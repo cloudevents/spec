@@ -2,6 +2,16 @@
 
 OpenEventing is a vendor-neutral specification for event data.
 
+## Table of Contents
+- [Overview](#overview)
+- [Status](#status)
+- [Notations and Terminology](#notations-and-terminology)
+- [Context Attributes](#context-attributes)
+- [Context Attributes Backlog](#context-attributes-backlog)
+- [Use Cases](#use-cases)
+- [Additional Topics & Questions](#additional-topics--questions)
+- [Reference](#reference)
+
 ## Overview
 Events are everywhere.  However, event publishers tend to describe events
 differently.
@@ -61,15 +71,25 @@ implementation.  At this time we are focused on the following scope:
 Have questions or want to contribute? Please join the Serverless Working
 Group within the CNCF.
 
-## Glossary
+## Notations and Terminology
 
-### Occurrence
+### Notational Conventions
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to
+be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+### Terminology
+
+This specification defines the following terms:
+
+#### Occurrence
 When something happens (or doesn’t happen) and is detected by a software
 system.  This is most typically when that system receives an external signal
 (e.g HTTP or RPC), though could also be through observing a changing value
  (e.g. an IoT sensor or period of inactivity).
 
-### Event
+#### Event
 Data representing an occurrence, a change in state, that something happened
 (or did not happen), usually used for notification.  Events include context
 and data.  Each occurrence may be uniquely identified with data in the event.
@@ -77,18 +97,18 @@ Events should be considered as facts that have no given destination, whereas
 messages contain intent and tend to transport data from a source to a given
 destination.
 
-### Context
+#### Context
 A set of consistent metadata attributes included with the event about the
 occurrence that tools and developers can rely upon to better handle the event.
 These attributes describe the event and the structure of its data, include
 information about the originating system, and more.
 
-### Data
+#### Data
 Domain-specific information about the occurrence (i.e. the payload).  This may
 include minimal information about the occurrence, details about the data that
 was changed, or more.
 
-### Protocol
+#### Protocol
 Events can be delivered through various industry standard protocol (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or
 platform/vendor specific protocols (AWS Kinesis, Azure Event Grid).
