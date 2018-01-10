@@ -138,7 +138,7 @@ that contains both context and data).
   * OPTIONAL
   * If present, MUST be a non-empty string
 
-### open-events-version
+### cloud-events-version
 * Type: String
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
