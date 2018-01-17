@@ -121,8 +121,8 @@ understand how to handle the event and its data.
 Context is designed such that it can be delivered separately from the event data 
 (e.g. in protocol headers or protocol specific attributes).  This allows the context
 to be inspected at the destination without having to deserialize the event data.  
-The context may also need to be serialized with the event data for some use cases
-(e.g. a JSON implementation may consist of one JSON object that contains both context 
+The context MAY also need to be serialized with the event data for some use cases
+(e.g. a JSON implementation might use one JSON object that contains both context 
 and data).
 
 ### namespace
