@@ -125,6 +125,7 @@ The context MAY also need to be serialized with the event data for some use case
 (e.g. a JSON implementation might use one JSON object that contains both context 
 and data).
 
+
 ### namespace
 * Type: String
 * Description: Identifier that uniquely identifies the organization publishing
