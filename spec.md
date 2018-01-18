@@ -1,6 +1,6 @@
-# OpenEventing - Verson 0.1
+# CloudEvents - Verson 0.1
 
-OpenEventing is a vendor-neutral specification for event data.
+CloudEvents is a vendor-neutral specification for event data.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -22,11 +22,11 @@ tooling and infrastructure to aide the delivery of event data across
 environments, like SDKs, event routers or tracing systems.  The portability
 and productivity we can achieve from event data is hindered overall.
 
-Enter OpenEventing, a specification for describing event data in a common way.
-OpenEventing seeks to ease event declaration and delivery across services,
+Enter CloudEvents, a specification for describing event data in a common way.
+CloudEvents seeks to ease event declaration and delivery across services,
 platforms and beyond.
 
-OpenEventing is a new effort and it's still under active development.  However,
+CloudEvents is a new effort and it's still under active development.  However,
 its working group has received a surprising amount of industry interest,
 ranging from major cloud providers to popular SaaS companies.  Our end goal is
 to offer this specification to the Cloud Native Computing Foundation.
@@ -36,7 +36,7 @@ A coalition of industry stakeholders have expressed interest in collaborating
 on this specification (though this does not constitute an endorsement on their
 behalf) and have begun iterating on early drafts.
 
-Version 0.4 of OpenEventing represents the end result of a working session
+Version 0.4 of CloudEvents represents the end result of a working session
 between engineers at Amazon, Google, and Microsoft.  Many items are left to be
 discussed, but this specification does represent the beginning of a level of
 consensus between these major industry stakeholders, which is exciting.  Now,
@@ -57,13 +57,13 @@ implementation.  At this time we are focused on the following scope:
     initial focus on HTTP.
   * Can be extended to support experimental or uncommon features, while being
     clearly indicated as an extension (e.g. extensions use a common prefix).
-  * Allow for evolution of both the payload and OpenEventing definition (e.g.
+  * Allow for evolution of both the payload and CloudEvents definition (e.g.
     versioning).
   * Can be embedded at different stages along the route of the event by
     middleware (e.g. a router may add transport or auth information).
 * Establish a backlog of prospective event metadata attributes (“context”)
   for potential inclusion in the future.
-* Include use-case examples to help users understand the value of OpenEventing,
+* Include use-case examples to help users understand the value of CloudEvents,
   with an initial focus on HTTP and Functions-as-a-Service/Serverless computing.
 * Determine process and overall governance of the specification.
 * Discuss additional architecture components that complement this specification.
@@ -114,7 +114,7 @@ AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or
 platform/vendor specific protocols (AWS Kinesis, Azure Event Grid).
 
 ## Context Attributes
-Every event in the OpenEventing specification includes context which is a set
+Every event in the CloudEvents specification includes context which is a set
 of consistent metadata attributes tools and developers can rely upon to
 understand how to handle the event and its data.
 
@@ -162,7 +162,7 @@ consist of one JSON object that contains both context and data).
 
 ### open-events-version
 * Type: String
-* Description: The version of the OpenEventing specification which the event
+* Description: The version of the CloudEvents specification which the event
   uses.  This enables the interpretation of the context.
 
 ### resource
@@ -215,7 +215,7 @@ consist of one JSON object that contains both context and data).
 * Description: This is for additional metadata and this does not have a
   required structure.  This enables a place for custom fields a producer or
   middleware may want to include and provides a place to test metadata before
-  adding them to the OpenEventing specification.  TBD - Determine a shorter
+  adding them to the CloudEvents specification.  TBD - Determine a shorter
   prefix for this (e.g. OpenAPI uses “x-”)
 * Examples:
   * authorization data
@@ -287,7 +287,7 @@ consist of one JSON object that contains both context and data).
 * Description:
 
 ## Use Cases
-[WIP]  Use-case examples to help end users understand the value of OpenEventing.
+[WIP]  Use-case examples to help end users understand the value of CloudEvents.
 
 ### Inter-Service Communication
 
