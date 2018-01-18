@@ -1,4 +1,4 @@
-# OpenEventing Specification
+# CloudEvents Specification
 
 This repository... (TBD)
 
