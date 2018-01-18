@@ -41,13 +41,15 @@ merged:
 
 If a vote is taken during a WG meeting, the follow rules will be followed:
 
+* There is only 1 vote per participating company, or nonaffiliated individual.
+* Each participating company can assign a primary and secondary representative.
+* A participating company, or nonaffiliated individual, attains voting rights
+  by having any of their assigned representative(s) attend 3 out of the last
+  4 meetings. They obtain voting rights after the 3rd meeting, not during.
 * Only WG members with voting rights will be allowed to vote.
-* Only one WG member per company can vote.
 * A vote passes if more than 50% of the votes cast approve the motion.
 * Only "yes" or "no" votes count, "abstain" votes do not count towards the
   total.
-* WG members attain voting rights by attending 3 out of the last 4 WG
-  meetings.  They obtain rights after the 3rd meeting, not during.
 * Meeting attendence will be formally tracked
   [here](https://docs.google.com/spreadsheets/d/1bw5s9sC2ggYyAiGJHEk7xm-q2KG6jyrfBy69ifkdmt0/edit#gid=0).
   Members must acknowledge their presence verbally, meaning, adding yourself
