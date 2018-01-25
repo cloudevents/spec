@@ -29,13 +29,13 @@ to facilitate successful event delivery and receipt.
 ### Increasing Portability of Functions-as-a-Service
 
 Functions-as-a-Service (also known as serverless computing) is one of the
-fastest growing trends in IT and it is entirely event-driven.  However, a
+fastest growing trends in IT and it is largely event-driven.  However, a
 primary concern of FaaS is vendor lock-in.  This lock-in is partially caused
 by differences in function APIs and signatures across providers, but the
 lock-in is also caused by differences in the format of event data received
 within functions.
 
-OpenEvents' common way of describing event data increase the portability of
+OpenEvents' common way of describing event data increases the portability of
 Functions-as-a-Service.
 
 ### Improving Development & Testing of Event-Driven/Serverless Architectures
