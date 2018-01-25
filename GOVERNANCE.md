@@ -14,7 +14,7 @@ the following process will be followed:
 * During meetings, priority will be given to PRs that appear to be ready for
   a vote over those that appear to require discussions.
 * Any motion that does not have "unanimous consent" will result in a formal
-  vote. See [Voting](#voting).
+  vote. See [Decisions](#Decisions).
 
 ## Working Group Membership
 
@@ -60,7 +60,7 @@ merged:
 * Reopening a PR can be done if new information is made available via
   github issue, which can then be added to the agenda for WG meeting.
 
-## Decision Making
+## Decisions
 
 Process:
 - [Optional] Add an item to the [agenda]() for a working group meeting if you
