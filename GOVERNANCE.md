@@ -20,18 +20,19 @@ the following process will be followed:
 
 Anyone is welcome to attend Working Group meetings and invited to review
 PRs, whether or not they have declared formal membership in the Working Group.
+We encourage everyone to document your participation so that new people can
+learn about other folks who are involved.
 
-We encourage everyone to document your participation in the [member list](),
-then people new to the group can learn about other folks who are involved.
-Each member identifies their affiliation with an organization, company or
-open source project, along with their specific use case(s) for events.
+Each member (company, organization, or independent project) which
+wishes to be considered for membership should add their name to the
+[member list]() with the following information:
 
 - company / org / project
     - representative, (optional) alternate representative
     - describe how you are using or intend to use the Event specification
 
-**Active Members** participate in at least three Working Group meetings per
-month.
+**Active Members** have participated in 3 out of the last 4 meetings, along
+with participation outside of the meetings by reviewing PRs.
 
 ## PRs
 
@@ -75,9 +76,9 @@ Most of the time we come to agreement simply by revising a proposed change or ad
 Working Group may choose to overrule a minority viewpoint by calling for a vote
 by active members of the Working Group, as described below.
 
-If a minority viewpoint is supported by an member with an implementation, the
-vote cannot be held until there is an open source implementation that
-illustrates the benefits or drawbacks of the proposal.
+If a minority viewpoint is supported by a member with a demonstrable
+implementation (even of a closed source implementation), the vote cannot be held
+until there is an open source implementation that illustrates the benefits or drawbacks of the proposal.
 
 If a vote is taken during a WG meeting, the follow rules will be followed:
 
@@ -89,7 +90,3 @@ If a vote is taken during a WG meeting, the follow rules will be followed:
   [here](https://docs.google.com/spreadsheets/d/1bw5s9sC2ggYyAiGJHEk7xm-q2KG6jyrfBy69ifkdmt0/edit#gid=0).
   Members must acknowledge their presence verbally, meaning, adding yourself
   to the "Attendees" section of the Agenda document is not sufficient.
-
-
-
-
