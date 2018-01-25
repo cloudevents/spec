@@ -1,4 +1,4 @@
-# Contributing to OpenEventing
+# Contributing to CloudEvents
 
 This page contains information about reporting issues, how to suggest changes
 as well as the guidelines we follow for how our documents are formatted.
@@ -12,14 +12,14 @@ as well as the guidelines we follow for how our documents are formatted.
 
 To report an issue, or to suggest an idea for a change that you haven't
 had time to write-up yet, open an 
-[issue](https://github.com/openeventing/spec/issues). It is best to check
-our existing [issues](https://github.com/openeventing/spec/issues) first
+[issue](https://github.com/cloudevents/spec/issues). It is best to check
+our existing [issues](https://github.com/cloudevents/spec/issues) first
 to see if a similar one has already been opened and discussed.
 
 ## Suggesting a Change
 
 To suggest a change to to this repository, submit a [pull
-request](https://github.com/openeventing/spec/pulls)(PR) with the complete
+request](https://github.com/cloudevents/spec/pulls)(PR) with the complete
 set of changes you'd like to see. See the 
 [Spec Formatting Conventions](#spec-formatting-conventions) section for
 the guidelines we follow for how documents are formatted.
