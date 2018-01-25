@@ -80,7 +80,7 @@ If a minority viewpoint is supported by a member with a demonstrable
 implementation (even of a closed source implementation), the vote cannot be held
 until there is an open source implementation that illustrates the benefits or drawbacks of the proposal.
 
-If a vote is taken during a WG meeting, the follow rules will be followed:
+If a vote is taken during a WG meeting, the following rules will be followed:
 
 * There is only 1 vote per Active Member
 * A vote passes if more than 50% of the votes cast approve the motion.
