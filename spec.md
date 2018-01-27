@@ -118,12 +118,12 @@ Every event in the CloudEvents specification includes context which is a set
 of consistent metadata attributes tools and developers can rely upon to
 understand how to handle the event and its data.
 
-Context is designed such that it can be delivered separately from the event data
-(e.g. in protocol headers or protocol specific attributes).  This allows the context
-to be inspected at the destination without having to deserialize the event data.  
-The context MAY also need to be serialized with the event data for some use cases
-(e.g. a JSON implementation might use one JSON object that contains both context
-and data).
+Context is designed such that it can be delivered separately from the event
+data (e.g. in protocol headers or protocol specific attributes).  This allows
+the context to be inspected at the destination without having to deserialize
+the event data.  The context MAY also need to be serialized with the event
+data for some use cases (e.g. a JSON implementation might use one JSON object
+that contains both context and data).
 
 ### namespace
 * Type: String
@@ -154,8 +154,8 @@ and data).
 ### event-type-version
 * Type: String
 * Description: The version of the event-type.  This enables the interpretation
-  of data by eventual consumers, requires the consumer to be knowledgeable about
-  the producer.
+  of data by eventual consumers, requires the consumer to be knowledgeable
+  about the producer.
 * Notes:
   * It is up for discussion whether this is applicable to the whole event or
     to the data payload alone.  Currently, event-type-version covers the data,
@@ -174,7 +174,8 @@ and data).
 
 ### resource-type
 * Type: String
-* Description: Type of the event source. Providers define list of event sources.
+* Description: Type of the event source. Providers define list of event
+  sources.
 * Constraints:
   * Required
 * Examples:
@@ -321,7 +322,7 @@ Examples of current event formats that exist today.
 ### Microsoft - Event Grid
 ```
 {
-    "topic":"/subscriptions/{subscription-id}",        
+    "topic":"/subscriptions/{subscription-id}",
     "subject":"/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
     "eventType":"Microsoft.Resources.ResourceWriteSuccess",
     "eventTime":"2017-08-16T03:54:38.2696833Z",
