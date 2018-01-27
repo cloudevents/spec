@@ -7,7 +7,6 @@ CloudEvents is a vendor-neutral specification for event data.
 - [Status](#status)
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
-- [Context Attributes Backlog](#context-attributes-backlog)
 - [Use-Cases](use-cases.md)
 - [Additional Topics & Questions](#additional-topics--questions)
 - [Reference](#reference)
@@ -142,24 +141,12 @@ that contains both context and data).
   * customer.created
 * Constraints:
   * Required
-* Notes:
-  * It is up for discussion whether namespace could be included as a prefix in
-    event-type.
-  * It is up for discussion whether the event-type should also include a
-    version.  It’s currently included in a separate attribute titled
-    event-type-version.
-  * It is up for discussion whether this specification should enforce a type
-    format.
 
 ### event-type-version
 * Type: String
 * Description: The version of the event-type.  This enables the interpretation
   of data by eventual consumers, requires the consumer to be knowledgeable
   about the producer.
-* Notes:
-  * It is up for discussion whether this is applicable to the whole event or
-    to the data payload alone.  Currently, event-type-version covers the data,
-    while open-events-version covers the context.
 
 ### open-events-version
 * Type: String
@@ -208,9 +195,6 @@ that contains both context and data).
 * Type: String
 * Description: A link to the schema which can be optionally specified by the
   producer.
-* Notes:
-  * It is up for discussion whether this is applicable to the whole event or
-    to the data alone.
 
 ### extensions
 * Type: Map <String, Object>
@@ -227,66 +211,6 @@ that contains both context and data).
 * Type: Arbitrary payload
 * Description: The event payload.  The payload depends on the event-type,
   schema-url and event-type-version.
-* Notes:
-  * TBD where the producer specifies format/encoding of the data elsewhere in
-    this schema.
-
-## Context Attributes Backlog
-
-### path
-* Type: String
-* Description: The destination endpoint address (e.g. URL) or target topic
-
-### content-type
-* Type: String
-* Description:  The data encoding scheme (e.g. application/json).  The data
-  content type.
-* Constraints:
-  * Required if the event contains a body.
-
-### correlation-id
-* Type: String
-* Description: Correlation ID of event that triggered this event to be
-  created (if any). If not triggered in response to an event, a unique ID.
-  Can be specified by the producer if event not produced in response to an
-  event. Enables traceability through systems.
-* Examples:
-  * Event A generated with unique correlation-id. Event handler receives event
-    and generates a new event in response, Event B. Event B copies the
-    correlation-id of Event A so that the chain of events can be properly
-    correlated.
-* Constraints:
-  * Optional
-
-### causation-id
-* Type: String
-* Description: event-id of event that triggered this event to be created (if
-  any). If not triggered in response to an event, then not present. Enables
-  traceability through systems.
-* Examples:
-  * Event A generated with unique event-id. Event handler receives event and
-    generates a new event in response, Event B. Event B copies the event-id of
-    Event A into its own causation-id so that the chain of events can be
-    properly correlated.
-* Constraints:
-  * Optional
-
-### method
-* Type: String
-* Description:  The (http) method used in the call
-
-### log-level
-* Type: String
-* Description:  The level of logging that the publisher may want to log this
-  specific event (e.g. debug)
-
-### receipt-queue
-* Type: String
-* Description:  An optional return endpoint for completion events
-
-### authentication
-* Type:
-* Description:
 
 ## Additional Topics & Questions
 
