@@ -1,6 +1,6 @@
 # CloudEvents - Use Cases
-
-[WIP] Use-case examples to help end users understand the value of OpenEventing.
+...
+[WIP] Use-case examples to help end users understand the value of CloudEventsj.
 
 ### Normalizing Events Across Services & Platforms
 
