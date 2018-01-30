@@ -24,7 +24,7 @@ successful event delivery and consumers from knowing what to do with event
 data.
 
 CloudEvents offers useful metadata which middleware and consumers can rely upon
-to facilitate successful event delivery and receipt.
+to facilitate event routing, logging, delivery and receipt.
 
 ### Increasing Portability of Functions-as-a-Service
 
