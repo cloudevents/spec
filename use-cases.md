@@ -45,8 +45,8 @@ event-driven and serverless architectures.  There is no easy way to mock events
 accurately for development and testing purposes, and help emulate event-driven
 workflows in a development environment.
 
-CloudEvents can enable better developer tools for building and testing
-event-driven and serverless architectures.
+CloudEvents can enable better developer tools for building, testing and
+handling the end-to-end lifecycle of event-driven and serverless architectures.
 
 ### Event Data Evolution
 
