@@ -167,13 +167,13 @@ and data).
 * Description: The version of the CloudEvents specification which the event
   uses.  This enables the interpretation of the context.
 
-### resource
+### source
 * Type: Object
 * Description: This describes the software instance that emits the event at
   runtime (i.e. the producer).  It contains sub-properties (listed below)
 
 
-### resource-type
+### source-type
 * Type: String
 * Description: Type of the event source. Providers define list of event sources.
 * Constraints:
@@ -181,7 +181,7 @@ and data).
 * Examples:
   * s3
 
-### resource-id
+### source-id
 * Type: String
 * Description: ID of the event source.
 * Constraints:
