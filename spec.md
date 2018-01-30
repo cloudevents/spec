@@ -118,11 +118,11 @@ Every event in the CloudEvents specification includes context which is a set
 of consistent metadata attributes tools and developers can rely upon to
 understand how to handle the event and its data.
 
-Context is designed such that it can be delivered separately from the event data 
+Context is designed such that it can be delivered separately from the event data
 (e.g. in protocol headers or protocol specific attributes).  This allows the context
 to be inspected at the destination without having to deserialize the event data.  
 The context MAY also need to be serialized with the event data for some use cases
-(e.g. a JSON implementation might use one JSON object that contains both context 
+(e.g. a JSON implementation might use one JSON object that contains both context
 and data).
 
 
@@ -288,27 +288,6 @@ and data).
 * Type:
 * Description:
 
-## Use Cases
-[WIP]  Use-case examples to help end users understand the value of CloudEvents.
-
-### Inter-Service Communication
-
-### Inter-Platform Communication
-
-### Development & Testing of Event-Driven Architectures
-
-### Event Data Evolution
-
-### Policy Enforcement
-
-### Data Access Control
-
-### Event Delivery Tracing
-
-### Cloudbursting
-
-### IoT
-
 ## Additional Topics & Questions
 
 * Context Attribute Names - We decided not to spend too much time on property
@@ -343,7 +322,8 @@ Examples of current event formats that exist today.
 ### Microsoft - Event Grid
 ```
 {
-    "topic":"/subscriptions/{subscription-id}",        "subject":"/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
+    "topic":"/subscriptions/{subscription-id}",        
+    "subject":"/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
     "eventType":"Microsoft.Resources.ResourceWriteSuccess",
     "eventTime":"2017-08-16T03:54:38.2696833Z",
     "id":"25b3b0d0-d79b-44d5-9963-440d4e6a9bba",
