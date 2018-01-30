@@ -50,10 +50,13 @@ handling the end-to-end lifecycle of event-driven and serverless architectures.
 
 ### Event Data Evolution
 
-Most platforms and services version their event data differently, if at all.
-This creates an inconsistent experience for handling event data as it evolves.
+Most platforms and services version the data model of their events differently
+(if they do this at all).  This creates an inconsistent experience for
+publishing and consuming the data model of events as those data models evolve.
 
-CloudEvents can offer a common way to version and evolve event data.
+CloudEvents can offer a common way to version and evolve event data.  This will
+help event publishers safely version their data models based on best practices,
+and this help event consumers safely work with event data as it evolves.
 
 ### Normalizing Webhooks
 
@@ -64,6 +67,15 @@ validate, and overall process event data delivered via webhooks.
 CloudEvents can offer consistency in webhook publishing and consumption.
 
 ### Policy Enforcement
+
+The transiting of events between systems may need to be filtered, transformed,
+or blocked due to security and policy concerns. Examples may be to prevent
+ingress or egress of the events such as event data containing sensitive
+information or wanting to disallow the information flow between the sender and
+receiver.
+
+A common event format would allow easier reasoning about the data being
+transited and allow for better introspection of the data.
 
 ### Event Tracing
 
