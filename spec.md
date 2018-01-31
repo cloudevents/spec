@@ -90,12 +90,12 @@ system.  This is most typically when that system receives an external signal
  (e.g. an IoT sensor or period of inactivity).
 
 #### Event
-Data representing an occurrence, a change in state, that something happened
-(or did not happen), usually used for notification.  Events include context
-and data.  Each occurrence may be uniquely identified with data in the event.
-Events should be considered as facts that have no given destination, whereas
-messages contain intent and tend to transport data from a source to a given
-destination.
+ Data representing an occurrence, a change in state, that something happened
+ (or did not happen).  Events include context and data.  Each occurrence MAY be 
+ uniquely identified with data in the event. Events should not be confused with
+ messages which are used to carry intent and data to a given destination. Events 
+ should be considered as facts that have no given destination. Events are used 
+ to notify other systems that something has happened.
 
 #### Context
 A set of consistent metadata attributes included with the event about the
