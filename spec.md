@@ -120,9 +120,9 @@ that contains both context and data).
 
 ### event-type
 * Type: String
-* Description: Type of the event. Producers can specify the format of this,
-  depending on their service. This enables the interpretation of data, and
-  can be used for routing, policy and more.
+* Description: Type of the event `data`. Producers can specify the format of
+  this, depending on their service. This enables the interpretation of `data`,
+  and can be used for routing, policy and more.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
@@ -131,9 +131,9 @@ that contains both context and data).
 
 ### event-type-version
 * Type: String
-* Description: The version of the event-type. This enables the interpretation
-  of data by eventual consumers, requires the consumer to be knowledgeable about
-  the producer.
+* Description: The version of the `event-type`. This enables the interpretation
+  of `data` by eventual consumers, requires the consumer to be knowledgeable
+  about the producer.
 * Constraints:
   * OPTIONAL
   * If present, MUST be a non-empty string
@@ -194,7 +194,7 @@ that contains both context and data).
 
 ### schema-url
 * Type: URI per [RFC 3986](https://tools.ietf.org/html/rfc3986)
-* Description: A link to the schema that the event adheres to.
+* Description: A link to the schema that the `data` attribute adheres to.
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
