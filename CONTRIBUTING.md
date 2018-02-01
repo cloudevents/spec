@@ -28,7 +28,9 @@ Each PR must be signed per the following section.
 
 ### Assigning and Owning work
 
-If you want to own and work on an issue, add a comment or “#dibs” it asking about ownership. Contributors will then add the "Assigned" label with “Assigned to: person@xxx”. 
+If you want to own and work on an issue, add a comment or “#dibs” it asking 
+about ownership. Contributors will then add the "Assigned" label with 
+“Assigned to: person@xxx”.
 
 ### Sign your work
 
