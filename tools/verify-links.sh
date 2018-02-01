@@ -32,6 +32,7 @@ verbose=""
 debugFlag=""
 maxRetries="1"
 skipExternal=""
+skips=""
 stop=""
 tmp=/tmp/out${RANDOM}
 
@@ -74,6 +75,17 @@ while [[ "$#" != "0" && "$1" == "-"* ]]; do
   while [[ "$opts" != "" ]]; do
     case "${opts:0:1}" in
       d) debugFlag="1" ; verbose="1" ;;
+      s) word=${opts:1}
+         if [[ "${word}" == "" && "$2" != "" && "$2" != "-"* ]]; then
+           word=$2
+           shift
+         fi
+         if [[ "${word}" == "" ]]; then
+           echo "Missing arg for -s flag"
+           exit 1
+         fi
+         skips="${skips} ${word}"
+         opts="" ;;
       t) maxRetries="5" ;;
       v) verbose="1" ;;
       x) skipExternal="1" ;;
@@ -81,11 +93,13 @@ while [[ "$#" != "0" && "$1" == "-"* ]]; do
       ?) echo "Usage: $0 [OPTION]... [DIR|FILE]..."
          echo "Verify all links in markdown files."
          echo
-         echo "  -v   show each file as it is checked"
-         echo "  -d   show each href as it is found"
-         echo "  -t   retry GETs to http(s) URLs 5 times"
-         echo "  -?   show this help text"
-         echo "  --   treat remainder of args as dir/files"
+         echo "  -d         show each href as it is found"
+         echo "  -sWORD     skip files with 'WORD' in them"
+         echo "  -t         retry GETs to http(s) URLs 5 times"
+         echo "  -v         show each file as it is checked"
+         echo "  -x         skip checking non-local hrefs"
+         echo "  -?         show this help text"
+         echo "  --         treat remainder of args as dir/files"
          exit 0 ;;
       *) echo "Unknown option '${opts:0:1}'"
          exit 1 ;;
@@ -108,7 +122,22 @@ if [ "$*" == "" ]; then
   arg="${REPO_ROOT}"
 fi
 
-mdFiles=$(find $* $arg -name "*.md" | sort | grep -v vendor | grep -v glide)
+# Default to skipping some well-known golang dirs
+SKIPS="${SKIPS:=vendor glide} ${skips}"
+
+mdFiles=$(find $* $arg -name "*.md" | sort | (
+  while read line ; do
+    skip=false
+    for pattern in ${SKIPS:=}; do
+      if [[ "${line}" == *"${pattern}"* ]]; then
+        skip=true
+        break
+      fi
+    done
+    [[ "${skip}" == "true" ]] && continue
+    echo $line
+  done
+))
 
 clean
 for file in ${mdFiles}; do
@@ -137,10 +166,15 @@ for file in ${mdFiles}; do
   sed "s/.*\[*\]\([^()]*\)/\1/" < ${tmp}1 > ${tmp}2  || continue
 
   cat ${tmp}2 | while read line ; do
-    # Strip off the leading and trailing parens, and then spaces
+    # Strip off the leading and trailing parens
     ref=${line#*(}
     ref=${ref%)*}
-    ref=$(echo $ref | sed "s/ *//" | sed "s/ *$//")
+
+    # Strip off any "title" associated with the href
+    ref=$(echo $ref | sed 's/ ".*//')
+
+    # Strip off leading and trailing spaces
+    ref=$(echo $ref | sed "s/^ *//" | sed "s/ *$//")
 
     # Show all hrefs - mainly for verifying in our tests
     debug "Checking: '$ref'"
