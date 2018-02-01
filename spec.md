@@ -146,7 +146,7 @@ that contains both context and data).
   * REQUIRED
   * MUST be a non-empty string
 
-### resource
+### source
 * Type: Object
 * Description: This describes the software instance that emits the event at
   runtime (i.e. the producer). It contains sub-properties (listed below)
@@ -154,7 +154,7 @@ that contains both context and data).
   * REQUIRED
   * MUST contain at least one non-empty sub-property.
 
-### resource-type
+### source-type
 * Type: String
 * Description: Type of the event source. Providers define list of event
   sources.
@@ -164,7 +164,7 @@ that contains both context and data).
 * Examples:
   * s3
 
-### resource-id
+### source-id
 * Type: String
 * Description: ID of the event source.
 * Constraints:
