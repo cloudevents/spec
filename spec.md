@@ -221,6 +221,83 @@ that contains both context and data).
 * Constraints:
   * OPTIONAL
 
+### log-level
+* Type: String
+* Description:  The level of logging that the publisher may want to log this
+  specific event (e.g. debug)
+
+## Context Attributes Backlog
+
+### path
+* Type: String
+* Description: The destination endpoint address (e.g. URL) or target topic
+
+### content-type
+* Type: String
+* Description:  The data encoding scheme (e.g. application/json).  The data
+  content type.
+* Constraints:
+  * Required if the event contains a body.
+
+### correlation-id
+* Type: String
+* Description: Correlation ID of event that triggered this event to be
+  created (if any). If not triggered in response to an event, a unique ID.
+  Can be specified by the producer if event not produced in response to an
+  event. Enables traceability through systems.
+* Examples:
+  * Event A generated with unique correlation-id. Event handler receives event
+    and generates a new event in response, Event B. Event B copies the
+    correlation-id of Event A so that the chain of events can be properly
+    correlated.
+* Constraints:
+  * Optional
+
+### causation-id
+* Type: String
+* Description: event-id of event that triggered this event to be created (if
+  any). If not triggered in response to an event, then not present. Enables
+  traceability through systems.
+* Examples:
+  * Event A generated with unique event-id. Event handler receives event and
+    generates a new event in response, Event B. Event B copies the event-id of
+    Event A into its own causation-id so that the chain of events can be
+    properly correlated.
+* Constraints:
+  * Optional
+
+### method
+* Type: String
+* Description:  The (http) method used in the call
+
+### receipt-queue
+* Type: String
+* Description:  An optional return endpoint for completion events
+
+### authentication
+* Type:
+* Description:
+
+## Use Cases
+[WIP]  Use-case examples to help end users understand the value of CloudEvents.
+
+### Inter-Service Communication
+
+### Inter-Platform Communication
+
+### Development & Testing of Event-Driven Architectures
+
+### Event Data Evolution
+
+### Policy Enforcement
+
+### Data Access Control
+
+### Event Delivery Tracing
+
+### Cloudbursting
+>>>>>>> Add log-level to context attributes from Context Attribute Backlog
+
 
 ## Additional Topics & Questions
 
