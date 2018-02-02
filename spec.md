@@ -231,6 +231,12 @@ that contains both context and data).
 * Constraints:
   * OPTIONAL
 
+### log-level
+* Type: String
+* Description: The severity level of logging. The intent of this attribute is to be considered as a mechanism to tell the receiving infrastructure what the logging level of the infrastructure SHOULD be.
+* Constraints:
+  * OPTIONAL
+  * If present, MUST be one of debug, info, warning, error, fatal   
 
 ## Additional Topics & Questions
 
