@@ -18,7 +18,7 @@ to see if a similar one has already been opened and discussed.
 
 ## Suggesting a Change
 
-To suggest a change to to this repository, submit a [pull
+To suggest a change to this repository, submit a [pull
 request](https://github.com/cloudevents/spec/pulls)(PR) with the complete
 set of changes you'd like to see. See the 
 [Spec Formatting Conventions](#spec-formatting-conventions) section for
