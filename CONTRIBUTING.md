@@ -26,6 +26,13 @@ the guidelines we follow for how documents are formatted.
 
 Each PR must be signed per the following section.
 
+### Assigning and Owning work
+
+If you want to own and work on an issue, add a comment or “#dibs” it asking 
+about ownership. A maintainer will then add the Assigned label and modify 
+the first comment in the issue to include `Assigned to: @person`
+
+
 ### Sign your work
 
 The sign-off is a simple line at the end of the explanation for the patch. Your
