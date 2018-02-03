@@ -200,6 +200,15 @@ that contains both context and data).
   * If present, MUST adhere to the format specified in
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
+### content-type
+* Type: String per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+* Description: Describe the data encoding format 
+* Constraints:
+  * OPTIONAL
+  * If present, MUST adhere to the format specified in
+    [RFC 2046](https://tools.ietf.org/html/rfc2046)
+* For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
+
 ### extensions
 * Type: Map <String, Object>
 * Description: This is for additional metadata and this does not have a
@@ -212,12 +221,12 @@ that contains both context and data).
   * If present, MUST contain at least one entry
 * Examples:
   * authorization data
-  * content type
 
 ### data
 * Type: Arbitrary payload
 * Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version.
+  schema-url and event-type-version, the pyload is encoded into a media format 
+  which is specified by the content-type attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
 
