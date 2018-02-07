@@ -9,7 +9,7 @@ be more approachable to newcomers.
 An [event](spec.md#event) includes context and data about an [occurrence](spec.md#occurrence).  Each *occurrence* is uniquely identified by the data
 of the *event*.
 
-Events represent facts and therefore do not include a destination, whereas
+*Events* represent facts and therefore do not include a destination, whereas
 messages convey intent, transporting data from a source to a given destination.
 
 ## Eventing
@@ -21,7 +21,7 @@ example, a source may generate an event when it receives an external signal
 inactivity).
 
 To illustrate how a system uses CloudEvents, the simplified diagram below shows
-how an **event** from a [source](spec.md#source) triggers an **action**.
+how an event from a [source](spec.md#source) triggers an action.
 
 ![alt text](img/source-event-action.png "A box representing the source with
 arrow pointing to a box representing the action. The arrow is annotated with 'e'
@@ -39,12 +39,12 @@ Events can be delivered through various industry standard protocols (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor
 specific protocols (AWS Kinesis, Azure Event Grid).
 
-An **action** processes an *event* defining a behavior or effect which was
+An action processes an event defining a behavior or effect which was
 triggered by a specific *occurrence* from a specific *source*.  While outside
-of the scope of the specification, the purpose of generating an *event* is to
-allow other systems to respond to a specific event. The *source* and *action*
-are typically built by different developers.  Often the *source* is a managed
-service and the *action* is custom code in a serverless Function (such as
-AWS Lambda or Google Cloud Functions).
+of the scope of the specification, the purpose of generating an *event* is
+typcially to allow other systems to easily react to changes in a source that
+they do not control. The *source* and action are typically built by different
+developers.  Often the *source* is a managed service and the *action* is custom
+code in a serverless Function (such as AWS Lambda or Google Cloud Functions).
 
 
