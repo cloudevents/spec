@@ -1,12 +1,12 @@
 
 # CloudEvents Concepts
 
-This document provides context for the [CloudEvents spec](spec.md). In the
+This document provides context for the [CloudEvents spec](../spec.md). In the
 text below there are links to definitions in the specification, followed by
 narrative text which is less precise than the formal specification, yet may
 be more approachable to newcomers.
 
-An [event](spec.md#event) includes context and data about an [occurrence](spec.md#occurrence).  Each *occurrence* is uniquely identified by the data
+An [event](../spec.md#event) includes context and data about an [occurrence](../spec.md#occurrence).  Each *occurrence* is uniquely identified by the data
 of the *event*.
 
 *Events* represent facts and therefore do not include a destination, whereas
@@ -21,7 +21,7 @@ example, a source may generate an event when it receives an external signal
 inactivity).
 
 To illustrate how a system uses CloudEvents, the simplified diagram below shows
-how an event from a [source](spec.md#source) triggers an action.
+how an event from a [source](../spec.md#source) triggers an action.
 
 ![alt text](img/source-event-action.png "A box representing the source with
 arrow pointing to a box representing the action. The arrow is annotated with 'e'
@@ -31,7 +31,7 @@ The source generates a message where the event is encapsulated in a protocol.
 The event arrives to a destination, triggering an action which is provided with
 the event data.
 
-A *source* is a specific instance of a [source-type](spec.md#source-type) which
+A *source* is a specific instance of a source-type which
 allows for staging and test instances. Open source software of a specific
 *source-type* may be deployed by multiple companies or providers.
 
