@@ -155,9 +155,11 @@ for file in ${mdFiles}; do
   #         This makes it so that each href is on a line by itself
   #  sed  - prefix each line with a space so the grep can do [^\\]
   #  grep - find all lines that match [...](...)
+  # Macs require this funky newline stuff
   cat $file | \
     tr '\n' ' ' | \
-    sed "s/)/)\n/g" | \
+    sed 's/)/)\
+/g' | \
     sed "s/^/ /g" | \
     grep "[^\\]\[.*\](.*)" > ${tmp}1 || continue
 
@@ -277,8 +279,10 @@ for file in ${mdFiles}; do
           done > ${anchorFile} || true
 
         # Add sections of the form <a name="xxx">
+        # Macs require this funky newline stuff
         grep "<a name=" <${fullpath} | \
-          sed 's/<a name="/\n<a name="/g' | \
+          sed 's/<a name="/\
+<a name="/g' | \
           sed 's/^.*<a name="\(.*\)">.*$/\1/' | \
           sort | uniq >> ${anchorFile} || true
 
