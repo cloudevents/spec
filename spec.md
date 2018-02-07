@@ -170,8 +170,21 @@ that contains both context and data).
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
+  * MUST be a unique resource relative to source-service
 * Examples:
-  * my.s3.bucket
+  * mybucket.s3.amazonaws.com
+  * /projects/myProject/databases/(default)/documents/users/aNewUser
+
+### source-service
+* Type: String
+* Description: The physical (e.g. IP address) or logical (e.g. DNS address) of
+  the source software.
+* Constraints:
+  * REQUIRED
+  * MUST be a non-empty string
+* Examples:
+  * s3.amazonaws.com
+  * firestore.googleapis.com
 
 ### event-id
 * Type: String
