@@ -109,9 +109,14 @@ function checkFile {
     # Put each word on its own line with its line number before it.
     echo "$line" | \
     # Split on whitespace
-    sed "s/[[:space:]]/\n&\n/g" | \
+    # Macs require this funky newline stuff
+    sed 's/[[:space:]]/\
+&\
+/g' | \
     # Put a \n before any http... word so they're easy to find
-    sed "s/http.*[^[[:space:]]]*/\n&\n/g" | \
+    sed 's/http.*[^[[:space:]]]*/\
+&\
+/g' | \
     ( while read line ; do
         # Lines that start with http are special, just echo them
         if [[ "$line" == "http"* ]]; then
@@ -119,7 +124,9 @@ function checkFile {
           continue
         fi
         # Now split on words
-        echo "$line" | sed "s/[a-zA-Z_\-]\+/\n&\n/g"
+        echo "$line" | sed 's/[a-zA-Z_\-]\+/\
+&\
+/g'
       done
     ) | \
     while read word ; do
@@ -147,21 +154,26 @@ function checkFile {
 
     # For each of our "casePhrases" check to see if its in "words" with
     # the wrong case
+    upperWords=$(echo ${words[@]} | tr "[a-z]" "[A-Z]")
     for phrase in "${casePhrases[@]}"; do
-      if [[ "${words[@]^^} " == "${phrase^^} "* && \
+      upperPhrase=$(echo ${phrase} | tr "[a-z]" "[A-Z]")
+      # echo upperWords:${upperWords}
+      # echo upperPhrase:${upperPhrase}
+      if [[ "${upperWords} " == "${upperPhrase} "* && \
             "${words[@]} " != "${phrase} "* ]]; then
-      ll=${words[*]}
-      echo line ${lines[0]}: \'${ll:0:${#phrase}}\' should be \'${phrase}\'
-    fi
+        ll=${words[*]}
+        echo line ${lines[0]}: \'${ll:0:${#phrase}}\' should be \'${phrase}\'
+      fi
     done
 
     # For each of our "bannedPhrases" check to see if its in "words". Note
     # that the case of the phrase does not matter.
     [ -z ${bannedPhrases} ] || for phrase in "${bannedPhrases[@]}"; do
-      if [[ "${words[@]^^} " == "${phrase^^} "* ]]; then
-      ll=${words[*]}
-      echo line ${lines[0]}: \'${ll:0:${#phrase}}\' is banned
-    fi
+      upperPhrase=$(echo ${phrase} | tr "[a-z]" "[A-Z]")
+      if [[ "${upperWords} " == "${upperPhrase} "* ]]; then
+        ll=${words[*]}
+        echo line ${lines[0]}: \'${ll:0:${#phrase}}\' is banned
+      fi
     done
 
 
