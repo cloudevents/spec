@@ -156,7 +156,7 @@ that contains both context and data).
 
 ### source-type
 * Type: String
-* Description: The kind of object on which an an event occurred. Providers
+* Description: The kind of object on which an event occurred. Providers
   define list of source-types.
 * Constraints:
   * REQUIRED
