@@ -200,6 +200,7 @@ that contains both context and data).
   * If present, MUST adhere to the format specified in
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
+<<<<<<< HEAD
 ### content-type
 * Type: String per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * Description: Describe the data encoding format 
@@ -208,6 +209,17 @@ that contains both context and data).
   * If present, MUST adhere to the format specified in
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
+=======
+### sampled-rate
+* Type: Positive Integer
+* Description: The rate at which this event has already been sampled. Represents
+  the denominator of a fraction: when `1/n` events are sent, this field should
+  hold `n`.
+* Constraints:
+  * OPTIONAL
+  * If present, MUST be a positive integer
+  * When absent, may be assumed to be 1, meaning unsampled
+>>>>>>> Add sample rate field to the spec
 
 ### extensions
 * Type: Map <String, Object>
