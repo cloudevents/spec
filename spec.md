@@ -72,9 +72,9 @@ system. This is most typically when that system receives an external signal
 #### Event
 Data representing an occurrence, a change in state, that something happened
 (or did not happen).  Events include context and data.  Each occurrence MAY be
-uniquely identified with data in the event. Events ought not to be confused 
-with messages which are used to transport or distribute data without assumptions 
-regarding its semantic. Events are considered to be facts that have no given 
+uniquely identified with data in the event. Events ought not to be confused
+with messages which are used to transport or distribute data without assumptions
+regarding its semantic. Events are considered to be facts that have no given
 destination. Events are used to notify other systems that something has happened.
 
 #### Context
