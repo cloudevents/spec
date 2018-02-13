@@ -242,7 +242,7 @@ they already suit the Event Source's needs.
   * If empty, MUST indicate that the Event was triggered by an anonymous user.
   * The 
   [registered claim names](https://tools.ietf.org/html/rfc7519#section-4.1)
-   of JWTs (e.g. 'iss', 'sub', 'aud', and 'exp') are reserved and must
+   of JWTs (e.g. 'iss', 'sub', 'aud', and 'exp') are reserved and MUST 
    have the same meaning as RFC3519 when present.
 
 ## Additional Topics & Questions
