@@ -222,6 +222,29 @@ that contains both context and data).
   * OPTIONAL
 
 
+## Known extensions
+The following extensions are in active use. To better support promotion of
+extensions to full-features, Event Sources SHOULD use known extensions when
+they already suit the Event Source's needs.
+
+### jwt_claims
+* Type: Object
+* Description: If the Event Source supports JWT authentication, this extension
+  allows the Source to provide information about which user triggered the
+  occurrence for the Event. The jwt_claims extension is unsigned claims portion
+  of a JWT. This allows event systems to forward authentication information
+  without fear of leaking end-user authorization. An empty object MAY be used
+  to indicate that the Event was triggered by an anonymous user. For more
+  information about JWTs, see 
+  [jwt.io/introduction](https://jwt.io/introduction).
+* Constraints:
+  * OPTIONAL
+  * If empty, MUST indicate that the Event was triggered by an anonymous user.
+  * The 
+  [registered claim names](https://tools.ietf.org/html/rfc7519#section-4.1)
+   of JWTs (e.g. 'iss', 'sub', 'aud', and 'exp') are reserved and must
+   have the same meaning as RFC3519 when present.
+
 ## Additional Topics & Questions
 
 * Context Attribute Names - We decided not to spend too much time on property
