@@ -82,3 +82,12 @@ transited and allow for better introspection of the data.
 ### Cloudbursting
 
 ### IoT
+IoT devices send and receive events related to their functionality.
+For example, a connected thermostat will send telemetry on the current
+temperature and could receive events to change temperatures.
+These devices typically have a constrained operating environment
+(cpu, memory) requiring a well defined event message format.
+In a lot of cases these messages are binary encoded instead of textual.
+Whether directly from the device or transformed via a gateway, CloudEvents
+would allow for a better description of the origin of the message and the
+format of the data contained within the message.
