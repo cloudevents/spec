@@ -78,10 +78,11 @@ regarding its semantic. Events are considered to be facts that have no given
 destination. Events are used to notify other systems that something has happened.
 
 #### Context
-A set of consistent metadata attributes included with the event about the
-occurrence that tools and developers can rely upon to better handle the event.
-These attributes describe the event and the structure of its data, include
-information about the originating system, and more.
+A set of metadata attributes included with the event that describe circumstances
+of the occurrence which are not specific to the occurrence. Tools and application
+code may use context information to identify the relationship of events to aspects of
+the system or to other events. Context attributes may describe the event source,
+the originating system, the emitting process, and other circumstantial information.
 
 #### Message
 Events are transported from a source to a destination via messages.
