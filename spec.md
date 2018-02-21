@@ -154,24 +154,21 @@ that contains both context and data).
   * REQUIRED
   * MUST contain at least one non-empty sub-property.
 
-### source-type
+### subject
 * Type: String
-* Description: Type of the event source. Providers define list of event
-  sources.
+* Description: Identifies the subject of the event in relation to the source.
+  For example, a notification about a new customer record being added to a CRM
+  system might identify the CRM system as the "source", might further qualify the
+  event as 'new-customer-added' in the "event-type" relative to its "namespace",
+  and then further qualify the subject of the event (the new record) with the content
+  of this field. The subject is a free-form string defined by the publisher.
 * Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
+  * OPTIONAL. The subject may be self-evident from the "source" context.
 * Examples:
-  * s3
-
-### source-id
-* Type: String
-* Description: ID of the event source.
-* Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
-* Examples:
-  * my.s3.bucket
+  * File system event, a newly created file being the subject, with a partial URI 
+    relative to the source URI: /data/app/alice.txt
+  * Customer relationship management (CRM) solution event, new customer record being 
+    the subject, with fully qualified URI: https://example.com/crm/c/2662773
 
 ### event-id
 * Type: String
