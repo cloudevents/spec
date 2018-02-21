@@ -202,7 +202,7 @@ that contains both context and data).
 
 ### content-type
 * Type: String per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-* Description: Describe the data encoding format
+* Description: Describe the data encoding format 
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
@@ -212,12 +212,14 @@ that contains both context and data).
 ### sampled-rate
 * Type: Positive Integer
 * Description: The rate at which this event has already been sampled. Represents
-  the denominator of a fraction: when `1/n` events are sent, this field holds
-  `n`.
+  the number of similar events that happened but were not sent.
 * Constraints:
   * OPTIONAL
   * If present, MUST be a positive integer
   * When absent means that no sampling has yet been applied
+* Examples:
+  * If a system sees 30 occurrences and emits a single event as a sample,
+    `sampled-rate` would be 30.
 
 ### extensions
 * Type: Map <String, Object>
@@ -235,7 +237,7 @@ that contains both context and data).
 ### data
 * Type: Arbitrary payload
 * Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version, the pyload is encoded into a media format
+  schema-url and event-type-version, the pyload is encoded into a media format 
   which is specified by the content-type attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
