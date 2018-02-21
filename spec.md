@@ -71,8 +71,8 @@ about to perform a scheduled reboot.
 #### Event
 An "event" is a data record expressing an occurrence and its context. Events
 are routed from the emitting source to interested parties for the purpose of
-notifying them about the source occurrence. The routing may be performed based
-on information contained in the event, but an event will generally not identify
+notifying them about the source occurrence. The routing can be performed based
+on information contained in the event, but an event will not identify
 a specific routing destination.
 
 #### Context
