@@ -161,9 +161,11 @@ that contains both context and data).
   system might identify the CRM system as the "source", might further qualify the
   event as 'new-customer-added' in the "event-type" relative to its "namespace",
   and then further qualify the subject of the event (the new record) with the content
-  of this field. The subject is a free-form string defined by the publisher.
+  of this property. The subject is a free-form string defined by the publisher. The
+  property is optional, because the subject might already be self-evident from 
+  the "source" context.
 * Constraints:
-  * OPTIONAL. The subject may be self-evident from the "source" context.
+  * OPTIONAL 
 * Examples:
   * File system event, a newly created file being the subject, with a partial URI 
     relative to the source URI: /data/app/alice.txt
