@@ -26,7 +26,8 @@ to offer this specification to the
 We have google group for e-mail communications:
  [cncf-wg-serverless](https://groups.google.com/forum/#!forum/cncf-wg-serverless)
 
-And a #serverless Slack channel: https://slack.cncf.io/
+And a #cloudevents Slack channel under
+[CNCF's Slack workspace](https://slack.cncf.io/).
 
 ## Meeting Time
 
