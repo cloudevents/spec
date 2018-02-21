@@ -65,7 +65,7 @@ This specification defines the following terms:
 
 #### Occurrence
 An "occurrence" is the capture of a statement of fact during the operation of 
-a software system. This may occur because of a signal raised by the system or 
+a software system. This might occur because of a signal raised by the system or 
 a signal being observed by the system, because of a state change, because of 
 a timer elapsing, or any other noteworthy activity.
 
