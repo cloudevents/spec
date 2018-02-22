@@ -149,18 +149,22 @@ that contains both context and data).
 ### source
 * Type: String
 * Description: This property identifies the source of the event as defined
-  by the publishing organization. The value SHOULD be a URI. The source property
-  value MUST uniquely identify the source within the scope set by the "namespace"
-  property. While the value MAY be a interpreted as a URL, the purpose of
-  it to logically identify the source and not to establish the location of the 
-  event source on the network.
+  by the publishing organization. The value SHOULD be a URI. The source 
+  property value MUST uniquely identify the source within the scope set by the
+  "namespace" property. While the value MAY be a interpreted as a URL, the 
+  purpose of it to logically identify the source and not to establish the 
+  location of the event source on the network.
 * Constraints:
   * REQUIRED
 * Examples:
-  * Resource path, relative URI reference: /tenant/group/type/myresource
-  * Machine component, relative URI reference: /robot/drives/3/temperature
-  * Virtual machine alerting, URI with custom scheme: alerts://mymachine.example.com/
-  * Web service notification triggers, URI/URL network resolvable: https://myservice.example.com
+  * Resource path, relative URI reference: 
+    /tenant/group/type/myresource
+  * Machine component, relative URI reference:
+    /robot/drives/3/temperature
+  * Virtual machine alerting, URI with custom scheme: 
+    alerts://mymachine.example.com/
+  * Web service notification triggers, URI/URL network resolvable: 
+    https://myservice.example.com
 
 ### source-type
 * Type: String
