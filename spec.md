@@ -75,7 +75,8 @@ Data representing an occurrence, a change in state, that something happened
 uniquely identified with data in the event. Events ought not to be confused
 with messages which are used to transport or distribute data without assumptions
 regarding its semantic. Events are considered to be facts that have no given
-destination. Events are used to notify other systems that something has happened.
+destination. Events are used to notify other systems that something has
+happened.
 
 #### Context
 A set of consistent metadata attributes included with the event about the
@@ -225,7 +226,7 @@ that contains both context and data).
 ### data
 * Type: Arbitrary payload
 * Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version, the pyload is encoded into a media format 
+  schema-url and event-type-version, the payload is encoded into a media format 
   which is specified by the content-type attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL

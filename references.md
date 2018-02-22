@@ -5,7 +5,8 @@ Examples of current event formats that exist today.
 ### Microsoft - Event Grid
 ```
 {
-    "topic":"/subscriptions/{subscription-id}",        "subject":"/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
+    "topic":"/subscriptions/{subscription-id}",
+    "subject":"/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
     "eventType":"Microsoft.Resources.ResourceWriteSuccess",
     "eventTime":"2017-08-16T03:54:38.2696833Z",
     "id":"25b3b0d0-d79b-44d5-9963-440d4e6a9bba",
