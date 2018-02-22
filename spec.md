@@ -162,16 +162,17 @@ that contains both context and data).
   * REQUIRED
   * MUST be a non-empty string
 * Examples:
-  * s3
+  * aws:s3:object
   * google.firestore.document
 
 ### source-id
 * Type: String
 * Description: A unique identifier of the object on which an event occurred. The
-  source-id is of kind source-type.
+  format of this ID will be source specific.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
+  * MUST be unique within the scope of the `source`
 * Examples:
   * my.s3.bucket
   * //firestore.googleapis.com/projects/p/databases/(default)/documents/users/me
