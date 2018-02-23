@@ -110,7 +110,10 @@ that contains both context and data).
 ### namespace
 * Type: String
 * Description: Identifier that uniquely identifies the organization publishing
-  the event.
+  the event. It is important to prevent collisions and to make it possible to
+  identify the owner of a namespace. To accomplish these two goals,
+  organizations SHOULD use a prefix based on their domain name, expressed in
+  reverse order.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
