@@ -28,8 +28,8 @@ Each PR must be signed per the following section.
 
 ### Assigning and Owning work
 
-If you want to own and work on an issue, add a comment or “#dibs” it asking 
-about ownership. A maintainer will then add the Assigned label and modify 
+If you want to own and work on an issue, add a comment or “#dibs” it asking
+about ownership. A maintainer will then add the Assigned label and modify
 the first comment in the issue to include `Assigned to: @person`
 
 
