@@ -1,8 +1,8 @@
 # CloudEvents Specification Design Goals
 
 CloudEvents are typically used in a distributed system to allow for services to
-be loosely coupled during development, then configured with tight-coupling for
-specific applications.
+be loosely coupled during development, then may be configured with
+tight-coupling for specific applications or dynamically configured at runtime.
 
 The goal of the CloudEvents specification is to define interoperability of event
 systems that allow cloud providers, third-party tools and services to provide:
@@ -29,24 +29,29 @@ In order to achieve the above goals and desired system properties, the
 Serverless WG must agree on a common vocabulary with precise definitions
 describing the key elements of the system including:
 - [Source](../spec.md#source)
-- Action <use definition from starter doc>
+- Action: An action consumes an event, producing a behavior or effect which was
+triggered by a specific *occurrence* from a specific *source*.  While the
+details of how events are delivered to an action is outside of the scope of the
+specification, the purpose of generating an *event* is typcially to allow other
+systems to easily react to changes in a source that they do not control. The
+*source* and action are often built by different developers.
+
+Examples:
+- the *source* is a managed service and the *action* is custom
+code in a serverless Function (such as AWS Lambda or Google Cloud Functions).
+- the *source* is an IoT device and the *event* is transmitted through an API
+Gateway to the *action*, a service provided by a different developer.
+
+The events system provides a way for the developer to specify which *event*
+should be delivered to which *action*. The specific mechanism is outside the
+scope of the specification, yet the following definitions faciltate an
+understanding of how CloudEvent are typically used in context:
 - Trigger: the condition that causes an event to be transmitted from source to
 action
 - Rule: the association of trigger + action
 
-In order to achieve the interoperability goals, the Serverless WG must describe:
-- One or more common architectures that are in active use today or planned to be
-built by WG members
-- How events are transported from source to action via at least one protocol
-- Whether a shared trigger specification is needed, or if runtime
-interoperability can be achieved independently, then shared configuration and/or
-API definition can be addressed as follow-on work
-- Authorization model(s) that control access and execution permissions
+Systems which generate events can have independent mechanisms for how triggers
+are specified and how rules are stored and evaluated.
 
 
-## Non-Goals of this spec
-The following non-goals may be follow-on work, yet would not be included in the
-1.0 specification.
-- Function build and invocation process
-- Language-specific runtime APIs
 
