@@ -13,10 +13,16 @@ The CloudEvents Roadmap.
 
 * Draft specification that WG members agree *could* provide interoperability
 * Document at least 3 sample events that conform to the specification
-* Github repo is organized to be approachable to a engineers who might want to implement the spec
+* Github repo is organized to be approachable to a engineers who might want to
+implement the spec
 * Additional materials:
   * use-cases
-  * placeholder for protocol specification, folder and brief starter doc for HTTP
+  * placeholder for protocol specification, folder and brief starter doc for
+  HTTP
+* Finalize logo
+* Deploy a website that features a simple overview, email list and directs 
+visitors to Github
+
 
 *0.2*
 
@@ -42,7 +48,6 @@ integrate it with the ecosystem.
 
 Additional activities in parallel with above roadmap
 
-* Build out promotional materials (website, logos, etc).
 * Create a page linking to implementations of the specification
 * Participate in conferences (WG gatherings & presentations):
   * [CloudNativeCon Europe](https://events.linuxfoundation.org/events/kubecon-cloudnativecon-north-america-2018/)
