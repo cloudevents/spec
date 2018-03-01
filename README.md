@@ -24,7 +24,7 @@ to offer this specification to the
 ## Working Group process
 
 The CNCF Serverless WG is working to formalize the [specification](spec.md)
-based on [design goals](about/design-goals.md) which focus on interoperability
+based on [design goals](spec#design-goals) which focus on interoperability
 between systems which generate and respond to events.
 
 In order to achieve these goals, the Serverless WG must describe:
