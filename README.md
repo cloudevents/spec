@@ -35,7 +35,7 @@ built by WG members
 - Authorization model(s) that control access and execution permissions
 
 ### Non-Goals of this specification
-The following non-goals will not be part of the specification.
+The following non-goals will not be part of the specification:
 - Function build and invocation process
 - Language-specific runtime APIs
 - Selecting a single identity/access control system
