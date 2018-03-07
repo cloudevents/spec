@@ -5,7 +5,7 @@ of event data.
 
 ## Table of Contents
 - [Overview](#overview)
-- [Deisgn Goals](#design-goals)
+- [Design Goals](#design-goals)
 - [Status](#status)
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
@@ -61,7 +61,7 @@ describing the key elements of the system including:
 - Action: An action consumes an event, producing a behavior or effect which was
 triggered by a specific *occurrence* from a specific *source*.  While the
 details of how events are delivered to an action is outside of the scope of the
-specification, the purpose of generating an *event* is typcially to allow other
+specification, the purpose of generating an *event* is typically to allow other
 systems to easily react to changes in a source that they do not control. The
 *source* and action are often built by different developers.
 
@@ -73,8 +73,8 @@ Gateway to the *action*, a service provided by a different developer.
 
 The events system provides a way for the developer to specify which *event*
 should be delivered to which *action*. The specific mechanism is outside the
-scope of the specification, yet the following definitions faciltate an
-understanding of how CloudEvent are typically used in context:
+scope of the specification, yet the following definitions facilitate an
+understanding of how CloudEvents are typically used in context:
 - Trigger: the condition that causes an event to be transmitted from source to
 action
 - Rule: the association of trigger + action
