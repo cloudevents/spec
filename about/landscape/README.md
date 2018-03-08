@@ -1,6 +1,7 @@
-Prior to the CloudEvents specification, many systems implemented similar models for events that allowed late-binding of services to actions.
+Prior to the CloudEvents specification, many systems implemented similar models
+for events that allowed late-binding of services to actions.
 
-The folowing references were evaluated in the formation of the first draft
+The following references were evaluated in the formation of the first draft
 of the specification. (We welcome pull requests with more context or
 additional references)
 
