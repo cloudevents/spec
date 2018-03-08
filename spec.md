@@ -64,10 +64,12 @@ be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 This specification defines the following terms:
 
 #### Occurrence
-When something happens (or doesn’t happen) and is detected by a software
-system. This is most typically when that system receives an external signal
-(e.g. HTTP or RPC), though could also be through observing a changing value
-(e.g. an IoT sensor or period of inactivity).
+An "occurrence" is the capture of a statement of fact during the operation of 
+a software system. This might occur because of a signal raised by the system or 
+a signal being observed by the system, because of a state change, because of 
+a timer elapsing, or any other noteworthy activity. For example, a device might
+go into an alert state because the battery is low, or a virtual machine is
+about to perform a scheduled reboot.
 
 #### Event
 Data representing an occurrence, a change in state, that something happened
