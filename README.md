@@ -32,7 +32,7 @@ In order to achieve these goals, the Serverless WG must describe:
 - One or more common architectures that are in active use today or planned to be
 built by WG members
 - How events are transported from source to action via at least one protocol
-- Authorization model(s) that control access and execution permissions
+- Identify and resolve whatever else is needed for interoperability
 
 ### Non-Goals of this specification
 The following non-goals will not be part of the specification:
