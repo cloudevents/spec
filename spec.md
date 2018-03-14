@@ -8,9 +8,9 @@ of event data.
 - [Status](#status)
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
-- [Use-Cases](use-cases.md)
+- [Use-Cases](about/use-cases.md)
 - [Additional Topics & Questions](#additional-topics--questions)
-- [References](references.md)
+- [References](about/references.md)
 
 ## Overview
 Events are everywhere. However, event publishers tend to describe events
