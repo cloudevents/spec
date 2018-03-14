@@ -34,12 +34,6 @@ built by WG members
 - How events are transported from source to action via at least one protocol
 - Identify and resolve whatever else is needed for interoperability
 
-### Non-Goals of this specification
-The following non-goals will not be part of the specification:
-- Function build and invocation process
-- Language-specific runtime APIs
-- Selecting a single identity/access control system
-
 ## Communications
 
 We have google group for e-mail communications:

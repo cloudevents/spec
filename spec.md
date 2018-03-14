@@ -46,9 +46,9 @@ details about the consumer or transport that might be use to send the event.
 
 ## Non-Goals
 The following will not be part of the specification:
-Function build and invocation process
-Language-specific runtime APIs
-Selecting a single identity/access control system
+* Function build and invocation process
+* Language-specific runtime APIs
+* Selecting a single identity/access control system
 
 ## Status
 At this time the specification is focused on the following scope:
