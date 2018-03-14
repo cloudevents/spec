@@ -35,8 +35,8 @@ can be connected to create new applications.
 
 The goal of the CloudEvents specification is to define interoperability of event
 systems that allow services to produce or consume events, where the producer and
-consumer can be developed and deployed independently.  A producer must be able
-to generate events before a consumer is listening, and a consumer must be able
+consumer can be developed and deployed independently.  A producer MUST be able
+to generate events before a consumer is listening, and a consumer MUST be able
 to express an interest in an event or class of events that is not yet being
 produced.
 
