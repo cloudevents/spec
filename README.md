@@ -31,7 +31,7 @@ In order to achieve these goals, the Serverless WG must describe:
 - Common attributes of an *event* that facilitate interoperability
 - One or more common architectures that are in active use today or planned to be
 built by WG members
-- How events are transported from source to action via at least one protocol
+- How events are transported from producer to consumer via at least one protocol
 - Identify and resolve whatever else is needed for interoperability
 
 ## Communications
