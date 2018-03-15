@@ -21,6 +21,19 @@ ranging from major cloud providers to popular SaaS companies.  Our end goal is
 to offer this specification to the
 [Cloud Native Computing Foundation](https://www.cncf.io/).
 
+## Working Group process
+
+The CNCF Serverless WG is working to formalize the [specification](spec.md)
+based on [design goals](spec.md#design-goals) which focus on interoperability
+between systems which generate and respond to events.
+
+In order to achieve these goals, the Serverless WG must describe:
+- Common attributes of an *event* that facilitate interoperability
+- One or more common architectures that are in active use today or planned to be
+built by WG members
+- How events are transported from producer to consumer via at least one protocol
+- Identify and resolve whatever else is needed for interoperability
+
 ## Communications
 
 We have google group for e-mail communications:

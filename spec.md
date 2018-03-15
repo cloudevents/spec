@@ -5,6 +5,7 @@ of event data.
 
 ## Table of Contents
 - [Overview](#overview)
+- [Design Goals](#design-goals)
 - [Status](#status)
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
@@ -25,6 +26,28 @@ and productivity that can be achieved from event data is hindered overall.
 Enter CloudEvents, a specification for describing event data in a common way.
 CloudEvents seeks to ease event declaration and delivery across services,
 platforms and beyond.
+
+# Design Goals
+
+CloudEvents are typically used in a distributed system to allow for services to
+be loosely coupled during development, deployed independently, and later
+can be connected to create new applications.
+
+The goal of the CloudEvents specification is to define interoperability of event
+systems that allow services to produce or consume events, where the producer and
+consumer can be developed and deployed independently.  A producer can generate
+events before a consumer is listening, and a consumer can express an interest in
+an event or class of events that is not yet being produced.
+
+To this end, the specification will include common metadata attributes of an
+event that facilitate interoperability, where the event does not contain any
+details about the consumer or transport that might be use to send the event.
+
+## Non-Goals
+The following will not be part of the specification:
+* Function build and invocation process
+* Language-specific runtime APIs
+* Selecting a single identity/access control system
 
 ## Status
 At this time the specification is focused on the following scope:
@@ -64,9 +87,9 @@ be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 This specification defines the following terms:
 
 #### Occurrence
-An "occurrence" is the capture of a statement of fact during the operation of 
-a software system. This might occur because of a signal raised by the system or 
-a signal being observed by the system, because of a state change, because of 
+An "occurrence" is the capture of a statement of fact during the operation of
+a software system. This might occur because of a signal raised by the system or
+a signal being observed by the system, because of a state change, because of
 a timer elapsing, or any other noteworthy activity. For example, a device might
 go into an alert state because the battery is low, or a virtual machine is
 about to perform a scheduled reboot.
@@ -205,7 +228,7 @@ that contains both context and data).
 
 ### content-type
 * Type: String per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-* Description: Describe the data encoding format 
+* Description: Describe the data encoding format
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
@@ -228,7 +251,7 @@ that contains both context and data).
 ### data
 * Type: Arbitrary payload
 * Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version, the payload is encoded into a media format 
+  schema-url and event-type-version, the payload is encoded into a media format
   which is specified by the content-type attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
