@@ -17,11 +17,12 @@ The CloudEvents Roadmap.
 implement the spec.
 * Additional materials:
   * Use-cases.
-  * placeholder for protocol specification, folder and brief starter doc for
+  * Placeholder for protocol specification, folder and brief starter doc for
   HTTP.
 * Finalize logo.
-* Deploy a website that features a simple overview, email list and directs
-visitors to Github.
+* Create and deploy a website that features a simple overview, email list and directs visitors to Github.
+* Store all website assets in the CloudEvents repository, under the governance
+of the working group.
 
 
 *0.2*
