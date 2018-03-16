@@ -73,6 +73,10 @@ At this time the specification is focused on the following scope:
   with an initial focus on HTTP and Functions-as-a-Service/Serverless computing.
 * Determine process and overall governance of the specification.
 * Discuss additional architecture components that complement this specification.
+* As of now this specification defines the abstract definition of an Event.
+  Whether or not this specification, or working group, will define what this
+  definition looks like as an "on the wire" representation or how it is
+  presented to an application receiving the event is still to-be-determined.
 
 ## Notations and Terminology
 
