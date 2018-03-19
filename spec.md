@@ -65,7 +65,7 @@ concurrently, including being both a producer and a consumer of events.
    Events are typically produced related to a context or a producer-chosen
    base classification. A temperature sensor in a room might be
    context-qualified by mount position, room, floor, and building. A sports
-   result may be classified by league and team.
+   result might be classified by league and team.
 
    The producer application might reside on server hosts or on a device of
    any kind.
@@ -107,7 +107,7 @@ concurrently, including being both a producer and a consumer of events.
      that this blob has just been created.
 
    Consumer interests motivate requirements for which information
-   producers shall include in an event.
+   producers ought to include an event.
 
 3) Middleware routes events from producers to consumers, or onwards
    to other middleware. Applications producing events might delegate
@@ -154,7 +154,7 @@ concurrently, including being both a producer and a consumer of events.
    Frameworks are most interested in semantic metadata commonality
    across the platforms they abstract.
 
-   For a sports application, a developer using the framework may be
+   For a sports application, a developer using the framework might be
    interested in all events from today's game (subject) of a team in a
    league (topic of interest), but wanting to handle reports
    of "goal" differently than reports of "substitution".
