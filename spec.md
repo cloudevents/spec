@@ -48,6 +48,144 @@ The following will not be part of the specification:
 * Language-specific runtime APIs
 * Selecting a single identity/access control system
 
+## Usage Scenarios
+
+The list below enumerates key usage scenarios and developer perspectives
+that have been considered for the development of this specification.
+
+In these scenarios, we keep the roles of event producer and event consumer
+distinct. A single application context can always take on multiple roles
+concurrently, including being both a producer and a consumer of events.
+
+1) Applications produce events for consumption by other parties, for instance
+   for providing consumers with insights about end-user activities, state
+   changes or environment observations, or for allowing complementing the
+   application's capabilities with event-driven extensions.
+
+   Events are typically produced related to a context or a producer-chosen
+   base classification. A temperature sensor in a room might be
+   context-qualified by mount position, room, floor, and building. A sports
+   result may be classified by league and team.
+
+   The producer application might reside on server hosts or on a device of 
+   any kind.
+
+   The produced events might be rendered and emitted directly by the producer
+   or by an intermediary; as example for the latter, consider event data
+   transmitted by a device over payload-size-constrained networks such as
+   LoRaWAN or ModBus, and where events compliant to this
+   specification will be rendered by a network gateway on behalf of the
+   producer.
+
+2) Applications consume events originating from devices and/or people
+   and/or applications/-modules/-instances for display, archival, analytics,
+   workflow processing, or other handling.
+
+   Platform tools and applications consume events for the purpose of
+   monitoring the condition and/or providing transparency into the operation
+   of a business solution and its foundational building blocks.
+
+   The consumer application might reside on server hosts or on a device
+   of any kind.
+
+   A consuming application will typically be interested in:
+   - distinguishing events such that the exact same event is not
+     processed twice.
+   - identifying and selecting the origin context or the
+     producer-assigned classification.
+   - identifying the temporal order of the events relative to the
+     originating context and/or relative to a wall-clock.
+   - understanding the context-related detail information carried
+     in the event.
+
+   In some cases, the consuming application might be interested in:
+   - obtaining further details about the event's subject from the
+     originating context, like obtaining detail information about a
+     changed object that requires privileged access authorization.
+   - interact with the event's subject at the originating context,
+     for instance reading a storage blob after having been informed
+     that this blob has just been created.
+
+   Consumer interests motivate requirements for which information
+   producers shall include in an event.
+
+3) Middleware routes events from producers to consumers, or onwards
+   to other middleware. Applications producing events might delegate
+   certain tasks arising from their consumers' requirements to
+   middleware:
+
+   - Management of many concurrent interested consumers for one of
+     multiple classes or originating contexts of events
+   - Processing of filter conditions over a class or originating context
+     of events on behalf of consumers.
+   - Transcoding, like encoding in MsgPack after decoding from JSON
+   - Transformation that changes the event's structure, like mapping from
+     a proprietary format to Cloud Events, while preserving the
+     identity and semantic integrity of the event.
+   - Instant "push-style" delivery to interested consumers.
+   - Storing events for eventual delivery, either for pick-up initiated
+     by the consumer ("pull"), or initiated by the middleware ("push")
+     after a delay.
+   - Observing event content or event flow for monitoring or
+     diagnostics purposes.
+
+   To satisfy these needs, middleware will be interested in:
+   - A metadata discriminator usable for classification of events so that
+     consumers can express interest in one or multiple such classes.
+   - A metadata discriminator that allows distinguishing the subject of
+     a particular event of that class.
+   - An indicator for the encoding of the event and its data.
+   - An indicator for the structural layout (schema) for the event and
+     its data.
+
+   Whether its events are available for consumption via a middleware is
+   a delegation choice of the producer.
+
+4) Frameworks and other abstractions make interactions with event platform
+   infrastructure simpler, and often provide common API surface areas
+   for multiple event platform infrastructures.
+
+   Frameworks are often used for turning events into an object graph,
+   and to dispatch the event to some specific handling user-code or
+   user-rule that permits the consuming application to react to
+   a particular kind of occurrence in the originating context and
+   on a particular subject.
+
+   Frameworks are most interested in semantic metadata commonality
+   across the platforms they abstract.
+
+   For a sports application, a developer using the framework may be
+   interested in all events from today's game (subject) of a team in a
+   league (topic of interest), but wanting to handle reports
+   of "goal" differently than reports of "substitution".
+   For this, the framework will need a suitable metadata discriminator
+   that frees it from having to understand the event details.
+
+## Status
+At this time the specification is focused on the following scope:
+
+* Agree upon a set of event metadata attributes (“context”) that:
+  * Offer a basic description of the event and the data it carries.
+  * Are currently implemented and semantically similar across multiple
+    platforms.
+  * Can be delivered separately from the event data in the transport headers
+    (e.g. HTTP, AMQP, Kafka) or together with the data in a serialized fashion
+    (e.g. JSON, protobuf, Avro).
+  * Include a description of the transport/protocol and encoding, with an
+    initial focus on HTTP.
+  * Can be extended to support experimental or uncommon features, while being
+    clearly indicated as an extension (e.g. extensions use a common prefix).
+  * Allow for evolution of both the payload and CloudEvents definition (e.g.
+    versioning).
+  * Can be embedded at different stages along the route of the event by
+    middleware (e.g. a router can add transport or auth information).
+* Establish a backlog of prospective event metadata attributes (“context”)
+  for potential inclusion in the future.
+* Include use-case examples to help users understand the value of CloudEvents,
+  with an initial focus on HTTP and Functions-as-a-Service/Serverless computing.
+* Determine process and overall governance of the specification.
+* Discuss additional architecture components that complement this specification.
+
 ## Notations and Terminology
 
 ### Notational Conventions
