@@ -63,12 +63,11 @@ concurrently, including being both a producer and a consumer of events.
    application's capabilities with event-driven extensions.
 
    Events are typically produced related to a context or a producer-chosen
-   base classification. A temperature sensor in a room might be
+   classification. For example, a temperature sensor in a room might be
    context-qualified by mount position, room, floor, and building. A sports
    result might be classified by league and team.
 
-   The producer application might reside on server hosts or on a device of
-   any kind.
+   The producer application could run anywhere, such as on a server or a device.
 
    The produced events might be rendered and emitted directly by the producer
    or by an intermediary; as example for the latter, consider event data
@@ -77,16 +76,19 @@ concurrently, including being both a producer and a consumer of events.
    specification will be rendered by a network gateway on behalf of the
    producer.
 
-2) Applications consume events originating from devices and/or people
-   and/or applications/-modules/-instances for display, archival, analytics,
-   workflow processing, or other handling.
+   For example, a weather station transmits a 12 byte event payload indicating
+   weather conditions once every 5 minutes over LoRaWAN. A LoRaWAN gateway
+   might then be used to publish the event to an Internet destination and
+   in the Cloud Events format. The weather station is the producer and
+   the intermediary gateway plays a middleware role (see 3).
 
-   Platform tools and applications consume events for the purpose of
-   monitoring the condition and/or providing transparency into the operation
-   of a business solution and its foundational building blocks.
+2) Applications consume events for the purposes such as display, archival,
+   analytics, workflow processing, monitoring the condition and/or providing
+   transparency into the operation of a business solution and its foundational
+   building blocks.
 
-   The consumer application might reside on server hosts or on a device
-   of any kind.
+   The consumer application could run anywhere, such as on a server or a
+   device.
 
    A consuming application will typically be interested in:
    - distinguishing events such that the exact same event is not
@@ -97,11 +99,17 @@ concurrently, including being both a producer and a consumer of events.
      originating context and/or relative to a wall-clock.
    - understanding the context-related detail information carried
      in the event.
+   - correlating event instances from multiple event producers and send
+     them to the same consumer context.
 
    In some cases, the consuming application might be interested in:
    - obtaining further details about the event's subject from the
      originating context, like obtaining detail information about a
      changed object that requires privileged access authorization.
+     For example, a HR solution might only publish very limited
+     information in events for privacy reasons, and any event consumer
+     needing more data will have to obtain details related to the event
+     from the HR system under their own authorization context.
    - interact with the event's subject at the originating context,
      for instance reading a storage blob after having been informed
      that this blob has just been created.
@@ -130,10 +138,17 @@ concurrently, including being both a producer and a consumer of events.
      diagnostics purposes.
 
    To satisfy these needs, middleware will be interested in:
-   - A metadata discriminator usable for classification of events so that
-     consumers can express interest in one or multiple such classes.
+   - A metadata discriminator usable for classification or
+     contextualization of events so that consumers can express interest
+     in one or multiple such classes or contexts.
+     For instance, a consumer might be interested in all events related
+     to a specific directory inside a file storage account.
    - A metadata discriminator that allows distinguishing the subject of
-     a particular event of that class.
+     a particular event of that class or context.
+     For instance, a consumer might want to filter out all events related
+     to new files ending with ".jpg" (the file name being the "new file"
+     event's subject) for the context describing specific directory
+     inside a file storage account that it has registered interest on.
    - An indicator for the encoding of the event and its data.
    - An indicator for the structural layout (schema) for the event and
      its data.
@@ -152,7 +167,8 @@ concurrently, including being both a producer and a consumer of events.
    on a particular subject.
 
    Frameworks are most interested in semantic metadata commonality
-   across the platforms they abstract.
+   across the platforms they abstract, so that similar activities can
+   be handled uniformly.
 
    For a sports application, a developer using the framework might be
    interested in all events from today's game (subject) of a team in a
