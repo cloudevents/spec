@@ -27,8 +27,7 @@ of the working group.
 
 *0.2*
 
-* Create a reference implementation of at least two libraries or supporting
-tools.
+* Have at least 2 implementations of the specification that can demonstrate interoperability.
 * Changes to the spec to facilitate adoption.
 * HTTP protocol specification.
 * Draft documentation and developer guide.
