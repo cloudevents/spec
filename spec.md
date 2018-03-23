@@ -79,10 +79,10 @@ concurrently, including being both a producer and a consumer of events.
    For example, a weather station transmits a 12 byte event payload indicating
    weather conditions once every 5 minutes over LoRaWAN. A LoRaWAN gateway
    might then be used to publish the event to an Internet destination and
-   in the Cloud Events format. The weather station is the producer and
-   the intermediary gateway plays a middleware role (see 3).
+   in the CloudEvents format. The weather station is the producer and
+   the intermediary gateway plays a middleware role.
 
-2) Applications consume events for the purposes such as display, archival,
+2) Applications consume events for purposes such as display, archival,
    analytics, workflow processing, monitoring the condition and/or providing
    transparency into the operation of a business solution and its foundational
    building blocks.
@@ -110,7 +110,7 @@ concurrently, including being both a producer and a consumer of events.
      information in events for privacy reasons, and any event consumer
      needing more data will have to obtain details related to the event
      from the HR system under their own authorization context.
-   - interact with the event's subject at the originating context,
+   - interacting with the event's subject at the originating context,
      for instance reading a storage blob after having been informed
      that this blob has just been created.
 
@@ -161,8 +161,8 @@ concurrently, including being both a producer and a consumer of events.
    for multiple event platform infrastructures.
 
    Frameworks are often used for turning events into an object graph,
-   and to dispatch the event to some specific handling user-code or
-   user-rule that permits the consuming application to react to
+   and to dispatch the event to some specific handling custom application code
+   or configuration that permits the consuming application to react to
    a particular kind of occurrence in the originating context and
    on a particular subject.
 
