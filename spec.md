@@ -148,30 +148,34 @@ that contains both context and data).
 
 ### source
 * Type: Object
-* Description: This describes the software instance that emits the event at
-  runtime (i.e. the producer). It contains sub-properties (listed below)
+* Description: This describes the software where an event occurred. It contains
+  sub-properties (listed below)
 * Constraints:
   * REQUIRED
   * MUST contain at least one non-empty sub-property.
 
 ### source-type
 * Type: String
-* Description: Type of the event source. Providers define list of event
-  sources.
+* Description: The kind of object on which an event occurred. Providers
+  define list of source-types.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
 * Examples:
-  * s3
+  * aws:s3:object
+  * google.firestore.document
 
 ### source-id
 * Type: String
-* Description: ID of the event source.
+* Description: A unique identifier of the object on which an event occurred. The
+  format of this ID will be source specific.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
+  * MUST be unique within the scope of the `source`
 * Examples:
   * my.s3.bucket
+  * //firestore.googleapis.com/projects/p/databases/(default)/documents/users/me
 
 ### event-id
 * Type: String
