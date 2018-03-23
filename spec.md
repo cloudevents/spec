@@ -52,6 +52,12 @@ The following will not be part of the specification:
 
 The list below enumerates key usage scenarios and developer perspectives
 that have been considered for the development of this specification.
+These usage scenarios are by no means exhaustive, and the specification
+does not aim to be prescriptive about usage.
+
+These scenarios are not normative; anyone is free to create a system that
+mixes these scenarios. These cases establish a common vocabulary of event
+producer, consumer, middleware, and framework.
 
 In these scenarios, we keep the roles of event producer and event consumer
 distinct. A single application context can always take on multiple roles
@@ -76,11 +82,12 @@ concurrently, including being both a producer and a consumer of events.
    specification will be rendered by a network gateway on behalf of the
    producer.
 
-   For example, a weather station transmits a 12 byte event payload indicating
-   weather conditions once every 5 minutes over LoRaWAN. A LoRaWAN gateway
-   might then be used to publish the event to an Internet destination and
-   in the Cloud Events format. The weather station is the producer and
-   the intermediary gateway plays a middleware role (see 3).
+   For example, a weather station transmits a 12-byte, proprietary event
+   payload indicating weather conditions once every 5 minutes over LoRaWAN. A
+   LoRaWAN gateway is then used to publish the event to an Internet destination
+   in the Cloud Events format. The LoRaWAN gateway is the event producer,
+   publishing on behalf of the weather station, and will set event metadata
+   appropriately to reflect the source of the event.
 
 2) Applications consume events for the purposes such as display, archival,
    analytics, workflow processing, monitoring the condition and/or providing
@@ -155,6 +162,11 @@ concurrently, including being both a producer and a consumer of events.
 
    Whether its events are available for consumption via a middleware is
    a delegation choice of the producer.
+
+   In practice, middleware can take on role of a producer when it changes
+   the semantic meaning of an event, a consumer when it takes action based
+   on an event, or middleware when it routes events without making semantic
+   changes.
 
 4) Frameworks and other abstractions make interactions with event platform
    infrastructure simpler, and often provide common API surface areas
