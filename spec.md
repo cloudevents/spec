@@ -146,32 +146,48 @@ that contains both context and data).
   * REQUIRED
   * MUST be a non-empty string
 
-### source
-* Type: Object
-* Description: This describes the software instance that emits the event at
-  runtime (i.e. the producer). It contains sub-properties (listed below)
-* Constraints:
-  * REQUIRED
-  * MUST contain at least one non-empty sub-property.
-
-### source-type
+### topic
 * Type: String
-* Description: Type of the event source. Providers define list of event
-  sources.
+* Description: This expression is a classification of the event that 
+  enables groupwise publishing of and subscription to events of the 
+  described class. The classification might reflect the identity of 
+  the party raising the event, and/or the context of where and/or why 
+  the event was raised, and/or a structured classification of the 
+  information contained in the event. The value SHOULD be a URI. 
+  The value MAY be used to map directly to the "topic" concept found
+  in many middleware products. The value MAY also be a interpreted as 
+  a URL. The topic property value's scope is set by the "namespace" 
+  property. 
 * Constraints:
   * REQUIRED
-  * MUST be a non-empty string
 * Examples:
-  * s3
+  * Resource path, relative URI reference: 
+    /tenant/group/type/myresource
+  * Machine component, relative URI reference:
+    /robot/drives/3/temperature
+  * US City, relative URI reference:
+    /USA/Alaska/Juneau
+  * Virtual machine alerting, URI with custom scheme: 
+    alerts://mymachine.example.com/
+  * Web service notification triggers, URI/URL network resolvable: 
+    https://myservice.example.com, https://myservice.example.com/mytrigger   
 
-### source-id
+### subject
 * Type: String
-* Description: ID of the event source.
+* Description: Identifies the subject of the event in relation to the topic.
+  For example, a notification about a new customer record being added to 
+  a CRM system might identify a CRM system's tenant as the ´topic´, might 
+  further qualify the ´event-type´ as 'new-customer-added', and then further 
+  qualify the subject of the event (the new record) with the content of this 
+  property. The subject is a free-form string defined by the publisher. 
 * Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
+  OPTIONAL. The subject might already be self-evident from the "source" context. 
 * Examples:
-  * my.s3.bucket
+  * File system event, with `topic` reflecting the emitting storage container,
+    and the newly created file-name being the subject, a partial URI 
+    relative to the source URI: `/data/app/alice.txt`.
+  * Customer relationship management (CRM) solution event, new customer record 
+    being the subject, with fully qualified URI: https://example.com/crm/c/2662773
 
 ### event-id
 * Type: String
