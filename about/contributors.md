@@ -1,25 +1,48 @@
 ## CloudEvents contributors
 
+We welcome you to join us! This list acknowleges those who contribute whether
+it be via GitHub pull request or in real life in the working group, as well as
+those who contributed before this became a CNCF Serverless WG project. If you
+are participating in some way, please add your information via pull request.
+
+This list is intended to build community, helping the working group to connect
+github handles to real world identities and get to know each other, and for new
+folks to see who has been involved already.
+
+Contributions do not constitute an official endorsement.
+
 * **Amazon**
   * [AWS Lambda events](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html)
   * Arun Gupta, Ajay Nair, Rob Leidle, Orr Weinstein
 * **Google**
   * [Google Cloud Functions](https://cloud.google.com/functions/) and [Cloud Functions for Firebase](https://firebase.google.com/docs/functions/)
-  * [Sarah Allen](https://github.com/ultrasaurus), [Rachel Myers](https://github.com/rachelmyers) (Serverless WG)
-  * [Thomas Bouldin](https://github.com/inlined), Morgan Hallmon, Robert-Jan Huijsman, Mike McDonald
+  * Sarah Allen - [@ultrasaurus](https://github.com/ultrasaurus)
+  * Rachel Myers - [@rachelmyers](https://github.com/rachelmyers)
+  * Thomas Bouldin - [@inlined](https://github.com/inlined)
+  * Mike McDonald, Morgan Hallmon, Robert-Jan Huijsman
+* **Huawei**
+  * [Huawei Function Stage](http://www.huaweicloud.com/en-us/product/functionstage.html)
+  * Cathy Hong Zhang - [@cathyhongzhang](https://github.com/cathyhongzhang)
+  * Louis Fourie - [@lfourie](https://github.com/lfourie)
+* **IBM**
+  * [IBM Cloud Functions](https://console.bluemix.net/openwhisk/)
+  * Doug Davis, [@duglin](https://github.com/duglin)
+  * Daniel Krook, [@krook](https://github.com/krook)
+  * Matt Rutkowski, Michael M Behrendt
+* **Iguazio**
+  * Yaron Haviv - [@iguazio](https://github.com/iguazio)
+  * Orit Nissan-Messing
 * **Microsoft**
   * [Microsoft Event Grid](https://azure.microsoft.com/en-us/services/event-grid/)
   * Bahram Banisadr, Clemens Vasters, Cesar Ruiz-Meraz, Dan Rosanova, Raja Ravipati
-* **Serverless Inc**
-  * [Serverless Framework and Event Gateway](https://serverless.com/)
-  * Austen Collins, Rupak Ganguly (Serverless WG)
-  * Brian Neisler, Jeremy Coffield, Ganesh Radhakirshnan
-* **IBM**
-  * [Doug Davis](https://github.com/duglin), [Daniel Krook](https://github.com/krook), Matt Rutkowski (Serverless WG)
-  * Michael M Behrendt
 * **Oracle**
   * Travis Reeder, Chad Arimura
-* **Iguazio**
-  * [Yaron Haviv](https://github.com/iguazio), Orit Nissan-Messing (Serverless WG)
-* **Huawei**
-  * Cathy Zhang
+* **SAP**
+  * Nathan Oyler - [@notque](https://github.com/notque)
+* **Serverless Inc**
+  * [Serverless Framework and Event Gateway](https://serverless.com/)
+  * Austen Collins - [@ac360](https://github.com/ac360)
+  * Rupak Ganguly, Brian Neisler, Jeremy Coffield, Ganesh Radhakirshnan
+* **SolarWinds**
+  * Lee Calcote - [@leecalcote](https://github.com/leecalcote)
+
