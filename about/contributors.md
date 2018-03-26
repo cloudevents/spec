@@ -26,23 +26,35 @@ Contributions do not constitute an official endorsement.
   * Louis Fourie - [@lfourie](https://github.com/lfourie)
 * **IBM**
   * [IBM Cloud Functions](https://console.bluemix.net/openwhisk/)
-  * Doug Davis, [@duglin](https://github.com/duglin)
-  * Daniel Krook, [@krook](https://github.com/krook)
-  * Matt Rutkowski, Michael M Behrendt
+  * Doug Davis - [@duglin](https://github.com/duglin)
+  * Daniel Krook - [@krook](https://github.com/krook)
+  * Matt Rutkowski - [@mrutkows](https://github.com/mrutkows)
+  * Michael M Behrendt - [@mbehrendt](https://github.com/mbehrendt)
 * **Iguazio**
   * Yaron Haviv - [@iguazio](https://github.com/iguazio)
   * Orit Nissan-Messing
 * **Microsoft**
   * [Microsoft Event Grid](https://azure.microsoft.com/en-us/services/event-grid/)
-  * Bahram Banisadr, Clemens Vasters, Cesar Ruiz-Meraz, Dan Rosanova, Raja Ravipati
+  * Clemens Vasters - [@clemensv](https://github.com/clemensv)
+  * Bahram Banisadr - [@banisadr](https://github.com/banisadr)
+  * Dan Rosanova - [@djrosanova](https://github.com/djrosanova)
+  * Cesar Ruiz-Meraz, Raja Ravipati
 * **Oracle**
-  * Travis Reeder, Chad Arimura
+  * [Fn Project](https://fnproject.io/)
+  * Chad Arimura - [@carimura](https://github.com/banisadr)
+  * Stanley Halka - [@shalka](https://github.com/banisadr)
+  * Travis Reeder - [@treeder](https://github.com/banisadr)
 * **SAP**
   * Nathan Oyler - [@notque](https://github.com/notque)
 * **Serverless Inc**
   * [Serverless Framework and Event Gateway](https://serverless.com/)
   * Austen Collins - [@ac360](https://github.com/ac360)
-  * Rupak Ganguly, Brian Neisler, Jeremy Coffield, Ganesh Radhakirshnan
+  * Rupak Ganguly - [@rupakg](https://github.com/rupakg)
+  * Brian Neisler - [@brianneisler](https://github.com/brianneisler)
+  * Jeremy Coffield, Ganesh Radhakirshnan
 * **SolarWinds**
   * Lee Calcote - [@leecalcote](https://github.com/leecalcote)
+* **VMWare**
+  * [Dispatch Functions Framework](https://vmware.github.io/dispatch/)
+  * Mark Peek - [@leecalcote](https://github.com/markpeek)
 
