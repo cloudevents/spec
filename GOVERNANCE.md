@@ -3,16 +3,31 @@
 This document describes the governance process under which the Serverless
 Working Group (WG) will manage this repository.
 
-## Working Group Meetings
+## Working Group Process
 
 In order to provide equitable rights to all Working Group members,
 the following process will be followed:
 
 * Official WG meetings will be announced at least a week in advance.
-* Proposed changes to any document will be done via a Pull Request (PR).
-* PRs will be reviewed during official WG meetings.
-* During meetings, priority will be given to PRs that appear to be ready for
-  a vote over those that appear to require discussions.
+* Proposed changes to any document will be done via a Pull Request (PR)
+* PRs will be reviewed in advance of WG meetings
+* Active members will vote on PRs in advance of Working Group meetings to
+  promote them to active consideration
+* Changes to the [spec.md](spec.md) require active member participation:
+  * if there are no negative votes, then any PR with 3 affirmative votes can be
+    raised for consideration
+  * if there are negative votes, then 5 affirmative votes and a code sample
+  illustrating the benefit of the change or drawback of current spec which would
+  be addressed by the change
+* Changes outside of the spec require only a single affirmative vote from
+  another active member for consideration
+* Working Group will discuss PRs under consideration at Working Group meetings
+  in advance of merging any PR (see details below)
+
+
+## Working Group Meetings
+* During meetings, priority will be given to PRs with the most votes from
+  active members
 * PRs should not be merged if they have had substantial changes made within
   two days of the meeting.
   Rebases, typo fixes, etc. do not count as substantial.
