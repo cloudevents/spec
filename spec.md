@@ -107,27 +107,19 @@ the event data. The context might also need to be serialized with the event
 data for some use cases (e.g. a JSON implementation might use one JSON object
 that contains both context and data).
 
-### namespace
-* Type: String
-* Description: Identifier that uniquely identifies the organization publishing
-  the event.
-* Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
-* Examples:
-  * kafka.apache.org
-  * com.microsoft.azure
-
 ### event-type
 * Type: String
-* Description: Type of the event `data`. Producers can specify the format of
-  this, depending on their service. This enables the interpretation of `data`,
-  and can be used for routing, policy and more.
+* Description: Type of occurrence which has happened. The event type MUST be
+  namespaced with a package based on the reverse-DNS of a domain associated
+  with the software that produced the event. This MAY be used for routing,
+  observability, policy enforcement, etc.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
+  * MUST be prefixed with a reverse-DNS name associated with the software that
+         produces the event
 * Examples:
-  * customer.created
+  * com.github.pull.create
 
 ### event-type-version
 * Type: String
@@ -146,32 +138,46 @@ that contains both context and data).
   * REQUIRED
   * MUST be a non-empty string
 
-### source
-* Type: Object
-* Description: This describes the software instance that emits the event at
-  runtime (i.e. the producer). It contains sub-properties (listed below)
-* Constraints:
-  * REQUIRED
-  * MUST contain at least one non-empty sub-property.
-
-### source-type
+### source-authority
 * Type: String
-* Description: Type of the event source. Providers define list of event
-  sources.
+* Description: The URI authority component of the source software.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
+  * MUST conform to the
+   ["authority" component](https://tools.ietf.org/html/rfc3986#section-3.2)
+    of the URI spec
 * Examples:
-  * s3
+  * github.com
+  * myenterpriseGitHubInstall.company.com
 
-### source-id
-* Type: String
-* Description: ID of the event source.
+### source-path
+* Type: string
+* Description: The URI path component of the resource that emitted an event.
 * Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
+  * OPTIONAL
+  * If present, MUST conform to the "path-rootless" grammar of the 
+    [URI spec](https://tools.ietf.org/html/rfc3986#section-3.3)
 * Examples:
-  * my.s3.bucket
+  * myorg/myrepo
+  * my/long/ftp/path.jpg
+
+### source-attributes
+* Type: Map <String, String>
+* Description: Attributes associated with the resource that emitted the event.
+  This allows filtering or routing based on non-hierarchical source metadata.
+  This is intended to include (but is not limited to) "labels" in cloud
+  platforms like AWS or Kubernetes.
+* Constraints:
+  * OPTIONAL
+  * Keys MUST match the regular expression `[_.a-z0-9]+`
+  * Keys SHOULD use the character "." is as namespace separator
+  * Values MUST use URI-safe characters
+* Examples:
+  * {
+      "sensor.configuration": "WINDOW"
+      "sensor.location": "deployments/house1/window3"
+    }
 
 ### event-id
 * Type: String
