@@ -209,6 +209,17 @@ that contains both context and data).
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
+### correlation-field
+* Type: String
+* Description: A path string pointing to a field in the event data 
+  that can be used to correlate all the events associated with 
+  the same application instance. 
+* Constraints:
+  * OPTIONAL
+  * If present, MUST be a non-empty string
+* Examples:
+  * headers.body.cathy-house-number
+
 ### extensions
 * Type: Map <String, Object>
 * Description: This is for additional metadata and this does not have a
