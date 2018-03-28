@@ -162,9 +162,9 @@ that contains both context and data).
   * myorg/myrepo
   * my/long/ftp/path.jpg
 
-### source-attributes
+### source-labels
 * Type: Map <String, String>
-* Description: Attributes associated with the resource that emitted the event.
+* Description: Labels associated with the resource that emitted the event.
   This allows filtering or routing based on non-hierarchical source metadata.
   This is intended to include (but is not limited to) "labels" in cloud
   platforms like AWS or Kubernetes.
