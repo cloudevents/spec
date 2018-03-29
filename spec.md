@@ -222,15 +222,6 @@ that contains both context and data).
 * Examples:
   * authorization data
 
-### data
-* Type: Arbitrary payload
-* Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version, the payload is encoded into a media format
-  which is specified by the content-type attribute (e.g. application/json).
-* Constraints:
-  * OPTIONAL
-
-
 ## Additional Topics & Questions
 
 * Context Attribute Names - We decided not to spend too much time on property
