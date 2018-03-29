@@ -46,3 +46,24 @@ Notes:
   they be placed as children of the `extensions` property. Receivers
   MUST NOT treat unkonwn additional properties as an error and MUST NOT stop
   processing of the event as a result of their presence.
+- Non-mandatory properties are NOT REQUIRED to be included in the JSON, but
+  if they are present then they MUST adhere to the format described.
+
+Example:
+```
+{
+  "cloud-events-version": "0.1",
+  "event-id": "6480da1a-5028-4301-acc3-fbae628207b3",
+  "namespace": "product.example.com",
+  "source": {
+    "type": "repository",
+    "id": "AFN234769347623"
+  },
+  "event-type": "created",
+  "event-type-version": "v1.5",
+  "schema-url": "https://product.example.com/schema/repo-create",
+  "data": {
+    "path": "/JaneDoe/repos/mycode"
+  }
+}
+```
