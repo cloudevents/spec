@@ -353,6 +353,8 @@ that contains both context and data).
   middleware might want to include and provides a place to test metadata before
   adding them to the CloudEvents specification. TBD - Determine a shorter
   prefix for this (e.g. OpenAPI uses “x-”)
+  See the [Extensions](extensions.md) document for a list of possible
+  properties.
 * Constraints:
   * OPTIONAL
   * If present, MUST contain at least one entry
