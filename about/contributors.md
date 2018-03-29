@@ -22,6 +22,7 @@ Contributions do not constitute an official endorsement.
   * Mike McDonald, Morgan Hallmon, Robert-Jan Huijsman
 * **Huawei**
   * [Huawei Function Stage](http://www.huaweicloud.com/en-us/product/functionstage.html)
+  * [Huawei Function Graph](https://www.huaweicloud.com/en-us/product/functiongraph.html)
   * Cathy Hong Zhang - [@cathyhongzhang](https://github.com/cathyhongzhang)
   * Louis Fourie - [@lfourie](https://github.com/lfourie)
 * **IBM**
