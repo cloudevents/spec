@@ -171,7 +171,7 @@ that contains both context and data).
 * Constraints:
   * OPTIONAL
   * Keys MUST match the regular expression `[_.a-z0-9]+`
-  * Keys SHOULD use the character "." is as namespace separator
+  * Keys SHOULD use the character "." as a namespace separator
   * Values MUST use URI-safe characters
 * Examples:
   * {
