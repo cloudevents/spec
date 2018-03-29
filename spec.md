@@ -273,17 +273,6 @@ the event data. The context might also need to be serialized with the event
 data for some use cases (e.g. a JSON implementation might use one JSON object
 that contains both context and data).
 
-### namespace
-* Type: String
-* Description: Identifier that uniquely identifies the organization publishing
-  the event.
-* Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
-* Examples:
-  * kafka.apache.org
-  * com.microsoft.azure
-
 ### event-type
 * Type: String
 * Description: Type of the event `data`. Producers can specify the format of
@@ -313,31 +302,13 @@ that contains both context and data).
   * MUST be a non-empty string
 
 ### source
-* Type: Object
-* Description: This describes the software instance that emits the event at
-  runtime (i.e. the producer). It contains sub-properties (listed below)
+* Type: URI
+* Description: This describes the event producer. Often this will include
+  information such as the type of the event source, the organization
+  publishing the event, and some unique idenfitiers. The exact syntax and
+  semantics behind the data encoded in the URI is event producer defined.
 * Constraints:
   * REQUIRED
-  * MUST contain at least one non-empty sub-property.
-
-### source-type
-* Type: String
-* Description: Type of the event source. Providers define list of event
-  sources.
-* Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
-* Examples:
-  * s3
-
-### source-id
-* Type: String
-* Description: ID of the event source.
-* Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
-* Examples:
-  * my.s3.bucket
 
 ### event-id
 * Type: String
