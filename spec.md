@@ -240,13 +240,11 @@ go into an alert state because the battery is low, or a virtual machine is
 about to perform a scheduled reboot.
 
 #### Event
-Data representing an occurrence, a change in state, that something happened
-(or did not happen).  Events include context and data.  Each occurrence MAY be
-uniquely identified with data in the event. Events ought not to be confused
-with messages which are used to transport or distribute data without assumptions
-regarding its semantic. Events are considered to be facts that have no given
-destination. Events are used to notify other systems that something has
-happened.
+An "event" is a data record expressing an occurrence and its context. Events
+are routed from the emitting source to interested parties for the purpose of
+notifying them about the source occurrence. The routing can be performed based
+on information contained in the event, but an event will not identify
+a specific routing destination.
 
 #### Context
 A set of consistent metadata attributes included with the event about the
