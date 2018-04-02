@@ -15,9 +15,8 @@ The CloudEvents Roadmap.
 1. Document at least 3 sample events that conform to the specification.
 1. Github repo is organized to be approachable to a engineers who might want to
 implement the spec.
-1. Additional materials:
-  1. Use-cases.
-  1. Placeholder for protocol specification, folder and brief starter doc for
+1. Use-cases.
+1. Placeholder for protocol specification, folder and brief starter doc for
   HTTP.
 1. Finalize logo.
 1. Create and deploy a website that features a simple overview, email list and directs visitors to Github.
@@ -36,9 +35,12 @@ of the working group.
 *0.3*
 
 1. Interoperability demo.
-  1. At least one open source implementation of sending and receiving events.
-  1. Events are sent by code written by Developer1 and recieved by code written by Developer2, where Developer1 has no knowledge of Developer2.
-  1. Draft trigger specification (e.g. how events + actions are associated).
+
+  i. At least one open source implementation of sending and receiving events.
+
+  ii. Events are sent by code written by Developer1 and recieved by code written by Developer2, where Developer1 has no knowledge of Developer2.
+
+  iii. Draft trigger specification (e.g. how events + actions are associated).
 1. Draft documentation and user guides.
 
 *0.4*
