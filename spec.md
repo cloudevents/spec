@@ -194,6 +194,31 @@ concurrently, including being both a producer and a consumer of events.
    For this, the framework will need a suitable metadata discriminator
    that frees it from having to understand the event details.
 
+## Attribute Categories
+
+The number of metadata attributes will be constrained to the minimal set needed
+to achieve the stated goals. To that end, attributes defined by this
+specification will fall into three categories:
+- required
+- optional
+- extensions
+
+As the category names imply, "required" attributes will be the ones that are
+considered vital to all events in all use cases, while "optional" ones will be
+used in a majority of use cases. If an attribute is not common enough to fall
+into those two categories but would still benefit from the level of
+interoperability that comes from being well-defined, then it will be placed into
+the "extensions" category and described in the (extensions)[extensions.md]
+document. The spec will define how these extension attributes will appear within
+a CloudEvent.
+
+Core attributes, whether required or optional, are those that describe the event
+itself. For example those attributes may relate to the source, the content type,
+the time the event occurred, or any identifying information. Attributes that are
+relevant only for certain contexts within which the event may be used will be in
+the extensions category. Examples might include grouping, sampling, correlation,
+and tracing.
+
 ## Status
 At this time the specification is focused on the following scope:
 
@@ -399,4 +424,3 @@ that contains both context and data).
   serverless function which listens on the source event, opens a connection to
   the destination protocol and maps every incoming event (received through
   event API) to an event message over the destination protocol.
-
