@@ -202,6 +202,18 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to
 be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
+### Attribute Naming Convention
+
+Cloud Events attributes use "camelCasing" for the object member names, to aid
+integration with common programming languages.
+
+Attribute names that are composed of multiple words are expressed as compound
+words, with the first word starting with a lower-case character and all
+subsequent words starting with an upper-case character, and no separator
+characters.
+
+Words that are acronyms are written in all-caps, e.g. "ID" and "URL".
+
 ### Terminology
 
 This specification defines the following terms:
@@ -251,7 +263,7 @@ the event data. The context might also need to be serialized with the event
 data for some use cases (e.g. a JSON implementation might use one JSON object
 that contains both context and data).
 
-### event-type
+### eventType
 * Type: String
 * Description: Type of the event `data`. Producers can specify the format of
   this, depending on their service. This enables the interpretation of `data`,
@@ -262,16 +274,16 @@ that contains both context and data).
 * Examples:
   * customer.created
 
-### event-type-version
+### eventTypeVersion
 * Type: String
-* Description: The version of the `event-type`. This enables the interpretation
+* Description: The version of the `eventType`. This enables the interpretation
   of `data` by eventual consumers, requires the consumer to be knowledgeable
   about the producer.
 * Constraints:
   * OPTIONAL
   * If present, MUST be a non-empty string
 
-### cloud-events-version
+### cloudEventsVersion
 * Type: String
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
@@ -288,7 +300,7 @@ that contains both context and data).
 * Constraints:
   * REQUIRED
 
-### event-id
+### eventID
 * Type: String
 * Description: ID of the event. The semantics of this string are explicitly
   undefined to ease the implementation of producers. Enables deduplication.
@@ -299,7 +311,7 @@ that contains both context and data).
   * MUST be a non-empty string
   * MUST be unique within the scope of the producer
 
-### event-time
+### eventTime
 * Type: Timestamp per [RFC 3339](https://tools.ietf.org/html/rfc3339)
 * Description: Timestamp of when the event happened.
 * Constraints:
@@ -307,7 +319,7 @@ that contains both context and data).
   * If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
-### schema-url
+### schemaURL
 * Type: URI per [RFC 3986](https://tools.ietf.org/html/rfc3986)
 * Description: A link to the schema that the `data` attribute adheres to.
 * Constraints:
@@ -315,7 +327,7 @@ that contains both context and data).
   * If present, MUST adhere to the format specified in
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
-### content-type
+### contentType
 * Type: String per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * Description: Describe the data encoding format
 * Constraints:
@@ -341,9 +353,9 @@ that contains both context and data).
 
 ### data
 * Type: Arbitrary payload
-* Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version, the payload is encoded into a media format
-  which is specified by the content-type attribute (e.g. application/json).
+* Description: The event payload. The payload depends on the eventType,
+  schemaURL and eventTypeVersion, the payload is encoded into a media format
+  which is specified by the contentType attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
 

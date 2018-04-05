@@ -21,14 +21,14 @@ MUST adhere to the following format:
 
 ```
 {
-  "cloud-events-version": "cloud-events-version value",
-  "event-id": "event-id value",
+  "cloudEventsVersion": "cloudEventsVersion value",
+  "eventID": "eventID value",
   "source": "source value",
-  "event-type": "event-type value",
-  "event-type-version": "event-type value",
-  "event-time": "event-time value",
-  "schema-url": "schema-url value",
-  "content-type": "content-type",
+  "eventType": "eventType value",
+  "eventTypeVersion": "eventTypeVersion value",
+  "eventTime": "eventTime value",
+  "schemaURL": "schemaURL value",
+  "contentType": "contentType",
   "extensions": {
     ... extensions values ...
   },
@@ -50,14 +50,14 @@ Notes:
 Example:
 ```
 {
-  "cloud-events-version": "0.1",
-  "event-id": "6480da1a-5028-4301-acc3-fbae628207b3",
+  "cloudEventsVersion": "0.1",
+  "eventID": "6480da1a-5028-4301-acc3-fbae628207b3",
   "source": "http://example.com/repomanager",
-  "event-type": "created",
-  "event-type-version": "v1.5",
-  "event-time": "2018-04-01T23:12:34Z",
-  "schema-url": "https://product.example.com/schema/repo-create",
-  "content-type": "application/json",
+  "eventType": "created",
+  "eventTypeVersion": "v1.5",
+  "eventTime": "2018-04-01T23:12:34Z",
+  "schemaURL": "https://product.example.com/schema/repo-create",
+  "contentType": "application/json",
   "data": {
     "path": "/JaneDoe/repos/mycode"
   }
