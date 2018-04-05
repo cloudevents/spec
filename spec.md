@@ -227,7 +227,7 @@ An event includes context and data. This "Event Data" section is the
 sibling to the above "Context Attributes". This is where the original
 event data info goes.
 
-In this section, each serialization/encoding scheme of a Cloud Event should 
+In this section, each serialization/encoding scheme of a Cloud Event should
 specify how to retrieve interoperability related information from the data
 or where those information appears in the event message.
 
