@@ -45,7 +45,7 @@ an event or class of events that is not yet being produced.
 
 To this end, the specification will include common metadata attributes of an
 event that facilitate interoperability, where the event does not contain any
-details about the consumer or transport that might be use to send the event.
+details about the consumer or transport that might be used to send the event.
 
 ## Non-Goals
 The following will not be part of the specification:
