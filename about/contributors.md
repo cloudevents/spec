@@ -34,6 +34,8 @@ Contributions do not constitute an official endorsement.
 * **Iguazio**
   * Yaron Haviv - [@iguazio](https://github.com/iguazio)
   * Orit Nissan-Messing
+* **Intel**
+  * David Lyle - [@dklyle](https://github.com/dklyle)
 * **Microsoft**
   * [Microsoft Event Grid](https://azure.microsoft.com/en-us/services/event-grid/)
   * Clemens Vasters - [@clemensv](https://github.com/clemensv)
