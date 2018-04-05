@@ -23,14 +23,12 @@ MUST adhere to the following format:
 {
   "cloud-events-version": "cloud-events-version value",
   "event-id": "event-id value",
-  "namespace": "namespace value",
-  "source": {
-    "type": "source-id value",
-    "id": "source-id value"
-  },
+  "source": "source value",
   "event-type": "event-type value",
   "event-type-version": "event-type value",
+  "event-time": "event-time value",
   "schema-url": "schema-url value",
+  "content-type": "content-type",
   "extensions": {
     ... extensions values ...
   },
@@ -54,14 +52,12 @@ Example:
 {
   "cloud-events-version": "0.1",
   "event-id": "6480da1a-5028-4301-acc3-fbae628207b3",
-  "namespace": "product.example.com",
-  "source": {
-    "type": "repository",
-    "id": "AFN234769347623"
-  },
+  "source": "http://example.com/repomanager",
   "event-type": "created",
   "event-type-version": "v1.5",
+  "event-time": "2018-04-01T23:12:34Z",
   "schema-url": "https://product.example.com/schema/repo-create",
+  "content-type": "application/json",
   "data": {
     "path": "/JaneDoe/repos/mycode"
   }
