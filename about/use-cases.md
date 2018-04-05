@@ -104,3 +104,17 @@ In a lot of cases these messages are binary encoded instead of textual.
 Whether directly from the device or transformed via a gateway, CloudEvents
 would allow for a better description of the origin of the message and the
 format of the data contained within the message.
+
+### Event Correlation
+
+A serverless application/workflow could be associated with multiple events from
+different event sources/producers. For example, a burglary detection
+application/workflow could involve both a motion event and a door/window open event.
+A serverless platform could receive many instances of each type of events,
+e.g. it could receive motion events and window open events from different houses.
+The serverless platform needs to correlate one type of event instance correctly
+with other types of event instances and map a received event instance to the
+correct application/workflow instance. CloudEvents will provide a standard way
+for any event consumer (eg. the serverless platform) to locate the event
+correlation information/token in the event data and map a received event instance
+to the correct application/workflow instance.
