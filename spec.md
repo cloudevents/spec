@@ -194,31 +194,6 @@ concurrently, including being both a producer and a consumer of events.
    For this, the framework will need a suitable metadata discriminator
    that frees it from having to understand the event details.
 
-## Status
-At this time the specification is focused on the following scope:
-
-* Agree upon a set of event metadata attributes (“context”) that:
-  * Offer a basic description of the event and the data it carries.
-  * Are currently implemented and semantically similar across multiple
-    platforms.
-  * Can be delivered separately from the event data in the transport headers
-    (e.g. HTTP, AMQP, Kafka) or together with the data in a serialized fashion
-    (e.g. JSON, protobuf, Avro).
-  * Include a description of the transport/protocol and encoding, with an
-    initial focus on HTTP.
-  * Can be extended to support experimental or uncommon features, while being
-    clearly indicated as an extension (e.g. extensions use a common prefix).
-  * Allow for evolution of both the payload and CloudEvents definition (e.g.
-    versioning).
-  * Can be embedded at different stages along the route of the event by
-    middleware (e.g. a router can add transport or auth information).
-* Establish a backlog of prospective event metadata attributes (“context”)
-  for potential inclusion in the future.
-* Include use-case examples to help users understand the value of CloudEvents,
-  with an initial focus on HTTP and Functions-as-a-Service/Serverless computing.
-* Determine process and overall governance of the specification.
-* Discuss additional architecture components that complement this specification.
-
 ## Notations and Terminology
 
 ### Notational Conventions
