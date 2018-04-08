@@ -42,7 +42,7 @@ Notes:
 - CloudEvent producers MAY include additional properties in the JSON
   but receivers MAY choose to ignore them. However, it is RECOMMENDED that
   they be placed as children of the `extensions` property. Receivers
-  MUST NOT treat unkonwn additional properties as an error and MUST NOT stop
+  MUST NOT treat unknown additional properties as an error and MUST NOT stop
   processing of the event as a result of their presence.
 - Non-mandatory properties are NOT REQUIRED to be included in the JSON, but
   if they are present then they MUST adhere to the format described.
