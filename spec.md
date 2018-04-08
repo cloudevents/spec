@@ -339,14 +339,14 @@ that contains both context and data).
 * Examples:
   * authorization data
 
-### data
-* Type: Arbitrary payload
-* Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version, the payload is encoded into a media format
-  which is specified by the content-type attribute (e.g. application/json).
-* Constraints:
-  * OPTIONAL
+## Event Data
+An event includes context and data. This "Event Data" section is the
+sibling to the above "Context Attributes". This is where the original
+event data info goes.
 
+In this section, each serialization/encoding scheme of a Cloud Event should
+specify how to retrieve interoperability related information from the data
+or where those information appears in the event message.
 
 ## Additional Topics & Questions
 
