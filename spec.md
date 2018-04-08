@@ -324,6 +324,18 @@ that contains both context and data).
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
+### sampled-rate
+* Type: Positive Integer
+* Description: The rate at which this event has already been sampled. Represents
+  the number of similar events that happened but were not sent plus this event.
+* Constraints:
+  * OPTIONAL
+  * If present, MUST be a positive integer
+  * When absent, a default value of 1 MAY be assumed, indicating no sampling
+* Examples:
+  * If a system sees 30 occurrences and emits a single event as a sample,
+    `sampled-rate` would be 30 (29 not sent and 1 sent).
+
 ### extensions
 * Type: Map <String, Object>
 * Description: This is for additional metadata and this does not have a
