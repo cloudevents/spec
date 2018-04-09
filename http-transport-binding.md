@@ -58,7 +58,7 @@ which is compatible with HTTP 1.1 semantics.
 
 ### 1.3. Content Modes
 
-The specification defines two content modes for transferring events:
+This specification defines two content modes for transferring events:
 *structured* and *binary*. Every compliant implementation SHOULD support both
 modes.
 
@@ -160,13 +160,13 @@ are individually mapped to and from distinct HTTP message headers.
 
 The naming convention for the HTTP header mapping of attributes is:
 
-    * Prefixed with "CE-"
-    * Each attribute name's first character is capitalized
+    * MUST be prefixed with "CE-"
+    * Each attribute name's first character MUST be capitalized
 
 Examples:
 
     * `eventTime` maps to `CE-EventTime`
-    * `eventId` maps to `CE-EventId`
+    * `eventID` maps to `CE-EventID`
     * `cloudEventsVersion` maps to `CE-CloudEventsVersion`
 
 ##### 3.1.3.2 HTTP Header Values
@@ -175,8 +175,19 @@ The value for each HTTP header is constructed from the respective attribute's
 [JSON value][JSON-value] representation, compliant with the [JSON event
 format][JSON-format] specification.
 
-The JSON value MUST NOT contain any unencoded LF (ASCII 0x10) or CR (ASCII
-0x13) characters.
+Some Cloud Events metadata attributes can contain arbitrary UTF-8 string
+content, and per [RFC7230 Section 3][RFC7230-Section-3], HTTP headers MUST only
+use printable characters from the US-ASCII character set, and are terminated by
+a CRLF sequence.
+
+Therefore, and analog to the encoding rules for Universal character set host
+names in URIs [RFC3986 3.2.2][RFC3986], the JSON value MUST be encoded as
+follows:
+
+Non-printable ASCII characters and non-ASCII characters must first be encoded
+according to UTF-8, and then each octet of the corresponding UTF-8 sequence
+must be percent-encoded to be represented as HTTP header characters, in
+compliance with [RFC7230, sections 3, 3.2, 3.2.6][RFC7230-Section-3].
 
 JSON objects and arrays are NOT surrounded with single or double quotes.
 
@@ -191,7 +202,7 @@ Host: webhook.example.com
 CE-CloudEventsVersion: "0.1"
 CE-EventType: "com.example.someevent"
 CE-EventTime: "2018-04-05T03:56:24Z"
-CE-EventId: "1234-1234-1234"
+CE-EventID: "1234-1234-1234"
 CE-Source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
@@ -209,7 +220,7 @@ HTTP/1.1 200 OK
 CE-CloudEventsVersion: "0.1"
 CE-EventType: "com.example.someevent"
 CE-EventTime: "2018-04-05T03:56:24Z"
-CE-EventId: "1234-1234-1234"
+CE-EventID: "1234-1234-1234"
 CE-Source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
@@ -249,6 +260,9 @@ format specification and the resulting data becomes the HTTP message body.
 
 Implementations MAY include the same HTTP headers as defined for the [binary
 mode](#313-metadata-headers).
+
+All Cloud Event metadata attributes MUST be mapped into the payload, even if
+they are also mapped into HTTP headers.
 
 #### 3.2.4 Examples
 
@@ -302,6 +316,7 @@ Content-Length: nnnn
 - [RFC2119][RFC2119] Key words for use in RFCs to Indicate Requirement Levels
 - [RFC2818][RFC2818] HTTP over TLS
 - [RFC3629][RFC3629] UTF-8, a transformation format of ISO 10646
+- [RFC3986][RFC3986] Uniform Resource Identifier (URI): Generic Syntax 
 - [RFC4627][RFC4627] The application/json Media Type for JavaScript Object
   Notation (JSON)
 - [RFC4648][RFC4648] The Base16, Base32, and Base64 Data Encodings
@@ -321,12 +336,14 @@ Content-Length: nnnn
 [RFC2119]: https://tools.ietf.org/html/rfc2119
 [RFC2818]: https://tools.ietf.org/html/rfc2818
 [RFC3629]: https://tools.ietf.org/html/rfc3629
+[RFC3986]: https://tools.ietf.org/html/rfc3986
 [RFC4627]: https://tools.ietf.org/html/rfc4627
 [RFC4648]: https://tools.ietf.org/html/rfc4648
 [RFC6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [RFC7159]: https://tools.ietf.org/html/rfc7159
 [RFC7230]: https://tools.ietf.org/html/rfc7230 
 [RFC7231]: https://tools.ietf.org/html/rfc7231
+[RFC7230-Section-3]: https://tools.ietf.org/html/rfc7230#section-3
 [RFC7231-Section-4]: https://tools.ietf.org/html/rfc7231#section-4
 [RFC7230-Section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [RFC7540]: https://tools.ietf.org/html/rfc7540

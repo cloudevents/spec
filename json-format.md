@@ -84,7 +84,7 @@ The following table shows exemplary mappings:
 | eventTypeVersion   | String   | "1.0"
 | cloudEventsVersion | String   | "0.1"
 | source             | URI      | "/mycontext"
-| eventId            | String   | "1234-1234-1234"
+| eventID            | String   | "1234-1234-1234"
 | eventTime          | Timestamp| "2018-04-05T17:31:00Z"
 | contentType        | String   | "application/json"
 | extensions         | Map      | { "extA" : "vA", "extB", "vB" }
@@ -135,7 +135,7 @@ Example event with `String`-valued `data`:
     "eventType" : "com.example.someevent",
     "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
-    "eventId" : "A234-1234-1234",
+    "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
     "extensions" : {
       "comExampleExtension" : "value"
@@ -153,7 +153,7 @@ Example event with `Binary`-valued data
     "eventType" : "com.example.someevent",
     "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
-    "eventId" : "B234-1234-1234",
+    "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
     "extensions" : {
       "comExampleExtension" : "value"
@@ -172,7 +172,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
     "eventType" : "com.example.someevent",
     "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
-    "eventId" : "C234-1234-1234",
+    "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
     "extensions" : {
       "comExampleExtension" : "value"
