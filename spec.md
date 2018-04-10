@@ -251,6 +251,25 @@ Messages can be delivered through various industry standard protocol (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or
 platform/vendor specific protocols (AWS Kinesis, Azure Event Grid).
 
+## Type System
+
+The following abstract data types are available for use in attributes.
+
+- `String` - Sequence of printable Unicode characters.
+- `Binary` - Sequence of bytes.
+- `Map` - `String`-indexed dictionary of `Object`-typed values
+- `Object` - Either a `String`, or a `Binary`, or a `Map`
+- `URI` - String expression as defined in
+  [RFC 3986](https://tools.ietf.org/html/rfc3986)
+- `Timestamp` - String expression as defined in
+  [RFC 3339](https://tools.ietf.org/html/rfc3339)
+
+This specification does not define numeric or logical types.
+
+The `Object` type is a variant type that can take the shape of either a
+`String` or a `Binary` or a `Map`. The type system is intentionally
+abstract, and therefore it is left to implementations how to represent the
+variant type.
 
 ## Context Attributes
 Every event conforming to this specification MUST include a context.
@@ -263,7 +282,7 @@ data for some use cases (e.g. a JSON implementation might use one JSON object
 that contains both context and data).
 
 ### eventType
-* Type: String
+* Type: `String`
 * Description: Type of occurrence which has happened. Often this
   property is used for routing, observability, policy enforcement, etc.
 * Constraints:
@@ -275,7 +294,7 @@ that contains both context and data).
    * com.github.pull.create
 
 ### eventTypeVersion
-* Type: String
+* Type: `String`
 * Description: The version of the `eventType`. This enables the interpretation
   of `data` by eventual consumers, requires the consumer to be knowledgeable
   about the producer.
@@ -284,7 +303,7 @@ that contains both context and data).
   * If present, MUST be a non-empty string
 
 ### cloudEventsVersion
-* Type: String
+* Type: `String`
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
 * Constraints:
@@ -292,7 +311,7 @@ that contains both context and data).
   * MUST be a non-empty string
 
 ### source
-* Type: URI
+* Type: `URI`
 * Description: This describes the event producer. Often this will include
   information such as the type of the event source, the organization
   publishing the event, and some unique idenfitiers. The exact syntax and
@@ -301,7 +320,7 @@ that contains both context and data).
   * REQUIRED
 
 ### eventID
-* Type: String
+* Type: `String`
 * Description: ID of the event. The semantics of this string are explicitly
   undefined to ease the implementation of producers. Enables deduplication.
 * Examples:
@@ -312,7 +331,7 @@ that contains both context and data).
   * MUST be unique within the scope of the producer
 
 ### eventTime
-* Type: Timestamp per [RFC 3339](https://tools.ietf.org/html/rfc3339)
+* Type: `Timestamp`
 * Description: Timestamp of when the event happened.
 * Constraints:
   * OPTIONAL
@@ -320,7 +339,7 @@ that contains both context and data).
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
 ### schemaURL
-* Type: URI per [RFC 3986](https://tools.ietf.org/html/rfc3986)
+* Type: `URI`
 * Description: A link to the schema that the `data` attribute adheres to.
 * Constraints:
   * OPTIONAL
@@ -328,7 +347,7 @@ that contains both context and data).
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
 ### contentType
-* Type: String per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+* Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * Description: Describe the data encoding format
 * Constraints:
   * OPTIONAL
@@ -337,7 +356,7 @@ that contains both context and data).
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
 ### extensions
-* Type: Map <String, Object>
+* Type: `Map`
 * Description: This is for additional metadata and this does not have a
   mandated structure. This enables a place for custom fields a producer or
   middleware might want to include and provides a place to test metadata before
@@ -352,7 +371,7 @@ that contains both context and data).
   * authorization data
 
 ### data
-* Type: Arbitrary payload
+* Type: `Object`
 * Description: The event payload. The payload depends on the eventType,
   schemaURL and eventTypeVersion, the payload is encoded into a media format
   which is specified by the contentType attribute (e.g. application/json).
