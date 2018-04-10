@@ -264,15 +264,13 @@ that contains both context and data).
 
 ### eventType
 * Type: String
-* Description: Type of occurrence which has happened. The event type MUST be
-  namespaced with a package based on the reverse-DNS of a domain associated
-  with the software that produced the event. This MAY be used for routing,
-  observability, policy enforcement, etc.
+* Description: Type of occurrence which has happened. Often this
+  property is used for routing, observability, policy enforcement, etc.
 * Constraints:
    * REQUIRED
    * MUST be a non-empty string
-   * MUST be prefixed with a reverse-DNS name associated with the software that
-          produces the event
+   * SHOULD be prefixed with a reverse-DNS name associated with the software
+          that produces the event
 * Examples
    * com.github.pull.create
 
