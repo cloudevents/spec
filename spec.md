@@ -287,6 +287,8 @@ that contains both context and data).
   semantics behind the data encoded in the URI is event producer defined.
 * Constraints:
   * REQUIRED
+  * SHOULD include an [authority
+    component](https://tools.ietf.org/html/rfc3986#section-3.2)
 
 ### event-id
 * Type: String
