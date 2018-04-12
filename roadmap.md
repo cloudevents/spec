@@ -13,8 +13,6 @@ The CloudEvents Roadmap.
 
 * Draft specification that WG members agree *could* provide interoperability.
 * Include an initial set of use-cases for CloudEvents.
-* Include a specification for mapping the CloudEvents specification to HTTP.
-* Include a specification for mapping the CloudEvents specification to JSON.
 * Define a type system for CloudEvents values.
 * Document at least 3 sample events that conform to the specification.
 * Github repo is organized to be approachable to a engineers who might want to
@@ -27,8 +25,9 @@ of the working group.
 *0.2*
 
 * Have at least 2 implementations of the specification that can demonstrate interoperability.
+* Include a specification for mapping the CloudEvents specification to HTTP.
+* Include a specification for mapping the CloudEvents specification to JSON.
 * Changes to the spec to facilitate adoption.
-* HTTP protocol specification.
 * Draft documentation and developer guide.
 * Publicize at conferences ([CloudNativeCon Europe](https://events.linuxfoundation.org/events/kubecon-cloudnativecon-north-america-2018/)).
 
