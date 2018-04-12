@@ -11,10 +11,10 @@ This document is a working draft.
 
 ## Table of Contents
 
-1. [Introduction](#1-Introduction)
-2. [Attributes](#2-Attributes)
-3. [Envelope](#3-Envelope)
-4. [References](#4-References)
+1. [Introduction](#1-introduction)
+2. [Attributes](#2-attributes)
+3. [Envelope](#3-envelope)
+4. [References](#4-references)
 
 ## 1. Introduction
 
@@ -24,10 +24,10 @@ the elements defined in the Cloud Events specification are to be represented in
 the JavaScript Object Notation (JSON) Data Interchange Format
 ([RFC8259][RFC8259]).
 
-The [Attributes](#2-Attributes) section describes the naming conventions and
+The [Attributes](#2-attributes) section describes the naming conventions and
 data type mappings for Cloud Events attributes.
 
-The [Envelope](#3-Envelope) section defines a JSON container for Cloud Events
+The [Envelope](#3-envelope) section defines a JSON container for Cloud Events
 attributes and an associated media type.
 
 ### 1.1. Conformance
@@ -84,7 +84,7 @@ The following table shows exemplary mappings:
 | eventTypeVersion   | String   | "1.0"
 | cloudEventsVersion | String   | "0.1"
 | source             | URI      | "/mycontext"
-| eventId            | String   | "1234-1234-1234"
+| eventID            | String   | "1234-1234-1234"
 | eventTime          | Timestamp| "2018-04-05T17:31:00Z"
 | contentType        | String   | "application/json"
 | extensions         | Map      | { "extA" : "vA", "extB", "vB" }
@@ -103,12 +103,12 @@ Such a representation uses the media type `application/cloudevents+json`
 All REQUIRED and all not omitted OPTIONAL attributes in the given event
 become members of the JSON object, with the respective JSON object member
 name matching the attribute name, and the member's type and value being
-mapped using the [type system mapping](#22-Type-System-Mapping).
+mapped using the [type system mapping](#22-type-system-mapping).
 
 ### 3.1. Special Handling of the "data" Attribute
 
 The mapping of the `Object`-typed `data` attribute follows the rules laid out
-in [Section 2.3.](#23-Mapping Object-typed Attributes), with one additional
+in [Section 2.3.](#23-mapping-object-typed-attributes), with one additional
 rule:
 
 If an implementation determines that the type of the `data` attribute is
@@ -121,7 +121,7 @@ the `data` attribute value into a [JSON value][JSON-Value], and set the `data`
 member of the envelope JSON object to this JSON value.
 
 Unlike all other attributes, for which value types are restricted to strings
-per the [type-system mapping](#22-Type-System-Mapping), the resulting `data`
+per the [type-system mapping](#22-type-system-mapping), the resulting `data`
 member [JSON value][JSON-Value] is unrestricted, and MAY also contain numeric
 and logical JSON types.
 
@@ -135,7 +135,7 @@ Example event with `String`-valued `data`:
     "eventType" : "com.example.someevent",
     "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
-    "eventId" : "A234-1234-1234",
+    "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
     "extensions" : {
       "comExampleExtension" : "value"
@@ -153,7 +153,7 @@ Example event with `Binary`-valued data
     "eventType" : "com.example.someevent",
     "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
-    "eventId" : "B234-1234-1234",
+    "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
     "extensions" : {
       "comExampleExtension" : "value"
@@ -164,7 +164,7 @@ Example event with `Binary`-valued data
 ```
 
 Example event with JSON data for the "data" member, either derived from
-a `Map` or [JSON data](#31-Special-Handling-of-the-data-Attribute) data:
+a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 
 ``` JSON
 {
@@ -172,7 +172,7 @@ a `Map` or [JSON data](#31-Special-Handling-of-the-data-Attribute) data:
     "eventType" : "com.example.someevent",
     "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
-    "eventId" : "C234-1234-1234",
+    "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
     "extensions" : {
       "comExampleExtension" : "value"
