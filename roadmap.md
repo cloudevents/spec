@@ -13,18 +13,18 @@ _Note: The ordered lists for each milestone provide a way to reference each item
 
 *0.1*
 
-1. Draft specification that WG members agree *could* provide interoperability.
-1. Document at least 3 sample events that conform to the specification.
-1. Github repo is organized to be approachable to a engineers who might want to
+* Draft specification that WG members agree *could* provide interoperability.
+* Include an initial set of use-cases for CloudEvents.
+* Include a specification for mapping the CloudEvents specification to HTTP.
+* Include a specification for mapping the CloudEvents specification to JSON.
+* Define a type system for CloudEvents values.
+* Document at least 3 sample events that conform to the specification.
+* Github repo is organized to be approachable to a engineers who might want to
 implement the spec.
-1. Use-cases.
-1. Placeholder for protocol specification, folder and brief starter doc for
-  HTTP.
-1. Finalize logo.
-1. Create and deploy a website that features a simple overview, email list and directs visitors to Github.
-1. Store all website assets in the CloudEvents repository, under the governance
+* Finalize logo.
+* Create and deploy a website that features a simple overview, email list and directs visitors to Github.
+* Store all website assets in the CloudEvents repository, under the governance
 of the working group.
-
 
 *0.2*
 
