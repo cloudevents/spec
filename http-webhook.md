@@ -305,6 +305,7 @@ WebHook-Allowed-Rate: 100
 - [RFC7540][RFC7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [CE]: ./spec.md
+[Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [Retry-After]: https://tools.ietf.org/html/rfc7231#section-7.1.3
 [Authorization]: https://tools.ietf.org/html/rfc7235#section-4.2
 [Allow]: https://tools.ietf.org/html/rfc7231#section-7.4.1
