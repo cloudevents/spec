@@ -18,7 +18,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of Cloud Events Attributes](#2-use-of-cloud-events-attributes)
-- 2.1. [contentType Attribute](#21-contentType-attribute)
+- 2.1. [contentType Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [AMQP Message Mapping](#3-amqp-message-mapping)
 - 3.2. [Binary Content Mode](#31-binary-content-mode)
@@ -228,7 +228,7 @@ format specification and the resulting data becomes the AMQP application
 #### 3.2.3. Metadata Headers
 
 Implementations MAY include the same AMQP application-properties as defined for
-the [binary mode](#313-Metadata-Headers).
+the [binary mode](#313-metadata-headers).
 
 #### 3.2.4 Examples
 
