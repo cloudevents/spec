@@ -319,6 +319,9 @@ WebHook-Allowed-Rate: 100
 [RFC6750]: https://tools.ietf.org/html/rfc6750
 [RFC7159]: https://tools.ietf.org/html/rfc7159
 [RFC7230]: https://tools.ietf.org/html/rfc7230
+[RFC7230-Section-3]: https://tools.ietf.org/html/rfc7230#section-3
+[RFC7231-Section-4]: https://tools.ietf.org/html/rfc7231#section-4
+[RFC7230-Section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [RFC7231]: https://tools.ietf.org/html/rfc7231
 [RFC7235]: https://tools.ietf.org/html/rfc7235
 [RFC7540]: https://tools.ietf.org/html/rfc7540
