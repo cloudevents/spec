@@ -15,8 +15,6 @@ _Note: The ordered lists for each milestone provide a way to reference each item
 
 * Draft specification that WG members agree *could* provide interoperability.
 * Include an initial set of use-cases for CloudEvents.
-* Include a specification for mapping the CloudEvents specification to HTTP.
-* Include a specification for mapping the CloudEvents specification to JSON.
 * Define a type system for CloudEvents values.
 * Document at least 3 sample events that conform to the specification.
 * Github repo is organized to be approachable to a engineers who might want to
@@ -28,11 +26,12 @@ of the working group.
 
 *0.2*
 
-1. Have at least 2 implementations of the specification that can demonstrate interoperability.
-1. Changes to the spec to facilitate adoption.
-1. HTTP protocol specification.
-1. Draft documentation and developer guide.
-1. Publicize at conferences ([CloudNativeCon Europe](https://events.linuxfoundation.org/events/kubecon-cloudnativecon-north-america-2018/)).
+* Have at least 2 implementations of the specification that can demonstrate interoperability.
+* Include a specification for mapping the CloudEvents specification to HTTP.
+* Include a specification for mapping the CloudEvents specification to JSON.
+* Changes to the spec to facilitate adoption.
+* Draft documentation and developer guide.
+* Publicize at conferences ([CloudNativeCon Europe](https://events.linuxfoundation.org/events/kubecon-cloudnativecon-north-america-2018/)).
 
 *0.3*
 
