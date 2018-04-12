@@ -305,8 +305,6 @@ WebHook-Allowed-Rate: 100
 - [RFC7540][RFC7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [CE]: ./spec.md
-[JSON-format]: ./json-format.md
-[Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [Retry-After]: https://tools.ietf.org/html/rfc7231#section-7.1.3
 [Authorization]: https://tools.ietf.org/html/rfc7235#section-4.2
 [Allow]: https://tools.ietf.org/html/rfc7231#section-7.4.1
@@ -315,20 +313,11 @@ WebHook-Allowed-Rate: 100
 [3xx]: https://tools.ietf.org/html/rfc7231#section-6.4
 [429]: https://tools.ietf.org/html/rfc6585#section-4
 [Bearer]:https://tools.ietf.org/html/rfc6750#section-2.1
-[RFC2046]: https://tools.ietf.org/html/rfc2046
 [RFC2119]: https://tools.ietf.org/html/rfc2119
 [RFC2818]: https://tools.ietf.org/html/rfc2818
-[RFC3629]: https://tools.ietf.org/html/rfc3629
-[RFC3986]: https://tools.ietf.org/html/rfc3986
-[RFC4627]: https://tools.ietf.org/html/rfc4627
-[RFC4648]: https://tools.ietf.org/html/rfc4648
-[RFC6585]: https://tools.ietf.org/html/rfc6585
-[RFC6839]: https://tools.ietf.org/html/rfc6839#section-3.1
+[RFC6750]: https://tools.ietf.org/html/rfc6750
 [RFC7159]: https://tools.ietf.org/html/rfc7159
 [RFC7230]: https://tools.ietf.org/html/rfc7230
 [RFC7231]: https://tools.ietf.org/html/rfc7231
 [RFC7235]: https://tools.ietf.org/html/rfc7235
-[RFC7230-Section-3]: https://tools.ietf.org/html/rfc7230#section-3
-[RFC7231-Section-4]: https://tools.ietf.org/html/rfc7231#section-4
-[RFC7230-Section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [RFC7540]: https://tools.ietf.org/html/rfc7540
