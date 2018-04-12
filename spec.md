@@ -9,7 +9,6 @@ of event data.
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
 - [Use-Cases](about/use-cases.md)
-- [Additional Topics & Questions](#additional-topics--questions)
 - [References](about/references.md)
 
 ## Overview
@@ -346,32 +345,4 @@ that contains both context and data).
   which is specified by the content-type attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
-
-
-## Additional Topics & Questions
-
-* Context Attribute Names - We decided not to spend too much time on property
-  names during our working sessions. Instead the focus has been on semantics.
-  We still need to revise property names.
-* Event Consumer API - What does this look like?
-* Routing, Batching, Failure Semantics - What do these look like?
-* Authentication - Will this be included within the event?
-  * Initial authN (e.g. auth at the point of event occurrence)
-  * Transport level authN (e.g. auth on the event)
-* What is the best way to handle encoding for event payloads?
-* How to specify an action that is desired to happen based on an event
-  notification (also does this violate our interpretation of events)?
-* Micro batch considerations – For various streaming and asynchronous
-  implementations the client might push one event at a time, but the function
-  might want to process multiple events per invocation and obtain higher
-  efficiency. There needs to be a mechanism to trigger a function with an
-  array of events. An example implementation can be to indicate in the event
-  type that it's a list type and pass a “records” list object where each
-  record holds its own headers, body or attributes.
-* Event Routing – Once the event structure, protocol, and API are well defined
-  it becomes trivial to route from one type to another, or even route internal
-  events to external clouds. It can be accomplished by simply writing a
-  serverless function which listens on the source event, opens a connection to
-  the destination protocol and maps every incoming event (received through
-  event API) to an event message over the destination protocol.
 
