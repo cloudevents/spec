@@ -315,6 +315,7 @@ WebHook-Allowed-Rate: 100
 [Bearer]:https://tools.ietf.org/html/rfc6750#section-2.1
 [RFC2119]: https://tools.ietf.org/html/rfc2119
 [RFC2818]: https://tools.ietf.org/html/rfc2818
+[RFC6585]: https://tools.ietf.org/html/rfc6585
 [RFC6750]: https://tools.ietf.org/html/rfc6750
 [RFC7159]: https://tools.ietf.org/html/rfc7159
 [RFC7230]: https://tools.ietf.org/html/rfc7230
