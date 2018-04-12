@@ -20,7 +20,7 @@ This document is a working draft.
 2. [Delivering notifications](#2-delivering-notifications)
 3. [Authorization](#3-authorization)
 4. [Abuse Protection](#4-abuse-protection)
-5. [References](#4-references)
+5. [References](#5-references)
 
 ## 1. Introduction
 
