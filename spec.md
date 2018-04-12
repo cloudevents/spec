@@ -269,8 +269,8 @@ that contains both context and data).
 * Constraints:
    * REQUIRED
    * MUST be a non-empty string
-   * SHOULD be prefixed with a reverse-DNS name associated with the software
-          that produces the event
+   * SHOULD be prefixed with a reverse-DNS name. The prefixed domain dictates
+            the organization which defines the semantics of this event type.
 * Examples
    * com.github.pull.create
 
