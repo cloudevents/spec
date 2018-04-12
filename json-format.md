@@ -1,0 +1,212 @@
+# JSON Event Format for Cloud Events
+
+## Abstract
+
+The JSON Format for Cloud Events defines how events are expressed in
+JavaScript Object Notation (JSON) Data Interchange Format ([RFC8259][RFC8259]).
+
+## Status of this document
+
+This document is a working draft.
+
+## Table of Contents
+
+1. [Introduction](#1-Introduction)
+2. [Attributes](#2-Attributes)
+3. [Envelope](#3-Envelope)
+4. [References](#4-References)
+
+## 1. Introduction
+
+[Cloud Events][CE] is a standardized and transport-neutral definition of the
+structure and metadata description of events. This specification defines how
+the elements defined in the Cloud Events specification are to be represented in
+the JavaScript Object Notation (JSON) Data Interchange Format
+([RFC8259][RFC8259]).
+
+The [Attributes](#2-Attributes) section describes the naming conventions and
+data type mappings for Cloud Events attributes.
+
+The [Envelope](#3-Envelope) section defines a JSON container for Cloud Events
+attributes and an associated media type.
+
+### 1.1. Conformance
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in [RFC2119][RFC2119].
+
+## 2. Attributes
+
+This section defines how Cloud Events attributes are mapped to JSON. This
+specification does not explicitly map each attribute, but provides a generic
+mapping model that applies to all current and future Cloud Event attributes.
+
+### 2.1. Base Type System
+
+The core [Cloud Events specification][CE] defines a minimal abstract type
+system, which this mapping leans on.
+
+### 2.2. Type System Mapping
+
+The Cloud Events type system is mapped to JSON types as follows:
+
+| Cloud Events | JSON
+|--------------|-------------------------------------------------------------
+| String       | [string][JSON-String]
+| Binary       | [string][JSON-String], [Base64-encoded][base64] binary
+| URI          | [string][JSON-String]
+| Timestamp    | [string][JSON-String]
+| Map          | [JSON object][JSON-Object]
+| Object       | [JSON value][JSON-Value]
+
+### 2.3. Mapping Object-typed Attributes
+
+The Cloud Events `data` attribute is `Object`-typed, meaning that it either
+holds a `String`, or a `Binary` value, or a `Map`. `Map` entry values are
+also `Object` typed.
+
+If an implementation determines that the actual type of an `Object` is a
+`String`, the value MUST be represented as [JSON string][JSON-String]
+expression; for `Binary`, the value MUST represented as [JSON
+string][JSON-String] expression containing the [Base64][base64] encoded binary
+value; for `Map`, the value MUST be represented as a [JSON object][JSON-Object]
+expression, whereby the index fields become member names and the associated
+values become the respective member's value.
+
+### 2.4. Examples
+
+The following table shows exemplary mappings:
+
+| Cloud Events       | Type     | Exemplary JSON Value
+|--------------------|----------|-------------------------------
+| eventType          | String   | "com.example.someevent"
+| eventTypeVersion   | String   | "1.0"
+| cloudEventsVersion | String   | "0.1"
+| source             | URI      | "/mycontext"
+| eventId            | String   | "1234-1234-1234"
+| eventTime          | Timestamp| "2018-04-05T17:31:00Z"
+| contentType        | String   | "application/json"
+| extensions         | Map      | { "extA" : "vA", "extB", "vB" }
+| data               | String   | "<much wow=\"xml\"/>"
+| data               | Binary   | "Q2xvdWRFdmVudHM="
+| data               | Map      | { "objA" : "vA", "objB", "vB" }
+
+## 3. Envelope
+
+Each Cloud Event can be wholly represented as a JSON object.
+
+Such a representation uses the media type `application/cloudevents+json`
+
+> The media type must be registered with IANA
+
+All REQUIRED and all not omitted OPTIONAL attributes in the given event
+become members of the JSON object, with the respective JSON object member
+name matching the attribute name, and the member's type and value being
+mapped using the [type system mapping](#22-Type-System-Mapping).
+
+### 3.1. Special Handling of the "data" Attribute
+
+The mapping of the `Object`-typed `data` attribute follows the rules laid out
+in [Section 2.3.](#23-Mapping Object-typed Attributes), with one additional
+rule:
+
+If an implementation determines that the type of the `data` attribute is
+`Binary` or `String`, it MUST inspect the `contentType` attribute to determine
+whether it is indicated that the data value contains JSON data.
+
+If the `contentType` value is ["application/json"][RFC4627], or any media type
+with a [structured +json suffix][RFC6839], the implementation MUST translate
+the `data` attribute value into a [JSON value][JSON-Value], and set the `data`
+member of the envelope JSON object to this JSON value.
+
+Unlike all other attributes, for which value types are restricted to strings
+per the [type-system mapping](#22-Type-System-Mapping), the resulting `data`
+member [JSON value][JSON-Value] is unrestricted, and MAY also contain numeric
+and logical JSON types.
+
+### 3.2. Examples
+
+Example event with `String`-valued `data`:
+
+``` JSON
+{
+    "cloudEventsVersion" : "0.1",
+    "eventType" : "com.example.someevent",
+    "eventTypeVersion" : "1.0",
+    "source" : "/mycontext",
+    "eventId" : "A234-1234-1234",
+    "eventTime" : "2018-04-05T17:31:00Z",
+    "extensions" : {
+      "comExampleExtension" : "value"
+    },
+    "contentType" : "text/xml",
+    "data" : "<much wow=\"xml\"/>"
+}
+```
+
+Example event with `Binary`-valued data
+
+``` JSON
+{
+    "cloudEventsVersion" : "0.1",
+    "eventType" : "com.example.someevent",
+    "eventTypeVersion" : "1.0",
+    "source" : "/mycontext",
+    "eventId" : "B234-1234-1234",
+    "eventTime" : "2018-04-05T17:31:00Z",
+    "extensions" : {
+      "comExampleExtension" : "value"
+    },
+    "contentType" : "application/vnd.apache.thrift.binary",
+    "data" : "... base64 encoded string ..."
+}
+```
+
+Example event with JSON data for the "data" member, either derived from
+a `Map` or [JSON data](#31-Special-Handling-of-the-data-Attribute) data:
+
+``` JSON
+{
+    "cloudEventsVersion" : "0.1",
+    "eventType" : "com.example.someevent",
+    "eventTypeVersion" : "1.0",
+    "source" : "/mycontext",
+    "eventId" : "C234-1234-1234",
+    "eventTime" : "2018-04-05T17:31:00Z",
+    "extensions" : {
+      "comExampleExtension" : "value"
+    },
+    "contentType" : "application/json",
+    "data" : {
+        "appinfoA" : "abc",
+        "appinfoB" : 123,
+        "appinfoC" : true
+    }
+}
+```
+
+## 4. References
+
+* [RFC2046][RFC2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
+  Media Types
+* [RFC2119][RFC2119] Key words for use in RFCs to Indicate Requirement Levels
+* [RFC4627][RFC4627] The application/json Media Type for JavaScript Object
+  Notation (JSON)
+* [RFC4648][RFC4648] The Base16, Base32, and Base64 Data Encodings
+* [RFC6839][RFC6839] Additional Media Type Structured Syntax Suffixes
+* [RFC8259][RFC8259] The JavaScript Object Notation (JSON) Data Interchange Format
+
+[CE]: ./spec.md
+[JSON-format]: ./json-format.md
+[Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
+[JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
+[JSON-String]: https://tools.ietf.org/html/rfc7159#section-7
+[JSON-Object]: https://tools.ietf.org/html/rfc7159#section-4 
+[base64]: https://tools.ietf.org/html/rfc4648#section-4
+[RFC2046]: https://tools.ietf.org/html/rfc2046
+[RFC2119]: https://tools.ietf.org/html/rfc2119
+[RFC4627]: https://tools.ietf.org/html/rfc4627
+[RFC4648]: https://tools.ietf.org/html/rfc4648
+[RFC6839]: https://tools.ietf.org/html/rfc6839#section-3.1
+[RFC8259]: https://tools.ietf.org/html/rfc8259
