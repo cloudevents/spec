@@ -312,6 +312,10 @@ WebHook-Allowed-Rate: 100
 [POST]: https://tools.ietf.org/html/rfc7231#section-4.3.3
 [OPTIONS]: https://tools.ietf.org/html/rfc7231#section-4.3.7
 [3xx]: https://tools.ietf.org/html/rfc7231#section-6.4
+[200]: https://tools.ietf.org/html/rfc7231#section-6.3.1
+[202]: https://tools.ietf.org/html/rfc7231#section-6.3.3
+[204]: https://tools.ietf.org/html/rfc7231#section-6.3.5
+[410]:https://tools.ietf.org/html/rfc7231#section-6.5.9
 [429]: https://tools.ietf.org/html/rfc6585#section-4
 [Bearer]:https://tools.ietf.org/html/rfc6750#section-2.1
 [RFC2119]: https://tools.ietf.org/html/rfc2119
