@@ -17,7 +17,6 @@ This document is a working draft.
 1. [Introduction](#1-introduction)
 - 1.1. [Conformance](#11-conformance)
 - 1.2. [Relation to HTTP](#12-relation-to-http)
-- 1.3. [Security](#15-security)
 2. [Delivering notifications](#2-delivering-notifications)
 3. [Authorization](#3-authorization)
 4. [Abuse Protection](#4-abuse-protection)
@@ -294,19 +293,10 @@ WebHook-Allowed-Rate: 100
 
 ## 5. References
 
-- [RFC2046][RFC2046] Multipurpose Internet Mail Extensions (MIME) Part Two: 
-  Media Types
 - [RFC2119][RFC2119] Key words for use in RFCs to Indicate Requirement Levels
 - [RFC2818][RFC2818] HTTP over TLS
-- [RFC3629][RFC3629] UTF-8, a transformation format of ISO 10646
-- [RFC3986][RFC3986] Uniform Resource Identifier (URI): Generic Syntax 
-- [RFC4627][RFC4627] The application/json Media Type for JavaScript Object
-  Notation (JSON)
-- [RFC4648][RFC4648] The Base16, Base32, and Base64 Data Encodings
 - [RFC6750][RFC6750] The OAuth 2.0 Authorization Framework: Bearer Token Usage
 - [RFC6585][RFC6585] Additional HTTP Status Codes
-- [RFC6839][RFC6839] Additional Media Type Structured Syntax Suffixes
-- [RFC7159][RFC7159] The JavaScript Object Notation (JSON) Data Interchange Format
 - [RFC7230][RFC7230] Hypertext Transfer Protocol (HTTP/1.1): Message Syntax
   and Routing
 - [RFC7231][RFC7231] Hypertext Transfer Protocol (HTTP/1.1): Semantics and
