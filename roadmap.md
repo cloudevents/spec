@@ -2,6 +2,8 @@
 
 The CloudEvents Roadmap.
 
+_Note: The ordered lists for each milestone provide a way to reference each item; they don't imply an order for implementation._
+
 *Setup*
 
 1. Establish governance, contributing guidelines and initial stakeholders.
@@ -35,12 +37,9 @@ of the working group.
 *0.3*
 
 1. Interoperability demo.
-
-  i. At least one open source implementation of sending and receiving events.
-
-  ii. Events are sent by code written by Developer1 and recieved by code written by Developer2, where Developer1 has no knowledge of Developer2.
-
-  iii. Draft trigger specification (e.g. how events + actions are associated).
+    1. At least one open source implementation of sending and receiving events.
+    1. Events are sent by code written by Developer1 and recieved by code written by Developer2, where Developer1 has no knowledge of Developer2.
+    1. Draft trigger specification (e.g. how events + actions are associated).
 1. Draft documentation and user guides.
 
 *0.4*
