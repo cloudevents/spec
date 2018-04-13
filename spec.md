@@ -310,6 +310,19 @@ that contains both context and data).
   * MUST be a non-empty string
   * MUST be unique within the scope of the producer
 
+### followsFrom
+* Type: String
+* Description: The eventID of the event that caused this event. The semantics
+  of this string are explicitly undefined to ease the implementation of
+  producers. Enables correlation. The semantics of the relationship between
+  the event identified by followsFrom and the event identified by eventID are
+  as defined by the (Open Tracing Standard](https://github.com/opentracing/specification/blob/1be76512597d0e0388de06702f3c8a9e7b554064/specification.md#references-between-spans)
+* Examples:
+  * A database commit ID
+* Constraints:
+  * OPTIONAL
+  * If present, MUST adhere to ALL constraints of eventID.
+
 ### eventTime
 * Type: Timestamp per [RFC 3339](https://tools.ietf.org/html/rfc3339)
 * Description: Timestamp of when the event happened.
