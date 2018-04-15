@@ -4,7 +4,7 @@ We have an amazing community working together to build a dynamic cloud native
 ecosystem by increasing interoperability between systems which generate and
 respond to events.
 
-* [Contributors](contributors): the people and companies contributing to
+* [Contributors](contributors.md): the people and companies contributing to
   the CloudEvents specification and ecosystem
-* [Open Source](open-source): open source libraries that support CloudEvents
-* [Demos](demos): CloudEvents in action
+* [Open Source](open-source.md): open source libraries that support CloudEvents
+* [Demos](demos.md): CloudEvents in action
