@@ -264,14 +264,15 @@ that contains both context and data).
 
 ### eventType
 * Type: String
-* Description: Type of the event `data`. Producers can specify the format of
-  this, depending on their service. This enables the interpretation of `data`,
-  and can be used for routing, policy and more.
+* Description: Type of occurrence which has happened. Often this
+  property is used for routing, observability, policy enforcement, etc.
 * Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
-* Examples:
-  * customer.created
+   * REQUIRED
+   * MUST be a non-empty string
+   * SHOULD be prefixed with a reverse-DNS name. The prefixed domain dictates
+            the organization which defines the semantics of this event type.
+* Examples
+   * com.github.pull.create
 
 ### eventTypeVersion
 * Type: String
