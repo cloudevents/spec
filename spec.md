@@ -89,7 +89,7 @@ concurrently, including being both a producer and a consumer of events.
    For example, a weather station transmits a 12-byte, proprietary event
    payload indicating weather conditions once every 5 minutes over LoRaWAN. A
    LoRaWAN gateway is then used to publish the event to an Internet destination
-   in the Cloud Events format. The LoRaWAN gateway is the event producer,
+   in the CloudEvents format. The LoRaWAN gateway is the event producer,
    publishing on behalf of the weather station, and will set event metadata
    appropriately to reflect the source of the event.
 
@@ -139,7 +139,7 @@ concurrently, including being both a producer and a consumer of events.
      of events on behalf of consumers.
    - Transcoding, like encoding in MsgPack after decoding from JSON
    - Transformation that changes the event's structure, like mapping from
-     a proprietary format to Cloud Events, while preserving the
+     a proprietary format to CloudEvents, while preserving the
      identity and semantic integrity of the event.
    - Instant "push-style" delivery to interested consumers.
    - Storing events for eventual delivery, either for pick-up initiated
@@ -203,7 +203,7 @@ be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### Attribute Naming Convention
 
-Cloud Events attributes use "camelCasing" for the object member names, to aid
+CloudEvents attributes use "camelCasing" for the object member names, to aid
 integration with common programming languages.
 
 Attribute names that are composed of multiple words are expressed as compound
