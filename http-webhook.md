@@ -5,8 +5,8 @@
 "Web hooks" are a popular pattern to deliver notifications between applications
 and via HTTP endpoints. In spite of pattern usage being widespread, there is no
 formal definition for Web Hooks. This specification aims to provide such a
-definition for use with [CNCF Cloud Events][CE], but is considered generally
-usable beyond the scope of Cloud Events.
+definition for use with [CNCF CloudEvents][CE], but is considered generally
+usable beyond the scope of CloudEvents.
 
 ## Status of this document
 
@@ -92,12 +92,12 @@ observe the value of the Retry-After header and refrain from sending further
 requests until the indicated time.
 
 If the delivery has been accepted and processed, and if the response carries a
-payload with processing details, the response MUST have the [200 OK][200]
-status code. In this case, the response MUST carry a
+payload with processing details, the response MUST have the [200 OK][200] or
+[201 Created][201] status code. In this case, the response MUST carry a
 [`Content-Type`][Content-Type] header.
 
 If the delivery has been accepted and processed, but carries no payload, the
-response MUST have the [204 No Content][204] status code.
+response MUST have the [201 Created][201] or [204 No Content][204] status code.
 
 If the delivery has been accepted, but has not yet been processed or if the
 processing status is unknown, the response MUST have the [202 Accepted][202]
@@ -313,6 +313,7 @@ WebHook-Allowed-Rate: 100
 [OPTIONS]: https://tools.ietf.org/html/rfc7231#section-4.3.7
 [3xx]: https://tools.ietf.org/html/rfc7231#section-6.4
 [200]: https://tools.ietf.org/html/rfc7231#section-6.3.1
+[201]: https://tools.ietf.org/html/rfc7231#section-6.3.2
 [202]: https://tools.ietf.org/html/rfc7231#section-6.3.3
 [204]: https://tools.ietf.org/html/rfc7231#section-6.3.5
 [410]:https://tools.ietf.org/html/rfc7231#section-6.5.9
