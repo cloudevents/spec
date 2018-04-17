@@ -103,6 +103,11 @@ If the delivery has been accepted, but has not yet been processed or if the
 processing status is unknown, the response MUST have the [202 Accepted][202]
 status code.
 
+If the delivery cannot be accepted because the notification format has not
+been understood, the service MUST respond with status code [415][415].
+
+All further error status codes apply as specified in [RFC7231][RFC7231].
+
 ## 3. Authorization
 
 The delivery request MUST use one of the following two methods, both of which
@@ -317,6 +322,7 @@ WebHook-Allowed-Rate: 100
 [202]: https://tools.ietf.org/html/rfc7231#section-6.3.3
 [204]: https://tools.ietf.org/html/rfc7231#section-6.3.5
 [410]:https://tools.ietf.org/html/rfc7231#section-6.5.9
+[415]: https://tools.ietf.org/html/rfc7231#section-6.5.13
 [429]: https://tools.ietf.org/html/rfc6585#section-4
 [Bearer]:https://tools.ietf.org/html/rfc6750#section-2.1
 [RFC2119]: https://tools.ietf.org/html/rfc2119
