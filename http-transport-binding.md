@@ -17,7 +17,7 @@ This document is a working draft.
 - 1.3. [Content Modes](#13-content-modes)
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
-2. [Use of CloudEvents Attributes](#2-use-of-cloud-events-attributes)
+2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
 - 2.1. [contentType Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [HTTP Message Mapping](#3-http-message-mapping)
