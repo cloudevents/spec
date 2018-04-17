@@ -198,9 +198,9 @@ Therefore, and analog to the encoding rules for Universal character set host
 names in URIs [RFC3986 3.2.2][RFC3986], the JSON value MUST be encoded as
 follows:
 
-Non-printable ASCII characters and non-ASCII characters must first be encoded
+Non-printable ASCII characters and non-ASCII characters MUST first be encoded
 according to UTF-8, and then each octet of the corresponding UTF-8 sequence
-must be percent-encoded to be represented as HTTP header characters, in
+MUST be percent-encoded to be represented as HTTP header characters, in
 compliance with [RFC7230, sections 3, 3.2, 3.2.6][RFC7230-Section-3].
 
 JSON objects and arrays are NOT surrounded with single or double quotes.
