@@ -40,7 +40,7 @@ interpreted as described in [RFC2119][RFC2119].
 
 This section defines how CloudEvents attributes are mapped to JSON. This
 specification does not explicitly map each attribute, but provides a generic
-mapping model that applies to all current and future Cloud Event attributes.
+mapping model that applies to all current and future CloudEvents attributes.
 
 ### 2.1. Base Type System
 
@@ -94,11 +94,9 @@ The following table shows exemplary mappings:
 
 ## 3. Envelope
 
-Each Cloud Event can be wholly represented as a JSON object.
+Each CloudEvents event can be wholly represented as a JSON object.
 
 Such a representation uses the media type `application/cloudevents+json`
-
-> The media type must be registered with IANA
 
 All REQUIRED and all not omitted OPTIONAL attributes in the given event
 become members of the JSON object, with the respective JSON object member

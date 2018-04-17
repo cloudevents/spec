@@ -143,8 +143,8 @@ efficient transfer and without transcoding effort.
 
 #### 3.1.1. HTTP Content-Type
 
-For the *binary* mode, the HTTP `Content-Type` value maps directly to the Cloud
-Events `contentType` attribute.
+For the *binary* mode, the HTTP `Content-Type` value maps directly to the
+CloudEvents `contentType` attribute.
 
 #### 3.1.2. Event Data Encoding
 
