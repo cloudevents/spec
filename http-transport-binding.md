@@ -160,7 +160,7 @@ are individually mapped to and from distinct HTTP message headers.
 
 The naming convention for the HTTP header mapping of attributes is:
 
-    * MUST be prefixed with "CE-"
+    * Each attribute name MUST be prefixed with "CE-"
     * Each attribute name's first character MUST be capitalized
 
 Examples:
@@ -168,6 +168,20 @@ Examples:
     * `eventTime` maps to `CE-EventTime`
     * `eventID` maps to `CE-EventID`
     * `cloudEventsVersion` maps to `CE-CloudEventsVersion`
+
+For the `extensions` attribute, each entry of the `extensions` map
+is mapped to a separate HTTP header. The `extensions` attribute itself is
+not mapped to a header.
+
+The naming convention for the `extensions` header mapping of attributes is:
+
+    * Each map entry name MUST be prefixed with "CE-X-"
+    * Each map entry name's first character MUST be capitalized
+
+Examples:
+
+    * `example` maps to `CE-X-Example`
+    * `testExtension` maps to `CE-X-TestExtension`
 
 ##### 3.1.3.2 HTTP Header Values
 
@@ -261,7 +275,7 @@ format specification and the resulting data becomes the HTTP message body.
 Implementations MAY include the same HTTP headers as defined for the [binary
 mode](#313-metadata-headers).
 
-All Cloud Event metadata attributes MUST be mapped into the payload, even if
+All CloudEvents metadata attributes MUST be mapped into the payload, even if
 they are also mapped into HTTP headers.
 
 #### 3.2.4 Examples
