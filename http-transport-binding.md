@@ -1,8 +1,8 @@
-# HTTP Transport Binding for Cloud Events
+# HTTP Transport Binding for CloudEvents
 
 ## Abstract
 
-The HTTP Transport Binding for Cloud Events defines how events are mapped to
+The HTTP Transport Binding for CloudEvents defines how events are mapped to
 HTTP 1.1 request and response messages.
 
 ## Status of this document
@@ -17,7 +17,7 @@ This document is a working draft.
 - 1.3. [Content Modes](#13-content-modes)
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
-2. [Use of Cloud Events Attributes](#2-use-of-cloud-events-attributes)
+2. [Use of CloudEvents Attributes](#2-use-of-cloud-events-attributes)
 - 2.1. [contentType Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [HTTP Message Mapping](#3-http-message-mapping)
@@ -27,9 +27,9 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[Cloud Events][CE] is a standardized and transport-neutral definition of the
+[CloudEvents][CE] is a standardized and transport-neutral definition of the
 structure and metadata description of events. This specification defines how
-the elements defined in the Cloud Events specification are to be used in
+the elements defined in the CloudEvents specification are to be used in
 [HTTP 1.1][RFC7230] requests and response messages.
 
 ### 1.1. Conformance
@@ -84,9 +84,9 @@ This specification does not introduce any new security features for HTTP, or
 mandate specific existing features to be used. This specification applies
 identically to [HTTP over TLS]([RFC2818][RFC2818]).
 
-## 2. Use of Cloud Events Attributes
+## 2. Use of CloudEvents Attributes
 
-This specification does not further define any of the [Cloud Events][CE] event
+This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
 Two of the event attributes, `contentType` and `data` are handled specially
@@ -127,12 +127,12 @@ events using a particular mode might be defined by an application, but are not
 defined here.
 
 The receiver of the event can distinguish between the two modes by inspecting
-the `Content-Type` header value. If the value is prefixed with the Cloud Events
+the `Content-Type` header value. If the value is prefixed with the CloudEvents
 media type `application/cloudevents`, indicating the use of a known [event
 format](#14-event-formats), the receiver uses *structured* mode, otherwise it
 defaults to *binary* mode.
 
-If a receiver detects the Cloud Events media type, but with an event format that
+If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
 treat the event as binary and forward it to another party as-is.
 
@@ -153,7 +153,7 @@ message body.
 
 #### 3.1.3. Metadata Headers
 
-All [Cloud Events][CE] attributes with exception of `contentType` and `data`
+All [CloudEvents][CE] attributes with exception of `contentType` and `data`
 are individually mapped to and from distinct HTTP message headers.
 
 ##### 3.1.3.1 HTTP Header Names
@@ -175,7 +175,7 @@ The value for each HTTP header is constructed from the respective attribute's
 [JSON value][JSON-value] representation, compliant with the [JSON event
 format][JSON-format] specification.
 
-Some Cloud Events metadata attributes can contain arbitrary UTF-8 string
+Some CloudEvents metadata attributes can contain arbitrary UTF-8 string
 content, and per [RFC7230 Section 3][RFC7230-Section-3], HTTP headers MUST only
 use printable characters from the US-ASCII character set, and are terminated by
 a CRLF sequence.
