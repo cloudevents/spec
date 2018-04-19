@@ -1,4 +1,4 @@
-# HTTP Transport Binding for CloudEvents
+# HTTP Transport Binding for CloudEvents - Version 0.1
 
 ## Abstract
 
