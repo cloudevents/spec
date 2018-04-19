@@ -341,8 +341,7 @@ that contains both context and data).
 * Description: This is for additional metadata and this does not have a
   mandated structure. This enables a place for custom fields a producer or
   middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification. TBD - Determine a shorter
-  prefix for this (e.g. OpenAPI uses “x-”)
+  adding them to the CloudEvents specification.
   See the [Extensions](extensions.md) document for a list of possible
   properties.
 * Constraints:
