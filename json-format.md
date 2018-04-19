@@ -98,10 +98,10 @@ Each CloudEvents event can be wholly represented as a JSON object.
 
 Such a representation uses the media type `application/cloudevents+json`
 
-All REQUIRED and all not omitted OPTIONAL attributes in the given event
-become members of the JSON object, with the respective JSON object member
-name matching the attribute name, and the member's type and value being
-mapped using the [type system mapping](#22-type-system-mapping).
+All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST
+become members of the JSON object, with the respective JSON object member name
+matching the attribute name, and the member's type and value being mapped using
+the [type system mapping](#22-type-system-mapping).
 
 ### 3.1. Special Handling of the "data" Attribute
 

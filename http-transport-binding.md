@@ -253,8 +253,8 @@ hops, and across multiple transports.
 
 #### 3.2.1. HTTP Content-Type
 
-The [HTTP `Content-Type`][Content-Type] header is set to the media type of an
-[event format](#14-event-formats).
+The [HTTP `Content-Type`][Content-Type] header MUST be set to the media type of
+an [event format](#14-event-formats).
 
 Example for the [JSON format][JSON-format]:
 
