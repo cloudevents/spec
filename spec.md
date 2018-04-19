@@ -25,10 +25,10 @@ Enter CloudEvents, a specification for describing event data in a common way.
 CloudEvents seeks to ease event declaration and delivery across services,
 platforms and beyond.
 
-The [Serialization Profile](serialization.md) specifies how to
-serialize a CloudEvent into certain encoding formats. Compliant CloudEvents
-implementations that support those formats MUST adhere to the encoding rules
-specified in the profile for those formats.
+Event Formats specify how to serialize a CloudEvent with certain encoding
+formats. Compliant CloudEvents implementations that support those encodings
+MUST adhere to the encoding rules specified in the respective event format.
+All implementations MUST support the [JSON format][json-format.md].
 
 # Design Goals
 
