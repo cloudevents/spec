@@ -55,3 +55,21 @@ If a vote is taken during a WG meeting, the follow rules will be followed:
   Members must acknowledge their presence verbally, meaning, adding yourself
   to the "Attendees" section of the Agenda document is not sufficient.
 
+## Release Process
+
+To create a new release:
+* Create a PR that modifies the [README](README.md), and all specifications
+  (ie. *.md files) that include a version string, to the new release
+  version string.
+* Merge the PR.
+* Create a [new release](https://github.com/cloudevents/spec/releases/new):
+  * Choose a "Tag version" of the form: `vX.Y`, e.g. `v0.1`
+  * Target should be `master`, the default value
+  * Release title should be the same as the Tag - `vX.Y`
+  * Add some descriptive text, or the list of PRs that have been merged
+    since the previous release.
+	The git query to get the list commits since the last release is:
+	`git log --pretty=format:%s master...v0.1`.
+	Just replace "v0.1" with the name of the previous release.
+  * Press `Publish release` button
+
