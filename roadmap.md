@@ -13,25 +13,25 @@ _Note: The ordered lists for each milestone provide a way to reference each item
 
 *0.1*
 
-* Draft specification that WG members agree *could* provide interoperability.
-* Include an initial set of use-cases for CloudEvents.
-* Define a type system for CloudEvents values.
-* Document at least 3 sample events that conform to the specification.
-* Github repo is organized to be approachable to a engineers who might want to
+1. Draft specification that WG members agree *could* provide interoperability.
+1. Include an initial set of use-cases for CloudEvents.
+1. Define a type system for CloudEvents values.
+1. Document at least 3 sample events that conform to the specification.
+1. Github repo is organized to be approachable to a engineers who might want to
 implement the spec.
-* Finalize logo.
-* Create and deploy a website that features a simple overview, email list and directs visitors to Github.
-* Store all website assets in the CloudEvents repository, under the governance
+1. Finalize logo.
+1. Create and deploy a website that features a simple overview, email list and directs visitors to Github.
+1. Store all website assets in the CloudEvents repository, under the governance
 of the working group.
 
 *0.2*
 
-* Have at least 2 implementations of the specification that can demonstrate interoperability.
-* Include a specification for mapping the CloudEvents specification to HTTP.
-* Include a specification for mapping the CloudEvents specification to JSON.
-* Changes to the spec to facilitate adoption.
-* Draft documentation and developer guide.
-* Publicize at conferences ([CloudNativeCon Europe](https://events.linuxfoundation.org/events/kubecon-cloudnativecon-north-america-2018/)).
+1. Have at least 2 implementations of the specification that can demonstrate interoperability.
+1. Include a specification for mapping the CloudEvents specification to HTTP.
+1. Include a specification for mapping the CloudEvents specification to JSON.
+1. Changes to the spec to facilitate adoption.
+1. Draft documentation and developer guide.
+1. Publicize at conferences ([CloudNativeCon Europe](https://events.linuxfoundation.org/events/kubecon-cloudnativecon-north-america-2018/)).
 
 *0.3*
 
