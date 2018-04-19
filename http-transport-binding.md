@@ -201,7 +201,9 @@ follows:
 Non-printable ASCII characters and non-ASCII characters MUST first be encoded
 according to UTF-8, and then each octet of the corresponding UTF-8 sequence
 MUST be percent-encoded to be represented as HTTP header characters, in
-compliance with [RFC7230, sections 3, 3.2, 3.2.6][RFC7230-Section-3].
+compliance with [RFC7230, sections 3, 3.2, 3.2.6][RFC7230-Section-3]. The
+rules for encoding of the percent character ('%') apply as defined in 
+[RFC 3986 Section 2.4.][RFC3986-Section-2-4].
 
 JSON objects and arrays are NOT surrounded with single or double quotes.
 
@@ -351,6 +353,7 @@ Content-Length: nnnn
 [RFC2818]: https://tools.ietf.org/html/rfc2818
 [RFC3629]: https://tools.ietf.org/html/rfc3629
 [RFC3986]: https://tools.ietf.org/html/rfc3986
+[RFC3986-Section-2-4]: https://tools.ietf.org/html/rfc3986#section-2.4
 [RFC4627]: https://tools.ietf.org/html/rfc4627
 [RFC4648]: https://tools.ietf.org/html/rfc4648
 [RFC6839]: https://tools.ietf.org/html/rfc6839#section-3.1
