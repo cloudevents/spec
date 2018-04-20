@@ -21,6 +21,19 @@ ranging from major cloud providers to popular SaaS companies.  Our end goal is
 to offer this specification to the
 [Cloud Native Computing Foundation](https://www.cncf.io/).
 
+## CloudEvents Documents
+
+The following specifications are available:
+
+| | Latest Release | Working Draft |
+| :--- | :---: | :---: |
+| **CloudEvents** | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/spec.md) | [master](https://github.com/cloudevents/spec/blob/master/spec.md) |
+| **HTTP Transport Binding** | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
+| **JSON Event Format** | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/json-format.md) | [master](https://github.com/cloudevents/spec/blob/master/json-format.md) |
+
+There is also the [CloudEvents Extension Attributes](https://github.com/cloudevents/spec/blob/master/extensions.md)
+document.
+
 ## Working Group process
 
 The CNCF Serverless WG is working to formalize the [specification](spec.md)
