@@ -348,7 +348,7 @@ that contains both context and data).
 
 ### contentType
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-* Description: Describe the data encoding format
+* Description: Describes the format and encoding of the `data` attribute
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
