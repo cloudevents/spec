@@ -1,7 +1,13 @@
 # CloudEvents - Version 0.1
 
+## Abstract
+
 CloudEvents is a vendor-neutral specification for defining the format
 of event data.
+
+## Status of this document
+
+This document is a working draft.
 
 ## Table of Contents
 - [Overview](#overview)

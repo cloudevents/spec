@@ -1,4 +1,4 @@
-# JSON Event Format for CloudEvents
+# JSON Event Format for CloudEvents - Version 0.1
 
 ## Abstract
 
