@@ -265,8 +265,9 @@ The following abstract data types are available for use in attributes.
 - `Binary` - Sequence of bytes.
 - `Map` - `String`-indexed dictionary of `Object`-typed values
 - `Object` - Either a `String`, or a `Binary`, or a `Map`
-- `URI` - String expression as defined in
-  [RFC 3986](https://tools.ietf.org/html/rfc3986)
+- `URI` - String expression conforming to `URI-reference`
+  as defined in
+  [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
 - `Timestamp` - String expression as defined in
   [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
