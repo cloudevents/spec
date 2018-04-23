@@ -34,7 +34,7 @@ platforms and beyond.
 Event Formats specify how to serialize a CloudEvent with certain encoding
 formats. Compliant CloudEvents implementations that support those encodings
 MUST adhere to the encoding rules specified in the respective event format.
-All implementations MUST support the [JSON format][json-format.md].
+All implementations MUST support the [JSON format](json-format.md).
 
 # Design Goals
 
