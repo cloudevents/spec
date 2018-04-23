@@ -118,9 +118,9 @@ AMQP.
 ## 3. AMQP Message Mapping
 
 The content mode is chosen by the sender of the event, which is either the
-requesting or the responding party. Gestures that might allow solicitation of
-events using a particular mode might be defined by an application, but are not
-defined here.
+requesting or the responding party. Protocol interaction patterns that might
+allow solicitation of events using a particular content mode might be defined
+by an application, but are not defined here.
 
 The receiver of the event can distinguish between the two modes by inspecting
 the `content-type` message property field. If the value is prefixed with the
