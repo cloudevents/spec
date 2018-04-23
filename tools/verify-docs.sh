@@ -23,21 +23,15 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+# Check for the case of certain phrases
 casePhrases=(   # case matters
-MUST
-"MUST NOT"
-REQUIRED
-SHALL
-"SHALL NOT"
-SHOULD
-"SHOULD NOT"
-RECOMMENDED
-MAY
-OPTIONAL
 )
 casePhrases=${casePhrases:=""}  # just to avoid a bash error if undefined
 
+# Phrases that should never be used, in any case
 bannedPhrases=(  # case does not matter
+"Cloud Event"
+"Cloud Events"
 )
 bannedPhrases=${bannedPhrases:=""}  # just to avoid a bash error if undefined
 
@@ -124,7 +118,7 @@ function checkFile {
           continue
         fi
         # Now split on words
-        echo "$line" | sed 's/[a-zA-Z_\-]\+/\
+        echo "$line" | sed 's/[a-zA-Z_\-]+/\
 &\
 /g'
       done
@@ -138,7 +132,7 @@ function checkFile {
       continue
     fi
 
-    # echo $line $word
+    # echo $line \"$word\"
 
     # Shift our arrays of lineNums and words
     if (( ${#words[@]} >= $maxWords )); then
@@ -157,8 +151,10 @@ function checkFile {
     upperWords=$(echo ${words[@]} | tr "[a-z]" "[A-Z]")
     for phrase in "${casePhrases[@]}"; do
       upperPhrase=$(echo ${phrase} | tr "[a-z]" "[A-Z]")
-      # echo upperWords:${upperWords}
-      # echo upperPhrase:${upperPhrase}
+      # echo words:${words[@]}:
+      # echo phrase:${phrase}:
+      # echo upperWords:${upperWords}:
+      # echo upperPhrase:${upperPhrase}:
       if [[ "${upperWords} " == "${upperPhrase} "* && \
             "${words[@]} " != "${phrase} "* ]]; then
         ll=${words[*]}
@@ -168,7 +164,7 @@ function checkFile {
 
     # For each of our "bannedPhrases" check to see if its in "words". Note
     # that the case of the phrase does not matter.
-    [ -z ${bannedPhrases} ] || for phrase in "${bannedPhrases[@]}"; do
+    [ -z "${bannedPhrases}" ] || for phrase in "${bannedPhrases[@]}"; do
       upperPhrase=$(echo ${phrase} | tr "[a-z]" "[A-Z]")
       if [[ "${upperWords} " == "${upperPhrase} "* ]]; then
         ll=${words[*]}

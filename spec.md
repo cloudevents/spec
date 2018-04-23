@@ -1,7 +1,13 @@
 # CloudEvents - Version 0.1
 
+## Abstract
+
 CloudEvents is a vendor-neutral specification for defining the format
 of event data.
+
+## Status of this document
+
+This document is a working draft.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -9,7 +15,6 @@ of event data.
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
 - [Use-Cases](about/use-cases.md)
-- [Additional Topics & Questions](#additional-topics--questions)
 - [References](about/references.md)
 
 ## Overview
@@ -26,10 +31,10 @@ Enter CloudEvents, a specification for describing event data in a common way.
 CloudEvents seeks to ease event declaration and delivery across services,
 platforms and beyond.
 
-The [Serialization Profile](serialization.md) specifies how to
-serialize a CloudEvent into certain encoding formats. Compliant CloudEvents
-implementations that support those formats MUST adhere to the encoding rules
-specified in the profile for those formats.
+Event Formats specify how to serialize a CloudEvent with certain encoding
+formats. Compliant CloudEvents implementations that support those encodings
+MUST adhere to the encoding rules specified in the respective event format.
+All implementations MUST support the [JSON format][json-format.md].
 
 # Design Goals
 
@@ -45,7 +50,7 @@ an event or class of events that is not yet being produced.
 
 To this end, the specification will include common metadata attributes of an
 event that facilitate interoperability, where the event does not contain any
-details about the consumer or transport that might be use to send the event.
+details about the consumer or transport that might be used to send the event.
 
 ## Non-Goals
 The following will not be part of the specification:
@@ -90,7 +95,7 @@ concurrently, including being both a producer and a consumer of events.
    For example, a weather station transmits a 12-byte, proprietary event
    payload indicating weather conditions once every 5 minutes over LoRaWAN. A
    LoRaWAN gateway is then used to publish the event to an Internet destination
-   in the Cloud Events format. The LoRaWAN gateway is the event producer,
+   in the CloudEvents format. The LoRaWAN gateway is the event producer,
    publishing on behalf of the weather station, and will set event metadata
    appropriately to reflect the source of the event.
 
@@ -140,7 +145,7 @@ concurrently, including being both a producer and a consumer of events.
      of events on behalf of consumers.
    - Transcoding, like encoding in MsgPack after decoding from JSON
    - Transformation that changes the event's structure, like mapping from
-     a proprietary format to Cloud Events, while preserving the
+     a proprietary format to CloudEvents, while preserving the
      identity and semantic integrity of the event.
    - Instant "push-style" delivery to interested consumers.
    - Storing events for eventual delivery, either for pick-up initiated
@@ -194,31 +199,6 @@ concurrently, including being both a producer and a consumer of events.
    For this, the framework will need a suitable metadata discriminator
    that frees it from having to understand the event details.
 
-## Status
-At this time the specification is focused on the following scope:
-
-* Agree upon a set of event metadata attributes (“context”) that:
-  * Offer a basic description of the event and the data it carries.
-  * Are currently implemented and semantically similar across multiple
-    platforms.
-  * Can be delivered separately from the event data in the transport headers
-    (e.g. HTTP, AMQP, Kafka) or together with the data in a serialized fashion
-    (e.g. JSON, protobuf, Avro).
-  * Include a description of the transport/protocol and encoding, with an
-    initial focus on HTTP.
-  * Can be extended to support experimental or uncommon features, while being
-    clearly indicated as an extension (e.g. extensions use a common prefix).
-  * Allow for evolution of both the payload and CloudEvents definition (e.g.
-    versioning).
-  * Can be embedded at different stages along the route of the event by
-    middleware (e.g. a router can add transport or auth information).
-* Establish a backlog of prospective event metadata attributes (“context”)
-  for potential inclusion in the future.
-* Include use-case examples to help users understand the value of CloudEvents,
-  with an initial focus on HTTP and Functions-as-a-Service/Serverless computing.
-* Determine process and overall governance of the specification.
-* Discuss additional architecture components that complement this specification.
-
 ## Notations and Terminology
 
 ### Notational Conventions
@@ -226,6 +206,18 @@ At this time the specification is focused on the following scope:
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to
 be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+### Attribute Naming Convention
+
+CloudEvents attributes use "camelCasing" for the object member names, to aid
+integration with common programming languages.
+
+Attribute names that are composed of multiple words are expressed as compound
+words, with the first word starting with a lower-case character and all
+subsequent words starting with an upper-case character, and no separator
+characters.
+
+Words that are acronyms are written in all-caps, e.g. "ID" and "URL".
 
 ### Terminology
 
@@ -265,6 +257,26 @@ Messages can be delivered through various industry standard protocol (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or
 platform/vendor specific protocols (AWS Kinesis, Azure Event Grid).
 
+## Type System
+
+The following abstract data types are available for use in attributes.
+
+- `String` - Sequence of printable Unicode characters.
+- `Binary` - Sequence of bytes.
+- `Map` - `String`-indexed dictionary of `Object`-typed values
+- `Object` - Either a `String`, or a `Binary`, or a `Map`
+- `URI` - String expression conforming to `URI-reference`
+  as defined in
+  [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
+- `Timestamp` - String expression as defined in
+  [RFC 3339](https://tools.ietf.org/html/rfc3339)
+
+This specification does not define numeric or logical types.
+
+The `Object` type is a variant type that can take the shape of either a
+`String` or a `Binary` or a `Map`. The type system is intentionally
+abstract, and therefore it is left to implementations how to represent the
+variant type.
 
 ## Context Attributes
 Every event conforming to this specification MUST include a context.
@@ -276,28 +288,29 @@ the event data. The context might also need to be serialized with the event
 data for some use cases (e.g. a JSON implementation might use one JSON object
 that contains both context and data).
 
-### event-type
-* Type: String
-* Description: Type of the event `data`. Producers can specify the format of
-  this, depending on their service. This enables the interpretation of `data`,
-  and can be used for routing, policy and more.
+### eventType
+* Type: `String`
+* Description: Type of occurrence which has happened. Often this
+  property is used for routing, observability, policy enforcement, etc.
 * Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
-* Examples:
-  * customer.created
+   * REQUIRED
+   * MUST be a non-empty string
+   * SHOULD be prefixed with a reverse-DNS name. The prefixed domain dictates
+            the organization which defines the semantics of this event type.
+* Examples
+   * com.github.pull.create
 
-### event-type-version
-* Type: String
-* Description: The version of the `event-type`. This enables the interpretation
+### eventTypeVersion
+* Type: `String`
+* Description: The version of the `eventType`. This enables the interpretation
   of `data` by eventual consumers, requires the consumer to be knowledgeable
   about the producer.
 * Constraints:
   * OPTIONAL
   * If present, MUST be a non-empty string
 
-### cloud-events-version
-* Type: String
+### cloudEventsVersion
+* Type: `String`
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
 * Constraints:
@@ -305,7 +318,7 @@ that contains both context and data).
   * MUST be a non-empty string
 
 ### source
-* Type: URI
+* Type: `URI`
 * Description: This describes the event producer. Often this will include
   information such as the type of the event source, the organization
   publishing the event, and some unique idenfitiers. The exact syntax and
@@ -313,8 +326,8 @@ that contains both context and data).
 * Constraints:
   * REQUIRED
 
-### event-id
-* Type: String
+### eventID
+* Type: `String`
 * Description: ID of the event. The semantics of this string are explicitly
   undefined to ease the implementation of producers. Enables deduplication.
 * Examples:
@@ -324,24 +337,24 @@ that contains both context and data).
   * MUST be a non-empty string
   * MUST be unique within the scope of the producer
 
-### event-time
-* Type: Timestamp per [RFC 3339](https://tools.ietf.org/html/rfc3339)
+### eventTime
+* Type: `Timestamp`
 * Description: Timestamp of when the event happened.
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
-### schema-url
-* Type: URI per [RFC 3986](https://tools.ietf.org/html/rfc3986)
+### schemaURL
+* Type: `URI`
 * Description: A link to the schema that the `data` attribute adheres to.
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
-### content-type
-* Type: String per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+### contentType
+* Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * Description: Describe the data encoding format
 * Constraints:
   * OPTIONAL
@@ -350,12 +363,11 @@ that contains both context and data).
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
 ### extensions
-* Type: Map <String, Object>
+* Type: `Map`
 * Description: This is for additional metadata and this does not have a
   mandated structure. This enables a place for custom fields a producer or
   middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification. TBD - Determine a shorter
-  prefix for this (e.g. OpenAPI uses “x-”)
+  adding them to the CloudEvents specification.
   See the [Extensions](extensions.md) document for a list of possible
   properties.
 * Constraints:
@@ -365,38 +377,10 @@ that contains both context and data).
   * authorization data
 
 ### data
-* Type: Arbitrary payload
-* Description: The event payload. The payload depends on the event-type,
-  schema-url and event-type-version, the payload is encoded into a media format
-  which is specified by the content-type attribute (e.g. application/json).
+* Type: `Object`
+* Description: The event payload. The payload depends on the eventType,
+  schemaURL and eventTypeVersion, the payload is encoded into a media format
+  which is specified by the contentType attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
-
-
-## Additional Topics & Questions
-
-* Context Attribute Names - We decided not to spend too much time on property
-  names during our working sessions. Instead the focus has been on semantics.
-  We still need to revise property names.
-* Event Consumer API - What does this look like?
-* Routing, Batching, Failure Semantics - What do these look like?
-* Authentication - Will this be included within the event?
-  * Initial authN (e.g. auth at the point of event occurrence)
-  * Transport level authN (e.g. auth on the event)
-* What is the best way to handle encoding for event payloads?
-* How to specify an action that is desired to happen based on an event
-  notification (also does this violate our interpretation of events)?
-* Micro batch considerations – For various streaming and asynchronous
-  implementations the client might push one event at a time, but the function
-  might want to process multiple events per invocation and obtain higher
-  efficiency. There needs to be a mechanism to trigger a function with an
-  array of events. An example implementation can be to indicate in the event
-  type that it's a list type and pass a “records” list object where each
-  record holds its own headers, body or attributes.
-* Event Routing – Once the event structure, protocol, and API are well defined
-  it becomes trivial to route from one type to another, or even route internal
-  events to external clouds. It can be accomplished by simply writing a
-  serverless function which listens on the source event, opens a connection to
-  the destination protocol and maps every incoming event (received through
-  event API) to an event message over the destination protocol.
 

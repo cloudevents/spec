@@ -4,5 +4,7 @@ verify:
 	@echo Running href checker:
 	@# Use "-x" if you want to skip exernal links
 	@tools/verify-links.sh -v .
-	@echo Running the RFC2119 keyword checker:
-	@tools/verify-phrases.sh -v spec.md extensions.md
+	@echo Running the spec phrase checker:
+	@tools/verify-specs.sh -v spec.md extensions.md json-format.md http-transport-binding.md
+	@echo Running the doc phrase checker:
+	@tools/verify-docs.sh -v .
