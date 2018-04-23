@@ -357,7 +357,7 @@ that contains both context and data).
   rules for how the `data` attribute content is rendered for different
   `contentType` values are defined in the event format specifications; for
   example, the JSON event format defines the relationship in
-  [section 3.1](./json-format.md#3-1-special-handling-of-the-data-attribute).
+  [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
