@@ -348,7 +348,16 @@ that contains both context and data).
 
 ### contentType
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-* Description: Describes the format and encoding of the `data` attribute
+* Description: Content type of the `data` attribute value. This attribute
+  enables the `data` attribute to carry any type of content, whereby format
+  and encoding might differ from that of the chosen event format. For example,
+  an event rendered using the [JSON envelope](./json-format#3-envelope)
+  format might carry an XML payload in its `data` attribute, and the
+  consumer is informed by this attribute being set to "application/xml". The
+  rules for how the `data` attribute content is rendered for different
+  `contentType` values are defined in the event format specifications; for
+  example, the JSON event format defines the relationship in
+  [section 3.1](./json-format/#3-1-special-handling-of-the-data-attribute).
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
