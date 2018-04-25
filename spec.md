@@ -331,7 +331,7 @@ that contains both context and data).
 ### sourceLabels
 * Type: `Map`
 * Description: Non-heirarchical attributes which describe the `source` of
-  the event. Receivers may filter or route based on these attributes.
+  the event. Receivers can filter or route based on these attributes.
   This is intended to include (but is not limited to) "labels" in cloud
   platforms like AWS or Kubernetes.
 * Constraints:
