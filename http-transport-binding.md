@@ -161,7 +161,6 @@ are individually mapped to and from distinct HTTP message headers.
 The naming convention for the HTTP header mapping of attributes is:
 
     * Each attribute name MUST be prefixed with "CE-"
-    * Each attribute name's first character MUST be capitalized
 
 Examples:
 
@@ -176,12 +175,14 @@ not mapped to a header.
 The naming convention for the `extensions` header mapping of attributes is:
 
     * Each map entry name MUST be prefixed with "CE-X-"
-    * Each map entry name's first character MUST be capitalized
 
 Examples:
 
     * `example` maps to `CE-X-Example`
     * `testExtension` maps to `CE-X-TestExtension`
+
+Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
+specification, header names are case-insensitive.
 
 ##### 3.1.3.2 HTTP Header Values
 
