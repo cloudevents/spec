@@ -53,7 +53,10 @@ Contributions do not constitute an official endorsement.
   * Jim Curtis - [@jimcurtis64](https://github.com/jimcurtis2) 
   * William Markito Oliveira - [@william_markito](https://github.com/markito) 
 * **SAP**
+  * [kubeless](https://kubeless.io)
   * Nathan Oyler - [@notque](https://github.com/notque)
+  * Stevo Slavić - [@sslavic](https://github.com/sslavic)
+  * Klaus Deissner - [@deissnerk](https://github.com/deissnerk)
 * **Serverless Inc**
   * [Serverless Framework and Event Gateway](https://serverless.com/)
   * Austen Collins - [@ac360](https://github.com/ac360)
