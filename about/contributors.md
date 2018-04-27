@@ -32,8 +32,10 @@ Contributions do not constitute an official endorsement.
   * Matt Rutkowski - [@mrutkows](https://github.com/mrutkows)
   * Michael M Behrendt - [@mbehrendt](https://github.com/mbehrendt)
 * **Iguazio**
-  * Yaron Haviv - [@iguazio](https://github.com/iguazio)
-  * Orit Nissan-Messing
+  * [nuclio (serverless)](https://github.com/nuclio/nuclio)
+  * [iguazio data platform](https://www.iguazio.com/)
+  * Yaron Haviv - [@yaronha](https://github.com/yaronha)
+  * Orit Nissan-Messing - [@oritnm](https://github.com/oritnm)
 * **Intel**
   * David Lyle - [@dklyle](https://github.com/dklyle)
 * **Microsoft**
