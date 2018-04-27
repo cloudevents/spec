@@ -66,6 +66,6 @@ Contributions do not constitute an official endorsement.
 * **SolarWinds**
   * Lee Calcote - [@leecalcote](https://github.com/leecalcote)
 * **VMWare**
-  * [Dispatch Functions Framework](https://vmware.github.io/dispatch/)
-  * Mark Peek - [@leecalcote](https://github.com/markpeek)
+  * [Dispatch Functions Framework](http://dispatchframework.io)
+  * Mark Peek - [@markpeek](https://github.com/markpeek)
 
