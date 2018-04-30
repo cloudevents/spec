@@ -34,6 +34,17 @@ The following specifications are available:
 There is also the [CloudEvents Extension Attributes](https://github.com/cloudevents/spec/blob/master/extensions.md)
 document.
 
+## Community
+
+Learn more about the people and organizations who are creating a dynamic
+cloud native ecosystem by making our systems interopable with CloudEvents.
+
+* [Contributors](community/contributors.md): people and organizations who helped
+us get started or are actively working on the CloudEvents specification.
+* Coming soon: [demos & open source](community/README.md) -- if you have
+something to share about your use of CloudEvents, please submit a PR!
+
+
 ## Working Group process
 
 The CNCF Serverless WG is working to formalize the [specification](spec.md)
