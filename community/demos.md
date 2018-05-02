@@ -2,9 +2,11 @@
  If there isn't an associated blog or github repo, feel free to add
  descriptive text as a markdown file in `community/demos/`.
 
-Example:
 
-* [Video]() of [AmazingStorageProduct]() file upload event triggers an
-  action in [AwesomeServerlessPlatform]() -- for more details see
-  [blogpost, github repo, etc]()
-
+* CNCF/Kube-Con EU 2018
+  * CloudEvents interop demo during Austen Collins'
+    [session](https://kccnceu18.sched.com/event/Dqvg/the-serverless-and-event-driven-future-austen-collins-serverless-intermediate-skill-level)
+  * Participants: Alibaba, Google, IBM, iguazio, RedHat, Serverless.com, VMware
+  * Info on demo structure: https://github.com/ac360/cloudevents-demo
+  * Code from demo:
+    * [Company](https://github.com/cloudevents/spec?replace-with-your-url)
