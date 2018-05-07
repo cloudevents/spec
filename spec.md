@@ -318,6 +318,14 @@ that contains both context and data).
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
+  
+### ordinal
+* Type: `String`
+* Description: Value expressing the relative order of the event. This enables
+  interpretation of data supercedence.
+* Constraints:
+  * REQUIRED
+  * MUST be a non-empty lexicographically-orderable string
 
 ### source
 * Type: `URI`
