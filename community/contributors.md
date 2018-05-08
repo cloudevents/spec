@@ -10,7 +10,10 @@ github handles to real world identities and get to know each other, and for new
 folks to see who has been involved already.
 
 Contributions do not constitute an official endorsement.
-
+* **Alibaba**
+  * [Alibaba Cloud Function Compute](https://www.alibabacloud.com/product/function-compute)
+  * Ryan Zhang - [@nerdyyatrice](https://github.com/nerdyyatrice)
+  * Haoran Yang, Hongqi Wang
 * **Amazon**
   * [AWS Lambda events](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html)
   * Arun Gupta, Ajay Nair, Rob Leidle, Orr Weinstein
