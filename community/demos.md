@@ -9,4 +9,6 @@
   * Participants: Alibaba, Google, IBM, iguazio, RedHat, Serverless.com, VMware
   * Info on demo structure: https://github.com/ac360/cloudevents-demo
   * Code from demo:
-    * [Company](https://github.com/cloudevents/spec?replace-with-your-url)
+    * [Oracle Fn](https://github.com/fnproject/cloudevents-demo)
+    * [Serverless Compute/FaaS](https://github.com/ac360/cloudevents-demo)
+    * [VMware Dispatch](https://github.com/dispatchframework/cloudevents-twitter-demo)
