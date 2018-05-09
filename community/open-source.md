@@ -10,3 +10,7 @@ uses CloudEvents, please include in the list below.
   of 1) console app to Web API, and 2) Web API to Azure Event Grid, which
   demonstrates how CloudEvent messages are generated and sent to Web API and
   Azure Event Grid over HTTP.
+
+* [microBean CloudEvents](https://microbean.github.io/microbean-cloudevents/):
+  CloudEvents represented as plain Java objects. Satellite projects add
+  [Jackson and CDI event integration](https://microbean.github.io/microbean-cloudevents-jackson-cdi).
