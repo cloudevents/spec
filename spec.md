@@ -323,7 +323,7 @@ that contains both context and data).
 * Type: `URI`
 * Description: This describes the event producer. Often this will include
   information such as the type of the event source, the organization
-  publishing the event, and some unique idenfitiers. The exact syntax and
+  publishing the event, and some unique identifiers. The exact syntax and
   semantics behind the data encoded in the URI is event producer defined.
 * Constraints:
   * REQUIRED
