@@ -15,11 +15,11 @@ Enter CloudEvents, a specification for describing event data in a common way.
 CloudEvents seeks to ease event declaration and delivery across services,
 platforms and beyond.
 
-CloudEvents is a new effort and it's still under active development.  However,
-its working group has received a surprising amount of industry interest,
-ranging from major cloud providers to popular SaaS companies.  Our end goal is
-to offer this specification to the
-[Cloud Native Computing Foundation](https://www.cncf.io/).
+CloudEvents is a new effort and has received a surprising amount of industry
+interest, ranging from major cloud providers to popular SaaS companies.
+CloudEvents is hosted by the
+[Cloud Native Computing Foundation](https://cncf.io) (CNCF) as a sandbox
+level project.
 
 ## CloudEvents Documents
 
@@ -53,8 +53,8 @@ between systems which generate and respond to events.
 
 In order to achieve these goals, the Serverless WG must describe:
 - Common attributes of an *event* that facilitate interoperability
-- One or more common architectures that are in active use today or planned to be
-built by WG members
+- One or more common architectures that are in active use today or planned to
+  be built by WG members
 - How events are transported from producer to consumer via at least one protocol
 - Identify and resolve whatever else is needed for interoperability
 
