@@ -2,7 +2,7 @@
 
 ## Abstract
 
-"Web hooks" are a popular pattern to deliver notifications between applications
+"Webhooks" are a popular pattern to deliver notifications between applications
 and via HTTP endpoints. In spite of pattern usage being widespread, there is no
 formal definition for Web Hooks. This specification aims to provide such a
 definition for use with [CNCF CloudEvents][CE], but is considered generally
@@ -24,15 +24,15 @@ This document is a working draft.
 
 ## 1. Introduction
 
-"Web hooks" are a popular pattern to deliver notifications between applications
-and via HTTP endpoints. Applications that make notifications available, allow
-for other applications to register an HTTP endpoint to which notifications are
-delivered once available.
+["Webhooks"][Webhooks] are a popular pattern to deliver notifications between
+applications and via HTTP endpoints. Applications that make notifications
+available, allow for other applications to register an HTTP endpoint to which
+notifications are delivered.
 
 This specification defines a HTTP method by how notifications are delivered by
-the sender, an authorization model for event delivery to protect the receiver,
-and a registration handshake that protects the sender from being abused for
-flooding arbitrary HTTP sites with requests.
+the sender, an authorization model for event delivery to protect the delivery
+target, and a registration handshake that protects the sender from being abused
+for flooding arbitrary HTTP sites with requests.
 
 ### 1.1. Conformance
 
@@ -81,16 +81,6 @@ to define such a payload.
 The response MUST NOT use any of the [3xx HTTP Redirect status codes][3xx] and
 the client MUST NOT follow any such redirection.
 
-If a delivery target has been retired, but the HTTP site still exists, the
-site SHOULD return a [410 "Gone"][410] status code and the sender SHOULD refrain
-from sending any further notifications.
-
-If the delivery target is unable to process the request due to exceeding a
-request rate limit, it SHOULD return a [429 Too Many Requests][429] status code
-and MUST include the [`Retry-After`][Retry-After] header. The sender MUST
-observe the value of the Retry-After header and refrain from sending further
-requests until the indicated time.
-
 If the delivery has been accepted and processed, and if the response carries a
 payload with processing details, the response MUST have the [200 OK][200] or
 [201 Created][201] status code. In this case, the response MUST carry a
@@ -103,8 +93,19 @@ If the delivery has been accepted, but has not yet been processed or if the
 processing status is unknown, the response MUST have the [202 Accepted][202]
 status code.
 
+If a delivery target has been retired, but the HTTP site still exists, the
+site SHOULD return a [410 Gone][410] status code and the sender SHOULD refrain
+from sending any further notifications.
+
+If the delivery target is unable to process the request due to exceeding a
+request rate limit, it SHOULD return a [429 Too Many Requests][429] status code
+and MUST include the [`Retry-After`][Retry-After] header. The sender MUST
+observe the value of the Retry-After header and refrain from sending further
+requests until the indicated time.
+
 If the delivery cannot be accepted because the notification format has not
-been understood, the service MUST respond with status code [415][415].
+been understood, the service MUST respond with status code 
+[415 Unsupported Media Type][415].
 
 All further error status codes apply as specified in [RFC7231][RFC7231].
 
@@ -147,7 +148,7 @@ POST /resource?access_token=mF_9.B5f-4.1JqM HTTP/1.1
 Host: server.example.com
 ```
 
-The HTTP request URI query can include other request-specific parameters, in
+The HTTP request URI query MAY include other request-specific parameters, in
 which case the "access_token" parameter MUST be properly separated from the
 request-specific parameters using "&" character(s) (ASCII code 38).
 
@@ -197,7 +198,7 @@ Delivery targets SHOULD support the abuse protection feature. If a target does
 not support the feature, the sender MAY choose not to send to the target, at
 all, or send only at a very low request rate.
 
-### 4.1.1. Validation request
+### 4.1. Validation request
 
 The validation request uses the HTTP [OPTIONS][OPTIONS] method. The request
 is directed to the exact resource target URI that is being registered.
@@ -209,27 +210,54 @@ minute).
 The delivery target will respond with a permission statement and the permitted
 request rate.
 
-The following header fields MUST be included in the validation request:
+The following header fields are for inclusion in the validation request.
 
-#### 4.1.1.2. WebHook-Request-Origin
+#### 4.1.2. WebHook-Request-Origin
 
-The `WebHook-Request-Origin` header requests permission to send notifications
-from this sender, and contains a DNS expression that identifies the sending
-system, for example "eventemitter.example.com". The value is meant to summarily
-identify all sender instances that act on the behalf of a certain system, and
-not an individual host.
+The `WebHook-Request-Origin` header MUST be included in the validation request
+and requests permission to send notifications from this sender, and contains a
+DNS expression that identifies the sending system, for example
+"eventemitter.example.com". The value is meant to summarily identify all sender
+instances that act on the behalf of a certain system, and not an individual
+host.
 
-After the handshake and when permission is granted, the sender MUST use the
+After the handshake and if permission has been granted, the sender MUST use the
 `Origin` request header for each delivery request, with the value matching that
 of this header.
+
+Example:
+
+``` text 
+WebHook-Request-Origin: eventemitter.example.com 
+```
+
+#### 4.1.3. WebHook-Request-Callback
+
+The `WebHook-Request-Callback` header is OPTIONAL and augments the
+`WebHook-Request-Origin` header. It allows the delivery target to grant send
+permission asynchronously, via a simple HTTPS callback.
+
+If the receiving application does not explicitly support the handshake
+described here, an administrator could nevertheless still find the callback URL
+in the log, and call it manually and therewith grant access.
+
+The delivery target grants permission by issuing an HTTPS GET or POST request against
+the given URL. The HTTP GET request can be performed manually using a browser
+client.
+
+The delivery target MAY include the `WebHook-Allowed-Rate` response in the callback.
+
+The URL is not formally constrained, but it SHOULD contain an identifier for the
+delivery target along with a secret key that makes the URL difficult to guess so that
+3rd parties cannot spoof the delivery target.
 
 For example:
 
 ``` text
-WebHook-Request-Origin: eventemitter.example.com
+WebHook-Request-Callback: https://example.com/confirm?id=12345&key=...base64...
 ```
 
-#### 4.1.1.2. WebHook-Request-Rate
+#### 4.1.4. WebHook-Request-Rate
 
 The `WebHook-Request-Rate` header MAY be included in the request and asks for
 permission to send notifications from this sender at the specified rate. The
@@ -243,22 +271,27 @@ minute:
 WebHook-Request-Rate: 120
 ```
 
-### 4.1.2 Validation response
+### 4.2. Validation response
 
 If and only if the delivery target does allow delivery of the events, it MUST
 reply to the request by including the `WebHook-Allowed-Origin` and
 `WebHook-Allowed-Rate` headers.
 
-If it does not allow delivery of the events or does not expect delivery of
-events and nevertheless handles the HTTP OPTIONS method, the existing response
-ought not to be interpreted as consent, and therefore the handshake cannot
-rely on status codes.
+If the delivery target chooses to grant permission by callback, it withholds
+the response headers.
 
-The response SHOULD include the [Allow][Allow] header indicating the [POST][POST]
-method being permitted. Other methods MAY be permitted on the resource, but
-their function is outside the scope of this specification.
+If the delivery target does not allow delivery of the events or does not expect
+delivery of events and nevertheless handles the HTTP OPTIONS method, the
+existing response ought not to be interpreted as consent, and therefore the
+handshake cannot rely on status codes. If the delivery target otherwise does
+not handle the HTTP OPTIONS method, it should respond with HTTP status code
+405, as if OPTIONS were not supported.
 
-#### 4.1.1.2. WebHook-Allowed-Origin
+The OPTIONS response SHOULD include the [Allow][Allow] header indicating the
+[POST][POST] method being permitted. Other methods MAY be permitted on the
+resource, but their function is outside the scope of this specification.
+
+#### 4.2.1. WebHook-Allowed-Origin
 
 The `WebHook-Allowed-Origin` header MUST be returned when the delivery target
 agrees to notification delivery by the origin service. Its value MUST either be
@@ -276,10 +309,10 @@ or
 WebHook-Request-Origin: *
 ```
 
-#### 4.1.1.2. WebHook-Allowed-Rate
+#### 4.2.2. WebHook-Allowed-Rate
 
 The `WebHook-Allowed-Rate` header MUST be returned if the request contained
-teh `WebHook-Request-Rate`, otherwise it SHOULD be returned.
+the `WebHook-Request-Rate`, otherwise it SHOULD be returned.
 
 The header grants permission to send notifications at the specified rate. The
 value is either an asterisk character or the string representation of a
@@ -287,7 +320,7 @@ positive integer number greater than zero. The asterisk indicates that there is
 no rate limitation. An integer number expresses the permitted request rate in
 "requests per minute". For request rates exceeding the granted notification
 rate, the sender ought to expect request throttling. Throttling is indicated
-by requests being rejected using HTTP status code [429][429].
+by requests being rejected using HTTP status code [429 Too Many Requests][429].
 
 For example, the following header permits to send 100 requests per
 minute:
@@ -310,6 +343,7 @@ WebHook-Allowed-Rate: 100
 - [RFC7540][RFC7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [CE]: ./spec.md
+[Webhooks]: http://progrium.com/blog/2007/05/03/web-hooks-to-revolutionize-the-web/
 [Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [Retry-After]: https://tools.ietf.org/html/rfc7231#section-7.1.3
 [Authorization]: https://tools.ietf.org/html/rfc7235#section-4.2
