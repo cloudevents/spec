@@ -34,7 +34,7 @@ platforms and beyond.
 Event Formats specify how to serialize a CloudEvent with certain encoding
 formats. Compliant CloudEvents implementations that support those encodings
 MUST adhere to the encoding rules specified in the respective event format.
-All implementations MUST support the [JSON format][json-format.md].
+All implementations MUST support the [JSON format](json-format.md).
 
 # Design Goals
 
@@ -239,10 +239,12 @@ on information contained in the event, but an event will not identify
 a specific routing destination.
 
 #### Context
-A set of consistent metadata attributes included with the event about the
-occurrence that tools and developers can rely upon to better handle the event.
-These attributes describe the event and the structure of its data, include
-information about the originating system, and more.
+As described in the Event definition, an Event contains two parts, the data
+representing the Occurrence and additional metadata that provides other
+circumstantial information about the Occurrence (e.g. information about the
+originating system). This additional metadata is referred to as Context data.
+Tools and application code can use this information to identify the
+relationship of Events to aspects of the system or to other Events.
 
 #### Message
 Events are transported from a source to a destination via messages.
@@ -321,7 +323,7 @@ that contains both context and data).
 * Type: `URI`
 * Description: This describes the event producer. Often this will include
   information such as the type of the event source, the organization
-  publishing the event, and some unique idenfitiers. The exact syntax and
+  publishing the event, and some unique identifiers. The exact syntax and
   semantics behind the data encoded in the URI is event producer defined.
 * Constraints:
   * REQUIRED

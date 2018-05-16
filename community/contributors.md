@@ -10,7 +10,10 @@ github handles to real world identities and get to know each other, and for new
 folks to see who has been involved already.
 
 Contributions do not constitute an official endorsement.
-
+* **Alibaba**
+  * [Alibaba Cloud Function Compute](https://www.alibabacloud.com/product/function-compute)
+  * Ryan Zhang - [@nerdyyatrice](https://github.com/nerdyyatrice)
+  * Haoran Yang, Hongqi Wang
 * **Amazon**
   * [AWS Lambda events](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html)
   * Arun Gupta, Ajay Nair, Rob Leidle, Orr Weinstein
@@ -32,8 +35,10 @@ Contributions do not constitute an official endorsement.
   * Matt Rutkowski - [@mrutkows](https://github.com/mrutkows)
   * Michael M Behrendt - [@mbehrendt](https://github.com/mbehrendt)
 * **Iguazio**
-  * Yaron Haviv - [@iguazio](https://github.com/iguazio)
-  * Orit Nissan-Messing
+  * [nuclio (serverless)](https://github.com/nuclio/nuclio)
+  * [iguazio data platform](https://www.iguazio.com/)
+  * Yaron Haviv - [@yaronha](https://github.com/yaronha)
+  * Orit Nissan-Messing - [@oritnm](https://github.com/oritnm)
 * **Intel**
   * David Lyle - [@dklyle](https://github.com/dklyle)
 * **Microsoft**
@@ -51,7 +56,10 @@ Contributions do not constitute an official endorsement.
   * Jim Curtis - [@jimcurtis64](https://github.com/jimcurtis2) 
   * William Markito Oliveira - [@william_markito](https://github.com/markito) 
 * **SAP**
+  * [kubeless](https://kubeless.io)
   * Nathan Oyler - [@notque](https://github.com/notque)
+  * Stevo Slavić - [@sslavic](https://github.com/sslavic)
+  * Klaus Deissner - [@deissnerk](https://github.com/deissnerk)
 * **Serverless Inc**
   * [Serverless Framework and Event Gateway](https://serverless.com/)
   * Austen Collins - [@ac360](https://github.com/ac360)
@@ -61,6 +69,6 @@ Contributions do not constitute an official endorsement.
 * **SolarWinds**
   * Lee Calcote - [@leecalcote](https://github.com/leecalcote)
 * **VMWare**
-  * [Dispatch Functions Framework](https://vmware.github.io/dispatch/)
-  * Mark Peek - [@leecalcote](https://github.com/markpeek)
+  * [Dispatch Functions Framework](http://dispatchframework.io)
+  * Mark Peek - [@markpeek](https://github.com/markpeek)
 
