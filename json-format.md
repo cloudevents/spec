@@ -116,11 +116,11 @@ whether it is indicated that the data value contains JSON data.
 If the `contentType` value is either ["application/json"][RFC4627] or any media type
 with a [structured +json suffix][RFC6839], the implementation MUST translate
 the `data` attribute value into a [JSON value][JSON-Value], and set the `data`
-member of the envelope JSON object to this JSON value.
+attribute of the envelope JSON object to this JSON value.
 
 If the `contentType` value does not follow the [structured +json suffix][RFC6839]
 but still implies JSON, the implementation SHOULD translate the `data` attribute
-value into a [JSON value][JSON-Value], and set the `data` member of the envelope
+value into a [JSON value][JSON-Value], and set the `data` attribute of the envelope
 JSON object to this JSON value. Its typical examples are, but not limited to,
 `text/json`, [`application/json-seq`][JSON-seq] and
 [`application/geo+json-seq`][JSON-geoseq].
