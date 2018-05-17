@@ -14,6 +14,7 @@ This document is a working draft.
 - [Design Goals](#design-goals)
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
+- [Data Attribute](#data-attribute)
 - [Use-Cases](about/use-cases.md)
 - [References](about/references.md)
 
@@ -236,23 +237,27 @@ An "event" is a data record expressing an occurrence and its context. Events
 are routed from the emitting source to interested parties for the purpose of
 notifying them about the source occurrence. The routing can be performed based
 on information contained in the event, but an event will not identify
-a specific routing destination.
+a specific routing destination. Events will contain two pieces of information:
+the [Data](#data) representing the Occurance and extra [Context](#context)
+metadata providing additional information about the Occurance.
 
 #### Context
-As described in the Event definition, an Event contains two parts, the data
-representing the Occurrence and additional metadata that provides other
-circumstantial information about the Occurrence (e.g. information about the
-originating system). This additional metadata is referred to as Context data.
+As described in the Event definition, an Event contains two parts, the
+[data](#data) representing the occurrence and additional metadata
+that provides other circumstantial information about the occurrence
+(e.g. information about the originating system). This additional metadata will
+be encapsulated in the [Context Attributes](#context-attributes).
 Tools and application code can use this information to identify the
 relationship of Events to aspects of the system or to other Events.
-
-#### Message
-Events are transported from a source to a destination via messages.
 
 #### Data
 Domain-specific information about the occurrence (i.e. the payload). This
 might include information about the occurrence, details about the data
-that was changed, or more.
+that was changed, or more. See the [Data Attribute](#data-attribute) section
+for more information.
+
+#### Message
+Events are transported from a source to a destination via messages.
 
 #### Protocol
 Messages can be delivered through various industry standard protocol (e.g. HTTP,
@@ -281,14 +286,17 @@ abstract, and therefore it is left to implementations how to represent the
 variant type.
 
 ## Context Attributes
-Every event conforming to this specification MUST include a context.
+Every CloudEvent conforming to this specification MUST include one or more
+of the following context attributes.
 
-Context is designed such that it can be delivered separately from the event
-data (e.g. in protocol headers or protocol specific attributes). This allows
-the context to be inspected at the destination without having to deserialize
-the event data. The context might also need to be serialized with the event
-data for some use cases (e.g. a JSON implementation might use one JSON object
-that contains both context and data).
+These attributes, while descriptive of the event, are designed such that they
+can be serialized independent of the event data. This allows for them to be
+inspected at the destination without having to deserialize the event data.
+
+The choice of serialization mechanism will determine how the context
+attributes and the event data will be materialized. For example, in the case
+of a JSON serialization, the context attributes and the event data might
+both appear within the same JSON object.
 
 ### eventType
 * Type: `String`
@@ -377,6 +385,12 @@ that contains both context and data).
   * If present, MUST contain at least one entry
 * Examples:
   * authorization data
+
+## Data Attribute
+
+As defined by the term [Data](#data), CloudEvents MAY include domain-specific
+information about the occurrence. When present, this information will be
+encapsulated within the `data` attribute.
 
 ### data
 * Type: `Object`
