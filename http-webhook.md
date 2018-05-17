@@ -68,7 +68,7 @@ This specification does not further constrain the content of the notification,
 and it also does not prescribe the [HTTP target resource][RFC7230-Section-5-1]
 that is used for delivery.
 
-If the delivery target supports and requires [Abuse Protection][#4-abuse-protection],
+If the delivery target supports and requires [Abuse Protection](#4-abuse-protection),
 the delivery request MUST include the `Origin` header. The `Origin` header value
 is a DNS name expression that identifies the sending system.
 
@@ -116,8 +116,10 @@ lean on the OAuth 2.0 Bearer Token [RFC6750][RFC6750] model.
 
 The delivery target MUST support both methods.
 
-The client MAY use any token-based authorization scheme. Challenge-based
-schemes MUST NOT be used.
+The client MAY use any token-based authorization scheme. The token can take any shape,
+and can be a standardized token format or a simple key expression.
+
+Challenge-based schemes MUST NOT be used.
 
 ### 3.1.  Authorization Request Header Field
 
@@ -360,6 +362,7 @@ WebHook-Allowed-Rate: 100
 [429]: https://tools.ietf.org/html/rfc6585#section-4
 [Bearer]:https://tools.ietf.org/html/rfc6750#section-2.1
 [RFC2119]: https://tools.ietf.org/html/rfc2119
+[RFC3986]: https://tools.ietf.org/html/rfc3986
 [RFC2818]: https://tools.ietf.org/html/rfc2818
 [RFC6585]: https://tools.ietf.org/html/rfc6585
 [RFC6750]: https://tools.ietf.org/html/rfc6750
