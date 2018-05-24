@@ -286,7 +286,7 @@ If the delivery target does not allow delivery of the events or does not expect
 delivery of events and nevertheless handles the HTTP OPTIONS method, the
 existing response ought not to be interpreted as consent, and therefore the
 handshake cannot rely on status codes. If the delivery target otherwise does
-not handle the HTTP OPTIONS method, it should respond with HTTP status code
+not handle the HTTP OPTIONS method, it SHOULD respond with HTTP status code
 405, as if OPTIONS were not supported.
 
 The OPTIONS response SHOULD include the [Allow][Allow] header indicating the
