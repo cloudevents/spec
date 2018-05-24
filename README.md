@@ -31,6 +31,7 @@ The following specifications are available:
 | **HTTP Transport Binding** | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
 | **JSON Event Format** | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/json-format.md) | [master](https://github.com/cloudevents/spec/blob/master/json-format.md) |
 | **Web hook** | - | [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md) |
+| **NATS Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
 
 There is also the [CloudEvents Extension Attributes](https://github.com/cloudevents/spec/blob/master/extensions.md)
 document.
