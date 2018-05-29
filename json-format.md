@@ -119,7 +119,7 @@ the `data` attribute value into a [JSON value][JSON-Value], and set the `data`
 attribute of the envelope JSON object to this JSON value.
 
 If the `contentType` value does not follow the [structured +json suffix][RFC6839]
-but is knwon to use JSON encoding, the implementation MUST translate the `data` attribute
+but is known to use JSON encoding, the implementation MUST translate the `data` attribute
 value into a [JSON value][JSON-Value], and set the `data` attribute of the envelope
 JSON object to this JSON value. Its typical examples are, but not limited to,
 `text/json`, [`application/json-seq`][JSON-seq] and
