@@ -13,3 +13,5 @@ uses CloudEvents, please include in the list below.
 * [microBean CloudEvents](https://microbean.github.io/microbean-cloudevents/):
   CloudEvents represented as plain Java objects. Satellite projects add
   [Jackson and CDI event integration](https://microbean.github.io/microbean-cloudevents-jackson-cdi).
+* [jCloudEvents](https://github.com/project-streamzi/jcloudevents)
+  Java POJO implementation of the CloudEvents specification and some CDI bindings.
