@@ -61,8 +61,8 @@ In order to achieve these goals, the Serverless WG must describe:
 
 ## Communications
 
-We have google group for e-mail communications:
- [cncf-wg-serverless](https://groups.google.com/forum/#!forum/cncf-wg-serverless)
+The mailing list for e-mail communications:
+[cncf-wg-serverless](mailto:cncf-wg-serverless@lists.cncf.io)
 
 And a #cloudevents Slack channel under
 [CNCF's Slack workspace](https://slack.cncf.io/).
