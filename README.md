@@ -35,6 +35,12 @@ The following specifications are available:
 There is also the [CloudEvents Extension Attributes](https://github.com/cloudevents/spec/blob/master/extensions.md)
 document.
 
+Included within this repository are some documents that helped guide the
+working group's design decisions. They include:
+- [Use-Cases](about/use-cases.md) from the community
+- [Existing events](about/references.md) from some popular implementations
+  in the community
+
 ## Community
 
 Learn more about the people and organizations who are creating a dynamic

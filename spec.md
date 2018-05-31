@@ -12,11 +12,13 @@ This document is a working draft.
 ## Table of Contents
 - [Overview](#overview)
 - [Design Goals](#design-goals)
+- [Non-Goals](#non-goals)
+- [Usage Scenarios](#usage-scenarios)
 - [Notations and Terminology](#notations-and-terminology)
+- [Type System](#type-system)
 - [Context Attributes](#context-attributes)
 - [Data Attribute](#data-attribute)
-- [Use-Cases](about/use-cases.md)
-- [References](about/references.md)
+- [Example](#example)
 
 ## Overview
 Events are everywhere. However, event publishers tend to describe events
@@ -400,3 +402,22 @@ encapsulated within the `data` attribute.
 * Constraints:
   * OPTIONAL
 
+# Example
+
+The following example shows a CloudEvent serialized as JSON:
+
+``` JSON
+{
+    "cloudEventsVersion" : "0.1",
+    "eventType" : "com.example.someevent",
+    "eventTypeVersion" : "1.0",
+    "source" : "/mycontext",
+    "eventID" : "A234-1234-1234",
+    "eventTime" : "2018-04-05T17:31:00Z",
+    "extensions" : {
+        "comExampleExtension" : "value"
+    },
+    "contentType" : "text/xml",
+    "data" : "<much wow=\"xml\"/>"
+}
+```
