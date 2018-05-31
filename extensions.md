@@ -1,7 +1,7 @@
 # CloudEvents Extension Attributes
 
 The [CloudEvents specification](spec.md) defines a set of metadata attributes
-than can be used when tranforming a generic event into a CloudEvent.
+than can be used when transforming a generic event into a CloudEvent.
 The list of attributes specified in that document represent the minimal set
 that the specification authors deemed most likely to be used in a majority of
 situations.
@@ -20,4 +20,30 @@ standing and might be changed, or removed, at any time.
 
 ## Extension Attributes
 
-None at this time.
+### distributedTracing
+
+This extension embeds context from 
+[Distributed Tracing](https://w3c.github.io/distributed-tracing/report-trace-context.html)
+so that distributed systems can include traces that span an event-driven system.
+This is the foundation of many other systems, such as Open Tracing, on which
+platforms like Prometheus are built.
+ 
+#### traceparent
+* Type: `String`
+* Description: Contains a a trace ID, span ID, and trace options as defined in
+  [section 2.2.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#field-value)
+* Constraints
+  * REQUIRED
+  * To integrate with Distributed Tracing, this field MUST NOT use standard
+    extension encoding over HTTP(S). `distributedTracing.traceparent` MUST
+    instead be marshaled as the `traceparent` HTTP header.
+
+#### tracestate
+* Type: `String`
+* Description: a comma-delimited list of key-value pairs, defined by
+  [section 2.3.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#header-value).
+* Constraints
+  * OPTIONAL
+  * To integrate with Distributed Tracing, this field MUST NOT use standard
+    extension encoding over HTTP(S). `distributedTracing.tracestate` MUST
+    instead be marshaled as the `tracestate` HTTP header.
