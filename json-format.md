@@ -87,7 +87,6 @@ The following table shows exemplary mappings:
 | eventID            | String   | "1234-1234-1234"
 | eventTime          | Timestamp| "2018-04-05T17:31:00Z"
 | contentType        | String   | "application/json"
-| extensions         | Map      | { "extA" : "vA", "extB", "vB" }
 | data               | String   | "<much wow=\"xml\"/>"
 | data               | Binary   | "Q2xvdWRFdmVudHM="
 | data               | Map      | { "objA" : "vA", "objB", "vB" }
@@ -142,10 +141,8 @@ Example event with `String`-valued `data`:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-      "comExampleExtension" : "value"
-    },
     "contentType" : "text/xml",
+    "comExampleExtension" : "value",
     "data" : "<much wow=\"xml\"/>"
 }
 ```
@@ -160,10 +157,8 @@ Example event with `Binary`-valued data
     "source" : "/mycontext",
     "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-      "comExampleExtension" : "value"
-    },
     "contentType" : "application/vnd.apache.thrift.binary",
+    "comExampleExtension" : "value",
     "data" : "... base64 encoded string ..."
 }
 ```
@@ -179,10 +174,8 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
     "source" : "/mycontext",
     "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-      "comExampleExtension" : "value"
-    },
     "contentType" : "application/json",
+    "comExampleExtension" : "value",
     "data" : {
         "appinfoA" : "abc",
         "appinfoB" : 123,

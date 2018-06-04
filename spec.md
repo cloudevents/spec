@@ -298,6 +298,12 @@ attributes and the event data will be materialized. For example, in the case
 of a JSON serialization, the context attributes and the event data might
 both appear within the same JSON object.
 
+Note that the enumeration of the following attributes SHALL NOT be construed
+as an enumeration of all allowed context attributes; additional producer or
+middleware extensions (of any type) may be stored on attribute names not
+defined below. It is expected that this mechanism will be used to test new
+attributes before standardizing.
+
 ### eventType
 * Type: `String`
 * Description: Type of occurrence which has happened. Often this
@@ -371,20 +377,6 @@ both appear within the same JSON object.
   * If present, MUST adhere to the format specified in
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
-
-### extensions
-* Type: `Map`
-* Description: This is for additional metadata and this does not have a
-  mandated structure. This enables a place for custom fields a producer or
-  middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification.
-  See the [Extensions](extensions.md) document for a list of possible
-  properties.
-* Constraints:
-  * OPTIONAL
-  * If present, MUST contain at least one entry
-* Examples:
-  * authorization data
 
 ## Data Attribute
 

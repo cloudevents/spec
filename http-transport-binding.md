@@ -168,18 +168,14 @@ Examples:
     * `eventID` maps to `CE-EventID`
     * `cloudEventsVersion` maps to `CE-CloudEventsVersion`
 
-For the `extensions` attribute, each entry of the `extensions` map
-is mapped to a separate HTTP header. The `extensions` attribute itself is
-not mapped to a header.
-
-The naming convention for the `extensions` header mapping of attributes is:
-
-    * Each map entry name MUST be prefixed with "CE-X-"
+For other attributes not explicitly defined in the [spec](spec.md), each
+attribute will be mapped to a separate HTTP header in the same way as the
+predefined attributes.
 
 Examples:
 
-    * `example` maps to `CE-X-Example`
-    * `testExtension` maps to `CE-X-TestExtension`
+    * `example` maps to `CE-Example`
+    * `testExtension` maps to `CE-TestExtension`
 
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
