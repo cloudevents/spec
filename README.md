@@ -99,7 +99,10 @@ http://www.thetimezoneconverter.com/?t=9:00%20am&tz=San%20Francisco&
 
 ## In Person Meetings
 
-None planned at this time.
+There is a face-to-face meeting planned for June 15, 2018
+in San Francisco. Please see the first page of the
+[minutes](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
+document for more information.
 
 ## Meeting Minutes
 
