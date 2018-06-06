@@ -212,8 +212,8 @@ that contains both context and data).
 ### property-bucket
 * Type: <Key Value>
 * Description: A list of “key : value” pairs in flat strcuture that specify the properties of the event source.
-  The value could be a string or a JSON object. One example usage of the property-field is to
-  correlate multiple events involved with a serverless application.  
+  The value could be a string or a JSON object. There should be no duplication of field in this property-bucket. 
+  One example usage of the property-field is to correlate multiple events involved with a serverless application.  
 * Constraints:
   * MANDATORY
   * MUST be in the format of <key value> pair. 
