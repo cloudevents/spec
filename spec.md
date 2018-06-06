@@ -209,17 +209,23 @@ that contains both context and data).
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-### correlation-field
-* Type: String
-* Description: A path string pointing to a field in the event data 
-  that can be used to correlate all the events associated with 
-  the same application instance. 
+### property-bucket
+* Type: <Key Value>
+* Description: A list of “key : value” pairs in flat strcuture that specify the properties of the event source.
+  The value could be a string or a JSON object. One example usage of the property-field is to
+  correlate multiple events involved with a serverless application.  
 * Constraints:
-  * OPTIONAL
-  * If present, MUST be a non-empty string
+  * MANDATORY
+  * MUST be in the format of <key value> pair. 
 * Examples:
-  * headers.body.cathy-house-number
-
+  property-bucket
+  { 
+     "building address": "12 Main Street, Copenhagen, Denmark, 123456"
+     "floor": "2"
+     "apartmentId": "345"
+     "sensor-location": "window"
+  }
+  
 ### extensions
 * Type: Map <String, Object>
 * Description: This is for additional metadata and this does not have a
