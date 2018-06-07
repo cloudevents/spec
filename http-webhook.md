@@ -173,7 +173,7 @@ field or the HTTP request entity-body. All further caveats cited in
 ## 4. Abuse Protection
 
 Any system that allows registration of and delivery of notifications to
-arbitary HTTP endpoints can potentially be abused such that someone maliciously
+arbitrary HTTP endpoints can potentially be abused such that someone maliciously
 or inadvertently registers the address of a system that does not expect such
 requests and for which the registering party is not authorized to perform such
 a registration. In extreme cases, a notification infrastructure could be abused

@@ -240,8 +240,8 @@ are routed from the emitting source to interested parties for the purpose of
 notifying them about the source occurrence. The routing can be performed based
 on information contained in the event, but an event will not identify
 a specific routing destination. Events will contain two pieces of information:
-the [Data](#data) representing the Occurance and extra [Context](#context)
-metadata providing additional information about the Occurance.
+the [Data](#data) representing the Occurrence and extra [Context](#context)
+metadata providing additional information about the Occurrence.
 
 #### Context
 As described in the Event definition, an Event contains two parts, the

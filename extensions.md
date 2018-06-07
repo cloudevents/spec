@@ -1,7 +1,7 @@
 # CloudEvents Extension Attributes
 
 The [CloudEvents specification](spec.md) defines a set of metadata attributes
-than can be used when tranforming a generic event into a CloudEvent.
+than can be used when transforming a generic event into a CloudEvent.
 The list of attributes specified in that document represent the minimal set
 that the specification authors deemed most likely to be used in a majority of
 situations.
@@ -9,7 +9,7 @@ situations.
 This document defines some addition attributes that, while not as commonly
 used as the ones specified in the [CloudEvents specification](spec.md),
 could still benefit from being formally specified in the hopes of providing
-some degree of interoperabilty. This also allows for attributes to be
+some degree of interoperability. This also allows for attributes to be
 defined in an experimental manner and tested prior to being considered for
 inclusion in the [CloudEvents specification](spec.md).
 

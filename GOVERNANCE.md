@@ -50,7 +50,7 @@ If a vote is taken during a WG meeting, the follow rules will be followed:
 * A vote passes if more than 50% of the votes cast approve the motion.
 * Only "yes" or "no" votes count, "abstain" votes do not count towards the
   total.
-* Meeting attendence will be formally tracked
+* Meeting attendance will be formally tracked
   [here](https://docs.google.com/spreadsheets/d/1bw5s9sC2ggYyAiGJHEk7xm-q2KG6jyrfBy69ifkdmt0/edit#gid=0).
   Members must acknowledge their presence verbally, meaning, adding yourself
   to the "Attendees" section of the Agenda document is not sufficient.
