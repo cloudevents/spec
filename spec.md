@@ -301,7 +301,7 @@ both appear within the same JSON object.
 ### eventType
 * Type: `String`
 * Description: Type of occurrence which has happened. Often this
-  property is used for routing, observability, policy enforcement, etc.
+  attribute is used for routing, observability, policy enforcement, etc.
 * Constraints:
    * REQUIRED
    * MUST be a non-empty string
@@ -379,7 +379,7 @@ both appear within the same JSON object.
   middleware might want to include and provides a place to test metadata before
   adding them to the CloudEvents specification.
   See the [Extensions](extensions.md) document for a list of possible
-  properties.
+  attributes.
 * Constraints:
   * OPTIONAL
   * If present, MUST contain at least one entry
