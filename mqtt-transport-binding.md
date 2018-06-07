@@ -65,7 +65,7 @@ attributes are mapped to the MQTT PUBLISH message's
 
 ### 1.4. Event Formats
 
-Event formats, used with the *stuctured* content mode, define how an event is
+Event formats, used with the *structured* content mode, define how an event is
 expressed in a particular data format. All implementations of this
 specification MUST support the [JSON event format][JSON-format].
 

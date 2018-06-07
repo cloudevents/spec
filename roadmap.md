@@ -36,7 +36,7 @@ of the working group.
     1.  At least one open source implementation of sending and receiving
 	    events, see
 		[community open source](https://github.com/cloudevents/spec/blob/master/community/open-source.md).
-    1. Events are sent by code written by Developer1 and recieved by code
+    1. Events are sent by code written by Developer1 and received by code
 	   written by Developer2, where Developer1 has no knowledge of Developer2.
 
 *0.2*

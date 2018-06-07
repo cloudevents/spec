@@ -38,7 +38,7 @@ document.
 ## Community
 
 Learn more about the people and organizations who are creating a dynamic
-cloud native ecosystem by making our systems interopable with CloudEvents.
+cloud native ecosystem by making our systems interoperable with CloudEvents.
 
 * [Contributors](community/contributors.md): people and organizations who helped
 us get started or are actively working on the CloudEvents specification.
