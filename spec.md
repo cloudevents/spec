@@ -359,13 +359,17 @@ that contains both context and data).
   example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
   
+  When this attribute is omitted, the "data" attribute simply follows the 
+  event format's encoding rules. For the JSON event format, the "data" 
+  attribute value can therefore be a JSON object, array, or value.   
+  
   For the binary mode of some of the CloudEvents transport bindings,
   where the "data" content is immediately mapped into the payload of the
   transport frame, this field is directly mapped to the respective transport
   or application protocol's content-type metadata property. Normative rules
   for the binary mode and the content-type metadata mapping can be found 
   in the respective transport mapping specifications.
-  
+    
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
