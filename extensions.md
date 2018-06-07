@@ -30,13 +30,14 @@ platforms like Prometheus are built.
  
 #### traceparent
 * Type: `String`
-* Description: Contains a a trace ID, span ID, and trace options as defined in
+* Description: Contains a trace ID, span ID, and trace options as defined in
   [section 2.2.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#field-value)
 * Constraints
   * REQUIRED
-  * To integrate with Distributed Tracing, this field MUST NOT use standard
-    extension encoding over HTTP(S). `distributedTracing.traceparent` MUST
-    instead be marshaled as the `traceparent` HTTP header.
+  * To integrate with Distributed Tracing, this field MUST NOT use the normal
+    [extension encoding over HTTP(S)](http-transport-binding.md).
+    `distributedTracing.traceparent` MUST instead be marshaled as 
+    the `traceparent` HTTP header.
 
 #### tracestate
 * Type: `String`
@@ -44,6 +45,7 @@ platforms like Prometheus are built.
   [section 2.3.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#header-value).
 * Constraints
   * OPTIONAL
-  * To integrate with Distributed Tracing, this field MUST NOT use standard
-    extension encoding over HTTP(S). `distributedTracing.tracestate` MUST
-    instead be marshaled as the `tracestate` HTTP header.
+  * To integrate with Distributed Tracing, this field MUST NOT use the normal
+    [extension encoding over HTTP(S)](http-transport-binding.md).
+    `distributedTracing.tracestate` MUST instead be marshaled as the
+    `tracestate` HTTP header.
