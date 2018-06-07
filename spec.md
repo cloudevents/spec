@@ -209,16 +209,16 @@ that contains both context and data).
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-### property-bucket
+### properties
 * Type: <Key Value>
-* Description: A list of “key : value” pairs in flat strcuture that specify the properties of the event source.
+* Description: A list of “key : value” pairs in flat structure that specify the properties of the event source.
   The value could be a string or a JSON object. There should be no duplication of field in this property-bucket. 
   One example usage of the property-field is to correlate multiple events involved with a serverless application.  
 * Constraints:
   * MANDATORY
   * MUST be in the format of <key value> pair. 
 * Examples:
-  property-bucket
+  properties
   { 
      "building address": "12 Main Street, Copenhagen, Denmark, 123456"
      "floor": "2"
