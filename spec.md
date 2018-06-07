@@ -358,6 +358,14 @@ that contains both context and data).
   `contentType` values are defined in the event format specifications; for
   example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
+  
+  For the binary mode of some of the CloudEvents transport bindings,
+  where the "data" content is immediately mapped into the payload of the
+  transport frame, this field is directly mapped to the respective transport
+  or application protocol's content-type metadata property. Normative rules
+  for the binary mode and the content-type metadata mapping can be found 
+  in the respective transport mapping specifications.
+  
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
