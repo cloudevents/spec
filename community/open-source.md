@@ -15,3 +15,5 @@ uses CloudEvents, please include in the list below.
   [Jackson and CDI event integration](https://microbean.github.io/microbean-cloudevents-jackson-cdi).
 * [jCloudEvents](https://github.com/project-streamzi/jcloudevents)
   Java POJO implementation of the CloudEvents specification and some CDI bindings.
+* [Strombrau Gateway](https://github.com/project-streamzi/event-gateway)
+  Vert.x based gateway routing CloudEvent metadata to internal Apache Kafka topic
