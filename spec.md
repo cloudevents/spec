@@ -338,6 +338,25 @@ both appear within the same JSON object.
 * Constraints:
   * REQUIRED
 
+### labels
+* Type: `Map`
+* Description: Non-heirarchical attributes which describe the `source` of
+  the event. Receivers can filter or route based on these attributes.
+  This is intended to include (but is not limited to) "labels" in cloud
+  platforms like AWS or Kubernetes.
+* Constraints:
+  * OPTIONAL.
+  * Keys MUST match the regular expression `[_a-z0-9][_.a-z0-9/]*`
+  * Keys SHOULD use the character "." as a namespace separator
+  * Values MUST be `String`s
+  * Values MUST use URI-safe characters
+  * Values MUST be non-zero in length
+* Examples:
+  * {
+      "sensor.configuration": "WINDOW",
+      "sensor.location": "deployments/house1/window3"
+    }
+
 ### eventID
 * Type: `String`
 * Description: ID of the event. The semantics of this string are explicitly
