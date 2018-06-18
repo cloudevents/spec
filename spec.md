@@ -367,7 +367,28 @@ both appear within the same JSON object.
 
 ### contentType
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-* Description: Describe the data encoding format
+* Description: Content type of the `data` attribute value. This attribute
+  enables the `data` attribute to carry any type of content, whereby format
+  and encoding might differ from that of the chosen event format. For example,
+  an event rendered using the [JSON envelope](./json-format.md#3-envelope)
+  format might carry an XML payload in its `data` attribute, and the
+  consumer is informed by this attribute being set to "application/xml". The
+  rules for how the `data` attribute content is rendered for different
+  `contentType` values are defined in the event format specifications; for
+  example, the JSON event format defines the relationship in
+  [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
+  
+  When this attribute is omitted, the "data" attribute simply follows the 
+  event format's encoding rules. For the JSON event format, the "data" 
+  attribute value can therefore be a JSON object, array, or value.   
+  
+  For the binary mode of some of the CloudEvents transport bindings,
+  where the "data" content is immediately mapped into the payload of the
+  transport frame, this field is directly mapped to the respective transport
+  or application protocol's content-type metadata property. Normative rules
+  for the binary mode and the content-type metadata mapping can be found 
+  in the respective transport mapping specifications.
+    
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
