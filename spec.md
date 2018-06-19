@@ -209,36 +209,25 @@ that contains both context and data).
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-### properties
+### application-properties
 * Type: <Key Value>
-* Description: A list of “key : value” pairs in flat structure that specify the properties of the event source.
-  The value could be a string or a JSON object. There should be no duplication of field in this property-bucket. 
-  One example usage of the property-field is to correlate multiple events involved with a serverless application.  
+* Description: A list of “key : value” pairs providing information about the event, which are 
+  used by an event-based application. The “key : value” pairs should be in flat structure.
+  The value should be a string. There should be no duplication of keys.
+  One usage example: an application workflow can use a "key:value" to correlate multiple events 
+  (from different event sources) asscociated with a serverless application workflow.  
 * Constraints:
   * MANDATORY
   * MUST be in the format of <key value> pair. 
 * Examples:
-  properties
+  application-properties
   { 
      "building address": "12 Main Street, Copenhagen, Denmark, 123456"
      "floor": "2"
      "apartmentId": "345"
-     "sensor-location": "window"
+     "sensor-location": "room1.window2"
   }
   
-### extensions
-* Type: Map <String, Object>
-* Description: This is for additional metadata and this does not have a
-  mandated structure. This enables a place for custom fields a producer or
-  middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification. TBD - Determine a shorter
-  prefix for this (e.g. OpenAPI uses “x-”)
-* Constraints:
-  * OPTIONAL
-  * If present, MUST contain at least one entry
-* Examples:
-  * authorization data
-
 ### data
 * Type: Arbitrary payload
 * Description: The event payload. The payload depends on the event-type,
