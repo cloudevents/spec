@@ -107,15 +107,16 @@ platform/vendor specific protocols (AWS Kinesis, Azure Event Grid).
 
 The following abstract data types are available for use in attributes.
 
+- `Integer` - A 32-bit whole number.
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
-- `Map` - `String`-indexed dictionary of `Object`-typed values
-- `Object` - Either a `String`, or a `Binary`, or a `Map`
+- `Map` - `String`-indexed dictionary of `Object`-typed values.
+- `Object` - Either a `String`, or a `Binary`, or a `Map`, or an `Integer`.
 - `URI` - String expression conforming to `URI-reference`
   as defined in
   [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
 - `Timestamp` - String expression as defined in
-  [RFC 3339](https://tools.ietf.org/html/rfc3339)
+  [RFC 3339](https://tools.ietf.org/html/rfc3339).
 
 This specification does not define numeric or logical types.
 

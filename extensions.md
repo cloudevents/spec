@@ -33,6 +33,11 @@ default placement for extensions, but an extension MAY require special
 representation when transported (e.g. tracing standards that require
 specific headers).
 
-## Documented Extensions
+As a convention, extensions of scalar types (`String`, `Binary`, `URI`,
+`Number`) document their format with the attribute name `(self)` in the
+documentation's "Attributes" section.
+
+## Known Extensions
 
 * [Distributed Tracing](extensions/distributed-tracing.md)
+* [Sampling](extensions/sampled-rate.md)
