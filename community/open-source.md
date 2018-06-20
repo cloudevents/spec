@@ -13,7 +13,9 @@ uses CloudEvents, please include in the list below.
 * [microBean CloudEvents](https://microbean.github.io/microbean-cloudevents/):
   CloudEvents represented as plain Java objects. Satellite projects add
   [Jackson and CDI event integration](https://microbean.github.io/microbean-cloudevents-jackson-cdi).
-* [jCloudEvents](https://github.com/project-streamzi/jcloudevents)
+* [jCloudEvents](https://github.com/project-streamzi/jcloudevents):
   Java POJO implementation of the CloudEvents specification and some CDI bindings.
-* [Strombrau Gateway](https://github.com/project-streamzi/event-gateway)
+* [Strombrau Gateway](https://github.com/project-streamzi/event-gateway):
   Vert.x based gateway routing CloudEvent metadata to internal Apache Kafka topic
+* [Event Gateway](https://github.com/serverless/event-gateway):
+  It's dataflow for event-driven, serverless architectures. The Event Gateway combines both API Gateway and Pub/Sub functionality into a single event-driven experience. 
