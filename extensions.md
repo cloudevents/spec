@@ -33,6 +33,6 @@ default placement for extensions, but an extension MAY require special
 representation when transported (e.g. tracing standards that require
 specific headers).
 
-## Known Extensions
+## Documented Extensions
 
 * [Distributed Tracing](extensions/distributed-tracing.md)
