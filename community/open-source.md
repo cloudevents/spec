@@ -17,5 +17,6 @@ uses CloudEvents, please include in the list below.
   Java POJO implementation of the CloudEvents specification and some CDI bindings.
 * [Strombrau Gateway](https://github.com/project-streamzi/event-gateway):
   Vert.x based gateway routing CloudEvent metadata to internal Apache Kafka topic
+* [CloudEvents Extend API](https://github.com/goextend/cloudevents-extend-api) is a JavaScript programming model for [Extend](https://goextend.io) which allows handling Cloud Events.
 * [Event Gateway](https://github.com/serverless/event-gateway):
   It's dataflow for event-driven, serverless architectures. The Event Gateway combines both API Gateway and Pub/Sub functionality into a single event-driven experience. 
