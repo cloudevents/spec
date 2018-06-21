@@ -19,5 +19,6 @@ uses CloudEvents, please include in the list below.
   Vert.x based gateway routing CloudEvent metadata to internal Apache Kafka topic
 * [Event Gateway](https://github.com/serverless/event-gateway):
   It's dataflow for event-driven, serverless architectures. The Event Gateway combines both API Gateway and Pub/Sub functionality into a single event-driven experience.
+* [CloudEvents Extend API](https://github.com/goextend/cloudevents-extend-api) is a JavaScript programming model for [Extend](https://goextend.io) which allows handling Cloud Events.
 * [CloudEvents Verify](https://github.com/btbd/CEVerify):
   is a tool to help verify CloudEvents according to the proper specifications. It is currently being hosted publicly [here](http://soaphub.org/ceverify).
