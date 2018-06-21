@@ -32,6 +32,8 @@ The following specifications are available:
 | **JSON Event Format** | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/json-format.md) | [master](https://github.com/cloudevents/spec/blob/master/json-format.md) |
 | **Web hook** | - | [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md) |
 | **NATS Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
+| **AMQP Event Format** | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md) |
+| **AMQP Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
 
 There is also the [CloudEvents Extension Attributes](https://github.com/cloudevents/spec/blob/master/extensions.md)
 document.
