@@ -78,7 +78,7 @@ variant type representation.
 
 [CE]: ./spec.md
 [Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
-[type-system]:docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html 
+[type-system]: https://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html
 [type-system-encoding]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#section-encodings
 [AMQP-String]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
 [AMQP-Binary]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-binary
