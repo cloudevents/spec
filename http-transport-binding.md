@@ -176,7 +176,7 @@ of HTTP headers, where by the name of each header carries the prefix
 
 CloudEvents extensions that define their own attributes MAY define a 
 diverging mapping to HTTP headers for those attributes, especially if 
-specific header names are required to align with HTTP features or with 
+specific header names need to align with HTTP features or with 
 other specifications that have explicit HTTP header bindings. If specific
 names are not required, extensions SHOULD follow the naming convention
 cited here.
