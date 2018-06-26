@@ -158,9 +158,10 @@ are individually mapped to and from distinct HTTP message headers.
 
 ##### 3.1.3.1 HTTP Header Names
 
-The naming convention for the HTTP header mapping of attributes is:
-
-    * Each attribute name MUST be prefixed with "CE-"
+Except for attributes [explicitly handled in this specification]
+(#2-use-of-cloudevents-attributes), the naming convention for the 
+HTTP header mapping of well-known CloudEvents attributes is that 
+each attribute name MUST be prefixed with "CE-".
 
 Examples:
 
@@ -168,18 +169,17 @@ Examples:
     * `eventID` maps to `CE-EventID`
     * `cloudEventsVersion` maps to `CE-CloudEventsVersion`
 
-For the `extensions` attribute, each entry of the `extensions` map
-is mapped to a separate HTTP header. The `extensions` attribute itself is
-not mapped to a header.
+`Map`-typed CloudEvents attributes MUST be flattened into a set
+of HTTP headers, where by the name of each header carries the prefix
+"CE-", an infix reflecting the map attribute followed by a dash 
+("-"), and the name of the map entry key, e.g. "CE-attrib-key".
 
-The naming convention for the `extensions` header mapping of attributes is:
-
-    * Each map entry name MUST be prefixed with "CE-X-"
-
-Examples:
-
-    * `example` maps to `CE-X-Example`
-    * `testExtension` maps to `CE-X-TestExtension`
+CloudEvents extensions that define their own attributes MAY define a 
+diverging mapping to HTTP headers for those attributes, especially if 
+specific header names are required to align with HTTP features or with 
+other specifications that have explicit HTTP header bindings. If specific
+names are not required, extensions SHOULD follow the naming convention
+cited here.
 
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
