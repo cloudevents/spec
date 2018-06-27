@@ -312,15 +312,6 @@ both appear within the same JSON object.
 * Examples
    * com.github.pull.create
 
-### eventTypeVersion
-* Type: `String`
-* Description: The version of the `eventType`. This enables the interpretation
-  of `data` by eventual consumers, requires the consumer to be knowledgeable
-  about the producer.
-* Constraints:
-  * OPTIONAL
-  * If present, MUST be a non-empty string
-
 ### cloudEventsVersion
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
@@ -360,6 +351,7 @@ both appear within the same JSON object.
 ### schemaURL
 * Type: `URI`
 * Description: A link to the schema that the `data` attribute adheres to.
+Incompatible changes to the schema SHOULD result in a new schema version.
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
