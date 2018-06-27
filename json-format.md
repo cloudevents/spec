@@ -140,7 +140,7 @@ Example event with `String`-valued `data`:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
+    "properties" : {
       "comExampleExtension" : "value"
     },
     "contentType" : "text/xml",
@@ -157,7 +157,7 @@ Example event with `Binary`-valued data
     "source" : "/mycontext",
     "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
+    "properties" : {
       "comExampleExtension" : "value"
     },
     "contentType" : "application/vnd.apache.thrift.binary",
@@ -175,7 +175,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
     "source" : "/mycontext",
     "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
+    "properties" : {
       "comExampleExtension" : "value"
     },
     "contentType" : "application/json",

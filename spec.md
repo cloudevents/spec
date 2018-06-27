@@ -217,26 +217,37 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   or application protocol's content-type metadata property. Normative rules
   for the binary mode and the content-type metadata mapping can be found 
   in the respective transport mapping specifications.
-    
+  
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-### extensions
+### properties
 * Type: `Map`
-* Description: This is for additional metadata and this does not have a
-  mandated structure. This enables a place for custom fields a producer or
-  middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification.
-  See the [Extensions](extensions.md) document for a list of possible
-  attributes.
+* Description: This is a place for custom key-value pairs a producer or
+  middleware want to include to provide more information about the
+  event. It does not have mandated definition of the keys.
+  For example, a producer could put an event identification label
+  which will be used by a serverless platform to correlate this event
+  with other types of events associated with the same application
+  workflow instance. When adding a new key-value pair,
+  care should be taken to use a name that is descriptive enough and
+  not overlapping with the other keys. The extensions.md document
+  contains some possible attributes that could be used as the keys,
+  but producers are free to define their own.  
 * Constraints:
-  * OPTIONAL
+  * OPTIONAL 
   * If present, MUST contain at least one entry
 * Examples:
-  * authorization data
+``` JSON
+  properties
+  {
+     "employee-ID": "H0098002",
+     "travel-request-ID": "123456"
+  }
+```
 
 ## Data Attribute
 
@@ -263,8 +274,8 @@ The following example shows a CloudEvent serialized as JSON:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-        "comExampleExtension" : "value"
+    "properties" : {
+        "employee-ID": "H0098002"
     },
     "contentType" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
