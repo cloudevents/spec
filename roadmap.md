@@ -56,8 +56,15 @@ of the working group.
 
 1. Resolve all known "proposed optional attributes" issues
 1. Resolve all known "security related" issues
+1. Review spec for practical-use issues:
+    1. Consider context size limits
+    1. Consider restricting character sets of `String` properties or key names
+    1. Consider defining uniqueness constraints of `eventId`
+    1. Consider which fields will be immutable (prevents annotation or redaction)
+    1. Consider validating transport bindings with load tests
 
 *0.4*
+
 1. Complete the proposed set of protocol and serialization mappings
 1. Resolve "Process" related issues
 
