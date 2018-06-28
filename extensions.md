@@ -18,34 +18,21 @@ to limit their use of extension attributes to just the ones specified in
 this document. The attributes defined in this document have no official
 standing and might be changed, or removed, at any time.
 
-## Extension Attributes
+## Usage
 
-### distributedTracing
+Support for any extension is OPTIONAL. When an extension definition uses 
+[RFC 2199](https://www.ietf.org/rfc/rfc2119.txt) keywords (e.g. MUST,
+SHOULD, MAY), this usage only applies to events that use the extension.
 
-This extension embeds context from 
-[Distributed Tracing](https://w3c.github.io/distributed-tracing/report-trace-context.html)
-so that distributed systems can include traces that span an event-driven system.
-This is the foundation of many other systems, such as Open Tracing, on which
-platforms like Prometheus are built.
- 
-#### traceparent
-* Type: `String`
-* Description: Contains a trace ID, span ID, and trace options as defined in
-  [section 2.2.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#field-value)
-* Constraints
-  * REQUIRED
-  * To integrate with Distributed Tracing, this field MUST NOT use the normal
-    [extension encoding over HTTP(S)](http-transport-binding.md).
-    `distributedTracing.traceparent` MUST instead be marshaled as 
-    the `traceparent` HTTP header.
+Extensions always follow a common placement strategy for in-memory
+formats (e.g. [JSON](json-format.md), XML, Protobuffer) that are
+decided by those representations. Transport bindings (e.g.
+[HTTP](http-transport-binding.md), [MQTT](mqtt-transport-binding.md),
+[AMPQ](amqp-transport-binding.md), [NATS](nats-transport-binding.md)) provide
+default placement for extensions, but an extension MAY require special
+representation when transported (e.g. tracing standards that require
+specific headers).
 
-#### tracestate
-* Type: `String`
-* Description: a comma-delimited list of key-value pairs, defined by
-  [section 2.3.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#header-value).
-* Constraints
-  * OPTIONAL
-  * To integrate with Distributed Tracing, this field MUST NOT use the normal
-    [extension encoding over HTTP(S)](http-transport-binding.md).
-    `distributedTracing.tracestate` MUST instead be marshaled as the
-    `tracestate` HTTP header.
+## Documented Extensions
+
+* [Distributed Tracing](extensions/distributed-tracing.md)
