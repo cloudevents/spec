@@ -26,3 +26,5 @@ uses CloudEvents, please include in the list below.
   is a function gateway built on top of [Envoy Proxy](https://envoyproxy.io/) by [Solo.io](https://www.solo.io/) that supports CloudEvents.
 * [Dispatch](https://github.com/vmware/dispatch):
   is a function framework / gateway by [VMWare](https://vmware.github.io/dispatch/) that support CloudEvents.
+* [cloudevents-python](https://github.com/williamhogman/cloudevents-python): A CloudEvents library for python.
+* [CloudEvents.live](https://cloudevents.live/): A real-time debugger/request bin for the CloudEvents webhook format. Submit events to the bin and immediately see them in the web UI (Sources: [Backend](https://github.com/klira/cloudevents-bin) [Frontend](https://github.com/klira/cloudevents-debugger))
