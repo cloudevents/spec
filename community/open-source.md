@@ -22,3 +22,7 @@ uses CloudEvents, please include in the list below.
 * [CloudEvents Extend API](https://github.com/goextend/cloudevents-extend-api) is a JavaScript programming model for [Extend](https://goextend.io) which allows handling Cloud Events.
 * [CloudEvents Verify](https://github.com/btbd/CEVerify):
   is a tool to help verify CloudEvents according to the proper specifications. It is currently being hosted publicly [here](http://soaphub.org/ceverify).
+* [Gloo](https://github.com/solo-io/gloo):
+  is a function gateway built on top of [Envoy Proxy](https://envoyproxy.io/) by [Solo.io](https://www.solo.io/) that supports CloudEvents.
+* [Dispatch](https://github.com/vmware/dispatch):
+  is a function framework / gateway by [VMWare](https://vmware.github.io/dispatch/) that support CloudEvents.
