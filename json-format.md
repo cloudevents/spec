@@ -81,7 +81,6 @@ The following table shows exemplary mappings:
 | CloudEvents       | Type     | Exemplary JSON Value
 |--------------------|----------|-------------------------------
 | eventType          | String   | "com.example.someevent"
-| eventTypeVersion   | String   | "1.0"
 | cloudEventsVersion | String   | "0.1"
 | source             | URI      | "/mycontext"
 | eventID            | String   | "1234-1234-1234"
@@ -138,7 +137,6 @@ Example event with `String`-valued `data`:
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.example.someevent",
-    "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
@@ -156,7 +154,6 @@ Example event with `Binary`-valued data
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.example.someevent",
-    "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
     "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
@@ -175,7 +172,6 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.example.someevent",
-    "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
     "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",

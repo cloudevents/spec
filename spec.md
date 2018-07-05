@@ -149,15 +149,6 @@ both appear within the same JSON object.
 * Examples
    * com.github.pull.create
 
-### eventTypeVersion
-* Type: `String`
-* Description: The version of the `eventType`. This enables the interpretation
-  of `data` by eventual consumers, requires the consumer to be knowledgeable
-  about the producer.
-* Constraints:
-  * OPTIONAL
-  * If present, MUST be a non-empty string
-
 ### cloudEventsVersion
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
@@ -197,6 +188,7 @@ both appear within the same JSON object.
 ### schemaURL
 * Type: `URI`
 * Description: A link to the schema that the `data` attribute adheres to.
+Incompatible changes to the schema SHOULD be reflected by a different URL.
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
@@ -254,8 +246,8 @@ encapsulated within the `data` attribute.
 
 ### data
 * Type: `Object`
-* Description: The event payload. The payload depends on the eventType,
-  schemaURL and eventTypeVersion, the payload is encoded into a media format
+* Description: The event payload. The payload depends on the eventType and
+  the schemaURL. It is encoded into a media format
   which is specified by the contentType attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
@@ -268,7 +260,6 @@ The following example shows a CloudEvent serialized as JSON:
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.example.someevent",
-    "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
