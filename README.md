@@ -36,13 +36,8 @@ The following specifications are available:
 | **AMQP Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
 
 There is also the [CloudEvents Extension Attributes](https://github.com/cloudevents/spec/blob/master/extensions.md)
-document.
-
-Included within this repository are some documents that helped guide the
-working group's design decisions. They include:
-- [Use-Cases](about/use-cases.md) from the community
-- [Existing events](about/references.md) from some popular implementations
-  in the community
+document and a [CloudEvents Primer](primer.md) to help understand some of
+the history and design goals of the working group.
 
 ## Community
 
@@ -58,7 +53,7 @@ something to share about your use of CloudEvents, please submit a PR!
 ## Working Group process
 
 The CNCF Serverless WG is working to formalize the [specification](spec.md)
-based on [design goals](spec.md#design-goals) which focus on interoperability
+based on [design goals](primer.md#design-goals) which focus on interoperability
 between systems which generate and respond to events.
 
 In order to achieve these goals, the Serverless WG must describe:
