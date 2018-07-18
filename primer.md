@@ -111,8 +111,6 @@ Along with the definition of these attributes, there will also be
 specifications of how to serialize the event in different formats and
 transports (e.g. JSON and HTTP).
 
-*Cathy* Insert additional text (examples, usecases...) about "properties" here.
-
 ### Non-Goals
 The following will not be part of the specification:
 * Function build and invocation process
