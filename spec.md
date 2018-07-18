@@ -233,12 +233,12 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   which will be used by a serverless platform to correlate this event
   with other types of events associated with the same application
   workflow instance. When adding a new key-value pair,
-  care should be taken to use a name that is descriptive enough and
+  care SHOULD be taken to use a name that is descriptive enough and
   not overlapping with the other keys. The extensions.md document
   contains some possible attributes that could be used as the keys,
   but producers are free to define their own.  
 * Constraints:
-  * OPTIONAL 
+  * OPTIONAL
   * If present, MUST contain at least one entry
 * Examples:
 ``` JSON
