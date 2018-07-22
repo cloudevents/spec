@@ -91,6 +91,12 @@ The following table shows exemplary mappings:
 | data               | Binary   | "Q2xvdWRFdmVudHM="
 | data               | Map      | { "objA" : "vA", "objB", "vB" }
 
+## 2.5. JSONSchema Validation
+
+The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
+[here](spec.json) and contains the definitions for validating events in JSON.
+
+
 ## 3. Envelope
 
 Each CloudEvents event can be wholly represented as a JSON object.
