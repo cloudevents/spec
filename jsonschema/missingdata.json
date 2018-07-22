@@ -1,0 +1,11 @@
+{
+  "cloudEventsVersion": "0.1",
+  "contentType": "application/vnd.apache.thrift.binary",
+  "eventID": "B234-1234-1234",
+  "eventTime": "2018-04-05T17:31:00Z",
+  "eventType": "com.example.someevent",
+  "extensions": {
+    "comExampleExtension": "value"
+  },
+  "source": "/mycontext"
+}
