@@ -25,4 +25,3 @@ jsonschema -i missingdata.json spec.json
 inary', u'eventType': u'com.example.someevent', u'cloudEventsVersion': u'0.1', u'source': u'/mycontext', u'extensions':
 {u'comExampleExtension': u'value'}}: u'data' is a required property
 ```
-
