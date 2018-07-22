@@ -1,0 +1,70 @@
+{
+  "$ref": "#/definitions/event",
+  "definitions": {
+    "cloudEventsVersion": {
+      "type": "string"
+    },
+    "contentType": {
+      "type": "string"
+    },
+    "data": {
+      "type": [
+        "object",
+        "string"
+      ]
+    },
+    "event": {
+      "properties": {
+        "cloudEventsVersion": {
+          "$ref": "#/definitions/cloudEventsVersion"
+        },
+        "contentType": {
+          "$ref": "#/definitions/contentType"
+        },
+        "data": {
+          "$ref": "#/definitions/data"
+        },
+        "eventID": {
+          "$ref": "#/definitions/eventID"
+        },
+        "eventTime": {
+          "$ref": "#/definitions/eventTime"
+        },
+        "eventType": {
+          "$ref": "#/definitions/eventType"
+        },
+        "extensions": {
+          "$ref": "#/definitions/extensions"
+        },
+        "source": {
+          "$ref": "#/definitions/source"
+        }
+      },
+      "required": [
+        "cloudEventsVersion",
+        "eventID",
+	"eventType",
+        "source"
+      ],
+      "type": "object"
+    },
+    "eventID": {
+      "type": "string"
+    },
+    "eventTime": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "eventType": {
+      "type": "string"
+    },
+    "extensions": {
+      "type": "object"
+    },
+    "source": {
+      "format": "uri",
+      "type": "string"
+    }
+  },
+  "type": "object"
+}
