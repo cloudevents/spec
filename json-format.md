@@ -39,8 +39,10 @@ interpreted as described in [RFC2119][RFC2119].
 ## 2. Attributes
 
 This section defines how CloudEvents attributes are mapped to JSON. This
-specification does not explicitly map each attribute, but provides a generic
-mapping model that applies to all current and future CloudEvents attributes.
+specification does not explicitly map each attribute, but
+provides a generic mapping model that applies to all current and future 
+CloudEvents attributes, including extensions.
+
 
 ### 2.1. Base Type System
 
@@ -86,7 +88,6 @@ The following table shows exemplary mappings:
 | eventID            | String   | "1234-1234-1234"
 | eventTime          | Timestamp| "2018-04-05T17:31:00Z"
 | contentType        | String   | "application/json"
-| extensions         | Map      | { "extA" : "vA", "extB", "vB" }
 | data               | String   | "<much wow=\"xml\"/>"
 | data               | Binary   | "Q2xvdWRFdmVudHM="
 | data               | Map      | { "objA" : "vA", "objB", "vB" }
@@ -146,9 +147,7 @@ Example event with `String`-valued `data`:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-      "comExampleExtension" : "value"
-    },
+    "comExampleExtension" : "value",
     "contentType" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
@@ -163,9 +162,7 @@ Example event with `Binary`-valued data
     "source" : "/mycontext",
     "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-      "comExampleExtension" : "value"
-    },
+    "comExampleExtension" : "value",
     "contentType" : "application/vnd.apache.thrift.binary",
     "data" : "... base64 encoded string ..."
 }
@@ -181,9 +178,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
     "source" : "/mycontext",
     "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-      "comExampleExtension" : "value"
-    },
+    "comExampleExtension" : "value",
     "contentType" : "application/json",
     "data" : {
         "appinfoA" : "abc",

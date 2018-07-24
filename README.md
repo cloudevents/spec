@@ -35,7 +35,8 @@ The following specifications are available:
 | **AMQP Event Format** | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md) |
 | **AMQP Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
 
-There is also the [CloudEvents Extension Attributes](https://github.com/cloudevents/spec/blob/master/extensions.md)
+There is also the
+[CloudEvents documented extension attributes](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)
 document and a [CloudEvents Primer](primer.md) to help understand some of
 the history and design goals of the working group.
 

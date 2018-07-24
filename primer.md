@@ -103,10 +103,13 @@ either the event producer or event consumer.
 
 CloudEvents, at its core, defines a set of metadata, called attributes, about
 the event being transferred between systems, and how those pieces of metadata
-should appear in that message. The metadata is not meant to duplicate any of
-the application data of the event itself, rather it is just the minimal
-information needed to route the request to the proper component that will
-process the event.
+should appear in that message. This metadata is meant to be the minimal 
+set of information needed to route the request to the proper component that
+will process the event. So, while this might mean that some of the application
+data of the event itself might be duplicated as part of the CloudEvent's set
+of properties, this is to be done solely for the purpose of proper delivery
+of the message.  Data that is meant strictly for use by the component
+processing the event should be within the event.
 
 Along with the definition of these attributes, there will also be
 specifications of how to serialize the event in different formats and
@@ -136,8 +139,9 @@ in these cases will be defined within the specfication itself.
 When the working group determines that an attribute is not common enough to
 fall into those two categories but would still benefit from the level of
 interoperability that comes from being well-defined, then they will be placed
-into the "extensions" category and put into the (extensions)[extensions.md]
-document. The specification defines how these extension attributes will
+into the "extensions" category and put into 
+(documented extensions)[documented-extensions.md].
+The specification defines how these extension attributes will
 appear within a CloudEvent.
 
 In determining which category a proposed attribute belongs, or even if it
@@ -145,6 +149,13 @@ will be included at all, the working group uses use-cases and
 user-stories to explain the rationale and need for them. This supporting
 information will be added to the [Prior Art](#prior-art) section of this
 document.
+
+Extension attributes to the CloudEvent specification are meant to
+be additional metadata that needs to be included to help ensure proper
+routing and processing of the CloudEvent. Additional metadata for other
+purposes, that is related to the event itself and not needed in the
+transportation of the CloudEvent, should instead be placed within the proper
+extensibility points of the event itself.
 
 ## Qualifying Protocols and Encodings
 
