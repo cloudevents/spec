@@ -113,6 +113,11 @@ solely for the purpose of proper delivery, and processing, of the message. Data
 that is not intended for that purpose should instead be placed within the event
 (the `data` attribute) itself.
 
+Additionally, it is assumed that the metadata needed by the transport layer
+to deliver the message to the target system is handled entirely by the
+transport and therefore is not included within the CloudEvents attributes.
+See the [Non-Goals](#non-goals) section for more details.
+
 Along with the definition of these attributes, there will also be specifications
 of how to serialize the event in different formats (e.g. JSON) and transports
 (e.g. HTTP, AMQP, Kafka).
@@ -124,11 +129,34 @@ transport specification.
 
 ### Non-Goals
 
-The following will not be part of the specification:
+The following are considered beyond the scope of the specification:
 
 - Function build and invocation process
 - Language-specific runtime APIs
 - Selecting a single identity/access control system
+- Inclusion of transport-level routing information
+
+The CloudEvents spec will not include transport-level routing
+information (e.g. a destination URL to which the event is being sent).
+This is a common suggestion by those new to the concepts of CloudEvents.
+After much deliberation, the working group has come to the conclusion that
+routing is unnecessary in the spec: any transport protocol (e.g. HTTPS,
+MQTT, XMPP, or a Pub/Sub bus) already defines semantics for routing.
+For example, the CloudEvents [HTTPS binding](http-transport-binding.md)
+dictates headers and request body contents. CloudEvents don't need to
+include a destination URL in the spec to be HTTP compatible; the HTTP spec
+already includes one in the
+[Request-Line](https://tools.ietf.org/html/rfc2616#section-5.1).
+
+Routing information is not just redundant, it detracts.
+CloudEvents should increase interoperability and decouple the producer and
+consumer of events. Prohibiting routing information from the events format
+allows CloudEvents to be redelivered to new actions, or to be delivered
+over complex relays that include multiple channels. For example, a
+CloudEvent that was intended for a webhook should be deliverable to a
+dead-letter queue if the webhook address is unavailable. That dead-letter
+queue should be able to feed events to new actions that the original event
+emitter never imagined.
 
 
 ## Architecture
