@@ -31,11 +31,15 @@ decided by those representations. Transport bindings (e.g.
 [AMPQ](amqp-transport-binding.md), [NATS](nats-transport-binding.md)) provide
 default placement for extensions, but an extension MAY require special
 representation when transported (e.g. tracing standards that require
-specific headers).
+specific headers). Extension authors SHOULD only require special
+representation in transport bindings where extensions integrate with
+pre-existing specs; extensions with custom transport bindings are much
+more likely to be dropped by middleware that does not understand the
+extension.
 
 As a convention, extensions of scalar types (`String`, `Binary`, `URI`,
-`Number`) document their format with the attribute name `(self)` in the
-documentation's "Attributes" section.
+`Number`) document their `Value` and structured types document their 
+`Attributes`.
 
 ## Known Extensions
 

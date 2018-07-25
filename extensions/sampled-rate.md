@@ -17,20 +17,23 @@ emitted event represents a given number of other similar events. It also
 provides a place for intermediary transport systems to modify the event when
 they impose additional sampling.
 
-## Attributes
+## Value
 
-### (self)
 * Type: `Integer`
 * Description: The rate at which this event has already been sampled. Represents
   the number of similar events that happened but were not sent plus this event.
   For example, if a system sees 30 occurrences and emits a single event, `rate`
   would be 30 (29 not sent and 1 sent).
-  Consumers SHOULD assume a value of `1` when the extension is omitted.
+  A value of `1` is the equivalent of this extension not being used at all.
 * Constraints
-  * The rate MUST be positive.
+  * The rate MUST be greater than zero.
 
 ## Encoding
 
 ### In-memory formats
-The Sampling extension uses the key `sampledRate` for in-memory formats
+The Sampling extension uses the key `sampledRate` for in-memory formats.
+
+### Transport bindings
+The Sampling extension does not customize any transport binding's storage
+for extensions.
 
