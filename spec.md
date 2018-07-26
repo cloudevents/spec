@@ -224,19 +224,17 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-### properties
+### identificationLabels
 * Type: `Map`
 * Description: This is a place for custom key-value pairs a producer or
-  middleware want to include to provide more information about the
-  event. It does not have mandated definition of the keys.
+  middleware want to include to provide more identification information
+  about the event. It does not have mandated definition of the keys.
   For example, a producer could put an event identification label
   which will be used by a serverless platform to correlate this event
   with other types of events associated with the same application
   workflow instance. When adding a new key-value pair,
   care SHOULD be taken to use a name that is descriptive enough and
-  not overlapping with the other keys. The extensions.md document
-  contains some possible attributes that could be used as the keys,
-  but producers are free to define their own.  
+  not overlapping with the other keys.   
 * Constraints:
   * OPTIONAL
   * If present, MUST contain at least one entry
@@ -248,6 +246,8 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
      "travel-request-ID": "123456"
   }
 ```
+
+### extensions
 
 ## Data Attribute
 
