@@ -250,6 +250,8 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   }
 ```
 
+### extensions
+
 ## Data Attribute
 
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
@@ -275,7 +277,7 @@ The following example shows a CloudEvent serialized as JSON:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "properties" : {
+    "identificationLabels" : {
         "employee-ID": "H0098002"
     },
     "contentType" : "text/xml",
