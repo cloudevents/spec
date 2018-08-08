@@ -279,7 +279,7 @@ The following example shows a CloudEvent serialized as JSON:
     "eventTime" : "2018-04-05T17:31:00Z",
     "identityLabels" : {
         "employee-ID": "H0098002",
-		"travel-request-ID": "123456"
+        "travel-request-ID": "123456"
     },
     "contentType" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
