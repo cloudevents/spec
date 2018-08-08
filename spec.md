@@ -277,8 +277,8 @@ The following example shows a CloudEvent serialized as JSON:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-	"extensions" : {
-	    "comExampleExtension" : "value"
+    "extensions" : {
+        "comExampleExtension" : "value"
     },
     "identityLabels" : {
         "employee-ID": "H0098002",
