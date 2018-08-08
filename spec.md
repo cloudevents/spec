@@ -224,19 +224,20 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-### properties
+### idendityLabels
 * Type: `Map`
 * Description: This is a place for custom key-value pairs a producer or
-  middleware want to include to provide more information about the
-  event. It does not have mandated definition of the keys.
-  For example, a producer could put an event identification label
-  which will be used by a serverless platform to correlate this event
-  with other types of events associated with the same application
-  workflow instance. When adding a new key-value pair,
-  care SHOULD be taken to use a name that is descriptive enough and
-  not overlapping with the other keys. The extensions.md document
-  contains some possible attributes that could be used as the keys,
-  but producers are free to define their own.  
+  middleware wants to include to provide additional identity information
+  about the event. The syntax and semantics of each specific label
+  inside this bucket are open for each event type producer to define
+  and will not be defined by this specification.
+  For example, a travel request messaging event producer could put
+  "TravelRequestID: 123456" as an identity label for a travel
+  request event, a home IoT device event producer could put
+  "home address: 20 Spruce Street, San Jose, CA" as an identity label
+  for that IoT device event. Identity labels could be used by a
+  serverless platform to correlate this event with other types of
+  events associated with the same serverless application instance.
 * Constraints:
   * OPTIONAL
   * If present, MUST contain at least one entry
