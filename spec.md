@@ -231,8 +231,9 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
 * Description: This is a place for custom key-value pairs a producer or
   middleware wants to include to provide additional identity information
   about the event. The syntax and semantics of each specific label
-  inside this bucket are open for each event type producer to define
-  and will not be defined by this specification.
+  inside this map are open for each event type producer to define,
+  but the keys of this map are of type string and
+  the values are restricted to be of simple types only.
   For example, a travel request messaging event producer could put
   "TravelRequestID: 123456" as an identity label for a travel
   request event, a home IoT device event producer could put
