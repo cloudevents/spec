@@ -160,8 +160,8 @@ within the proper extensibility points of the event (the `data` attribute)
 itself.
 
 The specification places no restrictions on the type of the extension
-attributes. Meaning, they may be simple types (e.g. strings, integers)
-or they can be complex types of structured data.
+attributes. Meaning, they may be simple types (e.g. strings, integers),
+complex (e.g. structured) or undefined collection of attributes.
 
 If an extension becomes popular then the specification authors might
 consider moving it into the specification as a core attribute. This means
