@@ -150,15 +150,16 @@ extensions.
 This specification places no restriction on the type or semantics of the
 extension attributes. Each definition of an extensions SHOULD fully
 define all aspects of the attribute - e.g. its name, semantic meaning
-and possible values.  New extension definitions SHOULD use a name that is
+and possible values or even to indicate that it places no restrictions on
+its values.  New extension definitions SHOULD use a name that is
 descriptive enough to reduce the chances of name collisions with other
-extensions.
+extensions. In particular, extension authors SHOULD check the
+[documented extensions](documented-extensions.md) document for the
+set of known extensions - not just for possible name conflicts but
+for extensions that might be of interest.
 
 Each specification that defines how to serialize a CloudEvent will
 define how extension attributes will appear.
-
-See [documented extensions](documented-extensions.md) for a list
-of extension attributes that might be of interest.
 
 ### eventType
 * Type: `String`
@@ -272,7 +273,10 @@ The following example shows a CloudEvent serialized as JSON:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension" : "value",
+    "comExampleExtension1" : "value",
+    "comExampleExtension2" : {
+        "otherValue": 5
+    },
     "contentType" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }

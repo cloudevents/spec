@@ -147,7 +147,10 @@ Example event with `String`-valued `data`:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension" : "value",
+    "comExampleExtension1" : "value",
+    "comExampleExtension2" : {
+        "otherValue": 5
+    },
     "contentType" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
@@ -162,7 +165,10 @@ Example event with `Binary`-valued data
     "source" : "/mycontext",
     "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension" : "value",
+    "comExampleExtension1" : "value",
+    "comExampleExtension2" : {
+        "otherValue": 5
+    },
     "contentType" : "application/vnd.apache.thrift.binary",
     "data" : "... base64 encoded string ..."
 }
@@ -178,7 +184,10 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
     "source" : "/mycontext",
     "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension" : "value",
+    "comExampleExtension1" : "value",
+    "comExampleExtension2" : {
+        "otherValue": 5
+    },
     "contentType" : "application/json",
     "data" : {
         "appinfoA" : "abc",

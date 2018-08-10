@@ -104,12 +104,13 @@ either the event producer or event consumer.
 CloudEvents, at its core, defines a set of metadata, called attributes, about
 the event being transferred between systems, and how those pieces of metadata
 should appear in that message. This metadata is meant to be the minimal 
-set of information needed to route the request to the proper component that
-will process the event. So, while this might mean that some of the application
+set of information needed to route the request to the proper component 
+and to facilitate proper processing of the event by that component.
+So, while this might mean that some of the application
 data of the event itself might be duplicated as part of the CloudEvent's set
-of properties, this is to be done solely for the purpose of proper delivery
-of the message.  Data that is meant strictly for use by the component
-processing the event should be within the event.
+of attributes, this is to be done solely for the purpose of proper delivery,
+and processing, of the message. Data that is not intended for that purpose
+should instead be placed within the event (the `data` attribute) itself.
 
 Along with the definition of these attributes, there will also be
 specifications of how to serialize the event in different formats and
@@ -154,8 +155,18 @@ Extension attributes to the CloudEvent specification are meant to
 be additional metadata that needs to be included to help ensure proper
 routing and processing of the CloudEvent. Additional metadata for other
 purposes, that is related to the event itself and not needed in the
-transportation of the CloudEvent, should instead be placed within the proper
-extensibility points of the event itself.
+transportation or processing of the CloudEvent, should instead be placed
+within the proper extensibility points of the event (the `data` attribute)
+itself.
+
+The specification places no restrictions on the type of the extension
+attributes. Meaning, they may be simple types (e.g. strings, integers)
+or they can be complex types of structured data.
+
+If an extension becomes popular then the specification authors might
+consider moving it into the specification as a core attribute. This means
+that the extension mechanism/process can be used as a way to vet new
+attributes prior to formally adding them to the specification.
 
 ## Qualifying Protocols and Encodings
 
