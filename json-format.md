@@ -81,7 +81,6 @@ The following table shows exemplary mappings:
 | CloudEvents       | Type     | Exemplary JSON Value
 |--------------------|----------|-------------------------------
 | eventType          | String   | "com.example.someevent"
-| eventTypeVersion   | String   | "1.0"
 | cloudEventsVersion | String   | "0.1"
 | source             | URI      | "/mycontext"
 | eventID            | String   | "1234-1234-1234"
@@ -113,10 +112,17 @@ If an implementation determines that the type of the `data` attribute is
 `Binary` or `String`, it MUST inspect the `contentType` attribute to determine
 whether it is indicated that the data value contains JSON data.
 
-If the `contentType` value is ["application/json"][RFC4627], or any media type
+If the `contentType` value is either ["application/json"][RFC4627] or any media type
 with a [structured +json suffix][RFC6839], the implementation MUST translate
 the `data` attribute value into a [JSON value][JSON-Value], and set the `data`
-member of the envelope JSON object to this JSON value.
+attribute of the envelope JSON object to this JSON value.
+
+If the `contentType` value does not follow the [structured +json suffix][RFC6839]
+but is known to use JSON encoding, the implementation MUST translate the `data` attribute
+value into a [JSON value][JSON-Value], and set the `data` attribute of the envelope
+JSON object to this JSON value. Its typical examples are, but not limited to,
+`text/json`, [`application/json-seq`][JSON-seq] and
+[`application/geo+json-seq`][JSON-geoseq].
 
 Unlike all other attributes, for which value types are restricted to strings
 per the [type-system mapping](#22-type-system-mapping), the resulting `data`
@@ -131,7 +137,6 @@ Example event with `String`-valued `data`:
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.example.someevent",
-    "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
@@ -149,7 +154,6 @@ Example event with `Binary`-valued data
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.example.someevent",
-    "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
     "eventID" : "B234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
@@ -168,7 +172,6 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.example.someevent",
-    "eventTypeVersion" : "1.0",
     "source" : "/mycontext",
     "eventID" : "C234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
@@ -195,13 +198,15 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 * [RFC6839][RFC6839] Additional Media Type Structured Syntax Suffixes
 * [RFC8259][RFC8259] The JavaScript Object Notation (JSON) Data Interchange Format
 
-[CE]: ./spec.md
-[JSON-format]: ./json-format.md
-[Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
-[JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
-[JSON-String]: https://tools.ietf.org/html/rfc7159#section-7
-[JSON-Object]: https://tools.ietf.org/html/rfc7159#section-4 
 [base64]: https://tools.ietf.org/html/rfc4648#section-4
+[CE]: ./spec.md
+[Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
+[JSON-format]: ./json-format.md
+[JSON-geoseq]: https://www.iana.org/assignments/media-types/application/geo+json-seq
+[JSON-Object]: https://tools.ietf.org/html/rfc7159#section-4
+[JSON-seq]: https://www.iana.org/assignments/media-types/application/json-seq
+[JSON-String]: https://tools.ietf.org/html/rfc7159#section-7
+[JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
 [RFC2046]: https://tools.ietf.org/html/rfc2046
 [RFC2119]: https://tools.ietf.org/html/rfc2119
 [RFC4627]: https://tools.ietf.org/html/rfc4627

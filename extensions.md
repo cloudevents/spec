@@ -1,7 +1,7 @@
 # CloudEvents Extension Attributes
 
 The [CloudEvents specification](spec.md) defines a set of metadata attributes
-than can be used when tranforming a generic event into a CloudEvent.
+than can be used when transforming a generic event into a CloudEvent.
 The list of attributes specified in that document represent the minimal set
 that the specification authors deemed most likely to be used in a majority of
 situations.
@@ -9,7 +9,7 @@ situations.
 This document defines some addition attributes that, while not as commonly
 used as the ones specified in the [CloudEvents specification](spec.md),
 could still benefit from being formally specified in the hopes of providing
-some degree of interoperabilty. This also allows for attributes to be
+some degree of interoperability. This also allows for attributes to be
 defined in an experimental manner and tested prior to being considered for
 inclusion in the [CloudEvents specification](spec.md).
 
@@ -18,6 +18,21 @@ to limit their use of extension attributes to just the ones specified in
 this document. The attributes defined in this document have no official
 standing and might be changed, or removed, at any time.
 
-## Extension Attributes
+## Usage
 
-None at this time.
+Support for any extension is OPTIONAL. When an extension definition uses 
+[RFC 2199](https://www.ietf.org/rfc/rfc2119.txt) keywords (e.g. MUST,
+SHOULD, MAY), this usage only applies to events that use the extension.
+
+Extensions always follow a common placement strategy for in-memory
+formats (e.g. [JSON](json-format.md), XML, Protobuffer) that are
+decided by those representations. Transport bindings (e.g.
+[HTTP](http-transport-binding.md), [MQTT](mqtt-transport-binding.md),
+[AMPQ](amqp-transport-binding.md), [NATS](nats-transport-binding.md)) provide
+default placement for extensions, but an extension MAY require special
+representation when transported (e.g. tracing standards that require
+specific headers).
+
+## Documented Extensions
+
+* [Distributed Tracing](extensions/distributed-tracing.md)

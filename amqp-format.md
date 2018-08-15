@@ -1,8 +1,8 @@
-# AMQP Event Format for Cloud Events
+# AMQP Event Format for CloudEvents
 
 ## Abstract
 
-The AMQP Format for Cloud Events defines how event attributes are expressed in
+The AMQP Format for CloudEvents defines how event attributes are expressed in
 the [AMQP 1.0 Type System][type-system].
 
 ## Status of this document
@@ -17,13 +17,13 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[Cloud Events][CE] is a standardized and transport-neutral definition of the
+[CloudEvents][CE] is a standardized and transport-neutral definition of the
 structure and metadata description of events. This specification defines how
-the elements defined in the Cloud Events specification are to be represented in
+the elements defined in the CloudEvents specification are to be represented in
 the [AMQP 1.0 Type System][amqp-types].
 
 The [Attributes](#2-attributes) section describes the naming conventions and
-data type mappings for Cloud Events attributes for use as AMQP message
+data type mappings for CloudEvents attributes for use as AMQP message
 properties.
 
 This specification does not define an envelope format. The AMQP type system's
@@ -38,32 +38,32 @@ interpreted as described in [RFC2119][RFC2119].
 
 ## 2. Attributes
 
-This section defines how Cloud Events attributes are mapped to the AMQP
+This section defines how CloudEvents attributes are mapped to the AMQP
 type-system. This specification does not explicitly map each attribute, but
 provides a generic mapping model that applies to all current and future Cloud
 Event attributes.
 
 ### 2.1. Base Type System
 
-The core [Cloud Events specification][CE] defines a minimal abstract type
+The core [CloudEvents specification][CE] defines a minimal abstract type
 system, which this mapping leans on.
 
 ### 2.2. Type System Mapping
 
-The Cloud Events type system is mapped to AMQP types as follows:
+The CloudEvents type system is mapped to AMQP types as follows:
 
-| Cloud Events | AMQP
-|--------------|-------------------------------------------------------------
-| String       | [string][AMQP-String]
-| Binary       | [binary][AMQP-Binary]
-| URI          | [string][AMQP-String]
-| Timestamp    | [timestamp][AMQP-Timestamp]
-| Map          | [map][AMQP-Map]
-| Object       | See 2.3.
+| CloudEvents | AMQP
+|-------------|-------------------------------------------------------------
+| String      | [string][AMQP-String]
+| Binary      | [binary][AMQP-Binary]
+| URI         | [string][AMQP-String]
+| Timestamp   | [timestamp][AMQP-Timestamp]
+| Map         | [map][AMQP-Map]
+| Object      | See 2.3.
 
 ### 2.3. Mapping Object-typed Attributes
 
-`Object`-typed Cloud Events values can either hold a `String`, or a `Binary`
+`Object`-typed CloudEvents values can either hold a `String`, or a `Binary`
 value, or a `Map`. `Map` entry values are also `Object` typed. AMQP's type
 system natively represents dynamic typing in its [type system
 encoding][type-system-encoding], and therefore immediately allows for the required
@@ -78,7 +78,7 @@ variant type representation.
 
 [CE]: ./spec.md
 [Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
-[type-system]:docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html 
+[type-system]: https://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html
 [type-system-encoding]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#section-encodings
 [AMQP-String]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
 [AMQP-Binary]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-binary

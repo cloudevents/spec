@@ -1,8 +1,8 @@
-# AMQP Transport Binding for Cloud Events
+# AMQP Transport Binding for CloudEvents
 
 ## Abstract
 
-The AMQP Transport Binding for Cloud Events defines how events are mapped to
+The AMQP Transport Binding for CloudEvents defines how events are mapped to
 OASIS AMQP 1.0 ([OASIS][OASIS-AMQP-1.0]; ISO/IEC 19464:2014) messages.
 
 ## Status of this document
@@ -17,7 +17,7 @@ This document is a working draft.
 - 1.3. [Content Modes](#13-content-modes)
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
-2. [Use of Cloud Events Attributes](#2-use-of-cloud-events-attributes)
+2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
 - 2.1. [contentType Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [AMQP Message Mapping](#3-amqp-message-mapping)
@@ -27,9 +27,9 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[Cloud Events][CE] is a standardized and transport-neutral definition of the
+[CloudEvents][CE] is a standardized and transport-neutral definition of the
 structure and metadata description of events. This specification defines how
-the elements defined in the Cloud Events specification are to be used in
+the elements defined in the CloudEvents specification are to be used in
 [AMQP][OASIS-AMQP-1.0] messages.
 
 ### 1.1. Conformance
@@ -41,7 +41,7 @@ interpreted as described in [RFC2119][RFC2119].
 ### 1.2. Relation to AMQP
 
 This specification does not prescribe rules constraining transfer or
-settlement of event messages with AMQP; it solely defines how Cloud Events
+settlement of event messages with AMQP; it solely defines how CloudEvents
 are expressed as AMQP 1.0 messages.
 
 AMQP-based messaging and eventing infrastructures often provide higher-level
@@ -81,9 +81,9 @@ section, but MAY support any additional, including proprietary, formats.
 This specification does not introduce any new security features for AMQP, or
 mandate specific existing features to be used.
 
-## 2. Use of Cloud Events Attributes
+## 2. Use of CloudEvents Attributes
 
-This specification does not further define any of the [Cloud Events][CE] event
+This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
 Two of the event attributes, `contentType` and `data` are handled specially
@@ -124,11 +124,11 @@ by an application, but are not defined here.
 
 The receiver of the event can distinguish between the two modes by inspecting
 the `content-type` message property field. If the value is prefixed with the
-Cloud Events media type `application/cloudevents`, indicating the use of a
+CloudEvents media type `application/cloudevents`, indicating the use of a
 known [event format](#14-event-formats), the receiver uses *structured* mode,
 otherwise it defaults to *binary* mode.
 
-If a receiver detects the Cloud Events media type, but with an event format that
+If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
 treat the event as binary and forward it to another party as-is.
 
@@ -140,7 +140,7 @@ efficient transfer and without transcoding effort.
 #### 3.1.1. AMQP content-type
 
 For the *binary* mode, the AMQP `content-type` property field value maps
-directly to the Cloud Events `contentType` attribute.
+directly to the CloudEvents `contentType` attribute.
 
 #### 3.1.2. Event Data Encoding
 
@@ -149,7 +149,7 @@ The [`data` attribute](#22-data-attribute) byte-sequence is used as the AMQP
 
 #### 3.1.3. Metadata Headers
 
-All [Cloud Events][CE] attributes with exception of `contentType` and `data`
+All [CloudEvents][CE] attributes with exception of `contentType` and `data`
 are individually mapped to and from the AMQP
 [application-properties][app-properties] section.
 
