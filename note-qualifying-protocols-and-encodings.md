@@ -25,14 +25,19 @@ ecosystems of top-level multi-company consortia projects, such as Apache Kafka,
 and largely in parallel to the evolution of the aforementioned standards stacks.
 
 The CloudEvents effort shall not become a vehicle to even implicitly endorse 
-or promote project- or product-proprietary protocols, because that were 
+or promote project- or product-proprietary protocols, because that would be 
 counterproductive towards CloudEvents' original goals. 
 
 For a protocol or encoding to qualify for a core CloudEvents event format or 
-protocol binding, the protocol must either have formal status as a standard 
-with a widely-recognized multi-vendor protocol standardization body (W3C, IETF, 
-OASIS, OMG), or in the case of ecosystem protocols, it must have "de-facto standard" 
-status for its ecosystem category, comparable to Apache Kafka.
+protocol binding, it must belong to either one of the following categories:
+
+- The protocol has a formal status as a standard with a widely-recognized 
+  multi-vendor protocol standardization body (e.g. W3C, IETF, OASIS, ISO)
+- The protocol has a "de-facto standard" status for its ecosystem category,
+  which means it is used so widely that it is considered a standard for a
+  given application. Practically, we would like to see at least one open
+  source implementation and at least a dozen independent vendors using it
+  in their products/services.
 
 Aside from formal status, a key criterion for whether a protocol or encoding shall 
 qualify for a core CloudEvents event format or transport binding is whether the 
