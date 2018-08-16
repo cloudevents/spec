@@ -36,8 +36,9 @@ protocol binding, it must belong to either one of the following categories:
 - The protocol has a "de-facto standard" status for its ecosystem category,
   which means it is used so widely that it is considered a standard for a
   given application. Practically, we would like to see at least one open
-  source implementation and at least a dozen independent vendors using it
-  in their products/services.
+  source implementation under the umbrella of a vendor-neutral open-source
+  organization (e.g. Apache, Eclipse, CNCF, .NET Foundation) and at least
+  a dozen independent vendors using it in their products/services.
 
 Aside from formal status, a key criterion for whether a protocol or encoding shall 
 qualify for a core CloudEvents event format or transport binding is whether the 
