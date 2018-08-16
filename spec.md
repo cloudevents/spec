@@ -124,6 +124,28 @@ The `Object` type is a variant type that can take the shape of either a
 abstract, and therefore it is left to implementations how to represent the
 variant type.
 
+## Extensibility
+
+Applications MAY add their own attributes to any CloudEvent, parallel and
+alongside the attributes defined in this specification. The only condition
+is that the such an application-defined attribute MUST NOT clash with the
+name of any of the well-known attributes defined herein.
+
+If a revision of this specification introduces a new attribute and an
+application-defined attribute used with the prior version clashes with the
+newly introduced attribute, the application MUST adapt to interpreting the
+attribute according to the new specification version, as indicated by the
+`cloudEventsVersion` attribute value. If an application-defined extension
+becomes promoted into a revision of this specification without semantic 
+changes, no change is required. 
+
+Such a clash can generally be avoided by making the names of extension
+attributes explicitly indicative of their purpose or relationship
+to a particular product or technology, for instance by using a name prefix.
+
+Extension attribute types MUST be limited to the type system defined herein
+and MUST be rendered using the event format rules for those types.
+
 ## Context Attributes
 Every CloudEvent conforming to this specification MUST include one or more
 of the following context attributes.
@@ -224,20 +246,6 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-### extensions
-* Type: `Map`
-* Description: This is for additional metadata and this does not have a
-  mandated structure. This enables a place for custom fields a producer or
-  middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification.
-  See the [Extensions](extensions.md) document for a list of possible
-  attributes.
-* Constraints:
-  * OPTIONAL
-  * If present, MUST contain at least one entry
-* Examples:
-  * authorization data
-
 ## Data Attribute
 
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
@@ -263,10 +271,8 @@ The following example shows a CloudEvent serialized as JSON:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-        "comExampleExtension" : "value"
-    },
     "contentType" : "text/xml",
-    "data" : "<much wow=\"xml\"/>"
+    "data" : "<much wow=\"xml\"/>",
+    "myAppExampleExtension" : "value"
 }
 ```
