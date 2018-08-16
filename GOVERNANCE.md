@@ -54,6 +54,11 @@ If a vote is taken during a WG meeting, the follow rules will be followed:
   [here](https://docs.google.com/spreadsheets/d/1bw5s9sC2ggYyAiGJHEk7xm-q2KG6jyrfBy69ifkdmt0/edit#gid=0).
   Members must acknowledge their presence verbally, meaning, adding yourself
   to the "Attendees" section of the Agenda document is not sufficient.
+* When a vote is called, votes will be collected over the following week: 
+  * Comment on the PR: "agree, yes, +1", "disagree, no, -1", or "abstain".
+  * Any person is encouraged to vote with a statement of support or dissent to
+    help undecided voters to reach a decision
+  * Voting tally will reflect the above qualification and recorded in PR
 
 ## Release Process
 
