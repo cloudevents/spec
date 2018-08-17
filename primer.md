@@ -161,9 +161,12 @@ itself.
 
 Extension attributes should be kept minimal to ensure the CloudEvent can be
 properly serialized and transported. For example, the
+Event producers should consider the technical limitations that might be
+encountered when adding extensions to a CloudEvent. For example, the
 [HTTP Binary Mode](http-transport-binding.md#31-binary-content-mode) uses HTTP
-headers to transport metadata. Most HTTP servers will reject requests with
-excessive HTTP header data, with limits as low as 8kb.
+headers to transport metadata; most HTTP servers will reject requests with
+excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
+size and number of extension attributes should be kept minimal.
 
 The specification places no restrictions on the type of the extension
 attributes. Meaning, they may be simple types (e.g. strings, integers),
