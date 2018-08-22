@@ -12,9 +12,9 @@ This document is a working draft
 
 CloudEvents is a standardized and transport-neutral definition of the structure and metadata description of events. This specification defines how the elements defined in the CloudEvents specification are to be represented in the Protocol buffers version 3.
 
-Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. A message is defined once using the protobuf interface description language (IDL), and the protobuf compiler generates the language specific libraries for serializing to and deserializing from the binary representation. The protobuf version 3 library can also convert a protobuf message into its [standard JSON form](PROTO_JSON).
+Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. A message is defined once using the protobuf interface description language (IDL), and the protobuf compiler generates the language specific libraries for serializing to and deserializing from the binary representation. The protobuf version 3 library can also convert a protobuf message into its [standard JSON form][PROTO_JSON].
 
-Some built in message types in protobuf 3 (`google.protobuf.Value`, `google.protobuf.Any`, etc) have special runtime support from the protobuf library. These built in messages are given special treatment when transcoding to and from JSON. Tools in the protobuf ecosystem also give special treatment to these messages. For example, the [Common Expression Language tool (CEL)](CEL) automatically converts a `google.protobuf.Any` into its contained message when performing data queries.
+Some built in message types in protobuf 3 (`google.protobuf.Value`, `google.protobuf.Any`, etc) have special runtime support from the protobuf library. These built in messages are given special treatment when transcoding to and from JSON. Tools in the protobuf ecosystem also give special treatment to these messages. For example, the [Common Expression Language tool (CEL)][CEL] automatically converts a `google.protobuf.Any` into its contained message when performing data queries.
 
 
 ### 1.1. Conformance
@@ -77,9 +77,9 @@ The protobuf `package` keyword defines a package name that includes the CloudEve
 
 #### 2.2.1 Background knowledge on special built in protobuf types
 
-`google.protobuf.Value` ([more info](PROTO_JSON)) is used to express a JSON structure. Its fields are composed of special wrapper value types such as `google.protobuf.BytesValue`. The protobuf runtime library provides JSON conversion support for these special built in message types.
+`google.protobuf.Value` ([more info][PROTO_JSON]) is used to express a JSON structure. Its fields are composed of special wrapper value types such as `google.protobuf.BytesValue`. The protobuf runtime library provides JSON conversion support for these special built in message types.
 
-`google.protobuf.Any` ([more info](PROTO_ANY)) is used in protobuf to express a field whose type is not known to the enclosing message. It contains the binary representation of the embedded message and a URL string that identifies the type of the embedded message.
+`google.protobuf.Any` ([more info][PROTO_ANY]) is used in protobuf to express a field whose type is not known to the enclosing message. It contains the binary representation of the embedded message and a URL string that identifies the type of the embedded message.
 
 
 #### 2.2.2 Handling instructions
@@ -92,7 +92,7 @@ If the payload is a protobuf, the implementation MUST store the payload in the `
 
 ### 2.3 Extensions:
 
-`google.protobuf.Struct` ([more info](PROTO_STRUCT)) represents an arbitrary JSON structure. The keys of the `Struct` are the names of the extensions. The values of the `google.protobuf.Struct` are `com.protobuf.Value` ([more info](PROTO_VALUE)) fields whose contents correspond to the value of the extension mapped into JSON using the [JSON mapping rules](CE_JSON_ENCODING). All extensions attributes MUST be put into this bag because they are not a part of the CloudEvents spec.
+`google.protobuf.Struct` ([more info][PROTO_STRUCT]) represents an arbitrary JSON structure. The keys of the `Struct` are the names of the extensions. The values of the `google.protobuf.Struct` are `com.protobuf.Value` ([more info][PROTO_VALUE]) fields whose contents correspond to the value of the extension mapped into JSON using the [JSON mapping rules][CE_JSON_ENCODING]. All extensions attributes MUST be put into this bag because they are not a part of the CloudEvents spec.
 
 Well known extensions can not be given a top level field because they have no official standing, therefore the protobuf definition can not commit to a strongly typed representation of the value. The protobuf binding must be able to map an extension name to different value types, e.g. a "exampleExtension" with CE type "Object" in one message and another "exampleExtension" with CE type "Integer" in another message.
 
@@ -139,7 +139,7 @@ If a field moves from the extensions bag to a top level field, then the producer
 
 ### 2.4 Relation to CloudEvents JSON format:
 
-All proto3 messages have a standard JSON form. The standard JSON of this protobuf format is not compatible from the official [CloudEvents JSON encoding](CE_JSON_ENCODING) at the time of writing. A service that supports the standard protobuf JSON encoding as well as the official CloudEvents JSON encoding will end up supporting two different JSON encodings.
+All proto3 messages have a standard JSON form. The standard JSON of this protobuf format is not compatible from the official [CloudEvents JSON encoding][CE_JSON_ENCODING] at the time of writing. A service that supports the standard protobuf JSON encoding as well as the official CloudEvents JSON encoding will end up supporting two different JSON encodings.
 
 Below are a few examples of the proto3 JSON.
 
