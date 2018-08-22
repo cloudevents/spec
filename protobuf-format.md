@@ -49,7 +49,7 @@ message CloudEvent {
   // `oneof payload` itself is not a real field, it only enforces the `oneof` constraint
   oneof payload {
     google.protobuf.Value data = 9;
-    google.protobuf.BytesValue bytes_data = 10;
+    bytes bytes_data = 10;
     google.protobuf.Any proto_data = 11;
   }
   google.protobuf.Struct extensions = 12;
@@ -62,7 +62,7 @@ In general, the CloudEvents attribute names are converted into protobuf fields i
 | CloudEvents | Protobuf
 |--------------|-------------------------------------------------------------
 | String       | string
-| Binary       | google.protobuf.BytesValue
+| Binary       | bytes
 | URI          | string
 | Timestamp    | google.protobuf.Timestamp
 | Map          | google.protobuf.Struct
@@ -208,8 +208,7 @@ A CloudEvent whose data payload is bytes may be constructed as follows:
         .setEventId("100")
         .setTimestamp(ts)
         .setContentType("application/octet-stream")
-        .setBytesData(
-            BytesValue.newBuilder().setValue(ByteString.copyFrom(new byte[] {1, 2, 3, 4})))
+        .setBytesData(ByteString.copyFrom(new byte[] {1, 2, 3, 4}))
         .setExtensions(
             Struct.newBuilder()
                 .putFields(
