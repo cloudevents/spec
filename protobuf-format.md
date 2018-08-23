@@ -70,14 +70,8 @@ message CloudEvent {
   google.protobuf.Timestamp timestamp = 6;
   string schema_url = 7;
   string content_type = 8;
-  // `oneof payload` itself is not a real field, it only enforces the
-  // `oneof` constraint
-  oneof payload {
-    google.protobuf.Value data = 9;
-    bytes bytes_data = 10;
-    google.protobuf.Any proto_data = 11;
-  }
-  google.protobuf.Struct extensions = 12;
+  google.protobuf.Value data = 9;
+  google.protobuf.Struct extensions = 11;
 }
 ```
 
@@ -94,7 +88,7 @@ system is mapped into protobuf types as follows:
 | Timestamp    | google.protobuf.Timestamp
 | Map          | google.protobuf.Struct
 | Object       | google.protobuf.Value
-| Integer | int32
+| Integer      | int32
 
 ### 2.1 Note on cloud_events_version:
 
@@ -165,7 +159,7 @@ CloudEvent.newBuilder()
   .setExtensions(
     Struct.newBuilder()
     .putFields(
-      "comExampleMyextension",
+      "vendorExtension",
       Value.newBuilder().setStringValue("myvalue").build()))
   .build();
 ```
@@ -209,14 +203,13 @@ in the upgrade process:
 
 ### 2.4 Relation to CloudEvents JSON format:
 
-All proto3 messages have a standard JSON form. The standard JSON of
-this protobuf format is not compatible from the official [CloudEvents
-JSON encoding][CE_JSON_ENCODING] at the time of writing. A service
-that supports the standard protobuf JSON encoding as well as the
-official CloudEvents JSON encoding will end up supporting two
-different JSON encodings.
+All proto3 messages have a standard JSON form.
 
-Below are a few examples of the proto3 JSON.
+Note: at the time of writing, extensions are in a separate extensions
+bag. The standard JSON is the same as the CloudEvents JSON.
+
+Below are a few examples of the proto message and its JSON
+representation.
 
 A CloudEvent whose payload is a JSON may be constructed as follows:
 ```java
@@ -241,10 +234,10 @@ CloudEvent.newBuilder()
   .setExtensions(
     Struct.newBuilder()
       .putFields(
-        "comExampleExtension1",
+        "vendorExtension1",
         Value.newBuilder().setStringValue("value1").build())
       .putFields(
-        "comExampleExtension2",
+        "vendorExtension2",
         Value.newBuilder().setStringValue("value2").build()))
   .build();
 ```
@@ -265,8 +258,8 @@ It has the following proto3 standard JSON representation:
     "email": "user@example.com"
   },
   "extensions": {
-    "comExampleExtension1": "value1",
-    "comExampleExtension2": "value2"
+    "vendorExtension1": "value1",
+    "vendorExtension2": "value2"
   }
 }
 ```
@@ -274,21 +267,24 @@ It has the following proto3 standard JSON representation:
 A CloudEvent whose data payload is bytes may be constructed as follows:
 ```java
 CloudEvent.newBuilder()
-  .setEventType("com.example.octetstream")
+  .setEventType("com.example.somebytes")
   .setEventTypeVersion("1.0")
   .setCloudEventsVersion("0.1")
   .setSource("producer1")
   .setEventId("100")
   .setTimestamp(ts)
-  .setContentType("application/octet-stream")
-  .setBytesData(ByteString.copyFrom(new byte[] {1, 2, 3, 4}))
+  .setContentType("application/json")
+  .setSchemaUrl("https://com.example.schema/usercreated")
+  .setData(
+    Value.newBuilder()
+        .setStringValue(Base64.encode(new byte[] {1, 2, 3, 4})))
   .setExtensions(
     Struct.newBuilder()
       .putFields(
-        "comExampleExtension1",
+        "vendorExtension1",
         Value.newBuilder().setStringValue("value1").build())
       .putFields(
-        "comExampleExtension2",
+        "vendorExtension2",
         Value.newBuilder().setStringValue("value2").build()))
   .build();
 ```
@@ -296,75 +292,18 @@ CloudEvent.newBuilder()
 It has the following proto3 standard JSON representation.
 ```json
 {
-  "eventType": "com.example.octetstreamservice",
+  "eventType": "com.example.somebytes",
   "eventTypeVersion": "1.0",
   "cloudEventsVersion": "0.1",
   "source": "producer1",
   "eventId": "100",
-  "timestamp": "2018-08-22T16:04:45.017Z",
-  "contentType": "application/protobuf",
-  "bytesData": "AQIDBA==",
+  "timestamp": "2018-08-23T17:24:34.226Z",
+  "schemaUrl": "https://com.example.schema/usercreated",
+  "contentType": "application/json",
+  "data": "AQIDBA==",
   "extensions": {
-    "comExampleExtension1": "value1",
-    "comExampleExtension2": "value2"
-  }
-}
-```
-
-A CloudEvent whose data payload is a proto message can be constructed
-as follows:
-
-The proto payload’s message definition:
-```proto
-package com.example;
-
-message CustomMessage {
-  string contents = 1;
-}
-```
-
-It has the following proto3 standard JSON representation. Note that
-the binary data is put in the `protoData` field rather than `data`:
-
-```java
-CloudEvent.newBuilder()
-  .setEventType("com.example.readablemessagesservice")
-  .setEventTypeVersion("1.0")
-  .setCloudEventsVersion("0.1")
-  .setSource("producer1")
-  .setEventId("100")
-  .setTimestamp(ts)
-  .setContentType("application/protobuf")
-  .setProtoData(
-    Any.pack(CustomMessage.newBuilder().setContents("helloworld").build()))
-  .setExtensions(
-    Struct.newBuilder()
-      .putFields(
-        "comExampleExtension1",
-        Value.newBuilder().setStringValue("value1").build())
-      .putFields(
-        "comExampleExtension2",
-        Value.newBuilder().setStringValue("value2").build()))
-  .build();
-```
-
-It has the following proto3 standard JSON representation.
-```json
-{
-  "eventType": "com.example.readablemessages",
-  "eventTypeVersion": "1.0",
-  "cloudEventsVersion": "0.1",
-  "source": "producer1",
-  "eventId": "100",
-  "timestamp": "2018-08-22T16:15:07.386Z",
-  "contentType": "application/protobuf",
-  "protoData": {
-    "@type": "type.googleapis.com/com.example.CustomMessage",
-    "contents": "helloworld"
-  },
-  "extensions": {
-    "comExampleExtension1": "value1",
-    "comExampleExtension2": "value2"
+    "vendorExtension1": "value1",
+    "vendorExtension2": "value2"
   }
 }
 ```
