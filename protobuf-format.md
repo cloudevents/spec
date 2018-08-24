@@ -90,6 +90,15 @@ system is mapped into protobuf types as follows:
 | Object       | google.protobuf.Value
 | Integer      | int32
 
+By default, lower_case_names in the protobuf IDL field names are
+represented as lowerCamelCase in the protobuf standard JSON format. If
+the field has a different styled casing, the `json_name` protobuf
+option MUST be used:
+
+```
+string arbitrary_casing_attr = 12 [json_name = "aRbItRaRy_casing_ATTR_"];
+```
+
 ### 2.1 Note on cloud_events_version:
 
 The protobuf `package` keyword defines a package name that includes
