@@ -232,8 +232,7 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   middleware wants to include to provide additional identity information
   about the event. The syntax and semantics of each specific label
   inside this map are open for each event type producer to define,
-  but the keys of this map are of type string and
-  the values are restricted to be of simple types only.
+  but the key is a string and the value is a string.
   For example, a travel request messaging event producer could put
   "TravelRequestID: 123456" as an identity label for a travel
   request event, a home IoT device event producer could put
