@@ -226,7 +226,7 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
 
 ### extensions
 
-### idendityLabels
+### identityLabels
 * Type: `Map`
 * Description: This is a place for custom key-value pairs a producer or
   middleware wants to include to provide additional identity information
