@@ -218,7 +218,7 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   or application protocol's content-type metadata property. Normative rules
   for the binary mode and the content-type metadata mapping can be found 
   in the respective transport mapping specifications.
-    
+  
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
@@ -226,18 +226,32 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
 ### extensions
+
+### identityLabels
 * Type: `Map`
-* Description: This is for additional metadata and this does not have a
-  mandated structure. This enables a place for custom fields a producer or
-  middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification.
-  See the [Extensions](extensions.md) document for a list of possible
-  attributes.
+* Description: This is a place for custom key-value pairs a producer or
+  middleware wants to include to provide additional identity information
+  about the event. The syntax and semantics of each specific label
+  inside this map are open for each event type producer to define,
+  but the key is a string and the value is a string.
+  For example, a travel request messaging event producer could put
+  "TravelRequestID: 123456" as an identity label for a travel
+  request event, a home IoT device event producer could put
+  "home address: 20 Spruce Street, San Jose, CA" as an identity label
+  for that IoT device event. Identity labels could be used by a
+  serverless platform to correlate this event with other types of
+  events associated with the same serverless application instance.
 * Constraints:
   * OPTIONAL
   * If present, MUST contain at least one entry
 * Examples:
-  * authorization data
+``` JSON
+  properties
+  {
+     "employee-ID": "H0098002",
+     "travel-request-ID": "123456"
+  }
+```
 
 ## Data Attribute
 
@@ -266,6 +280,10 @@ The following example shows a CloudEvent serialized as JSON:
     "eventTime" : "2018-04-05T17:31:00Z",
     "extensions" : {
         "comExampleExtension" : "value"
+    },
+    "identityLabels" : {
+        "employee-ID": "H0098002",
+        "travel-request-ID": "123456"
     },
     "contentType" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
