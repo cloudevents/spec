@@ -40,8 +40,8 @@ interpreted as described in [RFC2119][RFC2119].
 
 This section defines how CloudEvents attributes are mapped to the AMQP
 type-system. This specification does not explicitly map each attribute, but
-provides a generic mapping model that applies to all current and future Cloud
-Event attributes.
+provides a generic mapping model that applies to all current and future
+CloudEvents attributes, including extensions.
 
 ### 2.1. Base Type System
 
