@@ -8,7 +8,9 @@ Working Group (WG) will manage this repository.
 In order to provide equitable rights to all Working Group members,
 the following process will be followed:
 
-* Official WG meetings will be announced at least a week in advance.
+* Official WG conference calls will be announced at least a week in advance.
+* Official WG face-to-face meetings will be announced at least 4 weeks in
+  advance.
 * Proposed changes to any document will be done via a Pull Request (PR).
 * PRs will be reviewed during official WG meetings.
 * During meetings, priority will be given to PRs that appear to be ready for
