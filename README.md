@@ -34,6 +34,7 @@ The following specifications are available:
 | **NATS Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
 | **AMQP Event Format** | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md) |
 | **AMQP Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
+| **Kafka Transport Binding** | - | [master](https://github.com/cloudevents/spec/blob/master/kafka-transport-binding.md) |
 
 There is also the
 [CloudEvents documented extension attributes](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)
