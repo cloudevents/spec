@@ -44,5 +44,5 @@ As a convention, extensions of scalar types (e.g. `String`, `Binary`, `URI`,
 ## Known Extensions
 
 * [Distributed Tracing](extensions/distributed-tracing.md)
-* [Ordinal](extensions/ordinal.md)
 * [Sampling](extensions/sampled-rate.md)
+* [Sequence](extensions/sequence.md)
