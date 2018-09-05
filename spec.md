@@ -128,19 +128,6 @@ variant type.
 Every CloudEvent conforming to this specification MUST include one or more
 of the following context attributes.
 
-It could also include additional attributes in the "context attributes" that
-might be used in ancillary actions related to the processing of the event.
-For example, in many IoT and enterprise use cases, an event could be used in
-a serverless application that performs actions across multiple types of events.
-To support such use cases, the event producer will need to add additional
-identity attributes to the "context attributes" which the event consumers can
-use to correlate this event with the other events. If such identity attributes
-happen to be part of the event "data", it is still suggested that the event
-producer add the identity attributes to the "context attributes" so that event
-consumers can easily access this information without needing to decode and
-examine the event data. Such identity attributes might also be used to help
-intermediate gateways determine how to route the events.
-
 These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
 inspected at the destination without having to deserialize the event data.
