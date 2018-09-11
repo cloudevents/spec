@@ -137,10 +137,10 @@ To support such use cases, the event producer will need to add additional
 identity attributes to the "context attributes" which the event consumers can
 use to correlate this event with the other events. If such identity attributes
 happen to be part of the event "data", it is still suggested that the event
-producer add the identity attributes to the "context attributes" so that event
-consumers can easily access this information without needing to decode and
-examine the event data. Such identity attributes might also be used to help
-intermediate gateways determine how to route the events.
+producer also adds the identity attributes to the "context attributes" so that
+event consumers can easily access this information without needing to decode
+and examine the event data. Such identity attributes might also be used to
+help intermediate gateways determine how to route the events.
 
 These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
@@ -152,13 +152,8 @@ of a JSON serialization, the context attributes and the event data might
 both appear within the same JSON object.
 
 ### Extension Attributes
-CloudEvent producers MAY include additional extension attributes within the
-event. This enables event producers, or middleware, to include additional
-metadata that might be used for any purpose in the processing of the
-CloudEvent, such as identifying or correlating event sources. See
-[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
-for additional information concerning the use and definition of
-extensions.
+Any context attributes that are not defined in this specification are
+extension attributes.
 
 This specification places no restriction on the type or semantics of the
 extension attributes. Each definition of an extensions SHOULD fully
