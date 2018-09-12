@@ -153,7 +153,9 @@ both appear within the same JSON object.
 
 ### Extension Attributes
 Any context attributes that are not defined in this specification are
-extension attributes.
+extension attributes. See
+[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
+for additional information concerning the use and definition of extensions.
 
 This specification places no restriction on the type or semantics of the
 extension attributes. Each definition of an extensions SHOULD fully
