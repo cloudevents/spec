@@ -167,7 +167,7 @@ use to correlate this event with the other events. If such identity attributes
 happen to be part of the event "data", the event producer SHOULD also add
 the identity attributes to the "context attributes" so that
 event consumers can easily access this information without needing to decode
-and examine the event data. Such identity attributes MAY also be used to
+and examine the event data. Such identity attributes can also be used to
 help intermediate gateways determine how to route the events.
 
 ### eventType
