@@ -59,12 +59,12 @@ The CloudEvents type system is mapped to AMQP types as follows:
 | URI         | [string][AMQP-String]
 | Timestamp   | [timestamp][AMQP-Timestamp]
 | Map         | [map][AMQP-Map]
-| Object      | See 2.3.
+| Any         | See 2.3.
 
-### 2.3. Mapping Object-typed Attributes
+### 2.3. Mapping Any-typed Attributes
 
-`Object`-typed CloudEvents values can either hold a `String`, or a `Binary`
-value, or a `Map`. `Map` entry values are also `Object` typed. AMQP's type
+`Any`-typed CloudEvents values can either hold a `String`, or a `Binary`
+value, or a `Map`. `Map` entry values are also `Any` typed. AMQP's type
 system natively represents dynamic typing in its [type system
 encoding][type-system-encoding], and therefore immediately allows for the required
 variant type representation.
