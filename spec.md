@@ -110,8 +110,8 @@ The following abstract data types are available for use in attributes.
 - `Integer` - A 32-bit whole number.
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
-- `Map` - `String`-indexed dictionary of `Object`-typed values.
-- `Object` - Either a `String`, or a `Binary`, or a `Map`, or an `Integer`.
+- `Map` - `String`-indexed dictionary of `Any`-typed values.
+- `Any` - Either a `String`, or a `Binary`, or a `Map`, or an `Integer`.
 - `URI` - String expression conforming to `URI-reference`
   as defined in
   [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
@@ -120,7 +120,7 @@ The following abstract data types are available for use in attributes.
 
 This specification does not define numeric or logical types.
 
-The `Object` type is a variant type that can take the shape of either a
+The `Any` type is a variant type that can take the shape of either a
 `String` or a `Binary` or a `Map`. The type system is intentionally
 abstract, and therefore it is left to implementations how to represent the
 variant type.
@@ -264,7 +264,7 @@ information about the occurrence. When present, this information will be
 encapsulated within the `data` attribute.
 
 ### data
-* Type: `Object`
+* Type: `Any`
 * Description: The event payload. The payload depends on the eventType and
   the schemaURL. It is encoded into a media format
   which is specified by the contentType attribute (e.g. application/json).
