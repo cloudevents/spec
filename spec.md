@@ -107,15 +107,16 @@ platform/vendor specific protocols (AWS Kinesis, Azure Event Grid).
 
 The following abstract data types are available for use in attributes.
 
+- `Integer` - A 32-bit whole number.
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
-- `Map` - `String`-indexed dictionary of `Object`-typed values
-- `Object` - Either a `String`, or a `Binary`, or a `Map`
+- `Map` - `String`-indexed dictionary of `Object`-typed values.
+- `Object` - Either a `String`, or a `Binary`, or a `Map`, or an `Integer`.
 - `URI` - String expression conforming to `URI-reference`
   as defined in
   [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
 - `Timestamp` - String expression as defined in
-  [RFC 3339](https://tools.ietf.org/html/rfc3339)
+  [RFC 3339](https://tools.ietf.org/html/rfc3339).
 
 This specification does not define numeric or logical types.
 
@@ -136,6 +137,38 @@ The choice of serialization mechanism will determine how the context
 attributes and the event data will be materialized. For example, in the case
 of a JSON serialization, the context attributes and the event data might
 both appear within the same JSON object.
+
+### Extension Attributes
+CloudEvents producers MAY include additional context attributes in the event
+that might be used in ancillary actions related to the processing of the event.
+See [CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
+for additional information concerning the use and definition of extensions.
+
+This specification places no restriction on the type or semantics of the
+extension attributes. Each definition of an extensions SHOULD fully
+define all aspects of the attribute - e.g. its name, semantic meaning
+and possible values or even to indicate that it places no restrictions on
+its values.  New extension definitions SHOULD use a name that is
+descriptive enough to reduce the chances of name collisions with other
+extensions. In particular, extension authors SHOULD check the
+[documented extensions](documented-extensions.md) document for the
+set of known extensions - not just for possible name conflicts but
+for extensions that might be of interest.
+
+Each specification that defines how to serialize a CloudEvent will
+define how extension attributes will appear.
+
+Here is an example that illustrates the need for additional attributes.
+In many IoT and enterprise use cases, an event could be used in
+a serverless application that performs actions across multiple types of events.
+To support such use cases, the event producer will need to add additional
+identity attributes to the "context attributes" which the event consumers can
+use to correlate this event with the other events. If such identity attributes
+happen to be part of the event "data", the event producer SHOULD also add
+the identity attributes to the "context attributes" so that
+event consumers can easily access this information without needing to decode
+and examine the event data. Such identity attributes can also be used to
+help intermediate gateways determine how to route the events.
 
 ### eventType
 * Type: `String`
@@ -206,37 +239,23 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   `contentType` values are defined in the event format specifications; for
   example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
-  
-  When this attribute is omitted, the "data" attribute simply follows the 
-  event format's encoding rules. For the JSON event format, the "data" 
-  attribute value can therefore be a JSON object, array, or value.   
-  
+
+  When this attribute is omitted, the "data" attribute simply follows the
+  event format's encoding rules. For the JSON event format, the "data"
+  attribute value can therefore be a JSON object, array, or value.
+
   For the binary mode of some of the CloudEvents transport bindings,
   where the "data" content is immediately mapped into the payload of the
   transport frame, this field is directly mapped to the respective transport
   or application protocol's content-type metadata property. Normative rules
-  for the binary mode and the content-type metadata mapping can be found 
+  for the binary mode and the content-type metadata mapping can be found
   in the respective transport mapping specifications.
-    
+
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
-
-### extensions
-* Type: `Map`
-* Description: This is for additional metadata and this does not have a
-  mandated structure. This enables a place for custom fields a producer or
-  middleware might want to include and provides a place to test metadata before
-  adding them to the CloudEvents specification.
-  See the [Extensions](extensions.md) document for a list of possible
-  attributes.
-* Constraints:
-  * OPTIONAL
-  * If present, MUST contain at least one entry
-* Examples:
-  * authorization data
 
 ## Data Attribute
 
@@ -263,8 +282,9 @@ The following example shows a CloudEvent serialized as JSON:
     "source" : "/mycontext",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
-    "extensions" : {
-        "comExampleExtension" : "value"
+    "comExampleExtension1" : "value",
+    "comExampleExtension2" : {
+        "otherValue": 5
     },
     "contentType" : "text/xml",
     "data" : "<much wow=\"xml\"/>"

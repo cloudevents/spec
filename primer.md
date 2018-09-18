@@ -19,6 +19,7 @@ This document is a working draft.
 - [CloudEvents Concepts](#cloudevents-concepts)
 - [Design Goals](#design-goals)
 - [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
+- [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Prior Art](#prior-art)
 - [Roles](#roles)
 - [Value Proposition](#value-proposition)
@@ -102,10 +103,14 @@ either the event producer or event consumer.
 
 CloudEvents, at its core, defines a set of metadata, called attributes, about
 the event being transferred between systems, and how those pieces of metadata
-should appear in that message. The metadata is not meant to duplicate any of
-the application data of the event itself, rather it is just the minimal
-information needed to route the request to the proper component that will
-process the event.
+should appear in that message. This metadata is meant to be the minimal 
+set of information needed to route the request to the proper component 
+and to facilitate proper processing of the event by that component.
+So, while this might mean that some of the application
+data of the event itself might be duplicated as part of the CloudEvent's set
+of attributes, this is to be done solely for the purpose of proper delivery,
+and processing, of the message. Data that is not intended for that purpose
+should instead be placed within the event (the `data` attribute) itself.
 
 Along with the definition of these attributes, there will also be
 specifications of how to serialize the event in different formats and
@@ -135,8 +140,9 @@ in these cases will be defined within the specfication itself.
 When the working group determines that an attribute is not common enough to
 fall into those two categories but would still benefit from the level of
 interoperability that comes from being well-defined, then they will be placed
-into the "extensions" category and put into the (extensions)[extensions.md]
-document. The specification defines how these extension attributes will
+into the "extensions" category and put into 
+(documented extensions)[documented-extensions.md].
+The specification defines how these extension attributes will
 appear within a CloudEvent.
 
 In determining which category a proposed attribute belongs, or even if it
@@ -144,6 +150,88 @@ will be included at all, the working group uses use-cases and
 user-stories to explain the rationale and need for them. This supporting
 information will be added to the [Prior Art](#prior-art) section of this
 document.
+
+Extension attributes to the CloudEvent specification are meant to
+be additional metadata that needs to be included to help ensure proper
+routing and processing of the CloudEvent. Additional metadata for other
+purposes, that is related to the event itself and not needed in the
+transportation or processing of the CloudEvent, should instead be placed
+within the proper extensibility points of the event (the `data` attribute)
+itself.
+
+Extension attributes should be kept minimal to ensure the CloudEvent can be
+properly serialized and transported. For example, the
+Event producers should consider the technical limitations that might be
+encountered when adding extensions to a CloudEvent. For example, the
+[HTTP Binary Mode](http-transport-binding.md#31-binary-content-mode) uses HTTP
+headers to transport metadata; most HTTP servers will reject requests with
+excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
+size and number of extension attributes should be kept minimal.
+
+The specification places no restrictions on the type of the extension
+attributes. Meaning, they may be simple types (e.g. strings, integers),
+complex (e.g. structured) or undefined collection of attributes.
+
+If an extension becomes popular then the specification authors might
+consider moving it into the specification as a core attribute. This means
+that the extension mechanism/process can be used as a way to vet new
+attributes prior to formally adding them to the specification.
+
+## Qualifying Protocols and Encodings
+
+The explicit goal of the CloudEvents effort, as expressed in the specification,
+is "describing event data in a common way" and "to define interoperability of
+event systems that allow services to produce or consume events, where the
+producer and consumer can be developed and deployed independently".
+
+The foundation for such interoperability are open data formats and open
+protocols, with CloudEvents aiming to provide such an open data format and
+projections of its data format onto commonly used protocols and with commonly
+used encodings.
+
+While each software or service product and project can obviously make its own 
+choices about which form of communication it prefers, its unquestionable that 
+a proprietary protocol that is private to such a product or project does not 
+further the goal of broad interoperability across producers and consumers of 
+events.
+
+Especially in the area of messaging and eventing, the industry has made
+significant progress in the last decade in developing a robust and broadly
+supported protocol foundation, like HTTP 1.1 and HTTP/2 as well as WebSockets
+or events on the web, or MQTT and AMQP for connection-oriented messaging and
+telemetry transfers.
+
+Some widely used protocols have become de-facto standards emerging out of strong
+ecosystems of top-level multi-company consortia projects, such as Apache Kafka, 
+and largely in parallel to the evolution of the aforementioned standards stacks.
+
+The CloudEvents effort shall not become a vehicle to even implicitly endorse 
+or promote project- or product-proprietary protocols, because that would be 
+counterproductive towards CloudEvents' original goals. 
+
+For a protocol or encoding to qualify for a core CloudEvents event format or 
+protocol binding, it must belong to either one of the following categories:
+
+- The protocol has a formal status as a standard with a widely-recognized 
+  multi-vendor protocol standardization body (e.g. W3C, IETF, OASIS, ISO)
+- The protocol has a "de-facto standard" status for its ecosystem category,
+  which means it is used so widely that it is considered a standard for a
+  given application. Practically, we would like to see at least one open
+  source implementation under the umbrella of a vendor-neutral open-source
+  organization (e.g. Apache, Eclipse, CNCF, .NET Foundation) and at least
+  a dozen independent vendors using it in their products/services.
+
+Aside from formal status, a key criterion for whether a protocol or encoding
+shall qualify for a core CloudEvents event format or transport binding is
+whether the working group agrees that the specification will be of sustained
+practical benefit for any party that is unrelated to the product or project
+from which the protocol or encoding emerged. A base requirement for this is
+that the protocol or encoding is defined in a fashion that allows alternate
+implementations independent of the product or project's code.
+
+All other protocol and encoding formats for CloudEvents are welcome to be
+included in a list pointing to the CloudEvents binding information in the
+respective project's own public repository or site.
 
 ## Prior Art
 
