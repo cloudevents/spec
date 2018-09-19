@@ -16,11 +16,18 @@ inclusion in the [CloudEvents specification](spec.md).
 Implementations of the [CloudEvents specification](spec.md) are not mandated
 to limit their use of extension attributes to just the ones specified in
 this document. The attributes defined in this document have no official
-standing and might be changed, or removed, at any time.
+standing and might be changed, or removed, at any time. As such, inclusion
+of an attribute in this document does not need to meet the same level of
+maturity, or popularity, as attributes defined in the
+[CloudEvents specification](spec.md). To be included in this document,
+aside from the normal PR review process, the attribute needs to have at least
+two [Voting](GOVERNANCE.md#membership) member organizations stating their
+support for its inclusion as comments in the PR. If the author of the PR is
+also a Voting member, then they are allowed to be one of two.
 
 ## Usage
 
-Support for any extension is OPTIONAL. When an extension definition uses 
+Support for any extension is OPTIONAL. When an extension definition uses
 [RFC 2199](https://www.ietf.org/rfc/rfc2119.txt) keywords (e.g. MUST,
 SHOULD, MAY), this usage only applies to events that use the extension.
 
@@ -38,7 +45,7 @@ more likely to be dropped by middleware that does not understand the
 extension.
 
 As a convention, extensions of scalar types (e.g. `String`, `Binary`, `URI`,
-`Number`) document their `Value` and structured types document their 
+`Number`) document their `Value` and structured types document their
 `Attributes`.
 
 ## Known Extensions
