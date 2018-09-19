@@ -1,4 +1,4 @@
-Directory to hold material that WG members wish to share with each other - 
+Directory to hold material that project members wish to share with each other - 
 e.g. presentations from meetings or from conferences.
 These documents have no official standing within the group.
 References from this README to the documents can point to files stored

@@ -1,11 +1,11 @@
 ## CloudEvents contributors
 
 We welcome you to join us! This list acknowledges those who contribute whether
-it be via GitHub pull request or in real life in the working group, as well as
-those who contributed before this became a CNCF Serverless WG project. If you
+it be via GitHub pull request or in real life in the project, as well as
+those who contributed before this became a CNCF project. If you
 are participating in some way, please add your information via pull request.
 
-This list is intended to build community, helping the working group to connect
+This list is intended to build community, helping the project to connect
 github handles to real world identities and get to know each other, and for new
 folks to see who has been involved already.
 

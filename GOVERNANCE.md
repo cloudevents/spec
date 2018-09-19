@@ -1,31 +1,51 @@
 # Governance
 
-This document describes the governance process under which the Serverless
-Working Group (WG) will manage this repository.
+This document describes the governance process under which the CloudEvents
+project will manage this repository.
 
-## Working Group Meetings
+## Meetings
 
-In order to provide equitable rights to all Working Group members,
+In order to provide equitable rights to all members,
 the following process will be followed:
 
-* Official WG conference calls will be announced at least a week in advance.
-* Official WG face-to-face meetings will be announced at least 4 weeks in
+* Official conference calls will be announced at least a week in advance.
+* Official face-to-face meetings will be announced at least 4 weeks in
   advance.
 * Proposed changes to any document will be done via a Pull Request (PR).
-* PRs will be reviewed during official WG meetings.
+* PRs will be reviewed during official meetings, but off-line reviews
+  (LGTMs, NOT LGTMs) and comments are strongly encouraged to gauge the
+  group's opinion on the proposed change prior to the meeting.
 * During meetings, priority will be given to PRs that appear to be ready for
   a vote over those that appear to require discussions.
 * PRs should not be merged if they have had substantial changes made within
   two days of the meeting.
   Rebases, typo fixes, etc. do not count as substantial.
-  Note, administrivia PRs that do not materially modify WG output documents
-  may be processed by WG admins as needed.
+  Note, administrivia PRs that do not materially modify output documents
+  may be processed by admins as needed.
 * Resolving PRs ("merging" or "closing with no action") will be done as a
-  result of a motion made during a WG meeting, and approved.
+  result of a motion made during a meeting, and approved.
 * Reopening a PR can be done if new information is made available, and a
   motion to do so is approved.
 * Any motion that does not have "unanimous consent" will result in a formal
   vote. See [Voting](#voting).
+
+## Membership
+
+There are three categories of project membership:
+1 - Member. This is anyone who participates in the group's activities in any
+    of our communication channels (email, github issues/PRs, meetings, etc.).
+    No formal registration process is needed.
+2 - Voting Member. See the (Voting)[#voting]section below for more information
+    on how the list of Voting Members are determined. During the normal
+    operations of the group, Voting Members and Members are the same with
+    respect to influence over the groups actions. The rights associated with
+    being a Voting Member only apply in the event of a formal vote being taken.
+3 - Admins. Admins are Members of the group but have the ability to perform
+    administrative actions on behalf of the group. For example, manage the
+    website, github repos and moderate the meetings. Their actions should
+    be done with the knowledge and consent of the group. They also have the
+    ability to merge/close PRs, but only per the group's approval. See
+    the [OWNERS](OWNERS) file for the current list of Admins.
 
 ## PRs
 
@@ -41,14 +61,14 @@ merged:
 
 ## Voting
 
-If a vote is taken during a WG meeting, the follow rules will be followed:
+If a vote is taken during a meeting, the follow rules will be followed:
 
 * There is only 1 vote per participating company, or nonaffiliated individual.
 * Each participating company can assign a primary and secondary representative.
 * A participating company, or nonaffiliated individual, attains voting rights
   by having any of their assigned representative(s) attend 3 out of the last
   4 meetings. They obtain voting rights after the 3rd meeting, not during.
-* Only WG members with voting rights will be allowed to vote.
+* Only members with voting rights will be allowed to vote.
 * A vote passes if more than 50% of the votes cast approve the motion.
 * Only "yes" or "no" votes count, "abstain" votes do not count towards the
   total.
@@ -78,8 +98,8 @@ To create a new release:
   * Release title should be the same as the Tag - `vX.Y`
   * Add some descriptive text, or the list of PRs that have been merged
     since the previous release.
-	The git query to get the list commits since the last release is:
-	`git log --pretty=format:%s master...v0.1`.
-	Just replace "v0.1" with the name of the previous release.
+    The git query to get the list commits since the last release is:
+    `git log --pretty=format:%s master...v0.1`.
+    Just replace "v0.1" with the name of the previous release.
   * Press `Publish release` button
 
