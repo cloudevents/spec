@@ -171,8 +171,10 @@ or events on the web, or MQTT and AMQP for connection-oriented messaging and
 telemetry transfers.
 
 Some widely used protocols have become de-facto standards emerging out of strong
-ecosystems or top-level multi-company consortia projects and largely in parallel
-to the evolution of the aforementioned standards stacks.
+ecosystems of top-level consortia of three or more companies, and some out of
+the strong ecosystems of projects released by a single company, and in either
+case largely in parallel to the evolution of the previously mentioned standards
+stacks.
 
 The CloudEvents effort shall not become a vehicle to even implicitly endorse
 or promote project- or product-proprietary protocols, because that would be
