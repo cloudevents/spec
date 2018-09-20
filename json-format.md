@@ -60,15 +60,15 @@ The CloudEvents type system is mapped to JSON types as follows:
 | URI          | [string][JSON-String]
 | Timestamp    | [string][JSON-String]
 | Map          | [JSON object][JSON-Object]
-| Object       | [JSON value][JSON-Value]
+| Any          | [JSON value][JSON-Value]
 
-### 2.3. Mapping Object-typed Attributes
+### 2.3. Mapping Any-typed Attributes
 
-The CloudEvents `data` attribute is `Object`-typed, meaning that it either
+The CloudEvents `data` attribute is `Any`-typed, meaning that it either
 holds a `String`, or a `Binary` value, or a `Map`. `Map` entry values are
-also `Object` typed.
+also `Any` typed.
 
-If an implementation determines that the actual type of an `Object` is a
+If an implementation determines that the actual type of an `Any` is a
 `String`, the value MUST be represented as [JSON string][JSON-String]
 expression; for `Binary`, the value MUST represented as [JSON
 string][JSON-String] expression containing the [Base64][base64] encoded binary
@@ -111,8 +111,8 @@ the [type system mapping](#22-type-system-mapping).
 
 ### 3.1. Special Handling of the "data" Attribute
 
-The mapping of the `Object`-typed `data` attribute follows the rules laid out
-in [Section 2.3.](#23-mapping-object-typed-attributes), with one additional
+The mapping of the `Any`-typed `data` attribute follows the rules laid out
+in [Section 2.3.](#23-mapping-any-typed-attributes), with one additional
 rule:
 
 If an implementation determines that the type of the `data` attribute is
