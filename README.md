@@ -38,7 +38,7 @@ The following specifications are available:
 There is also the
 [CloudEvents documented extension attributes](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)
 document and a [CloudEvents Primer](primer.md) to help understand some of
-the history and design goals of the working group.
+the history and design goals of the project.
 
 ## Community
 
@@ -51,16 +51,16 @@ us get started or are actively working on the CloudEvents specification.
 something to share about your use of CloudEvents, please submit a PR!
 
 
-## Working Group process
+## Process
 
-The CNCF Serverless WG is working to formalize the [specification](spec.md)
+The CloudEvents project is working to formalize the [specification](spec.md)
 based on [design goals](primer.md#design-goals) which focus on interoperability
 between systems which generate and respond to events.
 
-In order to achieve these goals, the Serverless WG must describe:
+In order to achieve these goals, the project must describe:
 - Common attributes of an *event* that facilitate interoperability
 - One or more common architectures that are in active use today or planned to
-  be built by WG members
+  be built by its members
 - How events are transported from producer to consumer via at least one protocol
 - Identify and resolve whatever else is needed for interoperability
 

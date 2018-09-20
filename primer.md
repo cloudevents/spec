@@ -124,20 +124,20 @@ The following will not be part of the specification:
 
 ## CloudEvent Attribute Extensions
 
-In order to achieve the stated goals, the working group will attempt to
+In order to achieve the stated goals, the specification authors will attempt to
 constrain the number of metadata attributes they define in CloudEvents. To
-that end, attributes defined by this working group will fall into three
- categories:
+that end, attributes defined by this project will fall into three
+categories:
 - required
 - optional
 - extensions
 
 As the category names imply, "required" attributes will be the ones that
-the working group considers vital to all events in all use cases, while
+the group considers vital to all events in all use cases, while
 "optional" ones will be used in a majority of the cases. Both of the attributes
 in these cases will be defined within the specfication itself.
 
-When the working group determines that an attribute is not common enough to
+When the group determines that an attribute is not common enough to
 fall into those two categories but would still benefit from the level of
 interoperability that comes from being well-defined, then they will be placed
 into the "extensions" category and put into 
@@ -146,7 +146,7 @@ The specification defines how these extension attributes will
 appear within a CloudEvent.
 
 In determining which category a proposed attribute belongs, or even if it
-will be included at all, the working group uses use-cases and
+will be included at all, the group uses use-cases and
 user-stories to explain the rationale and need for them. This supporting
 information will be added to the [Prior Art](#prior-art) section of this
 document.
@@ -225,7 +225,7 @@ protocol binding, it must belong to either one of the following categories:
 
 Aside from formal status, a key criterion for whether a protocol or encoding
 shall qualify for a core CloudEvents event format or transport binding is
-whether the working group agrees that the specification will be of sustained
+whether the group agrees that the specification will be of sustained
 practical benefit for any party that is unrelated to the product or project
 from which the protocol or encoding emerged. A base requirement for this is
 that the protocol or encoding is defined in a fashion that allows alternate
@@ -237,7 +237,7 @@ respective project's own public repository or site.
 
 ## Prior Art
 
-This section describes some of the input material used by the working group
+This section describes some of the input material used by the group
 during the development of the CloudEvent specification.
 
 ### Roles
@@ -504,7 +504,7 @@ instance to the correct application/workflow instance.
 ### Existing Event Formats
 
 As with the previous section, the examination (and understanding) of the
-current state of the world was very important to the working group. To that
+current state of the world was very important to the group. To that
 end, a sampling of existing current event formats that are used in practice
 today was gathered.
 
