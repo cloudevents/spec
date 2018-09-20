@@ -1,19 +1,19 @@
+
 # CloudEvents
 
 ![CloudEvents logo](https://github.com/cncf/artwork/blob/master/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
 
-Events are everywhere.  However, event publishers tend to describe events
+Events are everywhere.  However, event producers tend to describe events
 differently.
 
 The lack of a common way of describing events means developers must constantly
-re-learn how to receive events.  This also limits the potential for libraries,
+re-learn how to consume events.  This also limits the potential for libraries,
 tooling and infrastructure to aide the delivery of event data across
 environments, like SDKs, event routers or tracing systems.  The portability and
 productivity we can achieve from event data is hindered overall.
 
-Enter CloudEvents, a specification for describing event data in a common way.
-CloudEvents seeks to ease event declaration and delivery across services,
-platforms and beyond.
+CloudEvents is a specification for describing event data in common formats to
+provide interoperability across services, platforms and systems.
 
 CloudEvents has received a large amount of industry interest, ranging from
 major cloud providers to popular SaaS companies.  CloudEvents is hosted by the
