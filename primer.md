@@ -189,10 +189,10 @@ protocols, with CloudEvents aiming to provide such an open data format and
 projections of its data format onto commonly used protocols and with commonly
 used encodings.
 
-While each software or service product and project can obviously make its own 
-choices about which form of communication it prefers, its unquestionable that 
-a proprietary protocol that is private to such a product or project does not 
-further the goal of broad interoperability across producers and consumers of 
+While each software or service product and project can obviously make its own
+choices about which form of communication it prefers, its unquestionable that
+a proprietary protocol that is private to such a product or project does not
+further the goal of broad interoperability across producers and consumers of
 events.
 
 Especially in the area of messaging and eventing, the industry has made
@@ -202,17 +202,19 @@ or events on the web, or MQTT and AMQP for connection-oriented messaging and
 telemetry transfers.
 
 Some widely used protocols have become de-facto standards emerging out of strong
-ecosystems of top-level multi-company consortia projects, such as Apache Kafka, 
-and largely in parallel to the evolution of the aforementioned standards stacks.
+ecosystems of top-level consortia of three or more companies, and some out of
+the strong ecosystems of projects released by a single company, and in either
+case largely in parallel to the evolution of the previously mentioned standards
+stacks.
 
-The CloudEvents effort shall not become a vehicle to even implicitly endorse 
-or promote project- or product-proprietary protocols, because that would be 
-counterproductive towards CloudEvents' original goals. 
+The CloudEvents effort shall not become a vehicle to even implicitly endorse
+or promote project- or product-proprietary protocols, because that would be
+counterproductive towards CloudEvents' original goals.
 
-For a protocol or encoding to qualify for a core CloudEvents event format or 
+For a protocol or encoding to qualify for a core CloudEvents event format or
 protocol binding, it must belong to either one of the following categories:
 
-- The protocol has a formal status as a standard with a widely-recognized 
+- The protocol has a formal status as a standard with a widely-recognized
   multi-vendor protocol standardization body (e.g. W3C, IETF, OASIS, ISO)
 - The protocol has a "de-facto standard" status for its ecosystem category,
   which means it is used so widely that it is considered a standard for a
