@@ -15,11 +15,11 @@ Enter CloudEvents, a specification for describing event data in a common way.
 CloudEvents seeks to ease event declaration and delivery across services,
 platforms and beyond.
 
-CloudEvents is a new effort and has received a surprising amount of industry
-interest, ranging from major cloud providers to popular SaaS companies.
-CloudEvents is hosted by the
-[Cloud Native Computing Foundation](https://cncf.io) (CNCF) as a sandbox
-level project.
+CloudEvents has received a large amount of industry interest, ranging from
+major cloud providers to popular SaaS companies.  CloudEvents is hosted by the
+[Cloud Native Computing Foundation](https://cncf.io) (CNCF) and was approved as
+a Cloud Native sandbox level project on
+[May 15, 2018](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41).
 
 ## CloudEvents Documents
 
