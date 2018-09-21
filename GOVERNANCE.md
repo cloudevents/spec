@@ -40,7 +40,7 @@ There are three categories of project membership:
     operations of the group, Voting Members and Members are the same with
     respect to influence over the groups actions. The rights associated with
     being a Voting Member only apply in the event of a formal vote being taken.
-3 - Admins. Admins are Members of the group but have the ability to perform
+3 - Admin. Admins are Members of the group but have the ability to perform
     administrative actions on behalf of the group. For example, manage the
     website, github repos and moderate the meetings. Their actions should
     be done with the knowledge and consent of the group. They also have the
