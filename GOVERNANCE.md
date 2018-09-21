@@ -67,9 +67,9 @@ If a vote is taken during a meeting, the follow rules will be followed:
 * Each participating company can assign a primary and secondary representative.
 * A participating company, or nonaffiliated individual, attains voting rights
   by having any of their assigned representative(s) attend 3 out of the last
-  4 meetings. They obtain voting rights after the 3rd meeting, not during.
-  If the primary representative can not attend a meeting, his/her
-  delegate's attendance is counted.
+  4 meetings. If the primary representative can not attend a meeting, his/her
+  delegate's attendance is counted. They obtain voting rights
+  after the 3rd meeting, not during.
 * Only members with voting rights will be allowed to vote.
 * A vote passes if more than 50% of the votes cast approve the motion.
 * Only "yes" or "no" votes count, "abstain" votes do not count towards the
