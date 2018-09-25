@@ -189,6 +189,14 @@ help intermediate gateways determine how to route the events.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
+  
+### ordinal
+* Type: `String`
+* Description: Value expressing the relative order of the event. This enables
+  interpretation of data supercedence.
+* Constraints:
+  * REQUIRED
+  * MUST be a non-empty lexicographically-orderable string
 
 ### source
 * Type: `URI`
