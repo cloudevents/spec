@@ -2,7 +2,8 @@
 
 ## Abstract
 
-The [OpenMessaging][OpenMessaging] Transport Binding for CloudEvents defines how events are mapped to [NATS messages][NATS-MSG-PROTO].
+The [OpenMessaging][OpenMessaging] Transport Binding for CloudEvents defines how events are mapped to [OpenMessaging Specification](https://github.com/openmessaging/specification/blob/master/specification-schema.md).
+
 
 ## Status of this document
 
@@ -12,24 +13,24 @@ This document is a working draft.
 
 1. [Introduction](#1-introduction)
 - 1.1. [Conformance](#11-conformance)
-- 1.2. [Relation to OpenMessaging](#12-relation-to-nats)
+- 1.2. [Relation to OpenMessaging](#12-relation-to-openmessaging)
 - 1.3. [Content Modes](#13-content-modes)
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
 - 2.1. [contentType Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
-3. [OpenMessaging Message Mapping](#3-mqtt-publish-message-mapping)
+3. [OpenMessaging Message Mapping](#3-openmessaging-message-mapping)
 - 3.2. [Binary Content Mode](#31-binary-content-mode)
 - 3.1. [Structured Content Mode](#32-structured-content-mode)
 4. [References](#4-references)
 
 ## 1. Introduction
 
-[CloudEvents][CE] is a standardized and transport-neutral definition of the
-structure and metadata description of events. This specification defines how
+This specification defines how
 the elements defined in the CloudEvents specification are to be used in
 [OpenMessaging][OpenMessaging]. 
+
 ### 1.1. Conformance
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
@@ -39,9 +40,14 @@ interpreted as described in [RFC2119][RFC2119].
 ### 1.2. Relation to OpenMessaging
 
 This specification does not prescribe rules constraining transfer or settlement
-of event messages with OpenMessaging; it solely defines how CloudEvents are expressed
-in the OpenMessaging protocol as client messages that are produced
-and consumed.
+of event messages with [OpenMessaging][OpenMessaging]; it solely defines how CloudEvents are expressed
+with [OpenMessaging Specification][OpenMessaging-Spec].    
+
+OpenMessaging-based messaging and eventing infrastructures may provide higher-level programming-level
+abstractions although OpenMessaging provides optional core APIs, but they all follow the schema of the messages
+provided by OpenMessaging Specification. This specification uses OpenMessaging terminology, and implementers can refer the respective
+infrastructure's OpenMessaging documentation to determine the mapping into a programming-level abstraction.
+
 
 ### 1.3. Content Modes
 
@@ -49,19 +55,21 @@ This specification defines two content modes for transferring events:
 *structured* and *binary*. Every compliant implementation SHOULD support both
 modes.
 
-In the *structured* content mode, event metadata attributes and event data are
-placed into producer send message body.
+In the *structured* content mode, event metadata attributes and event data are placed
+into the OpenMessaging message's application data section using an [event format](#14-event-formats).
 
 In the *binary* content mode, the value of the event `data` attribute is placed
 into message body, with the `contentType` attribute
-value declaring its media type; all other event attributes are mapped OpenMessaging
-sys headers.
+value declaring its media type; all other event attributes are mapped [OpenMessaging
+properties][OpenMessaging-Spec]
 
 ### 1.4. Event Formats
 
 Event formats, used with the *stuctured* content mode, define how an event is
 expressed in a particular data format. All implementations of this
-specification MUST support the [JSON event format][JSON-format].
+specification MUST support the [JSON event format][JSON-format], as well as the [OpenMessaging event format][OpenMessaging-format]
+for the [properties][OpenMessaging-Spec]
+section, but MAY support any additional, including proprietary, formats.
 
 ### 1.5. Security
 
@@ -77,6 +85,11 @@ attributes.
 Two of the event attributes, `contentType` and `data` are handled specially
 and mapped onto OpenMessaging constructs, all other attributes are transferred as
 metadata without further interpretation.
+
+This mapping is intentionally robust against changes, including the addition and 
+removal of event attributes, and also accommodates vendor extensions to the event 
+metadata. Any mention of event attributes other than contentType and data is exemplary.
+
 
 ### 2.1. contentType Attribute
 
@@ -96,7 +109,7 @@ available as a sequence of bytes.
 For instance, if the declared `contentType` is
 `application/json;charset=utf-8`, the expectation is that the `data` attribute
 value is made available as [UTF-8][RFC3629] encoded JSON text for use in
-OpenMessaging
+OpenMessaging.
 
 
 ## 3. OpenMessaging Message Mapping
@@ -106,15 +119,14 @@ usage patterns that might allow solicitation of events using a particular
 content mode might be defined by an application, but are not defined here.
 
 The receiver of the event can distinguish between the two content modes by
-inspecting the`Content Type` property  in the *userHeader* of the OpenMessaging PUBLISH message.
-If the value of the `Content Type` property is `application/json;charset=utf-8`, 
-indicating the use of a known [event format](#14-event-formats), the receiver uses *structured* mode, otherwise it
-defaults to *binary* mode.
+inspecting the`contentType` property  in the *properties* of the OpenMessaging message.
+If the value is prefixed with the CloudEvents media type application/cloudevents, 
+indicating the use of a known event format, the receiver uses structured mode, 
+otherwise it defaults to binary mode.
 
-If a receiver finds a CloudEvents media type as per the above rule, but with an
-event format that it cannot handle, for instance
-`application/cloudevents+thrift`, it MAY still treat the event as binary and
-forward it to another party as-is.
+If a receiver detects the CloudEvents media type, but with an event format that it cannot handle, 
+for instance application/cloudevents+avro, it MAY still treat the event as binary and forward it 
+to another party as-is.
 
 
 ### 3.1. Binary Content Mode
@@ -122,58 +134,58 @@ forward it to another party as-is.
 The *binary* content mode accommodates any shape of event data, and allows for
 efficient transfer and without transcoding effort.
 
-#### 3.1.1. OpenMessaging Content-Type
+#### 3.1.1. OpenMessaging contentType
 
-For the *binary* mode, the  `contentType` value in *userHeaders* maps directly to the
+For the *binary* mode, the  `contentType`  property field value maps directly to the
 CloudEvents `contentType` attribute.
 
 #### 3.1.2. Event Data Encoding
 
-The [`data` attribute](#22-data-attribute) byte-sequence is used as the OpenMessaging body
+The [`data` attribute](#22-data-attribute) byte-sequence is used as the 
+[OpenMessaging data][OpenMessaging-Spec] section.
 
 #### 3.1.3. Metadata Headers
 
 All [CloudEvents][CE] attributes with exception of `contentType` and `data`
-MUST be individually mapped to and from the *userHeader* Property fields in the OpenMessaging
-message.
+MUST be individually mapped to and from the *properties* section.
 
-##### 3.1.3.1 User Property Names
+##### 3.1.3.1 OpenMessaging Properties Names
 
-CloudEvents attribute names MUST be used unchanged in each mapped User Property
-in the MQTT PUBLISH message.
 
-##### 3.1.3.2 User Property Values
+Cloud Event attributes are prefixed with "cloudEvents:" for use in the [properties][OpenMessaging-Spec]  section.
 
-The value for each OpenMessaging PUBLISH *userHeader* MUST be constructed from the
-respective CloudEvents attribute's JSON type representation, compliant with the
-[JSON event format][JSON-format] specification.
+Examples:
+
+* `eventTime` maps to `cloudEvents:eventTime`
+* `eventID` maps to `cloudEvents:eventID`
+* `cloudEventsVersion` maps to `cloudEvents:cloudEventsVersion`
+
+##### 3.1.3.2 OpenMessaging Properties Values
+
+The value for each OpenMessaging *properties* is constructed from the respective attribute's OpenMessaging type representation,
+compliant with the [OpenMessaging event format][OpenMessaging-format] specification.
 
 #### 3.1.4 Examples
 
 This example shows the *binary* mode mapping of an event into the
-OpenMessaging produce message.All 
-CloudEvents attributes are mapped to OpenMessaging produce *userHeaders* Property
-fields. The `Topic name` is chosen by the OpenMessaging client and not derived
-from the CloudEvents event data.
-
-Mind that `Content Type` here does refer to the event `data`
+OpenMessaging message. All CloudEvents attributes are mapped to OpenMessaging *properties* section fields.
+Mind that `contentType` here does refer to the event `data`
 content carried in the payload.
 
 ``` text
------------------- PRODUCE -------------------
+------------- headers -------------------
+destination: mytopic
 
-Topic Name: mytopic
-
-------------- User Headers ----------------
-contentYype: application/json; charset=utf-8
-cloudEventsVersion: "0.1"
-eventType: "com.example.someevent"
-eventTime: "2018-04-16T08:56:24Z"
-eventId: "openMessaging.io.event"
-source: "io.penMessaging"
+------------- properties ----------------
+contentType: application/json; charset=utf-8
+cloudEvents:cloudEventsVersion: "0.1"
+cloudEvents:eventType: "com.example.someevent"
+cloudEvents:eventTime: "2018-09-05T03:56:24Z"
+cloudEvents:eventID: "1234-1234-1234"
+cloudEvents:source: "/mycontext/subcontext"
        .... further attributes ...
 
------------------- payload -------------------
+------------------ data -------------------
 
 {
     ... application data ...
@@ -190,8 +202,14 @@ hops, and across multiple transports.
 
 #### 3.2.1. OpenMessaging Content Type
 
-For OpenMessaging, the  `contentType` value in *userHeaders* maps directly to the
-CloudEvents `contentType` attribute.
+The OpenMessaging `contentType` field in *properties* section is set to the media type of an [event format](#14-event-formats).
+
+
+Example for the [JSON format][JSON-format]:
+
+``` text
+content-type: application/cloudevents+json; charset=UTF-8
+```
 
 #### 3.2.2. Event Data Encoding
 
@@ -203,24 +221,25 @@ format specification and the resulting data becomes the OpenMessaging payload.
 
 #### 3.2.3. Metadata Headers
 
-For OpenMessaging, implementations MAY include the same *userHeader* Properties
-as defined for the [binary mode](#313-metadata-headers).
+For OpenMessaging, implementations MAY include the same *properties* as defined 
+for the [binary mode](#313-metadata-headers).
 
 #### 3.2.4. Examples
 
 The first example shows a JSON event format encoded event with OpenMessaging:
 
 ``` text
------------------- PRODUCE -------------------
+------------------ headers -------------------
+destination: mytopic
 
-Topic Name: mytopic
-Content Type: application/cloudevents+json; charset=utf-8
+------------- properties ----------------
+contentType: application/cloudevents+json; charset=utf-8
 
------------------- payload -------------------
+------------------ data -------------------
 
 {
     "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "eventType" : "io.openMessaging.event",
 
     ... further attributes omitted ...
 
@@ -235,7 +254,8 @@ Content Type: application/cloudevents+json; charset=utf-8
 
 ## 4. References
 
-- [OpenMessaging][OpenMessaging] The NATS Messaging System
+- [OpenMessaging][OpenMessaging] The OpenMessaging System
+- [OpenMessaging-Specification][OpenMessaging-Spec] OpenMessaging Specification
 - [RFC2046][RFC2046] Multipurpose Internet Mail Extensions (MIME) Part Two: 
   Media Types
 - [RFC2119][RFC2119] Key words for use in RFCs to Indicate Requirement Levels
@@ -245,7 +265,9 @@ Content Type: application/cloudevents+json; charset=utf-8
 
 [CE]: ./spec.md
 [JSON-format]: ./json-format.md
+[OpenMessaging-format]: ./openmessaging-format.md
 [OpenMessaging]: https://github.com/openmessaging
+[OpenMessaging-Spec]: https://github.com/openmessaging/specification/blob/master/specification-schema.md
 [JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
 [RFC2046]: https://tools.ietf.org/html/rfc2046
 [RFC2119]: https://tools.ietf.org/html/rfc2119
