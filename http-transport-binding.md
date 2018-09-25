@@ -163,16 +163,23 @@ Except for attributes [explicitly handled in this specification]
 HTTP header mapping of well-known CloudEvents attributes is that 
 each attribute name MUST be prefixed with "CE-".
 
+Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
+specification, header names are case-insensitive. Upper-case letters are
+prefixed with a dash ("-"). When converting a HTTP Header Name back, the dash
+converts the following letter back to upper-case, all other letters are
+lower-case.
+
 Examples:
 
-    * `eventTime` maps to `CE-EventTime`
-    * `eventID` maps to `CE-EventID`
-    * `cloudEventsVersion` maps to `CE-CloudEventsVersion`
+    * `eventTime` maps to `CE-Event-Time`
+    * `eventID` maps to `CE-Event-I-D`
+    * `cloudEventsVersion` maps to `CE-Cloud-Events-Version`
+    * The HTTP Header `CE-COM-exAMPle-attrib` maps back to `comExampleAttrib`
 
 `Map`-typed CloudEvents attributes MUST be flattened into a set
 of HTTP headers, where by the name of each header carries the prefix
-"CE-", an infix reflecting the map attribute followed by a dash 
-("-"), and the name of the map entry key, e.g. "CE-attrib-key".
+"CE-", an infix reflecting the map attribute followed by a plus 
+("+"), and the name of the map entry key, e.g. "CE-attrib+key".
 
 CloudEvents extensions that define their own attributes MAY define a 
 diverging mapping to HTTP headers for those attributes, especially if 
@@ -180,9 +187,6 @@ specific header names need to align with HTTP features or with
 other specifications that have explicit HTTP header bindings. If specific
 names are not required, extensions SHOULD follow the naming convention
 cited here.
-
-Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
-specification, header names are case-insensitive.
 
 ##### 3.1.3.2 HTTP Header Values
 
@@ -216,10 +220,10 @@ request:
 ``` text
 POST /someresource HTTP/1.1
 Host: webhook.example.com
-CE-CloudEventsVersion: "0.1"
-CE-EventType: "com.example.someevent"
-CE-EventTime: "2018-04-05T03:56:24Z"
-CE-EventID: "1234-1234-1234"
+CE-Cloud-Events-Version: "0.1"
+CE-Event-Type: "com.example.someevent"
+CE-Event-Time: "2018-04-05T03:56:24Z"
+CE-Event-I-D: "1234-1234-1234"
 CE-Source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
@@ -234,10 +238,10 @@ This example shows a response containing an event:
 
 ``` text
 HTTP/1.1 200 OK
-CE-CloudEventsVersion: "0.1"
-CE-EventType: "com.example.someevent"
-CE-EventTime: "2018-04-05T03:56:24Z"
-CE-EventID: "1234-1234-1234"
+CE-Cloud-Events-Version: "0.1"
+CE-Event-Type: "com.example.someevent"
+CE-Event-Time: "2018-04-05T03:56:24Z"
+CE-Event-I-D: "1234-1234-1234"
 CE-Source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
