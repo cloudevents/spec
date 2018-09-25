@@ -49,15 +49,19 @@ be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### Attribute Naming Convention
 
-CloudEvents attributes use "camelCasing" for the object member names, to aid
-integration with common programming languages.
+To aid integration with common programming languages, CloudEvents attributes
+MUST only contain alpha-numeric characters, and MUST start with a letter.
 
-Attribute names that are composed of multiple words are expressed as compound
-words, with the first word starting with a lower-case character and all
-subsequent words starting with an upper-case character, and no separator
-characters.
+Attribute names use "camelCasing" for the object member names: they are composed
+of multiple words are expressed as compound words, with the first word starting
+with a lower-case character and all subsequent words starting with an upper-case
+character, and no separator characters.
 
 Words that are acronyms are written in all-caps, e.g. "ID" and "URL".
+
+Protocols or SDKs MAY have a different convention (e.g. snake_case), but MUST
+ensure that the attribute name is converted back, without loss of information,
+when the CloudEvent is passed along to a different protocol.
 
 ### Terminology
 
@@ -169,6 +173,9 @@ the identity attributes to the "context attributes" so that
 event consumers can easily access this information without needing to decode
 and examine the event data. Such identity attributes can also be used to
 help intermediate gateways determine how to route the events.
+
+Extension Attributes MUST follow the [Attribute Naming
+Convention](spec.md#attribute-naming-convention).
 
 ### eventType
 * Type: `String`
