@@ -2,8 +2,8 @@
 
 ## Abstract
 
-The OpenMessaging Event Format for CloudEvents defines how events are expressed in
-[OpenMessaging][OpenMessaging].
+The OpenMessaging Event Format for CloudEvents defines how events are expressed 
+in [OpenMessaging][OpenMessaging].
 
 ## Status of this document
 
@@ -16,11 +16,16 @@ This document is a working draft.
 3. [References](#3-references)
 
 ## 1. Introduction
-The [OpenMessaging][OpenMessaging] Format for CloudEvents defines how event attributes are expressed in the [OpenMessaging Type System](https://github.com/openmessaging/specification/blob/master/specification-schema.md).
+The [OpenMessaging][OpenMessaging] Format for CloudEvents defines how event 
+attributes are expressed in the [OpenMessaging Type System][OpenMessaging-Spec].
 
-The [Attributes](#2-attributes) section describes the naming conventions and data type mappings for CloudEvents attributes for use as OpenMessaging message properties.
+The [Attributes](#2-attributes) section describes the naming conventions and 
+data type mappings for CloudEvents attributes for use as OpenMessaging message 
+properties.
 
-This specification does not define an envelope format. The OpenMessaging type system's intent is primarily to provide a consistent type system for OpenMessaging itself and not for message payloads.
+This specification does not define an envelope format. The OpenMessaging type 
+system's intent is primarily to provide a consistent type system for 
+OpenMessaging itself and not for message payloads.
 
 
 ### 1.1. Conformance
@@ -31,9 +36,10 @@ interpreted as described in [RFC2119][RFC2119].
 
 ## 2. Attributes
 
-This section defines how CloudEvents attributes are mapped to OpenMessaging type-system . This
-specification does not explicitly map each attribute, but provides a generic
-mapping model that applies to all current and future CloudEvents attributes, including extensions.
+This section defines how CloudEvents attributes are mapped to OpenMessaging 
+type-system . This specification does not explicitly map each attribute, but 
+provides a generic mapping model that applies to all current and future 
+CloudEvents attributes, including extensions.
 
 ### 2.1. Base Type System
 
@@ -45,16 +51,19 @@ The CloudEvents type system is mapped to OpenMessaging types as follows:
 
 | CloudEvents | OpenMessaging
 |--------------|-------------------------------------------------------------
-| String       | [String](https://github.com/openmessaging/specification/blob/master/specification-schema.md)
-| Binary       | [Binary](https://github.com/openmessaging/specification/blob/master/specification-schema.md)
-| URI          | [URI](https://github.com/openmessaging/specification/blob/master/specification-schema.md)
-| Timestamp    | [String](https://github.com/openmessaging/specification/blob/master/specification-schema.md)
-| Map          | [Key-Value](https://github.com/openmessaging/specification/blob/master/specification-schema.md)
-| Object       | [Object](https://github.com/openmessaging/specification/blob/master/specification-schema.md)
+| String       | [String][OpenMessaging-Spec]
+| Binary       | [Binary][OpenMessaging-Spec]
+| URI          | [URI][OpenMessaging-Spec]
+| Timestamp    | [String][OpenMessaging-Spec]
+| Map          | [Key-Value][OpenMessaging-Spec]
+| Object       | [Object][OpenMessaging-Spec]
 
 ## 3. References
 
-- [OpenMessaging][OpenMessaging] The OpenMessaging Specification
+- [OpenMessaging][OpenMessaging] The OpenMessaging repository
+- [OpenMessaging Type System][OpenMessaging-Spec] The type system in 
+OpenMessaging specification
 
 [CE]: ./spec.md
 [OpenMessaging]: https://github.com/openmessaging
+[OpenMessaging-Spec]: https://github.com/openmessaging/specification/blob/master/specification-schema.md

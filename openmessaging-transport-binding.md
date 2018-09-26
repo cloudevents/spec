@@ -2,7 +2,8 @@
 
 ## Abstract
 
-The [OpenMessaging][OpenMessaging] Transport Binding for CloudEvents defines how events are mapped to [OpenMessaging Specification](https://github.com/openmessaging/specification/blob/master/specification-schema.md).
+The [OpenMessaging][OpenMessaging] Transport Binding for CloudEvents defines how
+events are mapped to [OpenMessaging Specification][OpenMessaging-Spec].
 
 
 ## Status of this document
@@ -40,13 +41,17 @@ interpreted as described in [RFC2119][RFC2119].
 ### 1.2. Relation to OpenMessaging
 
 This specification does not prescribe rules constraining transfer or settlement
-of event messages with [OpenMessaging][OpenMessaging]; it solely defines how CloudEvents are expressed
-with [OpenMessaging Specification][OpenMessaging-Spec].    
+of event messages with [OpenMessaging][OpenMessaging]; it solely defines how 
+CloudEvents are expressed with [OpenMessaging 
+Specification][OpenMessaging-Spec].    
 
-OpenMessaging-based messaging and eventing infrastructures may provide higher-level programming-level
-abstractions although OpenMessaging provides optional core APIs, but they all follow the schema of the messages
-provided by OpenMessaging Specification. This specification uses OpenMessaging terminology, and implementers can refer the respective
-infrastructure's OpenMessaging documentation to determine the mapping into a programming-level abstraction.
+OpenMessaging-based messaging and eventing infrastructures may provide
+higher-level programming-level abstractions although OpenMessaging provides 
+optional core APIs, but they all follow the schema of the messages
+provided by OpenMessaging Specification. This specification uses OpenMessaging
+terminology, and implementers can refer the respective infrastructure's 
+OpenMessaging documentation to determine the mapping into a programming-level 
+abstraction.
 
 
 ### 1.3. Content Modes
@@ -55,27 +60,29 @@ This specification defines two content modes for transferring events:
 *structured* and *binary*. Every compliant implementation SHOULD support both
 modes.
 
-In the *structured* content mode, event metadata attributes and event data are placed
-into the OpenMessaging message's application data section using an [event format](#14-event-formats).
+In the *structured* content mode, event metadata attributes and event data are
+placed into the OpenMessaging message's application data section using an 
+[event format](#14-event-formats).
 
 In the *binary* content mode, the value of the event `data` attribute is placed
 into message body, with the `contentType` attribute
-value declaring its media type; all other event attributes are mapped [OpenMessaging
-properties][OpenMessaging-Spec]
+value declaring its media type; all other event attributes are 
+mapped [OpenMessaging properties][OpenMessaging-Spec]
 
 ### 1.4. Event Formats
 
 Event formats, used with the *stuctured* content mode, define how an event is
 expressed in a particular data format. All implementations of this
-specification MUST support the [JSON event format][JSON-format], as well as the [OpenMessaging event format][OpenMessaging-format]
-for the [properties][OpenMessaging-Spec]
+specification MUST support the [JSON event format][JSON-format], as well as 
+the [OpenMessaging event format][OpenMessaging-format] for the 
+[properties][OpenMessaging-Spec]
 section, but MAY support any additional, including proprietary, formats.
 
 ### 1.5. Security
 
-This specification does not introduce any new security features for OpenMessaging, or
-mandate specific existing features to be used. This specification applies
-identically to [SSL]([RFC6101][RFC6101]).
+This specification does not introduce any new security features for 
+OpenMessaging, or mandate specific existing features to be used. This 
+specification applies identically to [SSL]([RFC6101][RFC6101]).
 
 ## 2. Use of CloudEvents Attributes
 
@@ -83,12 +90,13 @@ This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
 Two of the event attributes, `contentType` and `data` are handled specially
-and mapped onto OpenMessaging constructs, all other attributes are transferred as
-metadata without further interpretation.
+and mapped onto OpenMessaging constructs, all other attributes are transferred
+as metadata without further interpretation.
 
-This mapping is intentionally robust against changes, including the addition and 
-removal of event attributes, and also accommodates vendor extensions to the event 
-metadata. Any mention of event attributes other than contentType and data is exemplary.
+This mapping is intentionally robust against changes, including the addition 
+and removal of event attributes, and also accommodates vendor extensions to the 
+event metadata. Any mention of event attributes other than contentType and data 
+is exemplary.
 
 
 ### 2.1. contentType Attribute
@@ -102,8 +110,8 @@ The `data` attribute is assumed to contain opaque application data that is
 encoded as declared by the `contentType` attribute.
 
 An application is free to hold the information in any in-memory representation
-of its choosing, but as the value is transposed into OpenMessaging as defined in this
-specification, the assumption is that the `data` attribute value is made
+of its choosing, but as the value is transposed into OpenMessaging as defined 
+in this specification, the assumption is that the `data` attribute value is made
 available as a sequence of bytes.
 
 For instance, if the declared `contentType` is
@@ -114,19 +122,21 @@ OpenMessaging.
 
 ## 3. OpenMessaging Message Mapping
 
-With OpenMessaging, the content mode is chosen by the sender of the event. Protocol
-usage patterns that might allow solicitation of events using a particular
-content mode might be defined by an application, but are not defined here.
+With OpenMessaging, the content mode is chosen by the sender of the event. 
+Protocol usage patterns that might allow solicitation of events using a 
+particular content mode might be defined by an application, but are not 
+defined here.
 
 The receiver of the event can distinguish between the two content modes by
-inspecting the`contentType` property  in the *properties* of the OpenMessaging message.
-If the value is prefixed with the CloudEvents media type application/cloudevents, 
+inspecting the`contentType` property  in the *properties* of the OpenMessaging 
+message. If the value is prefixed with the CloudEvents media type 
+application/cloudevents, 
 indicating the use of a known event format, the receiver uses structured mode, 
 otherwise it defaults to binary mode.
 
-If a receiver detects the CloudEvents media type, but with an event format that it cannot handle, 
-for instance application/cloudevents+avro, it MAY still treat the event as binary and forward it 
-to another party as-is.
+If a receiver detects the CloudEvents media type, but with an event format that 
+it cannot handle, for instance application/cloudevents+avro, it MAY still treat 
+the event as binary and forward it to another party as-is.
 
 
 ### 3.1. Binary Content Mode
@@ -136,8 +146,8 @@ efficient transfer and without transcoding effort.
 
 #### 3.1.1. OpenMessaging contentType
 
-For the *binary* mode, the  `contentType`  property field value maps directly to the
-CloudEvents `contentType` attribute.
+For the *binary* mode, the  `contentType`  property field value maps directly to
+the CloudEvents `contentType` attribute.
 
 #### 3.1.2. Event Data Encoding
 
@@ -152,7 +162,8 @@ MUST be individually mapped to and from the *properties* section.
 ##### 3.1.3.1 OpenMessaging Properties Names
 
 
-Cloud Event attributes are prefixed with "cloudEvents:" for use in the [properties][OpenMessaging-Spec]  section.
+Cloud Event attributes are prefixed with "cloudEvents:" for use in the
+[properties][OpenMessaging-Spec] section.
 
 Examples:
 
@@ -162,15 +173,16 @@ Examples:
 
 ##### 3.1.3.2 OpenMessaging Properties Values
 
-The value for each OpenMessaging *properties* is constructed from the respective attribute's OpenMessaging type representation,
-compliant with the [OpenMessaging event format][OpenMessaging-format] specification.
+The value for each OpenMessaging *properties* is constructed from the 
+respective attribute's OpenMessaging type representation, compliant with the
+[OpenMessaging event format][OpenMessaging-format] specification.
 
 #### 3.1.4 Examples
 
 This example shows the *binary* mode mapping of an event into the
-OpenMessaging message. All CloudEvents attributes are mapped to OpenMessaging *properties* section fields.
-Mind that `contentType` here does refer to the event `data`
-content carried in the payload.
+OpenMessaging message. All CloudEvents attributes are mapped to OpenMessaging
+*properties* section fields. Mind that `contentType` here does refer to the 
+event `data` content carried in the payload.
 
 ``` text
 ------------- headers -------------------
@@ -202,7 +214,8 @@ hops, and across multiple transports.
 
 #### 3.2.1. OpenMessaging Content Type
 
-The OpenMessaging `contentType` field in *properties* section is set to the media type of an [event format](#14-event-formats).
+The OpenMessaging `contentType` field in *properties* section is set to the 
+media type of an [event format](#14-event-formats).
 
 
 Example for the [JSON format][JSON-format]:
