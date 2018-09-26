@@ -175,7 +175,7 @@ and examine the event data. Such identity attributes can also be used to
 help intermediate gateways determine how to route the events.
 
 Extension Attributes MUST follow the [Attribute Naming
-Convention](spec.md#attribute-naming-convention).
+Convention](#attribute-naming-convention).
 
 ### eventType
 * Type: `String`

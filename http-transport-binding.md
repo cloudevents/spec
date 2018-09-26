@@ -165,9 +165,9 @@ each attribute name MUST be prefixed with "CE-".
 
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive. Upper-case letters are
-prefixed with a dash ("-"). When converting a HTTP Header Name back, the dash
-converts the following letter back to upper-case, all other letters are
-lower-case.
+prefixed with a dash ("-"). When converting a HTTP Header Name back, the
+prefixed "CE-" is ignored. All other dashes convert the following letter back
+to upper-case, all other letters are lower-case.
 
 Examples:
 
