@@ -1,6 +1,11 @@
-# This file contains the current list of "Admins" for the CloudEvents
-# group. See the GOVERNANCE.md document for more information on their
-# roles and responsibilities.
-- duglin
-- markpeek
-- kenowens12
+# See the GOVERNANCE.md document for the definition of the roles and
+# responsibilities
+admins:
+  - duglin
+  - markpeek
+  - kenowens12
+approvers:
+  # Approvers are "Voting Members" as defined in the GOVERNANCE.md document.
+  # See the "Voting Rights?" column in:
+  # https://docs.google.com/spreadsheets/d/1bw5s9sC2ggYyAiGJHEk7xm-q2KG6jyrfBy69ifkdmt0/edit?pli=1#gid=0
+  # for the current list of Voting members
