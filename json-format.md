@@ -40,9 +40,8 @@ interpreted as described in [RFC2119][RFC2119].
 
 This section defines how CloudEvents attributes are mapped to JSON. This
 specification does not explicitly map each attribute, but
-provides a generic mapping model that applies to all current and future 
+provides a generic mapping model that applies to all current and future
 CloudEvents attributes, including extensions.
-
 
 ### 2.1. Base Type System
 
@@ -51,9 +50,10 @@ system, which this mapping leans on.
 
 ### 2.2. Type System Mapping
 
-The CloudEvents type system is mapped to JSON types as follows:
+The CloudEvents type system MUST be mapped to JSON types as follows, with
+exceptions noted below.
 
-| CloudEvents | JSON
+| CloudEvents  | JSON
 |--------------|-------------------------------------------------------------
 | String       | [string][JSON-String]
 | Binary       | [string][JSON-String], [Base64-encoded][base64] binary
@@ -61,6 +61,19 @@ The CloudEvents type system is mapped to JSON types as follows:
 | Timestamp    | [string][JSON-String]
 | Map          | [JSON object][JSON-Object]
 | Any          | [JSON value][JSON-Value]
+
+Extension specifications MAY define diverging mapping rules for the values of
+attributes they define.
+
+For instance, the attribute value may be a data structure
+defined in a standard outside of CloudEvents, with a formal JSON mapping, and
+there might be risk of translation errors or information loss when the original
+format is not preserved.
+
+An extension specification that defines a diverging mapping rule for JSON,
+and any revision of such a specification, MUST also define explicit mapping
+rules for all other event formats that are part of the CloudEvents core at
+the time of the submission or revision.
 
 ### 2.3. Mapping Any-typed Attributes
 
@@ -97,12 +110,11 @@ The following table shows exemplary mappings:
 The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
 [here](spec.json) and contains the definitions for validating events in JSON.
 
-
 ## 3. Envelope
 
 Each CloudEvents event can be wholly represented as a JSON object.
 
-Such a representation uses the media type `application/cloudevents+json`
+Such a representation uses the media type `application/cloudevents+json`.
 
 All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST
 become members of the JSON object, with the respective JSON object member name
