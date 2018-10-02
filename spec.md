@@ -52,7 +52,7 @@ be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 The CloudEvents specifications define mappings to various protocols and
 encodings, and the accompanying CloudEvents SDK targets various runtimes and
 languages. Some of these treat metadata elements as case-sensitive while others
-do not, and a single CloudEvent may be routed via multiple hops that involve
+do not, and a single CloudEvent might be routed via multiple hops that involve
 a mix of protocols, encodings, and runtimes. Therefore, this specification
 limits the available character set of all normatively named attributes such that
 case-sensitivity issues or clashes with the permissible character set for
@@ -61,7 +61,7 @@ identifiers in common languages are prevented.
 CloudEvents attribute names MUST consist of lower-case letter ('a' to 'z')
 or digits ('0' to '9') from the ASCII character set, and MUST begin with a
 lower-case letter. Attribute names SHOULD be descriptive and terse, and SHOULD
-not exceed 20 characters in length.
+NOT exceed 20 characters in length.
 
 ### Terminology
 
