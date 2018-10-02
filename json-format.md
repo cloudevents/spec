@@ -65,7 +65,7 @@ exceptions noted below.
 Extension specifications MAY define diverging mapping rules for the values of
 attributes they define.
 
-For instance, the attribute value may be a data structure
+For instance, the attribute value might be a data structure
 defined in a standard outside of CloudEvents, with a formal JSON mapping, and
 there might be risk of translation errors or information loss when the original
 format is not preserved.
