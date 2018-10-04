@@ -5,14 +5,14 @@ The CloudEvents Roadmap.
 _Note: The ordered lists for each milestone provide a way to reference each
 item; they don't imply an order for implementation._
 
-*Setup*
+*Setup* - Completed - 2018/02/26
 
 1. Establish governance, contributing guidelines and initial stakeholders.
 1. Define design goals for CloudEvents V.1.
 1. Describe the scope of the specification.
 1. Draft educational materials that provide context for reading the spec.
 
-*0.1*
+*0.1* - Completed - 2018/04/20
 
 1. Draft specification that project members agree *could* provide
    interoperability.
