@@ -19,7 +19,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-- 2.1. [contentType Attribute](#21-contenttype-attribute)
+- 2.1. [content_type Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [MQTT PUBLISH Message Mapping](#3-mqtt-publish-message-mapping)
 - 3.2. [Binary Content Mode](#31-binary-content-mode)
@@ -59,7 +59,7 @@ using an [event format](#14-event-formats).
 
 In the *binary* content mode, the value of the event `data` attribute is placed
 into the MQTT PUBLISH message's payload section as-is, with
-the `contentType` attribute value declaring its media type; all other event
+the `content_type` attribute value declaring its media type; all other event
 attributes are mapped to the MQTT PUBLISH message's
 [properties section][5-publish-properties].
 
@@ -82,31 +82,31 @@ mandate specific existing features to be used.
 This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
-Two of the event attributes, `contentType` and `data` are handled specially
+Two of the event attributes, `content_type` and `data` are handled specially
 and mapped onto MQTT constructs, all other attributes are transferred as
 metadata without further interpretation.
 
 This mapping is intentionally robust against changes, including the addition
 and removal of event attributes, and also accommodates vendor extensions to the
-event metadata. Any mention of event attributes other than `contentType` and
+event metadata. Any mention of event attributes other than `content_type` and
 `data` is exemplary.
 
-### 2.1. contentType Attribute
+### 2.1. content_type Attribute
 
-The `contentType` attribute is assumed to contain a [RFC2046][RFC2046]
+The `content_type` attribute is assumed to contain a [RFC2046][RFC2046]
 compliant media-type expression.
 
 ### 2.2. data Attribute
 
 The `data` attribute is assumed to contain opaque application data that is
-encoded as declared by the `contentType` attribute.
+encoded as declared by the `content_type` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into MQTT as defined in this
 specification, the assumption is that the `data` attribute value is made
 available as a sequence of bytes.
 
-For instance, if the declared `contentType` is
+For instance, if the declared `content_type` is
 `application/json;charset=utf-8`, the expectation is that the `data` attribute
 value is made available as [UTF-8][RFC3629] encoded JSON text for use in
 MQTT.
@@ -141,7 +141,7 @@ efficient transfer and without transcoding effort.
 
 For the *binary* mode, the MQTT PUBLISH message's [`Content
 Type`][5-content-type] property MUST be mapped directly to the CloudEvents
-`contentType` attribute.
+`content_type` attribute.
 
 #### 3.1.2. Event Data Encoding
 
@@ -150,7 +150,7 @@ payload of the MQTT PUBLISH message.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][CE] attributes with exception of `contentType` and `data`
+All [CloudEvents][CE] attributes with exception of `content_type` and `data`
 MUST be individually mapped to and from the User Property fields in the MQTT
 PUBLISH message.
 
@@ -168,7 +168,7 @@ respective CloudEvents attribute's JSON type representation, compliant with the
 #### 3.1.4 Examples
 
 This example shows the *binary* mode mapping of an event into the
-MQTT 5.0 PUBLISH message. The CloudEvents `contentType` attribute
+MQTT 5.0 PUBLISH message. The CloudEvents `content_type` attribute
 is mapped to the MQTT PUBLISH `Content Type` field; all other
 CloudEvents attributes are mapped to MQTT PUBLISH User Property
 fields. The `Topic name` is chosen by the MQTT client and not derived
@@ -185,10 +185,10 @@ Content Type: application/json; charset=utf-8
 
 ------------- User Properties ----------------
 
-cloudEventsVersion: "0.1"
-eventType: "com.example.someevent"
-eventTime: "2018-04-05T03:56:24Z"
-eventId: "1234-1234-1234"
+cloud_events_version: "0.1"
+event_type: "com.example.someevent"
+event_time: "2018-04-05T03:56:24Z"
+event_id: "1234-1234-1234"
 source: "/mycontext/subcontext"
        .... further attributes ...
 
@@ -247,8 +247,8 @@ Content Type: application/cloudevents+json; charset=utf-8
 ------------------ payload -------------------
 
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
 
     ... further attributes omitted ...
 
@@ -272,8 +272,8 @@ Topic Name: mytopic
 ------------------ payload -------------------
 
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
 
     ... further attributes omitted ...
 

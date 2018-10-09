@@ -49,15 +49,19 @@ be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### Attribute Naming Convention
 
-CloudEvents attributes use "camelCasing" for the object member names, to aid
-integration with common programming languages.
+The CloudEvents specifications define mappings to various protocols and
+encodings, and the accompanying CloudEvents SDK targets various runtimes and
+languages. Some of these treat metadata elements as case-sensitive while others
+do not, and a single CloudEvent might be routed via multiple hops that involve
+a mix of protocols, encodings, and runtimes. Therefore, this specification
+limits the available character set of all normatively named attributes such that
+case-sensitivity issues or clashes with the permissible character set for
+identifiers in common languages are prevented.
 
-Attribute names that are composed of multiple words are expressed as compound
-words, with the first word starting with a lower-case character and all
-subsequent words starting with an upper-case character, and no separator
-characters.
-
-Words that are acronyms are written in all-caps, e.g. "ID" and "URL".
+CloudEvents attribute names MUST consist of lower-case letter ('a' to 'z'),
+digits ('0' to '9') or the underscore symbol ('_') from the ASCII character set,
+and MUST begin with a lower-case letter. Attribute names SHOULD be descriptive and
+terse, and SHOULD NOT exceed 20 characters in length.
 
 ### Terminology
 
@@ -170,7 +174,7 @@ event consumers can easily access this information without needing to decode
 and examine the event data. Such identity attributes can also be used to
 help intermediate gateways determine how to route the events.
 
-### eventType
+### event_type
 * Type: `String`
 * Description: Type of occurrence which has happened. Often this
   attribute is used for routing, observability, policy enforcement, etc.
@@ -182,7 +186,7 @@ help intermediate gateways determine how to route the events.
 * Examples
    * com.github.pull.create
 
-### cloudEventsVersion
+### cloud_events_version
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
@@ -199,7 +203,7 @@ help intermediate gateways determine how to route the events.
 * Constraints:
   * REQUIRED
 
-### eventID
+### event_id
 * Type: `String`
 * Description: ID of the event. The semantics of this string are explicitly
   undefined to ease the implementation of producers. Enables deduplication.
@@ -210,7 +214,7 @@ help intermediate gateways determine how to route the events.
   * MUST be a non-empty string
   * MUST be unique within the scope of the producer
 
-### eventTime
+### event_time
 * Type: `Timestamp`
 * Description: Timestamp of when the event happened.
 * Constraints:
@@ -218,7 +222,7 @@ help intermediate gateways determine how to route the events.
   * If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
-### schemaURL
+### schema_url
 * Type: `URI`
 * Description: A link to the schema that the `data` attribute adheres to.
 Incompatible changes to the schema SHOULD be reflected by a different URL.
@@ -227,7 +231,7 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   * If present, MUST adhere to the format specified in
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
-### contentType
+### content_type
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * Description: Content type of the `data` attribute value. This attribute
   enables the `data` attribute to carry any type of content, whereby format
@@ -236,7 +240,7 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   format might carry an XML payload in its `data` attribute, and the
   consumer is informed by this attribute being set to "application/xml". The
   rules for how the `data` attribute content is rendered for different
-  `contentType` values are defined in the event format specifications; for
+  `content_type` values are defined in the event format specifications; for
   example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
 
@@ -265,9 +269,9 @@ encapsulated within the `data` attribute.
 
 ### data
 * Type: `Any`
-* Description: The event payload. The payload depends on the eventType and
+* Description: The event payload. The payload depends on the event_type and
   the schemaURL. It is encoded into a media format
-  which is specified by the contentType attribute (e.g. application/json).
+  which is specified by the content_type attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
 
@@ -277,16 +281,16 @@ The following example shows a CloudEvent serialized as JSON:
 
 ``` JSON
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventID" : "A234-1234-1234",
-    "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension1" : "value",
-    "comExampleExtension2" : {
-        "otherValue": 5
+    "event_id" : "A234-1234-1234",
+    "event_time" : "2018-04-05T17:31:00Z",
+    "com_example_extension_1" : "value",
+    "com_example_extension_2" : {
+        "othervalue": 5
     },
-    "contentType" : "text/xml",
+    "content_type" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
 ```

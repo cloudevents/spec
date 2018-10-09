@@ -82,12 +82,12 @@ The following table shows exemplary mappings:
 
 | CloudEvents       | Type     | Exemplary JSON Value
 |--------------------|----------|-------------------------------
-| eventType          | String   | "com.example.someevent"
-| cloudEventsVersion | String   | "0.1"
+| event_type          | String   | "com.example.someevent"
+| cloud_events_version | String   | "0.1"
 | source             | URI      | "/mycontext"
-| eventID            | String   | "1234-1234-1234"
-| eventTime          | Timestamp| "2018-04-05T17:31:00Z"
-| contentType        | String   | "application/json"
+| event_id            | String   | "1234-1234-1234"
+| event_time          | Timestamp| "2018-04-05T17:31:00Z"
+| content_type        | String   | "application/json"
 | data               | String   | "<much wow=\"xml\"/>"
 | data               | Binary   | "Q2xvdWRFdmVudHM="
 | data               | Map      | { "objA" : "vA", "objB", "vB" }
@@ -116,15 +116,15 @@ in [Section 2.3.](#23-mapping-any-typed-attributes), with one additional
 rule:
 
 If an implementation determines that the type of the `data` attribute is
-`Binary` or `String`, it MUST inspect the `contentType` attribute to determine
+`Binary` or `String`, it MUST inspect the `content_type` attribute to determine
 whether it is indicated that the data value contains JSON data.
 
-If the `contentType` value is either ["application/json"][RFC4627] or any media type
+If the `content_type` value is either ["application/json"][RFC4627] or any media type
 with a [structured +json suffix][RFC6839], the implementation MUST translate
 the `data` attribute value into a [JSON value][JSON-Value], and set the `data`
 attribute of the envelope JSON object to this JSON value.
 
-If the `contentType` value does not follow the [structured +json suffix][RFC6839]
+If the `content_type` value does not follow the [structured +json suffix][RFC6839]
 but is known to use JSON encoding, the implementation MUST translate the `data` attribute
 value into a [JSON value][JSON-Value], and set the `data` attribute of the envelope
 JSON object to this JSON value. Its typical examples are, but not limited to,
@@ -142,16 +142,16 @@ Example event with `String`-valued `data`:
 
 ``` JSON
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventID" : "A234-1234-1234",
-    "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension1" : "value",
-    "comExampleExtension2" : {
+    "event_id" : "A234-1234-1234",
+    "event_time" : "2018-04-05T17:31:00Z",
+    "com_example_extension_1" : "value",
+    "com_example_extension_2" : {
         "otherValue": 5
     },
-    "contentType" : "text/xml",
+    "content_type" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
 ```
@@ -160,16 +160,16 @@ Example event with `Binary`-valued data
 
 ``` JSON
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventID" : "B234-1234-1234",
-    "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension1" : "value",
-    "comExampleExtension2" : {
+    "event_id" : "B234-1234-1234",
+    "event_time" : "2018-04-05T17:31:00Z",
+    "com_example_extension_1" : "value",
+    "com_example_extension_2" : {
         "otherValue": 5
     },
-    "contentType" : "application/vnd.apache.thrift.binary",
+    "content_type" : "application/vnd.apache.thrift.binary",
     "data" : "... base64 encoded string ..."
 }
 ```
@@ -179,16 +179,16 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 
 ``` JSON
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventID" : "C234-1234-1234",
-    "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension1" : "value",
-    "comExampleExtension2" : {
+    "event_id" : "C234-1234-1234",
+    "event_time" : "2018-04-05T17:31:00Z",
+    "com_example_extension_1" : "value",
+    "com_example_extension_2" : {
         "otherValue": 5
     },
-    "contentType" : "application/json",
+    "content_type" : "application/json",
     "data" : {
         "appinfoA" : "abc",
         "appinfoB" : 123,
