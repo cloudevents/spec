@@ -18,7 +18,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-- 2.1. [contentType Attribute](#21-contenttype-attribute)
+- 2.1. [contenttype Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [HTTP Message Mapping](#3-http-message-mapping)
 - 3.2. [Binary Content Mode](#31-binary-content-mode)
@@ -67,7 +67,7 @@ placed into the HTTP request or response body using an [event
 format](#14-event-formats).
 
 In the *binary* content mode, the value of the event `data` attribute is placed
-into the HTTP request or response body as-is, with the `contentType` attribute
+into the HTTP request or response body as-is, with the `contenttype` attribute
 value declaring its media type; all other event attributes are mapped to HTTP
 headers.
 
@@ -89,31 +89,31 @@ identically to [HTTP over TLS]([RFC2818][RFC2818]).
 This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
-Two of the event attributes, `contentType` and `data` are handled specially
+Two of the event attributes, `contenttype` and `data` are handled specially
 and mapped onto HTTP constructs, all other attributes are transferred as
 metadata without further interpretation.
 
 This mapping is intentionally robust against changes, including the addition
 and removal of event attributes, and also accommodates vendor extensions to the
-event metadata. Any mention of event attributes other than `contentType` and
+event metadata. Any mention of event attributes other than `contenttype` and
 `data` is exemplary.
 
-### 2.1. contentType Attribute
+### 2.1. contenttype Attribute
 
-The `contentType` attribute is assumed to contain a [RFC2046][RFC2046]
+The `contenttype` attribute is assumed to contain a [RFC2046][RFC2046]
 compliant media-type expression.
 
 ### 2.2. data Attribute
 
 The `data` attribute is assumed to contain opaque application data that is
-encoded as declared by the `contentType` attribute.
+encoded as declared by the `contenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into HTTP as defined in this
 specification, the assumption is that the `data` attribute value is made
 available as a sequence of bytes.
 
-For instance, if the declared `contentType` is
+For instance, if the declared `contenttype` is
 `application/json;charset=utf-8`, the expectation is that the `data` attribute
 value is made available as [UTF-8][RFC3629] encoded JSON text to HTTP.
 
@@ -144,7 +144,7 @@ efficient transfer and without transcoding effort.
 #### 3.1.1. HTTP Content-Type
 
 For the *binary* mode, the HTTP `Content-Type` value maps directly to the
-CloudEvents `contentType` attribute.
+CloudEvents `contenttype` attribute.
 
 #### 3.1.2. Event Data Encoding
 
@@ -153,7 +153,7 @@ message body.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][CE] attributes with exception of `contentType` and `data`
+All [CloudEvents][CE] attributes with exception of `contenttype` and `data`
 are individually mapped to and from distinct HTTP message headers.
 
 ##### 3.1.3.1 HTTP Header Names
@@ -161,18 +161,18 @@ are individually mapped to and from distinct HTTP message headers.
 Except for attributes [explicitly handled in this specification]
 (#2-use-of-cloudevents-attributes), the naming convention for the 
 HTTP header mapping of well-known CloudEvents attributes is that 
-each attribute name MUST be prefixed with "CE-".
+each attribute name MUST be prefixed with "ce-".
 
 Examples:
 
-    * `eventTime` maps to `CE-EventTime`
-    * `eventID` maps to `CE-EventID`
-    * `cloudEventsVersion` maps to `CE-CloudEventsVersion`
+    * `eventtime` maps to `ce-eventtime`
+    * `eventid` maps to `ce-eventid`
+    * `cloudeventsversion` maps to `ce-cloudeventsversion`
 
 `Map`-typed CloudEvents attributes MUST be flattened into a set
 of HTTP headers, where by the name of each header carries the prefix
-"CE-", an infix reflecting the map attribute followed by a dash 
-("-"), and the name of the map entry key, e.g. "CE-attrib-key".
+"ce-", an infix reflecting the map attribute followed by a dash 
+("-"), and the name of the map entry key, e.g. "ce-attrib-key".
 
 CloudEvents extensions that define their own attributes MAY define a 
 diverging mapping to HTTP headers for those attributes, especially if 
@@ -216,11 +216,11 @@ request:
 ``` text
 POST /someresource HTTP/1.1
 Host: webhook.example.com
-CE-CloudEventsVersion: "0.1"
-CE-EventType: "com.example.someevent"
-CE-EventTime: "2018-04-05T03:56:24Z"
-CE-EventID: "1234-1234-1234"
-CE-Source: "/mycontext/subcontext"
+ce-cloudeventsversion: "0.1"
+ce-eventtype: "com.example.someevent"
+ce-eventtime: "2018-04-05T03:56:24Z"
+ce-eventid: "1234-1234-1234"
+ce-source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
@@ -234,11 +234,11 @@ This example shows a response containing an event:
 
 ``` text
 HTTP/1.1 200 OK
-CE-CloudEventsVersion: "0.1"
-CE-EventType: "com.example.someevent"
-CE-EventTime: "2018-04-05T03:56:24Z"
-CE-EventID: "1234-1234-1234"
-CE-Source: "/mycontext/subcontext"
+ce-cloudeventsversion: "0.1"
+ce-eventtype: "com.example.someevent"
+ce-eventtime: "2018-04-05T03:56:24Z"
+ce-eventid: "1234-1234-1234"
+ce-source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
@@ -293,8 +293,8 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloudeventsversion" : "0.1",
+    "eventtype" : "com.example.someevent",
 
     ... further attributes omitted ...
 
@@ -314,8 +314,8 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.example.someevent",
+    "cloudeventsversion" : "0.1",
+    "eventtype" : "com.example.someevent",
 
     ... further attributes omitted ...
 

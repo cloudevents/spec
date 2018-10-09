@@ -269,9 +269,9 @@ encapsulated within the `data` attribute.
 
 ### data
 * Type: `Any`
-* Description: The event payload. The payload depends on the eventType and
+* Description: The event payload. The payload depends on the eventtype and
   the schemaURL. It is encoded into a media format
-  which is specified by the contentType attribute (e.g. application/json).
+  which is specified by the contenttype attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
 
