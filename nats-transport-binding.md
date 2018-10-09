@@ -17,7 +17,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-- 2.1. [content_type Attribute](#21-content_type-attribute)
+- 2.1. [content_type Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [NATS Message Mapping](#3-nats-message-mapping)
 - 3.1. [Event Data Encoding](#31-event-data-encoding)
