@@ -18,7 +18,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-- 2.1. [contenttype Attribute](#21-contenttype-attribute)
+- 2.1. [content_type Attribute](#21-content_type-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [AMQP Message Mapping](#3-amqp-message-mapping)
 - 3.2. [Binary Content Mode](#31-binary-content-mode)
@@ -65,7 +65,7 @@ using an [event format](#14-event-formats).
 
 In the *binary* content mode, the value of the event `data` attribute is placed
 into the AMQP message's [application data][data] section as-is, with
-the `contenttype` attribute value declaring its media type; all other event
+the `content_type` attribute value declaring its media type; all other event
 attributes are mapped to the AMQP [application-properties][app-properties] section.
 
 ### 1.4. Event Formats
@@ -86,31 +86,31 @@ mandate specific existing features to be used.
 This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
-Two of the event attributes, `contenttype` and `data` are handled specially
+Two of the event attributes, `content_type` and `data` are handled specially
 and mapped onto AMQP constructs, all other attributes are transferred as
 metadata without further interpretation.
 
 This mapping is intentionally robust against changes, including the addition
 and removal of event attributes, and also accommodates vendor extensions to the
-event metadata. Any mention of event attributes other than `contenttype` and
+event metadata. Any mention of event attributes other than `content_type` and
 `data` is exemplary.
 
-### 2.1. contenttype Attribute
+### 2.1. content_type Attribute
 
-The `contenttype` attribute is assumed to contain a [RFC2046][RFC2046]
+The `content_type` attribute is assumed to contain a [RFC2046][RFC2046]
 compliant media-type expression.
 
 ### 2.2. data Attribute
 
 The `data` attribute is assumed to contain opaque application data that is
-encoded as declared by the `contenttype` attribute.
+encoded as declared by the `content_type` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into AMQP as defined in this
 specification, the assumption is that the `data` attribute value is made
 available as a sequence of bytes.
 
-For instance, if the declared `contenttype` is
+For instance, if the declared `content_type` is
 `application/json;charset=utf-8`, the expectation is that the `data` attribute
 value is made available as [UTF-8][RFC3629] encoded JSON text for use in
 AMQP.
@@ -140,7 +140,7 @@ efficient transfer and without transcoding effort.
 #### 3.1.1. AMQP content-type
 
 For the *binary* mode, the AMQP `content-type` property field value maps
-directly to the CloudEvents `contenttype` attribute.
+directly to the CloudEvents `content_type` attribute.
 
 #### 3.1.2. Event Data Encoding
 
@@ -149,7 +149,7 @@ The [`data` attribute](#22-data-attribute) byte-sequence is used as the AMQP
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][CE] attributes with exception of `contenttype` and `data`
+All [CloudEvents][CE] attributes with exception of `content_type` and `data`
 are individually mapped to and from the AMQP
 [application-properties][app-properties] section.
 
@@ -160,9 +160,9 @@ Cloud Event attributes are prefixed with "cloudEvents:" for use in the
 
 Examples:
 
-    * `eventtime` maps to `cloudEvents:eventtime`
-    * `eventid` maps to `cloudEvents:eventid`
-    * `cloudeventsversion` maps to `cloudEvents:cloudeventsversion`
+    * `event_time` maps to `cloudEvents:event_time`
+    * `event_id` maps to `cloudEvents:event_id`
+    * `cloud_events_version` maps to `cloudEvents:cloud_events_version`
 
 ##### 3.1.3.2 AMQP Application Property Values
 
@@ -183,10 +183,10 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:cloudeventsversion: "0.1"
-cloudEvents:eventtype: "com.example.someevent"
-cloudEvents:eventtime: "2018-04-05T03:56:24Z"
-cloudEvents:eventid: "1234-1234-1234"
+cloudEvents:cloud_events_version: "0.1"
+cloudEvents:event_type: "com.example.someevent"
+cloudEvents:event_time: "2018-04-05T03:56:24Z"
+cloudEvents:event_id: "1234-1234-1234"
 cloudEvents:source: "/mycontext/subcontext"
        .... further attributes ...
 
@@ -245,8 +245,8 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
 
     ... further attributes omitted ...
 

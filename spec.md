@@ -58,10 +58,10 @@ limits the available character set of all normatively named attributes such that
 case-sensitivity issues or clashes with the permissible character set for
 identifiers in common languages are prevented.
 
-CloudEvents attribute names MUST consist of lower-case letter ('a' to 'z')
-or digits ('0' to '9') from the ASCII character set, and MUST begin with a
-lower-case letter. Attribute names SHOULD be descriptive and terse, and SHOULD
-NOT exceed 20 characters in length.
+CloudEvents attribute names MUST consist of lower-case letter ('a' to 'z'),
+digits ('0' to '9') or the underscore symbol ('_') from the ASCII character set,
+and MUST begin with a lower-case letter. Attribute names SHOULD be descriptive and
+terse, and SHOULD NOT exceed 20 characters in length.
 
 ### Terminology
 
@@ -174,7 +174,7 @@ event consumers can easily access this information without needing to decode
 and examine the event data. Such identity attributes can also be used to
 help intermediate gateways determine how to route the events.
 
-### eventtype
+### event_type
 * Type: `String`
 * Description: Type of occurrence which has happened. Often this
   attribute is used for routing, observability, policy enforcement, etc.
@@ -186,7 +186,7 @@ help intermediate gateways determine how to route the events.
 * Examples
    * com.github.pull.create
 
-### cloudeventsversion
+### cloud_events_version
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
@@ -203,7 +203,7 @@ help intermediate gateways determine how to route the events.
 * Constraints:
   * REQUIRED
 
-### eventid
+### event_id
 * Type: `String`
 * Description: ID of the event. The semantics of this string are explicitly
   undefined to ease the implementation of producers. Enables deduplication.
@@ -214,7 +214,7 @@ help intermediate gateways determine how to route the events.
   * MUST be a non-empty string
   * MUST be unique within the scope of the producer
 
-### eventtime
+### event_time
 * Type: `Timestamp`
 * Description: Timestamp of when the event happened.
 * Constraints:
@@ -222,7 +222,7 @@ help intermediate gateways determine how to route the events.
   * If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
-### schemaurl
+### schema_url
 * Type: `URI`
 * Description: A link to the schema that the `data` attribute adheres to.
 Incompatible changes to the schema SHOULD be reflected by a different URL.
@@ -231,7 +231,7 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   * If present, MUST adhere to the format specified in
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
-### contenttype
+### content_type
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * Description: Content type of the `data` attribute value. This attribute
   enables the `data` attribute to carry any type of content, whereby format
@@ -240,7 +240,7 @@ Incompatible changes to the schema SHOULD be reflected by a different URL.
   format might carry an XML payload in its `data` attribute, and the
   consumer is informed by this attribute being set to "application/xml". The
   rules for how the `data` attribute content is rendered for different
-  `contenttype` values are defined in the event format specifications; for
+  `content_type` values are defined in the event format specifications; for
   example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
 
@@ -269,9 +269,9 @@ encapsulated within the `data` attribute.
 
 ### data
 * Type: `Any`
-* Description: The event payload. The payload depends on the eventtype and
+* Description: The event payload. The payload depends on the event_type and
   the schemaURL. It is encoded into a media format
-  which is specified by the contenttype attribute (e.g. application/json).
+  which is specified by the content_type attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
 
@@ -281,16 +281,16 @@ The following example shows a CloudEvent serialized as JSON:
 
 ``` JSON
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventid" : "A234-1234-1234",
-    "eventtime" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleextension2" : {
+    "event_id" : "A234-1234-1234",
+    "event_time" : "2018-04-05T17:31:00Z",
+    "com_example_extension_1" : "value",
+    "com_example_extension_2" : {
         "othervalue": 5
     },
-    "contenttype" : "text/xml",
+    "content_type" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
 ```

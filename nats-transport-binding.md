@@ -17,7 +17,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-- 2.1. [contenttype Attribute](#21-contenttype-attribute)
+- 2.1. [content_type Attribute](#21-content_type-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [NATS Message Mapping](#3-nats-message-mapping)
 - 3.1. [Event Data Encoding](#31-event-data-encoding)
@@ -73,21 +73,21 @@ mandate specific existing features to be used.
 This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
-### 2.1. contenttype Attribute
+### 2.1. content_type Attribute
 
-The `contenttype` attribute is assumed to contain a media-type expression
+The `content_type` attribute is assumed to contain a media-type expression
 compliant with [RFC2046][RFC2046].
 
 ### 2.2. data Attribute
 
 The `data` attribute is assumed to contain opaque application data that is
-encoded as declared by the `contenttype` attribute.
+encoded as declared by the `content_type` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into NATS as defined in this
 specification, core NATS provides data available as a sequence of bytes.
 
-For instance, if the declared `contenttype` is
+For instance, if the declared `content_type` is
 `application/json;charset=utf-8`, the expectation is that the `data` attribute
 value is made available as [UTF-8][RFC3629] encoded JSON text.
 
@@ -122,8 +122,8 @@ Subject: mySubject
 ------------------ payload -------------------
 
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "cloud_events_version" : "0.1",
+    "event_type" : "com.example.someevent",
 
     ... further attributes omitted ...
 
