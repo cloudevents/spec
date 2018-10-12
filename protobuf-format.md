@@ -14,7 +14,7 @@ This document is a working draft.
 CloudEvents is a standardized and transport-neutral definition of the
 structure and metadata description of events. This specification
 defines how the [Context
-Attributes](spec.md#context-attributes)defined in the CloudEvents in
+Attributes](spec.md#context-attributes) defined in the CloudEvents in
 the protocol buffers binary encoding MUST BE encoded. Transcoding to
 and from other formats (e.g. JSON) is out of the scope of this
 proposal.
