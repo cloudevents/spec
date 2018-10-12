@@ -21,12 +21,14 @@ proposal.
 
 Protocol buffers are a language-neutral, platform-neutral extensible
 mechanism for serializing structured data. The [Google reference
-implementation of protobuf](PROTO) includes support for an interface
-descriptor language (IDL), and this document makes use of language
-level 3 IDL from Protocol Buffers v3.5.0. CloudEvents systems using
-protocol buffers are not required to use the IDL or any particular
-implementation of Protocol buffers as long as they produce messages
-which match the binary encoding defined by the IDL.
+implementation of
+protobuf](https://github.com/protocolbuffers/protobuf) includes
+support for an interface descriptor language (IDL), and this document
+makes use of language level 3 IDL from Protocol Buffers
+v3.5.0. CloudEvents systems using protocol buffers are not required to
+use the IDL or any particular implementation of Protocol buffers as
+long as they produce messages which match the binary encoding defined
+by the IDL.
 
 
 ### 1.1. Conformance
