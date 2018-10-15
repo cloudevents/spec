@@ -152,7 +152,17 @@ payload of the MQTT PUBLISH message.
 
 All [CloudEvents][CE] attributes with exception of `contentType` and `data`
 MUST be individually mapped to and from the User Property fields in the MQTT
-PUBLISH message.
+PUBLISH message, with exceptions noted below.
+
+CloudEvents extensions that define their own attributes MAY define a 
+diverging mapping to MQTT user properties or features for those attributes, 
+especially if specific attributes need to align with MQTT features, or with 
+other specifications that have explicit MQTT header bindings.
+
+An extension specification that defines a diverging mapping rule for MQTT,
+and any revision of such a specification, MUST also define explicit mapping
+rules for all other transport bindings that are part of the CloudEvents core at
+the time of the submission or revision.
 
 ##### 3.1.3.1 User Property Names
 

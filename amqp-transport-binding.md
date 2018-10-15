@@ -150,8 +150,20 @@ The [`data` attribute](#22-data-attribute) byte-sequence is used as the AMQP
 #### 3.1.3. Metadata Headers
 
 All [CloudEvents][CE] attributes with exception of `contentType` and `data`
-are individually mapped to and from the AMQP
-[application-properties][app-properties] section.
+MUST be individually mapped to and from the AMQP
+[application-properties][app-properties] section, with exceptions noted
+below.
+
+CloudEvents extensions that define their own attributes MAY define a
+diverging mapping to AMQP properties for those attributes, also in 
+different message sections, especially if specific attributes or their 
+names need to align with AMQP features or with other specifications that 
+have explicit AMQP header bindings.
+
+An extension specification that defines a diverging mapping rule for AMQP,
+and any revision of such a specification, MUST also define explicit mapping
+rules for all other transport bindings that are part of the CloudEvents core at
+the time of the submission or revision.
 
 ##### 3.1.3.1 AMQP Application Property Names
 

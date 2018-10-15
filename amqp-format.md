@@ -50,7 +50,8 @@ system, which this mapping leans on.
 
 ### 2.2. Type System Mapping
 
-The CloudEvents type system is mapped to AMQP types as follows:
+The CloudEvents type system MUST be mapped to AMQP types as follows,
+with exceptions noted below.
 
 | CloudEvents | AMQP
 |-------------|-------------------------------------------------------------
@@ -60,6 +61,19 @@ The CloudEvents type system is mapped to AMQP types as follows:
 | Timestamp   | [timestamp][AMQP-Timestamp]
 | Map         | [map][AMQP-Map]
 | Any         | See 2.3.
+
+Extension specifications MAY define diverging mapping rules for the values of
+attributes they define.
+
+For instance, the attribute value may be a data structure
+defined in a standard outside of CloudEvents, with a formal AMQP mapping, and
+there might be risk of translation errors or information loss when the original
+format is not preserved.
+
+An extension specification that defines a diverging mapping rule for AMQP,
+and any revision of such a specification, MUST also define explicit mapping
+rules for all other event formats that are part of the CloudEvents core at
+the time of the submission or revision.
 
 ### 2.3. Mapping Any-typed Attributes
 

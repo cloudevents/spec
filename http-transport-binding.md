@@ -154,7 +154,18 @@ message body.
 #### 3.1.3. Metadata Headers
 
 All [CloudEvents][CE] attributes with exception of `contentType` and `data`
-are individually mapped to and from distinct HTTP message headers.
+MUST be individually mapped to and from distinct HTTP message headers,
+with exceptions noted below.
+
+CloudEvents extensions that define their own attributes MAY define a 
+diverging mapping to HTTP headers for those attributes, especially if 
+specific attributes need to align with HTTP features or with 
+other specifications that have explicit HTTP header bindings. 
+
+An extension specification that defines a diverging mapping rule for HTTP,
+and any revision of such a specification, MUST also define explicit mapping
+rules for all other transport bindings that are part of the CloudEvents core at
+the time of the submission or revision.
 
 ##### 3.1.3.1 HTTP Header Names
 
@@ -173,13 +184,6 @@ Examples:
 of HTTP headers, where by the name of each header carries the prefix
 "CE-", an infix reflecting the map attribute followed by a dash 
 ("-"), and the name of the map entry key, e.g. "CE-attrib-key".
-
-CloudEvents extensions that define their own attributes MAY define a 
-diverging mapping to HTTP headers for those attributes, especially if 
-specific header names need to align with HTTP features or with 
-other specifications that have explicit HTTP header bindings. If specific
-names are not required, extensions SHOULD follow the naming convention
-cited here.
 
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
