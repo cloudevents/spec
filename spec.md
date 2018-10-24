@@ -275,48 +275,6 @@ encapsulated within the `data` attribute.
 
 The following examples shows CloudEvent serialized as JSON.
 
-## Using relative URI in `source` element
-
-As defined in [RFC 3986, Section 4.2](https://tools.ietf.org/html/rfc3986#section-4.2) it is possible to use relative paths to express URI, but this require the apply of resolution algorithm [RFC 3986, Section 5](https://tools.ietf.org/html/rfc3986#section-5).
-
-``` JSON
-{
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.github.pull.create",
-    "source" : "/cloudevents/spec/pull/123",
-    "eventID" : "A234-1234-1234",
-    "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension1" : "value",
-    "comExampleExtension2" : {
-        "otherValue": 5
-    },
-    "contentType" : "text/xml",
-    "data" : "<much wow=\"xml\"/>"
-}
-```
-
-Regarding the resolution algorithm, lets consider:
-
-```
-- base URI = http://github.com
-- source   = /cloudevents/spec/pull/123
-```
-
-The full URI will resoluted as:
-
-```
-full URI = base URI + source
-```
-
-Then, the full URI will be: 
-
-```
-https://github.com/cloudevents/spec/pull/123
-```
-> See another example [here](https://docs.microsoft.com/en-us/azure/event-grid/cloudevents-schema#cloudevent-schema)
-
-## Using full URI in `source` element
-
 ``` JSON
 {
     "cloudEventsVersion" : "0.1",
