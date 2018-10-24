@@ -271,7 +271,7 @@ encapsulated within the `data` attribute.
 * Constraints:
   * OPTIONAL
 
-# Examples
+# Example
 
 The following examples shows CloudEvent serialized as JSON.
 
