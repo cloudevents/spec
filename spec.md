@@ -202,6 +202,9 @@ help intermediate gateways determine how to route the events.
   semantics behind the data encoded in the URI is event producer defined.
 * Constraints:
   * REQUIRED
+* Examples
+    * urn:event:from:cloudevents/spec/pull/123
+    * urn:event:from:myapi/resourse/123
 
 ### eventid
 * Type: `String`
@@ -300,7 +303,7 @@ The following example shows a CloudEvent with JSON as `data` and relative URI in
 {
     "cloudEventsVersion" : "0.1",
     "eventType" : "com.github.pull.create",
-    "source" : "urn:/cloudevents/spec/pull/123",
+    "source" : "urn:event:from:cloudevents/spec/pull/123",
     "eventID" : "A234-1234-1234",
     "eventTime" : "2018-04-05T17:31:00Z",
     "comExampleExtension1" : "value",
