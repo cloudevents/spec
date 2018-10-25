@@ -282,8 +282,8 @@ The following example shows a CloudEvent serialized as JSON:
 ``` JSON
 {
     "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
-    "source" : "/mycontext",
+    "eventtype" : "com.github.pull.create",
+    "source" : "https://github.com/cloudevents/spec/pull/123",
     "eventid" : "A234-1234-1234",
     "eventtime" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
@@ -292,5 +292,26 @@ The following example shows a CloudEvent serialized as JSON:
     },
     "contenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
+}
+```
+The following example shows a CloudEvent with JSON as `data` and relative URI in `source`:
+
+``` JSON
+{
+    "cloudEventsVersion" : "0.1",
+    "eventType" : "com.github.pull.create",
+    "source" : "urn:/cloudevents/spec/pull/123",
+    "eventID" : "A234-1234-1234",
+    "eventTime" : "2018-04-05T17:31:00Z",
+    "comExampleExtension1" : "value",
+    "comExampleExtension2" : {
+        "otherValue": 5
+    },
+    "contentType" : "application/json",
+    "data" : {
+        "much" : {
+            "wow" : "json"
+         }
+    }
 }
 ```
