@@ -203,8 +203,9 @@ help intermediate gateways determine how to route the events.
 * Constraints:
   * REQUIRED
 * Examples
-    * urn:event:from:cloudevents/spec/pull/123
+    * https://github.com/cloudevents/spec/pull/123
     * urn:event:from:myapi/resourse/123
+    * mailto:cncf-wg-serverless@lists.cncf.io
 
 ### eventid
 * Type: `String`
@@ -295,26 +296,5 @@ The following example shows a CloudEvent serialized as JSON:
     },
     "contenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
-}
-```
-The following example shows a CloudEvent with JSON as `data` and relative URI in `source`:
-
-``` JSON
-{
-    "cloudEventsVersion" : "0.1",
-    "eventType" : "com.github.pull.create",
-    "source" : "urn:event:from:cloudevents/spec/pull/123",
-    "eventID" : "A234-1234-1234",
-    "eventTime" : "2018-04-05T17:31:00Z",
-    "comExampleExtension1" : "value",
-    "comExampleExtension2" : {
-        "otherValue": 5
-    },
-    "contentType" : "application/json",
-    "data" : {
-        "much" : {
-            "wow" : "json"
-         }
-    }
 }
 ```
