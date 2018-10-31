@@ -150,7 +150,7 @@ The [`data` attribute](#22-data-attribute) byte-sequence is used as the AMQP
 #### 3.1.3. Metadata Headers
 
 All [CloudEvents][CE] attributes with exception of `contenttype` and `data`
-are individually mapped to and from the AMQP
+MUST be individually mapped to and from the AMQP
 [application-properties][app-properties] section, with exceptions noted
 below.
 

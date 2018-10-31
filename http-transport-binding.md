@@ -154,7 +154,7 @@ message body.
 #### 3.1.3. Metadata Headers
 
 All [CloudEvents][CE] attributes with exception of `contenttype` and `data`
-are individually mapped to and from distinct HTTP message headers,
+MUST be individually mapped to and from distinct HTTP message headers,
 with exceptions noted below.
 
 CloudEvents extensions that define their own attributes MAY define a 
