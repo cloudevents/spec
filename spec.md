@@ -54,7 +54,7 @@ encodings, and the accompanying CloudEvents SDK targets various runtimes and
 languages. Some of these treat metadata elements as case-sensitive while others
 do not, and a single CloudEvent might be routed via multiple hops that involve
 a mix of protocols, encodings, and runtimes. Therefore, this specification
-limits the available character set of all normatively named attributes such that
+limits the available character set of all attributes such that
 case-sensitivity issues or clashes with the permissible character set for
 identifiers in common languages are prevented.
 
