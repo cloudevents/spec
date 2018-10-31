@@ -1,7 +1,7 @@
 # Distributed Tracing extension
 
 This extension embeds context from 
-[Distributed Tracing](https://w3c.github.io/distributed-tracing/report-trace-context.html)
+[Distributed Tracing](https://w3c.github.io/trace-context/)
 so that distributed systems can include traces that span an event-driven system.
 This is the foundation of many other systems, such as Open Tracing, on which
 platforms like Prometheus are built.
@@ -10,14 +10,14 @@ platforms like Prometheus are built.
 #### traceparent
 * Type: `String`
 * Description: Contains a version, trace ID, span ID, and trace options as defined in
-  [section 2.2.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#field-value)
+  [section 2.2.2](https://w3c.github.io/trace-context/#field-value)
 * Constraints
   * REQUIRED
 
 #### tracestate
 * Type: `String`
 * Description: a comma-delimited list of key-value pairs, defined by
-  [section 2.3.2](https://w3c.github.io/distributed-tracing/report-trace-context.html#header-value).
+  [section 2.3.2](https://w3c.github.io/trace-context/#header-value).
 * Constraints
   * OPTIONAL
     
