@@ -88,7 +88,17 @@ If a vote is taken during a meeting, the follow rules will be followed:
   * Comments are welcome from non-members
   * Voting tally will reflect the above qualification and recorded in PR
 
-## Release Process
+## Release Process and Versioning
+
+The specifications produced will adhere to the following:
+* The versioning scheme used will follow [semver](https://semver.org/)
+* All normative specifications, and the Primer, will be grouped together into
+  a single logical unit and released at the same time, at the same version
+  number. This is true regardless of whether each individual document actually
+  changed during the release cycle.
+
+Note that these rules do not apply to the
+[documented extensions](documented-extensions.md).
 
 To create a new release:
 * Create a PR that modifies the [README](README.md), and all specifications
