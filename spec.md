@@ -202,6 +202,10 @@ help intermediate gateways determine how to route the events.
   semantics behind the data encoded in the URI is event producer defined.
 * Constraints:
   * REQUIRED
+* Examples
+    * https://github.com/cloudevents/spec/pull/123
+    * urn:event:from:myapi/resourse/123
+    * mailto:cncf-wg-serverless@lists.cncf.io
 
 ### eventid
 * Type: `String`
@@ -282,8 +286,8 @@ The following example shows a CloudEvent serialized as JSON:
 ``` JSON
 {
     "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
-    "source" : "/mycontext",
+    "eventtype" : "com.github.pull.create",
+    "source" : "https://github.com/cloudevents/spec/pull/123",
     "eventid" : "A234-1234-1234",
     "eventtime" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
