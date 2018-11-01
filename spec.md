@@ -58,6 +58,14 @@ that does not support that feature will then silently ignore that part of the
 message. The sender needs to be prepared for the situation where a receiver
 ignores that feature.
 
+For clarity, when a feature is marked as "OPTIONAL" this means that it is
+OPTIONAL for both the sender and receiver of a message to support that feature.
+In other words, a sender can choose to include that feature in a
+message if it wants, and a receiver can choose to support that feature
+if it wants. A receiver that does not support that feature will then silently
+ignore that part of the message. The sender needs to be prepared for the
+situation where a receiver ignores that feature.
+
 ### Attribute Naming Convention
 
 The CloudEvents specifications define mappings to various protocols and
@@ -439,6 +447,29 @@ without needing to decode and examine the event data. Such identity attributes
 can also be used to help intermediate gateways determine how to route the
 events.
 
+### datacontentencoding
+* Type: `String` per [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
+* Description: Describes the content encoding for the `data`
+  attribute for when the `data` field MUST be encoded as a string,
+  like with structured transport binding modes using the JSON event
+  format, but the `datacontenttype` indicates a non-string media
+  type. When the `data` field's effective data type is not `String`,
+  this attribute MUST NOT be set and MUST be ignored when set.
+  
+  The "Base64" value for the Base64 encoding as defined in [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8)
+  MUST be supported. When set, the event-format-encoded value of the `data` 
+  attribute is a base64 string, but the effective data type of
+  the `data` attribute towards the application is the base64-decoded
+  binary array.
+  
+  All other RFC2045 schemes are undefined for CloudEvents.
+
+* Constraints:
+  * The attribute MUST be set if the `data` attribute contains string-encoded
+    binary data. Otherwise the attribute MUST NOT be set.
+  * If present, MUST adhere to [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
+
+
 ## Data Attribute
 
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
@@ -517,6 +548,32 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 
   Transport level security SHOULD be employed to ensure the trusted and secure
   exchange of CloudEvents.
+
+# Privacy and Security
+Interoperability is the primary driver behind this specification, enabling such
+behavior requires some information to be made available *in the clear* resulting
+in the potential for information leakage.
+
+Consider the following to prevent inadvertent leakage especially when leveraging 
+3rd party platforms and communication networks:
+
+* Context Attributes
+
+  Sensitive information SHOULD NOT be carried or represented in context attributes.
+  
+  CloudEvent producers, consumers, and intermediaries MAY introspect and log context
+  attributes.
+  
+* Data
+
+  Domain specific [data](#data) SHOULD be encrypted to restrict visibility to
+  trusted parties. The mechanism employed for such encryption is an agreement between 
+  producers and consumers and thus outside the scope of this specification.
+  
+* Transport Bindings
+
+  Transport level security SHOULD be employed to ensure the trusted and 
+  secure exchange of CloudEvents.
 
 # Example
 
