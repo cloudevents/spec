@@ -62,7 +62,7 @@ item; they don't imply an order for implementation._
 1. Review spec for practical-use issues:
     1. Consider context size limits
     1. Consider restricting character sets of `String` properties or key names
-    1. Consider defining uniqueness constraints of `eventId`
+    1. Consider defining uniqueness constraints of event `id`
     1. Consider which fields will be immutable (prevents annotation or
        redaction)
     1. Consider validating transport bindings with load tests

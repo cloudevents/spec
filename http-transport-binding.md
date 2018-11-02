@@ -176,9 +176,9 @@ each attribute name MUST be prefixed with "ce-".
 
 Examples:
 
-    * `eventtime` maps to `ce-eventtime`
-    * `eventid` maps to `ce-eventid`
-    * `cloudeventsversion` maps to `ce-cloudeventsversion`
+    * `time` maps to `ce-time`
+    * `id` maps to `ce-id`
+    * `specversion` maps to `ce-specversion`
 
 `Map`-typed CloudEvents attributes MUST be flattened into a set
 of HTTP headers, where by the name of each header carries the prefix
@@ -220,10 +220,10 @@ request:
 ``` text
 POST /someresource HTTP/1.1
 Host: webhook.example.com
-ce-cloudeventsversion: "0.1"
-ce-eventtype: "com.example.someevent"
-ce-eventtime: "2018-04-05T03:56:24Z"
-ce-eventid: "1234-1234-1234"
+ce-specversion: "0.1"
+ce-type: "com.example.someevent"
+ce-time: "2018-04-05T03:56:24Z"
+ce-id: "1234-1234-1234"
 ce-source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
@@ -238,10 +238,10 @@ This example shows a response containing an event:
 
 ``` text
 HTTP/1.1 200 OK
-ce-cloudeventsversion: "0.1"
-ce-eventtype: "com.example.someevent"
-ce-eventtime: "2018-04-05T03:56:24Z"
-ce-eventid: "1234-1234-1234"
+ce-specversion: "0.1"
+ce-type: "com.example.someevent"
+ce-time: "2018-04-05T03:56:24Z"
+ce-id: "1234-1234-1234"
 ce-source: "/mycontext/subcontext"
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
@@ -297,8 +297,8 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
 
     ... further attributes omitted ...
 
@@ -318,8 +318,8 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
 
     ... further attributes omitted ...
 
