@@ -88,13 +88,6 @@ The CloudEvents type system MUST be mapped into the fields of
 | Integer      | int_value
 | Any          | Not applicable. Any is the enclosing CloudEventAny message itself
 
-## 2.2 Relation to HTTP
-
-The [HTTP transport binding](./http-transport-binding.md) defines a
-*structued* and *binary* mode.
-
-For the Protocol Buffer CloudEvent format expressed 
-
 
 ## 3. Examples
 
