@@ -12,10 +12,10 @@ This document is a working draft.
 ## 1. Introduction
 
 This specification defines how the [Context
-Attributes](spec.md#context-attributes) Attributes defined in the
-CloudEvents specification MUST be encoded in the protocol buffer
-binary format. Transcoding to and from other formats (e.g. JSON) is
-out of the scope of this document.
+Attributes](spec.md#context-attributes) defined in the CloudEvents
+specification MUST be encoded in the protocol buffer binary
+format. Transcoding to and from other formats (e.g. JSON) is out of
+the scope of this document.
 
 Protocol Buffers are a language-neutral, platform-neutral extensible
 mechanism for serializing structured data. The [Google reference
@@ -23,7 +23,7 @@ implementation of Protocol
 Buffers](https://github.com/protocolbuffers/protobuf) includes support
 for an interface descriptor language (IDL), and this document makes
 use of language level 3 IDL from Protocol Buffers v3.5.0. CloudEvents
-systems using Protocol Buffers are not required to use the IDL or any
+systems using Protocol Buffers are not mandated to use the IDL or any
 particular implementation of Protocol Buffers as long as they produce
 messages which match the binary encoding defined by the IDL.
 
@@ -51,7 +51,8 @@ binary encoding.
 ### 2.1 Definition
 
 Users of Protocol Buffers MUST use a message whose binary encoding is
-identical to the one described by the CloudEventMap message:
+identical to the one described by the [CloudEventMap
+message](./cloudevent.proto):
 
 ```proto
 syntax = "proto3";
@@ -87,8 +88,15 @@ The CloudEvents type system MUST be mapped into the fields of
 | Integer      | int_value
 | Any          | Not applicable. Any is the enclosing CloudEventAny message itself
 
+## 2.2 Relation to HTTP
 
-## Examples
+The [HTTP transport binding](./http-transport-binding.md) defines a
+*structued* and *binary* mode.
+
+For the Protocol Buffer CloudEvent format expressed 
+
+
+## 3. Examples
 
 Below is an example of how to create a CloudEvent Protocol Buffer
 message using the Java Google Protocol Buffers library:
