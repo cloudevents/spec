@@ -175,6 +175,8 @@ help intermediate gateways determine how to route the events.
 * Type: `String`
 * Description: Type of occurrence which has happened. Often this
   attribute is used for routing, observability, policy enforcement, etc.
+  The format of this is producer defined and might include information such
+  as the version of the `eventtype`.
 * Constraints:
    * REQUIRED
    * MUST be a non-empty string
@@ -182,6 +184,7 @@ help intermediate gateways determine how to route the events.
             the organization which defines the semantics of this event type.
 * Examples
    * com.github.pull.create
+   * com.example.object.v2.delete
 
 ### specversion
 * Type: `String`
