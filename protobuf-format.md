@@ -42,8 +42,8 @@ or JSON, along with a variety of language-specific libraries to
 perform automatic serialization and deserialization. The [Protocol
 Buffers specification defines a well-known encoding
 format](https://developers.google.com/protocol-buffers/docs/encoding)
-which is the basis of this specification. Specifications below may be
-written using the Protocol Buffers project IDL for readability, but
+which is the basis of this specification. This specification is
+described using the Protocol Buffers project IDL for readability, but
 the ultimate basis of this specification is the Protocol Buffers
 binary encoding.
 
