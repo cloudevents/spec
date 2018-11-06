@@ -54,8 +54,9 @@ The CloudEvents type system MUST be mapped to JSON types as follows, with
 exceptions noted below.
 
 | CloudEvents   | JSON
-|---------------|------------------------------------------------------------
+|---------------|-------------------------------------------------------------
 | String        | [string][JSON-String]
+| Integer       | [number][JSON-Number], only the `int` component is permitted
 | Binary        | [string][JSON-String], [Base64-encoded][base64] binary
 | URI-reference | [string][JSON-String]
 | Timestamp     | [string][JSON-String]
@@ -227,6 +228,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 [JSON-geoseq]: https://www.iana.org/assignments/media-types/application/geo+json-seq
 [JSON-Object]: https://tools.ietf.org/html/rfc7159#section-4
 [JSON-seq]: https://www.iana.org/assignments/media-types/application/json-seq
+[JSON-Number]: https://tools.ietf.org/html/rfc7159#section-6
 [JSON-String]: https://tools.ietf.org/html/rfc7159#section-7
 [JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
 [RFC2046]: https://tools.ietf.org/html/rfc2046
