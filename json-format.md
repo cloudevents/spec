@@ -78,9 +78,8 @@ the time of the submission or revision.
 
 ### 2.3. Mapping Any-typed Attributes
 
-The CloudEvents `data` attribute is `Any`-typed, meaning that it either
-holds a `String`, or a `Binary` value, or a `Map`. `Map` entry values are
-also `Any` typed.
+The CloudEvents `data` attribute is `Any`-typed, meaning that it holds a value
+of any valid type. `Map` entry values are also `Any` typed.
 
 If an implementation determines that the actual type of an `Any` is a
 `String`, the value MUST be represented as [JSON string][JSON-String]
