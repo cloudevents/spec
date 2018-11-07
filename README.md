@@ -34,6 +34,7 @@ The following documents are available:
 | HTTP Transport Binding | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
 | JSON Event Format | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/json-format.md) | [master](https://github.com/cloudevents/spec/blob/master/json-format.md) |
 | Web hook | - | [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md) |
+| MQTT Transport Binding | - | [master](https://github.com/cloudevents/spec/blob/master/mqtt-transport-binding.md) |
 | NATS Transport Binding | - | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
 | AMQP Event Format | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md) |
 | AMQP Transport Binding | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
