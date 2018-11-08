@@ -18,18 +18,17 @@ This document is a working draft.
 - [Example](#example)
 
 ## Overview
-Events are everywhere. However, event publishers tend to describe events
+Events are everywhere. However, event producers tend to describe events
 differently.
 
 The lack of a common way of describing events means developers are constantly
-re-learning how to receive events. This also limits the potential for libraries,
+re-learning how to consume events. This also limits the potential for libraries,
 tooling and infrastructure to aide the delivery of event data across
 environments, like SDKs, event routers or tracing systems. The portability
 and productivity that can be achieved from event data is hindered overall.
 
-Enter CloudEvents, a specification for describing event data in a common way.
-CloudEvents seeks to ease event declaration and delivery across services,
-platforms and beyond.
+CloudEvents is a specification for describing event data in common formats
+to provide interoperability across services, platforms and systems.
 
 Event Formats specify how to serialize a CloudEvent with certain encoding
 formats. Compliant CloudEvents implementations that support those encodings
@@ -77,18 +76,15 @@ about to perform a scheduled reboot.
 
 #### Event
 An "event" is a data record expressing an occurrence and its context. Events
-are routed from the emitting source to interested parties for the purpose of
-notifying them about the source occurrence. The routing can be performed based
-on information contained in the event, but an event will not identify
-a specific routing destination. Events will contain two pieces of information:
-the [Data](#data) representing the Occurrence and extra [Context](#context)
-metadata providing additional information about the Occurrence.
+are routed from an event producer (the source) to interested event consumers.
+The routing can be performed based on information contained in the event, but
+an event will not identify a specific routing destination. Events will contain
+two types of information: the [Data](#data) representing the Occurrence and
+[Context](#context) metadata providing contextual information about the
+Occurrence.
 
 #### Context
-As described in the Event definition, an Event contains two parts, the
-[data](#data) representing the occurrence and additional metadata
-that provides other circumstantial information about the occurrence
-(e.g. information about the originating system). This additional metadata will
+Context metadata will
 be encapsulated in the [Context Attributes](#context-attributes).
 Tools and application code can use this information to identify the
 relationship of Events to aspects of the system or to other Events.
@@ -130,8 +126,9 @@ abstract, and therefore it is left to implementations how to represent the
 variant type.
 
 ## Context Attributes
-Every CloudEvent conforming to this specification MUST include one or more
-of the following context attributes.
+Every CloudEvent conforming to this specification MUST include context
+attributes designated as REQUIRED and MAY include one or more OPTIONAL context
+attributes.
 
 These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
@@ -198,8 +195,9 @@ help intermediate gateways determine how to route the events.
 * Type: `URI`
 * Description: This describes the event producer. Often this will include
   information such as the type of the event source, the organization
-  publishing the event, and some unique identifiers. The exact syntax and
-  semantics behind the data encoded in the URI is event producer defined.
+  publishing the event, the process that produced the event, and some unique
+  identifiers. The exact syntax and semantics behind the data encoded in the URI
+  is event producer defined.
 * Constraints:
   * REQUIRED
 * Examples
