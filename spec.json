@@ -1,7 +1,7 @@
 {
   "$ref": "#/definitions/event",
   "definitions": {
-    "cloudeventsversion": {
+    "specversion": {
       "type": "string"
     },
     "contenttype": {
@@ -15,8 +15,8 @@
     },
     "event": {
       "properties": {
-        "cloudeventsversion": {
-          "$ref": "#/definitions/cloudeventsversion"
+        "specversion": {
+          "$ref": "#/definitions/specversion"
         },
         "contenttype": {
           "$ref": "#/definitions/contenttype"
@@ -24,14 +24,14 @@
         "data": {
           "$ref": "#/definitions/data"
         },
-        "eventid": {
-          "$ref": "#/definitions/eventid"
+        "id": {
+          "$ref": "#/definitions/id"
         },
-        "eventtime": {
-          "$ref": "#/definitions/eventtime"
+        "time": {
+          "$ref": "#/definitions/time"
         },
-        "eventtype": {
-          "$ref": "#/definitions/eventtype"
+        "type": {
+          "$ref": "#/definitions/type"
         },
         "extensions": {
           "$ref": "#/definitions/extensions"
@@ -41,21 +41,21 @@
         }
       },
       "required": [
-        "cloudeventsversion",
-        "eventid",
-        "eventtype",
+        "specversion",
+        "id",
+        "type",
         "source"
       ],
       "type": "object"
     },
-    "eventid": {
+    "id": {
       "type": "string"
     },
-    "eventtime": {
+    "time": {
       "format": "date-time",
       "type": "string"
     },
-    "eventtype": {
+    "type": {
       "type": "string"
     },
     "extensions": {

@@ -195,10 +195,10 @@ Content Type: application/json; charset=utf-8
 
 ------------- User Properties ----------------
 
-cloudeventsversion: "0.1"
-eventtype: "com.example.someevent"
-eventtime: "2018-04-05T03:56:24Z"
-eventid: "1234-1234-1234"
+specversion: "0.1"
+type: "com.example.someevent"
+time: "2018-04-05T03:56:24Z"
+id: "1234-1234-1234"
 source: "/mycontext/subcontext"
        .... further attributes ...
 
@@ -257,8 +257,8 @@ Content Type: application/cloudevents+json; charset=utf-8
 ------------------ payload -------------------
 
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
 
     ... further attributes omitted ...
 
@@ -282,8 +282,8 @@ Topic Name: mytopic
 ------------------ payload -------------------
 
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
 
     ... further attributes omitted ...
 

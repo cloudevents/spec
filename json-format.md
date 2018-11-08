@@ -95,11 +95,11 @@ The following table shows exemplary mappings:
 
 | CloudEvents        | Type          | Exemplary JSON Value
 |--------------------|---------------|--------------------------
-| eventtype          | String        | "com.example.someevent"
-| cloudeventsversion | String        | "0.1"
+| type               | String        | "com.example.someevent"
+| specversion        | String        | "0.1"
 | source             | URI-reference | "/mycontext"
-| eventid            | String        | "1234-1234-1234"
-| eventtime          | Timestamp     | "2018-04-05T17:31:00Z"
+| id                 | String        | "1234-1234-1234"
+| time               | Timestamp     | "2018-04-05T17:31:00Z"
 | contenttype        | String        | "application/json"
 | data               | String        | "<much wow=\"xml\"/>"
 | data               | Binary        | "Q2xvdWRFdmVudHM="
@@ -154,11 +154,11 @@ Example event with `String`-valued `data`:
 
 ``` JSON
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventid" : "A234-1234-1234",
-    "eventtime" : "2018-04-05T17:31:00Z",
+    "id" : "A234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
         "otherValue": 5
@@ -172,11 +172,11 @@ Example event with `Binary`-valued data
 
 ``` JSON
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventid" : "B234-1234-1234",
-    "eventtime" : "2018-04-05T17:31:00Z",
+    "id" : "B234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
         "otherValue": 5
@@ -191,11 +191,11 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 
 ``` JSON
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
     "source" : "/mycontext",
-    "eventid" : "C234-1234-1234",
-    "eventtime" : "2018-04-05T17:31:00Z",
+    "id" : "C234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
         "otherValue": 5

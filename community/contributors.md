@@ -52,6 +52,9 @@ Contributions do not constitute an official endorsement.
   * Chad Arimura - [@carimura](https://github.com/banisadr)
   * Stanley Halka - [@shalka](https://github.com/banisadr)
   * Travis Reeder - [@treeder](https://github.com/banisadr)
+* **PayPal**
+  * Vladimir Bacvanski
+  * Jem Day - [@JemDay](https://github.com/JemDay)
 * **Red Hat**
   * Jim Curtis - [@jimcurtis64](https://github.com/jimcurtis2) 
   * William Markito Oliveira - [@william_markito](https://github.com/markito) 
