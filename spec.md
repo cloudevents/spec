@@ -112,7 +112,7 @@ The following abstract data types are available for use in attributes.
 - `Binary` - Sequence of bytes.
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
 - `Any` - Either a `String`, or a `Binary`, or a `Map`, or an `Integer`.
-- `URI` - String expression conforming to `URI-reference`
+- `URI-reference` - String expression conforming to `URI-reference`
   as defined in
   [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
 - `Timestamp` - String expression as defined in
@@ -192,7 +192,7 @@ help intermediate gateways determine how to route the events.
   * MUST be a non-empty string
 
 ### source
-* Type: `URI`
+* Type: `URI-reference`
 * Description: This describes the event producer. Often this will include
   information such as the type of the event source, the organization
   publishing the event, the process that produced the event, and some unique
@@ -202,6 +202,7 @@ help intermediate gateways determine how to route the events.
   * REQUIRED
 * Examples
     * https://github.com/cloudevents/spec/pull/123
+    * /cloudevents/spec/pull/123
     * urn:event:from:myapi/resourse/123
     * mailto:cncf-wg-serverless@lists.cncf.io
 

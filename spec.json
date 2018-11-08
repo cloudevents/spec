@@ -62,7 +62,7 @@
       "type": "object"
     },
     "source": {
-      "format": "uri",
+      "format": "uri-reference",
       "type": "string"
     }
   },

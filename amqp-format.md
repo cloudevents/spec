@@ -53,14 +53,14 @@ system, which this mapping leans on.
 The CloudEvents type system MUST be mapped to AMQP types as follows,
 with exceptions noted below.
 
-| CloudEvents | AMQP
-|-------------|-------------------------------------------------------------
-| String      | [string][AMQP-String]
-| Binary      | [binary][AMQP-Binary]
-| URI         | [string][AMQP-String]
-| Timestamp   | [timestamp][AMQP-Timestamp]
-| Map         | [map][AMQP-Map]
-| Any         | See 2.3.
+| CloudEvents   | AMQP
+|---------------|-----------------------------------------------------------
+| String        | [string][AMQP-String]
+| Binary        | [binary][AMQP-Binary]
+| URI-reference | [string][AMQP-String]
+| Timestamp     | [timestamp][AMQP-Timestamp]
+| Map           | [map][AMQP-Map]
+| Any           | See 2.3.
 
 Extension specifications MAY define diverging mapping rules for the values of
 attributes they define.

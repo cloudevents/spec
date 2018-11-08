@@ -44,9 +44,9 @@ pre-existing specs; extensions with custom transport bindings are much
 more likely to be dropped by middleware that does not understand the
 extension.
 
-As a convention, extensions of scalar types (e.g. `String`, `Binary`, `URI`,
-`Number`) document their `Value` and structured types document their
-`Attributes`.
+As a convention, extensions of scalar types (e.g. `String`, `Binary`,
+`URI-reference`, `Number`) document their `Value` and structured types document
+their `Attributes`.
 
 ## Known Extensions
 
