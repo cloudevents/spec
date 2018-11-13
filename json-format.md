@@ -43,6 +43,14 @@ specification does not explicitly map each attribute, but
 provides a generic mapping model that applies to all current and future
 CloudEvents attributes, including extensions.
 
+For clarity, extension attributes are serialized using the same rules as
+specification defined attributes. This includes their syntax and placement
+within the JSON object. In particular, extensions are placed as top-level
+JSON properties. Extensions themselves are free to have nested properties,
+however the root of the extension MUST be serialized as a top-level JSON
+property. There were many reason for this design decision and they are covered
+in more detail in the [Primer](primer.md#json-extensions).
+
 ### 2.1. Base Type System
 
 The core [CloudEvents specification][CE] defines a minimal abstract type
@@ -105,7 +113,7 @@ The following table shows exemplary mappings:
 | data               | Binary        | "Q2xvdWRFdmVudHM="
 | data               | Map           | { "objA" : "vA", "objB", "vB" }
 
-## 2.5. JSONSchema Validation
+### 2.5. JSONSchema Validation
 
 The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
 [here](spec.json) and contains the definitions for validating events in JSON.
