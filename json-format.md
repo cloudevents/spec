@@ -114,7 +114,7 @@ The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
 
 Each CloudEvents event can be wholly represented as a JSON object.
 
-Such a representation uses the media type `application/cloudevents+json`.
+Such a representation MUST use the media type `application/cloudevents+json`.
 
 All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST
 become members of the JSON object, with the respective JSON object member name
