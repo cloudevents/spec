@@ -122,7 +122,7 @@ Subject: mySubject
 ------------------ payload -------------------
 
 {
-    "cloudeventsversioin" : "0.1",
+    "cloudeventsversion" : "0.1",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

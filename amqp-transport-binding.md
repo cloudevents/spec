@@ -174,7 +174,7 @@ Examples:
 
     * `time` maps to `cloudEvents:time`
     * `id` maps to `cloudEvents:id`
-    * `cloudeventsversioin` maps to `cloudEvents:cloudeventsversioin`
+    * `cloudeventsversion` maps to `cloudEvents:cloudeventsversion`
 
 ##### 3.1.3.2 AMQP Application Property Values
 
@@ -195,7 +195,7 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:cloudeventsversioin: "0.1"
+cloudEvents:cloudeventsversion: "0.1"
 cloudEvents:type: "com.example.someevent"
 cloudEvents:time: "2018-04-05T03:56:24Z"
 cloudEvents:id: "1234-1234-1234"
@@ -257,7 +257,7 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "cloudeventsversioin" : "0.1",
+    "cloudeventsversion" : "0.1",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

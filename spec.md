@@ -183,7 +183,7 @@ help intermediate gateways determine how to route the events.
 * Examples
    * com.github.pull.create
 
-### cloudeventsversioin
+### cloudeventsversion
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
@@ -284,7 +284,7 @@ The following example shows a CloudEvent serialized as JSON:
 
 ``` JSON
 {
-    "cloudeventsversioin" : "0.1",
+    "cloudeventsversion" : "0.1",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull/123",
     "id" : "A234-1234-1234",
