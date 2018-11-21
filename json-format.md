@@ -96,7 +96,7 @@ The following table shows exemplary mappings:
 | CloudEvents        | Type          | Exemplary JSON Value
 |--------------------|---------------|--------------------------
 | type               | String        | "com.example.someevent"
-| specversion        | String        | "0.1"
+| cloudeventsversioin        | String        | "0.1"
 | source             | URI-reference | "/mycontext"
 | id                 | String        | "1234-1234-1234"
 | time               | Timestamp     | "2018-04-05T17:31:00Z"
@@ -154,7 +154,7 @@ Example event with `String`-valued `data`:
 
 ``` JSON
 {
-    "specversion" : "0.1",
+    "cloudeventsversioin" : "0.1",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "A234-1234-1234",
@@ -172,7 +172,7 @@ Example event with `Binary`-valued data
 
 ``` JSON
 {
-    "specversion" : "0.1",
+    "cloudeventsversioin" : "0.1",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "B234-1234-1234",
@@ -191,7 +191,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 
 ``` JSON
 {
-    "specversion" : "0.1",
+    "cloudeventsversioin" : "0.1",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "C234-1234-1234",

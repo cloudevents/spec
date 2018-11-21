@@ -1,7 +1,7 @@
 {
   "$ref": "#/definitions/event",
   "definitions": {
-    "specversion": {
+    "cloudeventsversioin": {
       "type": "string"
     },
     "contenttype": {
@@ -15,8 +15,8 @@
     },
     "event": {
       "properties": {
-        "specversion": {
-          "$ref": "#/definitions/specversion"
+        "cloudeventsversioin": {
+          "$ref": "#/definitions/cloudeventsversioin"
         },
         "contenttype": {
           "$ref": "#/definitions/contenttype"
@@ -41,7 +41,7 @@
         }
       },
       "required": [
-        "specversion",
+        "cloudeventsversioin",
         "id",
         "type",
         "source"

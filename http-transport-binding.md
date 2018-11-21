@@ -178,7 +178,7 @@ Examples:
 
     * `time` maps to `ce-time`
     * `id` maps to `ce-id`
-    * `specversion` maps to `ce-specversion`
+    * `cloudeventsversioin` maps to `ce-cloudeventsversioin`
 
 `Map`-typed CloudEvents attributes MUST be flattened into a set
 of HTTP headers, where by the name of each header carries the prefix
@@ -220,7 +220,7 @@ request:
 ``` text
 POST /someresource HTTP/1.1
 Host: webhook.example.com
-ce-specversion: "0.1"
+ce-cloudeventsversioin: "0.1"
 ce-type: "com.example.someevent"
 ce-time: "2018-04-05T03:56:24Z"
 ce-id: "1234-1234-1234"
@@ -238,7 +238,7 @@ This example shows a response containing an event:
 
 ``` text
 HTTP/1.1 200 OK
-ce-specversion: "0.1"
+ce-cloudeventsversioin: "0.1"
 ce-type: "com.example.someevent"
 ce-time: "2018-04-05T03:56:24Z"
 ce-id: "1234-1234-1234"
@@ -297,7 +297,7 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "specversion" : "0.1",
+    "cloudeventsversioin" : "0.1",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
@@ -318,7 +318,7 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "specversion" : "0.1",
+    "cloudeventsversioin" : "0.1",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
