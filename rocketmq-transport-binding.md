@@ -20,7 +20,7 @@ This document is a working draft.
 - 2.2. [data Attribute](#22-data-attribute)
 3. [RocketMQ Message Mapping](#3-rocketmq-message-mapping)
 - 3.1. [Binary Content Mode](#31-binary-content-mode)
-- 3.2. [Structured Content Mode](#32-structured-constent-mode)
+- 3.2. [Structured Content Mode](#32-structured-content-mode)
 4. [References](#4-references)
 
 ## 1. Introduction
