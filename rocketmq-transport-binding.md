@@ -159,7 +159,7 @@ CE_source: "/mycontext/subcontext"
 
 ### 3.2. Structured Content Mode
 
-The structured content mode keeps event metadata and data together in the payload, 
+The [structured content mode](#32-structured-constent-mode) keeps event metadata and data together in the payload, 
 allowing simple forwarding of the same event across multiple routing hops, and across 
 multiple transports.
 
