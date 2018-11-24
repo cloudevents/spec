@@ -114,7 +114,7 @@ All CloudEvents attributes and CloudEvent Attributes Extensions with exception o
 
 ##### 3.1.3.1 Property Names
 
-Cloud Event attributes are prefixed with `"CE_"` for use in the message section.
+[CloudEvents][CE] attributes are prefixed with `"CE_"` for use in the message section.
 
 Examples:
 
@@ -178,7 +178,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 The chosen event format defines how all attributes, including the payload, are represented. 
 And in RocketMQ Message Header, it describes what is the type of transport event.
 
-The event metadata and data may then be rendered in accordance with the event format specification 
+The event metadata and data MAY then be rendered in accordance with the event format specification 
 and the resulting data becomes the payload.
 
 #### 3.2.3. Metadata Headers
