@@ -2,7 +2,8 @@
 
 ## Abstract
 
-The [RocketMQ][RocketMQ] Transport Binding for CloudEvents defines how events are mapped to RocketMQ messages.
+The [RocketMQ][RocketMQ] Transport Binding for CloudEvents defines how events are mapped 
+to RocketMQ messages.
 
 ## Status of this document
 
@@ -46,9 +47,8 @@ in the RocketMQ message transport protocol as client messages that are produced 
 The specification defines two content modes for transferring events:
 *structured* and *binary*.
 
-RocketMQ will only support *structured* data mode at this time. Today, the
-RocketMQ protocol does not support custom message headers, necessary for
-*binary* mode.
+RocketMQ will only support *structured* data mode at this time. Today, the RocketMQ 
+protocol have already supported custom message headers, necessary for *binary* mode.
 
 Event metadata attributes and event data are placed into the RocketMQ message
 payload using an [event format](#14-event-formats).
@@ -101,7 +101,7 @@ transfer and without transcoding effort.
 
 #### 3.1.1. Content Type
 
-For the binary mode, the header `CE_contentType property` MUST be mapped directly to the CloudEvents 
+For the binary mode, the header `CE_contenttype property` MUST be mapped directly to the CloudEvents 
 contentType attribute.
 
 #### 3.1.2. Event Data Encoding
@@ -118,9 +118,9 @@ All CloudEvents attributes and CloudEvent Attributes Extensions with exception o
 
 Examples:
 
-    * `eventTime` maps to `CE_eventTime`
-    * `eventID` maps to `CE_eventID`
-    * `cloudEventsVersion` maps to `CE_cloudEventsVersion`
+    * `time` maps to `CE_time`
+    * `id` maps to `CE_id`
+    * `specversion` maps to `CE_specversion`
 
 ##### 3.1.3.2 Property Values
 
@@ -142,11 +142,11 @@ Topic: mytopic
 
 -------------- user properties ---------------
 
-CE_contentType: application/avro
-CE_cloudEventsVersion: "0.1"
-CE_eventType: "com.example.someevent"
-CE_eventTime: "2018-11-23T03:56:24Z"
-CE_eventID: "1234-1234-1234"
+CE_contenttype: application/avro
+CE_specversion: "0.1"
+CE_type: "com.example.someevent"
+CE_time: "2018-11-23T03:56:24Z"
+CE_id: "1234-1234-1234"
 CE_source: "/mycontext/subcontext"
        .... further attributes ...
 
@@ -165,12 +165,12 @@ multiple transports.
 
 #### 3.2.1. RocketMQ Content-Type
 
-The [RocketMQ][RocketMQ] `CE_contentType` property field MUST be set to the media type of an event format.
+The [RocketMQ][RocketMQ] `CE_contenttype` property field MUST be set to the media type of an event format.
 
 Example for the JSON format:
 
 ```
-content-type: application/cloudevents+json; charset=UTF-8
+CE_contenttype: application/cloudevents+json; charset=UTF-8
 
 ```
 
@@ -195,7 +195,7 @@ Topic: mytopic
 
 ------------------ user properties -------------------
 
-CE_contentType: application/cloudevents+json; charset=UTF-8
+CE_contenttype: application/cloudevents+json; charset=UTF-8
 
 ------------------ payload -------------------
 
