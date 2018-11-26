@@ -28,3 +28,7 @@ For example: `2018-02-27-MyCoolIdea.pdf`
   Topics and Subjects
   [Video](https://1drv.ms/v/s!AgcBsXoqzTwSrc4xtiQ25VGGln6zWw) &
   [ppt](2018-03-22-TopicsAndSubjects.pptx)
+
+* 2018-11-14 KubeCon/CloudNativeCon China Nov 2018:
+  [CloudEvent/Serverless Intro and Deep-Dive sessions](https://docs.google.com/presentation/d/1-Nq_HrJPFvFz_etbKGCo4_RZnhA3OuzwLl0EMFnafxw/edit)
+  & [pdf](2018-11-14-KubeCon-Intro-DeepDive.pdf)
