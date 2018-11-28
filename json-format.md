@@ -53,14 +53,14 @@ system, which this mapping leans on.
 The CloudEvents type system MUST be mapped to JSON types as follows, with
 exceptions noted below.
 
-| CloudEvents   | JSON
-|---------------|------------------------------------------------------------
-| String        | [string][JSON-String]
-| Binary        | [string][JSON-String], [Base64-encoded][base64] binary
-| URI-reference | [string][JSON-String]
-| Timestamp     | [string][JSON-String]
-| Map           | [JSON object][JSON-Object]
-| Any           | [JSON value][JSON-Value]
+| CloudEvents  | JSON
+|--------------|-------------------------------------------------------------
+| String       | [string][JSON-String]
+| Binary       | [string][JSON-String], [Base64-encoded][base64] binary
+| URI-reference| [string][JSON-String] following [RFC 3986][RFC3986]
+| Timestamp    | [string][JSON-String] following [RFC 3339][RFC3339] (ISO 8601)
+| Map          | [JSON object][JSON-Object]
+| Any          | [JSON value][JSON-Value]
 
 Extension specifications MAY define diverging mapping rules for the values of
 attributes they define.
@@ -98,17 +98,17 @@ values become the respective member's value.
 
 The following table shows exemplary mappings:
 
-| CloudEvents        | Type          | Exemplary JSON Value
-|--------------------|---------------|--------------------------
-| eventtype          | String        | "com.example.someevent"
-| cloudeventsversion | String        | "0.1"
-| source             | URI-reference | "/mycontext"
-| eventid            | String        | "1234-1234-1234"
-| eventtime          | Timestamp     | "2018-04-05T17:31:00Z"
-| contenttype        | String        | "application/json"
-| data               | String        | "<much wow=\"xml\"/>"
-| data               | Binary        | "Q2xvdWRFdmVudHM="
-| data               | Map           | { "objA" : "vA", "objB", "vB" }
+| CloudEvents        | Type     | Exemplary JSON Value
+|--------------------|----------|-------------------------------
+| type               | String   | "com.example.someevent"
+| specversion        | String   | "0.1"
+| source             | URI      | "/mycontext"
+| id                 | String   | "1234-1234-1234"
+| time               | Timestamp| "2018-04-05T17:31:00Z"
+| contenttype        | String   | "application/json"
+| data               | String   | "<much wow=\"xml\"/>"
+| data               | Binary   | "Q2xvdWRFdmVudHM="
+| data               | Map      | { "objA" : "vA", "objB", "vB" }
 
 ## 2.5. JSONSchema Validation
 
