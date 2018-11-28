@@ -47,8 +47,8 @@ in the RocketMQ message transport protocol as client messages that are produced 
 The specification defines two content modes for transferring events:
 *structured* and *binary*.
 
-RocketMQ will only support *structured* data mode at this time. Today, the RocketMQ 
-protocol have already supported custom message headers, necessary for *binary* mode.
+The RocketMQ protocol have already supported custom message headers, 
+necessary for *binary* mode.
 
 Event metadata attributes and event data are placed into the RocketMQ message
 payload using an [event format](#14-event-formats).
@@ -60,7 +60,8 @@ expressed in a particular data format. All implementations of this
 specification MUST support the [JSON event format][JSON-format].
 
 ### 1.5. Security
-This specification does not introduce any new security features for RocketMQ, or mandate specific existing features to be used.
+This specification does not introduce any new security features for RocketMQ, 
+or mandate specific existing features to be used.
 
 ## 2. Use of CloudEvents Attributes
 
@@ -96,8 +97,8 @@ as binary and forward it to another party as-is .
 
 ### 3.1. Binary Content Mode
 
-The [binary content mode](#31-binary-content-mode) accommodates any shape of event data, and allows for efficient 
-transfer and without transcoding effort.
+The [binary content mode](#31-binary-content-mode) accommodates any shape of event data, 
+and allows for efficient transfer and without transcoding effort.
 
 #### 3.1.1. Content Type
 
@@ -110,7 +111,8 @@ The data attribute byte-sequence MUST be used as the value of the RocketMQ messa
 
 #### 3.1.3. Metadata Headers
 
-All CloudEvents attributes and CloudEvent Attributes Extensions with exception of data MUST be individually mapped to and from the Header fields in the RocketMQ message.
+All CloudEvents attributes and CloudEvent Attributes Extensions with exception of 
+data MUST be individually mapped to and from the Header fields in the RocketMQ message.
 
 ##### 3.1.3.1 Property Names
 
@@ -159,13 +161,14 @@ CE_source: "/mycontext/subcontext"
 
 ### 3.2. Structured Content Mode
 
-The [structured content mode](#32-structured-content-mode) keeps event metadata and data together in the payload, 
-allowing simple forwarding of the same event across multiple routing hops, and across 
-multiple transports.
+The [structured content mode](#32-structured-content-mode) keeps event metadata and 
+data together in the payload, allowing simple forwarding of the same event across 
+multiple routing hops, and across multiple transports.
 
 #### 3.2.1. RocketMQ Content-Type
 
-The [RocketMQ][RocketMQ] `CE_contenttype` property field MUST be set to the media type of an event format.
+The [RocketMQ][RocketMQ] `CE_contenttype` property field MUST be set to the media type 
+of an event format.
 
 Example for the JSON format:
 
@@ -178,8 +181,8 @@ CE_contenttype: application/cloudevents+json; charset=UTF-8
 The chosen event format defines how all attributes, including the payload, are represented. 
 And in RocketMQ Message Header, it describes what is the type of transport event.
 
-The event metadata and data MAY then be rendered in accordance with the event format specification 
-and the resulting data becomes the payload.
+The event metadata and data MAY then be rendered in accordance with the event format 
+specification and the resulting data becomes the payload.
 
 #### 3.2.3. Metadata Headers
 
@@ -189,7 +192,7 @@ Implementations MAY include the same RocketMQ headers as defined for the binary 
 This example shows a JSON event format encoded structured data event:
 
 ``` text
------------------- Message -------------------
+------------------ Message ---------------------------
 
 Topic: mytopic
 
@@ -197,7 +200,7 @@ Topic: mytopic
 
 CE_contenttype: application/cloudevents+json; charset=UTF-8
 
------------------- payload -------------------
+------------------ value -----------------------------
 
 {
     "cloudEventsVersion" : "0.1",
@@ -210,7 +213,7 @@ CE_contenttype: application/cloudevents+json; charset=UTF-8
     }
 }
 
------------------------------------------------
+------------------------------------------------------
 ```
 
 ## 4. References
