@@ -50,7 +50,7 @@ goals and design decisions, and then move on to the
 
 ## SDKs
 
-In addition to the documentation mentioned above, there are also a set of SDKs
+In addition to the documentation mentioned above, there are also an [SDK proposal](SDK.md) and a set of SDKs
 being developed:
 - [CSharp](https://github.com/cloudevents/sdk-csharp)
 - [Go](https://github.com/cloudevents/sdk-go)
