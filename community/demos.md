@@ -3,7 +3,7 @@
  descriptive text as a markdown file in `community/demos/`.
 
 
-* CNCF/Kube-Con EU 2018
+* CNCF/Kube-Con EU May 2018
   * CloudEvents interop demo during Austen Collins'
     [session](https://kccnceu18.sched.com/event/Dqvg/the-serverless-and-event-driven-future-austen-collins-serverless-intermediate-skill-level)
   * Participants: Alibaba, Google, IBM, iguazio, RedHat, Serverless.com, VMware

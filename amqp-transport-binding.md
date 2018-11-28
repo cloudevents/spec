@@ -172,9 +172,9 @@ Cloud Event attributes are prefixed with "cloudEvents:" for use in the
 
 Examples:
 
-    * `eventtime` maps to `cloudEvents:eventtime`
-    * `eventid` maps to `cloudEvents:eventid`
-    * `cloudeventsversion` maps to `cloudEvents:cloudeventsversion`
+    * `time` maps to `cloudEvents:time`
+    * `id` maps to `cloudEvents:id`
+    * `specversion` maps to `cloudEvents:specversion`
 
 ##### 3.1.3.2 AMQP Application Property Values
 
@@ -195,10 +195,10 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:cloudeventsversion: "0.1"
-cloudEvents:eventtype: "com.example.someevent"
-cloudEvents:eventtime: "2018-04-05T03:56:24Z"
-cloudEvents:eventid: "1234-1234-1234"
+cloudEvents:specversion: "0.1"
+cloudEvents:type: "com.example.someevent"
+cloudEvents:time: "2018-04-05T03:56:24Z"
+cloudEvents:id: "1234-1234-1234"
 cloudEvents:source: "/mycontext/subcontext"
        .... further attributes ...
 
@@ -257,8 +257,8 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.example.someevent",
+    "specversion" : "0.1",
+    "type" : "com.example.someevent",
 
     ... further attributes omitted ...
 

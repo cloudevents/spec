@@ -48,6 +48,16 @@ reading the [Primer](primer.md) for an overview of the specification's
 goals and design decisions, and then move on to the
 [core specification](spec.md).
 
+## SDKs
+
+In addition to the documentation mentioned above, there are also a set of SDKs
+being developed:
+- [CSharp](https://github.com/cloudevents/sdk-csharp)
+- [Go](https://github.com/cloudevents/sdk-go)
+- [Java](https://github.com/cloudevents/sdk-java)
+- [Javascript](https://github.com/cloudevents/sdk-javascript)
+- [Python](https://github.com/cloudevents/sdk-python)
+
 ## Community
 
 Learn more about the people and organizations who are creating a dynamic
@@ -75,8 +85,9 @@ In order to achieve these goals, the project must describe:
 ## Communications
 
 The mailing list for e-mail communications:
-- Send emails to: [cncf-wg-serverless](mailto:cncf-wg-serverless@lists.cncf.io)
-- To subscribe see: https://lists.cncf.io/g/cncf-wg-serverless
+- Send emails to: [cncf-cloudevents](mailto:cncf-cloudevents@lists.cncf.io)
+- To subscribe see: https://lists.cncf.io/g/cncf-cloudevents
+- Archives are at: https://lists.cncf.io/g/cncf-cloudevents/topics
 
 And a #cloudevents Slack channel under
 [CNCF's Slack workspace](https://slack.cncf.io/).
@@ -110,13 +121,6 @@ NOTE: Please use \*6 to mute/un-mute your phone during the call.
 World Time Zone Converter:
 http://www.thetimezoneconverter.com/?t=9:00%20am&tz=San%20Francisco&
 
-## In Person Meetings
-
-There is a face-to-face meeting planned for June 15, 2018
-in San Francisco. Please see the first page of the
-[minutes](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
-document for more information.
-
 ## Meeting Minutes
 
 The minutes from our calls are available
@@ -124,3 +128,9 @@ The minutes from our calls are available
 
 Recording from our calls are available
 [here](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt).
+
+Periodically, the group may have in-person meetings that coincide with
+a major conference. Please see the
+[meeting minutes](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
+for any future plans.
+

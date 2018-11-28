@@ -171,7 +171,7 @@ event consumers can easily access this information without needing to decode
 and examine the event data. Such identity attributes can also be used to
 help intermediate gateways determine how to route the events.
 
-### eventtype
+### type
 * Type: `String`
 * Description: Type of occurrence which has happened. Often this
   attribute is used for routing, observability, policy enforcement, etc.
@@ -183,7 +183,7 @@ help intermediate gateways determine how to route the events.
 * Examples
    * com.github.pull.create
 
-### cloudeventsversion
+### specversion
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context.
@@ -206,7 +206,7 @@ help intermediate gateways determine how to route the events.
     * urn:event:from:myapi/resourse/123
     * mailto:cncf-wg-serverless@lists.cncf.io
 
-### eventid
+### id
 * Type: `String`
 * Description: ID of the event. The semantics of this string are explicitly
   undefined to ease the implementation of producers. Enables deduplication.
@@ -217,7 +217,7 @@ help intermediate gateways determine how to route the events.
   * MUST be a non-empty string
   * MUST be unique within the scope of the producer
 
-### eventtime
+### time
 * Type: `Timestamp`
 * Description: Timestamp of when the event happened.
 * Constraints:
@@ -272,9 +272,9 @@ encapsulated within the `data` attribute.
 
 ### data
 * Type: `Any`
-* Description: The event payload. The payload depends on the eventtype and
-  the schemaURL. It is encoded into a media format
-  which is specified by the contenttype attribute (e.g. application/json).
+* Description: The event payload. The payload depends on the `type` and
+  the `schemaurl`. It is encoded into a media format
+  which is specified by the `contenttype` attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
 
@@ -284,11 +284,11 @@ The following example shows a CloudEvent serialized as JSON:
 
 ``` JSON
 {
-    "cloudeventsversion" : "0.1",
-    "eventtype" : "com.github.pull.create",
+    "specversion" : "0.1",
+    "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull/123",
-    "eventid" : "A234-1234-1234",
-    "eventtime" : "2018-04-05T17:31:00Z",
+    "id" : "A234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
         "othervalue": 5

@@ -54,8 +54,9 @@ The CloudEvents type system MUST be mapped to AMQP types as follows,
 with exceptions noted below.
 
 | CloudEvents   | AMQP
-|---------------|-----------------------------------------------------------
+|---------------|-------------------------------------------------------------
 | String        | [string][AMQP-String]
+| Integer       | [long][AMQP-Long]
 | Binary        | [binary][AMQP-Binary]
 | URI-reference | [string][AMQP-String]
 | Timestamp     | [timestamp][AMQP-Timestamp]
@@ -95,6 +96,7 @@ variant type representation.
 [type-system]: https://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html
 [type-system-encoding]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#section-encodings
 [AMQP-String]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
+[AMQP-Long]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-long
 [AMQP-Binary]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-binary
 [AMQP-Timestamp]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-timestamp
 [AMQP-Map]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-map
