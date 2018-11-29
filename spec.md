@@ -186,7 +186,9 @@ help intermediate gateways determine how to route the events.
 ### specversion
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
-  uses. This enables the interpretation of the context.
+  uses. This enables the interpretation of the context. Compliant event 
+  producers MUST use a value of `0.1` when referring to this version of
+  the specification.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
