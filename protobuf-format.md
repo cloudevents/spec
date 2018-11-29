@@ -102,17 +102,17 @@ import com.google.protobuf.ByteString;
 
 CloudEventMap event = CloudEventMap.newBuilder()
   .putValue(
-    "eventType",
+    "type",
     CloudEventAny.newBuilder()
       .setStringValue("com.example.emitter.event")
       .build())
   .putValue(
-    "cloudEventsVersion",
+    "specversion",
     CloudEventAny.newBuilder()
       .setStringValue("0.1")
       .build())
   .putValue(
-    "eventTime",
+    "time",
     CloudEventAny.newBuilder()
       .setStringValue("2018-10-25T00:00:00+00:00")
       .build())
