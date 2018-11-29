@@ -18,6 +18,7 @@ This document is a working draft.
 - [History](#history)
 - [CloudEvents Concepts](#cloudevents-concepts)
 - [Design Goals](#design-goals)
+- [Versioning of Attributes](#versioning-of-attributes)
 - [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Prior Art](#prior-art)
@@ -121,6 +122,25 @@ The following will not be part of the specification:
 * Function build and invocation process
 * Language-specific runtime APIs
 * Selecting a single identity/access control system
+
+## Versioning of Attributes
+
+For certain CloudEvents attributes, the entity or data model referenced by its
+value might change over time. For example, `schemaurl` might be a reference
+one particular version of a schema document. Often these attribute values
+will then distinguish each variant by including some version-specific
+string as part of its value. For example, a version number (`v1`, `v2`), or a
+date (`2018-01-01`) might be used.
+
+The CloudEvents specification does not mandate any particular pattern to
+be used, or even the use of version strings at all. This decision is up to
+each event producer. However, when a version-specific string is included,
+care should be taken whenever its value changes as event consumers might
+be reliant on the existing value and thus a change could be interpretted
+as a "breaking change". Some form of communication between producers and
+consumers should be established to ensure the event consumers know what
+possible values might be used. In general, this is true for all CloudEvents
+attributes as well.
 
 ## CloudEvent Attribute Extensions
 

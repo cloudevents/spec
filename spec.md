@@ -176,6 +176,10 @@ help intermediate gateways determine how to route the events.
 * Type: `String`
 * Description: Type of occurrence which has happened. Often this
   attribute is used for routing, observability, policy enforcement, etc.
+  The format of this is producer defined and might include information such
+  as the version of the `eventtype` - see
+  [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
+  for more information.
 * Constraints:
    * REQUIRED
    * MUST be a non-empty string
@@ -183,6 +187,7 @@ help intermediate gateways determine how to route the events.
             the organization which defines the semantics of this event type.
 * Examples
    * com.github.pull.create
+   * com.example.object.delete.v2
 
 ### specversion
 * Type: `String`
@@ -229,7 +234,10 @@ help intermediate gateways determine how to route the events.
 ### schemaurl
 * Type: `URI`
 * Description: A link to the schema that the `data` attribute adheres to.
-Incompatible changes to the schema SHOULD be reflected by a different URL.
+  Incompatible changes to the schema SHOULD be reflected by a different URL.
+  See
+  [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
+  for more information.
 * Constraints:
   * OPTIONAL
   * If present, MUST adhere to the format specified in
