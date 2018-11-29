@@ -142,7 +142,8 @@ both appear within the same JSON object.
 ### Extension Attributes
 CloudEvents producers MAY include additional context attributes in the event
 that might be used in ancillary actions related to the processing of the event.
-See [CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
+See
+[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
 for additional information concerning the use and definition of extensions.
 
 This specification places no restriction on the type or semantics of the

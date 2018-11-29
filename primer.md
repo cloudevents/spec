@@ -177,6 +177,52 @@ consider moving it into the specification as a core attribute. This means
 that the extension mechanism/process can be used as a way to vet new
 attributes prior to formally adding them to the specification.
 
+### JSON Extensions
+
+As mentioned in the [Attributes](json-format.md#2-attributes) section of the
+[JSON Event Format for CloudEvents](json-format.md) specificatinon,
+CloudEvent extension attributes are serialized as siblings to the specification
+defined attributes - meaning, at the top-level of the JSON object. The
+authors of the specification spent a long time considering all options
+and decided that this was the best choice. Some of the rationale follows.
+
+Since the specifications follow [semver](https://semver.org/), this
+means that new properties can be defined by future versions of the
+core specification without requiring a major version number change - as
+long as these properties are optional. In those cases, consider what an
+existing consumer would do with a new (unknown) top-level property. While
+it would be free to ignore it, since it is optional, in most cases it is
+believed that these properties would still want to be exposed to the
+application receiving those events. This would allow those applications to
+support these properties even if the infrastructure doesn't. This means
+that unknown top-level properties (regardless of who defined them - future
+versions of the spec or the event producer) are probably not going to be
+ignored.  So, while some other specifications define a specific property
+underwhich extensions are placed (e.g. a top-level `extensions` property), the
+authors decided that having two different locations within an
+incoming event for unknown properties could lead to interoperability issues
+and confusion for developers.
+
+Often extensions are used to test new potential properties of
+specifications prior to them being formally adopted. If there were an
+`extensions` type of property, in which this new property was serialized,
+then if that property were to ever be adopted by the core specification it
+would be promoted (from a serialization perspective) from the `extensions`
+property to be a top-level property. If we assume that this new property
+will be optional, then as it is adopted by the core specification it will
+be just a minor version increment, and all existing consumers should still
+continue to work. However, consumers will not know where this property
+will appear - in the `extensions` property or as a top-level property.
+This means they might need to look in both places. What if the property
+appears in both place but with different values? Will producers need to place
+it in both places since they could have old and new consumers? While
+it might be possible to define clear rules for how to solve each of the
+potential problems that arise, the authors decided that it would be better
+to simply avoid all of them in the first place by only having one location
+in the serialization for unkown, or even new, properties. It was also
+noted that the HTTP specification is now following a similar pattern by
+no longer suggesting that extension HTTP headers be prefixed with `X-`.
+
 ## Qualifying Protocols and Encodings
 
 The explicit goal of the CloudEvents effort, as expressed in the specification,
