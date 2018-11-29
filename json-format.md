@@ -58,8 +58,8 @@ exceptions noted below.
 | String        | [string][JSON-String]
 | Integer       | [number][JSON-Number], only the `int` component is permitted
 | Binary        | [string][JSON-String], [Base64-encoded][base64] binary
-| URI-reference | [string][JSON-String]
-| Timestamp     | [string][JSON-String]
+| URI-reference | [string][JSON-String] following [RFC 3986][RFC3986]
+| Timestamp     | [string][JSON-String] following [RFC 3339][RFC3339] (ISO 8601)
 | Map           | [JSON object][JSON-Object]
 | Any           | [JSON value][JSON-Value]
 
@@ -75,6 +75,11 @@ An extension specification that defines a diverging mapping rule for JSON,
 and any revision of such a specification, MUST also define explicit mapping
 rules for all other event formats that are part of the CloudEvents core at
 the time of the submission or revision.
+
+If required, like when decoding Maps, the CloudEvents type can be determined
+by inference using the rules from the mapping table, whereby the only potentially
+ambiguous JSON data type is `string`. The value is compatible with the respective
+CloudEvents type when the mapping rules are fulfilled.
 
 ### 2.3. Mapping Any-typed Attributes
 
@@ -124,10 +129,10 @@ the [type system mapping](#22-type-system-mapping).
 ### 3.1. Special Handling of the "data" Attribute
 
 The mapping of the `Any`-typed `data` attribute follows the rules laid out
-in [Section 2.3.](#23-mapping-any-typed-attributes), with one additional
-rule:
+in [Section 2.3.](#23-mapping-any-typed-attributes), with two additional
+rules:
 
-If an implementation determines that the type of the `data` attribute is
+First, if an implementation determines that the type of the `data` attribute is
 `Binary` or `String`, it MUST inspect the `contenttype` attribute to determine
 whether it is indicated that the data value contains JSON data.
 
@@ -147,6 +152,13 @@ Unlike all other attributes, for which value types are restricted to strings
 per the [type-system mapping](#22-type-system-mapping), the resulting `data`
 member [JSON value][JSON-Value] is unrestricted, and MAY also contain numeric
 and logical JSON types.
+
+Second, whether a Base64-encoded string in the data attribute is treated 
+as `Binary` or as a `String` is also determined by the `contenttype` value. If
+the `contenttype` media type is known to contain text, the data attribute value
+is not further interpreted and treated as a text string. Otherwise, it is decoded
+and treated as a binary value.
+
 
 ### 3.2. Examples
 
@@ -232,7 +244,9 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 [JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
 [RFC2046]: https://tools.ietf.org/html/rfc2046
 [RFC2119]: https://tools.ietf.org/html/rfc2119
+[RFC3986]: https://tools.ietf.org/html/rfc3986
 [RFC4627]: https://tools.ietf.org/html/rfc4627
 [RFC4648]: https://tools.ietf.org/html/rfc4648
 [RFC6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [RFC8259]: https://tools.ietf.org/html/rfc8259
+[RFC3339]: https://www.ietf.org/rfc/rfc3339.txt
