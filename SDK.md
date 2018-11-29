@@ -236,7 +236,7 @@ It means that an HTTP marshaller/unmarshaller is a set of binary and structured 
 
 In `Read`:
 
- - `event` - a placeholder (empty event object), see [event constructor](#Event object constructor API).
+ - `event` - a placeholder (empty event object), see [event constructor](#event-object-constructor-api).
  - `headers` - an HTTP request headers
  - `body` - an HTTP request body
  - `data_unmarshaller` - a function that turns an event data into an object of 
