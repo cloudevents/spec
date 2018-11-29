@@ -88,6 +88,7 @@ The CloudEvents type system MUST be mapped into the fields of
 | Integer      | int_value
 | Any          | Not applicable. Any is the enclosing CloudEventAny message itself
 
+Protocol Buffer representations of CloudEvents MUST use the media type `application/cloudevents+proto`.
 
 ## 3. Examples
 
