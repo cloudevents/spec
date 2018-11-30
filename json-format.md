@@ -1,4 +1,4 @@
-# JSON Event Format for CloudEvents - Version 0.1
+# JSON Event Format for CloudEvents - Version 0.2
 
 ## Abstract
 
@@ -109,7 +109,7 @@ The following table shows exemplary mappings:
 | CloudEvents        | Type          | Exemplary JSON Value
 |--------------------|---------------|--------------------------
 | type               | String        | "com.example.someevent"
-| specversion        | String        | "0.1"
+| specversion        | String        | "0.2"
 | source             | URI-reference | "/mycontext"
 | id                 | String        | "1234-1234-1234"
 | time               | Timestamp     | "2018-04-05T17:31:00Z"
@@ -174,7 +174,7 @@ Example event with `String`-valued `data`:
 
 ``` JSON
 {
-    "specversion" : "0.1",
+    "specversion" : "0.2",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "A234-1234-1234",
@@ -192,7 +192,7 @@ Example event with `Binary`-valued data
 
 ``` JSON
 {
-    "specversion" : "0.1",
+    "specversion" : "0.2",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "B234-1234-1234",
@@ -211,7 +211,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 
 ``` JSON
 {
-    "specversion" : "0.1",
+    "specversion" : "0.2",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "C234-1234-1234",

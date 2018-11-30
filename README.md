@@ -28,20 +28,20 @@ The following documents are available:
 | | Latest Release | Working Draft |
 | :--- | :---: | :---: |
 | **Core Specification:** |
-| CloudEvents | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/spec.md) | [master](https://github.com/cloudevents/spec/blob/master/spec.md) |
+| CloudEvents | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/spec.md) | [master](https://github.com/cloudevents/spec/blob/master/spec.md) |
 | |
 | **Optional Specifications:** |
-| HTTP Transport Binding | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
-| JSON Event Format | [v0.1](https://github.com/cloudevents/spec/blob/v0.1/json-format.md) | [master](https://github.com/cloudevents/spec/blob/master/json-format.md) |
-| Web hook | - | [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md) |
-| MQTT Transport Binding | - | [master](https://github.com/cloudevents/spec/blob/master/mqtt-transport-binding.md) |
-| NATS Transport Binding | - | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
-| AMQP Event Format | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md) |
-| AMQP Transport Binding | - | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
+| HTTP Transport Binding | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
+| JSON Event Format | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/json-format.md) | [master](https://github.com/cloudevents/spec/blob/master/json-format.md) |
+| Web hook | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/http-webhook.md) | [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md) |
+| MQTT Transport Binding | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/mqtt-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-transport-binding.md) |
+| NATS Transport Binding | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
+| AMQP Event Format | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/amqp-format.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md) |
+| AMQP Transport Binding | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/amqp-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
 | |
 | **Additional Documentation:** |
-| Primer | - | [master](https://github.com/cloudevents/spec/blob/master/primer.md) |
-| Documented Extensions | | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md) |
+| Primer | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/primer.md) | [master](https://github.com/cloudevents/spec/blob/master/primer.md) |
+| Documented Extensions | - | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md) |
 
 If you are new to CloudEvents, it is recommended that you start by
 reading the [Primer](primer.md) for an overview of the specification's
