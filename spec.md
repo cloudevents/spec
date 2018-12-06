@@ -1,4 +1,4 @@
-# CloudEvents - Version 0.1
+# CloudEvents - Version 0.2
 
 ## Abstract
 
@@ -193,7 +193,7 @@ help intermediate gateways determine how to route the events.
 * Type: `String`
 * Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context. Compliant event 
-  producers MUST use a value of `0.1` when referring to this version of
+  producers MUST use a value of `0.2` when referring to this version of
   the specification.
 * Constraints:
   * REQUIRED
@@ -295,7 +295,7 @@ The following example shows a CloudEvent serialized as JSON:
 
 ``` JSON
 {
-    "specversion" : "0.1",
+    "specversion" : "0.2",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull/123",
     "id" : "A234-1234-1234",

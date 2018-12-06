@@ -42,7 +42,7 @@ item; they don't imply an order for implementation._
     1. Events are sent by code written by Developer1 and received by code
        written by Developer2, where Developer1 has no knowledge of Developer2.
 
-*0.2*
+*0.2* - Completed - 2018/12/06
 
 1. Incorporate learnings and feedback from interop demo to support wider
    adoption.

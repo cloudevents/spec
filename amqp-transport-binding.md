@@ -195,7 +195,7 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:specversion: "0.1"
+cloudEvents:specversion: "0.2"
 cloudEvents:type: "com.example.someevent"
 cloudEvents:time: "2018-04-05T03:56:24Z"
 cloudEvents:id: "1234-1234-1234"
@@ -257,7 +257,7 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "specversion" : "0.1",
+    "specversion" : "0.2",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
