@@ -114,8 +114,12 @@ and processing, of the message. Data that is not intended for that purpose
 should instead be placed within the event (the `data` attribute) itself.
 
 Along with the definition of these attributes, there will also be
-specifications of how to serialize the event in different formats and
-transports (e.g. JSON and HTTP).
+specifications of how to serialize the event in different formats (e.g. JSON)
+and transports (e.g. HTTP, AMQP, Kafka).
+
+Batching of multiple events into a single API call is natively supported by some
+transports. To aid interoperability, it is left up to the transports if and how
+batching is implemented.
 
 ### Non-Goals
 The following will not be part of the specification:
