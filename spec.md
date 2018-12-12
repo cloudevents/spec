@@ -107,7 +107,7 @@ platform/vendor specific protocols (AWS Kinesis, Azure Event Grid).
 
 The following abstract data types are available for use in attributes.
 
-- `Integer` - A 32-bit whole number.
+- `Integer` - A whole number in the range −2,147,483,647 to +2,147,483,647 inclusive. This is the range of a signed 32-bit twos-complement representation. Event formats do not have to use this encoding, but they MUST only use `Integer` values in this range.
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
