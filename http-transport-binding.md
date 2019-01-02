@@ -18,7 +18,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-- 2.1. [contenttype Attribute](#21-contenttype-attribute)
+- 2.1. [datacontenttype Attribute](#21-datacontenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [HTTP Message Mapping](#3-http-message-mapping)
 - 3.2. [Binary Content Mode](#31-binary-content-mode)
@@ -67,9 +67,9 @@ placed into the HTTP request or response body using an [event
 format](#14-event-formats).
 
 In the *binary* content mode, the value of the event `data` attribute is placed
-into the HTTP request or response body as-is, with the `contenttype` attribute
-value declaring its media type; all other event attributes are mapped to HTTP
-headers.
+into the HTTP request or response body as-is, with the `datacontenttype`
+attribute value declaring its media type; all other event attributes are
+mapped to HTTP headers.
 
 ### 1.4. Event Formats
 
@@ -89,31 +89,31 @@ identically to [HTTP over TLS]([RFC2818][RFC2818]).
 This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
-Two of the event attributes, `contenttype` and `data` are handled specially
+Two of the event attributes, `datacontenttype` and `data` are handled specially
 and mapped onto HTTP constructs, all other attributes are transferred as
 metadata without further interpretation.
 
 This mapping is intentionally robust against changes, including the addition
 and removal of event attributes, and also accommodates vendor extensions to the
-event metadata. Any mention of event attributes other than `contenttype` and
+event metadata. Any mention of event attributes other than `datacontenttype` and
 `data` is exemplary.
 
-### 2.1. contenttype Attribute
+### 2.1. datacontenttype Attribute
 
-The `contenttype` attribute is assumed to contain a [RFC2046][RFC2046]
+The `datacontenttype` attribute is assumed to contain a [RFC2046][RFC2046]
 compliant media-type expression.
 
 ### 2.2. data Attribute
 
 The `data` attribute is assumed to contain opaque application data that is
-encoded as declared by the `contenttype` attribute.
+encoded as declared by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into HTTP as defined in this
 specification, the assumption is that the `data` attribute value is made
 available as a sequence of bytes.
 
-For instance, if the declared `contenttype` is
+For instance, if the declared `datacontenttype` is
 `application/json;charset=utf-8`, the expectation is that the `data` attribute
 value is made available as [UTF-8][RFC3629] encoded JSON text to HTTP.
 
@@ -144,7 +144,7 @@ efficient transfer and without transcoding effort.
 #### 3.1.1. HTTP Content-Type
 
 For the *binary* mode, the HTTP `Content-Type` value maps directly to the
-CloudEvents `contenttype` attribute.
+CloudEvents `datacontenttype` attribute.
 
 #### 3.1.2. Event Data Encoding
 
@@ -153,7 +153,7 @@ message body.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][CE] attributes with exception of `contenttype` and `data`
+All [CloudEvents][CE] attributes with exception of `datacontenttype` and `data`
 MUST be individually mapped to and from distinct HTTP message headers,
 with exceptions noted below.
 
