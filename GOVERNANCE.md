@@ -102,7 +102,7 @@ Note that these rules do not apply to the
 
 To create a new release:
 * Create a PR that modifies the [README](README.md), and all specifications
-  (ie. *.md files) that include a version string, to the new release
+  (ie. \*.md files) that include a version string, to the new release
   version string.
 * Merge the PR.
 * Create a [new release](https://github.com/cloudevents/spec/releases/new):
@@ -115,4 +115,11 @@ To create a new release:
     `git log --pretty=format:%s master...v0.1`.
     Just replace "v0.1" with the name of the previous release.
   * Press `Publish release` button
+* Create an "announcement" highlighting the key features of the new release
+  and any potential noteworthy activities of the group:
+  * Send it to the mailing list
+  * Announce the release on our
+    [twitter account](https://twitter.com/cloudeventsio)
+  * Add it to the "announcement" section of our
+    [website](https://cloudevents.io/)
 
