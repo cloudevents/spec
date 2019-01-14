@@ -119,7 +119,8 @@ and transports (e.g. HTTP, AMQP, Kafka).
 
 Batching of multiple events into a single API call is natively supported by some
 transports. To aid interoperability, it is left up to the transports if and how
-batching is implemented.
+batching is implemented. Details may be found in the transport binding or in
+the transport specification.
 
 ### Non-Goals
 The following will not be part of the specification:
