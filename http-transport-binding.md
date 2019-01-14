@@ -21,8 +21,8 @@ This document is a working draft.
 - 2.1. [contenttype Attribute](#21-contenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 3. [HTTP Message Mapping](#3-http-message-mapping)
-- 3.2. [Binary Content Mode](#31-binary-content-mode)
-- 3.1. [Structured Content Mode](#32-structured-content-mode)
+- 3.1. [Binary Content Mode](#31-binary-content-mode)
+- 3.2. [Structured Content Mode](#32-structured-content-mode)
 4. [References](#4-references)
 
 ## 1. Introduction
