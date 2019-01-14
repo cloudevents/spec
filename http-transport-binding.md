@@ -23,6 +23,7 @@ This document is a working draft.
 3. [HTTP Message Mapping](#3-http-message-mapping)
 - 3.1. [Binary Content Mode](#31-binary-content-mode)
 - 3.2. [Structured Content Mode](#32-structured-content-mode)
+- 3.3. [JSON Batch Content Mode](#33-json-batch-content-mode)
 4. [References](#4-references)
 
 ## 1. Introduction
@@ -58,18 +59,22 @@ which is compatible with HTTP 1.1 semantics.
 
 ### 1.3. Content Modes
 
-This specification defines two content modes for transferring events:
-*structured* and *binary*. Every compliant implementation SHOULD support both
-modes.
-
-In the *structured* content mode, event metadata attributes and event data are
-placed into the HTTP request or response body using an [event
-format](#14-event-formats).
+This specification defines three content modes for transferring events:
+*structured*, *binary* and *JSON Batch*. Every compliant implementation SHOULD
+support the *structured* and *binary* modes.
 
 In the *binary* content mode, the value of the event `data` attribute is placed
 into the HTTP request or response body as-is, with the `contenttype` attribute
 value declaring its media type; all other event attributes are mapped to HTTP
 headers.
+
+In the *structured* content mode, event metadata attributes and event data are
+placed into the HTTP request or response body using an [event
+format](#14-event-formats).
+
+In the *JSON Batch* content mode several events are batched into a single HTTP
+request or response body. The payload is built on top of the
+[JSON event format][JSON-format].
 
 ### 1.4. Event Formats
 
@@ -124,13 +129,15 @@ The event binding is identical for both HTTP request and response messages.
 The content mode is chosen by the sender of the event, which is either the
 requesting or the responding party. Gestures that might allow solicitation of
 events using a particular mode might be defined by an application, but are not
-defined here.
+defined here. The *JSON Batch* mode MUST NOT be used unless solicited, and the
+gesture SHOULD allow the receiver to choose the maximum size of a batch.
 
-The receiver of the event can distinguish between the two modes by inspecting
+The receiver of the event can distinguish between the three modes by inspecting
 the `Content-Type` header value. If the value is prefixed with the CloudEvents
 media type `application/cloudevents`, indicating the use of a known [event
-format](#14-event-formats), the receiver uses *structured* mode, otherwise it
-defaults to *binary* mode.
+format](#14-event-formats), the receiver uses *structured* mode. If the value
+is prefixed with `application/cloudevents-batch+json`, the receiver uses the
+*JSON Batch* mode. Otherwise it defaults to *binary* mode.
 
 If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
@@ -330,6 +337,102 @@ Content-Length: nnnn
 
 ```
 
+### 3.3. JSON Batch Content Mode
+
+In the *JSON Batch* content mode several events are batched into a single HTTP
+request or response body. The payload is a JSON array filled with CloudEvents
+in the [JSON event format][JSON-format].
+
+#### 3.3.1. HTTP Content-Type
+
+The [HTTP `Content-Type`][Content-Type] header MUST be set to
+`application/cloudevents-batch+json`.
+
+An example:
+
+``` text
+Content-Type: application/cloudevents-batch+json; charset=UTF-8
+```
+
+#### 3.3.2. Event Data Encoding
+
+The payload is a [JSON Array][JSON-array], which contains CloudEvents rendered
+in accordance with the [JSON event format][JSON-format] specification. The
+resulting data becomes the HTTP message body.
+
+The array MAY be empty (typically used in a HTTP response).
+All batched CloudEvents MUST have the same `specversion` attribute. Other
+attributes MAY differ, including the `contenttype` attribute.
+
+#### 3.2.3 Examples
+
+This example shows two batched CloudEvents, sent with a PUT request:
+
+``` text
+
+PUT /myresource HTTP/1.1
+Host: webhook.example.com
+Content-Type: application/cloudevents-batch+json; charset=utf-8
+Content-Length: nnnn
+
+[
+    {
+        "specversion" : "0.2",
+        "type" : "com.example.someevent",
+
+        ... further attributes omitted ...
+
+        "data" : {
+            ... application data ...
+        }
+    },
+    {
+        "specversion" : "0.2",
+        "type" : "com.example.someotherevent",
+
+        ... further attributes omitted ...
+
+        "data" : {
+            ... application data ...
+        }
+    }
+]
+
+```
+
+This example shows two batched CloudEvents returned in a response:
+
+``` text
+
+HTTP/1.1 200 OK
+Content-Type: application/cloudevents-batch+json; charset=utf-8
+Content-Length: nnnn
+
+[
+    {
+        "specversion" : "0.2",
+        "type" : "com.example.someevent",
+
+        ... further attributes omitted ...
+
+        "data" : {
+            ... application data ...
+        }
+    },
+    {
+        "specversion" : "0.2",
+        "type" : "com.example.someotherevent",
+
+        ... further attributes omitted ...
+
+        "data" : {
+            ... application data ...
+        }
+    }
+]
+
+```
+
 ## 4. References
 
 - [RFC2046][RFC2046] Multipurpose Internet Mail Extensions (MIME) Part Two: 
@@ -353,6 +456,7 @@ Content-Length: nnnn
 [JSON-format]: ./json-format.md
 [Content-Type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
+[JSON-Array]: https://tools.ietf.org/html/rfc7159#section-5
 [RFC2046]: https://tools.ietf.org/html/rfc2046
 [RFC2119]: https://tools.ietf.org/html/rfc2119
 [RFC2818]: https://tools.ietf.org/html/rfc2818
