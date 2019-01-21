@@ -2,7 +2,9 @@
   "$ref": "#/definitions/event",
   "definitions": {
     "specversion": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1,
+      "const": "0.2"
     },
     "contenttype": {
       "type": "string"
@@ -30,6 +32,9 @@
         "time": {
           "$ref": "#/definitions/time"
         },
+        "schemaurl": {
+          "$ref": "#/definitions/schemaurl"
+        },
         "type": {
           "$ref": "#/definitions/type"
         },
@@ -49,14 +54,20 @@
       "type": "object"
     },
     "id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "time": {
       "format": "date-time",
       "type": "string"
     },
+    "schemaurl": {
+      "type": "string",
+      "format": "uri"
+    },
     "type": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "extensions": {
       "type": "object"
