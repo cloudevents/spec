@@ -14,7 +14,8 @@ This document is a working draft.
 1. [Introduction](#1-introduction)
 2. [Attributes](#2-attributes)
 3. [Envelope](#3-envelope)
-4. [References](#4-references)
+4. [JSON Batch Format](#4-json-batch-format)
+5. [References](#5-references)
 
 ## 1. Introduction
 
@@ -229,7 +230,77 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 }
 ```
 
-## 4. References
+## 4. JSON Batch Format
+
+In the *JSON Batch Format* several CloudEvents are batched into a single JSON
+document. The document is a JSON array filled with CloudEvents in the
+[JSON Event format][JSON-format].
+
+Although the *JSON Batch Format* builds ontop of the *JSON Format*, it should
+be considered as a separate format: a valid implementation of the *JSON Format*
+doesn't have to support it. The *JSON Batch Format* MUST NOT be used when only
+support for the *JSON Format* is indicated.
+
+### 4.1. Mapping CloudEvents
+
+This section defines how a batch of CloudEvents is mapped to JSON.
+
+The outermost JSON element is a [JSON Array][JSON-array], which contains
+CloudEvents rendered in accordance with the [JSON event format][JSON-format]
+specification.
+
+### 4.2. Envelope
+
+A JSON Batch of CloudEvents must use the media type
+`application/cloudevents-batch+json`.
+
+### 4.3. Examples
+
+An example containing two CloudEvents: The first with `Binary`-valued data, the
+second with JSON data.
+
+``` JSON
+[
+  {
+      "specversion" : "0.2",
+      "type" : "com.example.someevent",
+      "source" : "/mycontext/4",
+      "id" : "B234-1234-1234",
+      "time" : "2018-04-05T17:31:00Z",
+      "comexampleextension1" : "value",
+      "comexampleextension2" : {
+          "otherValue": 5
+      },
+      "contenttype" : "application/vnd.apache.thrift.binary",
+      "data" : "... base64 encoded string ..."
+  },
+  {
+      "specversion" : "0.2",
+      "type" : "com.example.someotherevent",
+      "source" : "/mycontext/9",
+      "id" : "C234-1234-1234",
+      "time" : "2018-04-05T17:31:05Z",
+      "comexampleextension1" : "value",
+      "comexampleextension2" : {
+          "otherValue": 5
+      },
+      "contenttype" : "application/json",
+      "data" : {
+          "appinfoA" : "abc",
+          "appinfoB" : 123,
+          "appinfoC" : true
+      }
+  }
+]
+```
+
+An example of an empty batch of CloudEvents (typically used in a response):
+
+```JSON
+[]
+```
+
+## 5. References
 
 * [RFC2046][RFC2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
@@ -250,6 +321,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
 [JSON-Number]: https://tools.ietf.org/html/rfc7159#section-6
 [JSON-String]: https://tools.ietf.org/html/rfc7159#section-7
 [JSON-Value]: https://tools.ietf.org/html/rfc7159#section-3
+[JSON-Array]: https://tools.ietf.org/html/rfc7159#section-5
 [RFC2046]: https://tools.ietf.org/html/rfc2046
 [RFC2119]: https://tools.ietf.org/html/rfc2119
 [RFC3986]: https://tools.ietf.org/html/rfc3986
