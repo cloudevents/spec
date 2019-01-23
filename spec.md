@@ -15,7 +15,7 @@ This document is a working draft.
 - [Type System](#type-system)
 - [Context Attributes](#context-attributes)
 - [Data Attribute](#data-attribute)
-- [Size Limits](#size-limits)
+- [Event Size Guarantees](#event-size-guarantees)
 - [Example](#example)
 
 ## Overview
@@ -290,31 +290,15 @@ encapsulated within the `data` attribute.
 * Constraints:
   * OPTIONAL
 
-# Size Limits
-
-In order to increase interoperability, the following size limits apply to any
-CloudEvent:
-
-* The CloudEvent serialized as JSON (minified, i.e. without white-space) MUST
-  NOT exceed a size of 128KB.
-* The CloudEvent MUST NOT have more than 100 top-level attributes.
-
-CloudEvent producers SHOULD only create CloudEvents within these limits.
-CloudEvent consumers MUST accept all CloudEvents within these limits and SHOULD
-reject messages that violate these limits.
-
-# Size Guarantees // Another option
+# Event Size Guarantees
 
 In order to increase interoperability, all CloudEvent consumers MUST accept
-messages up to the following sizes:
+messages up to a size of 256KB, measured by serializing the CloudEvent as
+[JSON](./json-format.md) (minified, i.e. without white-space).
 
-* The CloudEvent serialized as JSON (minified, i.e. without white-space) does
-  not exceed a size of 128KB.
-* The CloudEvent does not have more than 100 top-level attributes.
-
-CloudEvent consumers MAY reject messages that violate these limits.
+CloudEvent consumers MAY reject CloudEvents above this size.
 It is RECOMMENDED for CloudEvent producers to only create CloudEvents within
-these limits, unless they can be sure all consumers support larger sizes.
+this size, unless they can be sure all consumers support larger sizes.
 
 # Example
 
