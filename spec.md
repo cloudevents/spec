@@ -15,7 +15,7 @@ This document is a working draft.
 - [Type System](#type-system)
 - [Context Attributes](#context-attributes)
 - [Data Attribute](#data-attribute)
-- [Event Size Guarantees](#event-size-guarantees)
+- [Minimum Supported Event Size](#minimum-supported-event-size)
 - [Example](#example)
 
 ## Overview
@@ -290,7 +290,7 @@ encapsulated within the `data` attribute.
 * Constraints:
   * OPTIONAL
 
-# Event Size Guarantees
+# Minimum Supported Event Size
 
 In order to increase interoperability, all CloudEvent consumers MUST accept
 messages up to a size of 256KB, measured by serializing the CloudEvent as
