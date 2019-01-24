@@ -246,7 +246,7 @@ help intermediate gateways determine how to route the events.
   * If present, MUST adhere to the format specified in
     [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
-### contenttype
+### datacontenttype
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * Description: Content type of the `data` attribute value. This attribute
   enables the `data` attribute to carry any type of content, whereby format
@@ -255,7 +255,7 @@ help intermediate gateways determine how to route the events.
   format might carry an XML payload in its `data` attribute, and the
   consumer is informed by this attribute being set to "application/xml". The
   rules for how the `data` attribute content is rendered for different
-  `contenttype` values are defined in the event format specifications; for
+  `datacontenttype` values are defined in the event format specifications; for
   example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
 
@@ -286,7 +286,7 @@ encapsulated within the `data` attribute.
 * Type: `Any`
 * Description: The event payload. The payload depends on the `type` and
   the `schemaurl`. It is encoded into a media format
-  which is specified by the `contenttype` attribute (e.g. application/json).
+  which is specified by the `datacontenttype` attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
 
@@ -305,7 +305,7 @@ The following example shows a CloudEvent serialized as JSON:
     "comexampleextension2" : {
         "othervalue": 5
     },
-    "contenttype" : "text/xml",
+    "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
 ```

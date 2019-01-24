@@ -113,7 +113,7 @@ The following table shows exemplary mappings:
 | source             | URI-reference | "/mycontext"
 | id                 | String        | "1234-1234-1234"
 | time               | Timestamp     | "2018-04-05T17:31:00Z"
-| contenttype        | String        | "application/json"
+| datacontenttype    | String        | "application/json"
 | data               | String        | "<much wow=\"xml\"/>"
 | data               | Binary        | "Q2xvdWRFdmVudHM="
 | data               | Map           | { "objA" : "vA", "objB", "vB" }
@@ -141,17 +141,18 @@ in [Section 2.3.](#23-mapping-any-typed-attributes), with two additional
 rules:
 
 First, if an implementation determines that the type of the `data` attribute is
-`Binary` or `String`, it MUST inspect the `contenttype` attribute to determine
-whether it is indicated that the data value contains JSON data.
+`Binary` or `String`, it MUST inspect the `datacontenttype` attribute to
+determine whether it is indicated that the data value contains JSON data.
 
-If the `contenttype` value is either ["application/json"][RFC4627] or any media type
-with a [structured +json suffix][RFC6839], the implementation MUST translate
-the `data` attribute value into a [JSON value][JSON-Value], and set the `data`
-attribute of the envelope JSON object to this JSON value.
+If the `datacontenttype` value is either ["application/json"][RFC4627] or any
+media type with a [structured +json suffix][RFC6839], the implementation MUST
+translate the `data` attribute value into a [JSON value][JSON-Value], and set
+the `data` attribute of the envelope JSON object to this JSON value.
 
-If the `contenttype` value does not follow the [structured +json suffix][RFC6839]
-but is known to use JSON encoding, the implementation MUST translate the `data` attribute
-value into a [JSON value][JSON-Value], and set the `data` attribute of the envelope
+If the `datacontenttype` value does not follow the
+[structured +json suffix][RFC6839] but is known to use JSON encoding, the
+implementation MUST translate the `data` attribute value into a
+[JSON value][JSON-Value], and set the `data` attribute of the envelope
 JSON object to this JSON value. Its typical examples are, but not limited to,
 `text/json`, [`application/json-seq`][JSON-seq] and
 [`application/geo+json-seq`][JSON-geoseq].
@@ -162,10 +163,10 @@ member [JSON value][JSON-Value] is unrestricted, and MAY also contain numeric
 and logical JSON types.
 
 Second, whether a Base64-encoded string in the data attribute is treated 
-as `Binary` or as a `String` is also determined by the `contenttype` value. If
-the `contenttype` media type is known to contain text, the data attribute value
-is not further interpreted and treated as a text string. Otherwise, it is decoded
-and treated as a binary value.
+as `Binary` or as a `String` is also determined by the `datacontenttype` value.
+If the `datacontenttype` media type is known to contain text, the data
+attribute value is not further interpreted and treated as a text string.
+Otherwise, it is decoded and treated as a binary value.
 
 
 ### 3.2. Examples
@@ -183,7 +184,7 @@ Example event with `String`-valued `data`:
     "comexampleextension2" : {
         "otherValue": 5
     },
-    "contenttype" : "text/xml",
+    "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
 ```
@@ -201,7 +202,7 @@ Example event with `Binary`-valued data
     "comexampleextension2" : {
         "otherValue": 5
     },
-    "contenttype" : "application/vnd.apache.thrift.binary",
+    "datacontenttype" : "application/vnd.apache.thrift.binary",
     "data" : "... base64 encoded string ..."
 }
 ```
@@ -220,7 +221,7 @@ a `Map` or [JSON data](#31-special-handling-of-the-data-attribute) data:
     "comexampleextension2" : {
         "otherValue": 5
     },
-    "contenttype" : "application/json",
+    "datacontenttype" : "application/json",
     "data" : {
         "appinfoA" : "abc",
         "appinfoB" : 123,

@@ -63,7 +63,7 @@ Event build considered to be an event constructor:
 This particular code sample represents bare minimum number of setters:
 ```
     v01.Event().
-    SetContentType("application/json").
+    SetDataContentType("application/json").
     SetData('{"name":"john"}').
     SetEventID("my-id").
     SetSource("from-galaxy-far-far-away").
@@ -73,7 +73,7 @@ This particular code sample represents bare minimum number of setters:
 
 Content type setter represents an event MIME content type setter:
 ```
-    SetContentType(content_type string)
+    SetDataContentType(content_type string)
 ```
 
 Data setter represents an event data setter:
@@ -122,9 +122,9 @@ Here's the list of getters:
     EventID() -> string
     EventTime() -> RFC3339
     SchemaURL() -> string
+    DataContentType() -> string
     Data() -> serializable
     Extensions() -> map[string]string
-    ContentType() -> string
     
     Get(key string) -> serializable
 

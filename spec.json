@@ -4,7 +4,7 @@
     "specversion": {
       "type": "string"
     },
-    "contenttype": {
+    "datacontenttype": {
       "type": "string"
     },
     "data": {
@@ -18,8 +18,8 @@
         "specversion": {
           "$ref": "#/definitions/specversion"
         },
-        "contenttype": {
-          "$ref": "#/definitions/contenttype"
+        "datacontenttype": {
+          "$ref": "#/definitions/datacontenttype"
         },
         "data": {
           "$ref": "#/definitions/data"
