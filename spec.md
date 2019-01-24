@@ -115,19 +115,16 @@ The following abstract data types are available for use in attributes.
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
-- `Any` - Either a `String`, or a `Binary`, or a `Map`, or an `Integer`.
+- `Any` - Either a `Binary`, `Integer`, `Map` or `String`.
 - `URI-reference` - String expression conforming to `URI-reference`
   as defined in
   [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
 - `Timestamp` - String expression as defined in
   [RFC 3339](https://tools.ietf.org/html/rfc3339).
 
-This specification does not define numeric or logical types.
-
-The `Any` type is a variant type that can take the shape of either a
-`String` or a `Binary` or a `Map`. The type system is intentionally
-abstract, and therefore it is left to implementations how to represent the
-variant type.
+The `Any` type is a variant type that can take the shape of either a `Binary`,
+`Integer`, `Map` or `String`. The type system is intentionally abstract, and
+therefore it is left to implementations how to represent the variant type.
 
 ## Context Attributes
 Every CloudEvent conforming to this specification MUST include context
