@@ -236,9 +236,9 @@ In the *JSON Batch Format* several CloudEvents are batched into a single JSON
 document. The document is a JSON array filled with CloudEvents in the
 [JSON Event format][JSON-format].
 
-Although the *JSON Batch Format* builds ontop of the *JSON Format*, it should
-be considered as a separate format: a valid implementation of the *JSON Format*
-doesn't have to support it. The *JSON Batch Format* MUST NOT be used when only
+Although the *JSON Batch Format* builds ontop of the *JSON Format*, it is
+considered as a separate format: a valid implementation of the *JSON Format*
+doesn't need to support it. The *JSON Batch Format* MUST NOT be used when only
 support for the *JSON Format* is indicated.
 
 ### 4.1. Mapping CloudEvents
@@ -251,7 +251,7 @@ specification.
 
 ### 4.2. Envelope
 
-A JSON Batch of CloudEvents must use the media type
+A JSON Batch of CloudEvents MUST use the media type
 `application/cloudevents-batch+json`.
 
 ### 4.3. Examples
