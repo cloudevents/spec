@@ -293,12 +293,12 @@ encapsulated within the `data` attribute.
 # Minimum Supported Event Size
 
 In order to increase interoperability, all CloudEvent consumers MUST accept
-messages up to a size of 256KB, measured by serializing the CloudEvent as
+events up to a size of 256KB, measured by serializing the CloudEvent as
 [JSON](./json-format.md) (minified, i.e. without white-space).
 
-CloudEvent consumers MAY reject CloudEvents above this size.
-It is RECOMMENDED for CloudEvent producers to only create CloudEvents within
-this size, unless they can be sure all consumers support larger sizes.
+CloudEvent consumers MAY reject events above this size.
+It is RECOMMENDED for CloudEvent producers to only create events within this
+size, unless they can be sure all consumers support larger sizes.
 
 # Example
 
