@@ -296,9 +296,23 @@ In order to increase interoperability, all CloudEvent consumers MUST accept
 events up to a size of 256KB, measured by serializing the CloudEvent as
 [JSON](./json-format.md) (minified, i.e. without white-space).
 
-CloudEvent consumers MAY reject events above this size.
+CloudEvent consumers MAY reject events above this size and MAY reject messages
+that are not minified (e.g. contain unnecessary white-space).
 It is RECOMMENDED for CloudEvent producers to only create events within this
 size, unless they can be sure all consumers support larger sizes.
+
+The same event serialized with a different format will likely result in a
+different size. However, to aid interoperability, only the minified
+[JSON](./json-format.md) is used to measure the size. As an example, an
+[AMQP](./amqp-format.md) message of 270KB MUST be accepted if the contained
+event serialized as JSON is below 256KB. However, an [AMQP](./amqp-format.md)
+message of 250KB MAY be rejected if the contained event serialized as JSON
+exceeds 256KB. Practically, an [AMQP](./amqp-format.md) consumer that wants to
+protect theirself from large messages MAY simply choose to reject messagess
+after a higher limit (e.g. 512KB) that comfortably fits any valid event size.
+However, a middleware that wants to guarantee that the event can be forwarded
+in any format SHOULD measure the size of the event independently of the format
+it was received in.
 
 # Example
 
