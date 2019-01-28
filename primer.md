@@ -534,12 +534,6 @@ CloudEvents includes metadata in events to associate these events as being
 part of an event sequence for the purpose of event tracing and
 troubleshooting.
 
-An event sent from a source may result in a sequence of additional events
-sent from various middleware devices such as event brokers and gateways.
-CloudEvents includes metadata in events to associate these events as being
-part of an event sequence for the purpose of event tracing and
-troubleshooting.
-
 #### Cloudbursting
 
 TBD
