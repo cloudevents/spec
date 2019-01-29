@@ -246,8 +246,8 @@ support for the *JSON Format* is indicated.
 This section defines how a batch of CloudEvents is mapped to JSON.
 
 The outermost JSON element is a [JSON Array][JSON-array], which contains
-CloudEvents rendered in accordance with the [JSON event format][JSON-format]
-specification.
+as elements CloudEvents rendered in accordance with the
+[JSON event format][JSON-format] specification.
 
 ### 4.2. Envelope
 

@@ -344,8 +344,10 @@ Content-Length: nnnn
 
 In the *batched* content mode several events are batched into a single HTTP
 request or response body. The chosen [event format](#14-event-formats) MUST
-define how a batch is represented. Currently, the only format supporting
-batching is the [JSON Batch Format][JSON-batch-format].
+define how a batch is represented.
+Based on the [JSON format][JSON-format] (that MUST be supported by any
+compliant implementation), the [JSON Batch format][JSON-batch-format] is an
+event format that supports batching.
 
 #### 3.3.1. HTTP Content-Type
 
@@ -366,7 +368,7 @@ all event attributes, including the `data` attribute, are represented.
 The batch of events is then rendered in accordance with the event format
 specification and the resulting data becomes the HTTP message body.
 
-The batch MAY be empty (typically used in a HTTP response).
+The batch MAY be empty.
 All batched CloudEvents MUST have the same `specversion` attribute. Other
 attributes MAY differ, including the `contenttype` attribute.
 
