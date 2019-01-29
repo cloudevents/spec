@@ -281,27 +281,13 @@ help intermediate gateways determine how to route the events.
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
 information about the occurrence. When present, this information will be
 encapsulated within the `data` attribute.
-The `dataref` attribute can be used to reference another location where this
-information is stored. Known as the "Claim Check Pattern", the `dataref`
-attribute can be used for different purposes:
-
-* If the information is too large to be included in the message, the `data`
-  attribute is not present, and the consumer can retrieve it based on the
-  `dataref` attribute.
-* If the consumer wants to verify that the information has not been tampered
-  with, it can retrieve it from a trusted source using the `dataref` attribute.
-* If the information MUST only be viewed by trusted consumers (e.g. personally
-  identifiable information), only a trusted consumer can retrieve it using the
-  `dataref` attribute and a pre-shared secret.
+The `dataref` attribute MAY be used to reference another location where this
+information is stored.
 
 Both the `data` and `dataref` attribute MAY exist at the same time. A middleware
 MAY drop the `data` attribute when the `dataref` attribute exists, it MAY add
 the `dataref` attribute and drop the `data` attribute, or it MAY add the `data`
 attribute by using the `dataref` attribute.
-
-If the `dataref` attribute is used, the information SHOULD be accessible long
-enough for all consumers to retrieve it, but MAY not be stored for an extended
-period of time.
 
 ### data
 * Type: `Any`
@@ -316,6 +302,23 @@ period of time.
 * Description: A reference to a location where the event payload is stored. The
   location MAY not be accessible without further information (e.g. a pre-shared
   secret).
+
+  Known as the "Claim Check Pattern", this attribute MAY be used for a variety
+  of purposes, including:
+
+  * If the [Data](#data) is too large to be included in the message, the `data`
+    attribute is not present, and the consumer can retrieve it using this
+    attribute.
+  * If the consumer wants to verify that the [Data](#data) has not been tampered
+    with, it can retrieve it from a trusted source using this attribute.
+  * If the [Data](#data) MUST only be viewed by trusted consumers (e.g.
+    personally identifiable information), only a trusted consumer can retrieve
+    it using this attribute and a pre-shared secret.
+
+  If this attribute is used, the information SHOULD be accessible long enough
+  for all consumers to retrieve it, but MAY not be stored for an extended period
+  of time.
+
 * Constraints:
   * OPTIONAL
 
