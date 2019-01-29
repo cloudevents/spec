@@ -3,8 +3,7 @@
   "definitions": {
     "specversion": {
       "type": "string",
-      "minLength": 1,
-      "const": "0.2"
+      "minLength": 1
     },
     "contenttype": {
       "type": "string"
