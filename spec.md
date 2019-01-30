@@ -178,7 +178,7 @@ help intermediate gateways determine how to route the events.
 * Description: Type of occurrence which has happened. Often this
   attribute is used for routing, observability, policy enforcement, etc.
   The format of this is producer defined and might include information such
-  as the version of the `eventtype` - see
+  as the version of the `type` - see
   [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
   for more information.
 * Constraints:
