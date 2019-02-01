@@ -370,7 +370,7 @@ specification and the resulting data becomes the HTTP message body.
 
 The batch MAY be empty.
 All batched CloudEvents MUST have the same `specversion` attribute. Other
-attributes MAY differ, including the `contenttype` attribute.
+attributes MAY differ, including the `datacontenttype` attribute.
 
 #### 3.2.3 Examples
 

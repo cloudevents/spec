@@ -271,7 +271,7 @@ second with JSON data.
       "comexampleextension2" : {
           "otherValue": 5
       },
-      "contenttype" : "application/vnd.apache.thrift.binary",
+      "datacontenttype" : "application/vnd.apache.thrift.binary",
       "data" : "... base64 encoded string ..."
   },
   {
@@ -284,7 +284,7 @@ second with JSON data.
       "comexampleextension2" : {
           "otherValue": 5
       },
-      "contenttype" : "application/json",
+      "datacontenttype" : "application/json",
       "data" : {
           "appinfoA" : "abc",
           "appinfoB" : 123,
