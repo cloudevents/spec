@@ -80,8 +80,8 @@ supports batching.
 
 Event formats, used with the *structured* content mode, define how an event is
 expressed in a particular data format. All implementations of this
-specification MUST support the [JSON event format][JSON-format], but MAY
-support any additional, including proprietary, formats.
+specification MUST support the non-batching [JSON event format][JSON-format],
+but MAY support any additional, including proprietary, formats.
 
 Event formats MAY additionally define how a batch of events is expressed. Those
 can be used with the *batched* content mode
