@@ -235,7 +235,7 @@ help intermediate gateways determine how to route the events.
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
 ### schemaurl
-* Type: `URI`
+* Type: `URI-reference`
 * Description: A link to the schema that the `data` attribute adheres to.
   Incompatible changes to the schema SHOULD be reflected by a different URL.
   See
@@ -243,8 +243,6 @@ help intermediate gateways determine how to route the events.
   for more information.
 * Constraints:
   * OPTIONAL
-  * If present, MUST adhere to the format specified in
-    [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
 ### datacontenttype
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
