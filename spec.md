@@ -282,7 +282,8 @@ As defined by the term [Data](#data), CloudEvents MAY include domain-specific
 information about the occurrence. When present, this information will be
 encapsulated within the `data` attribute.
 The `dataref` attribute MAY be used to reference another location where this
-information is stored.
+information is stored. The information, whether accessed via `data` or `dataref`
+MUST be identical.
 
 Both the `data` and `dataref` attribute MAY exist at the same time. A middleware
 MAY drop the `data` attribute when the `dataref` attribute exists, it MAY add
