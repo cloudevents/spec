@@ -235,7 +235,7 @@ help intermediate gateways determine how to route the events.
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
 ### schemaurl
-* Type: `URI`
+* Type: `URI-reference`
 * Description: A link to the schema that the `data` attribute adheres to.
   Incompatible changes to the schema SHOULD be reflected by a different URL.
   See
@@ -243,8 +243,6 @@ help intermediate gateways determine how to route the events.
   for more information.
 * Constraints:
   * OPTIONAL
-  * If present, MUST adhere to the format specified in
-    [RFC 3986](https://tools.ietf.org/html/rfc3986)
 
 ### datacontenttype
 * Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
@@ -275,6 +273,23 @@ help intermediate gateways determine how to route the events.
   * If present, MUST adhere to the format specified in
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 * For Media Type examples see [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
+
+### datacontentencoding
+* Type: `String` per [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
+* Description: Describes the content encoding for the `data` 
+  attribute for when the `data` field MUST be encoded as a string,
+  like with structured transport binding modes using the JSON event 
+  format, but the `datacontenttype` indicates a non-string media 
+  type. When the `data` field's effective data type is not `String`,
+  this attribute MUST NOT be set and MUST be ignored when set.
+  
+  The "Base64" value for the Base64 encoding as defined in [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8)
+  MUST be supported. When set, the event-format-encoded value of the `data` 
+  attribute is a base64 string, but the effective data type of 
+  the `data` attribute towards the application is the base64-decoded
+  binary array.
+  
+  All other RFC2045 schemes are undefined for CloudEvents.
 
 ## Data Attribute
 
