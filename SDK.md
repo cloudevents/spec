@@ -44,62 +44,64 @@ Widely used programming language version.
 
 ### Object model structure guidelines
 
-The CloudEvents specification set consists of 
+The CloudEvents specification set consists of
 
 * the base specification that defines the abstract information model and
   associated rules for a CloudEvent,
-* a set of extensions to the base specification that define use-case 
+* a set of extensions to the base specification that define use-case
   specific attributes and associated rules,
 * a set of event format specifications that define how a CloudEvent and  
-  its attributes are encoded in a particular wire transfer format,
+  its attributes are encoded in a particular wire transfer format, and
 * a set of transport bindings that define how a wire-encoded CloudEvent is
-  interoperably transferred from a publisher or intermediary to a target
+  interoperably transported from a publisher or intermediary to a target
   endpoint using a particular application protocol.
 
 The object model of any API projection of CloudEvents MUST reflect the
-specification architecture:
+specification architecture with the following elements:
 
 * A generic CloudEvent class/object/structure that provides access to the
   CloudEvent attributes and enforces data type constraints and all further
   conformance rules defined in the core CloudEvents specification. Instances
   of this class/object/structure MUST always be in a conformant state.
   The generic CloudEvent abstraction SHOULD provide strongly typed access
-  to all well-known attributes, be MUST also provide name-indexed access
+  to all well-known attributes, and MUST also provide name-indexed access
   to any application-specific extension attributes that the event might carry.
   Name-indexed access MUST include well-known attributes from the core
-  specification and from application-activated specification extensions (see 
-  below), and the related rules MUST be enforced when setting the attributed 
-  through the name-indexed access path.
-* A generic abstraction for extensions that allows for one or more active 
-  extensions to be added to the CloudEvent abstraction such that the 
-  extension-defined attributes are attached to the CloudEvent and 
-  conformance can be validated. 
+  specification and from application-activated specification extensions (see
+  below). The related rules MUST be enforced when setting the attribute 
+  values through the name-indexed access path.
+* A generic abstraction for extensions that allows for one or more active
+  extensions to be added to the CloudEvent abstraction such that the
+  extension-defined attributes are attached to the CloudEvent and
+  the conformance of their values can be validated.
   Each SDK MUST implement all extensions defined in the CloudEvents
   repository. "Active" extensions are those that the application explicitly
-  selects for use, meaning that other extensions MUST NOT be added and enforced
-  implicitly. Any application MAY ignore a particular extension and even 
-  use well-known extension attribute names for semantically different purposes.
-* An encoder abstraction and implementation for each event format which turns 
-  a CloudEvent instance and its active extensions into a conformant 
-  wire-representation and vice versa. If defined in the event format, the 
+  selects for use, meaning that other extensions MUST NOT be added and 
+  enforced on a CloudEvent implicitly. Any application MAY ignore a particular
+  extension and even use well-known extension attribute names for semantically
+  different purposes.
+* An encoder abstraction and implementation for each event format which turns
+  a CloudEvent instance and its active extensions into a conformant
+  wire-representation and vice versa. If defined in the event format, the
   encoder MUST be able to render the entire event in a structured transport
   representation, and MUST also be able to render individual attribute values
   for a binary transport representation.
 * At least one implementation for each transport binding which integrates with
   the most commonly used transport implementation for the respective language
-  and runtime. If there are multiple equally popular platform libraries for 
+  and runtime. If there are multiple equally popular platform libraries for
   the same transport, the SDK SHOULD provide implementations for each.
-  The transport binding implementation MUST NOT obscure or encapsulate the 
+  The transport binding implementation MUST NOT obscure or encapsulate the
   regular interaction with the respective platform API for its core send
-  and receive functionality; instead, the SDK SHOULD provide an extension or 
+  and receive functionality; instead, the SDK SHOULD provide an extension or
   complement to the respective platform API that fits the respective API style
-  and allows for mapping a CloudEvent from and to the respective application 
+  and allows for mapping a CloudEvent from and to the respective application
   protocol message/event.
   Because selecting and detecting structured or binary transfer modes is a
-  transport level choice, the respective mapping function MUST be given a 
-  reference to the chosen event format for mapping to the application protocol
-  message/event. The reference MAY also be given through a default configuration 
-  choice. When mapping from the application protocol message/event, the SDK 
+  transport level choice, the respective mapping function MUST be given a
+  reference to the desired event format encoder for mapping to the application
+  protocol message/event. This reference MAY also be given through a default
+  configuration choice.
+  When mapping from the application protocol message/event, the SDK
   SHOULD identify and choose the required event format encoder from the content
   type information of the protocol, if available on the protocol.
 
