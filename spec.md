@@ -188,13 +188,12 @@ within the same JSON object.
   - MUST be a non-empty string
 
 ### source
-
 - Type: `URI-reference`
-- Description: This describes the event producer. Often this will include
-  information such as the type of the event source, the organization publishing
-  the event, the process that produced the event, and some unique identifiers.
-  The exact syntax and semantics behind the data encoded in the URI is event
-  producer defined.
+- Description: This identifies the event producer. Often this will include
+  information such as the type of the event source, the organization
+  publishing the event, the process that produced the event, and some unique
+  identifiers. The exact syntax and semantics behind the data encoded in the URI
+  is event producer defined.
 - Constraints:
   - REQUIRED
 - Examples
@@ -243,7 +242,9 @@ within the same JSON object.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
-  - MUST be unique within the scope of the producer
+  - The producer MUST ensure that source+id is unique for each distinct event.
+  - If a duplicate of a previous event is re-sent it MAY have the same source+id.
+  - A consumer MAY ignore events with the same source+id as a previous event.
 
 ### time
 
