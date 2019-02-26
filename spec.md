@@ -192,15 +192,28 @@ within the same JSON object.
 - Description: This identifies the event producer. Often this will include
   information such as the type of the event source, the organization
   publishing the event, the process that produced the event, and some unique
-  identifiers. The exact syntax and semantics behind the data encoded in the URI
-  is event producer defined.
+  identifiers.
+
+  The exact syntax of `source`, and the scope in which it is unique,
+  depends on the application. Applications range from a single service
+  with a few direct consumers to large distributed services with
+  complex event routing networks.  The URI-reference is flexible
+  enough for all these cases, see the examples below.
+
 - Constraints:
   - REQUIRED
+
 - Examples
-  - https://github.com/cloudevents/spec/pull
-  - /cloudevents/spec/pull
-  - urn:event:from:myapi/resource
-  - mailto:cncf-wg-serverless@lists.cncf.io
+  - Internet-unique URI with a DNS authority.
+    - https://github.com/cloudevents/spec/pull/123
+    - mailto:cncf-wg-serverless@lists.cncf.io
+  - Universally-unique via a UUID:
+    -  urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
+  - Unique relative to some assumed base (e.g. a specific service)
+    - /cloudevents/spec/pull/123
+    - /sensors/tn-1234567/alerts
+  - Unique via URN namespaces:
+    - urn:event:from:myapi/resourse/123
 
 ### subject
 
@@ -237,6 +250,7 @@ within the same JSON object.
 - Type: `String`
 - Description: ID of the event. The semantics of this string are explicitly
   undefined to ease the implementation of producers. Enables deduplication.
+  source+id is unique within the same scope that `source` is unique.
 - Examples:
   - A database commit ID
 - Constraints:
