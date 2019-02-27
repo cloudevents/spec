@@ -293,26 +293,30 @@ encapsulated within the `data` attribute.
 # Minimum Supported Event Size
 
 In order to increase interoperability, all CloudEvent consumers SHOULD accept
-events up to a size of 64KB, measured by serializing the CloudEvent as
-[JSON](./json-format.md) (minified, i.e. without white-space).
+events that follow these rules:
 
-CloudEvent consumers MAY reject events above this size and MAY reject messages
-that are not minified (e.g. contain unnecessary white-space).
-It is RECOMMENDED for CloudEvent producers to only create events within this
-size, unless they can be sure all consumers support larger sizes.
+* The number of attributes does not exceed 100. Each index of a `Map` is
+  considered an attribute.
+* All attribute names are 20 characters or less long.
+* All indexes of `Maps` are 20 characters or less long.
+* All `Binary` attributes do not exceed a size of 1KB.
+* All `String` attributes (including String expressions like `URI-reference` and
+  `Timestamp`) do not exceed a size of 1KB.
+* `Any` attributes containing a `Binary` or a `String` follow the respective
+  rule above. The `data` attribute is excempt from this rule.
+* For a `Map`, the `Any`-typed values follow the rules above.
+* The total size of all attributes (including the `data` attribute) does not
+  exceed 40KB/64KB.
 
-The same event serialized with a different format will likely result in a
-different size. However, to aid interoperability, only the minified
-[JSON](./json-format.md) is used to measure the size. As an example, an
-[AMQP](./amqp-format.md) message of 70KB MUST be accepted if the contained
-event serialized as JSON is below 64KB. However, an [AMQP](./amqp-format.md)
-message of 60KB MAY be rejected if the contained event serialized as JSON
-exceeds 64KB. Practically, an [AMQP](./amqp-format.md) consumer that wants to
-protect theirself from large messages MAY simply choose to reject messagess
-after a higher limit (e.g. 256KB) that comfortably fits any valid event size.
-However, a middleware that wants to guarantee that the event can be forwarded
-in any format SHOULD measure the size of the event independently of the format
-it was received in.
+The size of a `String` attribute is measured by encoding it in
+[UTF-8](https://tools.ietf.org/html/rfc3629).
+The size of an `Integer` attribute is 4 bytes.
+
+CloudEvent consumers MAY reject events that do not follow these rules and MAY
+reject messages that are not minified (e.g. contain unnecessary white-space).
+It is RECOMMENDED for CloudEvent producers to only create events that follow
+these rules, unless they can be sure all consumers support larger sizes.
+
 
 # Example
 
