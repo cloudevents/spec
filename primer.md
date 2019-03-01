@@ -187,6 +187,9 @@ encountered when adding extensions to a CloudEvent. For example, the
 headers to transport metadata; most HTTP servers will reject requests with
 excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
 size and number of extension attributes should be kept minimal.
+A [Minimum Supported Event Size](spec.md#minimum-supported-event-size) should
+be supported by all event consumers. Event producers should leave additional
+space for a middleware to add extension attributes.
 
 The specification places no restrictions on the type of the extension
 attributes. Meaning, they may be simple types (e.g. strings, integers),

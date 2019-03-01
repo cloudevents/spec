@@ -295,15 +295,15 @@ encapsulated within the `data` attribute.
 In order to increase interoperability, all CloudEvent consumers SHOULD accept
 events that follow these rules:
 
-* The number of attributes does not exceed 100. Each index of a `Map` is
-  considered an attribute.
+* The number of attributes, including the `data` attribute, does not exceed 100.
+  Each index of a `Map` is considered an attribute.
 * All attribute names are 20 characters or less long.
 * All indexes of `Maps` are 20 characters or less long.
-* All `Binary` attributes do not exceed a size of 1KB.
-* All `String` attributes (including String expressions like `URI-reference` and
-  `Timestamp`) do not exceed a size of 1KB.
 * `Any` attributes containing a `Binary` or a `String` follow the respective
-  rule above. The `data` attribute is excempt from this rule.
+  rule below. The `data` attribute is excempt from this rule.
+* All `Binary` attributes do not exceed a size of 2KB.
+* All `String` attributes (including String expressions like `URI-reference` and
+  `Timestamp`) do not exceed a size of 2KB.
 * For a `Map`, the `Any`-typed values follow the rules above.
 * The total size of all attributes (including the `data` attribute) does not
   exceed 40KB/64KB.
