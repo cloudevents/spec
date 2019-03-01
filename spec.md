@@ -189,16 +189,17 @@ within the same JSON object.
 
 ### source
 - Type: `URI-reference`
-- Description: This identifies the event producer. Often this will include
+- Description: Identifies the event producer. Often this will include
   information such as the type of the event source, the organization
-  publishing the event, the process that produced the event, and some unique
-  identifiers.
+  publishing the event, the process that produced the event, and some
+  unique identifiers. The syntax of `source` is not defined by this
+  specification.
 
-  The exact syntax of `source`, and the scope in which it is unique,
-  depends on the application. Applications range from a single service
-  with a few direct consumers to large distributed services with
-  complex event routing networks.  The URI-reference is flexible
-  enough for all these cases, see the examples below.
+  In an application with many producers, each producer MUST be
+  assigned a distinct `source`. This specification does not define how
+  to ensure uniqueness. Since `source` is a URI-reference, it allows
+  for standard formats using DNS authorities or UUIDs, as well as
+  application-specific string or path identifiers.
 
 - Constraints:
   - REQUIRED
@@ -207,13 +208,12 @@ within the same JSON object.
   - Internet-unique URI with a DNS authority.
     - https://github.com/cloudevents/spec/pull/123
     - mailto:cncf-wg-serverless@lists.cncf.io
-  - Universally-unique via a UUID:
+  - Universally-unique URN with a UUID:
     -  urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
-  - Unique relative to some assumed base (e.g. a specific service)
+  - Application-specific path or string identifiers
     - /cloudevents/spec/pull/123
     - /sensors/tn-1234567/alerts
-  - Unique via URN namespaces:
-    - urn:event:from:myapi/resourse/123
+    - 1-555-123-4567
 
 ### subject
 
@@ -246,19 +246,22 @@ within the same JSON object.
     - `subject`: mynewfile.jpg
 
 ### id
-
 - Type: `String`
-- Description: ID of the event. The semantics of this string are explicitly
-  undefined to ease the implementation of producers. Enables deduplication.
-  source+id is unique within the same scope that `source` is unique.
+- Description: Identifies of the event, enables de-duplication.  The
+  format of this string is determined by the producer. Each producer
+  MUST generate unique `id` values for its own events, `id` values
+  from different producers might clash. Consumers MAY assume that
+  events with identical `id` and `source` values are duplicates, and
+  MAY discard all but one of such duplicate events.
 - Examples:
+  - An event counter maintained by the producer
   - A database commit ID
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
-  - The producer MUST ensure that source+id is unique for each distinct event.
-  - If a duplicate of a previous event is re-sent it MAY have the same source+id.
-  - A consumer MAY ignore events with the same source+id as a previous event.
+  - The producer MUST provide a different `id` for each distinct event it produces.
+  - If a duplicate of a previous event is re-sent due to a failure, it
+    MAY have the same `id`.
 
 ### time
 
