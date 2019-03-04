@@ -305,15 +305,16 @@ events that follow these rules:
 * All `String` attributes (including String expressions like `URI-reference` and
   `Timestamp`) do not exceed a size of 2KB.
 * For a `Map`, the `Any`-typed values follow the rules above.
-* The total size of all attributes (including the `data` attribute) does not
-  exceed 40KB/64KB.
+* The total size of all attributes (including the `data` attribute) and
+  nonessential data does not exceed 45KB.
 
+Nonessential data, such as whitespace or comments, is data that can be removed
+from an encoding or transport format without affecting the CloudEvent.
 The size of a `String` attribute is measured by encoding it in
 [UTF-8](https://tools.ietf.org/html/rfc3629).
 The size of an `Integer` attribute is 4 bytes.
 
-CloudEvent consumers MAY reject events that do not follow these rules and MAY
-reject messages that are not minified (e.g. contain unnecessary white-space).
+CloudEvent consumers MAY reject events that do not follow these rules.
 It is RECOMMENDED for CloudEvent producers to only create events that follow
 these rules, unless they can be sure all consumers support larger sizes.
 
