@@ -21,6 +21,7 @@ This document is a working draft.
 - [Versioning of Attributes](#versioning-of-attributes)
 - [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
+- [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
 - [Prior Art](#prior-art)
 - [Roles](#roles)
 - [Value Proposition](#value-proposition)
@@ -305,6 +306,27 @@ implementations independent of the product or project's code.
 All other protocol and encoding formats for CloudEvents are welcome to be
 included in a list pointing to the CloudEvents binding information in the
 respective project's own public repository or site.
+
+## Proprietary Protocols and Encodings
+
+To encourage adoption of CloudEvents, this repository will collect CloudEvent
+specs for proprietary protocols and encodings without endorsement. Repository
+maintainers are not responsible for creating, maintaining, or notifying
+maintainers of proprietary specs of drift from the CloudEvents spec.
+
+Proprietary specs will be hosted in their own repository or documentation site,
+and collected in the `proprietary_specs` file. Proprietary specs should follow
+the same format at other the specs for core protocols and encodings.
+
+Proprietary specs will receive less scrutiny than a core spec, and as the
+CloudEvents spec evolves, it is the the responsibility of the maintainers of
+the respective protocols and encodings to keep specs in sync with the
+CloudEvents spec. If a proprietary spec falls too far out of date, CloudEvents
+may mark the link to that spec as deprecated or remove it.
+
+In the case that multiple, incompatible specs are created for the same
+protocol, the repository maintainers will be agnostic about which spec is
+correct and list links to all specs.
 
 ## Prior Art
 
