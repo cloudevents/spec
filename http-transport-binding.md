@@ -179,10 +179,9 @@ the time of the submission or revision.
 
 ##### 3.1.3.1 HTTP Header Names
 
-Except for attributes [explicitly handled in this specification]
-(#2-use-of-cloudevents-attributes), the naming convention for the 
-HTTP header mapping of well-known CloudEvents attributes is that 
-each attribute name MUST be prefixed with "ce-".
+Except for attributes [explicitly handled in this specification](#2-use-of-cloudevents-attributes),
+the naming convention for the HTTP header mapping of well-known CloudEvents
+attributes is that each attribute name MUST be prefixed with "ce-".
 
 Examples:
 
