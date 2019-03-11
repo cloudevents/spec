@@ -5,4 +5,4 @@ specs, and does not ensure that they are up to date with the
 current version of CloudEvents. That is the responsibility of
 the respective project maintainers.
 
-* [placeholder](to nowhere)
+* [placeholder](/)
