@@ -288,6 +288,27 @@ encapsulated within the `data` attribute.
 * Constraints:
   * OPTIONAL
 
+# Privacy & Security Considerations
+Interoperability is the primary driver behind this specification, enabling such
+behavior requires information to be made available *in the clear* resulting
+in the potential for information leakage.
+
+* Context Attributes
+
+  Sensitive information *SHOULD NOT* be carried or represented in context attributes.
+  
+  CloudEvent participants *MAY* introspect and log context attributes.
+  
+* Data
+
+  Domain specific [data](#data) *SHOULD* be encoded to restrict visibility to
+  trusted parties. 
+  
+* Transport Bindings
+
+  Transport level security *SHOULD* be employed to ensure the trusted and 
+  secure exchange of CloudEvents.
+
 # Example
 
 The following example shows a CloudEvent serialized as JSON:
