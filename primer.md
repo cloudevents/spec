@@ -147,6 +147,36 @@ Some form of communication between producers and consumers should be established
 to ensure the event consumers know what possible values might be used. In
 general, this is true for all CloudEvents attributes as well.
 
+## CloudEvent Attributes
+
+This section provides additional background and design points related to some
+of the CloudEvent attributes.
+
+### id
+
+The `id` attribute is meant to be a value that is unique across all events
+related to one event source.  While the exact value used
+is producer defined, receivers of CloudEvents from a single
+event source can be assured that no two events will share the same `id`
+value. The only exception to this is if some replay of the event is supported,
+and in those cases, the `id` can then be used to detect this.
+
+Since a single occurrence may result in the generation of more than one
+event, in the cases where all of those events share the same `source`
+attribute value, each CloudEvent constructed will have a unique
+`id`. Take the example of the creation of a DB entry, this one occurrence
+might generate a CloudEvent with a type of `create` and a CloudEvent with
+a type of `write`. Each of those CloudEvents would have a unique `id`. If
+there is the desire for some correlation between those two CloudEvents
+to indicate they are both related to the same occurrence, then some additional
+data within the CloudEvent would be used for that purpose.
+
+In this respect, while the exact value chosen by the event producer might
+be some random string, or a string that has some semantic meaning in some other
+context, for the purposes of this CloudEvent attribute those meanings are not
+relevant and therefore using `id` for some other purpose beyond uniqueness
+checking is out of scope of the specification and not recommended.
+
 ## CloudEvent Attribute Extensions
 
 In order to achieve the stated goals, the specification authors will attempt to
