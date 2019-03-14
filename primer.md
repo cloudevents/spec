@@ -166,7 +166,7 @@ When the group determines that an attribute is not common enough to
 fall into those two categories but would still benefit from the level of
 interoperability that comes from being well-defined, then they will be placed
 into the "extensions" category and put into 
-(documented extensions)[documented-extensions.md].
+[documented extensions](documented-extensions.md).
 The specification defines how these extension attributes will
 appear within a CloudEvent.
 
