@@ -276,20 +276,26 @@ help intermediate gateways determine how to route the events.
 
 ### datacontentencoding
 * Type: `String` per [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
-* Description: Describes the content encoding for the `data` 
+* Description: Describes the content encoding for the `data`
   attribute for when the `data` field MUST be encoded as a string,
-  like with structured transport binding modes using the JSON event 
-  format, but the `datacontenttype` indicates a non-string media 
+  like with structured transport binding modes using the JSON event
+  format, but the `datacontenttype` indicates a non-string media
   type. When the `data` field's effective data type is not `String`,
   this attribute MUST NOT be set and MUST be ignored when set.
   
   The "Base64" value for the Base64 encoding as defined in [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8)
   MUST be supported. When set, the event-format-encoded value of the `data` 
-  attribute is a base64 string, but the effective data type of 
+  attribute is a base64 string, but the effective data type of
   the `data` attribute towards the application is the base64-decoded
   binary array.
   
   All other RFC2045 schemes are undefined for CloudEvents.
+
+* Constraints:
+  * The attribute MUST be set if the `data` attribute contains string-encoded
+    binary data. Otherwise the attribute MUST NOT be set.
+  * If present, MUST adhere to [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
+
 
 ## Data Attribute
 
