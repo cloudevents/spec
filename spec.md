@@ -293,14 +293,15 @@ Interoperability is the primary driver behind this specification, enabling such
 behavior requires some information to be made available *in the clear* resulting
 in the potential for information leakage.
 
-The following should be considered to prevent inadvertent leakage especially when
-leveraging 3rd party platforms and communication networks:
+Consider the following to prevent inadvertent leakage especially when leveraging 
+3rd party platforms and communication networks:
 
 * Context Attributes
 
   Sensitive information SHOULD NOT be carried or represented in context attributes.
   
-  CloudEvent producers, consumers, and intermediaries MAY introspect and log context attributes.
+  CloudEvent producers, consumers, and intermediaries MAY introspect and log context
+  attributes.
   
 * Data
 
