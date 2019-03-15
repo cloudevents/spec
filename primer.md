@@ -22,7 +22,7 @@ This document is a working draft.
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
 - [Prior Art](#prior-art)
-- [Roles](#roles)
+- [Traditional Eventing Roles](#traditional-eventing-roles)
 - [Value Proposition](#value-proposition)
 - [Existing Event Formats](#existing-event-formats)
 
@@ -243,6 +243,60 @@ serialization for unkown, or even new, properties. It was also noted that the
 HTTP specification is now following a similar pattern by no longer suggesting
 that extension HTTP headers be prefixed with `X-`.
 
+## Creating CloudEvents
+
+The CloudEvents specification purposely avoids being too prescriptive about
+how CloudEvents are created. For example, it does not assume that the original
+event producer is the same entity that is constructing the associated
+CloudEvent for that event. This allows for a wide variety of implementation
+choices. However, it can be useful for implementors of the specification
+to understand the expectations that the authors of the specifcations had
+in mind while developing the specification as this might help ensure
+interoperability and consistency.
+
+As mentioned above, whether the entity that generated the initial event is
+the same entity that creates the corresponding CloudEvent is an implementation
+choice. However, when the entity that is constructing/populating the
+CloudEvents attributes is acting on behalf of the event producer, the values
+of those attributes are meant to describe the event or the event producer
+and not the entity calculating the CloudEvent attribute values. In other words,
+when the split between the event producer and the CloudEvents generator are
+not materially significant to the event consumers, the spec defined
+attributes would typically not include any values to indicate this split
+of responsibilities.
+
+This isn't to suggest that the CloudEvents generator
+couldn't add some additional attributes to the CloudEvent, but those
+are outside the scope of the interoperability defined attributes of the spec.
+This is similar to how an HTTP proxy would typically minimize changes to the
+well-defined HTTP headers of an incoming message, but it might add some
+additional headers that include proxy-specific metadata.
+
+It is also worth noting that this separation between original event producer
+and CloudEvents generator could be small or large. Meaning, even if the
+CloudEvent generator not part of the original event producer's ecosystem,
+if it is acting on behalf of the event producer, and its presence in the
+flow of the event is not meaningful to event consumers, then the above
+guidance would still apply.
+
+When an entity is acting as both a receiver and sender of CloudEvents
+for the purposes of forwarding, or transforming, the incoming event, the
+degree to which the outbound CloudEvent matches the inbound CloudEvent
+will vary based on the processing semantics of this entity. In cases where
+it is acting as proxy, where it is simply forwarding CloudEvents
+to another event consumer, then the outbound CloudEvent will typically
+look identical to the inbound CloudEvent with respect to the spec defined
+attributes - see previous paragraph concerning adding additional attributes.
+Note that in these cases, while the entity is "sending" CloudEvents, it
+is not really an "event producer".
+
+However, if this entity is performing some type of semantic processing
+of the CloudEvent, typically resulting in a change to the value of the
+`data` attribute, then it may need to be considered a distinct "event
+producer" from the original event producer. And as such, it is expected
+that CloudEvents attributes related to the event producer (such as 'source`
+and `id`) would be changed from the incoming CloudEvent.
+
 ## Qualifying Protocols and Encodings
 
 The explicit goal of the CloudEvents effort, as expressed in the specification,
@@ -328,7 +382,7 @@ links to all specs.
 This section describes some of the input material used by the group during the
 development of the CloudEvent specification.
 
-### Roles
+### Traditional Eventing Roles
 
 The list below enumerates the various participants, and scenarios, that might be
 involved in the producing, managing or consuming of events.
