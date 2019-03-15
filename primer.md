@@ -315,7 +315,8 @@ maintainers are not responsible for creating, maintaining, or notifying
 maintainers of proprietary specs of drift from the CloudEvents spec.
 
 Proprietary specs will be hosted in their own repository or documentation site,
-and collected in the `proprietary_specs` file. Proprietary specs should follow
+and collected in the [proprietary-specs](proprietary-specs.md) file.
+Proprietary specs should follow
 the same format as the other specs for core protocols and encodings.
 
 Proprietary specs will receive less scrutiny than a core spec, and as the

@@ -42,6 +42,7 @@ The following documents are available:
 | **Additional Documentation:** |
 | Primer | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/primer.md) | [master](https://github.com/cloudevents/spec/blob/master/primer.md) |
 | Documented Extensions | - | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md) |
+| Proprietary Specifications | - | [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md) |
 
 If you are new to CloudEvents, it is recommended that you start by
 reading the [Primer](primer.md) for an overview of the specification's
