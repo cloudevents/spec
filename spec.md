@@ -290,23 +290,27 @@ encapsulated within the `data` attribute.
 
 # Privacy & Security Considerations
 Interoperability is the primary driver behind this specification, enabling such
-behavior requires information to be made available *in the clear* resulting
+behavior requires some information to be made available *in the clear* resulting
 in the potential for information leakage.
+
+The following should be considered to prevent inadvertent leakage especially when
+leveraging 3rd party platforms and communication networks:
 
 * Context Attributes
 
-  Sensitive information *SHOULD NOT* be carried or represented in context attributes.
+  Sensitive information SHOULD NOT be carried or represented in context attributes.
   
-  CloudEvent participants *MAY* introspect and log context attributes.
+  CloudEvent producers, consumers, and intermediaries MAY introspect and log context attributes.
   
 * Data
 
-  Domain specific [data](#data) *SHOULD* be encoded to restrict visibility to
-  trusted parties. 
+  Domain specific [data](#data) SHOULD be encoded to restrict visibility to
+  trusted parties. The mechanism employed for such encoding is an agreement between 
+  producers and consumers and thus outside the scope of this specification.
   
 * Transport Bindings
 
-  Transport level security *SHOULD* be employed to ensure the trusted and 
+  Transport level security SHOULD be employed to ensure the trusted and 
   secure exchange of CloudEvents.
 
 # Example
