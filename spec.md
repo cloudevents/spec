@@ -15,6 +15,7 @@ This document is a working draft.
 - [Type System](#type-system)
 - [Context Attributes](#context-attributes)
 - [Data Attribute](#data-attribute)
+- [Privacy & Security](#privacy-and-security)
 - [Example](#example)
 
 ## Overview
@@ -288,7 +289,7 @@ encapsulated within the `data` attribute.
 * Constraints:
   * OPTIONAL
 
-# Privacy & Security Considerations
+# Privacy and Security
 Interoperability is the primary driver behind this specification, enabling such
 behavior requires some information to be made available *in the clear* resulting
 in the potential for information leakage.
