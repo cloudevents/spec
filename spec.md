@@ -281,45 +281,12 @@ help intermediate gateways determine how to route the events.
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
 information about the occurrence. When present, this information will be
 encapsulated within the `data` attribute.
-The `dataref` attribute MAY be used to reference another location where this
-information is stored. The information, whether accessed via `data` or `dataref`
-MUST be identical.
-
-Both the `data` and `dataref` attribute MAY exist at the same time. A middleware
-MAY drop the `data` attribute when the `dataref` attribute exists, it MAY add
-the `dataref` attribute and drop the `data` attribute, or it MAY add the `data`
-attribute by using the `dataref` attribute.
 
 ### data
 * Type: `Any`
 * Description: The event payload. The payload depends on the `type` and
   the `schemaurl`. It is encoded into a media format
   which is specified by the `datacontenttype` attribute (e.g. application/json).
-* Constraints:
-  * OPTIONAL
-
-### dataref
-* Type: `URI-reference`
-* Description: A reference to a location where the event payload is stored. The
-  location MAY not be accessible without further information (e.g. a pre-shared
-  secret).
-
-  Known as the "Claim Check Pattern", this attribute MAY be used for a variety
-  of purposes, including:
-
-  * If the [Data](#data) is too large to be included in the message, the `data`
-    attribute is not present, and the consumer can retrieve it using this
-    attribute.
-  * If the consumer wants to verify that the [Data](#data) has not been tampered
-    with, it can retrieve it from a trusted source using this attribute.
-  * If the [Data](#data) MUST only be viewed by trusted consumers (e.g.
-    personally identifiable information), only a trusted consumer can retrieve
-    it using this attribute and a pre-shared secret.
-
-  If this attribute is used, the information SHOULD be accessible long enough
-  for all consumers to retrieve it, but MAY not be stored for an extended period
-  of time.
-
 * Constraints:
   * OPTIONAL
 
@@ -339,7 +306,6 @@ The following example shows a CloudEvent serialized as JSON:
         "othervalue": 5
     },
     "datacontenttype" : "text/xml",
-    "data" : "<much wow=\"xml\"/>",
-    "dataref" : "https://github.com/cloudevents/spec/pull/123/events/A234-1234-1234.xml"
+    "data" : "<much wow=\"xml\"/>"
 }
 ```
