@@ -6,8 +6,8 @@ by a unique event source.
 
 The `sequence` attribute represents the value of this event's
 order in the stream of events.  The exact value and meaning of this
-attribute is defined by the `sequenceType` attribute. 
-If the `sequenceType` is missing, or not defined in this specification,
+attribute is defined by the `sequencetype` attribute. 
+If the `sequencetype` is missing, or not defined in this specification,
 event consumers will need to have some out-of-band communication with the
 event producer to understand how to interpret the value of the attribute.
 
@@ -22,7 +22,7 @@ event producer to understand how to interpret the value of the attribute.
   * MUST be a non-empty lexicographically-orderable string
   * RECOMMENDED as monotonically increasing and contiguous
 
-### sequenceType
+### sequencetype
 * Type: `String`
 * Description: Specifies the semantics of the sequence attribute.
   See the [SequenceType Values](#sequencetype-values) section for more
@@ -33,11 +33,11 @@ event producer to understand how to interpret the value of the attribute.
 
 ## SequenceType Values
 
-This specification defines the following values for `sequenceType`.
+This specification defines the following values for `sequencetype`.
 Additional values MAY be defined by other specifications.
 
 ### Integer
-If the `sequenceType` is set to `Integer`, the `sequence` attribute has
+If the `sequencetype` is set to `Integer`, the `sequence` attribute has
 the following semantics:
 * The values of `sequence` are string-encoded signed 32-bit Integers.
 * The sequence MUST start with a value of `1` and increase by `1` for each 
