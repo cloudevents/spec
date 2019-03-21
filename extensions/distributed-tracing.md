@@ -24,7 +24,7 @@ platforms like Prometheus are built.
 ## Encoding
 
 ### In-memory formats
-The Distributed Tracing extension uses the key `distributedTracing` for in-memory formats
+The Distributed Tracing extension uses the key `distributedtracing` for in-memory formats
 
 ### HTTP
 
