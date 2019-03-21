@@ -29,20 +29,24 @@ be followed:
 
 ## Membership
 
-There are three categories of project membership: 1 - Member. This is anyone who
-participates in the group's activities in any of our communication channels
-(email, github issues/PRs, meetings, etc.). No formal registration process is
-needed. 2 - Voting Member. See the (Voting)[#voting]section below for more
-information on how the list of Voting Members are determined. During the normal
-operations of the group, Voting Members and Members are the same with respect to
-influence over the groups actions. The rights associated with being a Voting
-Member only apply in the event of a formal vote being taken. 3 - Admin. Admins
-are Members of the group but have the ability to perform administrative actions
-on behalf of the group. For example, manage the website, github repos and
-moderate the meetings. Their actions should be done with the knowledge and
-consent of the group. They also have the ability to merge/close PRs, but only
-per the group's approval. See the [OWNERS](OWNERS) file for the current list of
-Admins.
+There are three categories of project membership:
+
+1. **Member.** This is anyone who participates in the group's activities in any
+   of our communication channels (email, github issues/PRs, meetings, etc.). No
+   formal registration process is needed.
+
+2. **Voting Member.** See the (Voting)[#voting]section below for more
+   information on how the list of Voting Members are determined. During the
+   normal operations of the group, Voting Members and Members are the same with
+   respect to influence over the groups actions. The rights associated with
+   being a Voting Member only apply in the event of a formal vote being taken.
+
+3. **Admin.** Admins are Members of the group but have the ability to perform
+   administrative actions on behalf of the group. For example, manage the
+   website, github repos and moderate the meetings. Their actions should be done
+   with the knowledge and consent of the group. They also have the ability to
+   merge/close PRs, but only per the group's approval. See the [OWNERS](OWNERS)
+   file for the current list of Admins.
 
 ## PRs
 
