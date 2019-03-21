@@ -46,6 +46,14 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to
 be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
+For clarity, when a feature is marked as "OPTIONAL" this means that it is
+OPTIONAL for both the sender and receiver of a message to support that feature.
+In other words, a sender can choose to include that feature in a
+message if it wants, and a receiver can choose to support that feature
+if it wants. A receiver that does not support that feature will then silently
+ignore that part of the message. The sender needs to be prepared for the
+situation where a receiver ignores that feature.
+
 ### Attribute Naming Convention
 
 The CloudEvents specifications define mappings to various protocols and
