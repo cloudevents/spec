@@ -31,7 +31,7 @@ they impose additional sampling.
 ## Encoding
 
 ### In-memory formats
-The Sampling extension uses the key `sampledRate` for in-memory formats.
+The Sampling extension uses the key `sampledrate` for in-memory formats.
 
 ### Transport bindings
 The Sampling extension does not customize any transport binding's storage
