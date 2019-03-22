@@ -1,10 +1,10 @@
 # Sampling extension
 
 There are many cases in an Event's life when a system (either the system
-creating the event or a system transporting the event) might wish to only emit a
-portion of the events that actually happened. In a high throughput system where
-creating the event is costly, a system might wish to only create an event for
-1/100 of the times that something happened. Additionally, during the
+creating the event or a system transporting the event) might wish to only emit
+a portion of the events that actually happened. In a high throughput system
+where creating the event is costly, a system might wish to only create an event
+for 1/100 of the times that something happened. Additionally, during the
 transmission of an event from the source to the eventual recipient, any step
 along the way might choose to only pass along a fraction of the events it
 receives.
@@ -19,22 +19,21 @@ they impose additional sampling.
 
 ## Value
 
-- Type: `Integer`
-- Description: The rate at which this event has already been sampled. Represents
+* Type: `Integer`
+* Description: The rate at which this event has already been sampled. Represents
   the number of similar events that happened but were not sent plus this event.
   For example, if a system sees 30 occurrences and emits a single event, `rate`
-  would be 30 (29 not sent and 1 sent). A value of `1` is the equivalent of this
-  extension not being used at all.
-- Constraints
-  - The rate MUST be greater than zero.
+  would be 30 (29 not sent and 1 sent).
+  A value of `1` is the equivalent of this extension not being used at all.
+* Constraints
+  * The rate MUST be greater than zero.
 
 ## Encoding
 
 ### In-memory formats
-
-The Sampling extension uses the key `sampledRate` for in-memory formats.
+The Sampling extension uses the key `sampledrate` for in-memory formats.
 
 ### Transport bindings
+The Sampling extension does not customize any transport binding's storage
+for extensions.
 
-The Sampling extension does not customize any transport binding's storage for
-extensions.
