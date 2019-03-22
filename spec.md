@@ -15,6 +15,7 @@ This document is a working draft.
 - [Type System](#type-system)
 - [Context Attributes](#context-attributes)
 - [Data Attribute](#data-attribute)
+- [Privacy & Security](#privacy-and-security)
 - [Example](#example)
 
 ## Overview
@@ -295,6 +296,32 @@ encapsulated within the `data` attribute.
   which is specified by the `datacontenttype` attribute (e.g. application/json).
 * Constraints:
   * OPTIONAL
+
+# Privacy and Security
+Interoperability is the primary driver behind this specification, enabling such
+behavior requires some information to be made available *in the clear* resulting
+in the potential for information leakage.
+
+Consider the following to prevent inadvertent leakage especially when leveraging 
+3rd party platforms and communication networks:
+
+* Context Attributes
+
+  Sensitive information SHOULD NOT be carried or represented in context attributes.
+  
+  CloudEvent producers, consumers, and intermediaries MAY introspect and log context
+  attributes.
+  
+* Data
+
+  Domain specific [data](#data) SHOULD be encrypted to restrict visibility to
+  trusted parties. The mechanism employed for such encryption is an agreement between 
+  producers and consumers and thus outside the scope of this specification.
+  
+* Transport Bindings
+
+  Transport level security SHOULD be employed to ensure the trusted and 
+  secure exchange of CloudEvents.
 
 # Example
 
