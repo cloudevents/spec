@@ -314,8 +314,8 @@ Consider the following to prevent inadvertent leakage especially when leveraging
   
 * Data
 
-  Domain specific [data](#data) SHOULD be encoded to restrict visibility to
-  trusted parties. The mechanism employed for such encoding is an agreement between 
+  Domain specific [data](#data) SHOULD be encrypted to restrict visibility to
+  trusted parties. The mechanism employed for such encryption is an agreement between 
   producers and consumers and thus outside the scope of this specification.
   
 * Transport Bindings
