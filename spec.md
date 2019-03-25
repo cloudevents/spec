@@ -247,7 +247,7 @@ within the same JSON object.
 
 ### id
 - Type: `String`
-- Description: Identifies of the event, enables de-duplication.  The
+- Description: Identifies the event, enables de-duplication.  The
   format of this string is determined by the producer. Each producer
   MUST generate unique `id` values for its own events, `id` values
   from different producers might clash. Consumers MAY assume that
