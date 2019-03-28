@@ -3,11 +3,10 @@
 ## Abstract
 
 This non-normative document provides an overview of the CloudEvents
-specification. It is meant to compliment the CloudEvent specification
-to provide additional background and insight into the history and
-design decisions made during the development of the specification. This
-allows the specification itself to focus on the normative technical
-details.
+specification. It is meant to compliment the CloudEvent specification to provide
+additional background and insight into the history and design decisions made
+during the development of the specification. This allows the specification
+itself to focus on the normative technical details.
 
 ## Status of this document
 
@@ -29,15 +28,14 @@ This document is a working draft.
 
 ## History
 
-The [CNCF Serverless Working group](https://github.com/cncf/wg-serverless)
-was originally created by the CNCF's
+The [CNCF Serverless Working group](https://github.com/cncf/wg-serverless) was
+originally created by the CNCF's
 [Technical Oversight Committee](https://github.com/cncf/toc) to investigate
-Serverless Technology and to recommend some possible next steps for some
-CNCF related activities in this space. One of the recommendations was to
-investigate the creation of a common event format to aid in the
-portability of functions between Cloud providers and the interoperability of
-processing of event streams. As a result, the CloudEvents specification
-was created.
+Serverless Technology and to recommend some possible next steps for some CNCF
+related activities in this space. One of the recommendations was to investigate
+the creation of a common event format to aid in the portability of functions
+between Cloud providers and the interoperability of processing of event streams.
+As a result, the CloudEvents specification was created.
 
 While initially the work on CloudEvents was done as part of the Serverless
 Working group, once the specification reached its v0.1 milestone, the TOC
@@ -46,10 +44,10 @@ approved the CloudEvents work as a new stand-alone CNCF sandbox project.
 ## CloudEvents Concepts
 
 An [event](spec.md#event) includes context and data about an
-[occurrence](spec.md#occurrence). Each *occurrence* is uniquely
-identified by the data of the *event*.
+[occurrence](spec.md#occurrence). Each _occurrence_ is uniquely identified by
+the data of the _event_.
 
-*Events* represent facts and therefore do not include a destination, whereas
+_Events_ represent facts and therefore do not include a destination, whereas
 messages convey intent, transporting data from a source to a given destination.
 
 ### Eventing
@@ -71,27 +69,27 @@ The source generates a message where the event is encapsulated in a protocol.
 The event arrives to a destination, triggering an action which is provided with
 the event data.
 
-A *source* is a specific instance of a source-type which
-allows for staging and test instances. Open source software of a specific
-*source-type* may be deployed by multiple companies or providers.
+A _source_ is a specific instance of a source-type which allows for staging and
+test instances. Open source software of a specific _source-type_ may be deployed
+by multiple companies or providers.
 
 Events can be delivered through various industry standard protocols (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor
 specific protocols (AWS Kinesis, Azure Event Grid).
 
-An action processes an event defining a behavior or effect which was
-triggered by a specific *occurrence* from a specific *source*. While outside
-of the scope of the specification, the purpose of generating an *event* is
-typcially to allow other systems to easily react to changes in a source that
-they do not control. The *source* and action are typically built by different
-developers. Often the *source* is a managed service and the *action* is custom
-code in a serverless Function (such as AWS Lambda or Google Cloud Functions).
+An action processes an event defining a behavior or effect which was triggered
+by a specific _occurrence_ from a specific _source_. While outside of the scope
+of the specification, the purpose of generating an _event_ is typcially to allow
+other systems to easily react to changes in a source that they do not control.
+The _source_ and action are typically built by different developers. Often the
+_source_ is a managed service and the _action_ is custom code in a serverless
+Function (such as AWS Lambda or Google Cloud Functions).
 
 ## Design Goals
 
 CloudEvents are typically used in a distributed system to allow for services to
-be loosely coupled during development, deployed independently, and later
-can be connected to create new applications.
+be loosely coupled during development, deployed independently, and later can be
+connected to create new applications.
 
 The goal of the CloudEvents specification is to define interoperability of event
 systems that allow services to produce or consume events, where the producer and
@@ -99,155 +97,151 @@ consumer can be developed and deployed independently. A producer can generate
 events before a consumer is listening, and a consumer can express an interest in
 an event or class of events that is not yet being produced. Note that the
 specifications produced by this effort are focused on interoperability of the
-event format and how it appears while being sent on various transports,
-such as HTTP. The specifications will not focus on the processing model of
-either the event producer or event consumer.
+event format and how it appears while being sent on various transports, such as
+HTTP. The specifications will not focus on the processing model of either the
+event producer or event consumer.
 
 CloudEvents, at its core, defines a set of metadata, called attributes, about
 the event being transferred between systems, and how those pieces of metadata
-should appear in that message. This metadata is meant to be the minimal 
-set of information needed to route the request to the proper component 
-and to facilitate proper processing of the event by that component.
-So, while this might mean that some of the application
-data of the event itself might be duplicated as part of the CloudEvent's set
-of attributes, this is to be done solely for the purpose of proper delivery,
-and processing, of the message. Data that is not intended for that purpose
-should instead be placed within the event (the `data` attribute) itself.
+should appear in that message. This metadata is meant to be the minimal set of
+information needed to route the request to the proper component and to
+facilitate proper processing of the event by that component. So, while this
+might mean that some of the application data of the event itself might be
+duplicated as part of the CloudEvent's set of attributes, this is to be done
+solely for the purpose of proper delivery, and processing, of the message. Data
+that is not intended for that purpose should instead be placed within the event
+(the `data` attribute) itself.
 
-Along with the definition of these attributes, there will also be
-specifications of how to serialize the event in different formats (e.g. JSON)
-and transports (e.g. HTTP, AMQP, Kafka).
+Along with the definition of these attributes, there will also be specifications
+of how to serialize the event in different formats (e.g. JSON) and transports
+(e.g. HTTP, AMQP, Kafka).
 
 Batching of multiple events into a single API call is natively supported by some
 transports. To aid interoperability, it is left up to the transports if and how
-batching is implemented. Details may be found in the transport binding or in
-the transport specification.
+batching is implemented. Details may be found in the transport binding or in the
+transport specification.
 
 ### Non-Goals
+
 The following will not be part of the specification:
-* Function build and invocation process
-* Language-specific runtime APIs
-* Selecting a single identity/access control system
+
+- Function build and invocation process
+- Language-specific runtime APIs
+- Selecting a single identity/access control system
 
 ## Versioning of Attributes
 
 For certain CloudEvents attributes, the entity or data model referenced by its
-value might change over time. For example, `schemaurl` might be a reference
-one particular version of a schema document. Often these attribute values
-will then distinguish each variant by including some version-specific
-string as part of its value. For example, a version number (`v1`, `v2`), or a
-date (`2018-01-01`) might be used.
+value might change over time. For example, `schemaurl` might be a reference one
+particular version of a schema document. Often these attribute values will then
+distinguish each variant by including some version-specific string as part of
+its value. For example, a version number (`v1`, `v2`), or a date (`2018-01-01`)
+might be used.
 
-The CloudEvents specification does not mandate any particular pattern to
-be used, or even the use of version strings at all. This decision is up to
-each event producer. However, when a version-specific string is included,
-care should be taken whenever its value changes as event consumers might
-be reliant on the existing value and thus a change could be interpretted
-as a "breaking change". Some form of communication between producers and
-consumers should be established to ensure the event consumers know what
-possible values might be used. In general, this is true for all CloudEvents
-attributes as well.
+The CloudEvents specification does not mandate any particular pattern to be
+used, or even the use of version strings at all. This decision is up to each
+event producer. However, when a version-specific string is included, care should
+be taken whenever its value changes as event consumers might be reliant on the
+existing value and thus a change could be interpretted as a "breaking change".
+Some form of communication between producers and consumers should be established
+to ensure the event consumers know what possible values might be used. In
+general, this is true for all CloudEvents attributes as well.
 
 ## CloudEvent Attribute Extensions
 
 In order to achieve the stated goals, the specification authors will attempt to
-constrain the number of metadata attributes they define in CloudEvents. To
-that end, attributes defined by this project will fall into three
-categories:
+constrain the number of metadata attributes they define in CloudEvents. To that
+end, attributes defined by this project will fall into three categories:
+
 - required
 - optional
 - extensions
 
-As the category names imply, "required" attributes will be the ones that
-the group considers vital to all events in all use cases, while
-"optional" ones will be used in a majority of the cases. Both of the attributes
-in these cases will be defined within the specfication itself.
+As the category names imply, "required" attributes will be the ones that the
+group considers vital to all events in all use cases, while "optional" ones will
+be used in a majority of the cases. Both of the attributes in these cases will
+be defined within the specfication itself.
 
-When the group determines that an attribute is not common enough to
-fall into those two categories but would still benefit from the level of
-interoperability that comes from being well-defined, then they will be placed
-into the "extensions" category and put into 
-[documented extensions](documented-extensions.md).
-The specification defines how these extension attributes will
-appear within a CloudEvent.
+When the group determines that an attribute is not common enough to fall into
+those two categories but would still benefit from the level of interoperability
+that comes from being well-defined, then they will be placed into the
+"extensions" category and put into
+[documented extensions](documented-extensions.md). The specification defines how
+these extension attributes will appear within a CloudEvent.
 
-In determining which category a proposed attribute belongs, or even if it
-will be included at all, the group uses use-cases and
-user-stories to explain the rationale and need for them. This supporting
-information will be added to the [Prior Art](#prior-art) section of this
-document.
+In determining which category a proposed attribute belongs, or even if it will
+be included at all, the group uses use-cases and user-stories to explain the
+rationale and need for them. This supporting information will be added to the
+[Prior Art](#prior-art) section of this document.
 
-Extension attributes to the CloudEvent specification are meant to
-be additional metadata that needs to be included to help ensure proper
-routing and processing of the CloudEvent. Additional metadata for other
-purposes, that is related to the event itself and not needed in the
-transportation or processing of the CloudEvent, should instead be placed
-within the proper extensibility points of the event (the `data` attribute)
-itself.
+Extension attributes to the CloudEvent specification are meant to be additional
+metadata that needs to be included to help ensure proper routing and processing
+of the CloudEvent. Additional metadata for other purposes, that is related to
+the event itself and not needed in the transportation or processing of the
+CloudEvent, should instead be placed within the proper extensibility points of
+the event (the `data` attribute) itself.
 
 Extension attributes should be kept minimal to ensure the CloudEvent can be
-properly serialized and transported. For example, the
-Event producers should consider the technical limitations that might be
-encountered when adding extensions to a CloudEvent. For example, the
+properly serialized and transported. For example, the Event producers should
+consider the technical limitations that might be encountered when adding
+extensions to a CloudEvent. For example, the
 [HTTP Binary Mode](http-transport-binding.md#31-binary-content-mode) uses HTTP
 headers to transport metadata; most HTTP servers will reject requests with
 excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
 size and number of extension attributes should be kept minimal.
 
 The specification places no restrictions on the type of the extension
-attributes. Meaning, they may be simple types (e.g. strings, integers),
-complex (e.g. structured) or undefined collection of attributes.
+attributes. Meaning, they may be simple types (e.g. strings, integers), complex
+(e.g. structured) or undefined collection of attributes.
 
-If an extension becomes popular then the specification authors might
-consider moving it into the specification as a core attribute. This means
-that the extension mechanism/process can be used as a way to vet new
-attributes prior to formally adding them to the specification.
+If an extension becomes popular then the specification authors might consider
+moving it into the specification as a core attribute. This means that the
+extension mechanism/process can be used as a way to vet new attributes prior to
+formally adding them to the specification.
 
 ### JSON Extensions
 
 As mentioned in the [Attributes](json-format.md#2-attributes) section of the
-[JSON Event Format for CloudEvents](json-format.md) specificatinon,
-CloudEvent extension attributes are serialized as siblings to the specification
-defined attributes - meaning, at the top-level of the JSON object. The
-authors of the specification spent a long time considering all options
-and decided that this was the best choice. Some of the rationale follows.
+[JSON Event Format for CloudEvents](json-format.md) specificatinon, CloudEvent
+extension attributes are serialized as siblings to the specification defined
+attributes - meaning, at the top-level of the JSON object. The authors of the
+specification spent a long time considering all options and decided that this
+was the best choice. Some of the rationale follows.
 
-Since the specifications follow [semver](https://semver.org/), this
-means that new properties can be defined by future versions of the
-core specification without requiring a major version number change - as
-long as these properties are optional. In those cases, consider what an
-existing consumer would do with a new (unknown) top-level property. While
-it would be free to ignore it, since it is optional, in most cases it is
-believed that these properties would still want to be exposed to the
-application receiving those events. This would allow those applications to
-support these properties even if the infrastructure doesn't. This means
-that unknown top-level properties (regardless of who defined them - future
-versions of the spec or the event producer) are probably not going to be
-ignored.  So, while some other specifications define a specific property
+Since the specifications follow [semver](https://semver.org/), this means that
+new properties can be defined by future versions of the core specification
+without requiring a major version number change - as long as these properties
+are optional. In those cases, consider what an existing consumer would do with a
+new (unknown) top-level property. While it would be free to ignore it, since it
+is optional, in most cases it is believed that these properties would still want
+to be exposed to the application receiving those events. This would allow those
+applications to support these properties even if the infrastructure doesn't.
+This means that unknown top-level properties (regardless of who defined them -
+future versions of the spec or the event producer) are probably not going to be
+ignored. So, while some other specifications define a specific property
 underwhich extensions are placed (e.g. a top-level `extensions` property), the
-authors decided that having two different locations within an
-incoming event for unknown properties could lead to interoperability issues
-and confusion for developers.
+authors decided that having two different locations within an incoming event for
+unknown properties could lead to interoperability issues and confusion for
+developers.
 
-Often extensions are used to test new potential properties of
-specifications prior to them being formally adopted. If there were an
-`extensions` type of property, in which this new property was serialized,
-then if that property were to ever be adopted by the core specification it
-would be promoted (from a serialization perspective) from the `extensions`
-property to be a top-level property. If we assume that this new property
-will be optional, then as it is adopted by the core specification it will
-be just a minor version increment, and all existing consumers should still
-continue to work. However, consumers will not know where this property
-will appear - in the `extensions` property or as a top-level property.
-This means they might need to look in both places. What if the property
-appears in both place but with different values? Will producers need to place
-it in both places since they could have old and new consumers? While
-it might be possible to define clear rules for how to solve each of the
-potential problems that arise, the authors decided that it would be better
-to simply avoid all of them in the first place by only having one location
-in the serialization for unkown, or even new, properties. It was also
-noted that the HTTP specification is now following a similar pattern by
-no longer suggesting that extension HTTP headers be prefixed with `X-`.
+Often extensions are used to test new potential properties of specifications
+prior to them being formally adopted. If there were an `extensions` type of
+property, in which this new property was serialized, then if that property were
+to ever be adopted by the core specification it would be promoted (from a
+serialization perspective) from the `extensions` property to be a top-level
+property. If we assume that this new property will be optional, then as it is
+adopted by the core specification it will be just a minor version increment, and
+all existing consumers should still continue to work. However, consumers will
+not know where this property will appear - in the `extensions` property or as a
+top-level property. This means they might need to look in both places. What if
+the property appears in both place but with different values? Will producers
+need to place it in both places since they could have old and new consumers?
+While it might be possible to define clear rules for how to solve each of the
+potential problems that arise, the authors decided that it would be better to
+simply avoid all of them in the first place by only having one location in the
+serialization for unkown, or even new, properties. It was also noted that the
+HTTP specification is now following a similar pattern by no longer suggesting
+that extension HTTP headers be prefixed with `X-`.
 
 ## Qualifying Protocols and Encodings
 
@@ -262,15 +256,15 @@ projections of its data format onto commonly used protocols and with commonly
 used encodings.
 
 While each software or service product and project can obviously make its own
-choices about which form of communication it prefers, its unquestionable that
-a proprietary protocol that is private to such a product or project does not
+choices about which form of communication it prefers, its unquestionable that a
+proprietary protocol that is private to such a product or project does not
 further the goal of broad interoperability across producers and consumers of
 events.
 
 Especially in the area of messaging and eventing, the industry has made
 significant progress in the last decade in developing a robust and broadly
-supported protocol foundation, like HTTP 1.1 and HTTP/2 as well as WebSockets
-or events on the web, or MQTT and AMQP for connection-oriented messaging and
+supported protocol foundation, like HTTP 1.1 and HTTP/2 as well as WebSockets or
+events on the web, or MQTT and AMQP for connection-oriented messaging and
 telemetry transfers.
 
 Some widely used protocols have become de-facto standards emerging out of strong
@@ -279,8 +273,8 @@ the strong ecosystems of projects released by a single company, and in either
 case largely in parallel to the evolution of the previously mentioned standards
 stacks.
 
-The CloudEvents effort shall not become a vehicle to even implicitly endorse
-or promote project- or product-proprietary protocols, because that would be
+The CloudEvents effort shall not become a vehicle to even implicitly endorse or
+promote project- or product-proprietary protocols, because that would be
 counterproductive towards CloudEvents' original goals.
 
 For a protocol or encoding to qualify for a core CloudEvents event format or
@@ -289,19 +283,19 @@ protocol binding, it must belong to either one of the following categories:
 - The protocol has a formal status as a standard with a widely-recognized
   multi-vendor protocol standardization body (e.g. W3C, IETF, OASIS, ISO)
 - The protocol has a "de-facto standard" status for its ecosystem category,
-  which means it is used so widely that it is considered a standard for a
-  given application. Practically, we would like to see at least one open
-  source implementation under the umbrella of a vendor-neutral open-source
-  organization (e.g. Apache, Eclipse, CNCF, .NET Foundation) and at least
-  a dozen independent vendors using it in their products/services.
+  which means it is used so widely that it is considered a standard for a given
+  application. Practically, we would like to see at least one open source
+  implementation under the umbrella of a vendor-neutral open-source organization
+  (e.g. Apache, Eclipse, CNCF, .NET Foundation) and at least a dozen independent
+  vendors using it in their products/services.
 
 Aside from formal status, a key criterion for whether a protocol or encoding
 shall qualify for a core CloudEvents event format or transport binding is
-whether the group agrees that the specification will be of sustained
-practical benefit for any party that is unrelated to the product or project
-from which the protocol or encoding emerged. A base requirement for this is
-that the protocol or encoding is defined in a fashion that allows alternate
-implementations independent of the product or project's code.
+whether the group agrees that the specification will be of sustained practical
+benefit for any party that is unrelated to the product or project from which the
+protocol or encoding emerged. A base requirement for this is that the protocol
+or encoding is defined in a fashion that allows alternate implementations
+independent of the product or project's code.
 
 All other protocol and encoding formats for CloudEvents are welcome to be
 included in a list pointing to the CloudEvents binding information in the
@@ -315,35 +309,35 @@ maintainers are not responsible for creating, maintaining, or notifying
 maintainers of proprietary specs of drift from the CloudEvents spec.
 
 Proprietary specs will be hosted in their own repository or documentation site,
-and collected in the [proprietary-specs](proprietary-specs.md) file.
-Proprietary specs should follow
-the same format as the other specs for core protocols and encodings.
+and collected in the [proprietary-specs](proprietary-specs.md) file. Proprietary
+specs should follow the same format as the other specs for core protocols and
+encodings.
 
 Proprietary specs will receive less scrutiny than a core spec, and as the
-CloudEvents spec evolves, it is the the responsibility of the maintainers of
-the respective protocols and encodings to keep specs in sync with the
-CloudEvents spec. If a proprietary spec falls too far out of date, CloudEvents
-may mark the link to that spec as deprecated or remove it.
+CloudEvents spec evolves, it is the the responsibility of the maintainers of the
+respective protocols and encodings to keep specs in sync with the CloudEvents
+spec. If a proprietary spec falls too far out of date, CloudEvents may mark the
+link to that spec as deprecated or remove it.
 
-In the case that multiple, incompatible specs are created for the same
-protocol, the repository maintainers will be agnostic about which spec is
-correct and list links to all specs.
+In the case that multiple, incompatible specs are created for the same protocol,
+the repository maintainers will be agnostic about which spec is correct and list
+links to all specs.
 
 ## Prior Art
 
-This section describes some of the input material used by the group
-during the development of the CloudEvent specification.
+This section describes some of the input material used by the group during the
+development of the CloudEvent specification.
 
 ### Roles
 
-The list below enumerates the various participants, and scenarios, that might
-be involved in the producing, managing or consuming of events.
+The list below enumerates the various participants, and scenarios, that might be
+involved in the producing, managing or consuming of events.
 
-In these the roles of event producer and event consumer are kept
-distinct. A single application context can always take on multiple roles
-concurrently, including being both a producer and a consumer of events.
+In these the roles of event producer and event consumer are kept distinct. A
+single application context can always take on multiple roles concurrently,
+including being both a producer and a consumer of events.
 
-1) Applications produce events for consumption by other parties, for instance
+1. Applications produce events for consumption by other parties, for instance
    for providing consumers with insights about end-user activities, state
    changes or environment observations, or for allowing complementing the
    application's capabilities with event-driven extensions.
@@ -355,129 +349,120 @@ concurrently, including being both a producer and a consumer of events.
 
    The producer application could run anywhere, such as on a server or a device.
 
-   The produced events might be rendered and emitted directly by the producer
-   or by an intermediary; as example for the latter, consider event data
+   The produced events might be rendered and emitted directly by the producer or
+   by an intermediary; as example for the latter, consider event data
    transmitted by a device over payload-size-constrained networks such as
-   LoRaWAN or ModBus, and where events compliant to this
-   specification will be rendered by a network gateway on behalf of the
-   producer.
+   LoRaWAN or ModBus, and where events compliant to this specification will be
+   rendered by a network gateway on behalf of the producer.
 
-   For example, a weather station transmits a 12-byte, proprietary event
-   payload indicating weather conditions once every 5 minutes over LoRaWAN. A
-   LoRaWAN gateway is then used to publish the event to an Internet destination
-   in the CloudEvents format. The LoRaWAN gateway is the event producer,
-   publishing on behalf of the weather station, and will set event metadata
-   appropriately to reflect the source of the event.
+   For example, a weather station transmits a 12-byte, proprietary event payload
+   indicating weather conditions once every 5 minutes over LoRaWAN. A LoRaWAN
+   gateway is then used to publish the event to an Internet destination in the
+   CloudEvents format. The LoRaWAN gateway is the event producer, publishing on
+   behalf of the weather station, and will set event metadata appropriately to
+   reflect the source of the event.
 
-2) Applications consume events for the purposes such as display, archival,
+2. Applications consume events for the purposes such as display, archival,
    analytics, workflow processing, monitoring the condition and/or providing
    transparency into the operation of a business solution and its foundational
    building blocks.
 
-   The consumer application could run anywhere, such as on a server or a
-   device.
+   The consumer application could run anywhere, such as on a server or a device.
 
    A consuming application will typically be interested in:
-   - distinguishing events such that the exact same event is not
-     processed twice.
-   - identifying and selecting the origin context or the
-     producer-assigned classification.
-   - identifying the temporal order of the events relative to the
-     originating context and/or relative to a wall-clock.
-   - understanding the context-related detail information carried
-     in the event.
-   - correlating event instances from multiple event producers and send
-     them to the same consumer context.
+
+   - distinguishing events such that the exact same event is not processed
+     twice.
+   - identifying and selecting the origin context or the producer-assigned
+     classification.
+   - identifying the temporal order of the events relative to the originating
+     context and/or relative to a wall-clock.
+   - understanding the context-related detail information carried in the event.
+   - correlating event instances from multiple event producers and send them to
+     the same consumer context.
 
    In some cases, the consuming application might be interested in:
-   - obtaining further details about the event's subject from the
-     originating context, like obtaining detail information about a
-     changed object that requires privileged access authorization.
-     For example, a HR solution might only publish very limited
-     information in events for privacy reasons, and any event consumer
-     needing more data will have to obtain details related to the event
-     from the HR system under their own authorization context.
-   - interact with the event's subject at the originating context,
-     for instance reading a storage blob after having been informed
-     that this blob has just been created.
 
-   Consumer interests motivate requirements for which information
-   producers ought to include an event.
+   - obtaining further details about the event's subject from the originating
+     context, like obtaining detail information about a changed object that
+     requires privileged access authorization. For example, a HR solution might
+     only publish very limited information in events for privacy reasons, and
+     any event consumer needing more data will have to obtain details related to
+     the event from the HR system under their own authorization context.
+   - interact with the event's subject at the originating context, for instance
+     reading a storage blob after having been informed that this blob has just
+     been created.
 
-3) Middleware routes events from producers to consumers, or onwards
-   to other middleware. Applications producing events might delegate
-   certain tasks arising from their consumers' requirements to
-   middleware:
+   Consumer interests motivate requirements for which information producers
+   ought to include an event.
 
-   - Management of many concurrent interested consumers for one of
-     multiple classes or originating contexts of events
-   - Processing of filter conditions over a class or originating context
-     of events on behalf of consumers.
+3. Middleware routes events from producers to consumers, or onwards to other
+   middleware. Applications producing events might delegate certain tasks
+   arising from their consumers' requirements to middleware:
+
+   - Management of many concurrent interested consumers for one of multiple
+     classes or originating contexts of events
+   - Processing of filter conditions over a class or originating context of
+     events on behalf of consumers.
    - Transcoding, like encoding in MsgPack after decoding from JSON
-   - Transformation that changes the event's structure, like mapping from
-     a proprietary format to CloudEvents, while preserving the
-     identity and semantic integrity of the event.
+   - Transformation that changes the event's structure, like mapping from a
+     proprietary format to CloudEvents, while preserving the identity and
+     semantic integrity of the event.
    - Instant "push-style" delivery to interested consumers.
-   - Storing events for eventual delivery, either for pick-up initiated
-     by the consumer ("pull"), or initiated by the middleware ("push")
-     after a delay.
-   - Observing event content or event flow for monitoring or
-     diagnostics purposes.
+   - Storing events for eventual delivery, either for pick-up initiated by the
+     consumer ("pull"), or initiated by the middleware ("push") after a delay.
+   - Observing event content or event flow for monitoring or diagnostics
+     purposes.
 
    To satisfy these needs, middleware will be interested in:
-   - A metadata discriminator usable for classification or
-     contextualization of events so that consumers can express interest
-     in one or multiple such classes or contexts.
-     For instance, a consumer might be interested in all events related
-     to a specific directory inside a file storage account.
-   - A metadata discriminator that allows distinguishing the subject of
-     a particular event of that class or context.
-     For instance, a consumer might want to filter out all events related
-     to new files ending with ".jpg" (the file name being the "new file"
-     event's subject) for the context describing specific directory
-     inside a file storage account that it has registered interest on.
+
+   - A metadata discriminator usable for classification or contextualization of
+     events so that consumers can express interest in one or multiple such
+     classes or contexts. For instance, a consumer might be interested in all
+     events related to a specific directory inside a file storage account.
+   - A metadata discriminator that allows distinguishing the subject of a
+     particular event of that class or context. For instance, a consumer might
+     want to filter out all events related to new files ending with ".jpg" (the
+     file name being the "new file" event's subject) for the context describing
+     specific directory inside a file storage account that it has registered
+     interest on.
    - An indicator for the encoding of the event and its data.
-   - An indicator for the structural layout (schema) for the event and
-     its data.
+   - An indicator for the structural layout (schema) for the event and its data.
 
-   Whether its events are available for consumption via a middleware is
-   a delegation choice of the producer.
+   Whether its events are available for consumption via a middleware is a
+   delegation choice of the producer.
 
-   In practice, middleware can take on role of a producer when it changes
-   the semantic meaning of an event, a consumer when it takes action based
-   on an event, or middleware when it routes events without making semantic
-   changes.
+   In practice, middleware can take on role of a producer when it changes the
+   semantic meaning of an event, a consumer when it takes action based on an
+   event, or middleware when it routes events without making semantic changes.
 
-4) Frameworks and other abstractions make interactions with event platform
-   infrastructure simpler, and often provide common API surface areas
-   for multiple event platform infrastructures.
+4. Frameworks and other abstractions make interactions with event platform
+   infrastructure simpler, and often provide common API surface areas for
+   multiple event platform infrastructures.
 
-   Frameworks are often used for turning events into an object graph,
-   and to dispatch the event to some specific handling user-code or
-   user-rule that permits the consuming application to react to
-   a particular kind of occurrence in the originating context and
-   on a particular subject.
+   Frameworks are often used for turning events into an object graph, and to
+   dispatch the event to some specific handling user-code or user-rule that
+   permits the consuming application to react to a particular kind of occurrence
+   in the originating context and on a particular subject.
 
-   Frameworks are most interested in semantic metadata commonality
-   across the platforms they abstract, so that similar activities can
-   be handled uniformly.
+   Frameworks are most interested in semantic metadata commonality across the
+   platforms they abstract, so that similar activities can be handled uniformly.
 
-   For a sports application, a developer using the framework might be
-   interested in all events from today's game (subject) of a team in a
-   league (topic of interest), but wanting to handle reports
-   of "goal" differently than reports of "substitution".
-   For this, the framework will need a suitable metadata discriminator
-   that frees it from having to understand the event details.
+   For a sports application, a developer using the framework might be interested
+   in all events from today's game (subject) of a team in a league (topic of
+   interest), but wanting to handle reports of "goal" differently than reports
+   of "substitution". For this, the framework will need a suitable metadata
+   discriminator that frees it from having to understand the event details.
 
 ### Value Proposition
 
-This section describes some of the use-cases that explain the value
-of CloudEvents.
+This section describes some of the use-cases that explain the value of
+CloudEvents.
 
 #### Normalizing Events Across Services & Platforms
 
-Major event publishers (e.g. AWS, Microsoft, Google, etc.) all publish events
-in different formats on their respective platforms. There are even a few cases
+Major event publishers (e.g. AWS, Microsoft, Google, etc.) all publish events in
+different formats on their respective platforms. There are even a few cases
 where services on the same provider publish events in different formats (e.g.
 AWS). This forces event consumers to implement custom logic to read or munge
 event data across platforms and occasionally across services on a single
@@ -492,8 +477,7 @@ Event data being transported across environments is increasingly common.
 However, without a common way of describing events, delivery of events across
 environments is hindered. There is no single way of determining where an event
 came from and where it might be going. This prevents tooling to facilitate
-successful event delivery and consumers from knowing what to do with event
-data.
+successful event delivery and consumers from knowing what to do with event data.
 
 CloudEvents offers useful metadata which middleware and consumers can rely upon
 to facilitate event routing, logging, delivery and receipt.
@@ -501,11 +485,11 @@ to facilitate event routing, logging, delivery and receipt.
 #### Increasing Portability of Functions-as-a-Service
 
 Functions-as-a-Service (also known as serverless computing) is one of the
-fastest growing trends in IT and it is largely event-driven. However, a
-primary concern of FaaS is vendor lock-in. This lock-in is partially caused
-by differences in function APIs and signatures across providers, but the
-lock-in is also caused by differences in the format of event data received
-within functions.
+fastest growing trends in IT and it is largely event-driven. However, a primary
+concern of FaaS is vendor lock-in. This lock-in is partially caused by
+differences in function APIs and signatures across providers, but the lock-in is
+also caused by differences in the format of event data received within
+functions.
 
 CloudEvents' common way of describing event data increases the portability of
 Functions-as-a-Service.
@@ -517,14 +501,14 @@ event-driven and serverless architectures. There is no easy way to mock events
 accurately for development and testing purposes, and help emulate event-driven
 workflows in a development environment.
 
-CloudEvents can enable better developer tools for building, testing and
-handling the end-to-end lifecycle of event-driven and serverless architectures.
+CloudEvents can enable better developer tools for building, testing and handling
+the end-to-end lifecycle of event-driven and serverless architectures.
 
 #### Event Data Evolution
 
 Most platforms and services version the data model of their events differently
-(if they do this at all). This creates an inconsistent experience for
-publishing and consuming the data model of events as those data models evolve.
+(if they do this at all). This creates an inconsistent experience for publishing
+and consuming the data model of events as those data models evolve.
 
 CloudEvents can offer a common way to version and evolve event data. This will
 help event publishers safely version their data models based on best practices,
@@ -551,11 +535,10 @@ transited and allow for better introspection of the data.
 
 #### Event Tracing
 
-An event sent from a source may result in a sequence of additional events
-sent from various middleware devices such as event brokers and gateways.
-CloudEvents includes metadata in events to associate these events as being
-part of an event sequence for the purpose of event tracing and
-troubleshooting.
+An event sent from a source may result in a sequence of additional events sent
+from various middleware devices such as event brokers and gateways. CloudEvents
+includes metadata in events to associate these events as being part of an event
+sequence for the purpose of event tracing and troubleshooting.
 
 #### Cloudbursting
 
@@ -563,15 +546,14 @@ TBD
 
 #### IoT
 
-IoT devices send and receive events related to their functionality.
-For example, a connected thermostat will send telemetry on the current
-temperature and could receive events to change temperatures.
-These devices typically have a constrained operating environment
-(cpu, memory) requiring a well defined event message format.
-In a lot of cases these messages are binary encoded instead of textual.
-Whether directly from the device or transformed via a gateway, CloudEvents
-would allow for a better description of the origin of the message and the
-format of the data contained within the message.
+IoT devices send and receive events related to their functionality. For example,
+a connected thermostat will send telemetry on the current temperature and could
+receive events to change temperatures. These devices typically have a
+constrained operating environment (cpu, memory) requiring a well defined event
+message format. In a lot of cases these messages are binary encoded instead of
+textual. Whether directly from the device or transformed via a gateway,
+CloudEvents would allow for a better description of the origin of the message
+and the format of the data contained within the message.
 
 #### Event Correlation
 
@@ -591,12 +573,12 @@ instance to the correct application/workflow instance.
 
 ### Existing Event Formats
 
-As with the previous section, the examination (and understanding) of the
-current state of the world was very important to the group. To that
-end, a sampling of existing current event formats that are used in practice
-today was gathered.
+As with the previous section, the examination (and understanding) of the current
+state of the world was very important to the group. To that end, a sampling of
+existing current event formats that are used in practice today was gathered.
 
 #### Microsoft - Event Grid
+
 ```
 {
     "topic":"/subscriptions/{subscription-id}",
@@ -618,9 +600,11 @@ today was gathered.
     }
 }
 ```
+
 [Documentation](https://docs.microsoft.com/en-us/azure/event-grid/event-schema)
 
 #### Google - Cloud Functions (potential future)
+
 ```
 {
   "data": {
@@ -645,6 +629,7 @@ today was gathered.
 ```
 
 #### AWS - SNS
+
 ```
 {
   "Records": [
@@ -678,9 +663,11 @@ today was gathered.
   ]
 }
 ```
+
 [Documentation](http://docs.aws.amazon.com/lambda/latest/dg/eventsources.html)
 
 #### AWS - Kinesis
+
 ```
 {
   "Records": [
@@ -704,6 +691,7 @@ today was gathered.
 ```
 
 #### IBM - OpenWhisk - Web Action Event
+
 ```
 {
   "__ow_method": "post",
@@ -721,6 +709,7 @@ today was gathered.
 ```
 
 #### OpenStack - Audit Middleware - Event
+
 ```
 {
   "typeURI": "http://schemas.dmtf.org/cloud/audit/1.0/event",
@@ -756,9 +745,11 @@ today was gathered.
   "requestPath": "/v2/ae63ddf2076d4342a56eb049e37a7621/servers/b1b475fc-ef0a-4899-87f3-674ac0d56855"
 }
 ```
+
 [Documentation](https://github.com/openstack/pycadf/blob/master/doc/source/event_concept.rst)
 
 #### Adobe - I/O Events
+
 ```
 {
     "event_id": "639fd17a-d0bb-40ca-83a4-e78612bce5dc",
@@ -790,4 +781,5 @@ today was gathered.
     }
 }
 ```
+
 [Documentation](https://www.adobe.io/apis/cloudplatform/events/documentation.html)

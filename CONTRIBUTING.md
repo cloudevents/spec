@@ -1,37 +1,37 @@
 # Contributing to CloudEvents
 
-This page contains information about reporting issues, how to suggest changes
-as well as the guidelines we follow for how our documents are formatted.
+This page contains information about reporting issues, how to suggest changes as
+well as the guidelines we follow for how our documents are formatted.
 
 ## Table of Contents
-* [Reporting an Issue](#reporting-an-issue)
-* [Suggesting a Change](#suggesting-a-change)
-* [Spec Formatting Conventions](#spec-formatting-conventions)
+
+- [Reporting an Issue](#reporting-an-issue)
+- [Suggesting a Change](#suggesting-a-change)
+- [Spec Formatting Conventions](#spec-formatting-conventions)
 
 ## Reporting an Issue
 
-To report an issue, or to suggest an idea for a change that you haven't
-had time to write-up yet, open an
-[issue](https://github.com/cloudevents/spec/issues). It is best to check
-our existing [issues](https://github.com/cloudevents/spec/issues) first
-to see if a similar one has already been opened and discussed.
+To report an issue, or to suggest an idea for a change that you haven't had time
+to write-up yet, open an [issue](https://github.com/cloudevents/spec/issues). It
+is best to check our existing
+[issues](https://github.com/cloudevents/spec/issues) first to see if a similar
+one has already been opened and discussed.
 
 ## Suggesting a Change
 
-To suggest a change to this repository, submit a [pull
-request](https://github.com/cloudevents/spec/pulls)(PR) with the complete
+To suggest a change to this repository, submit a
+[pull request](https://github.com/cloudevents/spec/pulls)(PR) with the complete
 set of changes you'd like to see. See the
-[Spec Formatting Conventions](#spec-formatting-conventions) section for
-the guidelines we follow for how documents are formatted.
+[Spec Formatting Conventions](#spec-formatting-conventions) section for the
+guidelines we follow for how documents are formatted.
 
 Each PR must be signed per the following section.
 
 ### Assigning and Owning work
 
 If you want to own and work on an issue, add a comment or “#dibs” it asking
-about ownership. A maintainer will then add the Assigned label and modify
-the first comment in the issue to include `Assigned to: @person`
-
+about ownership. A maintainer will then add the Assigned label and modify the
+first comment in the issue to include `Assigned to: @person`
 
 ### Sign your work
 
@@ -88,8 +88,8 @@ Use your real name (sorry, no pseudonyms or anonymous contributions.)
 If you set your `user.name` and `user.email` git configs, you can sign your
 commit automatically with `git commit -s`.
 
-Note: If your git config information is set properly then viewing the
- `git log` information for your commit will look something like this:
+Note: If your git config information is set properly then viewing the `git log`
+information for your commit will look something like this:
 
 ```
 Author: Joe Smith <joe.smith@email.com>
@@ -100,13 +100,13 @@ Date:   Thu Feb 2 11:41:15 2018 -0800
     Signed-off-by: Joe Smith <joe.smith@email.com>
 ```
 
-Notice the `Author` and `Signed-off-by` lines match. If they don't
-your PR will be rejected by the automated DCO check.
+Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will
+be rejected by the automated DCO check.
 
 ## Spec Formatting Conventions
 
 Documents in this repository will adhere to the following rules:
-  * Lines are wrapped at 80 columns (when possible)
-  * Specifications will use [RFC2119](https://tools.ietf.org/html/rfc2119)
-    keywords to indicate normative requirements
 
+- Lines are wrapped at 80 columns (when possible)
+- Specifications will use [RFC2119](https://tools.ietf.org/html/rfc2119)
+  keywords to indicate normative requirements

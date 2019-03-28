@@ -9,10 +9,7 @@
       "type": "string"
     },
     "data": {
-      "type": [
-        "object",
-        "string"
-      ]
+      "type": ["object", "string"]
     },
     "event": {
       "properties": {
@@ -44,12 +41,7 @@
           "$ref": "#/definitions/source"
         }
       },
-      "required": [
-        "specversion",
-        "id",
-        "type",
-        "source"
-      ],
+      "required": ["specversion", "id", "type", "source"],
       "type": "object"
     },
     "id": {
