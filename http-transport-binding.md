@@ -226,7 +226,10 @@ with [RFC7230, sections 3, 3.2, 3.2.6][rfc7230-section-3]. The rules for
 encoding of the percent character ('%') apply as defined in [RFC 3986 Section
 2.4.][rfc3986-section-2-4].
 
-JSON objects and arrays are NOT surrounded with single or double quotes.
+[JSON values][json-value] for well-known context attributes as defined by the
+[CloudEvents specification][ce] or [CloudEvents Extensions][extensions] MAY omit
+the surrounding single or double quote. All values are assumed to be a string
+unless well-known.
 
 #### 3.1.4 Examples
 
@@ -236,11 +239,11 @@ request:
 ```text
 POST /someresource HTTP/1.1
 Host: webhook.example.com
-ce-specversion: "0.2"
-ce-type: "com.example.someevent"
-ce-time: "2018-04-05T03:56:24Z"
-ce-id: "1234-1234-1234"
-ce-source: "/mycontext/subcontext"
+ce-specversion: 0.2
+ce-type: com.example.someevent
+ce-time: 2018-04-05T03:56:24Z
+ce-id: 1234-1234-1234
+ce-source: /mycontext/subcontext
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
@@ -254,11 +257,11 @@ This example shows a response containing an event:
 
 ```text
 HTTP/1.1 200 OK
-ce-specversion: "0.2"
-ce-type: "com.example.someevent"
-ce-time: "2018-04-05T03:56:24Z"
-ce-id: "1234-1234-1234"
-ce-source: "/mycontext/subcontext"
+ce-specversion: 0.2
+ce-type: com.example.someevent
+ce-time: 2018-04-05T03:56:24Z
+ce-id: 1234-1234-1234
+ce-source: /mycontext/subcontext
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
@@ -266,6 +269,29 @@ Content-Length: nnnn
 {
     ... application data ...
 }
+```
+
+The following are equivalent in binary mode:
+
+```text
+ce-specversion: 0.2
+ce-type: com.example.someevent
+ce-custom: {"my":"value"}
+    .... further attributes ...
+```
+
+```text
+ce-specversion: '0.2'
+ce-type: 'com.example.someevent'
+ce-custom: '{"my":"value"}'
+    .... further attributes ...
+```
+
+```text
+ce-specversion: "0.2"
+ce-type: "com.example.someevent"
+ce-custom: "{\"my\":\"value\"}"
+    .... further attributes ...
 ```
 
 ### 3.2. Structured Content Mode
@@ -467,6 +493,7 @@ Content-Length: nnnn
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
+[extensions]: ./extensions/
 [json-format]: ./json-format.md
 [json-batch-format]: ./json-format.md#4-json-batch-format
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
