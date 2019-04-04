@@ -212,7 +212,7 @@ within the same JSON object.
   inside a blob-storage container. In this case, the event `source` identifies
   the subscription scope (storage container), the `type` identifies the "blob
   created" event, and the `id` uniquely identifies the event instance to
-  distinguish separate occurrences of a same-named blog having been created;
+  distinguish separate occurrences of a same-named blob having been created;
   the name of the newly created blob is carried in `subject`.
 
   Identifying the subject of the event in context metadata (opposed to only in
