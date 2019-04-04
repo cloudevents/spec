@@ -1,4 +1,4 @@
-# CloudEvents - Version 0.2
+﻿# CloudEvents - Version 0.2
 
 ## Abstract
 
@@ -186,20 +186,19 @@ within the same JSON object.
   - MUST be a non-empty string
 
 ### source
-
-- Type: `URI-reference`
-- Description: This describes the event producer. Often this will include
-  information such as the type of the event source, the organization publishing
-  the event, the process that produced the event, and some unique identifiers.
-  The exact syntax and semantics behind the data encoded in the URI is event
-  producer defined.
-- Constraints:
-  - REQUIRED
-- Examples
-  - https://github.com/cloudevents/spec/pull/123
-  - /cloudevents/spec/pull/123
-  - urn:event:from:myapi/resourse/123
-  - mailto:cncf-wg-serverless@lists.cncf.io
+* Type: `URI-reference`
+* Description: This describes the event producer. Often this will include
+  information such as the type of the event source, the organization
+  publishing the event, the process that produced the event, and some unique
+  identifiers. The exact syntax and semantics behind the data encoded in the URI
+  is event producer defined.
+* Constraints:
+  * REQUIRED
+* Examples
+    * https://github.com/cloudevents/spec/pull
+    * /cloudevents/spec/pull
+    * urn:event:from:myapi/resource
+    * mailto:cncf-wg-serverless@lists.cncf.io
 
 ### subject
 * Type: `String`
@@ -208,22 +207,26 @@ within the same JSON object.
   a subscriber will typically subscribe to events emitted by a `source`,
   but the `source` identifier alone might not be sufficient as a qualifier for
   any specific event if the `source` context has internal sub-structure.
-* Example: A subscriber might register interest for when new blobs are created
-  inside a blob-storage container. In this case, the event `source` identifies
-  the subscription scope (storage container), the `type` identifies the "blob
-  created" event, and the `id` uniquely identifies the event instance to
-  distinguish separate occurrences of a same-named blob having been created;
-  the name of the newly created blob is carried in `subject`.
 
   Identifying the subject of the event in context metadata (opposed to only in
   the `data` payload) is particularly helpful in generic subscription filtering
   scenarios where middleware is unable to interpret the `data` content. In the
   above example, the subscriber might only be interested in blobs with names
-  ending with '.jpg' or '.jpeg' and the subject attribute allows for constructing
-  a simple and efficient string-suffix filter for that subset of events.
+  ending with '.jpg' or '.jpeg' and the subject attribute allows for 
+  constructing a simple and efficient string-suffix filter for that subset of
+  events.
 * Constraints:
   * OPTIONAL
   * MUST be a non-empty string
+* Example:
+  * A subscriber might register interest for when new blobs are created
+    inside a blob-storage container. In this case, the event `source` identifies
+    the subscription scope (storage container), the `type` identifies the "blob
+    created" event, and the `id` uniquely identifies the event instance to
+    distinguish separate occurrences of a same-named blob having been created;
+    the name of the newly created blob is carried in `subject`:
+    * `source`: https://example.com/storage/tenant/container
+    * `subject`: mynewfile.jpg
 
 ### id
 
@@ -396,7 +399,8 @@ The following example shows a CloudEvent serialized as JSON:
 {
     "specversion" : "0.2",
     "type" : "com.github.pull.create",
-    "source" : "https://github.com/cloudevents/spec/pull/123",
+    "source" : "https://github.com/cloudevents/spec/pull",
+    "subject" : "123", 
     "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
