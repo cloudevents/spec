@@ -128,7 +128,7 @@ Subject: mySubject
 ------------------ payload -------------------
 
 {
-    "specversion" : "0.2",
+    "specversion" : "0.3",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
