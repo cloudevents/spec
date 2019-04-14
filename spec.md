@@ -1,4 +1,4 @@
-# CloudEvents - Version 0.3
+# CloudEvents - Version 0.3-wip
 
 ## Abstract
 
@@ -179,7 +179,7 @@ within the same JSON object.
 - Type: `String`
 - Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `0.3` when referring to this version of the
+  producers MUST use a value of `0.3-wip` when referring to this version of the
   specification.
 - Constraints:
   - REQUIRED
@@ -371,7 +371,7 @@ The following example shows a CloudEvent serialized as JSON:
 
 ```JSON
 {
-    "specversion" : "0.3",
+    "specversion" : "0.3-wip",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull/123",
     "id" : "A234-1234-1234",
