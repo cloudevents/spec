@@ -109,7 +109,7 @@ The following table shows exemplary mappings:
 | CloudEvents     | Type          | Exemplary JSON Value            |
 | --------------- | ------------- | ------------------------------- |
 | type            | String        | "com.example.someevent"         |
-| specversion     | String        | "0.3-wip"                           |
+| specversion     | String        | "0.3-wip"                       |
 | source          | URI-reference | "/mycontext"                    |
 | id              | String        | "1234-1234-1234"                |
 | time            | Timestamp     | "2018-04-05T17:31:00Z"          |

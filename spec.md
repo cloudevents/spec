@@ -1,5 +1,7 @@
 # CloudEvents - Version 0.3-wip
 
+=======
+
 ## Abstract
 
 CloudEvents is a vendor-neutral specification for defining the format of event
@@ -196,10 +198,40 @@ within the same JSON object.
 - Constraints:
   - REQUIRED
 - Examples
-  - https://github.com/cloudevents/spec/pull/123
-  - /cloudevents/spec/pull/123
-  - urn:event:from:myapi/resourse/123
+  - https://github.com/cloudevents/spec/pull
+  - /cloudevents/spec/pull
+  - urn:event:from:myapi/resource
   - mailto:cncf-wg-serverless@lists.cncf.io
+
+### subject
+
+- Type: `String`
+- Description: This describes the subject of the event in the context of the
+  event producer (identified by `source`). In publish-subscribe scenarios, a
+  subscriber will typically subscribe to events emitted by a `source`, but the
+  `source` identifier alone might not be sufficient as a qualifier for any
+  specific event if the `source` context has internal sub-structure.
+
+  Identifying the subject of the event in context metadata (opposed to only in
+  the `data` payload) is particularly helpful in generic subscription filtering
+  scenarios where middleware is unable to interpret the `data` content. In the
+  above example, the subscriber might only be interested in blobs with names
+  ending with '.jpg' or '.jpeg' and the `subject` attribute allows for
+  constructing a simple and efficient string-suffix filter for that subset of
+  events.
+
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a non-empty string
+- Example:
+  - A subscriber might register interest for when new blobs are created inside a
+    blob-storage container. In this case, the event `source` identifies the
+    subscription scope (storage container), the `type` identifies the "blob
+    created" event, and the `id` uniquely identifies the event instance to
+    distinguish separate occurrences of a same-named blob having been created;
+    the name of the newly created blob is carried in `subject`:
+    - `source`: https://example.com/storage/tenant/container
+    - `subject`: mynewfile.jpg
 
 ### id
 
@@ -373,7 +405,8 @@ The following example shows a CloudEvent serialized as JSON:
 {
     "specversion" : "0.3-wip",
     "type" : "com.github.pull.create",
-    "source" : "https://github.com/cloudevents/spec/pull/123",
+    "source" : "https://github.com/cloudevents/spec/pull",
+    "subject" : "123",
     "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",

@@ -55,7 +55,7 @@ _0.2_ - Completed - 2018/12/06
 1. Define the set of protocol and serialization mappings we're going to produce
    for 0.4 milestone
 
-_0.3-wip_
+_0.3_
 
 1. Resolve all known "proposed optional attributes" issues
 1. Resolve all known "security related" issues
