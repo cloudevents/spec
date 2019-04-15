@@ -646,7 +646,7 @@ the use of this format.
     "arn:aws:ec2:us-west-1:123456789012:instance/i-1234567890abcdef0"
   ],
   "detail": {
-    "instance-id": " i-1234567890abcdef0",
+    "instance-id": "i-1234567890abcdef0",
     "state": "terminated"
   }
 }
