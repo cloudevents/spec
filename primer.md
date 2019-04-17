@@ -628,65 +628,27 @@ existing current event formats that are used in practice today was gathered.
 }
 ```
 
-#### AWS - SNS
+#### AWS - CloudWatch Events
+
+A high proportion of event-processing systems on AWS are converging on 
+the use of this format.
 
 ```
 {
-  "Records": [
-    {
-      "EventVersion": "1.0",
-      "EventSubscriptionArn": eventsubscriptionarn,
-      "EventSource": "aws:sns",
-      "Sns": {
-        "SignatureVersion": "1",
-        "Timestamp": "1970-01-01T00:00:00.000Z",
-        "Signature": "EXAMPLE",
-        "SigningCertUrl": "EXAMPLE",
-        "MessageId": "95df01b4-ee98-5cb9-9903-4c221d41eb5e",
-        "Message": "Hello from SNS!",
-        "MessageAttributes": {
-          "Test": {
-            "Type": "String",
-            "Value": "TestString"
-          },
-          "TestBinary": {
-            "Type": "Binary",
-            "Value": "TestBinary"
-          }
-        },
-        "Type": "Notification",
-        "UnsubscribeUrl": "EXAMPLE",
-        "TopicArn": topicarn,
-        "Subject": "TestInvoke"
-      }
-    }
-  ]
-}
-```
-
-[Documentation](http://docs.aws.amazon.com/lambda/latest/dg/eventsources.html)
-
-#### AWS - Kinesis
-
-```
-{
-  "Records": [
-    {
-      "eventID": "shardId-000000000000:49545115243490985018280067714973144582180062593244200961",
-      "eventVersion": "1.0",
-      "kinesis": {
-        "partitionKey": "partitionKey-3",
-        "data": "SGVsbG8sIHRoaXMgaXMgYSB0ZXN0IDEyMy4=",
-        "kinesisSchemaVersion": "1.0",
-        "sequenceNumber": "49545115243490985018280067714973144582180062593244200961"
-      },
-      "invokeIdentityArn": identityarn,
-      "eventName": "aws:kinesis:record",
-      "eventSourceARN": eventsourcearn,
-      "eventSource": "aws:kinesis",
-      "awsRegion": "us-east-1"
-    }
-  ]
+  "version": "0",
+  "id": "6a7e8feb-b491-4cf7-a9f1-bf3703467718",
+  "detail-type": "EC2 Instance State-change Notification",
+  "source": "aws.ec2",
+  "account": "111122223333",
+  "time": "2017-12-22T18:43:48Z",
+  "region": "us-west-1",
+  "resources": [
+    "arn:aws:ec2:us-west-1:123456789012:instance/i-1234567890abcdef0"
+  ],
+  "detail": {
+    "instance-id": "i-1234567890abcdef0",
+    "state": "terminated"
+  }
 }
 ```
 
