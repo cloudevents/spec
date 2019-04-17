@@ -188,29 +188,27 @@ within the same JSON object.
   - MUST be a non-empty string
 
 ### source
+
 - Type: `URI-reference`
 - Description: Identifies the event producer. Often this will include
   information such as the type of the event source, the organization
-  publishing the event, the process that produced the event, and some
-  unique identifiers. The syntax of `source` is not defined by this
-  specification.
+  publishing the event, the process that produced the event, and some unique
+  identifiers. The exact syntax and semantics behind the data encoded in the URI
+  is event producer defined.
 
-  In an application with many producers, each producer MUST be
-  assigned a distinct `source`. This specification does not define how
-  to ensure uniqueness. Since `source` is a URI-reference, it allows
-  for standard formats using DNS authorities or UUIDs, as well as
-  application-specific string or path identifiers.
+  An application MUST assign a distinct `source` to each distinct producer.
+  The application MAY use UUIDs, URNs, DNS authorities or an application-specific
+  scheme to create unique identifiers.
 
 - Constraints:
   - REQUIRED
-
 - Examples
-  - Internet-unique URI with a DNS authority.
+  - Internet-wide unique URI with a DNS authority.
     - https://github.com/cloudevents/spec/pull/123
     - mailto:cncf-wg-serverless@lists.cncf.io
   - Universally-unique URN with a UUID:
     -  urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
-  - Application-specific path or string identifiers
+  - Application-specific identifiers
     - /cloudevents/spec/pull/123
     - /sensors/tn-1234567/alerts
     - 1-555-123-4567
@@ -246,22 +244,19 @@ within the same JSON object.
     - `subject`: mynewfile.jpg
 
 ### id
+
 - Type: `String`
-- Description: Identifies the event, enables de-duplication.  The
-  format of this string is determined by the producer. Each producer
-  MUST generate unique `id` values for its own events, `id` values
-  from different producers might clash. Consumers MAY assume that
-  events with identical `id` and `source` values are duplicates, and
-  MAY discard all but one of such duplicate events.
+- Description: Identifies the event for de-duplication.
+  Producers MUST ensure that each distinct event from the same `source` has a unique `id`  If a duplicate event is re-sent due to a network error, it MAY have the same `id`.
+.
+  Consumers MAY assume that Events with identical `source` and `id` are duplicates.
 - Examples:
   - An event counter maintained by the producer
   - A database commit ID
+  - A UUID
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
-  - The producer MUST provide a different `id` for each distinct event it produces.
-  - If a duplicate of a previous event is re-sent due to a failure, it
-    MAY have the same `id`.
 
 ### time
 
