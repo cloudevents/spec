@@ -198,7 +198,7 @@ Content Type: application/json; charset=utf-8
 
 ------------- User Properties ----------------
 
-specversion: "0.2"
+specversion: "0.3-wip"
 type: "com.example.someevent"
 time: "2018-04-05T03:56:24Z"
 id: "1234-1234-1234"
@@ -260,7 +260,7 @@ Content Type: application/cloudevents+json; charset=utf-8
 ------------------ payload -------------------
 
 {
-    "specversion" : "0.2",
+    "specversion" : "0.3-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
@@ -285,7 +285,7 @@ Topic Name: mytopic
 ------------------ payload -------------------
 
 {
-    "specversion" : "0.2",
+    "specversion" : "0.3-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
