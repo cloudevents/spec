@@ -176,12 +176,7 @@ within the same JSON object.
 
 The following attributes are REQUIRED to be present in all CloudEvents:
 
-<<<<<<< HEAD
 #### id
-=======
-### specversion
-<<<<<<< HEAD
->>>>>>> Added producer, consumer and intermediate to terminology section.
 
 - Type: `String`
 - Description: Identifies the event.
@@ -195,20 +190,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
-<<<<<<< HEAD
   - MUST be unique within the scope of the producer
-=======
-=======
-* Type: `String`
-* Description: The version of the CloudEvents specification which the event
-  uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `0.2` when referring to this version of
-  the specification.
-* Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
->>>>>>> Added producer, consumer and intermediate to terminology section.
->>>>>>> Added producer, consumer and intermediate to terminology section.
 
 #### source
 
@@ -444,7 +426,6 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 
 - Context Attributes
 
-<<<<<<< HEAD
   Sensitive information SHOULD NOT be carried or represented in context
   attributes.
 
@@ -462,23 +443,6 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 
   Transport level security SHOULD be employed to ensure the trusted and secure
   exchange of CloudEvents.
-=======
-  Sensitive information SHOULD NOT be carried or represented in context attributes.
-
-  CloudEvent producers, consumers, and intermediaries MAY introspect and log context
-  attributes.
-
-* Data
-
-  Domain specific [data](#data) SHOULD be encrypted to restrict visibility to
-  trusted parties. The mechanism employed for such encryption is an agreement between
-  producers and consumers and thus outside the scope of this specification.
-
-* Transport Bindings
-
-  Transport level security SHOULD be employed to ensure the trusted and
-  secure exchange of CloudEvents.
->>>>>>> Added producer, consumer and intermediate to terminology section.
 
 # Example
 
