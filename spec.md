@@ -104,7 +104,7 @@ based on the occurrence.
 
 #### Source
 The "source" is the logical system or service where the occurrence happened. In
-a distributed system it may consist of multiple [Producers](#producer). If a
+a distributed system it might consist of multiple [Producers](#producer). If a
 source is not aware of CloudEvents, a producer creates the CloudEvent on behalf
 of the source.
 
