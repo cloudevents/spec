@@ -99,8 +99,9 @@ types of information: the [Data](#data) representing the Occurrence and
 Occurrence.
 
 #### Producer
-The "producer" is a specific instance, process or device that produces the event
-based on the occurrence.
+
+The "producer" is a specific instance, process or device that creates the data
+structure describing the CloudEvent.
 
 #### Source
 The "source" is the logical system or service where the occurrence happened. In
@@ -109,7 +110,9 @@ source is not aware of CloudEvents, a producer creates the CloudEvent on behalf
 of the source.
 
 #### Consumer
-A "consumer" receives the event and acts upon it.
+
+A "consumer" receives the event and acts upon it. It uses the context and data
+to execute some logic, which might lead to the occurrence of new events.
 
 #### Intermediary
 
