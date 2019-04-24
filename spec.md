@@ -246,17 +246,20 @@ within the same JSON object.
 ### id
 
 - Type: `String`
-- Description: Identifies the event for de-duplication.
-  Producers MUST ensure that each distinct event from the same `source` has a unique `id`  If a duplicate event is re-sent due to a network error, it MAY have the same `id`.
-.
-  Consumers MAY assume that Events with identical `source` and `id` are duplicates.
+- Description: Optionally identifies an event for de-duplication.
+  Absent if de-duplication is not required.
+  If present, the `source` and `id` attributes together uniquely identify the event.
 - Examples:
   - An event counter maintained by the producer
   - A database commit ID
   - A UUID
 - Constraints:
-  - REQUIRED
-  - MUST be a non-empty string
+  - OPTIONAL
+    - Producers MAY omit `id` if de-duplication is not required.
+    - Consumers MUST process events lacking `id` as non-duplicate events.
+  - If present, MUST be a non-empty string.
+    - Producers MUST ensure each distinct event from the same `source` has a unique `id`  If a duplicate event is re-sent due to a network error, it MAY have the same `id`.
+    - Consumers MAY assume that events with matching `source` and `id` are duplicates.
 
 ### time
 
