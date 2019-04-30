@@ -207,7 +207,7 @@ specification, header names are case-insensitive.
 ##### 3.1.3.2 HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute's
-[JSON value][json-value] representation, compliant with the [JSON event
+unquoted [JSON value][json-value] representation, compliant with the [JSON event
 format][json-format] specification.
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
@@ -225,11 +225,6 @@ be percent-encoded to be represented as HTTP header characters, in compliance
 with [RFC7230, sections 3, 3.2, 3.2.6][rfc7230-section-3]. The rules for
 encoding of the percent character ('%') apply as defined in [RFC 3986 Section
 2.4.][rfc3986-section-2-4].
-
-[JSON values][json-value] for well-known context attributes as defined by the
-[CloudEvents specification][ce] or [CloudEvents Extensions][extensions] MAY omit
-the surrounding single or double quote. All values are assumed to be a string
-unless well-known.
 
 #### 3.1.4 Examples
 
@@ -269,29 +264,6 @@ Content-Length: nnnn
 {
     ... application data ...
 }
-```
-
-The following are equivalent in binary mode:
-
-```text
-ce-specversion: 0.2
-ce-type: com.example.someevent
-ce-custom: {"my":"value"}
-    .... further attributes ...
-```
-
-```text
-ce-specversion: '0.2'
-ce-type: 'com.example.someevent'
-ce-custom: '{"my":"value"}'
-    .... further attributes ...
-```
-
-```text
-ce-specversion: "0.2"
-ce-type: "com.example.someevent"
-ce-custom: "{\"my\":\"value\"}"
-    .... further attributes ...
 ```
 
 ### 3.2. Structured Content Mode

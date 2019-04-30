@@ -64,7 +64,7 @@ exceptions noted below.
 | CloudEvents   | JSON                                                           |
 | ------------- | -------------------------------------------------------------- |
 | String        | [string][json-string]                                          |
-| Integer       | [number][json-number], only the `int` component is permitted   |
+| Integer       | [string][json-string], interpreted as a [number][json-number]  |
 | Binary        | [string][json-string], [Base64-encoded][base64] binary         |
 | URI-reference | [string][json-string] following [RFC 3986][rfc3986]            |
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
@@ -180,7 +180,7 @@ Example event with `String`-valued `data`:
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
-        "otherValue": 5
+        "otherValue": "5"
     },
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
@@ -198,7 +198,7 @@ Example event with `Binary`-valued data
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
-        "otherValue": 5
+        "otherValue": "5"
     },
     "datacontenttype" : "application/vnd.apache.thrift.binary",
     "data" : "... base64 encoded string ..."
@@ -217,7 +217,7 @@ or [JSON data](#31-special-handling-of-the-data-attribute) data:
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
-        "otherValue": 5
+        "otherValue": "5"
     },
     "datacontenttype" : "application/json",
     "data" : {
@@ -267,7 +267,7 @@ second with JSON data.
       "time" : "2018-04-05T17:31:00Z",
       "comexampleextension1" : "value",
       "comexampleextension2" : {
-          "otherValue": 5
+          "otherValue": "5"
       },
       "datacontenttype" : "application/vnd.apache.thrift.binary",
       "data" : "... base64 encoded string ..."
@@ -280,7 +280,7 @@ second with JSON data.
       "time" : "2018-04-05T17:31:05Z",
       "comexampleextension1" : "value",
       "comexampleextension2" : {
-          "otherValue": 5
+          "otherValue": "5"
       },
       "datacontenttype" : "application/json",
       "data" : {

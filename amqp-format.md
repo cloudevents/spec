@@ -56,7 +56,7 @@ exceptions noted below.
 | CloudEvents   | AMQP                        |
 | ------------- | --------------------------- |
 | String        | [string][amqp-string]       |
-| Integer       | [long][amqp-long]           |
+| Integer       | [string][amqp-string]       |
 | Binary        | [binary][amqp-binary]       |
 | URI-reference | [string][amqp-string]       |
 | Timestamp     | [timestamp][amqp-timestamp] |
