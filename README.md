@@ -1,6 +1,6 @@
 # CloudEvents
 
-![CloudEvents logo](https://github.com/cncf/artwork/blob/master/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
+![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
 
 Events are everywhere. However, event producers tend to describe events
 differently.
