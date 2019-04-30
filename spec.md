@@ -411,7 +411,7 @@ The following example shows a CloudEvent serialized as JSON:
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleextension2" : {
-        "othervalue": 5
+        "othervalue": "5"
     },
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
