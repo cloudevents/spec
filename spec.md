@@ -158,7 +158,50 @@ and the event data will be materialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
 
-### type
+### REQUIRED Attributes
+
+The following attributes are REQUIRED to be present in all CloudEvents:
+
+#### id
+
+- Type: `String`
+- Description: ID of the event. The semantics of this string are explicitly
+  undefined to ease the implementation of producers. Enables deduplication.
+- Examples:
+  - A database commit ID
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty string
+  - MUST be unique within the scope of the producer
+
+#### source
+
+- Type: `URI-reference`
+- Description: This describes the event producer. Often this will include
+  information such as the type of the event source, the organization publishing
+  the event, the process that produced the event, and some unique identifiers.
+  The exact syntax and semantics behind the data encoded in the URI is event
+  producer defined.
+- Constraints:
+  - REQUIRED
+- Examples
+  - https://github.com/cloudevents/spec/pull
+  - /cloudevents/spec/pull
+  - urn:event:from:myapi/resource
+  - mailto:cncf-wg-serverless@lists.cncf.io
+
+#### specversion
+
+- Type: `String`
+- Description: The version of the CloudEvents specification which the event
+  uses. This enables the interpretation of the context. Compliant event
+  producers MUST use a value of `0.3-wip` when referring to this version of the
+  specification.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty string
+
+#### type
 
 - Type: `String`
 - Description: Type of occurrence which has happened. Often this attribute is
@@ -176,95 +219,37 @@ within the same JSON object.
   - com.github.pull.create
   - com.example.object.delete.v2
 
-### specversion
+### OPTIONAL Attributes
 
-- Type: `String`
-- Description: The version of the CloudEvents specification which the event
-  uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `0.3-wip` when referring to this version of the
-  specification.
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty string
+The following attribtues are OPTIONAL to appear in CloudEvents. See the
+[Notational Conventions](#notational-conventions) section for more information
+on the definition of OPTIONAL.
 
-### source
+#### datacontentencoding
 
-- Type: `URI-reference`
-- Description: This describes the event producer. Often this will include
-  information such as the type of the event source, the organization publishing
-  the event, the process that produced the event, and some unique identifiers.
-  The exact syntax and semantics behind the data encoded in the URI is event
-  producer defined.
-- Constraints:
-  - REQUIRED
-- Examples
-  - https://github.com/cloudevents/spec/pull
-  - /cloudevents/spec/pull
-  - urn:event:from:myapi/resource
-  - mailto:cncf-wg-serverless@lists.cncf.io
+- Type: `String` per
+  [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
+- Description: Describes the content encoding for the `data` attribute for when
+  the `data` field MUST be encoded as a string, like with structured transport
+  binding modes using the JSON event format, but the `datacontenttype` indicates
+  a non-string media type. When the `data` field's effective data type is not
+  `String`, this attribute MUST NOT be set and MUST be ignored when set.
 
-### subject
+  The "Base64" value for the Base64 encoding as defined in
+  [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8) MUST
+  be supported. When set, the event-format-encoded value of the `data` attribute
+  is a base64 string, but the effective data type of the `data` attribute
+  towards the application is the base64-decoded binary array.
 
-- Type: `String`
-- Description: This describes the subject of the event in the context of the
-  event producer (identified by `source`). In publish-subscribe scenarios, a
-  subscriber will typically subscribe to events emitted by a `source`, but the
-  `source` identifier alone might not be sufficient as a qualifier for any
-  specific event if the `source` context has internal sub-structure.
-
-  Identifying the subject of the event in context metadata (opposed to only in
-  the `data` payload) is particularly helpful in generic subscription filtering
-  scenarios where middleware is unable to interpret the `data` content. In the
-  above example, the subscriber might only be interested in blobs with names
-  ending with '.jpg' or '.jpeg' and the `subject` attribute allows for
-  constructing a simple and efficient string-suffix filter for that subset of
-  events.
+  All other RFC2045 schemes are undefined for CloudEvents.
 
 - Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty string
-- Example:
-  - A subscriber might register interest for when new blobs are created inside a
-    blob-storage container. In this case, the event `source` identifies the
-    subscription scope (storage container), the `type` identifies the "blob
-    created" event, and the `id` uniquely identifies the event instance to
-    distinguish separate occurrences of a same-named blob having been created;
-    the name of the newly created blob is carried in `subject`:
-    - `source`: https://example.com/storage/tenant/container
-    - `subject`: mynewfile.jpg
+  - The attribute MUST be set if the `data` attribute contains string-encoded
+    binary data. Otherwise the attribute MUST NOT be set.
+  - If present, MUST adhere to
+    [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
 
-### id
-
-- Type: `String`
-- Description: ID of the event. The semantics of this string are explicitly
-  undefined to ease the implementation of producers. Enables deduplication.
-- Examples:
-  - A database commit ID
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty string
-  - MUST be unique within the scope of the producer
-
-### time
-
-- Type: `Timestamp`
-- Description: Timestamp of when the event happened.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in
-    [RFC 3339](https://tools.ietf.org/html/rfc3339)
-
-### schemaurl
-
-- Type: `URI-reference`
-- Description: A link to the schema that the `data` attribute adheres to.
-  Incompatible changes to the schema SHOULD be reflected by a different URL. See
-  [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
-  for more information.
-- Constraints:
-  - OPTIONAL
-
-### datacontenttype
+#### datacontenttype
 
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - Description: Content type of the `data` attribute value. This attribute
@@ -295,6 +280,55 @@ within the same JSON object.
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - For Media Type examples see
   [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
+
+#### schemaurl
+
+- Type: `URI-reference`
+- Description: A link to the schema that the `data` attribute adheres to.
+  Incompatible changes to the schema SHOULD be reflected by a different URL. See
+  [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
+  for more information.
+- Constraints:
+  - OPTIONAL
+
+#### subject
+
+- Type: `String`
+- Description: This describes the subject of the event in the context of the
+  event producer (identified by `source`). In publish-subscribe scenarios, a
+  subscriber will typically subscribe to events emitted by a `source`, but the
+  `source` identifier alone might not be sufficient as a qualifier for any
+  specific event if the `source` context has internal sub-structure.
+
+  Identifying the subject of the event in context metadata (opposed to only in
+  the `data` payload) is particularly helpful in generic subscription filtering
+  scenarios where middleware is unable to interpret the `data` content. In the
+  above example, the subscriber might only be interested in blobs with names
+  ending with '.jpg' or '.jpeg' and the `subject` attribute allows for
+  constructing a simple and efficient string-suffix filter for that subset of
+  events.
+
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a non-empty string
+- Example:
+  - A subscriber might register interest for when new blobs are created inside a
+    blob-storage container. In this case, the event `source` identifies the
+    subscription scope (storage container), the `type` identifies the "blob
+    created" event, and the `id` uniquely identifies the event instance to
+    distinguish separate occurrences of a same-named blob having been created;
+    the name of the newly created blob is carried in `subject`:
+    - `source`: https://example.com/storage/tenant/container
+    - `subject`: mynewfile.jpg
+
+#### time
+
+- Type: `Timestamp`
+- Description: Timestamp of when the event happened.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST adhere to the format specified in
+    [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
 ### Extension Context Attributes
 
@@ -328,30 +362,6 @@ event "data", the event producer SHOULD also add the identity attributes to the
 without needing to decode and examine the event data. Such identity attributes
 can also be used to help intermediate gateways determine how to route the
 events.
-
-### datacontentencoding
-
-- Type: `String` per
-  [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
-- Description: Describes the content encoding for the `data` attribute for when
-  the `data` field MUST be encoded as a string, like with structured transport
-  binding modes using the JSON event format, but the `datacontenttype` indicates
-  a non-string media type. When the `data` field's effective data type is not
-  `String`, this attribute MUST NOT be set and MUST be ignored when set.
-
-  The "Base64" value for the Base64 encoding as defined in
-  [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8) MUST
-  be supported. When set, the event-format-encoded value of the `data` attribute
-  is a base64 string, but the effective data type of the `data` attribute
-  towards the application is the base64-decoded binary array.
-
-  All other RFC2045 schemes are undefined for CloudEvents.
-
-- Constraints:
-  - The attribute MUST be set if the `data` attribute contains string-encoded
-    binary data. Otherwise the attribute MUST NOT be set.
-  - If present, MUST adhere to
-    [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
 
 ## Data Attribute
 
