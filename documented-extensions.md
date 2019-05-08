@@ -47,6 +47,7 @@ their `Attributes`.
 
 ## Known Extensions
 
+- [Dataref (Claim Check Pattern)](extensions/dataref.md)
 - [Distributed Tracing](extensions/distributed-tracing.md)
 - [Sampling](extensions/sampled-rate.md)
 - [Sequence](extensions/sequence.md)
