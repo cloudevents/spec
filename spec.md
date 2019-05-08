@@ -104,10 +104,11 @@ The "producer" is a specific instance, process or device that creates the data
 structure describing the CloudEvent.
 
 #### Source
-The "source" is the logical system or service where the occurrence happened. In
-a distributed system it might consist of multiple [Producers](#producer). If a
-source is not aware of CloudEvents, a producer creates the CloudEvent on behalf
-of the source.
+
+The "source" is the context in which the occurrence happened. In a distributed
+system it might consist of multiple [Producers](#producer). If a source is not
+aware of CloudEvents, an external producer creates the CloudEvent on behalf of
+the source.
 
 #### Consumer
 
@@ -116,6 +117,10 @@ to execute some logic, which might lead to the occurrence of new events.
 
 #### Intermediary
 
+An "intermediary" receives a message containing an event for the purpose of
+forwarding it to the next receiver, which might be another intermediary or a
+[Consumer](#consumer). A typical task for an intermediary is to route the event
+to receivers based on the information in the [Context](#context).
 
 #### Context
 
