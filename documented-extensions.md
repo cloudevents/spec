@@ -49,5 +49,6 @@ their `Attributes`.
 
 - [Dataref (Claim Check Pattern)](extensions/dataref.md)
 - [Distributed Tracing](extensions/distributed-tracing.md)
+- [Partitioning](extensions/partitioning.md)
 - [Sampling](extensions/sampled-rate.md)
 - [Sequence](extensions/sequence.md)
