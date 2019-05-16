@@ -165,10 +165,14 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 #### id
 
 - Type: `String`
-- Description: ID of the event. The semantics of this string are explicitly
-  undefined to ease the implementation of producers. Enables deduplication.
+- Description: Identifies the event.
+  Producers MUST ensure that `source` + `id` is unique for each
+  distinct event.  If a duplicate event is re-sent (e.g. due to a
+  network error) it MAY have the same `id`.  Consumers MAY assume that
+  Events with identical `source` and `id` are duplicates.
 - Examples:
-  - A database commit ID
+  - An event counter maintained by the producer
+  - A UUID
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
@@ -177,18 +181,37 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 #### source
 
 - Type: `URI-reference`
-- Description: This describes the event producer. Often this will include
-  information such as the type of the event source, the organization publishing
-  the event, the process that produced the event, and some unique identifiers.
-  The exact syntax and semantics behind the data encoded in the URI is event
-  producer defined.
+- Description: Identifies the context in which an event
+  happened. Often this will include information such as the type of
+  the event source, the organization publishing the event or the
+  process that produced the event. The exact syntax and semantics
+  behind the data encoded in the URI is defined by the event producer.
+
+  Producers MUST ensure that `source` + `id` is unique for each
+  distinct event.
+
+  An application MAY assign a unique `source` to each distinct
+  producer, which makes it easy to produce unique IDs since no other
+  producer will have the same source. The application MAY use UUIDs,
+  URNs, DNS authorities or an application-specific scheme to create
+  unique `source` identifiers.
+
+  A source MAY include more than one producer. In that case the
+  producers MUST collaborate to ensure that `source` + `id` is unique
+  for each distinct event.
+
 - Constraints:
   - REQUIRED
 - Examples
-  - https://github.com/cloudevents/spec/pull
-  - /cloudevents/spec/pull
-  - urn:event:from:myapi/resource
-  - mailto:cncf-wg-serverless@lists.cncf.io
+  - Internet-wide unique URI with a DNS authority.
+    - https://github.com/cloudevents
+    - mailto:cncf-wg-serverless@lists.cncf.io
+  - Universally-unique URN with a UUID:
+    -  urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
+  - Application-specific identifiers
+    - /cloudevents/spec/pull/123
+    - /sensors/tn-1234567/alerts
+    - 1-555-123-4567
 
 #### specversion
 
