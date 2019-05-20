@@ -31,6 +31,9 @@
         "schemaurl": {
           "$ref": "#/definitions/schemaurl"
         },
+        "subject": {
+          "$ref": "#/definitions/subject"
+        },
         "type": {
           "$ref": "#/definitions/type"
         },
@@ -55,6 +58,10 @@
     "schemaurl": {
       "type": "string",
       "format": "uri-reference"
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
     },
     "type": {
       "type": "string",
