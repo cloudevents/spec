@@ -148,15 +148,41 @@ specific protocols (AWS Kinesis, Azure Event Grid).
 
 ## Type System
 
-The following abstract data types are available for use in attributes.
+The following abstract data types are available for use in attributes. Each of
+these types MAY be represented differently by different event formats and in
+transport metadata fields. This specification defines a canonical string-encoding
+for each type that MUST be supported by all implementations.
+
+A strongly-typed programming model that represents a CloudEvent or any 
+extension MUST be able to convert from and to the canonical string-encoding to
+the runtime/language native type that best corresponds to the abstract type.
+
+For example, the `time` attribute might be represented by the language's native
+*datetime* type in a given implementation, but it MUST be settable providing
+an RFC3339 string, and it MUST be convertible to an RFC3339 string when mapped
+to a header of an HTTP message. 
+
+A CloudEvents transport binding or event format implementation MUST likewise
+be able to convert from and to the canonical string-encoding to the 
+corresponding data type in the encoding or in transport metadata fields.
+
+An attribute value of type `Timestamp` might indeed be routed as a string 
+through multiple hops and only materialize as a native runtime/language type
+at the producer and ultimate consumer. The `Timestamp` might also 
+be routed as a native transport type and might be mapped to/from the respective
+language/runtime types at the producer and consumer ends, and never materialize 
+as a string.  
 
 - `Integer` - A whole number in the range -2,147,483,648 to +2,147,483,647
   inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
   Event formats do not have to use this encoding, but they MUST only use
   `Integer` values in this range.
+  - String encoding: [Reference JSON definition] 
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
+  -  String encoding: [Reference Base64]  
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
+  - String encoding: [Reference JSON Object]
 - `Any` - Either a `Binary`, `Integer`, `Map` or `String`.
 - `URI-reference` - String expression conforming to `URI-reference` as defined
   in [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
