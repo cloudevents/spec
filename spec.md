@@ -177,17 +177,18 @@ as a string.
   inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
   Event formats do not have to use this encoding, but they MUST only use
   `Integer` values in this range.
-  - String encoding: [Reference JSON definition] 
+  - String encoding: Integer portion of the JSON Number per [RFC 7159, Section 6](https://tools.ietf.org/html/rfc7159#section-6) 
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
-  -  String encoding: [Reference Base64]  
+  -  String encoding: Base64 encoding per [RFC4648](https://tools.ietf.org/html/rfc4648).  
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
-  - String encoding: [Reference JSON Object]
+  - String encoding: JSON Object per [RFC 7159, Section 4](https://tools.ietf.org/html/rfc7159#section-4)
 - `Any` - Either a `Binary`, `Integer`, `Map` or `String`.
-- `URI-reference` - String expression conforming to `URI-reference` as defined
-  in [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
-- `Timestamp` - String expression as defined in
-  [RFC 3339](https://tools.ietf.org/html/rfc3339).
+- `URI-reference` - Uniform resource identifier reference.
+   - String encoding: `URI-reference` as defined
+  in [RFC 3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
+- `Timestamp` - Date and time expression using the Gregorian Calendar. 
+   - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
 
 The `Any` type is a variant type that can take the shape of either a `Binary`,
 `Integer`, `Map` or `String`. The type system is intentionally abstract, and
