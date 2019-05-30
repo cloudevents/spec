@@ -22,7 +22,7 @@ This document is a working draft.
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
 - [Prior Art](#prior-art)
-- [Traditional Eventing Roles](#traditional-eventing-roles)
+- [Roles](#roles)
 - [Value Proposition](#value-proposition)
 - [Existing Event Formats](#existing-event-formats)
 
@@ -274,7 +274,7 @@ additional headers that include proxy-specific metadata.
 
 It is also worth noting that this separation between original event producer
 and CloudEvents generator could be small or large. Meaning, even if the
-CloudEvent generator not part of the original event producer's ecosystem,
+CloudEvent generator were not part of the original event producer's ecosystem,
 if it is acting on behalf of the event producer, and its presence in the
 flow of the event is not meaningful to event consumers, then the above
 guidance would still apply.
@@ -382,7 +382,7 @@ links to all specs.
 This section describes some of the input material used by the group during the
 development of the CloudEvent specification.
 
-### Traditional Eventing Roles
+### Roles
 
 The list below enumerates the various participants, and scenarios, that might be
 involved in the producing, managing or consuming of events.
@@ -684,7 +684,7 @@ existing current event formats that are used in practice today was gathered.
 
 #### AWS - CloudWatch Events
 
-A high proportion of event-processing systems on AWS are converging on 
+A high proportion of event-processing systems on AWS are converging on
 the use of this format.
 
 ```
