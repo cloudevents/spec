@@ -155,15 +155,16 @@ of the CloudEvent attributes.
 ### id
 
 The `id` attribute is meant to be a value that is unique across all events
-related to one event source.  While the exact value used
+related to one event source (where each event source is uniquely identified by
+its CloudEvents `source` attribute value).  While the exact value used
 is producer defined, receivers of CloudEvents from a single
 event source can be assured that no two events will share the same `id`
 value. The only exception to this is if some replay of the event is supported,
 and in those cases, the `id` can then be used to detect this.
 
 Since a single occurrence may result in the generation of more than one
-event, in the cases where all of those events share the same `source`
-attribute value, each CloudEvent constructed will have a unique
+event, in the cases where all of those events are from the same event source,
+each CloudEvent constructed will have a unique
 `id`. Take the example of the creation of a DB entry, this one occurrence
 might generate a CloudEvent with a type of `create` and a CloudEvent with
 a type of `write`. Each of those CloudEvents would have a unique `id`. If
