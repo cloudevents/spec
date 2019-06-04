@@ -18,6 +18,7 @@ This document is a working draft.
 - [Type System](#type-system)
 - [Context Attributes](#context-attributes)
 - [Data Attribute](#data-attribute)
+- [Size Limits](#size-limits)
 - [Privacy & Security](#privacy-and-security)
 - [Example](#example)
 
@@ -424,6 +425,39 @@ encapsulated within the `data` attribute.
   `datacontenttype` attribute (e.g. application/json).
 - Constraints:
   - OPTIONAL
+
+# Size Limits
+
+In many scenarios, CloudEvents will be forwarded through one or more
+generic intermediaries, each of which might impose limits on the size of
+forwarded events. CloudEvents might also be routed to consumers, like
+embedded devices, that are storage or memory-constrained and therefore
+would struggle with large singular events.
+
+The "size of an event" is it's wire-size, and includes every bit that is
+transmitted on the wire for the event: transport frame-metadata, event
+metadata, and event data, based on the chosen event format and the chosen
+protocol binding.
+
+If an application configuration requires for events to be routed across
+different transports or for events to be re-encoded, the least efficient
+transport and encoding used by the application SHOULD be considered for
+compliance with these size constraints:
+
+- Intermediaries MUST forward events of a size of at least 64 KByte.
+- Consumers SHOULD accept events of a size of at least 64 KByte.
+
+In effect, these rules will allow events of up to 64 KByte to be published
+and routed safely, with it being in any particular consumer's control, whether
+it wants to accept or reject events of that size due to local considerations.
+
+Generally, CloudEvents publishers SHOULD keep events compact by avoiding to
+embed large data items into event payloads and rather use the event payload
+to link to such data items. From an access control perspective, this approach
+also allows for a broader distribution of events, because accessing
+event-related details through resolving links allows for differentiated access
+control and selective disclosure, rather than having sensitive details embedded
+in the event directly.
 
 # Privacy and Security
 
