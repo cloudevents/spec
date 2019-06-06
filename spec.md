@@ -444,7 +444,7 @@ different transports or for events to be re-encoded, the least efficient
 transport and encoding used by the application SHOULD be considered for
 compliance with these size constraints:
 
-- Intermediaries MUST forward events of a size of at least 64 KByte.
+- Intermediaries MUST forward events of a size of 64 KByte or less.
 - Consumers SHOULD accept events of a size of at least 64 KByte.
 
 In effect, these rules will allow producers to publish events up to 64KB in
