@@ -139,7 +139,7 @@ elements that form a layered architecture model.
 1. The [base specification](spec.md) defines an abstract information model
    made up of attributes (key-value pairs) and associated rules for what 
    constitutes a CloudEvent.
-2. The [extensions](./spec.md#extension-attributes) add use-case specific
+2. The [extensions](./spec.md#extension-context-attributes) add use-case specific
    and potentially overlapping sets of extension attributes and associated
    rules, e.g. to support different tracing standards.
 3. The event format encodings, e.g. [JSON](json-format.md), define how the
