@@ -274,6 +274,57 @@ serialization for unkown, or even new, properties. It was also noted that the
 HTTP specification is now following a similar pattern by no longer suggesting
 that extension HTTP headers be prefixed with `X-`.
 
+## Creating CloudEvents
+
+The CloudEvents specification purposely avoids being too prescriptive about
+how CloudEvents are created. For example, it does not assume that the original
+event source is the same entity that is constructing the associated
+CloudEvent for that occurrence. This allows for a wide variety of implementation
+choices. However, it can be useful for implementors of the specification
+to understand the expectations that the specification authors had in mind
+as this might help ensure interoperability and consistency.
+
+As mentioned above, whether the entity that generated the initial event is
+the same entity that creates the corresponding CloudEvent is an implementation
+choice. However, when the entity that is constructing/populating the
+CloudEvents attributes is acting on behalf of the event source, the values
+of those attributes are meant to describe the event or the event source
+and not the entity calculating the CloudEvent attribute values. In other words,
+when the split between the event source and the CloudEvents producer are
+not materially significant to the event consumers, the spec defined
+attributes would typically not include any values to indicate this split
+of responsibilities.
+
+This isn't to suggest that the CloudEvents producer
+couldn't add some additional attributes to the CloudEvent, but those
+are outside the scope of the interoperability defined attributes of the spec.
+This is similar to how an HTTP proxy would typically minimize changes to the
+well-defined HTTP headers of an incoming message, but it might add some
+additional headers that include proxy-specific metadata.
+
+It is also worth noting that this separation between original event source
+and CloudEvents producer could be small or large. Meaning, even if the
+CloudEvent producer were not part of the original event source's ecosystem,
+if it is acting on behalf of the event source, and its presence in the
+flow of the event is not meaningful to event consumers, then the above
+guidance would still apply.
+
+When an entity is acting as both a receiver and sender of CloudEvents
+for the purposes of forwarding, or transforming, the incoming event, the
+degree to which the outbound CloudEvent matches the inbound CloudEvent
+will vary based on the processing semantics of this entity. In cases where
+it is acting as proxy, where it is simply forwarding CloudEvents
+to another event consumer, then the outbound CloudEvent will typically
+look identical to the inbound CloudEvent with respect to the spec defined
+attributes - see previous paragraph concerning adding additional attributes.
+
+However, if this entity is performing some type of semantic processing
+of the CloudEvent, typically resulting in a change to the value of the
+`data` attribute, then it may need to be considered a distinct "event
+source" from the original event source. And as such, it is expected
+that CloudEvents attributes related to the event producer (such as 'source`
+and `id`) would be changed from the incoming CloudEvent.
+
 ## Qualifying Protocols and Encodings
 
 The explicit goal of the CloudEvents effort, as expressed in the specification,
@@ -661,7 +712,7 @@ existing current event formats that are used in practice today was gathered.
 
 #### AWS - CloudWatch Events
 
-A high proportion of event-processing systems on AWS are converging on 
+A high proportion of event-processing systems on AWS are converging on
 the use of this format.
 
 ```
