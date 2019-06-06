@@ -76,8 +76,7 @@ specification architecture with the following elements:
   the conformance of their values can be validated.
   Each SDK MUST implement all extensions defined in the CloudEvents
   repository. "Active" extensions are those that the application explicitly
-  selects for use, meaning that other extensions MUST NOT be added and 
-  enforced on a CloudEvent implicitly. Any application MAY ignore a particular
+  selects for use. Any application MAY ignore a particular
   extension and even use well-known extension attribute names for semantically
   different purposes.
 * An encoder abstraction and implementation for each event format which turns
