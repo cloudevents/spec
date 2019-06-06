@@ -434,7 +434,7 @@ forwarded events. CloudEvents might also be routed to consumers, like
 embedded devices, that are storage or memory-constrained and therefore
 would struggle with large singular events.
 
-The "size of an event" is it's wire-size, and includes every bit that is
+The "size" of an event is its wire-size, and includes every bit that is
 transmitted on the wire for the event: transport frame-metadata, event
 metadata, and event data, based on the chosen event format and the chosen
 protocol binding.
@@ -447,9 +447,11 @@ compliance with these size constraints:
 - Intermediaries MUST forward events of a size of at least 64 KByte.
 - Consumers SHOULD accept events of a size of at least 64 KByte.
 
-In effect, these rules will allow events of up to 64 KByte to be published
-and routed safely, with it being in any particular consumer's control, whether
-it wants to accept or reject events of that size due to local considerations.
+In effect, these rules will allow producers to publish events up to 64KB in
+size safely. Safely here means that it is generally reasonable to expect the
+event to be accepted and retransmitted by all intermediaries. It is in any
+particular consumer's control, whether it wants to accept or reject events
+of that size due to local considerations.
 
 Generally, CloudEvents publishers SHOULD keep events compact by avoiding to
 embed large data items into event payloads and rather use the event payload
