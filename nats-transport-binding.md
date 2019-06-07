@@ -65,7 +65,7 @@ payload using an [event format](#14-event-formats).
 
 ### 1.4. Event Formats
 
-Event formats, used with the _stuctured_ content mode, define how an event is
+Event formats, used with the _structured_ content mode, define how an event is
 expressed in a particular data format. All implementations of this specification
 MUST support the [JSON event format][json-format].
 
