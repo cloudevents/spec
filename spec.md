@@ -185,16 +185,15 @@ as a string.
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
   - String encoding: JSON Object per
     [RFC 7159, Section 4](https://tools.ietf.org/html/rfc7159#section-4)
-- `Any` - Either a `Binary`, `Integer`, `Map` or `String`.
 - `URI-reference` - Uniform resource identifier reference.
   - String encoding: `URI-reference` as defined in
     [RFC 3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
 - `Timestamp` - Date and time expression using the Gregorian Calendar.
   - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
-
-The `Any` type is a variant type that can take the shape of either a `Binary`,
-`Integer`, `Map` or `String`. The type system is intentionally abstract, and
-therefore it is left to implementations how to represent the variant type.
+- `Any` - A variant type that can take the shape of either an `Integer`,
+  `String`, `Binary`, `Map`, `URI-reference` or `Timestamp`. The type system is
+  intentionally abstract, and therefore it is left to implementations how to
+  represent the `Any` type.
 
 ## Context Attributes
 
@@ -293,7 +292,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 
 ### OPTIONAL Attributes
 
-The following attribtues are OPTIONAL to appear in CloudEvents. See the
+The following attributes are OPTIONAL to appear in CloudEvents. See the
 [Notational Conventions](#notational-conventions) section for more information
 on the definition of OPTIONAL.
 
