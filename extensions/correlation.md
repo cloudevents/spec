@@ -41,5 +41,5 @@ values MAY be defined by other specifications.
 If the `correlationtype` is set to `uuid`, the `correlationid` attribute has the
 following semantics:
 
-- The values of `correlationid` are string-encoded UUID.
+- The values of `correlationid` are string-encoded UUID. 
 
