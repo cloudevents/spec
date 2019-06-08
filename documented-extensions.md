@@ -52,3 +52,4 @@ their `Attributes`.
 - [Partitioning](extensions/partitioning.md)
 - [Sampling](extensions/sampled-rate.md)
 - [Sequence](extensions/sequence.md)
+- [Tenant Identifier](extensions/tenant.md)
