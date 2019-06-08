@@ -52,3 +52,4 @@ their `Attributes`.
 - [Partitioning](extensions/partitioning.md)
 - [Sampling](extensions/sampled-rate.md)
 - [Sequence](extensions/sequence.md)
+- [Correlation](extensions/correlation.md)
