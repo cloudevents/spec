@@ -1,8 +1,8 @@
 # Tenant Identifier 
 
-This extension defines an attributes that can be included within a CloudEvent
+This extension defines an attribute that can be included within a CloudEvent
 to describe a tenant identifier for the event produced by an event source in 
-multi-tenant systems. This attribute allow intermediaries to apply functional 
+multi-tenant systems. This attribute allows intermediaries to apply functional 
 tenant-based logic, such as routing, scheduling or processing priorities, etc. 
 without a need to understand the event body.   
 
