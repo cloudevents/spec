@@ -95,7 +95,7 @@ routing can be performed based on information contained in the event, but an
 event will not identify a specific routing destination. Events will contain two
 types of information: the [Data](#data) representing the Occurrence and
 [Context](#context) metadata providing contextual information about the
-Occurrence.
+Occurrence. A single occurrence MAY result in more than one event.
 
 #### Producer
 
@@ -276,7 +276,8 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 #### type
 
 - Type: `String`
-- Description: Type of occurrence which has happened. Often this attribute is
+- Description: This attribute contains a value describing the type of event
+  related to the originating occurrence.  Often this attribute is
   used for routing, observability, policy enforcement, etc. The format of this
   is producer defined and might include information such as the version of the
   `type` - see
