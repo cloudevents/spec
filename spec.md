@@ -399,7 +399,12 @@ on the definition of OPTIONAL.
 #### time
 
 - Type: `Timestamp`
-- Description: Timestamp of when the event happened.
+- Description: Timestamp of when the occurrence happened. If the time of the
+  occurrence can not be determined then this attribute MAY be set to some
+  other time (such as the current time) by the CloudEvents producer, however
+  all producers for the same `source` MUST be consistent in this respect.
+  In other words, either they all use the actual time of the occurrence or
+  they all use the same alogorithm to determine the value used.
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in
