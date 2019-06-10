@@ -1,5 +1,4 @@
-MQTT Transport Binding for CloudEvents
-======================================
+# MQTT Transport Binding for CloudEvents
 
 ## Abstract
 

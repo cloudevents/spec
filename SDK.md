@@ -1,5 +1,4 @@
-CloudEvents SDK
-===============
+# CloudEvents SDK
 
 The intent of this document to describe bare minimum set of requirements for a
 new SDKs.

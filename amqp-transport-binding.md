@@ -1,5 +1,4 @@
-AMQP Transport Binding for CloudEvents
-======================================
+# AMQP Transport Binding for CloudEvents
 
 ## Abstract
 
