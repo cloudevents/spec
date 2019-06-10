@@ -1,4 +1,5 @@
-# NATS Transport Binding for CloudEvents
+NATS Transport Binding for CloudEvents
+======================================
 
 ## Abstract
 

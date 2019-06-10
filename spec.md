@@ -1,6 +1,5 @@
-# CloudEvents - Version 0.3-wip
-
-=======
+CloudEvents - Version 0.3-wip
+=========================
 
 ## Abstract
 

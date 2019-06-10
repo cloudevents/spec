@@ -1,4 +1,5 @@
-# CloudEvents
+CloudEvents
+===========
 
 ![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
 

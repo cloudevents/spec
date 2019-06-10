@@ -1,4 +1,5 @@
-# CloudEvents Primer
+CloudEvents Primer
+==================
 
 ## Abstract
 

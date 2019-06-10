@@ -1,4 +1,5 @@
-# HTTP Transport Binding for CloudEvents - Version 0.3-wip
+HTTP Transport Binding for CloudEvents - Version 0.3-wip
+====================================================
 
 ## Abstract
 

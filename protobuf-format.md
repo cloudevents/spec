@@ -1,4 +1,5 @@
-# Protocol Buffers Event Format for CloudEvents - Version 0.3-wip
+Protocol Buffers Event Format for CloudEvents - Version 0.3-wip
+===========================================================
 
 ## Abstract
 

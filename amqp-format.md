@@ -1,4 +1,5 @@
-# AMQP Event Format for CloudEvents
+AMQP Event Format for CloudEvents
+=================================
 
 ## Abstract
 
