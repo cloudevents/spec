@@ -79,7 +79,7 @@ specific protocols (AWS Kinesis, Azure Event Grid).
 
 An action processes an event defining a behavior or effect which was triggered
 by a specific _occurrence_ from a specific _source_. While outside of the scope
-of the specification, the purpose of generating an _event_ is typcially to allow
+of the specification, the purpose of generating an _event_ is typically to allow
 other systems to easily react to changes in a source that they do not control.
 The _source_ and action are typically built by different developers. Often the
 _source_ is a managed service and the _action_ is custom code in a serverless
@@ -191,7 +191,7 @@ end, attributes defined by this project will fall into three categories:
 As the category names imply, "required" attributes will be the ones that the
 group considers vital to all events in all use cases, while "optional" ones will
 be used in a majority of the cases. Both of the attributes in these cases will
-be defined within the specfication itself.
+be defined within the specification itself.
 
 When the group determines that an attribute is not common enough to fall into
 those two categories but would still benefit from the level of interoperability
@@ -233,7 +233,7 @@ formally adding them to the specification.
 ### JSON Extensions
 
 As mentioned in the [Attributes](json-format.md#2-attributes) section of the
-[JSON Event Format for CloudEvents](json-format.md) specificatinon, CloudEvent
+[JSON Event Format for CloudEvents](json-format.md) specification, CloudEvent
 extension attributes are serialized as siblings to the specification defined
 attributes - meaning, at the top-level of the JSON object. The authors of the
 specification spent a long time considering all options and decided that this
@@ -250,7 +250,7 @@ applications to support these properties even if the infrastructure doesn't.
 This means that unknown top-level properties (regardless of who defined them -
 future versions of the spec or the event producer) are probably not going to be
 ignored. So, while some other specifications define a specific property
-underwhich extensions are placed (e.g. a top-level `extensions` property), the
+under which extensions are placed (e.g. a top-level `extensions` property), the
 authors decided that having two different locations within an incoming event for
 unknown properties could lead to interoperability issues and confusion for
 developers.
@@ -270,7 +270,7 @@ need to place it in both places since they could have old and new consumers?
 While it might be possible to define clear rules for how to solve each of the
 potential problems that arise, the authors decided that it would be better to
 simply avoid all of them in the first place by only having one location in the
-serialization for unkown, or even new, properties. It was also noted that the
+serialization for unknown, or even new, properties. It was also noted that the
 HTTP specification is now following a similar pattern by no longer suggesting
 that extension HTTP headers be prefixed with `X-`.
 
