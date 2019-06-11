@@ -135,6 +135,7 @@ The following are considered beyond the scope of the specification:
 - Language-specific runtime APIs
 - Selecting a single identity/access control system
 - Inclusion of transport-level routing information
+- Event persistence processes
 
 The CloudEvents spec will not include transport-level routing
 information (e.g. a destination URL to which the event is being sent).
@@ -157,6 +158,19 @@ CloudEvent that was intended for a webhook should be deliverable to a
 dead-letter queue if the webhook address is unavailable. That dead-letter
 queue should be able to feed events to new actions that the original event
 emitter never imagined.
+
+The CloudEvents that are produced and consumed within and across systems trigger
+behaviors that derive value. As such, archiving and/or replaying events can be
+valuable for debugging or replication purposes. However, persisting an event
+removes the contextual information available during transmission such as the
+identity and rights of the producer, fidelity validation mechanisms, or
+confidentiality protections. Additionally, persistence can add complexity and
+challenge to meeting user's requirements. For example, the repeated use of a
+private key for encryption or signing purposes increases the information
+available to attackers and thereby reduces security. It is expected that
+attributes may be defined that facilitate meeting persistence requirements but
+it is expected that these will continuously evolve along with industry best
+practices and advancements.
 
 
 ## Architecture
