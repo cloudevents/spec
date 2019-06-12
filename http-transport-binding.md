@@ -30,7 +30,10 @@ This document is a working draft.
 - 3.2. [Structured Content Mode](#32-structured-content-mode)
 - 3.3. [Batched Content Mode](#33-batched-content-mode)
 
-4. [References](#4-references)
+4. [HTTP Response Handling](#4-http-responses)
+- 4.1. [Size Limits](#41-size-limits)
+
+5. [References](#5-references)
 
 ## 1. Introduction
 
@@ -443,7 +446,18 @@ Content-Length: nnnn
 
 ```
 
-## 4. References
+## 4. HTTP Responses
+### 4.1. Size Limits
+When CloudEvents are forwarded through one or more generic intermediaries,
+a minimum payload size SHOULD be considered, in accordance to the
+[CloudEvents spec][ce-size].
+
+In the event of the payload being larger than what can be forwarded or
+accepted, the HTTP status code 413 MUST be sent back to the source.
+See [RFC7231][rfc7231-section-6-5-11] for more information on this response
+code. 
+
+## 5. References
 
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
@@ -464,6 +478,7 @@ Content-Length: nnnn
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
+[ce-size]: ./spec.md#size-limits
 [json-format]: ./json-format.md
 [json-batch-format]: ./json-format.md#4-json-batch-format
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
@@ -483,5 +498,6 @@ Content-Length: nnnn
 [rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7230-section-3]: https://tools.ietf.org/html/rfc7230#section-3
 [rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
+[rfc7231-section-6-5-11]: https://tools.ietf.org/html/rfc7231#section-6.5.11
 [rfc7230-section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [rfc7540]: https://tools.ietf.org/html/rfc7540
