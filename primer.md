@@ -619,10 +619,6 @@ from various middleware devices such as event brokers and gateways. CloudEvents
 includes metadata in events to associate these events as being part of an event
 sequence for the purpose of event tracing and troubleshooting.
 
-#### Cloudbursting
-
-TBD
-
 #### IoT
 
 IoT devices send and receive events related to their functionality. For example,
