@@ -448,14 +448,15 @@ Content-Length: nnnn
 
 ## 4. HTTP Responses
 ### 4.1. Size Limits
-When CloudEvents are forwarded through one or more generic intermediaries,
-a minimum payload size SHOULD be considered, in accordance to the
-[CloudEvents spec][ce-size].
+When CloudEvents are transported via HTTP, a minimum payload size SHOULD be
+considered in accordance with the [CloudEvents spec][ce-size].
 
-In the event of the payload being larger than what can be forwarded or
-accepted, the HTTP status code 413 MUST be sent back to the source.
-See [RFC7231][rfc7231-section-6-5-11] for more information on this response
-code. 
+In the case of the payload of an incoming HTTP request is larger than what
+can be accepted, the HTTP status code of `413 Payload Too Large` MUST be
+sent in the response.
+
+See [RFC7231][rfc2731-section-6-5-11] for more information on this
+response code.
 
 ## 5. References
 
