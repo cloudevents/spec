@@ -66,12 +66,12 @@ exceptions noted below.
 A CloudEvents AMQP format implementation MUST allow for attribute values to be
 convertible from/to their canonical CloudEvents string representation. For
 instance, the `time` attribute MUST be convertible from and to a conformant
-RFC3339 string value. 
+RFC3339 string value.
 
-If an non-string attribute is received as string from a communicating party, 
-an AMQP intermediary MAY convert it to the native AMQP representation before 
+If an non-string attribute is received as string from a communicating party, an
+AMQP intermediary MAY convert it to the native AMQP representation before
 forwarding the event; an AMQP consumer SHOULD convert it to the native AMQP
-representation before surfacing the value to the API. An AMQP implementation 
+representation before surfacing the value to the API. An AMQP implementation
 SHOULD convert from/to the native runtime or language type system to the AMQP
 type system directly without translating through strings whenever possible.
 
