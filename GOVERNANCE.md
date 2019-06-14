@@ -105,6 +105,7 @@ To create a new release:
 
 - Create a PR that modifies the [README](README.md), and all specifications (ie.
   \*.md files) that include a version string, to the new release version string.
+  Make sure to remove `-wip` from all of the version strings.
 - Merge the PR.
 - Create a [new release](https://github.com/cloudevents/spec/releases/new):
   - Choose a "Tag version" of the form: `vX.Y`, e.g. `v0.1`
@@ -112,9 +113,14 @@ To create a new release:
   - Release title should be the same as the Tag - `vX.Y`
   - Add some descriptive text, or the list of PRs that have been merged since
     the previous release. The git query to get the list commits since the last
-    release is: `git log --pretty=format:%s master...v0.1`. Just replace "v0.1"
-    with the name of the previous release.
+    release is:
+	`git log --pretty=format:%s master...v0.1 | grep -v "Merge pull"`.
+	Just replace "v0.1" with the name of the previous release.
   - Press `Publish release` button
+- Create a PR that modifies the version string in all of the files
+  (but not the README.md table) to be the next version number with a `-wip`
+  in it (e.g `v0.4-wip`).
+- Merge the PR.
 - Create an "announcement" highlighting the key features of the new release and
   any potential noteworthy activities of the group:
   - Send it to the mailing list

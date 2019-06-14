@@ -1,4 +1,4 @@
-# HTTP Transport Binding for CloudEvents - Version 0.3
+# HTTP Transport Binding for CloudEvents - Version 0.4-wip
 
 ## Abstract
 
@@ -233,7 +233,7 @@ request:
 ```text
 POST /someresource HTTP/1.1
 Host: webhook.example.com
-ce-specversion: 0.3
+ce-specversion: 0.4-wip
 ce-type: com.example.someevent
 ce-time: 2018-04-05T03:56:24Z
 ce-id: 1234-1234-1234
@@ -251,7 +251,7 @@ This example shows a response containing an event:
 
 ```text
 HTTP/1.1 200 OK
-ce-specversion: 0.3
+ce-specversion: 0.4-wip
 ce-type: com.example.someevent
 ce-time: 2018-04-05T03:56:24Z
 ce-id: 1234-1234-1234
@@ -310,7 +310,7 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "specversion" : "0.3",
+    "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
@@ -331,7 +331,7 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "specversion" : "0.3",
+    "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
@@ -387,7 +387,7 @@ Content-Length: nnnn
 
 [
     {
-        "specversion" : "0.3",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someevent",
 
         ... further attributes omitted ...
@@ -397,7 +397,7 @@ Content-Length: nnnn
         }
     },
     {
-        "specversion" : "0.3",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someotherevent",
 
         ... further attributes omitted ...
@@ -420,7 +420,7 @@ Content-Length: nnnn
 
 [
     {
-        "specversion" : "0.3",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someevent",
 
         ... further attributes omitted ...
@@ -430,7 +430,7 @@ Content-Length: nnnn
         }
     },
     {
-        "specversion" : "0.3",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someotherevent",
 
         ... further attributes omitted ...
