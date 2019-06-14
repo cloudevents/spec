@@ -1,4 +1,4 @@
-# AMQP Event Format for CloudEvents - Version 0.3
+# AMQP Event Format for CloudEvents - Version 0.4-wip
 
 ## Abstract
 
