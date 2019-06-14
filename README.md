@@ -27,19 +27,19 @@ The following documents are available:
 |                               |                                 Latest Release                                  |                                    Working Draft                                    |
 | :---------------------------- | :-----------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
 | **Core Specification:**       |
-| CloudEvents                   |          [v0.2](https://github.com/cloudevents/spec/blob/v0.2/spec.md)          |          [master](https://github.com/cloudevents/spec/blob/master/spec.md)          |
+| CloudEvents                   |          [v0.3](https://github.com/cloudevents/spec/blob/v0.3/spec.md)          |          [master](https://github.com/cloudevents/spec/blob/master/spec.md)          |
 |                               |
 | **Optional Specifications:**  |
-| HTTP Transport Binding        | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
-| JSON Event Format             |      [v0.2](https://github.com/cloudevents/spec/blob/v0.2/json-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/json-format.md)       |
-| Web hook                      |      [v0.2](https://github.com/cloudevents/spec/blob/v0.2/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
-| MQTT Transport Binding        | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/mqtt-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-transport-binding.md) |
-| NATS Transport Binding        | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
-| AMQP Event Format             |      [v0.2](https://github.com/cloudevents/spec/blob/v0.2/amqp-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md)       |
-| AMQP Transport Binding        | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/amqp-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
+| HTTP Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
+| JSON Event Format             |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/json-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/json-format.md)       |
+| Web hook                      |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
+| MQTT Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/mqtt-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-transport-binding.md) |
+| NATS Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
+| AMQP Event Format             |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/amqp-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md)       |
+| AMQP Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/amqp-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
 |                               |
 | **Additional Documentation:** |
-| Primer                        |         [v0.2](https://github.com/cloudevents/spec/blob/v0.2/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
+| Primer                        |         [v0.3](https://github.com/cloudevents/spec/blob/v0.3/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
 | Documented Extensions         |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)  |
 | Proprietary Specifications    |                                        -                                        |   [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)    |
 

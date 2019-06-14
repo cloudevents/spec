@@ -1,4 +1,4 @@
-# Protocol Buffers Event Format for CloudEvents - Version 0.3-wip
+# Protocol Buffers Event Format for CloudEvents - Version 0.3
 
 ## Abstract
 
@@ -102,7 +102,7 @@ CloudEventMap event = CloudEventMap.newBuilder()
   .putValue(
     "specversion",
     CloudEventAny.newBuilder()
-      .setStringValue("0.3-wip")
+      .setStringValue("0.3")
       .build())
   .putValue(
     "time",

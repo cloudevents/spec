@@ -1,4 +1,4 @@
-# CloudEvents SDK
+# CloudEvents SDK - Version 0.3
 
 The intent of this document to describe bare minimum set of requirements for a
 new SDKs.

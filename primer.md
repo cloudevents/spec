@@ -1,4 +1,4 @@
-# CloudEvents Primer
+# CloudEvents Primer - Version 0.3
 
 ## Abstract
 
