@@ -1,10 +1,10 @@
-# Gitlab CloudEvents Adapter
+# GitLab CloudEvents Adapter
 
 This document describes how to convert
-[Gitlab webhook events](https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#events)
+[GitLab webhook events](https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#events)
 into a CloudEvents.
 
-Gitlab webhook event documentation:
+GitLab webhook event documentation:
 https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#events
 
 Each section below describes how to determine the CloudEvents attributes
@@ -16,7 +16,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "repository.homepage" value              |
-| `specversion`         | `0.3-wip`                                |
+| `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.push`                        |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
@@ -31,7 +31,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "repository.homepage" value              |
-| `specversion`         | `0.3-wip`                                |
+| `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.tag_push`                    |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
@@ -46,7 +46,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID              |
 | `source`              | "repository.homepage" value                           |
-| `specversion`         | `0.3-wip`                                             |
+| `specversion`         | `0.4-wip`                                             |
 | `type`                | `com.gitlab.issue.` + "object_attributes.state" value |
 | `datacontentencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
@@ -61,7 +61,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "commit.url" value                       |
-| `specversion`         | `0.3-wip`                                |
+| `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.note.commit`                 |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
@@ -76,7 +76,7 @@ based on the specified event.
 | :-------------------- | :----------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                     |
 | `source`              | "object_attributes.url" value, without the `#note\_...` part |
-| `specversion`         | `0.3-wip`                                                    |
+| `specversion`         | `0.4-wip`                                                    |
 | `type`                | `com.gitlab.note.merge_request`                              |
 | `datacontentencoding` | Omit                                                         |
 | `datacontenttype`     | `application/json`                                           |
@@ -91,7 +91,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                    |
 | `source`              | "object_attributes.url" value without the `#note\_...` part |
-| `specversion`         | `0.3-wip`                                                   |
+| `specversion`         | `0.4-wip`                                                   |
 | `type`                | `com.gitlab.note.issue`                                     |
 | `datacontentencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
@@ -106,7 +106,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                    |
 | `source`              | "object_attributes.url" value without the `#note\_...` part |
-| `specversion`         | `0.3-wip`                                                   |
+| `specversion`         | `0.4-wip`                                                   |
 | `type`                | `com.gitlab.note.snippet`                                   |
 | `datacontentencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
@@ -121,7 +121,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                       |
 | `source`              | "repository.homepage" value                                    |
-| `specversion`         | `0.3-wip`                                                      |
+| `specversion`         | `0.4-wip`                                                      |
 | `type`                | `com.gitlab.merge_request.` + "object_attributes.action" value |
 | `datacontentencoding` | Omit                                                           |
 | `datacontenttype`     | `application/json`                                             |
@@ -136,7 +136,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                   |
 | `source`              | "project.web_url" value                                    |
-| `specversion`         | `0.3-wip`                                                  |
+| `specversion`         | `0.4-wip`                                                  |
 | `type`                | `com.gitlab.wiki_page.` + "object_attributes.action" value |
 | `datacontentencoding` | Omit                                                       |
 | `datacontenttype`     | `application/json`                                         |
@@ -151,7 +151,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                  |
 | `source`              | "project.web_url" value                                   |
-| `specversion`         | `0.3-wip`                                                 |
+| `specversion`         | `0.4-wip`                                                 |
 | `type`                | `com.gitlab.pipeline.` + "object_attributes.status" value |
 | `datacontentencoding` | Omit                                                      |
 | `datacontenttype`     | `application/json`                                        |
@@ -166,7 +166,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "repository.homepage" value              |
-| `specversion`         | `0.3-wip`                                |
+| `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.job.` + "job_status" value   |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
