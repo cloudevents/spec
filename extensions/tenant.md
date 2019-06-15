@@ -7,7 +7,8 @@ tenant-based logic, such as routing, scheduling or processing priorities, etc.
 without a need to understand the event body.   
 
 The `tenantid` attribute represents the value of this event's Tenant Identifier 
-attribute. 
+attribute defined by the event producer. While events flow across multiple 
+provider platforms, a middleware MUST preserve the `tenantid` attribute.  
 
 ## Attributes
 
@@ -31,6 +32,4 @@ The Tenant Identifier extension uses the key `tenantid` for in-memory formats.
 
 The Tenant Identifier extension does not customize any transport binding's 
 storage for extensions.
-
-
 
