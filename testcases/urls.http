@@ -1,0 +1,9 @@
+POST / HTTP/1.1
+Host: handler.example.com
+Content-Length: 0
+CE-specversion: 0.3
+CE-id: 123
+CE-source:
+CE-type: io.cloudevetns.url-test
+CE-schemaurl: %2f%2f%anonymous@example.com/a&b;?x'=%2f//#//
+

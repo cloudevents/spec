@@ -1,0 +1,12 @@
+{
+    "specversion": "0.3",
+    "id": "123",
+
+    "source": "https://cloudevents.io/contenttype",
+    "type": "io.cloudevents.contenttype-test",
+
+    "datacontentencoding": "Base64",
+    "datacontenttype": "application/xml",
+
+    "data": "PG11Y2ggd293PSJ4bWwiLz4=",  // <much wow="xml"/>
+}

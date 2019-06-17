@@ -1,0 +1,16 @@
+{
+    "specversion": "0.3",
+    // "Printable" might or might not include " ", but probably includes
+    // characters that produce at least some visible output
+    // Go defines this as: 
+    // > Such characters include letters, marks, numbers, punctuation, symbols,
+    // > and spaces, from categories L, M, N, P, S, Zs.
+    // https://golang.org/pkg/unicode/#IsGraphic
+    "id": "\"😉\u033c.is+Fine火\u0022",  // \u22\u1F609\u033c\u2e\u69\u73\u2b\u46\u69\u6e\u65\u706b\u22
+
+    "source": "https://cloudevents.io/unicode-strings"
+    "type": "\"😉\u033c.is+Fine火\u0022",
+
+    // OPTIONAL field
+    "subject": "\"😉\u033c.is+Fine火\u0022",
+}

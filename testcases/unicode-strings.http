@@ -1,0 +1,9 @@
+POST / HTTP/1.1
+Host: handler.example.com
+Content-Length: 0
+CE-specversion: 0.3
+CE-id: %22%F0%9F%98%89%03%3c.is%2BFine%E7%81%AB%22
+CE-source: https://cloudevents.io/unicode-strings
+CE-type: %22%F0%9F%98%89%03%3c.is%2BFine%E7%81%AB%22
+CE-subject: %22%F0%9F%98%89%03%3c.is%2BFine%E7%81%AB%22
+

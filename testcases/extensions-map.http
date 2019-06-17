@@ -1,0 +1,11 @@
+POST / HTTP/1.1
+Host: handler.example.com
+Content-Length: 0
+CE-specversion: 0.3
+CE-id: 123
+CE-source: https://cloudevents.io/extensions-map
+CE-type: io.cloudevents.extensions-map-test
+CE-this0is0ok-\: ok
+CE-this0is0ok-": {\"u005c": 17}
+Content-Type: application/xml
+
