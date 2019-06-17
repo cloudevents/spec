@@ -5,7 +5,7 @@ ce-specversion: 0.3
 ce-id: 123
 ce-source: https://cloudevents.io/extensions-map
 ce-type: io.cloudevents.extensions-map-test
-ce-this0is0ok-\: ok
-ce-this0is0ok-": {\"u005c": 17}
+ce-this0is0ok-": ok
+ce-this0is0ok-: {\"u005c": 17}
 Content-Type: application/xml
 

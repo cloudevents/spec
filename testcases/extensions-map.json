@@ -9,8 +9,9 @@
      * EXTENSIONS, with a map value
      */
     "this0is0ok": {
-        "\\": "ok",
-        "\"": {
+        "\": "ok",
+        // Empty string **is** allowed by RFC7159.
+        "": {
             "\u005c": "17"
         }
     }
