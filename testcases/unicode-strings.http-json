@@ -1,0 +1,22 @@
+POST / HTTP/1.1
+Host: handler.example.com
+Content-Length: 517
+Content-Type: applications/cloudevents+json; charset=utf-8
+
+{
+    "specversion": "0.3",
+    "id": "\"😉\u033c.is+Fine火\u0022",  // \u22\u1F609\u033c\u2e\u69\u73\u2b\u46\u69\u6e\u65\u706b\u22
+    "source": "",  // relative-ref -> relative-part -> path-empty
+    "type": "\"😉\u033c.is+Fine火\u0022",
+    "datacontentencoding": "Base64",
+    "datacontenttype": "application/xml",
+    "schemaurl": "%2f%2f%anonymous@example.com/a&b;?x'=%2f//#//",
+    "subject": "\"😉\u033c.is+Fine火\u0022",
+    "data": "PG11Y2ggd293PSJ4bWwiLz4=",
+    "this0is0ok": {
+        "\\": "ok",
+        "\"": {
+            "\u005c": "good,too"
+        }
+    }
+}

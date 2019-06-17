@@ -1,0 +1,11 @@
+------------------ PUBLISH ---------------
+Topic Name: mytopic
+Content Type: 
+--------------- User Properties ----------
+specversion: 0.3
+id: 123
+source: https://cloudevents.io/extensions-map
+type: io.cloudevents.extensions-map-test
+this0is0ok: {"\\":"ok","\"":{"\\": "17"}}
+------------------ payload ---------------
+------------------------------------------

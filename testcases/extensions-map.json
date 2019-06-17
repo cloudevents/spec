@@ -1,0 +1,17 @@
+{
+    "specversion": "0.3",
+    "id": "123",
+
+    "source": "https://cloudevents.io/extensions-map",
+    "type": "io.cloudevents.extensions-map-test",
+
+    /***
+     * EXTENSIONS, with a map value
+     */
+    "this0is0ok": {
+        "\\": "ok",
+        "\"": {
+            "\u005c": "17"
+        }
+    }
+}

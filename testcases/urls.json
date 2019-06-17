@@ -1,0 +1,16 @@
+{
+    "specversion": "0.3",
+
+    "id": "123",
+
+    // Source is a URI-reference, https://tools.ietf.org/html/rfc3986#appendix-A
+    "source": "",  // relative-ref -> relative-part -> path-empty
+    "type": "io.cloudevents.url-test",
+    
+    // URI-reference: https://tools.ietf.org/html/rfc3986#appendix-A
+    // Verify that % decoding is done properly. This is a 'path-noscheme'
+    // that percent-decodes to a '"//" authority path-abempty'.
+    "schemaurl": "%2f%2f%anonymous@example.com/a&b;?x'=%2f//#//",
+
+    "data": "",
+}

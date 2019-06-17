@@ -1,0 +1,11 @@
+POST / HTTP/1.1
+Host: handler.example.com
+Content-Type: application/xml
+Content-Length: 24
+CE-specversion: 0.3
+CE-id: 123
+CE-source: https://cloudevents.io/contenttype
+CE-type: io.cloudevetns.contenttype-test
+CE-datacontentencoding: Base64
+
+PG11Y2ggd293PSJ4bWwiLz4=
