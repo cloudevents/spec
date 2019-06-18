@@ -57,7 +57,8 @@ include that feature in a message if it wants, and a consumer can choose to
 support that feature if it wants. A consumer that does not support that feature
 will then silently ignore that part of the message. The producer needs to be
 prepared for the situation where a consumer ignores that feature. For an
-[Intermediary](#Intermediary) silently ignoring OPTIONAL attributes means that it MUST forward them.
+[Intermediary](#Intermediary) silently ignoring OPTIONAL attributes means that
+it MUST forward them.
 
 ### Attribute Naming Convention
 
