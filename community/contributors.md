@@ -43,6 +43,8 @@ Contributions do not constitute an official endorsement.
   - Orit Nissan-Messing - [@oritnm](https://github.com/oritnm)
 - **Intel**
   - David Lyle - [@dklyle](https://github.com/dklyle)
+- **Lightbend**
+  - James Roper - [@jroper](https://github.com/jroper)
 - **Microsoft**
   - [Microsoft Event Grid](https://azure.microsoft.com/en-us/services/event-grid/)
   - Clemens Vasters - [@clemensv](https://github.com/clemensv)
