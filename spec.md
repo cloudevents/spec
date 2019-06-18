@@ -51,13 +51,13 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 For clarity, when a feature is marked as "OPTIONAL" this means that it is
-OPTIONAL for both the [Producer](#Producer) and [Consumer](#Consumer) of a
+OPTIONAL for both the [Producer](#producer) and [Consumer](#consumer) of a
 message to support that feature. In other words, a producer can choose to
 include that feature in a message if it wants, and a consumer can choose to
 support that feature if it wants. A consumer that does not support that feature
 will then silently ignore that part of the message. The producer needs to be
 prepared for the situation where a consumer ignores that feature. For an
-[Intermediary](#Intermediary) silently ignoring OPTIONAL attributes means that
+[Intermediary](#intermediary) silently ignoring OPTIONAL attributes means that
 it MUST forward them.
 
 ### Attribute Naming Convention

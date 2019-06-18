@@ -570,9 +570,9 @@ including being both a producer and a consumer of events.
    delegation choice of the producer.
 
    In practice, middleware can take on the role of a
-   [Producer](spec.md#Producer) when it changes the semantic meaning of an
-   event, a [Consumer](spec.md#Consumer) when it takes action based on an event,
-   or [Intermediary](spec.md#Intermediary) when it routes events without making
+   [Producer](spec.md#producer) when it changes the semantic meaning of an
+   event, a [Consumer](spec.md#consumer) when it takes action based on an event,
+   or [Intermediary](spec.md#intermediary) when it routes events without making
    semantic changes.
 
 4. Frameworks and other abstractions make interactions with event platform
