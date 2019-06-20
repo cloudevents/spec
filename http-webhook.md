@@ -110,6 +110,9 @@ If the delivery cannot be accepted because the notification format has not been
 understood, the service MUST respond with status code [415 Unsupported Media
 Type][415].
 
+If the delivery cannot be accepted due to the payload being too large,
+the service MUST respond with status code [413 Payload Too Large][413].
+
 All further error status codes apply as specified in [RFC7231][rfc7231].
 
 ## 3. Authorization
@@ -362,6 +365,7 @@ WebHook-Allowed-Rate: 100
 [202]: https://tools.ietf.org/html/rfc7231#section-6.3.3
 [204]: https://tools.ietf.org/html/rfc7231#section-6.3.5
 [410]: https://tools.ietf.org/html/rfc7231#section-6.5.9
+[413]: https://tools.ietf.org/html/rfc7231#section-6.5.11
 [415]: https://tools.ietf.org/html/rfc7231#section-6.5.13
 [429]: https://tools.ietf.org/html/rfc6585#section-4
 [bearer]: https://tools.ietf.org/html/rfc6750#section-2.1
