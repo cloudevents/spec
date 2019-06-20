@@ -18,6 +18,8 @@ Contributions do not constitute an official endorsement.
 - **Amazon**
   - [AWS Lambda events](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html)
   - Arun Gupta, Ajay Nair, Rob Leidle, Orr Weinstein
+- **commercetools**
+  - Christoph Neijenhuis - [@cneijenhuis](https://github.com/cneijenhuis)
 - **Google**
   - [Google Cloud Functions](https://cloud.google.com/functions/) and
     [Cloud Functions for Firebase](https://firebase.google.com/docs/functions/)
