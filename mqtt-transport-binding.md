@@ -1,4 +1,4 @@
-# MQTT Transport Binding for CloudEvents
+# MQTT Transport Binding for CloudEvents - Version 0.4-wip
 
 ## Abstract
 
@@ -176,8 +176,7 @@ in the MQTT PUBLISH message.
 ##### 3.1.3.2 User Property Values
 
 The value for each MQTT PUBLISH User Property MUST be constructed from the
-respective CloudEvents attribute's JSON type representation, compliant with the
-[JSON event format][json-format] specification.
+respective CloudEvents attribute type's canonical string representation.
 
 #### 3.1.4 Examples
 
@@ -198,11 +197,11 @@ Content Type: application/json; charset=utf-8
 
 ------------- User Properties ----------------
 
-specversion: "0.3-wip"
-type: "com.example.someevent"
-time: "2018-04-05T03:56:24Z"
-id: "1234-1234-1234"
-source: "/mycontext/subcontext"
+specversion: 0.4-wip
+type: com.example.someevent
+time: 2018-04-05T03:56:24Z
+id: 1234-1234-1234
+source: /mycontext/subcontext
        .... further attributes ...
 
 ------------------ payload -------------------
@@ -260,7 +259,7 @@ Content Type: application/cloudevents+json; charset=utf-8
 ------------------ payload -------------------
 
 {
-    "specversion" : "0.3-wip",
+    "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
@@ -285,7 +284,7 @@ Topic Name: mytopic
 ------------------ payload -------------------
 
 {
-    "specversion" : "0.3-wip",
+    "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

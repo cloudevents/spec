@@ -1,4 +1,4 @@
-# CloudEvents Primer
+# CloudEvents Primer - Version 0.4-wip
 
 ## Abstract
 
@@ -79,7 +79,7 @@ specific protocols (AWS Kinesis, Azure Event Grid).
 
 An action processes an event defining a behavior or effect which was triggered
 by a specific _occurrence_ from a specific _source_. While outside of the scope
-of the specification, the purpose of generating an _event_ is typcially to allow
+of the specification, the purpose of generating an _event_ is typically to allow
 other systems to easily react to changes in a source that they do not control.
 The _source_ and action are typically built by different developers. Often the
 _source_ is a managed service and the _action_ is custom code in a serverless
@@ -149,31 +149,30 @@ general, this is true for all CloudEvents attributes as well.
 
 ## CloudEvent Attributes
 
-This section provides additional background and design points related to some
-of the CloudEvent attributes.
+This section provides additional background and design points related to some of
+the CloudEvent attributes.
 
 ### id
 
 The `id` attribute is meant to be a value that is unique across all events
 related to one event source (where each event source is uniquely identified by
-its CloudEvents `source` attribute value).  While the exact value used
-is producer defined, receivers of CloudEvents from a single
-event source can be assured that no two events will share the same `id`
-value. The only exception to this is if some replay of the event is supported,
-and in those cases, the `id` can then be used to detect this.
+its CloudEvents `source` attribute value). While the exact value used is
+producer defined, receivers of CloudEvents from a single event source can be
+assured that no two events will share the same `id` value. The only exception to
+this is if some replay of the event is supported, and in those cases, the `id`
+can then be used to detect this.
 
-Since a single occurrence may result in the generation of more than one
-event, in the cases where all of those events are from the same event source,
-each CloudEvent constructed will have a unique
-`id`. Take the example of the creation of a DB entry, this one occurrence
-might generate a CloudEvent with a type of `create` and a CloudEvent with
-a type of `write`. Each of those CloudEvents would have a unique `id`. If
-there is the desire for some correlation between those two CloudEvents
-to indicate they are both related to the same occurrence, then some additional
-data within the CloudEvent would be used for that purpose.
+Since a single occurrence may result in the generation of more than one event,
+in the cases where all of those events are from the same event source, each
+CloudEvent constructed will have a unique `id`. Take the example of the creation
+of a DB entry, this one occurrence might generate a CloudEvent with a type of
+`create` and a CloudEvent with a type of `write`. Each of those CloudEvents
+would have a unique `id`. If there is the desire for some correlation between
+those two CloudEvents to indicate they are both related to the same occurrence,
+then some additional data within the CloudEvent would be used for that purpose.
 
-In this respect, while the exact value chosen by the event producer might
-be some random string, or a string that has some semantic meaning in some other
+In this respect, while the exact value chosen by the event producer might be
+some random string, or a string that has some semantic meaning in some other
 context, for the purposes of this CloudEvent attribute those meanings are not
 relevant and therefore using `id` for some other purpose beyond uniqueness
 checking is out of scope of the specification and not recommended.
@@ -191,7 +190,7 @@ end, attributes defined by this project will fall into three categories:
 As the category names imply, "required" attributes will be the ones that the
 group considers vital to all events in all use cases, while "optional" ones will
 be used in a majority of the cases. Both of the attributes in these cases will
-be defined within the specfication itself.
+be defined within the specification itself.
 
 When the group determines that an attribute is not common enough to fall into
 those two categories but would still benefit from the level of interoperability
@@ -233,7 +232,7 @@ formally adding them to the specification.
 ### JSON Extensions
 
 As mentioned in the [Attributes](json-format.md#2-attributes) section of the
-[JSON Event Format for CloudEvents](json-format.md) specificatinon, CloudEvent
+[JSON Event Format for CloudEvents](json-format.md) specification, CloudEvent
 extension attributes are serialized as siblings to the specification defined
 attributes - meaning, at the top-level of the JSON object. The authors of the
 specification spent a long time considering all options and decided that this
@@ -249,8 +248,8 @@ to be exposed to the application receiving those events. This would allow those
 applications to support these properties even if the infrastructure doesn't.
 This means that unknown top-level properties (regardless of who defined them -
 future versions of the spec or the event producer) are probably not going to be
-ignored. So, while some other specifications define a specific property
-underwhich extensions are placed (e.g. a top-level `extensions` property), the
+ignored. So, while some other specifications define a specific property under
+which extensions are placed (e.g. a top-level `extensions` property), the
 authors decided that having two different locations within an incoming event for
 unknown properties could lead to interoperability issues and confusion for
 developers.
@@ -270,9 +269,58 @@ need to place it in both places since they could have old and new consumers?
 While it might be possible to define clear rules for how to solve each of the
 potential problems that arise, the authors decided that it would be better to
 simply avoid all of them in the first place by only having one location in the
-serialization for unkown, or even new, properties. It was also noted that the
+serialization for unknown, or even new, properties. It was also noted that the
 HTTP specification is now following a similar pattern by no longer suggesting
 that extension HTTP headers be prefixed with `X-`.
+
+## Creating CloudEvents
+
+The CloudEvents specification purposely avoids being too prescriptive about how
+CloudEvents are created. For example, it does not assume that the original event
+source is the same entity that is constructing the associated CloudEvent for
+that occurrence. This allows for a wide variety of implementation choices.
+However, it can be useful for implementors of the specification to understand
+the expectations that the specification authors had in mind as this might help
+ensure interoperability and consistency.
+
+As mentioned above, whether the entity that generated the initial event is the
+same entity that creates the corresponding CloudEvent is an implementation
+choice. However, when the entity that is constructing/populating the CloudEvents
+attributes is acting on behalf of the event source, the values of those
+attributes are meant to describe the event or the event source and not the
+entity calculating the CloudEvent attribute values. In other words, when the
+split between the event source and the CloudEvents producer are not materially
+significant to the event consumers, the spec defined attributes would typically
+not include any values to indicate this split of responsibilities.
+
+This isn't to suggest that the CloudEvents producer couldn't add some additional
+attributes to the CloudEvent, but those are outside the scope of the
+interoperability defined attributes of the spec. This is similar to how an HTTP
+proxy would typically minimize changes to the well-defined HTTP headers of an
+incoming message, but it might add some additional headers that include
+proxy-specific metadata.
+
+It is also worth noting that this separation between original event source and
+CloudEvents producer could be small or large. Meaning, even if the CloudEvent
+producer were not part of the original event source's ecosystem, if it is acting
+on behalf of the event source, and its presence in the flow of the event is not
+meaningful to event consumers, then the above guidance would still apply.
+
+When an entity is acting as both a receiver and sender of CloudEvents for the
+purposes of forwarding, or transforming, the incoming event, the degree to which
+the outbound CloudEvent matches the inbound CloudEvent will vary based on the
+processing semantics of this entity. In cases where it is acting as proxy, where
+it is simply forwarding CloudEvents to another event consumer, then the outbound
+CloudEvent will typically look identical to the inbound CloudEvent with respect
+to the spec defined attributes - see previous paragraph concerning adding
+additional attributes.
+
+However, if this entity is performing some type of semantic processing of the
+CloudEvent, typically resulting in a change to the value of the `data`
+attribute, then it may need to be considered a distinct "event source" from the
+original event source. And as such, it is expected that CloudEvents attributes
+related to the event producer (such as 'source`and`id`) would be changed from
+the incoming CloudEvent.
 
 ## Qualifying Protocols and Encodings
 
@@ -571,10 +619,6 @@ from various middleware devices such as event brokers and gateways. CloudEvents
 includes metadata in events to associate these events as being part of an event
 sequence for the purpose of event tracing and troubleshooting.
 
-#### Cloudbursting
-
-TBD
-
 #### IoT
 
 IoT devices send and receive events related to their functionality. For example,
@@ -661,8 +705,8 @@ existing current event formats that are used in practice today was gathered.
 
 #### AWS - CloudWatch Events
 
-A high proportion of event-processing systems on AWS are converging on 
-the use of this format.
+A high proportion of event-processing systems on AWS are converging on the use
+of this format.
 
 ```
 {

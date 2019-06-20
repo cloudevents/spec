@@ -1,4 +1,4 @@
-### CloudEvent Specs for Proprietary Protocols and Encodings
+# CloudEvent Specs for Proprietary Protocols and Encodings
 
 Disclaimer: CloudEvents does not endorse these protocols or specs, and does not
 ensure that they are up to date with the current version of CloudEvents. That is

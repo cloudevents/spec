@@ -1,6 +1,4 @@
-# CloudEvents - Version 0.3-wip
-
-=======
+# CloudEvents - Version 0.4-wip
 
 ## Abstract
 
@@ -18,6 +16,7 @@ This document is a working draft.
 - [Type System](#type-system)
 - [Context Attributes](#context-attributes)
 - [Data Attribute](#data-attribute)
+- [Size Limits](#size-limits)
 - [Privacy & Security](#privacy-and-security)
 - [Example](#example)
 
@@ -148,24 +147,53 @@ specific protocols (AWS Kinesis, Azure Event Grid).
 
 ## Type System
 
-The following abstract data types are available for use in attributes.
+The following abstract data types are available for use in attributes. Each of
+these types MAY be represented differently by different event formats and in
+transport metadata fields. This specification defines a canonical
+string-encoding for each type that MUST be supported by all implementations.
+
+A strongly-typed programming model that represents a CloudEvent or any extension
+MUST be able to convert from and to the canonical string-encoding to the
+runtime/language native type that best corresponds to the abstract type.
+
+For example, the `time` attribute might be represented by the language's native
+_datetime_ type in a given implementation, but it MUST be settable providing an
+RFC3339 string, and it MUST be convertible to an RFC3339 string when mapped to a
+header of an HTTP message.
+
+A CloudEvents transport binding or event format implementation MUST likewise be
+able to convert from and to the canonical string-encoding to the corresponding
+data type in the encoding or in transport metadata fields.
+
+An attribute value of type `Timestamp` might indeed be routed as a string
+through multiple hops and only materialize as a native runtime/language type at
+the producer and ultimate consumer. The `Timestamp` might also be routed as a
+native transport type and might be mapped to/from the respective
+language/runtime types at the producer and consumer ends, and never materialize
+as a string.
 
 - `Integer` - A whole number in the range -2,147,483,648 to +2,147,483,647
   inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
   Event formats do not have to use this encoding, but they MUST only use
   `Integer` values in this range.
+  - String encoding: Integer portion of the JSON Number per
+    [RFC 7159, Section 6](https://tools.ietf.org/html/rfc7159#section-6)
 - `String` - Sequence of printable Unicode characters.
 - `Binary` - Sequence of bytes.
+  - String encoding: Base64 encoding per
+    [RFC4648](https://tools.ietf.org/html/rfc4648).
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
-- `Any` - Either a `Binary`, `Integer`, `Map` or `String`.
-- `URI-reference` - String expression conforming to `URI-reference` as defined
-  in [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
-- `Timestamp` - String expression as defined in
-  [RFC 3339](https://tools.ietf.org/html/rfc3339).
-
-The `Any` type is a variant type that can take the shape of either a `Binary`,
-`Integer`, `Map` or `String`. The type system is intentionally abstract, and
-therefore it is left to implementations how to represent the variant type.
+  - String encoding: JSON Object per
+    [RFC 7159, Section 4](https://tools.ietf.org/html/rfc7159#section-4)
+- `URI-reference` - Uniform resource identifier reference.
+  - String encoding: `URI-reference` as defined in
+    [RFC 3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
+- `Timestamp` - Date and time expression using the Gregorian Calendar.
+  - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
+- `Any` - A variant type that can take the shape of either an `Integer`,
+  `String`, `Binary`, `Map`, `URI-reference` or `Timestamp`. The type system is
+  intentionally abstract, and therefore it is left to implementations how to
+  represent the `Any` type.
 
 ## Context Attributes
 
@@ -189,10 +217,9 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 #### id
 
 - Type: `String`
-- Description: Identifies the event.
-  Producers MUST ensure that `source` + `id` is unique for each
-  distinct event.  If a duplicate event is re-sent (e.g. due to a
-  network error) it MAY have the same `id`.  Consumers MAY assume that
+- Description: Identifies the event. Producers MUST ensure that `source` + `id`
+  is unique for each distinct event. If a duplicate event is re-sent (e.g. due
+  to a network error) it MAY have the same `id`. Consumers MAY assume that
   Events with identical `source` and `id` are duplicates.
 - Examples:
   - An event counter maintained by the producer
@@ -205,24 +232,21 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 #### source
 
 - Type: `URI-reference`
-- Description: Identifies the context in which an event
-  happened. Often this will include information such as the type of
-  the event source, the organization publishing the event or the
-  process that produced the event. The exact syntax and semantics
-  behind the data encoded in the URI is defined by the event producer.
+- Description: Identifies the context in which an event happened. Often this
+  will include information such as the type of the event source, the
+  organization publishing the event or the process that produced the event. The
+  exact syntax and semantics behind the data encoded in the URI is defined by
+  the event producer.
 
-  Producers MUST ensure that `source` + `id` is unique for each
-  distinct event.
+  Producers MUST ensure that `source` + `id` is unique for each distinct event.
 
-  An application MAY assign a unique `source` to each distinct
-  producer, which makes it easy to produce unique IDs since no other
-  producer will have the same source. The application MAY use UUIDs,
-  URNs, DNS authorities or an application-specific scheme to create
-  unique `source` identifiers.
+  An application MAY assign a unique `source` to each distinct producer, which
+  makes it easy to produce unique IDs since no other producer will have the same
+  source. The application MAY use UUIDs, URNs, DNS authorities or an
+  application-specific scheme to create unique `source` identifiers.
 
-  A source MAY include more than one producer. In that case the
-  producers MUST collaborate to ensure that `source` + `id` is unique
-  for each distinct event.
+  A source MAY include more than one producer. In that case the producers MUST
+  collaborate to ensure that `source` + `id` is unique for each distinct event.
 
 - Constraints:
   - REQUIRED
@@ -231,7 +255,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
     - https://github.com/cloudevents
     - mailto:cncf-wg-serverless@lists.cncf.io
   - Universally-unique URN with a UUID:
-    -  urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
+    - urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
   - Application-specific identifiers
     - /cloudevents/spec/pull/123
     - /sensors/tn-1234567/alerts
@@ -242,7 +266,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 - Type: `String`
 - Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `0.3-wip` when referring to this version of the
+  producers MUST use a value of `0.4-wip` when referring to this version of the
   specification.
 - Constraints:
   - REQUIRED
@@ -268,7 +292,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 
 ### OPTIONAL Attributes
 
-The following attribtues are OPTIONAL to appear in CloudEvents. See the
+The following attributes are OPTIONAL to appear in CloudEvents. See the
 [Notational Conventions](#notational-conventions) section for more information
 on the definition of OPTIONAL.
 
@@ -371,7 +395,12 @@ on the definition of OPTIONAL.
 #### time
 
 - Type: `Timestamp`
-- Description: Timestamp of when the event happened.
+- Description: Timestamp of when the occurrence happened. If the time of the
+  occurrence can not be determined then this attribute MAY be set to some
+  other time (such as the current time) by the CloudEvents producer, however
+  all producers for the same `source` MUST be consistent in this respect.
+  In other words, either they all use the actual time of the occurrence or
+  they all use the same alogorithm to determine the value used.
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in
@@ -425,6 +454,41 @@ encapsulated within the `data` attribute.
 - Constraints:
   - OPTIONAL
 
+# Size Limits
+
+In many scenarios, CloudEvents will be forwarded through one or more generic
+intermediaries, each of which might impose limits on the size of forwarded
+events. CloudEvents might also be routed to consumers, like embedded devices,
+that are storage or memory-constrained and therefore would struggle with large
+singular events.
+
+The "size" of an event is its wire-size, and includes every bit that is
+transmitted on the wire for the event: transport frame-metadata, event metadata,
+and event data, based on the chosen event format and the chosen protocol
+binding.
+
+If an application configuration requires for events to be routed across
+different transports or for events to be re-encoded, the least efficient
+transport and encoding used by the application SHOULD be considered for
+compliance with these size constraints:
+
+- Intermediaries MUST forward events of a size of 64 KByte or less.
+- Consumers SHOULD accept events of a size of at least 64 KByte.
+
+In effect, these rules will allow producers to publish events up to 64KB in size
+safely. Safely here means that it is generally reasonable to expect the event to
+be accepted and retransmitted by all intermediaries. It is in any particular
+consumer's control, whether it wants to accept or reject events of that size due
+to local considerations.
+
+Generally, CloudEvents publishers SHOULD keep events compact by avoiding to
+embed large data items into event payloads and rather use the event payload to
+link to such data items. From an access control perspective, this approach also
+allows for a broader distribution of events, because accessing event-related
+details through resolving links allows for differentiated access control and
+selective disclosure, rather than having sensitive details embedded in the event
+directly.
+
 # Privacy and Security
 
 Interoperability is the primary driver behind this specification, enabling such
@@ -460,7 +524,7 @@ The following example shows a CloudEvent serialized as JSON:
 
 ```JSON
 {
-    "specversion" : "0.3-wip",
+    "specversion" : "0.4-wip",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull",
     "subject" : "123",

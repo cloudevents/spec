@@ -1,4 +1,4 @@
-# AMQP Transport Binding for CloudEvents
+# AMQP Transport Binding for CloudEvents - Version 0.4-wip
 
 ## Abstract
 
@@ -201,11 +201,11 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:specversion: "0.3-wip"
-cloudEvents:type: "com.example.someevent"
-cloudEvents:time: "2018-04-05T03:56:24Z"
-cloudEvents:id: "1234-1234-1234"
-cloudEvents:source: "/mycontext/subcontext"
+cloudEvents:specversion: 0.4-wip
+cloudEvents:type: com.example.someevent
+cloudEvents:time: 2018-04-05T03:56:24Z
+cloudEvents:id: 1234-1234-1234
+cloudEvents:source: /mycontext/subcontext
        .... further attributes ...
 
 ------------- application-data ---------------
@@ -263,7 +263,7 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "specversion" : "0.3-wip",
+    "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

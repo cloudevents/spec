@@ -1,4 +1,4 @@
-# HTTP Transport Binding for CloudEvents - Version 0.3-wip
+# HTTP Transport Binding for CloudEvents - Version 0.4-wip
 
 ## Abstract
 
@@ -206,9 +206,8 @@ specification, header names are case-insensitive.
 
 ##### 3.1.3.2 HTTP Header Values
 
-The value for each HTTP header is constructed from the respective attribute's
-[JSON value][json-value] representation, compliant with the [JSON event
-format][json-format] specification.
+The value for each HTTP header is constructed from the respective attribute
+type's canonical string representation.
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
 and per [RFC7230 Section 3][rfc7230-section-3], HTTP headers MUST only use
@@ -216,8 +215,8 @@ printable characters from the US-ASCII character set, and are terminated by a
 CRLF sequence.
 
 Therefore, and analog to the encoding rules for Universal character set host
-names in URIs [RFC3986 3.2.2][rfc3986], the JSON value MUST be encoded as
-follows:
+names in URIs [RFC3986 3.2.2][rfc3986], the string value MUST be further encoded
+as follows:
 
 Non-printable ASCII characters and non-ASCII characters MUST first be encoded
 according to UTF-8, and then each octet of the corresponding UTF-8 sequence MUST
@@ -225,8 +224,6 @@ be percent-encoded to be represented as HTTP header characters, in compliance
 with [RFC7230, sections 3, 3.2, 3.2.6][rfc7230-section-3]. The rules for
 encoding of the percent character ('%') apply as defined in [RFC 3986 Section
 2.4.][rfc3986-section-2-4].
-
-JSON objects and arrays are NOT surrounded with single or double quotes.
 
 #### 3.1.4 Examples
 
@@ -236,11 +233,11 @@ request:
 ```text
 POST /someresource HTTP/1.1
 Host: webhook.example.com
-ce-specversion: "0.3-wip"
-ce-type: "com.example.someevent"
-ce-time: "2018-04-05T03:56:24Z"
-ce-id: "1234-1234-1234"
-ce-source: "/mycontext/subcontext"
+ce-specversion: 0.4-wip
+ce-type: com.example.someevent
+ce-time: 2018-04-05T03:56:24Z
+ce-id: 1234-1234-1234
+ce-source: /mycontext/subcontext
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
@@ -254,11 +251,11 @@ This example shows a response containing an event:
 
 ```text
 HTTP/1.1 200 OK
-ce-specversion: "0.3-wip"
-ce-type: "com.example.someevent"
-ce-time: "2018-04-05T03:56:24Z"
-ce-id: "1234-1234-1234"
-ce-source: "/mycontext/subcontext"
+ce-specversion: 0.4-wip
+ce-type: com.example.someevent
+ce-time: 2018-04-05T03:56:24Z
+ce-id: 1234-1234-1234
+ce-source: /mycontext/subcontext
     .... further attributes ...
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
@@ -313,7 +310,7 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "specversion" : "0.3-wip",
+    "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
@@ -334,7 +331,7 @@ Content-Type: application/cloudevents+json; charset=utf-8
 Content-Length: nnnn
 
 {
-    "specversion" : "0.3-wip",
+    "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...
@@ -390,7 +387,7 @@ Content-Length: nnnn
 
 [
     {
-        "specversion" : "0.3-wip",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someevent",
 
         ... further attributes omitted ...
@@ -400,7 +397,7 @@ Content-Length: nnnn
         }
     },
     {
-        "specversion" : "0.3-wip",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someotherevent",
 
         ... further attributes omitted ...
@@ -423,7 +420,7 @@ Content-Length: nnnn
 
 [
     {
-        "specversion" : "0.3-wip",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someevent",
 
         ... further attributes omitted ...
@@ -433,7 +430,7 @@ Content-Length: nnnn
         }
     },
     {
-        "specversion" : "0.3-wip",
+        "specversion" : "0.4-wip",
         "type" : "com.example.someotherevent",
 
         ... further attributes omitted ...
