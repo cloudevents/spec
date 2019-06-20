@@ -37,6 +37,7 @@ The following documents are available:
 | NATS Transport Binding        | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
 | AMQP Event Format             |      [v0.2](https://github.com/cloudevents/spec/blob/v0.2/amqp-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md)       |
 | AMQP Transport Binding        | [v0.2](https://github.com/cloudevents/spec/blob/v0.2/amqp-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
+| AVRO Event Format             | - | [master](./avro-format.md) | 
 |                               |
 | **Additional Documentation:** |
 | Primer                        |         [v0.2](https://github.com/cloudevents/spec/blob/v0.2/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |

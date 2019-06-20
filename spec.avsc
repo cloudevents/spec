@@ -2,7 +2,7 @@
   "namespace":"io.cloudevents",
   "type":"record",
   "name":"CloudEvent",
-  "version":"0.2",
+  "version":"0.4-wip",
   "doc":"Avro Event Format fo CloudEvents",
   "fields":[
     {

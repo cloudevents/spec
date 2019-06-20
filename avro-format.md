@@ -91,7 +91,7 @@ to the one described by the [CloudEvent Avro Schema](./spec.avsc):
   "namespace":"io.cloudevents",
   "type":"record",
   "name":"CloudEvent",
-  "version":"0.3",
+  "version":"0.4-wip",
   "doc":"Avro Event Format of CloudEvents",
   "fields":[
     {
@@ -149,7 +149,7 @@ The following table shows exemplary mappings:
 | CloudEvents     | Type      | Exemplary Avro Value                           |
 | --------------- | --------- | ---------------------------------------------- |
 | type            | string    | `"com.example.someevent"`                      |
-| specversion     | string    | `"0.2"`                                        |
+| specversion     | string    | `"0.4-wip                                      |
 | source          | string    | `"/mycontext"`                                 |
 | id              | string    | `"7a0dc520-c870-4193c8"`                       |
 | time            | string    | `"2019-06-05T23:45:00Z"`                       |
