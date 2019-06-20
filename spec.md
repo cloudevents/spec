@@ -356,6 +356,10 @@ on the definition of OPTIONAL.
 
 - Type: `URI-reference`
 - Description: A link to the schema that the `data` attribute adheres to.
+  However, the schema MAY also include constraints for any other CloudEvents
+  attributes - as long as those constraints do not conflict with this
+  specification.
+
   Incompatible changes to the schema SHOULD be reflected by a different URL. See
   [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
   for more information.
