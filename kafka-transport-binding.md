@@ -54,7 +54,7 @@ The *binary* mode *only* applies to Kafka 0.11.0.0 and above, because Kafka
 
 In the *binary* content mode, the value of the event `data` attribute MUST be
 placed into the Kafka message's value section as-is, with the
-`ce_contentType` header value declaring its media type; all other
+`ce_datacontenttype` header value declaring its media type; all other
 event attributes MUST be mapped to the Kafka message's 
 [header section][Kafka-Message-Header].
 
@@ -83,13 +83,13 @@ attributes.
 ### 2.1. data Attribute
 
 The `data` attribute is assumed to contain opaque application data that is
-encoded as declared by the `contentType` attribute.
+encoded as declared by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into Kafka as defined in this
 specification, core Kafka provides data available as a sequence of bytes.
 
-For instance, if the declared `contentType` is
+For instance, if the declared `datacontenttype` is
 `application/json;charset=utf-8`, the expectation is that the `data` attribute
 value is made available as [UTF-8][RFC3629] encoded JSON text.
 
@@ -101,7 +101,7 @@ particular content mode might be defined by an application, but are not defined
 here.
 
 The receiver of the event can distinguish between the two content modes by
-inspecting the `ce_contentType` [Header][Kafka-Message-Header] of the 
+inspecting the `ce_datacontenttype` [Header][Kafka-Message-Header] of the 
 Kafka message. If the value is prefixed with the CloudEvents media type
 `application/cloudevents`, indicating the use of a known
 [event format](#14-event-formats), the receiver uses *structured* mode, otherwise
@@ -125,8 +125,8 @@ efficient transfer and without transcoding effort.
 
 #### 3.2.1. Content Type
 
-For the *binary* mode, the header `ce_contentType` property MUST be
-mapped directly to the CloudEvents `contentType` attribute.
+For the *binary* mode, the header `ce_datacontenttype` property MUST be
+mapped directly to the CloudEvents `datacontenttype` attribute.
 
 
 #### 3.2.2. Event Data Encoding
@@ -202,7 +202,7 @@ hops, and across multiple transports.
 
 #### 3.3.1. Kafka Content-Type
 
-The [Kafka `ce_contentType`] property field MUST be set to the media
+The [Kafka `content-type`] property field MUST be set to the media
 type of an [event format](#14-event-formats).
 
 Example for the [JSON format][JSON-format]:
@@ -240,7 +240,7 @@ Key: mykey
 
 ------------------ headers -------------------
 
-ce_contentType: application/cloudevents+json; charset=UTF-8
+content-type: application/cloudevents+json; charset=UTF-8
 
 ------------------- value --------------------
 
