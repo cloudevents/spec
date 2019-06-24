@@ -91,9 +91,6 @@ respective CloudEvents type when the mapping rules are fulfilled.
 
 ### 2.3. Mapping Any-typed Attributes
 
-The CloudEvents `data` attribute is `Any`-typed, meaning that it holds a value
-of any valid type. `Map` entry values are also `Any` typed.
-
 If an implementation determines that the actual type of an `Any` is a `String`,
 the value MUST be represented as [JSON string][json-string] expression; for
 `Binary`, the value MUST represented as [JSON string][json-string] expression
@@ -114,9 +111,6 @@ The following table shows exemplary mappings:
 | id              | String        | "1234-1234-1234"                |
 | time            | Timestamp     | "2018-04-05T17:31:00Z"          |
 | datacontenttype | String        | "application/json"              |
-| data            | String        | "<much wow=\"xml\"/>"           |
-| data            | Binary        | "Q2xvdWRFdmVudHM="              |
-| data            | Map           | { "objA" : "vA", "objB", "vB" } |
 
 ### 2.5. JSONSchema Validation
 
@@ -136,40 +130,45 @@ the [type system mapping](#22-type-system-mapping).
 
 ### 3.1. Special Handling of the "data" Attribute
 
-The mapping of the `Any`-typed `data` attribute follows the rules laid out in
-[Section 2.3.](#23-mapping-any-typed-attributes), with two additional rules:
+The `data` attribute has no specified type, and so is treated specially,
+according to the following rules. In cases where multiple rules apply to the
+same data, the top most rule MUST be used.
 
-First, if an implementation determines that the type of the `data` attribute is
-`Binary` or `String`, it MUST inspect the `datacontenttype` attribute to
-determine whether it is indicated that the data value contains JSON data.
+If the data attribute is known by the implementation to be JSON, the
+implementation MUST translate the `data` attribute value into a
+[JSON value][json-value], and set the `data` attribute of the envelope JSON
+object to this JSON value. An implementation MUST consider events with the
+following `datacontenttype` values as JSON:
 
-If the `datacontenttype` value is either ["application/json"][rfc4627] or any
-media type with a [structured +json suffix][rfc6839], the implementation MUST
-translate the `data` attribute value into a [JSON value][json-value], and set
-the `data` attribute of the envelope JSON object to this JSON value.
+* [`"application/json"`][rfc4627]
+* Any value with a [structured `+json` suffix][rfc6839]
 
-If the `datacontenttype` value does not follow the [structured +json
-suffix][rfc6839] but is known to use JSON encoding, the implementation MUST
-translate the `data` attribute value into a [JSON value][json-value], and set
-the `data` attribute of the envelope JSON object to this JSON value. Its typical
-examples are, but not limited to, `text/json`,
-[`application/json-seq`][json-seq] and
-[`application/geo+json-seq`][json-geoseq].
+An implementation MAY use other means to know if an event is representable as
+JSON, for example, using other well known `datacontentype` values such as
+`text/json` or `application/json-seq`][json-seq], or through inspection of
+types passed to an API.
 
-Unlike all other attributes, for which value types are restricted to strings per
-the [type-system mapping](#22-type-system-mapping), the resulting `data` member
-[JSON value][json-value] is unrestricted, and MAY also contain numeric and
-logical JSON types.
+If the top-level type of `datacontenttype` is `text` (eg, `text/plain`), the
+implementation MUST translate the `data` attribute into a
+[JSON string][json-string] (taking the `datacontentencoding` attribute into
+consideration if the value is originally binary) and set the `data` attribute
+of the envelope JSON object to this JSON string.
 
-Second, whether a Base64-encoded string in the data attribute is treated as
-`Binary` or as a `String` is also determined by the `datacontenttype` value. If
-the `datacontenttype` media type is known to contain text, the data attribute
-value is not further interpreted and treated as a text string. Otherwise, it is
-decoded and treated as a binary value.
+If the `datacontenttype` is anything else, or is not set, the implementation
+MUST translate the value to a [Base64-encoded][base64] 
+[JSON string][json-string], and set the `data` attribute of the envelope JSON
+object to this JSON string.
+
+Note that even if an implementation knows that the type of the `data` attribute
+is a `String`, if the `datacontenttype` top-level type is not `text`, the value
+MUST still be [Base64-encoded][base64]. This so that, when decoding, a consumer
+might not have the same knowledge that that `data` attribute is a `String`, and
+so without the indication of `text` from the `datacontenttype`, cannot know not
+to Base64 decode the String into `Binary`.
 
 ### 3.2. Examples
 
-Example event with `String`-valued `data`:
+Example event with `text`-valued `data`:
 
 ```JSON
 {
@@ -187,7 +186,7 @@ Example event with `String`-valued `data`:
 }
 ```
 
-Example event with `Binary`-valued data
+Example event with `Binary`-valued data:
 
 ```JSON
 {
@@ -205,8 +204,7 @@ Example event with `Binary`-valued data
 }
 ```
 
-Example event with JSON data for the "data" member, either derived from a `Map`
-or [JSON data](#31-special-handling-of-the-data-attribute) data:
+Example event with JSON valued data:
 
 ```JSON
 {

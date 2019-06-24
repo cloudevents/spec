@@ -448,10 +448,15 @@ encapsulated within the `data` attribute.
 
 ### data
 
-- Type: `Any`
+- Type: Unspecified, but MUST be encodable as `Binary`.
 - Description: The event payload. The payload depends on the `type` and the
-  `schemaurl`. It is encoded into a media format which is specified by the
-  `datacontenttype` attribute (e.g. application/json).
+  `schemaurl`. The `Binary` encoding of the `data` is specified by the
+  `datacontenttype` attribute (e.g. application/json). Implementations of this
+  spec, including transport bindings, format encodings, and APIs, MAY represent
+  the `data` attribute in whatever form they choose. For example, the JSON
+  binding MAY represent JSON data as a JSON value. If the type of the `data` is
+  not natively representable by the implementation or binding, then the
+  implementation or binding MUST represent it in its `Binary` encoding.
 - Constraints:
   - OPTIONAL
 
