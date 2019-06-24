@@ -197,8 +197,8 @@ as a string.
   represent the `Any` type.
 - `Any-context` - A variant type which can take the shapes allowed in a context
   attribute, namely `Integer`, `String`, `Binary`, `URI-reference` or
-  `Timestamp`. Unknown extensions in the context attributes should be treated as
-  the `Any-context` type; transport mappings should explicitly document how to
+  `Timestamp`. Unknown extensions in the context attributes SHOULD be treated as
+  the `Any-context` type; transport mappings SHOULD explicitly document how to
   represent the `Any-context` type.
 
 ## Context Attributes
@@ -216,7 +216,7 @@ and the event data will be materialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
 
-Context attributes must be one of the following types:
+Context attributes MUST be one of the following types:
 
 - `Integer`
 - `String`
@@ -224,7 +224,7 @@ Context attributes must be one of the following types:
 - `URI-reference`
 - `Timestamp`
 
-In particular, `Any` and `Map` values are not allowed in context attributes,
+In particular, `Any` and `Map` values MUST NOT be used in context attributes,
 including in extension attributes.
 
 ### REQUIRED Attributes
