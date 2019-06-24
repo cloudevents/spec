@@ -195,6 +195,11 @@ as a string.
   `String`, `Binary`, `Map`, `URI-reference` or `Timestamp`. The type system is
   intentionally abstract, and therefore it is left to implementations how to
   represent the `Any` type.
+- `Any-context` - A variant type which can take the shapes allowed in a context
+  attribute, namely `Integer`, `String`, `Binary`, `URI-reference` or
+  `Timestamp`. Unknown extensions in the context attributes should be treated as
+  the `Any-context` type; transport mappings should explicitly document how to
+  represent the `Any-context` type.
 
 ## Context Attributes
 
@@ -288,9 +293,9 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 
 - Type: `String`
 - Description: This attribute contains a value describing the type of event
-  related to the originating occurrence.  Often this attribute is
-  used for routing, observability, policy enforcement, etc. The format of this
-  is producer defined and might include information such as the version of the
+  related to the originating occurrence. Often this attribute is used for
+  routing, observability, policy enforcement, etc. The format of this is
+  producer defined and might include information such as the version of the
   `type` - see
   [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
   for more information.
