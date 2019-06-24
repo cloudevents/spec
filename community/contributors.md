@@ -18,6 +18,8 @@ Contributions do not constitute an official endorsement.
 - **Amazon**
   - [AWS Lambda events](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html)
   - Arun Gupta, Ajay Nair, Rob Leidle, Orr Weinstein
+- **commercetools**
+  - Christoph Neijenhuis - [@cneijenhuis](https://github.com/cneijenhuis)
 - **Google**
   - [Google Cloud Functions](https://cloud.google.com/functions/) and
     [Cloud Functions for Firebase](https://firebase.google.com/docs/functions/)
@@ -43,6 +45,8 @@ Contributions do not constitute an official endorsement.
   - Orit Nissan-Messing - [@oritnm](https://github.com/oritnm)
 - **Intel**
   - David Lyle - [@dklyle](https://github.com/dklyle)
+- **Lightbend**
+  - James Roper - [@jroper](https://github.com/jroper)
 - **Microsoft**
   - [Microsoft Event Grid](https://azure.microsoft.com/en-us/services/event-grid/)
   - Clemens Vasters - [@clemensv](https://github.com/clemensv)
