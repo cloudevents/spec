@@ -100,12 +100,13 @@ identically to [HTTP over TLS]([RFC2818][RFC2818]).
 
 ## 2. Use of CloudEvents Attributes
 
-This specification does not further define any of the [CloudEvents][ce] event
-attributes.
+This specification does not further define any of the core [CloudEvents][ce]
+event attributes.
 
 Two of the event attributes, `datacontenttype` and `data` are handled specially
 and mapped onto HTTP constructs, all other attributes are transferred as
-metadata without further interpretation.
+metadata without further interpretation (except that extensions may define
+additional header mappings).
 
 This mapping is intentionally robust against changes, including the addition and
 removal of event attributes, and also accommodates vendor extensions to the
@@ -202,7 +203,8 @@ specification, header names are case-insensitive.
 ##### 3.1.3.2 HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute
-type's canonical string representation.
+type's canonical string representation in the [JSON][json-format] string
+encoding.
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
 and per [RFC7230 Section 3][rfc7230-section-3], HTTP headers MUST only use

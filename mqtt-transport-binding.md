@@ -176,7 +176,8 @@ in the MQTT PUBLISH message.
 ##### 3.1.3.2 User Property Values
 
 The value for each MQTT PUBLISH User Property MUST be constructed from the
-respective CloudEvents attribute type's canonical string representation.
+respective CloudEvents attribute type's canonical string representation in the
+[JSON][json-format] string encoding.
 
 #### 3.1.4 Examples
 

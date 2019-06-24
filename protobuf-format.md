@@ -79,6 +79,7 @@ follows:
 | Map           | map_value                                                                                                                                   |
 | Integer       | int_value                                                                                                                                   |
 | Any           | Not applicable. Any is the enclosing CloudEventAny message itself                                                                           |
+| Any-context   | Not applicable. Any-context is the enclosing CloudEventAny message itself. May not be a `map_value`.                                        |
 
 Protocol Buffer representations of CloudEvents MUST use the media type
 `application/cloudevents+proto`.

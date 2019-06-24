@@ -62,6 +62,7 @@ exceptions noted below.
 | Timestamp     | [timestamp][amqp-timestamp] |
 | Map           | [map][amqp-map]             |
 | Any           | See 2.3.                    |
+| Any-context   | [string][amqp-string]       |
 
 A CloudEvents AMQP format implementation MUST allow for attribute values to be
 convertible from/to their canonical CloudEvents string representation. For

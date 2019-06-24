@@ -70,6 +70,7 @@ exceptions noted below.
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
 | Map           | [JSON object][json-object]                                     |
 | Any           | [JSON value][json-value]                                       |
+| Any-context   | [string][json-string] or [number][json-number]                 |
 
 Extension specifications MAY define diverging mapping rules for the values of
 attributes they define.
