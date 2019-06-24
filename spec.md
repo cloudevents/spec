@@ -182,7 +182,8 @@ as a string.
 - `Binary` - Sequence of bytes.
   - String encoding: Base64 encoding per
     [RFC4648](https://tools.ietf.org/html/rfc4648).
-- `Map` - `String`-indexed dictionary of `Any`-typed values.
+- `Map` - `String`-indexed dictionary of `Any`-typed values. Only valid in the
+  `data` attribute.
   - String encoding: JSON Object per
     [RFC 7159, Section 4](https://tools.ietf.org/html/rfc7159#section-4)
 - `URI-reference` - Uniform resource identifier reference.
@@ -209,6 +210,17 @@ The choice of serialization mechanism will determine how the context attributes
 and the event data will be materialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
+
+Context attributes must be one of the following types:
+
+- `Integer`
+- `String`
+- `Binary`
+- `URI-reference`
+- `Timestamp`
+
+In particular, `Any` and `Map` values are not allowed in context attributes,
+including in extension attributes.
 
 ### REQUIRED Attributes
 
@@ -396,11 +408,11 @@ on the definition of OPTIONAL.
 
 - Type: `Timestamp`
 - Description: Timestamp of when the occurrence happened. If the time of the
-  occurrence can not be determined then this attribute MAY be set to some
-  other time (such as the current time) by the CloudEvents producer, however
-  all producers for the same `source` MUST be consistent in this respect.
-  In other words, either they all use the actual time of the occurrence or
-  they all use the same alogorithm to determine the value used.
+  occurrence can not be determined then this attribute MAY be set to some other
+  time (such as the current time) by the CloudEvents producer, however all
+  producers for the same `source` MUST be consistent in this respect. In other
+  words, either they all use the actual time of the occurrence or they all use
+  the same alogorithm to determine the value used.
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in

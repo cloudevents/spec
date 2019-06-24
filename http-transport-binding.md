@@ -196,11 +196,6 @@ Examples:
     * `id` maps to `ce-id`
     * `specversion` maps to `ce-specversion`
 
-`Map`-typed CloudEvents attributes MUST be flattened into a set of HTTP headers,
-where by the name of each header carries the prefix "ce-", an infix reflecting
-the map attribute followed by a dash ("-"), and the name of the map entry key,
-e.g. "ce-attrib-key".
-
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
 
