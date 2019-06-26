@@ -200,7 +200,7 @@ The CloudEvents specification does not mandate any particular pattern to be
 used, or even the use of version strings at all. This decision is up to each
 event producer. However, when a version-specific string is included, care should
 be taken whenever its value changes as event consumers might be reliant on the
-existing value and thus a change could be interpretted as a "breaking change".
+existing value and thus a change could be interpreted as a "breaking change".
 Some form of communication between producers and consumers should be established
 to ensure the event consumers know what possible values might be used. In
 general, this is true for all CloudEvents attributes as well.
@@ -569,9 +569,11 @@ including being both a producer and a consumer of events.
    Whether its events are available for consumption via a middleware is a
    delegation choice of the producer.
 
-   In practice, middleware can take on role of a producer when it changes the
-   semantic meaning of an event, a consumer when it takes action based on an
-   event, or middleware when it routes events without making semantic changes.
+   In practice, middleware can take on the role of a
+   [Producer](spec.md#producer) when it changes the semantic meaning of an
+   event, a [Consumer](spec.md#consumer) when it takes action based on an event,
+   or [Intermediary](spec.md#intermediary) when it routes events without making
+   semantic changes.
 
 4. Frameworks and other abstractions make interactions with event platform
    infrastructure simpler, and often provide common API surface areas for
