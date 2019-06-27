@@ -27,7 +27,7 @@ differently.
 
 The lack of a common way of describing events means developers are constantly
 re-learning how to consume events. This also limits the potential for libraries,
-tooling and infrastructure to aide the delivery of event data across
+tooling and infrastructure to aid the delivery of event data across
 environments, like SDKs, event routers or tracing systems. The portability and
 productivity that can be achieved from event data is hindered overall.
 
@@ -71,8 +71,8 @@ or clashes with the permissible character set for identifiers in common
 languages are prevented.
 
 CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
-digits ('0' to '9') from the ASCII character set, and MUST begin with a
-lower-case letter. Attribute names SHOULD be descriptive and terse, and SHOULD
+digits ('0' to '9') from the ASCII character set and MUST begin with a
+lower-case letter. Attribute names SHOULD be descriptive and terse and SHOULD
 NOT exceed 20 characters in length.
 
 ### Terminology
@@ -398,11 +398,11 @@ on the definition of OPTIONAL.
 
 - Type: `Timestamp`
 - Description: Timestamp of when the occurrence happened. If the time of the
-  occurrence can not be determined then this attribute MAY be set to some
+  occurrence cannot be determined then this attribute MAY be set to some
   other time (such as the current time) by the CloudEvents producer, however
   all producers for the same `source` MUST be consistent in this respect.
   In other words, either they all use the actual time of the occurrence or
-  they all use the same alogorithm to determine the value used.
+  they all use the same algorithm to determine the value used.
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in
@@ -464,7 +464,7 @@ events. CloudEvents might also be routed to consumers, like embedded devices,
 that are storage or memory-constrained and therefore would struggle with large
 singular events.
 
-The "size" of an event is its wire-size, and includes every bit that is
+The "size" of an event is its wire-size and includes every bit that is
 transmitted on the wire for the event: transport frame-metadata, event metadata,
 and event data, based on the chosen event format and the chosen protocol
 binding.
@@ -483,13 +483,13 @@ be accepted and retransmitted by all intermediaries. It is in any particular
 consumer's control, whether it wants to accept or reject events of that size due
 to local considerations.
 
-Generally, CloudEvents publishers SHOULD keep events compact by avoiding to
-embed large data items into event payloads and rather use the event payload to
-link to such data items. From an access control perspective, this approach also
-allows for a broader distribution of events, because accessing event-related
-details through resolving links allows for differentiated access control and
-selective disclosure, rather than having sensitive details embedded in the event
-directly.
+Generally, CloudEvents publishers SHOULD keep events compact by avoiding
+embedding large data items into event payloads and rather use the event payload
+to link to such data items. From an access control perspective, this approach
+also allows for a broader distribution of events, because accessing
+event-related details through resolving links allows for differentiated access
+control and selective disclosure, rather than having sensitive details embedded
+in the event directly.
 
 # Privacy and Security
 
