@@ -32,6 +32,7 @@ The following documents are available:
 | **Optional Specifications:**  |
 | AMQP Event Format             |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/amqp-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md)       |
 | AMQP Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/amqp-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-transport-binding.md) |
+| AVRO Event Format             | - | [master](./avro-format.md) |
 | HTTP Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
 | JSON Event Format             |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/json-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/json-format.md)       |
 | Kafka Transport Binding       | - | [master](https://github.com/cloudevents/spec/blob/master/kafka-transport-binding.md) |
@@ -39,7 +40,6 @@ The following documents are available:
 | NATS Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
 | Protocol Buffers Event Format | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/protobuf-format.md)        | [master](https://github.com/cloudevents/spec/blob/master/protobuf-format.md)        |
 | Web hook                      |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
-| AVRO Event Format             | - | [master](./avro-format.md) | 
 |                               |
 | **Additional Documentation:** |
 | Primer                        |         [v0.3](https://github.com/cloudevents/spec/blob/v0.3/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
