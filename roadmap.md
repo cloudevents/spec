@@ -47,32 +47,40 @@ _0.2_ - Completed - 2018/12/06
 1. Incorporate learnings and feedback from interop demo to support wider
    adoption.
 1. Draft documentation, developer and/or user guide.
-1. Resolve all known large design issues (excluding security issues)
-1. Resolve all known "proposed required attributes" issues
+1. Resolve all known large design issues (excluding security issues).
+1. Resolve all known "proposed required attributes" issues.
 1. Interoperability demo 2
-   1. Details to be determined
-   1. Showcase demo at conferences - perhaps KubeCon NA 2018
+   1. Details to be determined.
+   1. Showcase demo at conferences - perhaps KubeCon NA 2018.
 1. Define the set of protocol and serialization mappings we're going to produce
-   for 0.4 milestone
+   for 0.4 milestone.
 
 _0.3_ - Completed - 2019/06/13
 
-1. Resolve all known "proposed optional attributes" issues
-1. Resolve all known "security related" issues
+1. Resolve all known "proposed optional attributes" issues.
+1. Resolve all known "security related" issues.
 1. Review spec for practical-use issues:
-   1. Consider context size limits
-   1. Consider restricting character sets of `String` properties or key names
-   1. Consider defining uniqueness constraints of event `id`
-   1. Consider which fields will be immutable (prevents annotation or redaction)
-   1. Consider validating transport bindings with load tests
+   1. Consider context size limits.
+   1. Consider restricting character sets of `String` properties or key names.
+   1. Consider defining uniqueness constraints of event `id`.
+   1. Consider which fields will be immutable (prevents annotation or
+      redaction).
+   1. Consider validating transport bindings with load tests.
 
-_0.4_
+_1.0-rc_
 
-1. Complete the proposed set of protocol and serialization mappings
-1. Resolve "Process" related issues
+1. Complete all issues and PRs tagged as `v1.0`.
+1. Decide on duration and exit criteria for 'verification & testing' period.
 
-_0.5_
+_1.0_
+1. Completion of exit criteria for 'verification & testing' period.
+1. Completion of as many `try-for-v1.0` issues and PRs as possible. The
+   expectation is that these are non-breaking changes to the core spec.
+   Format and transport-binding specs may introduce breaking change if
+   necessary to align with the core spec.
 
-1. Resolve outstanding clarifications and non-semantic issues
-1. Define and prioritize libraries and supporting tools that will accelerate
-   adoption of CloudEvents
+_Post 1.0_
+- All remaining issues and PRs will be examined.
+- How, and when, future releases (major, minor or patch) will be released will
+  be determined by based on the set of changes that have been approved.
+
