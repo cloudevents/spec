@@ -165,7 +165,7 @@ based on the specified event.
 | CloudEvents Attribute | Value                                 |
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
-| `source`              | "sender.url" value "                  |
+| `source`              | "sender.url" value                    |
 | `specversion`         | `0.4-wip`                             |
 | `type`                | `com.github.github_app_authorization` |
 | `datacontentencoding` | Omit                                  |
@@ -180,7 +180,7 @@ based on the specified event.
 | CloudEvents Attribute | Value                                       |
 | :-------------------- | :------------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value       |
-| `source`              | "repository.url" value "                    |
+| `source`              | "repository.url" value                      |
 | `specversion`         | `0.4-wip`                                   |
 | `type`                | `com.github.gollum.` + "pages.action" value |
 | `datacontentencoding` | Omit                                        |
@@ -195,7 +195,7 @@ based on the specified event.
 | CloudEvents Attribute | Value                                               |
 | :-------------------- | :-------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value               |
-| `source`              | "installation.account.url" value "                  |
+| `source`              | "installation.account.url" value                    |
 | `specversion`         | `0.4-wip`                                           |
 | `type`                | `com.github.installation.` + "action" value         |
 | `datacontentencoding` | Omit                                                |
@@ -210,7 +210,7 @@ based on the specified event.
 | CloudEvents Attribute | Value                                                  |
 | :-------------------- | :----------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                  |
-| `source`              | "installation.account.url" value "                     |
+| `source`              | "installation.account.url" value                       |
 | `specversion`         | `0.4-wip`                                              |
 | `type`                | `com.github.installation_repository.` + "action" value |
 | `datacontentencoding` | Omit                                                   |
@@ -231,7 +231,7 @@ based on the specified event.
 | `datacontentencoding` | Omit                                         |
 | `datacontenttype`     | `application/json`                           |
 | `schemaurl`           | Omit                                         |
-| `subject`             | "comment.id" value "                         |
+| `subject`             | "comment.id" value                           |
 | `time`                | "comment.updated_at" value                   |
 | `data`                | Content of HTTP request body                 |
 
@@ -246,7 +246,7 @@ based on the specified event.
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
 | `schemaurl`           | Omit                                  |
-| `subject`             | "issue.number" value "                |
+| `subject`             | "issue.number" value                  |
 | `time`                | "issue.updated_at" value              |
 | `data`                | Content of HTTP request body          |
 
@@ -261,7 +261,7 @@ based on the specified event.
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
 | `schemaurl`           | Omit                                  |
-| `subject`             | "label.name" value "                  |
+| `subject`             | "label.name" value                    |
 | `time`                | Current time                          |
 | `data`                | Content of HTTP request body          |
 
@@ -522,18 +522,18 @@ based on the specified event.
 
 ### ReleaseEvent
 
-| CloudEvents Attribute | Value                                                   |
-| :-------------------- | :------------------------------------------------------ |
-| `id`                  | "X-GitHub-Delivery" HTTP header value                   |
-| `source`              | "repository.url" value                                  |
-| `specversion`         | `0.4-wip`                                               |
-| `type`                | `com.github.release.` + "action" value                  |
-| `datacontentencoding` | Omit                                                    |
-| `datacontenttype`     | `application/json`                                      |
-| `schemaurl`           | Omit                                                    |
-| `subject`             | "release.id" value                                      |
-| `time`                | "release.\*\_at" value based on action # Current time ? |
-| `data`                | Content of HTTP request body                            |
+| CloudEvents Attribute | Value                                  |
+| :-------------------- | :------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value  |
+| `source`              | "repository.url" value                 |
+| `specversion`         | `0.4-wip`                              |
+| `type`                | `com.github.release.` + "action" value |
+| `datacontentencoding` | Omit                                   |
+| `datacontenttype`     | `application/json`                     |
+| `schemaurl`           | Omit                                   |
+| `subject`             | "release.id" value                     |
+| `time`                | "release.\*\_at" value based on action |
+| `data`                | Content of HTTP request body           |
 
 ### RepositoryEvent
 
