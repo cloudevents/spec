@@ -17,6 +17,7 @@ This document is a working draft.
 - [History](#history)
 - [CloudEvents Concepts](#cloudevents-concepts)
 - [Design Goals](#design-goals)
+- [Architecture](#architecture)
 - [Versioning of Attributes](#versioning-of-attributes)
 - [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
@@ -112,6 +113,11 @@ solely for the purpose of proper delivery, and processing, of the message. Data
 that is not intended for that purpose should instead be placed within the event
 (the `data` attribute) itself.
 
+Additionally, it is assumed that the metadata needed by the transport layer
+to deliver the message to the target system is handled entirely by the
+transport and therefore is not included within the CloudEvents attributes.
+See the [Non-Goals](#non-goals) section for more details.
+
 Along with the definition of these attributes, there will also be specifications
 of how to serialize the event in different formats (e.g. JSON) and transports
 (e.g. HTTP, AMQP, Kafka).
@@ -123,11 +129,63 @@ transport specification.
 
 ### Non-Goals
 
-The following will not be part of the specification:
+The following are considered beyond the scope of the specification:
 
 - Function build and invocation process
 - Language-specific runtime APIs
 - Selecting a single identity/access control system
+- Inclusion of transport-level routing information
+
+The CloudEvents spec will not include transport-level routing
+information (e.g. a destination URL to which the event is being sent).
+This is a common suggestion by those new to the concepts of CloudEvents.
+After much deliberation, the working group has come to the conclusion that
+routing is unnecessary in the spec: any transport protocol (e.g. HTTPS,
+MQTT, XMPP, or a Pub/Sub bus) already defines semantics for routing.
+For example, the CloudEvents [HTTPS binding](http-transport-binding.md)
+dictates headers and request body contents. CloudEvents don't need to
+include a destination URL in the spec to be HTTP compatible; the HTTP spec
+already includes one in the
+[Request-Line](https://tools.ietf.org/html/rfc2616#section-5.1).
+
+Routing information is not just redundant, it detracts.
+CloudEvents should increase interoperability and decouple the producer and
+consumer of events. Prohibiting routing information from the events format
+allows CloudEvents to be redelivered to new actions, or to be delivered
+over complex relays that include multiple channels. For example, a
+CloudEvent that was intended for a webhook should be deliverable to a
+dead-letter queue if the webhook address is unavailable. That dead-letter
+queue should be able to feed events to new actions that the original event
+emitter never imagined.
+
+
+## Architecture
+
+The CloudEvents specification set defines four different kinds of protocol
+elements that form a layered architecture model.
+
+1. The [base specification](spec.md) defines an abstract information model
+   made up of attributes (key-value pairs) and associated rules for what 
+   constitutes a CloudEvent.
+2. The [extensions](./spec.md#extension-context-attributes) add use-case specific
+   and potentially overlapping sets of extension attributes and associated
+   rules, e.g. to support different tracing standards.
+3. The event format encodings, e.g. [JSON](json-format.md), define how the
+   information model of the base specification together with the chosen
+   extensions is encoded for mapping it to header and payload elements of
+   an application protocol.
+4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines
+   how the CloudEvent is bound to an application protocol's transport frame,
+   in the case of HTTP to the HTTP message. The transport binding does not 
+   constrain how the transport frame is used, meaning that the HTTP binding
+   can be used with any HTTP method and with request and response messages.
+
+If required to assure broader interoperability, the CloudEvents specification
+set provides specific constraints for event delivery using a particular
+application protocol. The [HTTP Webhook](http-webhook.md) specification is
+not specific to CloudEvents and can be used to post any kind of one-way event
+and notifications to a conformant HTTP endpoint. However, the lack of such a
+specification elsewhere makes it necessary for CloudEvents to define it.
 
 ## Versioning of Attributes
 
@@ -142,7 +200,7 @@ The CloudEvents specification does not mandate any particular pattern to be
 used, or even the use of version strings at all. This decision is up to each
 event producer. However, when a version-specific string is included, care should
 be taken whenever its value changes as event consumers might be reliant on the
-existing value and thus a change could be interpretted as a "breaking change".
+existing value and thus a change could be interpreted as a "breaking change".
 Some form of communication between producers and consumers should be established
 to ensure the event consumers know what possible values might be used. In
 general, this is true for all CloudEvents attributes as well.
@@ -329,7 +387,7 @@ is "describing event data in a common way" and "to define interoperability of
 event systems that allow services to produce or consume events, where the
 producer and consumer can be developed and deployed independently".
 
-The foundation for such interoperability are open data formats and open
+The foundations for such interoperability are open data formats and open
 protocols, with CloudEvents aiming to provide such an open data format and
 projections of its data format onto commonly used protocols and with commonly
 used encodings.
@@ -393,7 +451,7 @@ specs should follow the same format as the other specs for core protocols and
 encodings.
 
 Proprietary specs will receive less scrutiny than a core spec, and as the
-CloudEvents spec evolves, it is the the responsibility of the maintainers of the
+CloudEvents spec evolves, it is the responsibility of the maintainers of the
 respective protocols and encodings to keep specs in sync with the CloudEvents
 spec. If a proprietary spec falls too far out of date, CloudEvents may mark the
 link to that spec as deprecated or remove it.
@@ -489,7 +547,7 @@ including being both a producer and a consumer of events.
      semantic integrity of the event.
    - Instant "push-style" delivery to interested consumers.
    - Storing events for eventual delivery, either for pick-up initiated by the
-     consumer ("pull"), or initiated by the middleware ("push") after a delay.
+     consumer ("pull") or initiated by the middleware ("push") after a delay.
    - Observing event content or event flow for monitoring or diagnostics
      purposes.
 
@@ -511,9 +569,11 @@ including being both a producer and a consumer of events.
    Whether its events are available for consumption via a middleware is a
    delegation choice of the producer.
 
-   In practice, middleware can take on role of a producer when it changes the
-   semantic meaning of an event, a consumer when it takes action based on an
-   event, or middleware when it routes events without making semantic changes.
+   In practice, middleware can take on the role of a
+   [Producer](spec.md#producer) when it changes the semantic meaning of an
+   event, a [Consumer](spec.md#consumer) when it takes action based on an event,
+   or [Intermediary](spec.md#intermediary) when it routes events without making
+   semantic changes.
 
 4. Frameworks and other abstractions make interactions with event platform
    infrastructure simpler, and often provide common API surface areas for
@@ -529,7 +589,7 @@ including being both a producer and a consumer of events.
 
    For a sports application, a developer using the framework might be interested
    in all events from today's game (subject) of a team in a league (topic of
-   interest), but wanting to handle reports of "goal" differently than reports
+   interest) but wanting to handle reports of "goal" differently than reports
    of "substitution". For this, the framework will need a suitable metadata
    discriminator that frees it from having to understand the event details.
 
@@ -624,7 +684,7 @@ sequence for the purpose of event tracing and troubleshooting.
 IoT devices send and receive events related to their functionality. For example,
 a connected thermostat will send telemetry on the current temperature and could
 receive events to change temperatures. These devices typically have a
-constrained operating environment (cpu, memory) requiring a well defined event
+constrained operating environment (cpu, memory) requiring a well-defined event
 message format. In a lot of cases these messages are binary encoded instead of
 textual. Whether directly from the device or transformed via a gateway,
 CloudEvents would allow for a better description of the origin of the message
@@ -642,7 +702,7 @@ different houses.
 The serverless platform needs to correlate one type of event instance correctly
 with other types of event instances and map a received event instance to the
 correct application/workflow instance. CloudEvents will provide a standard way
-for any event consumer (eg. the serverless platform) to locate the event
+for any event consumer (e.g. the serverless platform) to locate the event
 correlation information/token in the event data and map a received event
 instance to the correct application/workflow instance.
 
