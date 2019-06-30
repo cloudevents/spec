@@ -65,14 +65,13 @@ or a `Map`, or any of all other types. Avro type system SHOULD NOT satisfy the
 map-of-maps in a recursive way, i.e., every `map` declaration REQUIRE the
 `values` with primitives types or a declared type.
 
-### 2.3 Optional Attributes
+### 2.3 OPTIONAL Attributes
 
-CloudEvents Spec defines optional attributes. The Avro format defines that
-every optional field MUST use the `null` type and the actual type through
+CloudEvents Spec defines OPTIONAL attributes. The Avro format defines that
+these fields MUST use the `null` type and the actual type through
 the [union][avro-unions].
 
-Declaring a type which may be either a `null` or `string`, i.e., an optional
-string attribute.
+Example:
 
 ```json
 [
