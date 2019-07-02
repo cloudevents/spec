@@ -182,8 +182,7 @@ as a string.
 - `Binary` - Sequence of bytes.
   - String encoding: Base64 encoding per
     [RFC4648](https://tools.ietf.org/html/rfc4648).
-- `Map` - `String`-indexed dictionary of `Any`-typed values. Only valid in the
-  `data` attribute.
+- `Map` - `String`-indexed dictionary of `Any`-typed values.
   - String encoding: JSON Object per
     [RFC 7159, Section 4](https://tools.ietf.org/html/rfc7159#section-4)
 - `URI-reference` - Uniform resource identifier reference.
@@ -195,11 +194,6 @@ as a string.
   `String`, `Binary`, `Map`, `URI-reference` or `Timestamp`. The type system is
   intentionally abstract, and therefore it is left to implementations how to
   represent the `Any` type.
-- `Any-context` - A variant type which can take the shapes allowed in a context
-  attribute, namely `Integer`, `String`, `Binary`, `URI-reference` or
-  `Timestamp`. Unknown extensions in the context attributes SHOULD be treated as
-  the `Any-context` type; transport mappings SHOULD explicitly document how to
-  represent the `Any-context` type.
 
 ## Context Attributes
 
@@ -216,16 +210,8 @@ and the event data will be materialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
 
-Context attributes MUST be one of the following types:
-
-- `Integer`
-- `String`
-- `Binary`
-- `URI-reference`
-- `Timestamp`
-
-In particular, `Any` and `Map` values MUST NOT be used in context attributes,
-including in extension attributes.
+`Any` and `Map` values MUST NOT be used in context attributes, including in
+extension attributes.
 
 ### REQUIRED Attributes
 

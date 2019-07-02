@@ -105,7 +105,7 @@ event attributes.
 
 Two of the event attributes, `datacontenttype` and `data` are handled specially
 and mapped onto HTTP constructs, all other attributes are transferred as
-metadata without further interpretation (except that extensions may define
+metadata without further interpretation (except that extensions MAY define
 additional header mappings).
 
 This mapping is intentionally robust against changes, including the addition and
@@ -203,8 +203,7 @@ specification, header names are case-insensitive.
 ##### 3.1.3.2 HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute
-type's canonical string representation in the [JSON][json-format] string
-encoding.
+type's [canonical string representation][ce-types].
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
 and per [RFC7230 Section 3][rfc7230-section-3], HTTP headers MUST only use
@@ -461,6 +460,7 @@ Content-Length: nnnn
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
+[ce-types]: ./spec.md#type-system
 [json-format]: ./json-format.md
 [json-batch-format]: ./json-format.md#4-json-batch-format
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5

@@ -58,8 +58,8 @@ which this mapping leans on.
 
 ### 2.2. Type System Mapping
 
-The CloudEvents type system MUST be mapped to JSON types as follows, with
-exceptions noted below.
+The [CloudEvents type system][ce-types] MUST be mapped to JSON types as follows,
+with exceptions noted below.
 
 | CloudEvents   | JSON                                                           |
 | ------------- | -------------------------------------------------------------- |
@@ -70,7 +70,6 @@ exceptions noted below.
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
 | Map           | [JSON object][json-object]                                     |
 | Any           | [JSON value][json-value]                                       |
-| Any-context   | [string][json-string] or [number][json-number]                 |
 
 Extension specifications MAY define diverging mapping rules for the values of
 attributes they define.
@@ -313,6 +312,7 @@ An example of an empty batch of CloudEvents (typically used in a response):
 
 [base64]: https://tools.ietf.org/html/rfc4648#section-4
 [ce]: ./spec.md
+[ce-types]: ./spec.md#type-system
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-format]: ./json-format.md
 [json-geoseq]:
