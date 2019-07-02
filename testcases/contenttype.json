@@ -1,5 +1,5 @@
 {
-    "specversion": "0.3",
+    "specversion": "0.4-wip",
     "id": "123",
 
     "source": "https://cloudevents.io/contenttype",

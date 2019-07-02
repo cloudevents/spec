@@ -2,7 +2,7 @@
 Topic Name: mytopic
 Content Type: application/xml
 --------------- User Properties ----------
-specversion: 0.3
+specversion: 0.4-wip
 id: 123
 source: https://cloudevents.io/contenttype
 type: io.cloudevents.contenttype-test

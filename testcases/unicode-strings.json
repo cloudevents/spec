@@ -1,5 +1,5 @@
 {
-    "specversion": "0.3",
+    "specversion": "0.4-wip",
     // "Printable" might or might not include " ", but probably includes
     // characters that produce at least some visible output
     // Go defines this as: 
@@ -12,5 +12,5 @@
     "type": "\"😉\u033c.is+Fine火\u0022",
 
     // OPTIONAL field
-    "subject": "\"😉\u033c.is+Fine火\u0022"
+    "subject": "\"😉\u0.4-wipc.is+Fine火\u0022"
 }

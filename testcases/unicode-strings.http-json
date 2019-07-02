@@ -4,7 +4,7 @@ Content-Length: 279
 Content-Type: applications/cloudevents+json; charset=utf-8
 
 {
-    "specversion": "0.3",
+    "specversion": "0.4-wip",
     "id": "\"😉\u033c.is+Fine火\u0022",  // \u22\u1F609\u033c\u2e\u69\u73\u2b\u46\u69\u6e\u65\u706b\u22
     "source": "https://cloudevents.io/unicode-strings",
     "type": "\"😉\u033c.is+Fine火\u0022",

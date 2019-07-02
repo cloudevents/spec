@@ -1,7 +1,7 @@
 POST / HTTP/1.1
 Host: handler.example.com
 Content-Length: 0
-ce-specversion: 0.3
+ce-specversion: 0.4-wip
 ce-id: 123
 ce-source: https://cloudevents.io/extensions-map
 ce-type: io.cloudevents.extensions-map-test
