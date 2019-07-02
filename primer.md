@@ -200,7 +200,7 @@ The CloudEvents specification does not mandate any particular pattern to be
 used, or even the use of version strings at all. This decision is up to each
 event producer. However, when a version-specific string is included, care should
 be taken whenever its value changes as event consumers might be reliant on the
-existing value and thus a change could be interpretted as a "breaking change".
+existing value and thus a change could be interpreted as a "breaking change".
 Some form of communication between producers and consumers should be established
 to ensure the event consumers know what possible values might be used. In
 general, this is true for all CloudEvents attributes as well.
@@ -387,7 +387,7 @@ is "describing event data in a common way" and "to define interoperability of
 event systems that allow services to produce or consume events, where the
 producer and consumer can be developed and deployed independently".
 
-The foundation for such interoperability are open data formats and open
+The foundations for such interoperability are open data formats and open
 protocols, with CloudEvents aiming to provide such an open data format and
 projections of its data format onto commonly used protocols and with commonly
 used encodings.
@@ -451,7 +451,7 @@ specs should follow the same format as the other specs for core protocols and
 encodings.
 
 Proprietary specs will receive less scrutiny than a core spec, and as the
-CloudEvents spec evolves, it is the the responsibility of the maintainers of the
+CloudEvents spec evolves, it is the responsibility of the maintainers of the
 respective protocols and encodings to keep specs in sync with the CloudEvents
 spec. If a proprietary spec falls too far out of date, CloudEvents may mark the
 link to that spec as deprecated or remove it.
@@ -547,7 +547,7 @@ including being both a producer and a consumer of events.
      semantic integrity of the event.
    - Instant "push-style" delivery to interested consumers.
    - Storing events for eventual delivery, either for pick-up initiated by the
-     consumer ("pull"), or initiated by the middleware ("push") after a delay.
+     consumer ("pull") or initiated by the middleware ("push") after a delay.
    - Observing event content or event flow for monitoring or diagnostics
      purposes.
 
@@ -569,9 +569,11 @@ including being both a producer and a consumer of events.
    Whether its events are available for consumption via a middleware is a
    delegation choice of the producer.
 
-   In practice, middleware can take on role of a producer when it changes the
-   semantic meaning of an event, a consumer when it takes action based on an
-   event, or middleware when it routes events without making semantic changes.
+   In practice, middleware can take on the role of a
+   [Producer](spec.md#producer) when it changes the semantic meaning of an
+   event, a [Consumer](spec.md#consumer) when it takes action based on an event,
+   or [Intermediary](spec.md#intermediary) when it routes events without making
+   semantic changes.
 
 4. Frameworks and other abstractions make interactions with event platform
    infrastructure simpler, and often provide common API surface areas for
@@ -587,7 +589,7 @@ including being both a producer and a consumer of events.
 
    For a sports application, a developer using the framework might be interested
    in all events from today's game (subject) of a team in a league (topic of
-   interest), but wanting to handle reports of "goal" differently than reports
+   interest) but wanting to handle reports of "goal" differently than reports
    of "substitution". For this, the framework will need a suitable metadata
    discriminator that frees it from having to understand the event details.
 
@@ -682,7 +684,7 @@ sequence for the purpose of event tracing and troubleshooting.
 IoT devices send and receive events related to their functionality. For example,
 a connected thermostat will send telemetry on the current temperature and could
 receive events to change temperatures. These devices typically have a
-constrained operating environment (cpu, memory) requiring a well defined event
+constrained operating environment (cpu, memory) requiring a well-defined event
 message format. In a lot of cases these messages are binary encoded instead of
 textual. Whether directly from the device or transformed via a gateway,
 CloudEvents would allow for a better description of the origin of the message
@@ -700,7 +702,7 @@ different houses.
 The serverless platform needs to correlate one type of event instance correctly
 with other types of event instances and map a received event instance to the
 correct application/workflow instance. CloudEvents will provide a standard way
-for any event consumer (eg. the serverless platform) to locate the event
+for any event consumer (e.g. the serverless platform) to locate the event
 correlation information/token in the event data and map a received event
 instance to the correct application/workflow instance.
 
