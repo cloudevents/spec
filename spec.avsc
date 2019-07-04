@@ -3,51 +3,22 @@
   "type":"record",
   "name":"CloudEvent",
   "version":"0.4-wip",
-  "doc":"Avro Event Format fo CloudEvents",
+  "doc":"Avro Event Format for CloudEvents",
   "fields":[
     {
-      "name":"type",
-      "type":"string"
-    },
-    {
-      "name":"specversion",
-      "type":"string"
-    },
-    {
-      "name":"source",
-      "type":"string"
-    },
-    {
-      "name":"id",
-      "type":"string"
-    },
-    {
-      "name":"time",
-      "type":[
-        "null",
-        "string"
-      ]
-    },
-    {
-      "name":"schemaurl",
-      "type":[
-        "null",
-        "string"
-      ]
-    },
-    {
-      "name":"contenttype",
-      "type":[
-        "null",
-        "string"
-      ]
-    },
-    {
-      "name":"data",
-      "type":[
-        "null",
-        "string"
-      ]
+      "name":"metadata",
+      "type":{
+        "type":"map",
+        "values":[
+          "null",
+          "int",
+          "float",
+          "string",
+          "boolean",
+          "long",
+          "CloudEvent"
+        ]
+      }
     }
   ]
 }
