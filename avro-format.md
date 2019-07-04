@@ -61,9 +61,30 @@ attributes they define.
 ### 2.2 Mapping Any-typed Attributes
 
 `Any`-typed CloudEvents values can either hold a `String`, or a `Binary` value,
-or a `Map`, or any of all other types. Avro type system SHOULD NOT satisfy the
-map-of-maps in a recursive way, i.e., every `map` declaration REQUIRE the
-`values` with primitives types or a declared type.
+or a `Map`, or any of all other types. Avro type system satisfies this requirement by employing a recursive reference,
+where a `record` type is referenced as a value inside of its own `map`.
+
+Example:
+
+```json
+{
+  "type":"record",
+  "name":"MyRecord",
+  "fields":[
+    {
+      "name":"wow",
+      "type":{
+        "type":"map",
+        "values":[
+          "null",
+          "string",
+          "MyRecord"
+        ]
+      }
+    }
+  ]
+}
+```
 
 ### 2.3 OPTIONAL Attributes
 
@@ -91,54 +112,26 @@ to the one described by the [CloudEvent Avro Schema](./spec.avsc):
   "type":"record",
   "name":"CloudEvent",
   "version":"0.4-wip",
-  "doc":"Avro Event Format of CloudEvents",
+  "doc":"Avro Event Format for CloudEvents",
   "fields":[
     {
-      "name":"type",
-      "type":"string"
-    },
-    {
-      "name":"specversion",
-      "type":"string"
-    },
-    {
-      "name":"source",
-      "type":"string"
-    },
-    {
-      "name":"id",
-      "type":"string"
-    },
-    {
-      "name":"time",
-      "type":[
-        "null",
-        "string"
-      ]
-    },
-    {
-      "name":"schemaurl",
-      "type":[
-        "null",
-        "string"
-      ]
-    },
-    {
-      "name":"contenttype",
-      "type":[
-        "null",
-        "string"
-      ]
-    },
-    {
-      "name":"data",
-      "type":[
-        "null",
-        "string"
-      ]
+      "name":"metadata",
+      "type":{
+        "type":"map",
+        "values":[
+          "null",
+          "int",
+          "float",
+          "string",
+          "boolean",
+          "long",
+          "CloudEvent"
+        ]
+      }
     }
   ]
 }
+
 ```
 
 ## 3 Examples
@@ -148,7 +141,7 @@ The following table shows exemplary mappings:
 | CloudEvents     | Type      | Exemplary Avro Value                           |
 | --------------- | --------- | ---------------------------------------------- |
 | type            | string    | `"com.example.someevent"`                      |
-| specversion     | string    | `"0.4-wip                                      |
+| specversion     | string    | `"0.4-wip`                                      |
 | source          | string    | `"/mycontext"`                                 |
 | id              | string    | `"7a0dc520-c870-4193c8"`                       |
 | time            | string    | `"2019-06-05T23:45:00Z"`                       |
