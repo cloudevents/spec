@@ -211,8 +211,8 @@ and the event data will be materialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
 
-`Any` and `Map` values MUST NOT be used in context attributes, including in
-extension attributes.
+Values of type `Map`, either directly or via the `Any` type, MUST NOT be used
+in context attributes, including in extension attributes.
 
 ### REQUIRED Attributes
 
