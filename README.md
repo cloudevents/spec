@@ -44,10 +44,16 @@ The following documents are available:
 | Primer                        |         [v0.3](https://github.com/cloudevents/spec/blob/v0.3/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
 | Documented Extensions         |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)  |
 | Proprietary Specifications    |                                        -                                        |   [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)    |
+| CloudEvents Adapters          |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/adapters.md)               |
 
 If you are new to CloudEvents, it is recommended that you start by reading the
 [Primer](primer.md) for an overview of the specification's goals and design
 decisions, and then move on to the [core specification](spec.md).
+
+Since not all event producers generate CloudEvents by default, there is
+documentation describing the recommended process for adapting some popular
+events into CloudEvents, see
+[CloudEvents Adapters](https://github.com/cloudevents/spec/blob/master/adapters.md).
 
 ## SDKs
 
