@@ -292,7 +292,8 @@ second with JSON data.
 ]
 ```
 
-An example of an empty batch of CloudEvents (typically used in a response):
+An example of an empty batch of CloudEvents (typically used in a response, but
+also valid in a request):
 
 ```JSON
 []

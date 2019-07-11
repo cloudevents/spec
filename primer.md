@@ -125,7 +125,9 @@ of how to serialize the event in different formats (e.g. JSON) and transports
 Batching of multiple events into a single API call is natively supported by some
 transports. To aid interoperability, it is left up to the transports if and how
 batching is implemented. Details may be found in the transport binding or in the
-transport specification.
+transport specification. A batch of CloudEvents carries no semantic meaning and
+is not ordered. An [Intermediary](spec.md#intermediary) can add or remove
+batching as well as assign events to different batches.
 
 ### Non-Goals
 
