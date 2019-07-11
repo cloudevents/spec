@@ -336,10 +336,6 @@ on the definition of OPTIONAL.
   event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
 
-  When this attribute is omitted, the `data` attribute simply follows the event
-  format's encoding rules. For the JSON event format, the `data` attribute value
-  can therefore be a JSON object, array, or value.
-
   For the binary mode of some of the CloudEvents transport bindings, where the
   `data` content is immediately mapped into the payload of the transport frame,
   this field is directly mapped to the respective transport or application
@@ -347,8 +343,23 @@ on the definition of OPTIONAL.
   and the content-type metadata mapping can be found in the respective transport
   mapping specifications.
 
+  Implementations MAY introduce this parameter when encoding `Integer`, `Map`
+  and `String` to a binary mode of a CloudEvents transport binding. For example,
+  when encoding a `Map` in binary mode, the implementation MAY encode the value
+  as JSON if the underlying transport encoding does not support `Map` payloads,
+  in accordance to the normative rules for the `Map` type, and therefore MUST
+  set the `datacontenttype` to `application/json`. When decoding the event, the
+  new type of `data` will therefore be `Binary`, with a `datacontenttype` of
+  `application/json`.
+
 - Constraints:
-  - OPTIONAL
+  - MUST be compatible with the type of the `data` attribute, given the
+    following rules:
+    - `Binary` - REQUIRED, and can be any media type that can be used to decode
+      the value of the `data` attribute.
+    - `String` - OPTIONAL, and MUST be `text/*` if present.
+    - `Integer` - MUST NOT be present.
+    - `Map` - MUST NOT be present.
   - If present, MUST adhere to the format specified in
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - For Media Type examples see
@@ -451,8 +462,15 @@ encapsulated within the `data` attribute.
 
 - Type: `Any`
 - Description: The event payload. The payload depends on the `type` and the
-  `schemaurl`. It is encoded into a media format which is specified by the
-  `datacontenttype` attribute (e.g. application/json).
+  `schemaurl`. If the type is `Binary` or `String`, it is encoded using a 
+  media format which is specified by the `datacontenttype` attribute 
+  (e.g. `application/json`).
+
+  The abstract type (ie, `Binary`, `Text`, `Integer` or `Map`) MAY change when
+  encoded using a binary mode transport binding. For example, a `Map` MAY
+  become `Binary`, with a `datacontenttype` attribute set to 
+  `application/json`.
+
 - Constraints:
   - OPTIONAL
 
