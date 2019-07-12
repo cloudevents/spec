@@ -6,16 +6,14 @@
   "doc":"Avro Event Format for CloudEvents",
   "fields":[
     {
-      "name":"metadata",
+      "name":"attribute",
       "type":{
         "type":"map",
         "values":[
           "null",
           "int",
-          "float",
           "string",
-          "boolean",
-          "long",
+          "bytes",
           "CloudEvent"
         ]
       }

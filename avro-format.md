@@ -115,23 +115,20 @@ to the one described by the [CloudEvent Avro Schema](./spec.avsc):
   "doc":"Avro Event Format for CloudEvents",
   "fields":[
     {
-      "name":"metadata",
+      "name":"attribute",
       "type":{
         "type":"map",
         "values":[
           "null",
           "int",
-          "float",
           "string",
-          "boolean",
-          "long",
+          "bytes",
           "CloudEvent"
         ]
       }
     }
   ]
 }
-
 ```
 
 ## 3 Examples
