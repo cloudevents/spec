@@ -336,16 +336,43 @@ on the definition of OPTIONAL.
   event format defines the relationship in
   [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
 
-  When this attribute is omitted, the `data` attribute simply follows the event
-  format's encoding rules. For the JSON event format, the `data` attribute value
-  can therefore be a JSON object, array, or value.
-
   For the binary mode of some of the CloudEvents transport bindings, where the
   `data` content is immediately mapped into the payload of the transport frame,
   this field is directly mapped to the respective transport or application
   protocol's content-type metadata property. Normative rules for the binary mode
   and the content-type metadata mapping can be found in the respective transport
   mapping specifications.
+
+  The attribute MUST be set for Binary content in the data field, with an 
+  accurate media-type. If no IANA registered media-type is available, a vendor 
+  extension or application/octet-stream MAY be used.
+
+  The attribute SHOULD be set for String content in the data field. If set, the
+  media-type MUST describe a text format. If the attribute is omitted for String
+  content, the default is "text/plain". If the character encoding is not UTF-8 
+  or one of its subsets (US-ASCII, ISO-8859-1), or if the character encoding of 
+  the overall event diverges, the character encoding MUST be declared with a 
+  charset parameter and the text MUST be encoded as Binary.
+
+  The attribute MAY be set for all other types in order to enforce encoding of 
+  the data attribute according to the rules of a particular event format, which 
+  might differ from the event format chosen for the overall event. Using 
+  "application/json" will encode the data content according to the 
+  [JSON event format](./json-format.md) rules. If the event itself is JSON
+  encoded, the content is inlined into the JSON object's data field. If the 
+  event is encoded in a different event format, the content is carried as 
+  String or Binary under consideration of the aforementioned character encoding
+  rules.
+
+  If the attribute is omitted, the content of the data attribute is encoded 
+  according to the rules of the chosen event format, which also allows for 
+  transcoding of the content as an event is forwarded through routes that use 
+  different event formats. An event might initially be published via MQTT with 
+  Protobuf encoding for preserving bandwidth, but then routed onwards via 
+  Kafka using JSON encoding since the consumers are expecting JSON content.
+
+  For using the "binary" mode of any transport binding, the datacontenttype 
+  MUST be declared.
 
 - Constraints:
   - OPTIONAL

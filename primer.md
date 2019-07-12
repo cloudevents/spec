@@ -122,6 +122,72 @@ Along with the definition of these attributes, there will also be specifications
 of how to serialize the event in different formats (e.g. JSON) and transports
 (e.g. HTTP, AMQP, Kafka).
 
+The `data` attribute, which carries the application-specific information related
+to the event, has a special relationship with transports and event formats. 
+Effectively, there are three different models of handling the `data` attribute,
+each targeting different use-cases. 
+
+1. Some transport bindings like HTTP and AMQP define a "binary mode", which 
+   allows for projecting an event onto transport frame and carrying the `data` 
+   content inside the transport frame "body" section. This mode is, as the name 
+   indicates, designed for carrying binary payloads and has the additional 
+   advantage that it does not require supporting an event format encoder. 
+   A tiny device that only has a HTTP client stack can easily produce a binary
+   mode CloudEvent containing its existing binary telemetry format, with all 
+   CloudEvents-mandated context attributes expressed as HTTP headers. 
+   The device code does not have to link a JSON encoder and the binary data can 
+   be carried compactly. The content of the `data` attribute must be declared 
+   by the `datacontenttype` attribute in this case, and that attribute maps to 
+   the respective transport's content-type metadata field.
+2. All transport bindings define a "structured mode" in which the event is 
+   wholly encoded using an event format, including the content of the `data` 
+   attribute, and is then carried as the "body" of the respective transport 
+   frame. Similar to the "binary mode", the context attributes might 
+   additionally be projected onto the transport frame as headers or properties
+   so that intermediaries do not have to inspect the frame body. 
+   In this mode and if `datacontenttype` remains undefined, the `data` 
+   attribute can take on any of the types of CloudEvents' abstract type model,
+   and particularly the `Map` type, which allows carrying key/value pairs as 
+   application-specific information. The `data` content is then rendered
+   according to the rules of a chosen event format, and the event format is
+   declared on the transport frame with a "application/cloudevents+{format}"
+   content type where available. 
+   If `datacontenttype` is defined, the type of the `data` attribute is 
+   determined by the media type, and is typically string or binary.   
+   Binary data can be carried inside the `data` attribute, even if the event
+   format only allows for a string representation. In this case, the
+   `datacontentencoding` attribute provides a hint that the string contains
+   Base64 encoded information and shall be treated as a string.   
+   Since all event formatters de-/encode the `data` content from/to a 
+   realization of the abstract type model, transcoding (switching the event 
+   format) is as simple as reading the event into the respective CloudEvent
+   in-memory structure using the input event's formatter and writing the 
+   output event with a different formatter.
+   The structured mode is best suited for all scenarios where events may be 
+   routed over multiple hops and/or are held on storage media because they 
+   are independent of a transport frame. 
+3. A variation of the prior model is the ability to leverage the full type
+   model fidelity of the event format's encoder. For instance, JSON supports 
+   floating points numbers, boolean values, and arrays, while the simpler 
+   CloudEvents type model does not allow for those in the interest of broad
+   interoperability with even very constrained encodings and languages. 
+   If an application uses the JSON event format and additionally declares
+   the `datacontenttype` to be `application/json`, the `data` attribute 
+   is rendered as inline JSON just like in the regular structured case, but 
+   since the declaration is explicit, all JSON constructs are allowed. This
+   is equivalently true for all other event formats. In transcoding scenarios,
+   where such an event arrives at an intermediary and shall be sent onwards
+   using a different event format, the explicit declaration then forces the
+   intermediary to format the overall event using the target format, but 
+   the `data` content must be JSON encoded and stored inside the target 
+   event as either string or binary, depending on the character encoding
+   needs.
+   This variation of the structured mode is most useful for scenarios where
+   the overall system standardizes on using a particular encoding for 
+   structured data, and therefore wants to use the full type system of that
+   encoding for event data rather than choosing the aforementioned 
+   interoperable transcoding flexibility.     
+
 Batching of multiple events into a single API call is natively supported by some
 transports. To aid interoperability, it is left up to the transports if and how
 batching is implemented. Details may be found in the transport binding or in the
