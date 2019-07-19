@@ -37,9 +37,6 @@
         "type": {
           "$ref": "#/definitions/type"
         },
-        "extensions": {
-          "$ref": "#/definitions/extensions"
-        },
         "source": {
           "$ref": "#/definitions/source"
         }
@@ -66,9 +63,6 @@
     "type": {
       "type": "string",
       "minLength": 1
-    },
-    "extensions": {
-      "type": "object"
     },
     "source": {
       "format": "uri-reference",
