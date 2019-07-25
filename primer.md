@@ -20,6 +20,7 @@ This document is a working draft.
 - [Architecture](#architecture)
 - [Versioning of Attributes](#versioning-of-attributes)
 - [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
+- [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
 - [Prior Art](#prior-art)
@@ -202,6 +203,14 @@ application protocol. The [HTTP Webhook](http-webhook.md) specification is
 not specific to CloudEvents and can be used to post any kind of one-way event
 and notifications to a conformant HTTP endpoint. However, the lack of such a
 specification elsewhere makes it necessary for CloudEvents to define it.
+
+### Transport Error Handling
+
+The CloudEvents specification, for the most part, does not dictate a processing
+model associated with the creation or processing of CloudEvents. As such, if
+there are errors during the processing of a CloudEvent, the software
+encountering the error is encouraged to use the normal transport-level
+error reporting to report them.
 
 ## Versioning of Attributes
 
