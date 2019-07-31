@@ -357,7 +357,7 @@ on the definition of OPTIONAL.
 - For Media Type examples see
   [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-#### schemaurl
+#### dataschemaurl
 
 - Type: `URI-reference`
 - Description: A link to the schema that the `data` attribute adheres to.
@@ -454,7 +454,7 @@ encapsulated within the `data` attribute.
 
 - Type: `Any`
 - Description: The event payload. The payload depends on the `type` and the
-  `schemaurl`. It is encoded into a media format which is specified by the
+  `dataschemaurl`. It is encoded into a media format which is specified by the
   `datacontenttype` attribute (e.g. application/json).
 - Constraints:
   - OPTIONAL

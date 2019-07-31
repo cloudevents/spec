@@ -142,11 +142,11 @@ The following table shows exemplary mappings:
 | source          | string    | `"/mycontext"`                                 |
 | id              | string    | `"7a0dc520-c870-4193c8"`                       |
 | time            | string    | `"2019-06-05T23:45:00Z"`                       |
-| schemaurl       | string    | `"http://registry.com/schema/v1/much.json"`    |
+| dataschemaurl   | string    | `"http://registry.com/schema/v1/much.json"`    |
 | contenttype     | string    | `"application/json"`                           |
 | data            | string    | `"{"much":{"wow":"json"}}"`                    |
 ||||
-| schemaurl       | string    | `"http://registry.com/subjects/ce/versions/1"` |
+| dataschemaurl   | string    | `"http://registry.com/subjects/ce/versions/1"` |
 | contenttype     | string    | `"application/avro"`                           |
 | data            | string    | `"Q2xvdWRFdmVudHM="`                           |
 
