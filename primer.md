@@ -19,7 +19,8 @@ This document is a working draft.
 - [Design Goals](#design-goals)
 - [Architecture](#architecture)
 - [Versioning of Attributes](#versioning-of-attributes)
-- [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
+- [CloudEvent Attributes](#cloudevent-attributes)
+- [CloudEvent Attribute Extensions](#cloudevent-attribute-extensions)
 - [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
@@ -182,7 +183,7 @@ The CloudEvents specification set defines four different kinds of protocol
 elements that form a layered architecture model.
 
 1. The [base specification](spec.md) defines an abstract information model
-   made up of attributes (key-value pairs) and associated rules for what 
+   made up of attributes (key-value pairs) and associated rules for what
    constitutes a CloudEvent.
 2. The [extensions](./spec.md#extension-context-attributes) add use-case specific
    and potentially overlapping sets of extension attributes and associated
@@ -193,7 +194,7 @@ elements that form a layered architecture model.
    an application protocol.
 4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines
    how the CloudEvent is bound to an application protocol's transport frame,
-   in the case of HTTP to the HTTP message. The transport binding does not 
+   in the case of HTTP to the HTTP message. The transport binding does not
    constrain how the transport frame is used, meaning that the HTTP binding
    can be used with any HTTP method and with request and response messages.
 
@@ -234,6 +235,54 @@ general, this is true for all CloudEvents attributes as well.
 
 This section provides additional background and design points related to some of
 the CloudEvent attributes.
+
+### String Values
+
+Some of the CloudEvent attributes are defined to be of type `String`, and
+all data types used by CloudEvent attribute are required to have a
+string-encoding. This makes for an easy serialization to even the most
+basic formats and transports that might only have a string representation of
+attributes.
+
+Even with that model, it may still be possible to use certain
+characters that could be problematic in some cases. The CloudEvents
+specification does not attempt to further restrict the valid characters used
+for attribute values so as to allow for the specification to be used in
+situations where those potentially problematic characters are desired.
+
+However, this should not be interpreted as encouragement for producers to
+push the boundaries of what characters should be used just for the sake of
+edge-testing implementations. CloudEvents is striving to help with
+interoperability while still being flexible enough to be used in unique
+situations. So, CloudEvent producers are encouraged to only use values that
+have the best chance of being properly processed by all possible formats
+and transports that their CloudEvents might be used with.
+
+### URI-reference Values
+
+Attributes of type URI-reference have quite a large set of valid values that
+can be used. For example, it is possible that the `source` attribute could be
+as short as `home` or could be more meaningful, such as
+`http://home.example.com`. The CloudEvents specification allows for a wide
+range of values to allow for it to be used in as any use cases as possible,
+without undue burden on implementations.
+
+As an example, while `home` as a value for `source` would not be a wise
+choice when the CloudEvent is meant to be used in a very public environment,
+it may make perfect sense in a closed system where a full reverse-DNS name
+might be unnecessary. Or perhaps there is a severe size limitation on
+the size of the CloudEvent and shorter URI-references are needed.
+
+These are decisions that CloudEvent producers will need to decide for
+themselves based on their needs and expected usage of their events.
+
+Additionally, the CloudEvents specification does not define a `baseURI`
+to be used along with the URI-reference type attributes. This is because,
+unless otherwise stated, the URI-references are not meant to be normalized
+or used for any other purpose other than comparing its string value against
+some other URI-reference string value for equality. The use of URI-reference,
+instead of just a String, was done to encourage the use of meaningful values
+with a well-defined structure.
 
 ### id
 
