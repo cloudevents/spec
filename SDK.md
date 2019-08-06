@@ -1,7 +1,16 @@
-# CloudEvents SDK - Version 0.4-wip
+# CloudEvents SDK
 
-The intent of this document to describe bare minimum set of requirements for a
-new SDKs.
+The intent of this document to describe a minimum set of requirements for new
+Software Development Kits (SDKs) for CloudEvents. These SDKs are designed and
+implemented to enhance and speed up CloudEvents integration. As part of
+community efforts CloudEvents team committed to support and maintain the
+following SDKs:
+
+- [CSharp](https://github.com/cloudevents/sdk-csharp)
+- [Go SDK](https://github.com/cloudevents/sdk-go)
+- [Java SDK](https://github.com/cloudevents/sdk-java)
+- [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
+- [Python SDK](https://github.com/cloudevents/sdk-python)
 
 ## Status of this document
 
@@ -11,280 +20,111 @@ document also suppose to be considered as a working draft.
 ## Contribution acceptance
 
 Being an open source community CloudEvents team is open for a new members as
-well open to their contribution. In order to ensure that an SDK is going to be
+well open to their contributions. In order to ensure that an SDK is going to be
 supported and maintained CloudEvents community would like to ensured that:
 
-- a person (developer, committer) is going to become a maintainer
-- a person commits to support ongoing changes to the [CloudEvent spec](spec.md)
+- Each SDK has an active point of contact.
+- Each SDK supports ongoing changes to the [CloudEvent spec](spec.md).
 
-## Officially maintained software development kits (SDK)
+## Technical requirements
 
-Software Development Kit (SDK) is a set of helpers designed and implemented to
-enhance and speed up a CloudEvents integration. As part of community efforts
-CloudEvents team committed to support and maintain the following SDKs:
+Each SDK MUST meet these requirements:
 
-- [Go SDK](https://github.com/cloudevents/sdk-go)
-- [Java SDK](https://github.com/cloudevents/sdk-java)
-- [Python SDK](https://github.com/cloudevents/sdk-python)
-- [CSharp](https://github.com/cloudevents/sdk-csharp)
-- [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
+- Supports CloudEvents at spec milestones and ongoing development version.
+  - Encode a Conical Event into a transport specific encoded message.
+  - Decode transport specific encoded messages into a Conical Event.
+- Idiomatic usage of the programming language.
+  - Using current language version(s).
+- Supports HTTP transport renderings in both `structured` and `binary`
+  encodings.
 
-## SDK contribution
+### Object model structure guidelines
 
-That's said, being an open source community CloudEvents is all about building
-open for contribution. In order to keep the development/user experience the same
-(as much as possible) CloudEvents team agreed to establish minimum requirements
-for a new SDK.
+Each SDK will provide a generic CloudEvents class/object/structure that
+represents the conical form of an Event.
 
-### Technical requirements
-
-Supports CloudEvents spec milestones and ongoing development version. HTTP
-transport support (both structured and binary). Widely used programming language
-version.
-
-### Preferable API signature guidelines
-
-In order to remain developer/user UX the same among existing officially
-supported SDKs CloudEvents team asks maintainers to align with the following API
-signatures. Please consider the following code as pseudo-code.
-
-#### Event object constructor API
-
-Event build considered to be an event constructor:
+The SDK should enable users to bypass implementing transport specific encoding
+and decoding of the CloudEvents `Event` object. The general flow for Objects
+should be:
 
 ```
-    v01.Event()
+Event (-> Message) -> Transport
 ```
 
-#### Event object setters API
-
-This particular code sample represents bare minimum number of setters:
+and
 
 ```
-    v01.Event().
-    SetDataContentType("application/json").
-    SetData('{"name":"john"}').
-    SetEventID("my-id").
-    SetSource("from-galaxy-far-far-away").
-    SetEventTime("tomorrow").
-    SetEventType("cloudevent.greet.you")
+Transport (-> Message) -> Event
 ```
 
-Content type setter represents an event MIME content type setter:
+An SDK is not required to implement a wrapper around the transport, the focus
+should be around allowing programming models to work with the high level `Event`
+object, and providing tools to take the `Event` and turn it into something that
+can be used with the implementation transport selected.
 
-```
-    SetDataContentType(content_type string)
-```
+At a high level, the SDK needs to be able to help with the following tasks:
 
-Data setter represents an event data setter:
+1. Compose an Event.
+1. Encode an Event given a transport and encoding (into a Transport Message if
+   appropriate).
+1. Decode an Event given a transport specific message, request or response (into
+   a Transport Message if appropriate).
 
-```
-    SetData(event_data serializable)
-```
+#### Compose an Event
 
-ID setter represents an event ID setter:
+Provide a convenient way to compose both a single message and many messages.
+Implementors will need a way to quickly build up and convert their event data
+into the a CloudEvents encoded Event. In practice there tend to be two aspects
+to event composition,
 
-```
-    SetEventID(id string)
-```
+1. Event Creation
 
-Source setter represents an event source setter:
+- "I have this data that is not formatted as a CloudEvent and I want it to be."
 
-```
-    SetSource(source URL)
-```
+1. Event Mutation
 
-Time setter represents event emit time setter:
+- "I have a CloudEvents formatted Event and I need it to be a different Event."
+- "I have a CloudEvents formatted Event and I need to mutate the Event."
 
-```
-    SetEventTime(time RFC3339)
-```
+Event creation is highly idiomatic to the SDK language.
 
-Type setter represents an event type setter:
+Event mutation tends to be solved with an accessor pattern, like getters and
+setters. But direct key access could be leveraged, or named-key accessor
+functions.
 
-```
-    SetEventType(type string)
-```
+In either case, there MUST be a method for validating the resulting Event object
+based on the parameters set, most importantly the CloudEvents spec version.
 
-Extensions setter represents an event type setter:
+#### Encode/Decode an Event
 
-```
-    SetExtensions(exts map[string]string)
-```
+Each SDK will implement a form of a Codec that supports Encoding and Decoding an
+Event with regards to a transport and encoding. `Structured` encoding is the
+easiest to support, as it is just `json`, but `Binary` is fairly custom for each
+transport.
 
-Generic setter represents an event attribute setter:
+#### Data
 
-```
-    Set(key string, value serializable)
-```
+Data access from the event has some considerations, the Event at rest could be
+encoded into the `base64` form, as structured data, or as a wire format like
+`json`. The Conical Event tends to have some state around it to understand how
+the data is currently encoded. This metadata is useful for encoders and decoders
+but not for the transport message.
 
-#### Event object getters API
+#### Extensions
 
-Event getters are set of methods designed to retrieve an event attributes.
-Here's the list of getters:
+Supporting CloudEvents extensions is idiomatic again, but a method that mirrors
+the data access seems to work.
 
-```
-    EventType() -> string
-    Source() -> URL
-    EventID() -> string
-    EventTime() -> RFC3339
-    SchemaURL() -> string
-    DataContentType() -> string
-    Data() -> serializable
-    Extensions() -> map[string]string
+#### Validation
 
-    Get(key string) -> serializable
+Validation MUST be possible on an individual Event. Validation MUST take into
+account the spec version, and all the requirements put in-place by the spec at
+each version.
 
-```
+## Documentation
 
-All these getters correspond to setters from above.
+Each SDK must provide examples using at least HTTP transport of:
 
-#### HTTP API
-
-CloudEvents spec defines an HTTP transport, that's said, SDK suppose to support
-an HTTP transport routine. As part of an CloudEvent spec, defines two formats:
-
-- [structured](http-transport-binding.md#32-structured-content-mode)
-- [binary](http-transport-binding.md#31-binary-content-mode)
-
-#### HTTP API unmarshaller
-
-An HTTP unmarshaller should be capable of detecting a CloudEvent format from an
-HTTP request headers and a body. Here's the signature of an unmarshaller:
-
-```
-    FromRequest(
-        headers HTTP-Headers,
-        body Stream,
-        data_unmarshaller function(data serializable) -> object
-    ) -> CloudEvent:
-```
-
-In this signature:
-
-- `headers` could be a `map of string to string` or a
-  `map of string to list of strings`, the type of this parameter may vary
-- `body` is a stream, since CloudEvent spec does not define exact type of an
-  event data, SDK should not be responsible for data coercing
-- `data_unmarshaller` is a function that performs data unmarshaller, logic of
-  this method may vary depending on the type of an event format
-- the return statement is a CloudEvent of the particular spec
-
-#### HTTP API marshaller
-
-An HTTP marshaller is a method that should be capable to convert a CloudEvent
-into a combination of an HTTP request headers and a body. Here's the signature
-of a marshaller:
-
-```
-    ToRequest(
-        event CloudEvent,
-        converter_type FormatRef,
-        data_marshaller function(data serializable) -> object
-    ) -> map[string]string, Stream :
-```
-
-In this signature:
-
-- `event` is a CloudEvent of the particular spec
-- `converter_type` represents a type of an HTTP binding format
-  ([binary](http-transport-binding.md#31-binary-content-mode) or
-  [structured](http-transport-binding.md#32-structured-content-mode))
-- `data_marshaller` is a function that serialized an event data
-- the return statement is a set of an HTTP headers and request body
-
-The reason for such signature is that in most of programming languages there are
-a lot if different HTTP frameworks and route handling signature may vary, but
-HTTP headers and a request body is common (or may be easily converted to the
-appropriate type).
-
-#### HTTP Converters API
-
-Each transport binding unmarshaller/marshaller is a set of converters. In terms
-of an SDK the converter is a set API methods that are actually converting a
-CloudEvent of the particular spec into a transport binding-ready data.
-
-Converter API consists of at least two methods:
-
-```
-    Read(...)
-    Write(...)
-```
-
-Signature of these methods may vary depending on the the type of a transport
-binding.
-
-HTTP Converters API is the example of Converters API implementation for the
-[HTTP transport binding](http-transport-binding.md). Taking into account that
-the CloudEvent spec defines 2 (structured and binary) formats, an SDK suppose to
-implement two converters (one per each format):
-
-- `BinaryHTTPCloudEventConverter`
-- `StructuredHTTPCloudEventConverter`
-
-HTTP Converters suppose to comply the following signature:
-
-```
-    Read(
-        event CloudEvent,
-        headers headers HTTP-Headers,
-        body Stream,
-        data_unmarshaller function(data serializable) -> object
-    ) -> CloudEvent
-
-    Write(
-        event CloudEvent,
-        data_marshaller function(data serializable) -> object
-    ) -> HTTP-Headers, Stream
-
-```
-
-As you may see, Converter signature follows the signature of
-marshaller/unmarshaller. It means that an HTTP marshaller/unmarshaller is a set
-of binary and structured converters.
-
-In `Read`:
-
-- `event` - a placeholder (empty event object), see
-  [event constructor](#event-object-constructor-api).
-- `headers` - an HTTP request headers
-- `body` - an HTTP request body
-- `data_unmarshaller` - a function that turns an event data into an object of
-  the particular type
-- returns a valid CloudEvent of the particular spec
-
-In `Write`:
-
-- `event` - a CloudEvent
-- `data_marshaller` - a function that marshals an event data
-- returns a set of an HTTP headers and a body.
-
-### AMQP API
-
-#### AMQP marshaller/unmarshaller
-
-TBA
-
-#### AMQP Converters API
-
-TBA
-
-### MQTT API
-
-#### MQTT marshaller/unmarshaller
-
-TBA
-
-##### MQTT Converters API
-
-TBA
-
-### NATS API
-
-#### NATS marshaller/unmarshaller
-
-TBA
-
-##### NATS Converters API
-
-TBA
+- Composing an Event.
+- Encoding and sending a composed Event.
+- Receiving and decoding an Event.
