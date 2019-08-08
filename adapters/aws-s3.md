@@ -18,7 +18,7 @@ same pattern as described in the following table:
 | `type`                | `com.amazonaws.s3.` + "eventName" value         |
 | `datacontentencoding` | Omit                                            |
 | `datacontenttype`     | S3 event type (e.g. `application/json`)         |
-| `dataschemaurl`       | Omit                                            |
+| `dataschema`          | Omit                                            |
 | `subject`             | "s3.object.key" value                           |
 | `time`                | "eventTime" value                               |
 | `data`                | S3 event                                        |

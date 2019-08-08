@@ -215,7 +215,7 @@ error reporting to report them.
 ## Versioning of Attributes
 
 For certain CloudEvents attributes, the entity or data model referenced by its
-value might change over time. For example, `dataschemaurl` might reference one
+value might change over time. For example, `dataschema` might reference one
 particular version of a schema document. Often these attribute values will then
 distinguish each variant by including some version-specific string as part of
 its value. For example, a version number (`v1`, `v2`), or a date (`2018-01-01`)

@@ -28,8 +28,8 @@
         "time": {
           "$ref": "#/definitions/time"
         },
-        "dataschemaurl": {
-          "$ref": "#/definitions/dataschemaurl"
+        "dataschema": {
+          "$ref": "#/definitions/dataschema"
         },
         "subject": {
           "$ref": "#/definitions/subject"
@@ -52,9 +52,9 @@
       "format": "date-time",
       "type": "string"
     },
-    "dataschemaurl": {
+    "dataschema": {
       "type": "string",
-      "format": "uri-reference"
+      "format": "uri"
     },
     "subject": {
       "type": "string",

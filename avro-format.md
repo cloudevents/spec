@@ -135,20 +135,20 @@ to the one described by the [CloudEvent Avro Schema](./spec.avsc):
 
 The following table shows exemplary mappings:
 
-| CloudEvents     | Type      | Exemplary Avro Value                           |
-| --------------- | --------- | ---------------------------------------------- |
-| type            | string    | `"com.example.someevent"`                      |
-| specversion     | string    | `"0.4-wip`                                      |
-| source          | string    | `"/mycontext"`                                 |
-| id              | string    | `"7a0dc520-c870-4193c8"`                       |
-| time            | string    | `"2019-06-05T23:45:00Z"`                       |
-| dataschemaurl   | string    | `"http://registry.com/schema/v1/much.json"`    |
-| contenttype     | string    | `"application/json"`                           |
-| data            | string    | `"{"much":{"wow":"json"}}"`                    |
+| CloudEvents  | Type      | Exemplary Avro Value                           |
+| ------------ | --------- | ---------------------------------------------- |
+| type         | string    | `"com.example.someevent"`                      |
+| specversion  | string    | `"0.4-wip`                                     |
+| source       | string    | `"/mycontext"`                                 |
+| id           | string    | `"7a0dc520-c870-4193c8"`                       |
+| time         | string    | `"2019-06-05T23:45:00Z"`                       |
+| dataschema   | string    | `"http://registry.com/schema/v1/much.json"`    |
+| contenttype  | string    | `"application/json"`                           |
+| data         | string    | `"{"much":{"wow":"json"}}"`                    |
 ||||
-| dataschemaurl   | string    | `"http://registry.com/subjects/ce/versions/1"` |
-| contenttype     | string    | `"application/avro"`                           |
-| data            | string    | `"Q2xvdWRFdmVudHM="`                           |
+| dataschema   | string    | `"http://registry.com/subjects/ce/versions/1"` |
+| contenttype  | string    | `"application/avro"`                           |
+| data         | string    | `"Q2xvdWRFdmVudHM="`                           |
 
 ## References
 

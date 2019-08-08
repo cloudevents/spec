@@ -20,7 +20,7 @@ based on the specified event.
 | `type`                | `com.github.check_run.` + "action" value                                         |
 | `datacontentencoding` | Omit                                                                             |
 | `datacontenttype`     | `application/json`                                                               |
-| `dataschemaurl`       | Omit                                                                             |
+| `dataschema`          | Omit                                                                             |
 | `subject`             | "check_run.id" value                                                             |
 | `time`                | "check_run.completed_at" value, unless "null", then "check_run.started_at" value |
 | `data`                | Content of HTTP request body                                                     |
@@ -35,7 +35,7 @@ based on the specified event.
 | `type`                | `com.github.check_suite.` + "action" value |
 | `datacontentencoding` | Omit                                       |
 | `datacontenttype`     | `application/json`                         |
-| `dataschemaurl`       | Omit                                       |
+| `dataschema`          | Omit                                       |
 | `subject`             | "check_suite.id" value                     |
 | `time`                | "check_suite.updated_at" value             |
 | `data`                | Content of HTTP request body               |
@@ -50,7 +50,7 @@ based on the specified event.
 | `type`                | `com.github.commit_comment.` + "action" value         |
 | `datacontentencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
-| `dataschemaurl`       | Omit                                                  |
+| `dataschema`          | Omit                                                  |
 | `subject`             | "comment.id" value                                    |
 | `time`                | "comment.updated_at" value                            |
 | `data`                | Content of HTTP request body                          |
@@ -65,7 +65,7 @@ based on the specified event.
 | `type`                | `com.github.content_reference.` + "action" value |
 | `datacontentencoding` | Omit                                             |
 | `datacontenttype`     | `application/json`                               |
-| `dataschemaurl`       | Omit                                             |
+| `dataschema`          | Omit                                             |
 | `subject`             | "content_reference.id" value                     |
 | `time`                | Current time                                     |
 | `data`                | Content of HTTP request body                     |
@@ -80,7 +80,7 @@ based on the specified event.
 | `type`                | `com.github.create.` + "ref_type" value |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
-| `dataschemaurl`       | Omit                                    |
+| `dataschema`          | Omit                                    |
 | `subject`             | "ref" value                             |
 | `time`                | Current time                            |
 | `data`                | Content of HTTP request body            |
@@ -95,7 +95,7 @@ based on the specified event.
 | `type`                | `com.github.delete.` + "ref_type" value |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
-| `dataschemaurl`       | Omit                                    |
+| `dataschema`          | Omit                                    |
 | `subject`             | "ref" value                             |
 | `time`                | Current time                            |
 | `data`                | Content of HTTP request body            |
@@ -110,7 +110,7 @@ based on the specified event.
 | `type`                | `com.github.deploy_key.` + "action" value                       |
 | `datacontentencoding` | Omit                                                            |
 | `datacontenttype`     | `application/json`                                              |
-| `dataschemaurl`       | Omit                                                            |
+| `dataschema`          | Omit                                                            |
 | `subject`             | "key.id" value                                                  |
 | `time`                | "key.deleted_at" value, unless null then "key.created_at" value |
 | `data`                | Content of HTTP request body                                    |
@@ -125,7 +125,7 @@ based on the specified event.
 | `type`                | `com.github.deployment`               |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "deployment.id" value # task?         |
 | `time`                | "deployment.updated_at" value         |
 | `data`                | Content of HTTP request body          |
@@ -140,7 +140,7 @@ based on the specified event.
 | `type`                | `com.github.deployment_status.` + "deployment_status.state" value |
 | `datacontentencoding` | Omit                                                              |
 | `datacontenttype`     | `application/json`                                                |
-| `dataschemaurl`       | Omit                                                              |
+| `dataschema`          | Omit                                                              |
 | `subject`             | "deployment_status.url" value                                     |
 | `time`                | "deployment_status.updated_at" value                              |
 | `data`                | Content of HTTP request body                                      |
@@ -155,7 +155,7 @@ based on the specified event.
 | `type`                | `com.github.fork`                     |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "forkee.url" value                    |
 | `time`                | "forkee.created_at" value             |
 | `data`                | Content of HTTP request body          |
@@ -170,7 +170,7 @@ based on the specified event.
 | `type`                | `com.github.github_app_authorization` |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | Omit                                  |
 | `time`                | Current time                          |
 | `data`                | Content of HTTP request body          |
@@ -185,7 +185,7 @@ based on the specified event.
 | `type`                | `com.github.gollum.` + "pages.action" value |
 | `datacontentencoding` | Omit                                        |
 | `datacontenttype`     | `application/json`                          |
-| `dataschemaurl`       | Omit                                        |
+| `dataschema`          | Omit                                        |
 | `subject`             | "pages.page_name" value                     |
 | `time`                | Current time                                |
 | `data`                | Content of HTTP request body                |
@@ -200,7 +200,7 @@ based on the specified event.
 | `type`                | `com.github.installation.` + "action" value         |
 | `datacontentencoding` | Omit                                                |
 | `datacontenttype`     | `application/json`                                  |
-| `dataschemaurl`       | Omit                                                |
+| `dataschema`          | Omit                                                |
 | `subject`             | "installation.id" value                             |
 | `time`                | "installation.updated_at" value # not a timestamp?? |
 | `data`                | Content of HTTP request body                        |
@@ -215,7 +215,7 @@ based on the specified event.
 | `type`                | `com.github.installation_repository.` + "action" value |
 | `datacontentencoding` | Omit                                                   |
 | `datacontenttype`     | `application/json`                                     |
-| `dataschemaurl`       | Omit                                                   |
+| `dataschema`          | Omit                                                   |
 | `subject`             | "installation.id" value                                |
 | `time`                | "installation.updated_at" value # not a timestamp??    |
 | `data`                | Content of HTTP request body                           |
@@ -230,7 +230,7 @@ based on the specified event.
 | `type`                | `com.github.issue_comment.` + "action" value |
 | `datacontentencoding` | Omit                                         |
 | `datacontenttype`     | `application/json`                           |
-| `dataschemaurl`       | Omit                                         |
+| `dataschema`          | Omit                                         |
 | `subject`             | "comment.id" value                           |
 | `time`                | "comment.updated_at" value                   |
 | `data`                | Content of HTTP request body                 |
@@ -245,7 +245,7 @@ based on the specified event.
 | `type`                | `com.github.issue.` + "action" value  |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "issue.number" value                  |
 | `time`                | "issue.updated_at" value              |
 | `data`                | Content of HTTP request body          |
@@ -260,7 +260,7 @@ based on the specified event.
 | `type`                | `com.github.label.` + "action" value  |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "label.name" value                    |
 | `time`                | Current time                          |
 | `data`                | Content of HTTP request body          |
@@ -275,7 +275,7 @@ based on the specified event.
 | `type`                | `com.github.marketplace_purchase.` + "action" value |
 | `datacontentencoding` | Omit                                                |
 | `datacontenttype`     | `application/json`                                  |
-| `dataschemaurl`       | Omit                                                |
+| `dataschema`          | Omit                                                |
 | `subject`             | "marketplace_purchase.account.login" value          |
 | `time`                | "effective_date" value                              |
 | `data`                | Content of HTTP request body                        |
@@ -290,7 +290,7 @@ based on the specified event.
 | `type`                | `com.github.member.` + "action" value |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "member.login" value                  |
 | `time`                | Current time                          |
 | `data`                | Content of HTTP request body          |
@@ -305,7 +305,7 @@ based on the specified event.
 | `type`                | `com.github.membership.` + "scope" value + `.` + "action" value |
 | `datacontentencoding` | Omit                                                            |
 | `datacontenttype`     | `application/json`                                              |
-| `dataschemaurl`       | Omit                                                            |
+| `dataschema`          | Omit                                                            |
 | `subject`             | "member.login" value ### or `id` ?                              |
 | `time`                | Current time                                                    |
 | `data`                | Content of HTTP request body                                    |
@@ -320,7 +320,7 @@ based on the specified event.
 | `type`                | `com.github.meta.` + "action" value   |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "hook_id" value                       |
 | `time`                | "hook.updated_at" value               |
 | `data`                | Content of HTTP request body          |
@@ -335,7 +335,7 @@ based on the specified event.
 | `type`                | `com.github.milestone.` + "action" value |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
-| `dataschemaurl`       | Omit                                     |
+| `dataschema`          | Omit                                     |
 | `subject`             | "milestone.number" value                 |
 | `time`                | "milestone.updated_at" value             |
 | `data`                | Content of HTTP request body             |
@@ -350,7 +350,7 @@ based on the specified event.
 | `type`                | `com.github.organization.` + "action" value  |
 | `datacontentencoding` | Omit                                         |
 | `datacontenttype`     | `application/json`                           |
-| `dataschemaurl`       | Omit                                         |
+| `dataschema`          | Omit                                         |
 | `subject`             | "membership.user.login" value when available |
 | `time`                | Current time                                 |
 | `data`                | Content of HTTP request body                 |
@@ -365,7 +365,7 @@ based on the specified event.
 | `type`                | `com.github.org_block.` + "action" value |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
-| `dataschemaurl`       | Omit                                     |
+| `dataschema`          | Omit                                     |
 | `subject`             | "blocked_user.login" value               |
 | `time`                | Current time                             |
 | `data`                | Content of HTTP request body             |
@@ -380,7 +380,7 @@ based on the specified event.
 | `type`                | `com.github.page_build`               |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "build.url" value                     |
 | `time`                | "pusher.updated_at" value             |
 | `data`                | Content of HTTP request body          |
@@ -395,7 +395,7 @@ based on the specified event.
 | `type`                | `com.github.project_card.` + "action" value |
 | `datacontentencoding` | Omit                                        |
 | `datacontenttype`     | `application/json`                          |
-| `dataschemaurl`       | Omit                                        |
+| `dataschema`          | Omit                                        |
 | `subject`             | "project_card.id" value                     |
 | `time`                | "project_card.updated_at" value             |
 | `data`                | Content of HTTP request body                |
@@ -410,7 +410,7 @@ based on the specified event.
 | `type`                | `com.github.project_column.` + "action" value |
 | `datacontentencoding` | Omit                                          |
 | `datacontenttype`     | `application/json`                            |
-| `dataschemaurl`       | Omit                                          |
+| `dataschema`          | Omit                                          |
 | `subject`             | "project_column.id" value                     |
 | `time`                | "project_column.updated_at" value             |
 | `data`                | Content of HTTP request body                  |
@@ -425,7 +425,7 @@ based on the specified event.
 | `type`                | `com.github.project.` + "action" value |
 | `datacontentencoding` | Omit                                   |
 | `datacontenttype`     | `application/json`                     |
-| `dataschemaurl`       | Omit                                   |
+| `dataschema`          | Omit                                   |
 | `subject`             | "project.id" value                     |
 | `time`                | "project.updated_at" value             |
 | `data`                | Content of HTTP request body           |
@@ -440,7 +440,7 @@ based on the specified event.
 | `type`                | `com.github.public`                   |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "repository.name" value               |
 | `time`                | "repository.updated_at" value         |
 | `data`                | Content of HTTP request body          |
@@ -455,7 +455,7 @@ based on the specified event.
 | `type`                | `com.github.pull_request.` + "action" value |
 | `datacontentencoding` | Omit                                        |
 | `datacontenttype`     | `application/json`                          |
-| `dataschemaurl`       | Omit                                        |
+| `dataschema`          | Omit                                        |
 | `subject`             | "number" value                              |
 | `time`                | "pull_request.updated_at" value             |
 | `data`                | Content of HTTP request body                |
@@ -470,7 +470,7 @@ based on the specified event.
 | `type`                | `com.github.pull_request_review.` + "action" value |
 | `datacontentencoding` | Omit                                               |
 | `datacontenttype`     | `application/json`                                 |
-| `dataschemaurl`       | Omit                                               |
+| `dataschema`          | Omit                                               |
 | `subject`             | "review.id" value                                  |
 | `time`                | "review.submitted_at" value                        |
 | `data`                | Content of HTTP request body                       |
@@ -485,7 +485,7 @@ based on the specified event.
 | `type`                | `com.github.pull_request_review_comment.` + "action" value |
 | `datacontentencoding` | Omit                                                       |
 | `datacontenttype`     | `application/json`                                         |
-| `dataschemaurl`       | Omit                                                       |
+| `dataschema`          | Omit                                                       |
 | `subject`             | "comment.id" value                                         |
 | `time`                | "pull_request.updated_at" value                            |
 | `data`                | Content of HTTP request body                               |
@@ -500,7 +500,7 @@ based on the specified event.
 | `type`                | `com.github.push`                       |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
-| `dataschemaurl`       | Omit                                    |
+| `dataschema`          | Omit                                    |
 | `subject`             | "ref" value                             |
 | `time`                | Current time # repository.updated_at ?? |
 | `data`                | Content of HTTP request body            |
@@ -515,7 +515,7 @@ based on the specified event.
 | `type`                | `com.github.registry_package.` + "action" value |
 | `datacontentencoding` | Omit                                            |
 | `datacontenttype`     | `application/json`                              |
-| `dataschemaurl`       | Omit                                            |
+| `dataschema`          | Omit                                            |
 | `subject`             | "registry_package.html_url" value               |
 | `time`                | "registry_package.updated_at" value             |
 | `data`                | Content of HTTP request body                    |
@@ -530,7 +530,7 @@ based on the specified event.
 | `type`                | `com.github.release.` + "action" value |
 | `datacontentencoding` | Omit                                   |
 | `datacontenttype`     | `application/json`                     |
-| `dataschemaurl`       | Omit                                   |
+| `dataschema`          | Omit                                   |
 | `subject`             | "release.id" value                     |
 | `time`                | "release.\*\_at" value based on action |
 | `data`                | Content of HTTP request body           |
@@ -545,7 +545,7 @@ based on the specified event.
 | `type`                | `com.github.repository.` + "action" value |
 | `datacontentencoding` | Omit                                      |
 | `datacontenttype`     | `application/json`                        |
-| `dataschemaurl`       | Omit                                      |
+| `dataschema`          | Omit                                      |
 | `subject`             | "repository.name" value                   |
 | `time`                | "repository.updated_at" value             |
 | `data`                | Content of HTTP request body              |
@@ -560,7 +560,7 @@ based on the specified event.
 | `type`                | `com.github.repository_import`        |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "repository.name" value               |
 | `time`                | "repository.updated_at" value         |
 | `data`                | Content of HTTP request body          |
@@ -575,7 +575,7 @@ based on the specified event.
 | `type`                | `com.github.repository_vulnerability_alert.` + "action" value |
 | `datacontentencoding` | Omit                                                          |
 | `datacontenttype`     | `application/json`                                            |
-| `dataschemaurl`       | Omit                                                          |
+| `dataschema`          | Omit                                                          |
 | `subject`             | "alert.id" value                                              |
 | `time`                | Current time # repository.updated_id ?                        |
 | `data`                | Content of HTTP request body                                  |
@@ -590,7 +590,7 @@ based on the specified event.
 | `type`                | `com.github.security_advisory.` + "action" value |
 | `datacontentencoding` | Omit                                             |
 | `datacontenttype`     | `application/json`                               |
-| `dataschemaurl`       | Omit                                             |
+| `dataschema`          | Omit                                             |
 | `subject`             | "security_advisory.ghsa_id" value                |
 | `time`                | "security_advisory.updated_at" value             |
 | `data`                | Content of HTTP request body                     |
@@ -605,7 +605,7 @@ based on the specified event.
 | `type`                | `com.github.star.` + "action" value                   |
 | `datacontentencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
-| `dataschemaurl`       | Omit                                                  |
+| `dataschema`          | Omit                                                  |
 | `subject`             | Omit                                                  |
 | `time`                | "starred_at" value, if present otherwise Current time |
 | `data`                | Content of HTTP request body                          |
@@ -620,7 +620,7 @@ based on the specified event.
 | `type`                | `com.github.status.` # + "state" value ? |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
-| `dataschemaurl`       | Omit                                     |
+| `dataschema`          | Omit                                     |
 | `subject`             | "sha" value                              |
 | `time`                | "updated_at" value                       |
 | `data`                | Content of HTTP request body             |
@@ -635,7 +635,7 @@ based on the specified event.
 | `type`                | `com.github.team.` + "action" value   |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | "team.id" value                       |
 | `time`                | "updated_at" value                    |
 | `data`                | Content of HTTP request body          |
@@ -650,7 +650,7 @@ based on the specified event.
 | `type`                | `com.github.team_add.` + "action" value |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
-| `dataschemaurl`       | Omit                                    |
+| `dataschema`          | Omit                                    |
 | `subject`             | "team.id" value                         |
 | `time`                | Current time                            |
 | `data`                | Content of HTTP request body            |
@@ -665,7 +665,7 @@ based on the specified event.
 | `type`                | `com.github.watch.` + "action" value  |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
-| `dataschemaurl`       | Omit                                  |
+| `dataschema`          | Omit                                  |
 | `subject`             | Omit                                  |
 | `time`                | Current time                          |
 | `data`                | Content of HTTP request body          |
