@@ -176,7 +176,8 @@ in the MQTT PUBLISH message.
 ##### 3.1.3.2 User Property Values
 
 The value for each MQTT PUBLISH User Property MUST be constructed from the
-respective CloudEvents attribute type's canonical string representation.
+respective CloudEvents attribute type's [canonical string
+representation][ce-types].
 
 #### 3.1.4 Examples
 
@@ -311,6 +312,7 @@ Topic Name: mytopic
   Format
 
 [ce]: ./spec.md
+[ce-types]: ./spec.md#type-system
 [json-format]: ./json-format.md
 [oasis-mqtt-3.1.1]: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
 [oasis-mqtt-5]: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html

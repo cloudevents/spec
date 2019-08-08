@@ -58,8 +58,8 @@ which this mapping leans on.
 
 ### 2.2. Type System Mapping
 
-The CloudEvents type system MUST be mapped to JSON types as follows, with
-exceptions noted below.
+The [CloudEvents type system][ce-types] MUST be mapped to JSON types as follows,
+with exceptions noted below.
 
 | CloudEvents   | JSON                                                           |
 | ------------- | -------------------------------------------------------------- |
@@ -313,6 +313,7 @@ also valid in a request):
 
 [base64]: https://tools.ietf.org/html/rfc4648#section-4
 [ce]: ./spec.md
+[ce-types]: ./spec.md#type-system
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-format]: ./json-format.md
 [json-geoseq]:

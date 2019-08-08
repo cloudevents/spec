@@ -211,6 +211,9 @@ and the event data will be materialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
 
+Values of type `Map`, either directly or via the `Any` type, MUST NOT be used
+in context attributes, including in extension attributes.
+
 ### REQUIRED Attributes
 
 The following attributes are REQUIRED to be present in all CloudEvents:
@@ -277,9 +280,9 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 
 - Type: `String`
 - Description: This attribute contains a value describing the type of event
-  related to the originating occurrence.  Often this attribute is
-  used for routing, observability, policy enforcement, etc. The format of this
-  is producer defined and might include information such as the version of the
+  related to the originating occurrence. Often this attribute is used for
+  routing, observability, policy enforcement, etc. The format of this is
+  producer defined and might include information such as the version of the
   `type` - see
   [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
   for more information.

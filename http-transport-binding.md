@@ -100,12 +100,13 @@ identically to [HTTP over TLS]([RFC2818][RFC2818]).
 
 ## 2. Use of CloudEvents Attributes
 
-This specification does not further define any of the [CloudEvents][ce] event
-attributes.
+This specification does not further define any of the core [CloudEvents][ce]
+event attributes.
 
 Two of the event attributes, `datacontenttype` and `data` are handled specially
 and mapped onto HTTP constructs, all other attributes are transferred as
-metadata without further interpretation.
+metadata without further interpretation (except that extensions MAY define
+additional header mappings).
 
 This mapping is intentionally robust against changes, including the addition and
 removal of event attributes, and also accommodates vendor extensions to the
@@ -196,18 +197,13 @@ Examples:
     * `id` maps to `ce-id`
     * `specversion` maps to `ce-specversion`
 
-`Map`-typed CloudEvents attributes MUST be flattened into a set of HTTP headers,
-where by the name of each header carries the prefix "ce-", an infix reflecting
-the map attribute followed by a dash ("-"), and the name of the map entry key,
-e.g. "ce-attrib-key".
-
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
 
 ##### 3.1.3.2 HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute
-type's canonical string representation.
+type's [canonical string representation][ce-types].
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
 and per [RFC7230 Section 3][rfc7230-section-3], HTTP headers MUST only use
@@ -464,6 +460,7 @@ Content-Length: nnnn
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
+[ce-types]: ./spec.md#type-system
 [json-format]: ./json-format.md
 [json-batch-format]: ./json-format.md#4-json-batch-format
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
