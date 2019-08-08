@@ -252,6 +252,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 - Constraints:
   - REQUIRED
   - MUST be a non-empty URI-reference
+  - An absolute URI is RECOMMENDED
 - Examples
   - Internet-wide unique URI with a DNS authority.
     - https://github.com/cloudevents
