@@ -218,6 +218,48 @@ in context attributes, including in extension attributes.
 
 The following attributes are REQUIRED to be present in all CloudEvents:
 
+#### datacontenttype
+
+- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Description: Content type of the `data` attribute value. This attribute
+  enables the `data` attribute to carry any type of content, whereby format and
+  encoding might differ from that of the chosen event format. For example, an
+  event rendered using the [JSON envelope](./json-format.md#3-envelope) format
+  might carry an XML payload in its `data` attribute, and the consumer is
+  informed by this attribute being set to "application/xml". The rules for how
+  the `data` attribute content is rendered for different `datacontenttype`
+  values are defined in the event format specifications; for example, the JSON
+  event format defines the relationship in
+  [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
+
+  For the binary mode of some of the CloudEvents transport bindings, where the
+  `data` content is immediately mapped into the payload of the transport frame,
+  this field is directly mapped to the respective transport or application
+  protocol's content-type metadata property. Normative rules for the binary mode
+  and the content-type metadata mapping can be found in the respective transport
+  mapping specifications.
+
+  If `data` is of type `Binary`, an accurate media-type MUST be set.
+  If `data` is of type `Map`, the media-type
+  `application/cloudevents-typed-data+{format}` MUST be used, where `{format}`
+  is the chosen event format. An [Intermediary](#intermediary) CAN change the
+  event format (e.g. when the format of the envelope is changed).
+
+- Constraints:
+  - REQUIRED if `data` is present
+  - MUST NOT be present if `data` is not present
+  - If present, MUST adhere to the format specified in
+    [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- For Media Type examples see
+  [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
+- Examples
+  - `data` is of type `Binary`
+    - application/json
+    - image/jpeg
+  - `data` is of type `Map`
+    - application/cloudevents-typed-data+json
+    - application/cloudevents-typed-data+avro
+
 #### id
 
 - Type: `String`
@@ -325,38 +367,6 @@ on the definition of OPTIONAL.
   - If present, MUST adhere to
     [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
 
-#### datacontenttype
-
-- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: Content type of the `data` attribute value. This attribute
-  enables the `data` attribute to carry any type of content, whereby format and
-  encoding might differ from that of the chosen event format. For example, an
-  event rendered using the [JSON envelope](./json-format.md#3-envelope) format
-  might carry an XML payload in its `data` attribute, and the consumer is
-  informed by this attribute being set to "application/xml". The rules for how
-  the `data` attribute content is rendered for different `datacontenttype`
-  values are defined in the event format specifications; for example, the JSON
-  event format defines the relationship in
-  [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
-
-  When this attribute is omitted, the `data` attribute simply follows the event
-  format's encoding rules. For the JSON event format, the `data` attribute value
-  can therefore be a JSON object, array, or value.
-
-  For the binary mode of some of the CloudEvents transport bindings, where the
-  `data` content is immediately mapped into the payload of the transport frame,
-  this field is directly mapped to the respective transport or application
-  protocol's content-type metadata property. Normative rules for the binary mode
-  and the content-type metadata mapping can be found in the respective transport
-  mapping specifications.
-
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in
-    [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- For Media Type examples see
-  [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
-
 #### schemaurl
 
 - Type: `URI-reference`
@@ -452,7 +462,7 @@ encapsulated within the `data` attribute.
 
 ### data
 
-- Type: `Any`
+- Type: `Binary` or `Map`
 - Description: The event payload. The payload depends on the `type` and the
   `schemaurl`. It is encoded into a media format which is specified by the
   `datacontenttype` attribute (e.g. application/json).
