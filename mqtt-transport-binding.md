@@ -23,7 +23,7 @@ This document is a working draft.
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
 
 - 2.1. [datacontenttype Attribute](#21-datacontenttype-attribute)
-- 2.2. [data Attribute](#22-data-attribute)
+- 2.2. [data](#22-data)
 
 3. [MQTT PUBLISH Message Mapping](#3-mqtt-publish-message-mapping)
 
@@ -63,7 +63,7 @@ In the _structured_ content mode, event metadata attributes and event data are
 placed into the MQTT PUBLISH message payload section using an
 [event format](#14-event-formats).
 
-In the _binary_ content mode, the value of the event `data` attribute is placed
+In the _binary_ content mode, the value of the event `data` is placed
 into the MQTT PUBLISH message's payload section as-is, with the
 `datacontenttype` attribute value declaring its media type; all other event
 attributes are mapped to the MQTT PUBLISH message's [properties
@@ -102,18 +102,18 @@ event metadata. Any mention of event attributes other than `datacontenttype` and
 The `datacontenttype` attribute is assumed to contain a [RFC2046][rfc2046]
 compliant media-type expression.
 
-### 2.2. data Attribute
+### 2.2. data
 
-The `data` attribute is assumed to contain opaque application data that is
+`data` is assumed to contain opaque application data that is
 encoded as declared by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into MQTT as defined in this
-specification, the assumption is that the `data` attribute value is made
+specification, the assumption is that the `data` value is made
 available as a sequence of bytes.
 
 For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data` attribute
+`application/json;charset=utf-8`, the expectation is that the `data`
 value is made available as [UTF-8][rfc3629] encoded JSON text for use in MQTT.
 
 ## 3. MQTT PUBLISH Message Mapping
@@ -149,7 +149,7 @@ CloudEvents `datacontenttype` attribute.
 
 #### 3.1.2. Event Data Encoding
 
-The [`data` attribute](#22-data-attribute) byte-sequence MUST be used as the
+The [`data`](#22-data) byte-sequence MUST be used as the
 payload of the MQTT PUBLISH message.
 
 #### 3.1.3. Metadata Headers
@@ -237,7 +237,7 @@ content-type: application/cloudevents+json; charset=utf-8
 #### 3.2.2. Event Data Encoding
 
 The chosen [event format](#14-event-formats) defines how all attributes,
-including the `data` attribute, are represented.
+and `data`, are represented.
 
 The event metadata and data MUST then be rendered in accordance with the event
 format specification and the resulting data becomes the MQTT PUBLISH payload.

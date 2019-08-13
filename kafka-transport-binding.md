@@ -18,7 +18,7 @@ This document is a working draft.
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-- 2.1. [data Attribute](#21-data-attribute)
+- 2.1. [data](#21-data)
 3. [Kafka Message Mapping](#3-kafka-message-mapping)
 - 3.1. [Key Attribute](#31-key-attribute)
 - 3.2. [Binary Content Mode](#32-binary-content-mode)
@@ -52,7 +52,7 @@ The specification defines two content modes for transferring events:
 The *binary* mode *only* applies to Kafka 0.11.0.0 and above, because Kafka
 0.10.x.x and below lack support for message level headers.
 
-In the *binary* content mode, the value of the event `data` attribute MUST be
+In the *binary* content mode, the value of the event `data` MUST be
 placed into the Kafka message's value section as-is, with the
 `ce_datacontenttype` header value declaring its media type; all other
 event attributes MUST be mapped to the Kafka message's 
@@ -80,9 +80,9 @@ mandate specific existing features to be used.
 This specification does not further define any of the [CloudEvents][CE] event
 attributes.
 
-### 2.1. data Attribute
+### 2.1. data
 
-The `data` attribute is assumed to contain opaque application data that is
+`data` is assumed to contain opaque application data that is
 encoded as declared by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
@@ -90,7 +90,7 @@ of its choosing, but as the value is transposed into Kafka as defined in this
 specification, core Kafka provides data available as a sequence of bytes.
 
 For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data` attribute
+`application/json;charset=utf-8`, the expectation is that the `data`
 value is made available as [UTF-8][RFC3629] encoded JSON text.
 
 ## 3. Kafka Message Mapping
@@ -131,7 +131,7 @@ mapped directly to the CloudEvents `datacontenttype` attribute.
 
 #### 3.2.2. Event Data Encoding
 
-The [`data` attribute](#21-data-attribute) byte-sequence MUST be used as the
+The [`data`](#21-data) byte-sequence MUST be used as the
 value of the Kafka message.
 
 #### 3.2.3. Metadata Headers
@@ -214,7 +214,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 #### 3.3.2. Event Data Encoding
 
 The chosen [event format](#14-event-formats) defines how all attributes,
-including the `data` attribute, are represented.
+and `data`, are represented.
 
 The event metadata and data are then rendered in accordance with the [event
 format](#14-event-formats) specification and the resulting data becomes the

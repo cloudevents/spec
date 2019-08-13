@@ -112,7 +112,7 @@ might mean that some of the application data of the event itself might be
 duplicated as part of the CloudEvent's set of attributes, this is to be done
 solely for the purpose of proper delivery, and processing, of the message. Data
 that is not intended for that purpose should instead be placed within the event
-(the `data` attribute) itself.
+(`data`) itself.
 
 Additionally, it is assumed that the metadata needed by the transport layer
 to deliver the message to the target system is handled entirely by the
@@ -292,7 +292,7 @@ metadata that needs to be included to help ensure proper routing and processing
 of the CloudEvent. Additional metadata for other purposes, that is related to
 the event itself and not needed in the transportation or processing of the
 CloudEvent, should instead be placed within the proper extensibility points of
-the event (the `data` attribute) itself.
+the event (`data`) itself.
 
 Extension attributes should be kept minimal to ensure the CloudEvent can be
 properly serialized and transported. For example, the Event producers should
