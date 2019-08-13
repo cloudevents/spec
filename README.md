@@ -43,6 +43,7 @@ The following documents are available:
 | **Additional Documentation:** |
 | Primer                        |         [v0.3](https://github.com/cloudevents/spec/blob/v0.3/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
 | Documented Extensions         |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)  |
+| Edge cases for SDK testing    |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/testcases/README.md)       |
 | Proprietary Specifications    |                                        -                                        |   [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)    |
 
 If you are new to CloudEvents, it is recommended that you start by reading the
