@@ -8,5 +8,5 @@
     "datacontentencoding": "Base64",
     "datacontenttype": "application/xml",
 
-    "data": "PG11Y2ggd293PSJ4bWwiLz4=",  // <much wow="xml"/>
+    "data": "PG11Y2ggd293PSJ4bWwiLz4="  // <much wow="xml"/>
 }

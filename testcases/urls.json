@@ -8,7 +8,7 @@
     "type": "io.cloudevents.url-test",
     
     // URI-reference: https://tools.ietf.org/html/rfc3986#appendix-A
-    // Verify that % decoding is done properly. This is a 'path-noscheme'
-    // that percent-decodes to a '"//" authority path-abempty'.
-    "schemaurl": "%2f%2f%anonymous@example.com/a&b;?x'=%2f//#//",
+    // Verify that % decoding not performed. This is a 'path-noscheme'
+    // which percent-decodes to a hier-part -> '"//" authority path-abempty'.
+    "schemaurl": "%2f%2f%anonymous@example.com/a&b;?x'=%2f//#//"
 }
