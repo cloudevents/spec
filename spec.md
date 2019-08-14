@@ -179,7 +179,10 @@ as a string.
   `Integer` values in this range.
   - String encoding: Integer portion of the JSON Number per
     [RFC 7159, Section 6](https://tools.ietf.org/html/rfc7159#section-6)
-- `String` - Sequence of printable Unicode characters.
+- `String` - Sequence of Unicode characters. "Control" characters in
+  the range U+0000-U+001F, except for U+000A LINE FEED and U+000D 
+  CARRIAGE RETURN, SHOULD NOT be included, since they have no agreed-on
+  meaning and predictably cause interoperability problems.
 - `Binary` - Sequence of bytes.
   - String encoding: Base64 encoding per
     [RFC4648](https://tools.ietf.org/html/rfc4648).
