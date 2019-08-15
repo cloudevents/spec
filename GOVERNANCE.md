@@ -71,6 +71,14 @@ If a vote is taken during a meeting, the follow rules will be followed:
   an entity can be changed no more than once a month and can be changed by
   notifying one of the admins. The entity obtains voting rights after the 3rd
   meeting, not during.
+- A "primary" or "alternate" member may request a leave-of-absence via an
+  e-mail to the mailing list, or a message to the
+  [public slack channel](README.md#communications), prior to the absence.
+  An acceptable absence would include situations where the person is not
+  officially working at all, such as being on vacation, taking a sabbatical or
+  there is a public holiday. However, situations such as a scheduling conflict
+  would not apply.  Absence from meetings during that time will not impact
+  their voting rights.
 - Only members with voting rights will be allowed to vote.
 - A vote passes if more than 50% of the votes cast approve the motion.
 - Only "yes" or "no" votes count, "abstain" votes do not count towards the
