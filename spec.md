@@ -186,6 +186,9 @@ as a string.
 - `Map` - `String`-indexed dictionary of `Any`-typed values.
   - String encoding: JSON Object per
     [RFC 7159, Section 4](https://tools.ietf.org/html/rfc7159#section-4)
+- `URI` - Absolute uniform resource identifier.
+  - String encoding: `Absolute URI` as defined in
+    [RFC 3986 Section 4.3](https://tools.ietf.org/html/rfc3986#section-4.3).
 - `URI-reference` - Uniform resource identifier reference.
   - String encoding: `URI-reference` as defined in
     [RFC 3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
@@ -357,11 +360,11 @@ on the definition of OPTIONAL.
 - For Media Type examples see
   [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-#### schemaurl
+#### dataschema
 
-- Type: `URI-reference`
-- Description: A link to the schema that the `data` attribute adheres to.
-  Incompatible changes to the schema SHOULD be reflected by a different URL. See
+- Type: `URI`
+- Description: Identifies the schema that the `data` attribute adheres to.
+  Incompatible changes to the schema SHOULD be reflected by a different URI. See
   [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
   for more information.
 - Constraints:
@@ -454,7 +457,7 @@ encapsulated within the `data` attribute.
 
 - Type: `Any`
 - Description: The event payload. The payload depends on the `type` and the
-  `schemaurl`. It is encoded into a media format which is specified by the
+  `dataschema`. It is encoded into a media format which is specified by the
   `datacontenttype` attribute (e.g. application/json).
 - Constraints:
   - OPTIONAL

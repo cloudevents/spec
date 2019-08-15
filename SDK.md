@@ -128,7 +128,7 @@ Here's the list of getters:
     Source() -> URL
     EventID() -> string
     EventTime() -> RFC3339
-    SchemaURL() -> string
+    DataSchema() -> URL
     DataContentType() -> string
     Data() -> serializable
     Extensions() -> map[string]string
