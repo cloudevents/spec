@@ -181,9 +181,9 @@ as a string.
     [RFC 7159, Section 6](https://tools.ietf.org/html/rfc7159#section-6)
 - `String` - Sequence of allowable Unicode characters. The following characters
   are disallowed:
-  - the "control characters" in the ranges U+0000-U+001F and U+007F-009F (both
-	ranges inclusive), since most have no agreed-on meaning, and some, such as
-	U+000A (newline), are not usable in contexts such as HTTP headers. 
+  - the "control characters" in the ranges U+0000-U+001F and U+007F-U+009F (both
+    ranges inclusive), since most have no agreed-on meaning, and some, such as
+    U+000A (newline), are not usable in contexts such as HTTP headers. 
   - code points
     [identified as noncharacters by Unicode](http://www.unicode.org/faq/private_use.html#noncharacters).
   - code points identifying Surrogates, U+D800-U+DBFF and U+DC00-U+DFFF, both ranges
