@@ -162,16 +162,21 @@ efficient transfer and without transcoding effort.
 For the _binary_ mode, the HTTP `Content-Type` value maps directly to the
 CloudEvents `datacontenttype` attribute.
 
-#### 3.1.2. Event Data Encoding
+#### 3.1.2. HTTP Content-Encoding
+
+For the _binary_ mode, the HTTP `Content-Encoding` value maps directly to the
+CloudEvents `datacontentencoding` attribute.
+
+#### 3.1.3. Event Data Encoding
 
 The [`data` attribute](#22-data-attribute) byte-sequence is used as the HTTP
 message body.
 
-#### 3.1.3. Metadata Headers
+#### 3.1.4. Metadata Headers
 
-All [CloudEvents][ce] attributes with exception of `datacontenttype` and `data`
-MUST be individually mapped to and from distinct HTTP message headers, with
-exceptions noted below.
+All [CloudEvents][ce] attributes with exception of `datacontenttype`,
+`datacontentencoding`, and `data` MUST be individually mapped to and from
+distinct HTTP message headers, with exceptions noted below.
 
 CloudEvents extensions that define their own attributes MAY define a diverging
 mapping to HTTP headers for those attributes, especially if specific attributes
@@ -183,7 +188,7 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other transport bindings that are part of the CloudEvents core at the
 time of the submission or revision.
 
-##### 3.1.3.1 HTTP Header Names
+##### 3.1.4.1. HTTP Header Names
 
 Except for attributes
 [explicitly handled in this specification](#2-use-of-cloudevents-attributes),
@@ -204,28 +209,36 @@ e.g. "ce-attrib-key".
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
 
-##### 3.1.3.2 HTTP Header Values
+##### 3.1.4.2. HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute
 type's canonical string representation.
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
-and per [RFC7230 Section 3][rfc7230-section-3], HTTP headers MUST only use
+and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
 printable characters from the US-ASCII character set, and are terminated by a
 CRLF sequence.
 
-Therefore, and analog to the encoding rules for Universal character set host
-names in URIs [RFC3986 3.2.2][rfc3986], the string value MUST be further encoded
-as follows:
+String values must be percent-encoded according to the algorithm in
+[RFC3986, section 2.1](rfc3986-section-2-1). Given the rules in
+[RFC7230, section 3](rfc7230-section-3), the allowed set of characters which do
+not need to be percent-encoded are the `token` characters defined in section
+3.2.6, excluding the "%" character:
 
-Non-printable ASCII characters and non-ASCII characters MUST first be encoded
-according to UTF-8, and then each octet of the corresponding UTF-8 sequence MUST
-be percent-encoded to be represented as HTTP header characters, in compliance
-with [RFC7230, sections 3, 3.2, 3.2.6][rfc7230-section-3]. The rules for
-encoding of the percent character ('%') apply as defined in [RFC 3986 Section
-2.4.][rfc3986-section-2-4].
+    token          = 1*tchar
 
-#### 3.1.4 Examples
+    tchar          = "!" / "#" / "$" / "&" / "'" / "*"
+                   / "+" / "-" / "." / "^" / "_" / "`" / "|" / "~"
+                   / DIGIT / ALPHA
+                   ; any VCHAR, except delimiters
+
+When decoding an HTTP header value, a **single round** of percent-decoding
+should should be performed on the value, as described in
+[RFC3986, section 2.4](rfc3986-section-2-4). It is permissible for allowed
+`token` characters to be percent-encoded, and receiving software should decode
+these percent triples.
+
+#### 3.1.5. Examples
 
 This example shows the _binary_ mode mapping of an event with an HTTP POST
 request:
@@ -298,7 +311,7 @@ Implementations MAY include the same HTTP headers as defined for the
 All CloudEvents metadata attributes MUST be mapped into the payload, even if
 they are also mapped into HTTP headers.
 
-#### 3.2.4 Examples
+#### 3.2.4. Examples
 
 This example shows a JSON event format encoded event, sent with a PUT request:
 
@@ -474,14 +487,15 @@ Content-Length: nnnn
 [rfc2818]: https://tools.ietf.org/html/rfc2818
 [rfc3629]: https://tools.ietf.org/html/rfc3629
 [rfc3986]: https://tools.ietf.org/html/rfc3986
+[rfc3986-section-2-1]: https://tools.ietf.org/html/rfc3986#section-2.1
 [rfc3986-section-2-4]: https://tools.ietf.org/html/rfc3986#section-2.4
 [rfc4627]: https://tools.ietf.org/html/rfc4627
 [rfc4648]: https://tools.ietf.org/html/rfc4648
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159
 [rfc7230]: https://tools.ietf.org/html/rfc7230
-[rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7230-section-3]: https://tools.ietf.org/html/rfc7230#section-3
-[rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
 [rfc7230-section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
+[rfc7231]: https://tools.ietf.org/html/rfc7231
+[rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
 [rfc7540]: https://tools.ietf.org/html/rfc7540
