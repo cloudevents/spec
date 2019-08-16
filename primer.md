@@ -19,7 +19,8 @@ This document is a working draft.
 - [Design Goals](#design-goals)
 - [Architecture](#architecture)
 - [Versioning of Attributes](#versioning-of-attributes)
-- [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
+- [CloudEvent Attributes](#cloudevent-attributes)
+- [CloudEvent Attribute Extensions](#cloudevent-attribute-extensions)
 - [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
@@ -182,7 +183,7 @@ The CloudEvents specification set defines four different kinds of protocol
 elements that form a layered architecture model.
 
 1. The [base specification](spec.md) defines an abstract information model
-   made up of attributes (key-value pairs) and associated rules for what 
+   made up of attributes (key-value pairs) and associated rules for what
    constitutes a CloudEvent.
 2. The [extensions](./spec.md#extension-context-attributes) add use-case specific
    and potentially overlapping sets of extension attributes and associated
@@ -193,7 +194,7 @@ elements that form a layered architecture model.
    an application protocol.
 4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines
    how the CloudEvent is bound to an application protocol's transport frame,
-   in the case of HTTP to the HTTP message. The transport binding does not 
+   in the case of HTTP to the HTTP message. The transport binding does not
    constrain how the transport frame is used, meaning that the HTTP binding
    can be used with any HTTP method and with request and response messages.
 
