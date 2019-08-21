@@ -2,13 +2,13 @@
 
 As defined by the term [Data](../spec.md#data), CloudEvents MAY include
 domain-specific information about the occurrence. When present, this information
-will be encapsulated within the `data` attribute.
+will be encapsulated within `data`.
 The `dataref` attribute MAY be used to reference another location where this
 information is stored. The information, whether accessed via `data` or `dataref`
 MUST be identical.
 
-Both the `data` and `dataref` attribute MAY exist at the same time. A middleware
-MAY drop the `data` attribute when the `dataref` attribute exists, it MAY add
+Both `data` and the `dataref` attribute MAY exist at the same time. A middleware
+MAY drop `data` when the `dataref` attribute exists, it MAY add
 the `dataref` attribute and drop the `data` attribute, or it MAY add the `data`
 attribute by using the `dataref` attribute.
 
@@ -24,7 +24,7 @@ attribute by using the `dataref` attribute.
   of purposes, including:
 
   * If the [Data](../spec.md#data) is too large to be included in the message,
-    the `data` attribute is not present, and the consumer can retrieve it using
+    the `data` is not present, and the consumer can retrieve it using
     this attribute.
   * If the consumer wants to verify that the [Data](../spec.md#data) has not
     been tampered with, it can retrieve it from a trusted source using this

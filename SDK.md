@@ -1,4 +1,4 @@
-# CloudEvents SDK - Version 0.4-wip
+# CloudEvents SDK Requirements - Version 0.4-wip
 
 The intent of this document to describe bare minimum set of requirements for a
 new SDKs.
@@ -128,7 +128,7 @@ Here's the list of getters:
     Source() -> URL
     EventID() -> string
     EventTime() -> RFC3339
-    SchemaURL() -> string
+    DataSchema() -> URL
     DataContentType() -> string
     Data() -> serializable
     Extensions() -> map[string]string

@@ -8,6 +8,6 @@ verify:
 	@tools/verify-specs.sh -v spec.md documented-extensions.md json-format.md \
 		http-transport-binding.md http-webhook.md mqtt-transport-binding.md \
 		nats-transport-binding.md protobuf-format.md \
-		kafka-transport-binding.md
+		kafka-transport-binding.md avro-format.md
 	@echo Running the doc phrase checker:
 	@tools/verify-docs.sh -v .
