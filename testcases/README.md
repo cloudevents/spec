@@ -26,7 +26,7 @@ files:
 - `binary-date.amqp`
 
 These form two sets of tests: the `unicode-input` case is defined for JSON,
-HTTP, and MQTT, and the `binary-date` case is defined for QSON and AMQP.
+HTTP, and MQTT, and the `binary-date` case is defined for JSON and AMQP.
 
 Test cases which describe particularly unexpected formats should include
 comments in the JSON document using Javascript comment format (`//` or

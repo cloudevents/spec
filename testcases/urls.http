@@ -3,7 +3,7 @@ Host: handler.example.com
 Content-Length: 0
 ce-specversion: 0.4-wip
 ce-id: 123
-ce-source:
+ce-source: %2f
 ce-type: io.cloudevetns.url-test
-ce-schemaurl: %2f%2f%anonymous@example.com/a&b;?x'=%2f//#//
+ce-schemaurl: %252f%252fanonymous%40example.com%2fa&b%3b%3fx'%3d%252f%2f%2f#%2f%2f
 

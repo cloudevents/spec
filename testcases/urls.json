@@ -4,11 +4,13 @@
     "id": "123",
 
     // Source is a URI-reference, https://tools.ietf.org/html/rfc3986#appendix-A
-    "source": "",  // relative-ref -> relative-part -> path-empty
+    "source": "/",  // relative-ref -> relative-part -> path-absolute
     "type": "io.cloudevents.url-test",
     
     // URI-reference: https://tools.ietf.org/html/rfc3986#appendix-A
-    // Verify that % decoding not performed. This is a 'path-noscheme'
-    // which percent-decodes to a hier-part -> '"//" authority path-abempty'.
-    "schemaurl": "%2f%2f%anonymous@example.com/a&b;?x'=%2f//#//"
+    // Verify that % decoding is performed correctly (no % decoding in
+    // JSON, HTTP headers should be decoded). This is a 'path-noscheme'
+    // which percent-decodes to a different valid URI:
+    //   relative-ref -> relative-part -> '"//" authority path-abempty'.
+    "schemaurl": "%2f%2fanonymous@example.com/a&b;?x'=%2f//#//"
 }
