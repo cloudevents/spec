@@ -159,13 +159,15 @@ efficient transfer and without transcoding effort.
 
 #### 3.1.1. HTTP Content-Type
 
-For the _binary_ mode, the HTTP `Content-Type` value maps directly to the
-CloudEvents `datacontenttype` attribute.
+For the _binary_ mode, the HTTP `Content-Type` header value corresponds to
+(should be populated from or written to) the CloudEvents `datacontenttype`
+attribute.
 
 #### 3.1.2. HTTP Content-Encoding
 
-For the _binary_ mode, the HTTP `Content-Encoding` value maps directly to the
-CloudEvents `datacontentencoding` attribute.
+For the _binary_ mode, the HTTP `Content-Encoding` header value corresponds to
+(should be populated from or written to) the CloudEvents `datacontentencoding`
+attribute.
 
 #### 3.1.3. Event Data Encoding
 
