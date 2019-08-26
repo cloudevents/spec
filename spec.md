@@ -13,9 +13,8 @@ This document is a working draft.
 
 - [Overview](#overview)
 - [Notations and Terminology](#notations-and-terminology)
-- [Type System](#type-system)
 - [Context Attributes](#context-attributes)
-- [Data Attribute](#data-attribute)
+- [Data](#data)
 - [Size Limits](#size-limits)
 - [Privacy & Security](#privacy-and-security)
 - [Example](#example)
@@ -133,7 +132,7 @@ or to other Events.
 
 Domain-specific information about the occurrence (i.e. the payload). This might
 include information about the occurrence, details about the data that was
-changed, or more. See the [Data Attribute](#data-attribute) section for more
+changed, or more. See the [Data](#data) section for more
 information.
 
 #### Message
@@ -146,12 +145,45 @@ Messages can be delivered through various industry standard protocol (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor
 specific protocols (AWS Kinesis, Azure Event Grid).
 
-## Type System
+## Context Attributes
+
+Every CloudEvent conforming to this specification MUST include context
+attributes designated as REQUIRED and MAY include one or more OPTIONAL context
+attributes.
+
+These attributes, while descriptive of the event, are designed such that they
+can be serialized independent of the event data. This allows for them to be
+inspected at the destination without having to deserialize the event data.
 
 The following abstract data types are available for use in attributes. Each of
 these types MAY be represented differently by different event formats and in
 transport metadata fields. This specification defines a canonical
 string-encoding for each type that MUST be supported by all implementations.
+
+- `Boolean` - a boolean value of "true" or "false".
+  - String encoding: a case-sensitive value of `true` or `false`.
+- `Integer` - A whole number in the range -2,147,483,648 to +2,147,483,647
+  inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
+  Event formats do not have to use this encoding, but they MUST only use
+  `Integer` values in this range.
+  - String encoding: Integer portion of the JSON Number per
+    [RFC 7159, Section 6](https://tools.ietf.org/html/rfc7159#section-6)
+- `String` - Sequence of printable Unicode characters.
+- `Binary` - Sequence of bytes.
+  - String encoding: Base64 encoding per
+    [RFC4648](https://tools.ietf.org/html/rfc4648).
+- `URI` - Absolute uniform resource identifier.
+  - String encoding: `Absolute URI` as defined in
+    [RFC 3986 Section 4.3](https://tools.ietf.org/html/rfc3986#section-4.3).
+- `URI-reference` - Uniform resource identifier reference.
+  - String encoding: `URI-reference` as defined in
+    [RFC 3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
+- `Timestamp` - Date and time expression using the Gregorian Calendar.
+  - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
+
+All content attributes MUST be of scalar type (e.g. string, integer)
+that have a string-encoding defined. They MUST NOT be of complex type
+(e.g. structures, map).
 
 A strongly-typed programming model that represents a CloudEvent or any extension
 MUST be able to convert from and to the canonical string-encoding to the
@@ -221,9 +253,6 @@ and the event data will be materialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
 
-Values of type `Map`, either directly or via the `Any` type, MUST NOT be used
-in context attributes, including in extension attributes.
-
 ### REQUIRED Attributes
 
 The following attributes are REQUIRED to be present in all CloudEvents:
@@ -264,6 +293,8 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 
 - Constraints:
   - REQUIRED
+  - MUST be a non-empty URI-reference
+  - An absolute URI is RECOMMENDED
 - Examples
   - Internet-wide unique URI with a DNS authority.
     - https://github.com/cloudevents
@@ -305,7 +336,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   - com.github.pull.create
   - com.example.object.delete.v2
 
-### OPTIONAL Attributes
+### OPTIONAL or Conditional Attributes
 
 The following attributes are OPTIONAL to appear in CloudEvents. See the
 [Notational Conventions](#notational-conventions) section for more information
@@ -315,42 +346,39 @@ on the definition of OPTIONAL.
 
 - Type: `String` per
   [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
-- Description: Describes the content encoding for the `data` attribute for when
-  the `data` field MUST be encoded as a string, like with structured transport
-  binding modes using the JSON event format, but the `datacontenttype` indicates
-  a non-string media type. When the `data` field's effective data type is not
-  `String`, this attribute MUST NOT be set and MUST be ignored when set.
+- Description: Describes the content encoding for `data`.
+  There are cases where the value of `data` might need to be
+  encoded so that it can be carried within the serialization format being used.
+  For example, in JSON, binary data will likely need to be Base64 encoded.
+  When this attribute is set, the consumer can use its value to know how
+  to decode `data` value to retrieve its original contents.
 
-  The "Base64" value for the Base64 encoding as defined in
+  If this attribute is supported, then the "Base64" encoding as defined in
   [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8) MUST
-  be supported. When set, the event-format-encoded value of the `data` attribute
-  is a base64 string, but the effective data type of the `data` attribute
-  towards the application is the base64-decoded binary array.
-
-  All other RFC2045 schemes are undefined for CloudEvents.
+  be supported.
 
 - Constraints:
-  - The attribute MUST be set if the `data` attribute contains string-encoded
-    binary data. Otherwise the attribute MUST NOT be set.
+  - The attribute MUST be set if `data` is encoded and not
+    in its original format. Otherwise the attribute MUST NOT be set.
   - If present, MUST adhere to
     [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
 
 #### datacontenttype
 
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: Content type of the `data` attribute value. This attribute
-  enables the `data` attribute to carry any type of content, whereby format and
+- Description: Content type of `data` value. This attribute
+  enables `data` to carry any type of content, whereby format and
   encoding might differ from that of the chosen event format. For example, an
   event rendered using the [JSON envelope](./json-format.md#3-envelope) format
-  might carry an XML payload in its `data` attribute, and the consumer is
+  might carry an XML payload in `data`, and the consumer is
   informed by this attribute being set to "application/xml". The rules for how
-  the `data` attribute content is rendered for different `datacontenttype`
+  `data` content is rendered for different `datacontenttype`
   values are defined in the event format specifications; for example, the JSON
   event format defines the relationship in
-  [section 3.1](./json-format.md#31-special-handling-of-the-data-attribute).
+  [section 3.1](./json-format.md#31-special-handling-of-data).
 
-  When this attribute is omitted, the `data` attribute simply follows the event
-  format's encoding rules. For the JSON event format, the `data` attribute value
+  When this attribute is omitted, `data` simply follows the event
+  format's encoding rules. For the JSON event format, the `data` value
   can therefore be a JSON object, array, or value.
 
   For the binary mode of some of the CloudEvents transport bindings, where the
@@ -367,15 +395,16 @@ on the definition of OPTIONAL.
 - For Media Type examples see
   [IANA Media Types](http://www.iana.org/assignments/media-types/media-types.xhtml)
 
-#### schemaurl
+#### dataschema
 
-- Type: `URI-reference`
-- Description: A link to the schema that the `data` attribute adheres to.
-  Incompatible changes to the schema SHOULD be reflected by a different URL. See
+- Type: `URI`
+- Description: Identifies the schema that `data` adheres to.
+  Incompatible changes to the schema SHOULD be reflected by a different URI. See
   [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
   for more information.
 - Constraints:
   - OPTIONAL
+  - If present, MUST be a non-empty URI-reference
 
 #### subject
 
@@ -454,18 +483,25 @@ without needing to decode and examine the event data. Such identity attributes
 can also be used to help intermediate gateways determine how to route the
 events.
 
-## Data Attribute
+## Data
 
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
 information about the occurrence. When present, this information will be
-encapsulated within the `data` attribute.
+encapsulated within `data`.
 
 ### data
 
-- Type: `Any`
-- Description: The event payload. The payload depends on the `type` and the
-  `schemaurl`. It is encoded into a media format which is specified by the
-  `datacontenttype` attribute (e.g. application/json).
+- Description: The event payload. This specification does not place any
+  restriction on the type of this information. It is encoded into a media format
+  which is specified by the `datacontenttype` attribute (e.g.
+  application/json), and adheres to the `dataschema` format when those
+  repspective attributes are present.
+
+  If `data`'s native syntax, or its syntax based on the `datacontenttype`
+  attribute if present, can not be copied directly into the desired
+  serialization format, and therefore needs to be further encoded, then
+  the `datacontentencoding` attribute MUST include the encoding mechanism
+  used.
 - Constraints:
   - OPTIONAL
 

@@ -19,7 +19,8 @@ This document is a working draft.
 - [Design Goals](#design-goals)
 - [Architecture](#architecture)
 - [Versioning of Attributes](#versioning-of-attributes)
-- [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
+- [CloudEvent Attributes](#cloudevent-attributes)
+- [CloudEvent Attribute Extensions](#cloudevent-attribute-extensions)
 - [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
@@ -112,7 +113,7 @@ might mean that some of the application data of the event itself might be
 duplicated as part of the CloudEvent's set of attributes, this is to be done
 solely for the purpose of proper delivery, and processing, of the message. Data
 that is not intended for that purpose should instead be placed within the event
-(the `data` attribute) itself.
+(`data`) itself.
 
 Additionally, it is assumed that the metadata needed by the transport layer
 to deliver the message to the target system is handled entirely by the
@@ -182,7 +183,7 @@ The CloudEvents specification set defines four different kinds of protocol
 elements that form a layered architecture model.
 
 1. The [base specification](spec.md) defines an abstract information model
-   made up of attributes (key-value pairs) and associated rules for what 
+   made up of attributes (key-value pairs) and associated rules for what
    constitutes a CloudEvent.
 2. The [extensions](./spec.md#extension-context-attributes) add use-case specific
    and potentially overlapping sets of extension attributes and associated
@@ -193,7 +194,7 @@ elements that form a layered architecture model.
    an application protocol.
 4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines
    how the CloudEvent is bound to an application protocol's transport frame,
-   in the case of HTTP to the HTTP message. The transport binding does not 
+   in the case of HTTP to the HTTP message. The transport binding does not
    constrain how the transport frame is used, meaning that the HTTP binding
    can be used with any HTTP method and with request and response messages.
 
@@ -215,7 +216,7 @@ error reporting to report them.
 ## Versioning of Attributes
 
 For certain CloudEvents attributes, the entity or data model referenced by its
-value might change over time. For example, `schemaurl` might be a reference one
+value might change over time. For example, `dataschema` might reference one
 particular version of a schema document. Often these attribute values will then
 distinguish each variant by including some version-specific string as part of
 its value. For example, a version number (`v1`, `v2`), or a date (`2018-01-01`)
@@ -292,7 +293,7 @@ metadata that needs to be included to help ensure proper routing and processing
 of the CloudEvent. Additional metadata for other purposes, that is related to
 the event itself and not needed in the transportation or processing of the
 CloudEvent, should instead be placed within the proper extensibility points of
-the event (the `data` attribute) itself.
+the event (`data`) itself.
 
 Extension attributes should be kept minimal to ensure the CloudEvent can be
 properly serialized and transported. For example, the Event producers should
