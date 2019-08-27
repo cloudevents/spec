@@ -18,7 +18,7 @@ based on the specified event.
 | `source`              | "repository.homepage" value              |
 | `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.push`                        |
-| `datacontentencoding` | Omit                                     |
+| `dataencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "checkout_sha" value                     |
@@ -33,7 +33,7 @@ based on the specified event.
 | `source`              | "repository.homepage" value              |
 | `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.tag_push`                    |
-| `datacontentencoding` | Omit                                     |
+| `dataencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "ref" value                              |
@@ -48,7 +48,7 @@ based on the specified event.
 | `source`              | "repository.homepage" value                           |
 | `specversion`         | `0.4-wip`                                             |
 | `type`                | `com.gitlab.issue.` + "object_attributes.state" value |
-| `datacontentencoding` | Omit                                                  |
+| `dataencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
 | `dataschema`          | Omit                                                  |
 | `subject`             | "object_attributes.iid" value                         |
@@ -63,7 +63,7 @@ based on the specified event.
 | `source`              | "commit.url" value                       |
 | `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.note.commit`                 |
-| `datacontentencoding` | Omit                                     |
+| `dataencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "object_attributes.id" value             |
@@ -78,7 +78,7 @@ based on the specified event.
 | `source`              | "object_attributes.url" value, without the `#note\_...` part |
 | `specversion`         | `0.4-wip`                                                    |
 | `type`                | `com.gitlab.note.merge_request`                              |
-| `datacontentencoding` | Omit                                                         |
+| `dataencoding` | Omit                                                         |
 | `datacontenttype`     | `application/json`                                           |
 | `dataschema`          | Omit                                                         |
 | `subject`             | "object_attributes.id" value                                 |
@@ -93,7 +93,7 @@ based on the specified event.
 | `source`              | "object_attributes.url" value without the `#note\_...` part |
 | `specversion`         | `0.4-wip`                                                   |
 | `type`                | `com.gitlab.note.issue`                                     |
-| `datacontentencoding` | Omit                                                        |
+| `dataencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
 | `dataschema`          | Omit                                                        |
 | `subject`             | "object_attributes.id" value                                |
@@ -108,7 +108,7 @@ based on the specified event.
 | `source`              | "object_attributes.url" value without the `#note\_...` part |
 | `specversion`         | `0.4-wip`                                                   |
 | `type`                | `com.gitlab.note.snippet`                                   |
-| `datacontentencoding` | Omit                                                        |
+| `dataencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
 | `dataschema`          | Omit                                                        |
 | `subject`             | "object_attributes.id" value                                |
@@ -123,7 +123,7 @@ based on the specified event.
 | `source`              | "repository.homepage" value                                    |
 | `specversion`         | `0.4-wip`                                                      |
 | `type`                | `com.gitlab.merge_request.` + "object_attributes.action" value |
-| `datacontentencoding` | Omit                                                           |
+| `dataencoding` | Omit                                                           |
 | `datacontenttype`     | `application/json`                                             |
 | `dataschema`          | Omit                                                           |
 | `subject`             | "object_attributes.iid" value                                  |
@@ -138,7 +138,7 @@ based on the specified event.
 | `source`              | "project.web_url" value                                    |
 | `specversion`         | `0.4-wip`                                                  |
 | `type`                | `com.gitlab.wiki_page.` + "object_attributes.action" value |
-| `datacontentencoding` | Omit                                                       |
+| `dataencoding` | Omit                                                       |
 | `datacontenttype`     | `application/json`                                         |
 | `dataschema`          | Omit                                                       |
 | `subject`             | "object_attributes.slug" value                             |
@@ -153,7 +153,7 @@ based on the specified event.
 | `source`              | "project.web_url" value                                   |
 | `specversion`         | `0.4-wip`                                                 |
 | `type`                | `com.gitlab.pipeline.` + "object_attributes.status" value |
-| `datacontentencoding` | Omit                                                      |
+| `dataencoding` | Omit                                                      |
 | `datacontenttype`     | `application/json`                                        |
 | `dataschema`          | Omit                                                      |
 | `subject`             | "object_attributes.id" value                              |
@@ -168,7 +168,7 @@ based on the specified event.
 | `source`              | "repository.homepage" value              |
 | `specversion`         | `0.4-wip`                                |
 | `type`                | `com.gitlab.job.` + "job_status" value   |
-| `datacontentencoding` | Omit                                     |
+| `dataencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "job_id" value                           |

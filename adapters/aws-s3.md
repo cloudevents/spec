@@ -16,7 +16,7 @@ same pattern as described in the following table:
 | `source`              | "eventSource" value + `.` + "awsRegion" value + `.` + "s3.buckets.name" value  |
 | `specversion`         | `0.4-wip`                                       |
 | `type`                | `com.amazonaws.s3.` + "eventName" value         |
-| `datacontentencoding` | Omit                                            |
+| `dataencoding` | Omit                                            |
 | `datacontenttype`     | S3 event type (e.g. `application/json`)         |
 | `dataschema`          | Omit                                            |
 | `subject`             | "s3.object.key" value                           |
