@@ -309,32 +309,6 @@ The following attributes are OPTIONAL to appear in CloudEvents. See the
 [Notational Conventions](#notational-conventions) section for more information
 on the definition of OPTIONAL.
 
-#### dataencoding
-
-- Type: `String` 
-- Description: Describes the encoding for `data`, if and only if the `data`
-  value is carried inside the same envelope as the context attributes.
-  In this case, the value of `data` might need to be
-  encoded so that it can be carried within the serialization format being used.
-  For example, when `data` is carried inside a JSON document, binary data will
-  have to be Base64 encoded.
-  When this attribute is set, the consumer can use its value to know how
-  to decode `data` value to retrieve its original contents.
-
-  If this attribute is supported, then the "Base64" value, indicating an 
-  encoding of binary data as text, using the rules defined in
-  [RFC 4648 Section 4](https://tools.ietf.org/html/rfc4648#section-4) MUST
-  be supported. 
-
-- Constraints:
-  - The attribute MUST be set if `data` uses a special encoding. Otherwise the
-    attribute MUST NOT be set.
-  - The "Base64" value MUST be supported. Other encodings MAY be supported and
-    are either application-specific or defined in an extension specification.
-  - The attribute MUST NOT be used when `data` is transferred as the transport
-    frame body using any transport binding's binary mode. In this case, the
-    transport's own encoding facilities MUST be used. 
-
 #### datacontenttype
 
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
@@ -467,13 +441,8 @@ encapsulated within `data`.
   restriction on the type of this information. It is encoded into a media format
   which is specified by the `datacontenttype` attribute (e.g.
   application/json), and adheres to the `dataschema` format when those
-  repspective attributes are present.
+  respective attributes are present.
 
-  If `data`'s native syntax, or its syntax based on the `datacontenttype`
-  attribute, if present, cannot be copied directly into the desired
-  serialization format, and therefore needs to be further encoded, then
-  the `dataencoding` attribute MUST include the encoding mechanism
-  used.
 - Constraints:
   - OPTIONAL
 

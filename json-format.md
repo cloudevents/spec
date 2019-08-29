@@ -92,9 +92,12 @@ respective CloudEvents type when the mapping rules are fulfilled.
 ### 2.3. Mapping Data
 
 If an implementation determines that the actual type of `data` is a `String`,
-the value MUST be represented as [JSON string][json-string] expression; for
-`Binary`, the value MUST represented as [JSON string][json-string] expression
-containing the [Base64][base64] encoded binary value.
+the value MUST be represented as [JSON string][json-string] expression and the
+member name inside the JSON object MUST be `data`. For `Binary`, the value MUST
+be represented as a [JSON string][json-string] expression containing the 
+[Base64][base64] encoded binary value, and the member name inside the JSON 
+object MUST be `data_base64`.
+
 
 ### 2.4. Examples
 
@@ -155,12 +158,6 @@ the [type-system mapping](#22-type-system-mapping), the resulting `data` member
 [JSON value][json-value] is unrestricted, and MAY also contain numeric and
 logical JSON types.
 
-Second, whether a Base64-encoded string in `data` is treated as
-`Binary` or as a `String` is also determined by the `datacontenttype` value. If
-the `datacontenttype` media type is known to contain text, the data attribute
-value is not further interpreted and treated as a text string. Otherwise, it is
-decoded and treated as a binary value.
-
 ### 3.2. Examples
 
 Example event with `String`-valued `data`:
@@ -195,7 +192,7 @@ Example event with `Binary`-valued data
         "otherValue": 5
     },
     "datacontenttype" : "application/vnd.apache.thrift.binary",
-    "data" : "... base64 encoded string ..."
+    "data_base64" : "... base64 encoded string ..."
 }
 ```
 
@@ -264,7 +261,7 @@ second with JSON data.
           "otherValue": 5
       },
       "datacontenttype" : "application/vnd.apache.thrift.binary",
-      "data" : "... base64 encoded string ..."
+      "data_base64" : "... base64 encoded string ..."
   },
   {
       "specversion" : "0.4-wip",
