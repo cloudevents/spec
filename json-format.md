@@ -66,9 +66,9 @@ with exceptions noted below.
 | String        | [string][json-string]                                          |
 | Integer       | [number][json-number], only the `int` component is permitted   |
 | Binary        | [string][json-string], [Base64-encoded][base64] binary         |
+| URI           | [string][json-string] following [RFC 3986][rfc3986]            |
 | URI-reference | [string][json-string] following [RFC 3986][rfc3986]            |
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
-| Map           | [JSON object][json-object]                                     |
 | Any           | [JSON value][json-value]                                       |
 
 Extension specifications MAY define diverging mapping rules for the values of
