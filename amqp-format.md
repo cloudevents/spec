@@ -2,8 +2,8 @@
 
 ## Abstract
 
-The AMQP Format for CloudEvents defines how event attributes are expressed in
-the [AMQP 1.0 Type System][type-system].
+The AMQP Format for CloudEvents defines how event attributes and payload data
+are expressed in the [AMQP 1.0 Type System][type-system].
 
 ## Status of this document
 
@@ -126,4 +126,5 @@ data][amqp-data] section.
 [rfc4648]: https://tools.ietf.org/html/rfc4648
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [rfc8259]: https://tools.ietf.org/html/rfc8259
-[oasis-amqp-1.0]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-overview-v1.0-os.html
+[oasis-amqp-1.0]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-overview-v1.0-os.html
