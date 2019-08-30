@@ -155,7 +155,7 @@ These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
 inspected at the destination without having to deserialize the event data.
 
-#### Type System
+### Type System
 
 The following abstract data types are available for use in attributes. Each of
 these types MAY be represented differently by different event formats and in
