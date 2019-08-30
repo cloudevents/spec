@@ -69,10 +69,9 @@ This specification defines three content modes for transferring events:
 _binary_, _structured_ and _batched_. Every compliant implementation SHOULD
 support the _structured_ and _binary_ modes.
 
-In the _binary_ content mode, the value of the event `data` is placed
-into the HTTP request or response body as-is, with the `datacontenttype`
-attribute value declaring its media type; all other event attributes are mapped
-to HTTP headers.
+In the _binary_ content mode, the value of the event `data` is placed into the
+HTTP request or response body as-is, with the `datacontenttype` attribute value
+declaring its media type; all other event attributes are mapped to HTTP headers.
 
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the HTTP request or response body using an
@@ -120,17 +119,17 @@ compliant media-type expression.
 
 ### 2.2. data
 
-`data` is assumed to contain opaque application data that is
-encoded as declared by the `datacontenttype` attribute.
+`data` is assumed to contain opaque application data that is encoded as declared
+by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into HTTP as defined in this
-specification, the assumption is that the `data` value is made
-available as a sequence of bytes.
+specification, the assumption is that the `data` value is made available as a
+sequence of bytes.
 
 For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data`
-value is made available as [UTF-8][rfc3629] encoded JSON text to HTTP.
+`application/json;charset=utf-8`, the expectation is that the `data` value is
+made available as [UTF-8][rfc3629] encoded JSON text to HTTP.
 
 ## 3. HTTP Message Mapping
 
@@ -164,18 +163,11 @@ For the _binary_ mode, the HTTP `Content-Type` header value corresponds to
 (should be populated from or written to) the CloudEvents `datacontenttype`
 attribute.
 
-#### 3.1.2. HTTP Content-Encoding
+#### 3.1.2. Event Data Encoding
 
-For the _binary_ mode, the HTTP `Content-Encoding` header value corresponds to
-(should be populated from or written to) the CloudEvents `datacontentencoding`
-attribute.
+The [`data`](#22-data) byte-sequence is used as the HTTP message body.
 
-#### 3.1.3. Event Data Encoding
-
-The [`data`](#22-data) byte-sequence is used as the HTTP
-message body.
-
-#### 3.1.4. Metadata Headers
+#### 3.1.3. Metadata Headers
 
 All [CloudEvents][ce] attributes with exception of `datacontenttype`,
 `datacontentencoding`, and `data` MUST be individually mapped to and from
@@ -191,7 +183,7 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other transport bindings that are part of the CloudEvents core at the
 time of the submission or revision.
 
-##### 3.1.4.1. HTTP Header Names
+##### 3.1.3.1. HTTP Header Names
 
 Except for attributes
 [explicitly handled in this specification](#2-use-of-cloudevents-attributes),
@@ -207,7 +199,7 @@ Examples:
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
 
-##### 3.1.4.2. HTTP Header Values
+##### 3.1.3.2. HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute
 type's [canonical string representation][ce-types].
@@ -215,28 +207,21 @@ type's [canonical string representation][ce-types].
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
 and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
 printable characters from the US-ASCII character set, and are terminated by a
-CRLF sequence.
+CRLF sequence with optional whitespace around the header value.
 
-String values must be percent-encoded according to the algorithm in
-[RFC3986, section 2.1](rfc3986-section-2-1). Given the rules in
-[RFC7230, section 3](rfc7230-section-3), the allowed set of characters which do
-not need to be percent-encoded are the `token` characters defined in section
-3.2.6, excluding the "%" character:
+String values which contain unicode characters outside the ASCII range MUST be
+percent-encoded as described in [RFC3986, section 2.4][rfc3986-section-2-4]
+before applying the header encoding rules described in [RFC7230, section
+3.2.6][rfc7230-section-3-2s6].
 
-    token          = 1*tchar
+When decoding an HTTP message into a Cloud Event, these rules must be applied in
+reverse -- [RFC7230, section 3.2.6][rfc7230-section-3-2-6] decoding to an ASCII
+string, and then a **single round** of percent-decoding as described in
+[RFC3986, section 2.4][rfc3986-section-2-4]. (Note that applying
+percent-decoding an incorrect number of times may result in message corruption
+or security issues.)
 
-    tchar          = "!" / "#" / "$" / "&" / "'" / "*"
-                   / "+" / "-" / "." / "^" / "_" / "`" / "|" / "~"
-                   / DIGIT / ALPHA
-                   ; any VCHAR, except delimiters
-
-When decoding an HTTP header value, a **single round** of percent-decoding
-should should be performed on the value, as described in
-[RFC3986, section 2.4](rfc3986-section-2-4). It is permissible for allowed
-`token` characters to be percent-encoded, and receiving software should decode
-these percent triples.
-
-#### 3.1.5. Examples
+#### 3.1.4. Examples
 
 This example shows the _binary_ mode mapping of an event with an HTTP POST
 request:
@@ -295,8 +280,8 @@ Content-Type: application/cloudevents+json; charset=UTF-8
 
 #### 3.2.2. Event Data Encoding
 
-The chosen [event format](#14-event-formats) defines how all attributes,
-and `data`, are represented.
+The chosen [event format](#14-event-formats) defines how all attributes, and
+`data`, are represented.
 
 The event metadata and data is then rendered in accordance with the event format
 specification and the resulting data becomes the HTTP message body.
@@ -494,6 +479,7 @@ Content-Length: nnnn
 [rfc7159]: https://tools.ietf.org/html/rfc7159
 [rfc7230]: https://tools.ietf.org/html/rfc7230
 [rfc7230-section-3]: https://tools.ietf.org/html/rfc7230#section-3
+[rfc7230-section-3-2-6]: https://tools.ietf.org/html/rfc7230#section-3.2.6
 [rfc7230-section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
