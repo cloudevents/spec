@@ -58,9 +58,9 @@ exceptions noted below.
 | String        | [string][amqp-string]       |
 | Integer       | [long][amqp-long]           |
 | Binary        | [binary][amqp-binary]       |
+| URI           | [string][amqp-string]       |
 | URI-reference | [string][amqp-string]       |
 | Timestamp     | [timestamp][amqp-timestamp] |
-| Map           | [map][amqp-map]             |
 | Any           | See 2.3.                    |
 
 A CloudEvents AMQP format implementation MUST allow for attribute values to be
