@@ -11,12 +11,16 @@
         "type":"map",
         "values":[
           "null",
+          "boolean",
           "int",
           "string",
-          "bytes",
-          "CloudEvent"
+          "bytes"
         ]
       }
+    },
+    {
+      "name": "data",
+      "type": "bytes"
     }
   ]
 }
