@@ -28,17 +28,14 @@
         "time": {
           "$ref": "#/definitions/time"
         },
-        "schemaurl": {
-          "$ref": "#/definitions/schemaurl"
+        "dataschema": {
+          "$ref": "#/definitions/dataschema"
         },
         "subject": {
           "$ref": "#/definitions/subject"
         },
         "type": {
           "$ref": "#/definitions/type"
-        },
-        "extensions": {
-          "$ref": "#/definitions/extensions"
         },
         "source": {
           "$ref": "#/definitions/source"
@@ -55,9 +52,9 @@
       "format": "date-time",
       "type": "string"
     },
-    "schemaurl": {
+    "dataschema": {
       "type": "string",
-      "format": "uri-reference"
+      "format": "uri"
     },
     "subject": {
       "type": "string",
@@ -66,9 +63,6 @@
     "type": {
       "type": "string",
       "minLength": 1
-    },
-    "extensions": {
-      "type": "object"
     },
     "source": {
       "format": "uri-reference",

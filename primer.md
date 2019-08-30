@@ -19,7 +19,9 @@ This document is a working draft.
 - [Design Goals](#design-goals)
 - [Architecture](#architecture)
 - [Versioning of Attributes](#versioning-of-attributes)
-- [CloudEvent Attributes Extensions](#cloudevent-attribute-extensions)
+- [CloudEvent Attributes](#cloudevent-attributes)
+- [CloudEvent Attribute Extensions](#cloudevent-attribute-extensions)
+- [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
 - [Prior Art](#prior-art)
@@ -111,7 +113,7 @@ might mean that some of the application data of the event itself might be
 duplicated as part of the CloudEvent's set of attributes, this is to be done
 solely for the purpose of proper delivery, and processing, of the message. Data
 that is not intended for that purpose should instead be placed within the event
-(the `data` attribute) itself.
+(`data`) itself.
 
 Additionally, it is assumed that the metadata needed by the transport layer
 to deliver the message to the target system is handled entirely by the
@@ -125,7 +127,9 @@ of how to serialize the event in different formats (e.g. JSON) and transports
 Batching of multiple events into a single API call is natively supported by some
 transports. To aid interoperability, it is left up to the transports if and how
 batching is implemented. Details may be found in the transport binding or in the
-transport specification.
+transport specification. A batch of CloudEvents carries no semantic meaning and
+is not ordered. An [Intermediary](spec.md#intermediary) can add or remove
+batching as well as assign events to different batches.
 
 ### Non-Goals
 
@@ -135,6 +139,7 @@ The following are considered beyond the scope of the specification:
 - Language-specific runtime APIs
 - Selecting a single identity/access control system
 - Inclusion of transport-level routing information
+- Event persistence processes
 
 The CloudEvents spec will not include transport-level routing
 information (e.g. a destination URL to which the event is being sent).
@@ -158,6 +163,19 @@ dead-letter queue if the webhook address is unavailable. That dead-letter
 queue should be able to feed events to new actions that the original event
 emitter never imagined.
 
+The CloudEvents that are produced and consumed within and across systems trigger
+behaviors that derive value. As such, archiving and/or replaying events can be
+valuable for debugging or replication purposes. However, persisting an event
+removes the contextual information available during transmission such as the
+identity and rights of the producer, fidelity validation mechanisms, or
+confidentiality protections. Additionally, persistence can add complexity and
+challenge to meeting user's requirements. For example, the repeated use of a
+private key for encryption or signing purposes increases the information
+available to attackers and thereby reduces security. It is expected that
+attributes may be defined that facilitate meeting persistence requirements but
+it is expected that these will continuously evolve along with industry best
+practices and advancements.
+
 
 ## Architecture
 
@@ -165,7 +183,7 @@ The CloudEvents specification set defines four different kinds of protocol
 elements that form a layered architecture model.
 
 1. The [base specification](spec.md) defines an abstract information model
-   made up of attributes (key-value pairs) and associated rules for what 
+   made up of attributes (key-value pairs) and associated rules for what
    constitutes a CloudEvent.
 2. The [extensions](./spec.md#extension-context-attributes) add use-case specific
    and potentially overlapping sets of extension attributes and associated
@@ -176,7 +194,7 @@ elements that form a layered architecture model.
    an application protocol.
 4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines
    how the CloudEvent is bound to an application protocol's transport frame,
-   in the case of HTTP to the HTTP message. The transport binding does not 
+   in the case of HTTP to the HTTP message. The transport binding does not
    constrain how the transport frame is used, meaning that the HTTP binding
    can be used with any HTTP method and with request and response messages.
 
@@ -187,10 +205,18 @@ not specific to CloudEvents and can be used to post any kind of one-way event
 and notifications to a conformant HTTP endpoint. However, the lack of such a
 specification elsewhere makes it necessary for CloudEvents to define it.
 
+### Transport Error Handling
+
+The CloudEvents specification, for the most part, does not dictate a processing
+model associated with the creation or processing of CloudEvents. As such, if
+there are errors during the processing of a CloudEvent, the software
+encountering the error is encouraged to use the normal transport-level
+error reporting to report them.
+
 ## Versioning of Attributes
 
 For certain CloudEvents attributes, the entity or data model referenced by its
-value might change over time. For example, `schemaurl` might be a reference one
+value might change over time. For example, `dataschema` might reference one
 particular version of a schema document. Often these attribute values will then
 distinguish each variant by including some version-specific string as part of
 its value. For example, a version number (`v1`, `v2`), or a date (`2018-01-01`)
@@ -267,7 +293,7 @@ metadata that needs to be included to help ensure proper routing and processing
 of the CloudEvent. Additional metadata for other purposes, that is related to
 the event itself and not needed in the transportation or processing of the
 CloudEvent, should instead be placed within the proper extensibility points of
-the event (the `data` attribute) itself.
+the event (`data`) itself.
 
 Extension attributes should be kept minimal to ensure the CloudEvent can be
 properly serialized and transported. For example, the Event producers should
