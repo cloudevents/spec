@@ -13,7 +13,8 @@ This document is a working draft.
 
 1. [Introduction](#1-introduction)
 2. [Attributes](#2-attributes)
-3. [References](#3-references)
+3. [Data](#3-data)
+4. [References](#4-references)
 
 ## 1. Introduction
 
@@ -88,7 +89,12 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.
 
-## 3. References
+## 3. Data
+
+The CloudEvents `data` payload SHALL be mapped to a single [AMQP
+data][amqp-data] section.
+
+## 4. References
 
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
@@ -112,9 +118,12 @@ the submission or revision.
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-binary
 [amqp-timestamp]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-timestamp
+[amqp-data]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-data
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc4627]: https://tools.ietf.org/html/rfc4627
 [rfc4648]: https://tools.ietf.org/html/rfc4648
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [rfc8259]: https://tools.ietf.org/html/rfc8259
+[oasis-amqp-1.0]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-overview-v1.0-os.html
