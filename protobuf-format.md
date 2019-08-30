@@ -74,9 +74,9 @@ follows:
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | String        | string_value                                                                                                                                |
 | Binary        | binary_value                                                                                                                                |
+| URI           | string_value (string expression conforming to URI-reference as defined in [RFC 3986 §4.3](https://tools.ietf.org/html/rfc3986#section-4.3)) |
 | URI-reference | string_value (string expression conforming to URI-reference as defined in [RFC 3986 §4.1](https://tools.ietf.org/html/rfc3986#section-4.1)) |
 | Timestamp     | string_value (string expression as defined in [RFC 3339](https://tools.ietf.org/html/rfc3339))                                              |
-| Map           | map_value                                                                                                                                   |
 | Integer       | int_value                                                                                                                                   |
 | Any           | Not applicable. Any is the enclosing CloudEventAny message itself                                                                           |
 
