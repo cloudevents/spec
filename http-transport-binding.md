@@ -169,9 +169,9 @@ The [`data`](#22-data) byte-sequence is used as the HTTP message body.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][ce] attributes with exception of `datacontenttype`,
-`datacontentencoding`, and `data` MUST be individually mapped to and from
-distinct HTTP message headers, with exceptions noted below.
+All [CloudEvents][ce] attributes with exception of `datacontenttype`, and `data`
+MUST be individually mapped to and from distinct HTTP message headers, with
+exceptions noted below.
 
 CloudEvents extensions that define their own attributes MAY define a diverging
 mapping to HTTP headers for those attributes, especially if specific attributes
