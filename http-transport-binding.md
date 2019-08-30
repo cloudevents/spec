@@ -471,7 +471,6 @@ Content-Length: nnnn
 [rfc2818]: https://tools.ietf.org/html/rfc2818
 [rfc3629]: https://tools.ietf.org/html/rfc3629
 [rfc3986]: https://tools.ietf.org/html/rfc3986
-[rfc3986-section-2-1]: https://tools.ietf.org/html/rfc3986#section-2.1
 [rfc3986-section-2-4]: https://tools.ietf.org/html/rfc3986#section-2.4
 [rfc4627]: https://tools.ietf.org/html/rfc4627
 [rfc4648]: https://tools.ietf.org/html/rfc4648
