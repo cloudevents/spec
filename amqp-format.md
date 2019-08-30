@@ -55,13 +55,13 @@ exceptions noted below.
 
 | CloudEvents   | AMQP                        |
 | ------------- | --------------------------- |
-| String        | [string][amqp-string]       |
+| Boolean       | [boolean][amqp-boolean]     |
 | Integer       | [long][amqp-long]           |
+| String        | [string][amqp-string]       |
 | Binary        | [binary][amqp-binary]       |
 | URI           | [string][amqp-string]       |
 | URI-reference | [string][amqp-string]       |
 | Timestamp     | [timestamp][amqp-timestamp] |
-| Any           | See 2.3.                    |
 
 A CloudEvents AMQP format implementation MUST allow for attribute values to be
 convertible from/to their canonical CloudEvents string representation. For
@@ -88,13 +88,6 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.
 
-### 2.3. Mapping Any-typed Attributes
-
-`Any`-typed CloudEvents values can either hold a `String`, or a `Binary` value,
-or a `Map`. `Map` entry values are also `Any` typed. AMQP's type system natively
-represents dynamic typing in its [type system encoding][type-system-encoding],
-and therefore immediately allows for the required variant type representation.
-
 ## 3. References
 
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
@@ -109,18 +102,16 @@ and therefore immediately allows for the required variant type representation.
   https://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html
 [type-system-encoding]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#section-encodings
-[amqp-string]:
+[amqp-boolean]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
 [amqp-long]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-long
+[amqp-string]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
 [amqp-binary]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-binary
 [amqp-timestamp]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-timestamp
-[amqp-map]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-map
-[amqp-describedtype]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#doc-idp38080
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc4627]: https://tools.ietf.org/html/rfc4627
