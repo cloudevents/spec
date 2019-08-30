@@ -50,7 +50,7 @@ The CloudEvents type system MUST be mapped to Avro types as follows.
 | Integer       | [int][avro-primitives]                                                 |
 | String        | [string][avro-primitives]                                              |
 | Binary        | [bytes][avro-primitives]                                               |
-| Map           | [map][avro-primitives]                                                 |
+| URI           | [string][avro-primitives] following [RFC 3986 §4.3][rfc3986-section43] |
 | URI-reference | [string][avro-primitives] following [RFC 3986 §4.1][rfc3986-section41] |
 | Timestamp     | [string][avro-primitives] following [RFC 3339][rfc3339] (ISO 8601)     |
 | Any           | See [2.2](#22-mapping-any-typed-attributes)                            |
@@ -135,20 +135,20 @@ to the one described by the [CloudEvent Avro Schema](./spec.avsc):
 
 The following table shows exemplary mappings:
 
-| CloudEvents     | Type      | Exemplary Avro Value                           |
-| --------------- | --------- | ---------------------------------------------- |
-| type            | string    | `"com.example.someevent"`                      |
-| specversion     | string    | `"0.4-wip`                                      |
-| source          | string    | `"/mycontext"`                                 |
-| id              | string    | `"7a0dc520-c870-4193c8"`                       |
-| time            | string    | `"2019-06-05T23:45:00Z"`                       |
-| schemaurl       | string    | `"http://registry.com/schema/v1/much.json"`    |
-| contenttype     | string    | `"application/json"`                           |
-| data            | string    | `"{"much":{"wow":"json"}}"`                    |
+| CloudEvents  | Type      | Exemplary Avro Value                           |
+| ------------ | --------- | ---------------------------------------------- |
+| type         | string    | `"com.example.someevent"`                      |
+| specversion  | string    | `"0.4-wip`                                     |
+| source       | string    | `"/mycontext"`                                 |
+| id           | string    | `"7a0dc520-c870-4193c8"`                       |
+| time         | string    | `"2019-06-05T23:45:00Z"`                       |
+| dataschema   | string    | `"http://registry.com/schema/v1/much.json"`    |
+| contenttype  | string    | `"application/json"`                           |
+| data         | string    | `"{"much":{"wow":"json"}}"`                    |
 ||||
-| schemaurl       | string    | `"http://registry.com/subjects/ce/versions/1"` |
-| contenttype     | string    | `"application/avro"`                           |
-| data            | string    | `"Q2xvdWRFdmVudHM="`                           |
+| dataschema   | string    | `"http://registry.com/subjects/ce/versions/1"` |
+| contenttype  | string    | `"application/avro"`                           |
+| data         | string    | `"Q2xvdWRFdmVudHM="`                           |
 
 ## References
 
@@ -163,4 +163,5 @@ The following table shows exemplary mappings:
 
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3986-section41]: https://tools.ietf.org/html/rfc3986#section-4.1
+[rfc3986-section43]: https://tools.ietf.org/html/rfc3986#section-4.3
 [rfc3339]: https://tools.ietf.org/html/rfc3339

@@ -20,7 +20,7 @@ based on the specified event.
 | `type`                | `com.gitlab.push`                        |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
-| `schemaurl`           | Omit                                     |
+| `dataschema`          | Omit                                     |
 | `subject`             | "checkout_sha" value                     |
 | `time`                | Current time                             |
 | `data`                | Content of HTTP request body             |
@@ -35,7 +35,7 @@ based on the specified event.
 | `type`                | `com.gitlab.tag_push`                    |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
-| `schemaurl`           | Omit                                     |
+| `dataschema`          | Omit                                     |
 | `subject`             | "ref" value                              |
 | `time`                | Current time                             |
 | `data`                | Content of HTTP request body             |
@@ -50,7 +50,7 @@ based on the specified event.
 | `type`                | `com.gitlab.issue.` + "object_attributes.state" value |
 | `datacontentencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
-| `schemaurl`           | Omit                                                  |
+| `dataschema`          | Omit                                                  |
 | `subject`             | "object_attributes.iid" value                         |
 | `time`                | Current time                                          |
 | `data`                | Content of HTTP request body                          |
@@ -65,7 +65,7 @@ based on the specified event.
 | `type`                | `com.gitlab.note.commit`                 |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
-| `schemaurl`           | Omit                                     |
+| `dataschema`          | Omit                                     |
 | `subject`             | "object_attributes.id" value             |
 | `time`                | "object_attributes.created_at" value     |
 | `data`                | Content of HTTP request body             |
@@ -80,7 +80,7 @@ based on the specified event.
 | `type`                | `com.gitlab.note.merge_request`                              |
 | `datacontentencoding` | Omit                                                         |
 | `datacontenttype`     | `application/json`                                           |
-| `schemaurl`           | Omit                                                         |
+| `dataschema`          | Omit                                                         |
 | `subject`             | "object_attributes.id" value                                 |
 | `time`                | "object_attributes.created_at` value                         |
 | `data`                | Content of HTTP request body                                 |
@@ -95,7 +95,7 @@ based on the specified event.
 | `type`                | `com.gitlab.note.issue`                                     |
 | `datacontentencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
-| `schemaurl`           | Omit                                                        |
+| `dataschema`          | Omit                                                        |
 | `subject`             | "object_attributes.id" value                                |
 | `time`                | "object_attributes.created_at" value                        |
 | `data`                | Content of HTTP request body                                |
@@ -110,7 +110,7 @@ based on the specified event.
 | `type`                | `com.gitlab.note.snippet`                                   |
 | `datacontentencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
-| `schemaurl`           | Omit                                                        |
+| `dataschema`          | Omit                                                        |
 | `subject`             | "object_attributes.id" value                                |
 | `time`                | "object_attributes.created_at" value                        |
 | `data`                | Content of HTTP request body                                |
@@ -125,7 +125,7 @@ based on the specified event.
 | `type`                | `com.gitlab.merge_request.` + "object_attributes.action" value |
 | `datacontentencoding` | Omit                                                           |
 | `datacontenttype`     | `application/json`                                             |
-| `schemaurl`           | Omit                                                           |
+| `dataschema`          | Omit                                                           |
 | `subject`             | "object_attributes.iid" value                                  |
 | `time`                | "object_attributes.created_at" value                           |
 | `data`                | Content of HTTP request body                                   |
@@ -140,7 +140,7 @@ based on the specified event.
 | `type`                | `com.gitlab.wiki_page.` + "object_attributes.action" value |
 | `datacontentencoding` | Omit                                                       |
 | `datacontenttype`     | `application/json`                                         |
-| `schemaurl`           | Omit                                                       |
+| `dataschema`          | Omit                                                       |
 | `subject`             | "object_attributes.slug" value                             |
 | `time`                | Current time                                               |
 | `data`                | Content of HTTP request body                               |
@@ -155,7 +155,7 @@ based on the specified event.
 | `type`                | `com.gitlab.pipeline.` + "object_attributes.status" value |
 | `datacontentencoding` | Omit                                                      |
 | `datacontenttype`     | `application/json`                                        |
-| `schemaurl`           | Omit                                                      |
+| `dataschema`          | Omit                                                      |
 | `subject`             | "object_attributes.id" value                              |
 | `time`                | Current time                                              |
 | `data`                | Content of HTTP request body                              |
@@ -170,7 +170,7 @@ based on the specified event.
 | `type`                | `com.gitlab.job.` + "job_status" value   |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
-| `schemaurl`           | Omit                                     |
+| `dataschema`          | Omit                                     |
 | `subject`             | "job_id" value                           |
 | `time`                | Current time                             |
 | `data`                | Content of HTTP request body             |

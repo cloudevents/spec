@@ -1,4 +1,4 @@
-# CloudEvents SDK
+# CloudEvents SDK Requirements
 
 The intent of this document to describe a minimum set of requirements for new
 Software Development Kits (SDKs) for CloudEvents. These SDKs are designed and
@@ -12,12 +12,10 @@ following SDKs:
 - [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
 - [Python SDK](https://github.com/cloudevents/sdk-python)
 
-## Status of this document
-
 This is intended to provide guidance and requirements for SDK authors. This
 document is intended to be kept up to date with the CloudEvents spec.
 
-## Contribution acceptance
+## Contribution Acceptance
 
 Being an open source community CloudEvents team is open for a new members as
 well open to their contributions. In order to ensure that an SDK is going to be
@@ -26,7 +24,7 @@ supported and maintained CloudEvents community would like to ensure that:
 - Each SDK has active points of contact.
 - Each SDK supports ongoing changes to the [CloudEvent spec](spec.md).
 
-## Technical requirements
+## Technical Requirements
 
 Each SDK MUST meet these requirements:
 
@@ -38,7 +36,7 @@ Each SDK MUST meet these requirements:
 - Supports HTTP transport renderings in both `structured` and `binary`
   encodings.
 
-### Object model structure guidelines
+### Object Model Structure Guidelines
 
 Each SDK will provide a generic CloudEvents class/object/structure that
 represents the conical form of an Event.

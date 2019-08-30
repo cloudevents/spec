@@ -22,7 +22,7 @@ This document is a working draft.
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
 
 - 2.1. [datacontenttype Attribute](#21-datacontenttype-attribute)
-- 2.2. [data Attribute](#22-data-attribute)
+- 2.2. [data](#22-data)
 
 3. [HTTP Message Mapping](#3-http-message-mapping)
 
@@ -69,7 +69,7 @@ This specification defines three content modes for transferring events:
 _binary_, _structured_ and _batched_. Every compliant implementation SHOULD
 support the _structured_ and _binary_ modes.
 
-In the _binary_ content mode, the value of the event `data` attribute is placed
+In the _binary_ content mode, the value of the event `data` is placed
 into the HTTP request or response body as-is, with the `datacontenttype`
 attribute value declaring its media type; all other event attributes are mapped
 to HTTP headers.
@@ -100,12 +100,13 @@ identically to [HTTP over TLS]([RFC2818][RFC2818]).
 
 ## 2. Use of CloudEvents Attributes
 
-This specification does not further define any of the [CloudEvents][ce] event
-attributes.
+This specification does not further define any of the core [CloudEvents][ce]
+event attributes.
 
 Two of the event attributes, `datacontenttype` and `data` are handled specially
 and mapped onto HTTP constructs, all other attributes are transferred as
-metadata without further interpretation.
+metadata without further interpretation (except that extensions MAY define
+additional header mappings).
 
 This mapping is intentionally robust against changes, including the addition and
 removal of event attributes, and also accommodates vendor extensions to the
@@ -117,18 +118,18 @@ event metadata. Any mention of event attributes other than `datacontenttype` and
 The `datacontenttype` attribute is assumed to contain a [RFC2046][rfc2046]
 compliant media-type expression.
 
-### 2.2. data Attribute
+### 2.2. data
 
-The `data` attribute is assumed to contain opaque application data that is
+`data` is assumed to contain opaque application data that is
 encoded as declared by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into HTTP as defined in this
-specification, the assumption is that the `data` attribute value is made
+specification, the assumption is that the `data` value is made
 available as a sequence of bytes.
 
 For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data` attribute
+`application/json;charset=utf-8`, the expectation is that the `data`
 value is made available as [UTF-8][rfc3629] encoded JSON text to HTTP.
 
 ## 3. HTTP Message Mapping
@@ -164,7 +165,7 @@ CloudEvents `datacontenttype` attribute.
 
 #### 3.1.2. Event Data Encoding
 
-The [`data` attribute](#22-data-attribute) byte-sequence is used as the HTTP
+The [`data`](#22-data) byte-sequence is used as the HTTP
 message body.
 
 #### 3.1.3. Metadata Headers
@@ -196,18 +197,13 @@ Examples:
     * `id` maps to `ce-id`
     * `specversion` maps to `ce-specversion`
 
-`Map`-typed CloudEvents attributes MUST be flattened into a set of HTTP headers,
-where by the name of each header carries the prefix "ce-", an infix reflecting
-the map attribute followed by a dash ("-"), and the name of the map entry key,
-e.g. "ce-attrib-key".
-
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
 
 ##### 3.1.3.2 HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute
-type's canonical string representation.
+type's [canonical string representation][ce-types].
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
 and per [RFC7230 Section 3][rfc7230-section-3], HTTP headers MUST only use
@@ -285,7 +281,7 @@ Content-Type: application/cloudevents+json; charset=UTF-8
 #### 3.2.2. Event Data Encoding
 
 The chosen [event format](#14-event-formats) defines how all attributes,
-including the `data` attribute, are represented.
+and `data`, are represented.
 
 The event metadata and data is then rendered in accordance with the event format
 specification and the resulting data becomes the HTTP message body.
@@ -365,7 +361,7 @@ Content-Type: application/cloudevents-batch+json; charset=UTF-8
 #### 3.3.2. Event Data Encoding
 
 The chosen [event format](#14-event-formats) defines how a batch of events and
-all event attributes, including the `data` attribute, are represented.
+all event attributes, and `data`, are represented.
 
 The batch of events is then rendered in accordance with the event format
 specification and the resulting data becomes the HTTP message body.
@@ -464,6 +460,7 @@ Content-Length: nnnn
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
+[ce-types]: ./spec.md#type-system
 [json-format]: ./json-format.md
 [json-batch-format]: ./json-format.md#4-json-batch-format
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5

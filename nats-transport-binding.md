@@ -22,7 +22,7 @@ This document is a working draft.
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
 
 - 2.1. [datacontenttype Attribute](#21-datacontenttype-attribute)
-- 2.2. [data Attribute](#22-data-attribute)
+- 2.2. [data](#22-data)
 
 3. [NATS Message Mapping](#3-nats-message-mapping)
 
@@ -84,9 +84,9 @@ attributes.
 The `datacontenttype` attribute is assumed to contain a media-type expression
 compliant with [RFC2046][rfc2046].
 
-### 2.2. data Attribute
+### 2.2. data
 
-The `data` attribute is assumed to contain opaque application data that is
+`data` is assumed to contain opaque application data that is
 encoded as declared by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
@@ -94,7 +94,7 @@ of its choosing, but as the value is transposed into NATS as defined in this
 specification, core NATS provides data available as a sequence of bytes.
 
 For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data` attribute
+`application/json;charset=utf-8`, the expectation is that the `data`
 value is made available as [UTF-8][rfc3629] encoded JSON text.
 
 ## 3. NATS Message Mapping

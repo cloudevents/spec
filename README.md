@@ -42,10 +42,11 @@ The following documents are available:
 | Web hook                      |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
 |                               |
 | **Additional Documentation:** |
-| Primer                        |         [v0.3](https://github.com/cloudevents/spec/blob/v0.3/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
-| Documented Extensions         |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)  |
-| Proprietary Specifications    |                                        -                                        |   [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)    |
 | CloudEvents Adapters          |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/adapters.md)               |
+| CloudEvents SDK Requirements  |  [v0.3](https://github.com/cloudevents/spec/blob/v0.3/SDK.md)                   |   [master](https://github.com/cloudevents/spec/blob/master/SDK.md)                  |
+| Documented Extensions         |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)  |
+| Primer                        |         [v0.3](https://github.com/cloudevents/spec/blob/v0.3/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
+| Proprietary Specifications    |                                        -                                        |   [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)    |
 
 If you are new to CloudEvents, it is recommended that you start by reading the
 [Primer](primer.md) for an overview of the specification's goals and design
