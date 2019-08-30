@@ -169,7 +169,7 @@ The [`data`](#22-data) byte-sequence is used as the HTTP message body.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][ce] attributes with exception of `datacontenttype` MUST be
+All [CloudEvents][ce] attributes with the exception of `datacontenttype` MUST be
 individually mapped to and from distinct HTTP message headers, with exceptions
 noted below.
 
