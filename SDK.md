@@ -14,16 +14,16 @@ following SDKs:
 
 ## Status of this document
 
-Since [CloudEvent spec](spec.md) still considered as a working draft this
-document also suppose to be considered as a working draft.
+This is intended to provide guidance and requirements for SDK authors. This
+document is intended to be kept up to date with the CloudEvents spec.
 
 ## Contribution acceptance
 
 Being an open source community CloudEvents team is open for a new members as
 well open to their contributions. In order to ensure that an SDK is going to be
-supported and maintained CloudEvents community would like to ensured that:
+supported and maintained CloudEvents community would like to ensure that:
 
-- Each SDK has an active point of contact.
+- Each SDK has active points of contact.
 - Each SDK supports ongoing changes to the [CloudEvent spec](spec.md).
 
 ## Technical requirements
@@ -31,7 +31,7 @@ supported and maintained CloudEvents community would like to ensured that:
 Each SDK MUST meet these requirements:
 
 - Supports CloudEvents at spec milestones and ongoing development version.
-  - Encode a Conical Event into a transport specific encoded message.
+  - Encode a canonical Event into a transport specific encoded message.
   - Decode transport specific encoded messages into a Conical Event.
 - Idiomatic usage of the programming language.
   - Using current language version(s).
@@ -73,7 +73,7 @@ At a high level, the SDK needs to be able to help with the following tasks:
 #### Compose an Event
 
 Provide a convenient way to compose both a single message and many messages.
-Implementors will need a way to quickly build up and convert their event data
+Implementers will need a way to quickly build up and convert their event data
 into the a CloudEvents encoded Event. In practice there tend to be two aspects
 to event composition,
 
@@ -97,18 +97,16 @@ based on the parameters set, most importantly the CloudEvents spec version.
 
 #### Encode/Decode an Event
 
-Each SDK will implement a form of a Codec that supports Encoding and Decoding an
-Event with regards to a transport and encoding. `Structured` encoding is the
-easiest to support, as it is just `json`, but `Binary` is fairly custom for each
-transport.
+Each SDK will support encoding and decoding an Event with regards to a transport
+and encoding. `Structured` encoding is the easiest to support, as it is just
+`json`, but `Binary` is fairly custom for each transport.
 
 #### Data
 
 Data access from the event has some considerations, the Event at rest could be
 encoded into the `base64` form, as structured data, or as a wire format like
-`json`. The Conical Event tends to have some state around it to understand how
-the data is currently encoded. This metadata is useful for encoders and decoders
-but not for the transport message.
+`json`. An SDK MUST provide a method for unpacking the data from these formats
+into a native format.
 
 #### Extensions
 
