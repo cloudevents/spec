@@ -101,8 +101,8 @@ described by the [CloudEvent Avro Schema](./spec.avsc):
 
 ## 3 Data
 
-The `data` of the CloudEvent should be encoded in a top-level field called
-`data` of type `bytes`. No additional encoding should be done, regardless of the
+The `data` of the CloudEvent MUST be encoded in a top-level field called
+`data` of type `bytes`. Additional encoding MUST NOT be done, regardless of the
 `contenttype` attribute.
 
 ## 4 Examples
