@@ -321,7 +321,7 @@ on the definition of OPTIONAL.
   `data` content is rendered for different `datacontenttype`
   values are defined in the event format specifications; for example, the JSON
   event format defines the relationship in
-  [section 3.1](./json-format.md#31-special-handling-of-data).
+  [section 3.1](./json-format.md#31-handling-of-data).
 
   When this attribute is omitted, `data` simply follows the event
   format's encoding rules. For the JSON event format, the `data` value
