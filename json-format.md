@@ -184,7 +184,7 @@ Example event with `Binary`-valued data
 ```
 
 Example event with JSON data for the "data" member, either derived from a `Map`
-or [JSON data](#31-special-handling-of-data) data:
+or [JSON data](#31-handling-of-data) data:
 
 ```JSON
 {
