@@ -89,19 +89,9 @@ inference using the rules from the mapping table, whereby the only potentially
 ambiguous JSON data type is `string`. The value is compatible with the
 respective CloudEvents type when the mapping rules are fulfilled.
 
-### 2.3. Mapping Data
+### 2.3. Examples
 
-If an implementation determines that the actual type of `data` is a `String`,
-the value MUST be represented as [JSON string][json-string] expression and the
-member name inside the JSON object MUST be `data`. For `Binary`, the value MUST
-be represented as a [JSON string][json-string] expression containing the 
-[Base64][base64] encoded binary value, and the member name inside the JSON 
-object MUST be `data_base64`.
-
-
-### 2.4. Examples
-
-The following table shows exemplary mappings:
+The following table shows exemplary attribute mappings:
 
 | CloudEvents     | Type          | Exemplary JSON Value            |
 | --------------- | ------------- | ------------------------------- |
@@ -111,11 +101,8 @@ The following table shows exemplary mappings:
 | id              | String        | "1234-1234-1234"                |
 | time            | Timestamp     | "2018-04-05T17:31:00Z"          |
 | datacontenttype | String        | "application/json"              |
-| data            | String        | "<much wow=\"xml\"/>"           |
-| data            | Binary        | "Q2xvdWRFdmVudHM="              |
-| data            | Map           | { "objA" : "vA", "objB", "vB" } |
 
-### 2.5. JSONSchema Validation
+### 2.4. JSONSchema Validation
 
 The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
 [here](spec.json) and contains the definitions for validating events in JSON.
@@ -131,32 +118,32 @@ become members of the JSON object, with the respective JSON object member name
 matching the attribute name, and the member's type and value being mapped using
 the [type system mapping](#22-type-system-mapping).
 
-### 3.1. Special Handling of "data"
+### 3.1. Handling of "data"
 
-The mapping of `data` follows the rules laid out in
-[Section 2.3.](#23-mapping-data), with two additional rules:
+Before taking action, a JSON serializer MUST first determine the runtime data 
+type of the `data` content.  
 
-First, if an implementation determines that the type of `data` is
-`Binary` or `String`, it MUST inspect the `datacontenttype` attribute to
-determine whether it is indicated that the data value contains JSON data.
+If the implementation determines that the type of `data` is `Binary`, the value
+MUST be represented as a [JSON string][json-string] expression containing the 
+[Base64][base64] encoded binary value, and use the member name `data_base64`
+to store it inside the JSON object. 
 
-If the `datacontenttype` value is either ["application/json"][rfc4627] or any
-media type with a [structured +json suffix][rfc6839], the implementation MUST
-translate the `data` value into a [JSON value][json-value], and set
-the `data` attribute of the envelope JSON object to this JSON value.
+For any other type, the implementation MUST translate the `data` value into 
+a [JSON value][json-value], and use the member name `data`
+to store it inside the JSON object. 
 
-If the `datacontenttype` value does not follow the [structured +json
-suffix][rfc6839] but is known to use JSON encoding, the implementation MUST
-translate the `data` value into a [JSON value][json-value], and set
-the `data` attribute of the envelope JSON object to this JSON value. Its typical
-examples are, but not limited to, `text/json`,
-[`application/json-seq`][json-seq] and
-[`application/geo+json-seq`][json-geoseq].
+Out of this follows that use of the `data` and `data_base64` members is
+mutually exclusive in a JSON serialized CloudEvent. 
 
-Unlike all other attributes, for which value types are restricted to strings per
+When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
+member clearly indicates that the value is a Base64 encoded binary data, which
+the serializer MUST decode into a binary runtime data type. When a `data` 
+member is present, it is decoded using the default JSON type mapping for the 
+used runtime.  
+
+Unlike attributes, for which value types are restricted to strings per
 the [type-system mapping](#22-type-system-mapping), the resulting `data` member
-[JSON value][json-value] is unrestricted, and MAY also contain numeric and
-logical JSON types.
+[JSON value][json-value] is unrestricted, and MAY contain any valid JSON.
 
 ### 3.2. Examples
 
