@@ -160,7 +160,7 @@ efficient transfer and without transcoding effort.
 #### 3.1.1. HTTP Content-Type
 
 For the _binary_ mode, the HTTP `Content-Type` header value corresponds to
-(should be populated from or written to) the CloudEvents `datacontenttype`
+(MUST be populated from or written to) the CloudEvents `datacontenttype`
 attribute.
 
 #### 3.1.2. Event Data Encoding
@@ -213,11 +213,11 @@ String values MUST be percent-encoded as described in [RFC3986, section
 2.4][rfc3986-section-2-4] before applying the header encoding rules described in
 [RFC7230, section 3.2.6][rfc7230-section-3-2s6].
 
-When decoding an HTTP message into a Cloud Event, these rules must be applied in
+When decoding an HTTP message into a Cloud Event, these rules MUST be applied in
 reverse -- [RFC7230, section 3.2.6][rfc7230-section-3-2-6] decoding to an ASCII
 string, and then a **single round** of percent-decoding as described in
 [RFC3986, section 2.4][rfc3986-section-2-4] to produce a valid UTF-8 String.
-(Note that applying percent-decoding an incorrect number of times may result in
+(Note that applying percent-decoding an incorrect number of times can result in
 message corruption or security issues.)
 
 #### 3.1.4. Examples
