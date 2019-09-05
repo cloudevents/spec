@@ -311,27 +311,6 @@ The following attributes are OPTIONAL to appear in CloudEvents. See the
 [Notational Conventions](#notational-conventions) section for more information
 on the definition of OPTIONAL.
 
-#### datacontentencoding
-
-- Type: `String` per
-  [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
-- Description: Describes the content encoding for `data`.
-  There are cases where the value of `data` might need to be
-  encoded so that it can be carried within the serialization format being used.
-  For example, in JSON, binary data will likely need to be Base64 encoded.
-  When this attribute is set, the consumer can use its value to know how
-  to decode `data` value to retrieve its original contents.
-
-  If this attribute is supported, then the "Base64" encoding as defined in
-  [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8) MUST
-  be supported.
-
-- Constraints:
-  - The attribute MUST be set if `data` is encoded and not
-    in its original format. Otherwise the attribute MUST NOT be set.
-  - If present, MUST adhere to
-    [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
-
 #### datacontenttype
 
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
@@ -344,7 +323,7 @@ on the definition of OPTIONAL.
   `data` content is rendered for different `datacontenttype`
   values are defined in the event format specifications; for example, the JSON
   event format defines the relationship in
-  [section 3.1](./json-format.md#31-special-handling-of-data).
+  [section 3.1](./json-format.md#31-handling-of-data).
 
   When this attribute is omitted, `data` simply follows the event
   format's encoding rules. For the JSON event format, the `data` value
@@ -464,13 +443,8 @@ encapsulated within `data`.
   restriction on the type of this information. It is encoded into a media format
   which is specified by the `datacontenttype` attribute (e.g.
   application/json), and adheres to the `dataschema` format when those
-  repspective attributes are present.
+  respective attributes are present.
 
-  If `data`'s native syntax, or its syntax based on the `datacontenttype`
-  attribute if present, can not be copied directly into the desired
-  serialization format, and therefore needs to be further encoded, then
-  the `datacontentencoding` attribute MUST include the encoding mechanism
-  used.
 - Constraints:
   - OPTIONAL
 

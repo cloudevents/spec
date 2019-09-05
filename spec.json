@@ -11,6 +11,9 @@
     "data": {
       "type": ["object", "string"]
     },
+    "data_base64": {
+      "type": "string"
+    },
     "event": {
       "properties": {
         "specversion": {
@@ -21,6 +24,9 @@
         },
         "data": {
           "$ref": "#/definitions/data"
+        },
+        "data_base64": {
+          "$ref": "#/definitions/data_base64"
         },
         "id": {
           "$ref": "#/definitions/id"
