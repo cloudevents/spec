@@ -15,7 +15,7 @@ This document is a working draft.
 1. [Introduction](#1-introduction)
 - 1.1. [Conformance](#11-conformance)
 - 1.2. [Relation to SNS](#12-relation-to-sns)
-- 1.3. [Content Modes](#13-content-modes)
+- 1.3. [Message structure](#13-message-structure)
 - 1.4. [Security](#14-security)
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
 - 2.1. [data](#21-data)
