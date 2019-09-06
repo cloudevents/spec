@@ -69,10 +69,9 @@ This specification defines three content modes for transferring events:
 _binary_, _structured_ and _batched_. Every compliant implementation SHOULD
 support the _structured_ and _binary_ modes.
 
-In the _binary_ content mode, the value of the event `data` is placed
-into the HTTP request or response body as-is, with the `datacontenttype`
-attribute value declaring its media type; all other event attributes are mapped
-to HTTP headers.
+In the _binary_ content mode, the value of the event `data` is placed into the
+HTTP request or response body as-is, with the `datacontenttype` attribute value
+declaring its media type; all other event attributes are mapped to HTTP headers.
 
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the HTTP request or response body using an
@@ -120,17 +119,17 @@ compliant media-type expression.
 
 ### 2.2. data
 
-`data` is assumed to contain opaque application data that is
-encoded as declared by the `datacontenttype` attribute.
+`data` is assumed to contain opaque application data that is encoded as declared
+by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into HTTP as defined in this
-specification, the assumption is that the `data` value is made
-available as a sequence of bytes.
+specification, the assumption is that the `data` value is made available as a
+sequence of bytes.
 
 For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data`
-value is made available as [UTF-8][rfc3629] encoded JSON text to HTTP.
+`application/json;charset=utf-8`, the expectation is that the `data` value is
+made available as [UTF-8][rfc3629] encoded JSON text to HTTP.
 
 ## 3. HTTP Message Mapping
 
@@ -160,19 +159,19 @@ efficient transfer and without transcoding effort.
 
 #### 3.1.1. HTTP Content-Type
 
-For the _binary_ mode, the HTTP `Content-Type` value maps directly to the
-CloudEvents `datacontenttype` attribute.
+For the _binary_ mode, the HTTP `Content-Type` header value corresponds to
+(MUST be populated from or written to) the CloudEvents `datacontenttype`
+attribute.
 
 #### 3.1.2. Event Data Encoding
 
-The [`data`](#22-data) byte-sequence is used as the HTTP
-message body.
+The [`data`](#22-data) byte-sequence is used as the HTTP message body.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][ce] attributes with exception of `datacontenttype` and `data`
-MUST be individually mapped to and from distinct HTTP message headers, with
-exceptions noted below.
+All [CloudEvents][ce] attributes with the exception of `datacontenttype` MUST be
+individually mapped to and from distinct HTTP message headers, with exceptions
+noted below.
 
 CloudEvents extensions that define their own attributes MAY define a diverging
 mapping to HTTP headers for those attributes, especially if specific attributes
@@ -184,7 +183,7 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other transport bindings that are part of the CloudEvents core at the
 time of the submission or revision.
 
-##### 3.1.3.1 HTTP Header Names
+##### 3.1.3.1. HTTP Header Names
 
 Except for attributes
 [explicitly handled in this specification](#2-use-of-cloudevents-attributes),
@@ -200,28 +199,28 @@ Examples:
 Note: per the [HTTP](https://tools.ietf.org/html/rfc7230#section-3.2)
 specification, header names are case-insensitive.
 
-##### 3.1.3.2 HTTP Header Values
+##### 3.1.3.2. HTTP Header Values
 
 The value for each HTTP header is constructed from the respective attribute
 type's [canonical string representation][ce-types].
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
-and per [RFC7230 Section 3][rfc7230-section-3], HTTP headers MUST only use
+and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
 printable characters from the US-ASCII character set, and are terminated by a
-CRLF sequence.
+CRLF sequence with OPTIONAL whitespace around the header value.
 
-Therefore, and analog to the encoding rules for Universal character set host
-names in URIs [RFC3986 3.2.2][rfc3986], the string value MUST be further encoded
-as follows:
+String values MUST be percent-encoded as described in [RFC3986, section
+2.4][rfc3986-section-2-4] before applying the header encoding rules described in
+[RFC7230, section 3.2.6][rfc7230-section-3-2s6].
 
-Non-printable ASCII characters and non-ASCII characters MUST first be encoded
-according to UTF-8, and then each octet of the corresponding UTF-8 sequence MUST
-be percent-encoded to be represented as HTTP header characters, in compliance
-with [RFC7230, sections 3, 3.2, 3.2.6][rfc7230-section-3]. The rules for
-encoding of the percent character ('%') apply as defined in [RFC 3986 Section
-2.4.][rfc3986-section-2-4].
+When decoding an HTTP message into a Cloud Event, these rules MUST be applied in
+reverse -- [RFC7230, section 3.2.6][rfc7230-section-3-2-6] decoding to an ASCII
+string, and then a **single round** of percent-decoding as described in
+[RFC3986, section 2.4][rfc3986-section-2-4] to produce a valid UTF-8 String.
+(Note that applying percent-decoding an incorrect number of times can result in
+message corruption or security issues.)
 
-#### 3.1.4 Examples
+#### 3.1.4. Examples
 
 This example shows the _binary_ mode mapping of an event with an HTTP POST
 request:
@@ -280,8 +279,8 @@ Content-Type: application/cloudevents+json; charset=UTF-8
 
 #### 3.2.2. Event Data Encoding
 
-The chosen [event format](#14-event-formats) defines how all attributes,
-and `data`, are represented.
+The chosen [event format](#14-event-formats) defines how all attributes, and
+`data`, are represented.
 
 The event metadata and data is then rendered in accordance with the event format
 specification and the resulting data becomes the HTTP message body.
@@ -294,7 +293,7 @@ Implementations MAY include the same HTTP headers as defined for the
 All CloudEvents metadata attributes MUST be mapped into the payload, even if
 they are also mapped into HTTP headers.
 
-#### 3.2.4 Examples
+#### 3.2.4. Examples
 
 This example shows a JSON event format encoded event, sent with a PUT request:
 
@@ -477,8 +476,9 @@ Content-Length: nnnn
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159
 [rfc7230]: https://tools.ietf.org/html/rfc7230
-[rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7230-section-3]: https://tools.ietf.org/html/rfc7230#section-3
-[rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
+[rfc7230-section-3-2-6]: https://tools.ietf.org/html/rfc7230#section-3.2.6
 [rfc7230-section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
+[rfc7231]: https://tools.ietf.org/html/rfc7231
+[rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
 [rfc7540]: https://tools.ietf.org/html/rfc7540
