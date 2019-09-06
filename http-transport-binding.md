@@ -207,7 +207,7 @@ type's [canonical string representation][ce-types].
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
 and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
 printable characters from the US-ASCII character set, and are terminated by a
-CRLF sequence with optional whitespace around the header value.
+CRLF sequence with OPTIONAL whitespace around the header value.
 
 String values MUST be percent-encoded as described in [RFC3986, section
 2.4][rfc3986-section-2-4] before applying the header encoding rules described in
