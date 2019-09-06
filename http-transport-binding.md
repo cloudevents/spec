@@ -209,10 +209,9 @@ and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
 printable characters from the US-ASCII character set, and are terminated by a
 CRLF sequence with optional whitespace around the header value.
 
-String values which contain Unicode characters outside the ASCII range MUST be
-percent-encoded as described in [RFC3986, section 2.4][rfc3986-section-2-4]
-before applying the header encoding rules described in [RFC7230, section
-3.2.6][rfc7230-section-3-2s6].
+String values MUST be percent-encoded as described in [RFC3986, section
+2.4][rfc3986-section-2-4] before applying the header encoding rules described in
+[RFC7230, section 3.2.6][rfc7230-section-3-2s6].
 
 When decoding an HTTP message into a Cloud Event, these rules must be applied in
 reverse -- [RFC7230, section 3.2.6][rfc7230-section-3-2-6] decoding to an ASCII
