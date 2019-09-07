@@ -305,7 +305,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   - com.github.pull.create
   - com.example.object.delete.v2
 
-### OPTIONAL or Conditional Attributes
+### OPTIONAL Attributes
 
 The following attributes are OPTIONAL to appear in CloudEvents. See the
 [Notational Conventions](#notational-conventions) section for more information
