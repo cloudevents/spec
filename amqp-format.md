@@ -91,8 +91,17 @@ the submission or revision.
 
 ## 3. Data
 
-The CloudEvents `data` payload SHALL be mapped to a single [AMQP
-data][amqp-data] section.
+Before encoding, the AMQP serializer MUST first determine the runtime data type
+of the data content. This may be determined by examining the data for characters
+outside the UTF-8 range or by consulting the `datacontenttype` attribute.
+
+If the implementation determines that the type of the data is binary, the value
+MUST be stored in the payload as a single [AMQP data][amqp-data] section.
+
+For other types (non-binary data without a `datacontenttype` attribute), the
+implementation MUST translate the data value into an [AMQP type
+system][type-system] value and the value MUST be stored in an [AMQP
+value][amqp-value] section.
 
 ## 4. References
 
@@ -109,7 +118,7 @@ data][amqp-data] section.
 [type-system-encoding]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#section-encodings
 [amqp-boolean]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-boolean
 [amqp-long]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-long
 [amqp-string]:
@@ -120,6 +129,8 @@ data][amqp-data] section.
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-timestamp
 [amqp-data]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-data
+[amqp-value]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-value
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc4627]: https://tools.ietf.org/html/rfc4627
