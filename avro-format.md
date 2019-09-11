@@ -93,7 +93,44 @@ described by the [CloudEvent Avro Schema](./spec.avsc):
     },
     {
       "name": "data",
-      "type": "bytes"
+      "type": [
+        "bytes",
+        "null",
+        "boolean",
+        {
+          "type": "map",
+          "values": [
+            "null",
+            "boolean",
+            {
+              "type": "record",
+              "name": "CloudEventData",
+              "doc": "Representation of a JSON Value",
+              "fields": [
+                {
+                  "name": "value",
+                  "type": {
+                    "type": "map",
+                    "values": [
+                      "null",
+                      "boolean",
+                      { "type": "map", "values": "CloudEventData" },
+                      { "type": "array", "items": "CloudEventData" },
+                      "double",
+                      "string"
+                    ]
+                  }
+                }
+              ]
+            },
+            "double",
+            "string"
+          ]
+        },
+        { "type": "array", "items": "CloudEventData" },
+        "double",
+        "string"
+      ]
     }
   ]
 }
@@ -101,9 +138,16 @@ described by the [CloudEvent Avro Schema](./spec.avsc):
 
 ## 3 Data
 
-The `data` of the CloudEvent MUST be encoded in a top-level field called
-`data` of type `bytes`. Additional encoding MUST NOT be done, regardless of the
-`contenttype` attribute.
+Before encoding, the AVRO serializer MUST first determine the runtime data type
+of the content. This may be determined by examining the data for invalid UTF-8
+sequences or by consulting the `datacontenttype` attribute.
+
+If the implementation determines that the type of the data is binary, the value
+MUST be stored in the `data` field using the `bytes` type.
+
+For other types (non-binary data without a `datacontenttype` attribute), the
+implementation MUST translate the data value into a representation of the JSON
+value using the union types described for the `data` record.
 
 ## 4 Examples
 
