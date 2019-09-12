@@ -46,10 +46,9 @@ including extensions.
 For clarity, extension attributes are serialized using the same rules as
 specification defined attributes. This includes their syntax and placement
 within the JSON object. In particular, extensions are placed as top-level JSON
-properties. Extensions themselves are free to have nested properties, however
-the root of the extension MUST be serialized as a top-level JSON property. There
-were many reason for this design decision and they are covered in more detail in
-the [Primer](primer.md#json-extensions).
+properties. Extensions MUST be serialized as a top-level JSON property. There
+were many reasons for this design decision and they are covered in more detail
+in the [Primer](primer.md#json-extensions).
 
 ### 2.1. Base Type System
 
