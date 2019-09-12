@@ -406,8 +406,10 @@ See
 [CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
 for additional information concerning the use and definition of extensions.
 
-This specification places no restriction on the type or semantics of the
-extension attributes. Each definition of an extensions SHOULD fully define all
+This specification places no restriction on the semantics of the
+extension attributes, but they MUST use one of the types defined within the
+[type system](#type-system).
+Each definition of an extensions SHOULD fully define all
 aspects of the attribute - e.g. its name, semantic meaning and possible values
 or even to indicate that it places no restrictions on its values. New extension
 definitions SHOULD use a name that is descriptive enough to reduce the chances
@@ -419,13 +421,31 @@ extensions that might be of interest.
 Each specification that defines how to serialize a CloudEvent will define how
 extension attributes will appear.
 
+Extensions attribtue MUST be serialized using the same general pattern as all
+CloudEvents context attributes. For example, in binary HTTP, that means they
+MUST appear as HTTP headers with the `ce-` prefix. The specification of an
+attribute MAY define a secondary serialization where the data is duplicated
+in some other location within the message.
+
+In cases where a secondary serialization is defined, the extension
+specification MUST also state what a receiver of the CloudEvent should do
+is the data differs between those two serialization locations. Additionally,
+senders need to be prepared for intermediaries, and receivers, to not
+know about their extension and therefore the specialized serialization version
+version will most likely not be processed as a CloudEvent extension attribute.
+
+Many transports support the ability for senders to include additonal metadata,
+for example as HTTP headers. While a CloudEvents receiver is not mandated to
+process and pass them along, it is RECOMMENDED that they do so via some
+mechanism that makes it clear they are non-CloudEvents metadata.
+
 Here is an example that illustrates the need for additional attributes. In many
 IoT and enterprise use cases, an event could be used in a serverless application
 that performs actions across multiple types of events. To support such use
 cases, the event producer will need to add additional identity attributes to the
 "context attributes" which the event consumers can use to correlate this event
 with the other events. If such identity attributes happen to be part of the
-event "data", the event producer SHOULD also add the identity attributes to the
+event "data", the event producer would also add the identity attributes to the
 "context attributes" so that event consumers can easily access this information
 without needing to decode and examine the event data. Such identity attributes
 can also be used to help intermediate gateways determine how to route the

@@ -35,7 +35,7 @@ Extensions always follow a common placement strategy for in-memory formats (e.g.
 representations. Transport bindings (e.g. [HTTP](http-transport-binding.md),
 [MQTT](mqtt-transport-binding.md), [AMPQ](amqp-transport-binding.md),
 [NATS](nats-transport-binding.md)) provide default placement for extensions, but
-an extension MAY require special representation when transported (e.g. tracing
+an extension MAY require special secondary representation when transported (e.g. tracing
 standards that require specific headers). Extension authors SHOULD only require
 special representation in transport bindings where extensions integrate with
 pre-existing specs; extensions with custom transport bindings are much more
