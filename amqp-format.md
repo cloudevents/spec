@@ -2,8 +2,8 @@
 
 ## Abstract
 
-The AMQP Format for CloudEvents defines how event attributes are expressed in
-the [AMQP 1.0 Type System][type-system].
+The AMQP Format for CloudEvents defines how event attributes and payload data
+are expressed in the [AMQP 1.0 Type System][type-system].
 
 ## Status of this document
 
@@ -13,7 +13,8 @@ This document is a working draft.
 
 1. [Introduction](#1-introduction)
 2. [Attributes](#2-attributes)
-3. [References](#3-references)
+3. [Data](#3-data)
+4. [References](#4-references)
 
 ## 1. Introduction
 
@@ -55,13 +56,13 @@ exceptions noted below.
 
 | CloudEvents   | AMQP                        |
 | ------------- | --------------------------- |
-| String        | [string][amqp-string]       |
+| Boolean       | [boolean][amqp-boolean]     |
 | Integer       | [long][amqp-long]           |
+| String        | [string][amqp-string]       |
 | Binary        | [binary][amqp-binary]       |
 | URI           | [string][amqp-string]       |
 | URI-reference | [string][amqp-string]       |
 | Timestamp     | [timestamp][amqp-timestamp] |
-| Any           | See 2.3.                    |
 
 A CloudEvents AMQP format implementation MUST allow for attribute values to be
 convertible from/to their canonical CloudEvents string representation. For
@@ -88,14 +89,21 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.
 
-### 2.3. Mapping Any-typed Attributes
+## 3. Data
 
-`Any`-typed CloudEvents values can either hold a `String`, or a `Binary` value,
-or a `Map`. `Map` entry values are also `Any` typed. AMQP's type system natively
-represents dynamic typing in its [type system encoding][type-system-encoding],
-and therefore immediately allows for the required variant type representation.
+Before encoding, the AMQP serializer MUST first determine the runtime data type
+of the data content. This may be determined by examining the data for characters
+outside the UTF-8 range or by consulting the `datacontenttype` attribute.
 
-## 3. References
+If the implementation determines that the type of the data is binary, the value
+MUST be stored in the payload as a single [AMQP data][amqp-data] section.
+
+For other types (non-binary data without a `datacontenttype` attribute), the
+implementation MUST translate the data value into an [AMQP type
+system][type-system] value and the value MUST be stored in an [AMQP
+value][amqp-value] section.
+
+## 4. References
 
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
@@ -109,21 +117,25 @@ and therefore immediately allows for the required variant type representation.
   https://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html
 [type-system-encoding]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#section-encodings
-[amqp-string]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
+[amqp-boolean]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-boolean
 [amqp-long]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-long
+[amqp-string]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
 [amqp-binary]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-binary
 [amqp-timestamp]:
   http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-timestamp
-[amqp-map]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-map
-[amqp-describedtype]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#doc-idp38080
+[amqp-data]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-data
+[amqp-value]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-value
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc4627]: https://tools.ietf.org/html/rfc4627
 [rfc4648]: https://tools.ietf.org/html/rfc4648
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [rfc8259]: https://tools.ietf.org/html/rfc8259
+[oasis-amqp-1.0]:
+  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-overview-v1.0-os.html

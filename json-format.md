@@ -62,13 +62,13 @@ with exceptions noted below.
 
 | CloudEvents   | JSON                                                           |
 | ------------- | -------------------------------------------------------------- |
-| String        | [string][json-string]                                          |
+| Boolean       | [boolean][json-bool]
 | Integer       | [number][json-number], only the `int` component is permitted   |
+| String        | [string][json-string]                                          |
 | Binary        | [string][json-string], [Base64-encoded][base64] binary         |
 | URI           | [string][json-string] following [RFC 3986][rfc3986]            |
 | URI-reference | [string][json-string] following [RFC 3986][rfc3986]            |
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
-| Any           | [JSON value][json-value]                                       |
 
 Extension specifications MAY define diverging mapping rules for the values of
 attributes they define.
@@ -297,6 +297,7 @@ also valid in a request):
   https://www.iana.org/assignments/media-types/application/geo+json-seq
 [json-object]: https://tools.ietf.org/html/rfc7159#section-4
 [json-seq]: https://www.iana.org/assignments/media-types/application/json-seq
+[json-bool]: https://tools.ietf.org/html/rfc7159#section-3
 [json-number]: https://tools.ietf.org/html/rfc7159#section-6
 [json-string]: https://tools.ietf.org/html/rfc7159#section-7
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
