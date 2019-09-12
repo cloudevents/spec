@@ -58,22 +58,6 @@ will then silently ignore that part of the message. The producer needs to be
 prepared for the situation where a consumer ignores that feature. An
 [Intermediary](#intermediary) SHOULD forward OPTIONAL attributes.
 
-### Attribute Naming Convention
-
-The CloudEvents specifications define mappings to various protocols and
-encodings, and the accompanying CloudEvents SDK targets various runtimes and
-languages. Some of these treat metadata elements as case-sensitive while others
-do not, and a single CloudEvent might be routed via multiple hops that involve a
-mix of protocols, encodings, and runtimes. Therefore, this specification limits
-the available character set of all attributes such that case-sensitivity issues
-or clashes with the permissible character set for identifiers in common
-languages are prevented.
-
-CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
-digits ('0' to '9') from the ASCII character set and MUST begin with a
-lower-case letter. Attribute names SHOULD be descriptive and terse and SHOULD
-NOT exceed 20 characters in length.
-
 ### Terminology
 
 This specification defines the following terms:
@@ -154,6 +138,22 @@ attributes.
 These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
 inspected at the destination without having to deserialize the event data.
+
+### Attribute Naming Convention
+
+The CloudEvents specifications define mappings to various protocols and
+encodings, and the accompanying CloudEvents SDK targets various runtimes and
+languages. Some of these treat metadata elements as case-sensitive while others
+do not, and a single CloudEvent might be routed via multiple hops that involve a
+mix of protocols, encodings, and runtimes. Therefore, this specification limits
+the available character set of all attributes such that case-sensitivity issues
+or clashes with the permissible character set for identifiers in common
+languages are prevented.
+
+CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
+digits ('0' to '9') from the ASCII character set and MUST begin with a
+lower-case letter. Attribute names SHOULD be descriptive and terse and SHOULD
+NOT exceed 20 characters in length.
 
 ### Type System
 
@@ -523,7 +523,7 @@ The following example shows a CloudEvent serialized as JSON:
     "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : 5,
+    "comexampleothervalue" : 5,
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
