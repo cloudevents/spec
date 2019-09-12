@@ -157,9 +157,7 @@ Example event with `String`-valued `data`:
     "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "otherValue": 5
-    },
+    "comexampleextension2" : 5,
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
@@ -175,9 +173,7 @@ Example event with `Binary`-valued data
     "id" : "B234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "otherValue": 5
-    },
+    "comexampleextension2" : 5,
     "datacontenttype" : "application/vnd.apache.thrift.binary",
     "data_base64" : "... base64 encoded string ..."
 }
@@ -194,9 +190,7 @@ or [JSON data](#31-handling-of-data) data:
     "id" : "C234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "otherValue": 5
-    },
+    "comexampleextension2" : 5,
     "datacontenttype" : "application/json",
     "data" : {
         "appinfoA" : "abc",
@@ -244,9 +238,7 @@ second with JSON data.
       "id" : "B234-1234-1234",
       "time" : "2018-04-05T17:31:00Z",
       "comexampleextension1" : "value",
-      "comexampleextension2" : {
-          "otherValue": 5
-      },
+      "comexampleextension2" : 5,
       "datacontenttype" : "application/vnd.apache.thrift.binary",
       "data_base64" : "... base64 encoded string ..."
   },
@@ -257,9 +249,7 @@ second with JSON data.
       "id" : "C234-1234-1234",
       "time" : "2018-04-05T17:31:05Z",
       "comexampleextension1" : "value",
-      "comexampleextension2" : {
-          "otherValue": 5
-      },
+      "comexampleextension2" : 5,
       "datacontenttype" : "application/json",
       "data" : {
           "appinfoA" : "abc",

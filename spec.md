@@ -14,7 +14,7 @@ This document is a working draft.
 - [Overview](#overview)
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
-- [Data](#data)
+- [Event Data](#event-data)
 - [Size Limits](#size-limits)
 - [Privacy & Security](#privacy-and-security)
 - [Example](#example)
@@ -93,9 +93,9 @@ An "event" is a data record expressing an occurrence and its context. Events are
 routed from an event producer (the source) to interested event consumers. The
 routing can be performed based on information contained in the event, but an
 event will not identify a specific routing destination. Events will contain two
-types of information: the [Data](#data) representing the Occurrence and
-[Context](#context) metadata providing contextual information about the
-Occurrence. A single occurrence MAY result in more than one event.
+types of information: the [Event Data](#event-data) representing the
+Occurrence and [Context](#context) metadata providing contextual information
+about the Occurrence. A single occurrence MAY result in more than one event.
 
 #### Producer
 
@@ -132,7 +132,7 @@ or to other Events.
 
 Domain-specific information about the occurrence (i.e. the payload). This might
 include information about the occurrence, details about the data that was
-changed, or more. See the [Data](#data) section for more
+changed, or more. See the [Event Data](#event-data) section for more
 information.
 
 #### Message
@@ -431,13 +431,11 @@ without needing to decode and examine the event data. Such identity attributes
 can also be used to help intermediate gateways determine how to route the
 events.
 
-## Data
+## Event Data
 
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
 information about the occurrence. When present, this information will be
 encapsulated within `data`.
-
-### data
 
 - Description: The event payload. This specification does not place any
   restriction on the type of this information. It is encoded into a media format
@@ -502,10 +500,10 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 
 - Data
 
-  Domain specific [data](#data) SHOULD be encrypted to restrict visibility to
-  trusted parties. The mechanism employed for such encryption is an agreement
-  between producers and consumers and thus outside the scope of this
-  specification.
+  Domain specific [event data](#event-data) SHOULD be encrypted to restrict
+  visibility to trusted parties. The mechanism employed for such encryption is
+  an agreement between producers and consumers and thus outside the scope of
+  this specification.
 
 - Transport Bindings
 
@@ -525,9 +523,7 @@ The following example shows a CloudEvent serialized as JSON:
     "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "othervalue": 5
-    },
+    "comexampleextension2" : 5,
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
