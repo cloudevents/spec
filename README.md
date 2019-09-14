@@ -38,7 +38,6 @@ The following documents are available:
 | Kafka Transport Binding       | - | [master](https://github.com/cloudevents/spec/blob/master/kafka-transport-binding.md) |
 | MQTT Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/mqtt-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-transport-binding.md) |
 | NATS Transport Binding        | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
-| Protocol Buffers Event Format | [v0.3](https://github.com/cloudevents/spec/blob/v0.3/protobuf-format.md)        | [master](https://github.com/cloudevents/spec/blob/master/protobuf-format.md)        |
 | Web hook                      |      [v0.3](https://github.com/cloudevents/spec/blob/v0.3/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
 |                               |
 | **Additional Documentation:** |
