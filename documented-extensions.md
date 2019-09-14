@@ -31,7 +31,7 @@ Support for any extension is OPTIONAL. When an extension definition uses
 MAY), this usage only applies to events that use the extension.
 
 Extensions always follow a common placement strategy for in-memory formats (e.g.
-[JSON](json-format.md), XML, [Protocol Buffers](protobuf-format.md)) that are decided by those
+[JSON](json-format.md), XML) that are decided by those
 representations. Transport bindings (e.g. [HTTP](http-transport-binding.md),
 [MQTT](mqtt-transport-binding.md), [AMPQ](amqp-transport-binding.md),
 [NATS](nats-transport-binding.md)) provide default placement for extensions, but
