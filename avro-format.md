@@ -139,7 +139,7 @@ described by the [CloudEvent Avro Schema](./spec.avsc):
 ## 3 Data
 
 Before encoding, the AVRO serializer MUST first determine the runtime data type
-of the content. This may be determined by examining the data for invalid UTF-8
+of the content. This can be determined by examining the data for invalid UTF-8
 sequences or by consulting the `datacontenttype` attribute.
 
 If the implementation determines that the type of the data is binary, the value
