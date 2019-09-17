@@ -421,15 +421,15 @@ extensions that might be of interest.
 Each specification that defines how to serialize a CloudEvent will define how
 extension attributes will appear.
 
-Extensions attribtue MUST be serialized using the same general pattern as all
+Extension attribtue MUST be serialized using the same general pattern as all
 CloudEvents context attributes. For example, in binary HTTP, that means they
 MUST appear as HTTP headers with the `ce-` prefix. The specification of an
 attribute MAY define a secondary serialization where the data is duplicated
 in some other location within the message.
 
 In cases where a secondary serialization is defined, the extension
-specification MUST also state what a receiver of the CloudEvent should do
-is the data differs between those two serialization locations. Additionally,
+specification MUST also state what a receiver of the CloudEvent is to do
+if the data differs between those two serialization locations. Additionally,
 senders need to be prepared for intermediaries, and receivers, to not
 know about their extension and therefore the specialized serialization version
 version will most likely not be processed as a CloudEvent extension attribute.

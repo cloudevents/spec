@@ -65,9 +65,9 @@ placed into the MQTT PUBLISH message payload section using an
 
 In the _binary_ content mode, the value of the event `data` is placed
 into the MQTT PUBLISH message's payload section as-is, with the
-`datacontenttype` attribute value declaring its media type. All event
-attributes (including `datacontenttype`)are mapped to the MQTT PUBLISH
-message's [properties section][5-publish-properties].
+`datacontenttype` attribute value declaring its media type in the MQTT
+PUBLISH message's [`Content Type`][5-content-type] property; all other
+event attributes are mapped to User Property fields.
 
 ### 1.4. Event Formats
 
@@ -149,8 +149,8 @@ payload of the MQTT PUBLISH message.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][ce] context attributes, including `datacontenttype`,
-MUST be individually mapped to and from the User Property fields in the MQTT
+All other [CloudEvents][ce] context attributes, including extensions, MUST be
+individually mapped to and from the User Property fields in the MQTT
 PUBLISH message.
 
 CloudEvents extensions that define their own attributes MAY define a secondary

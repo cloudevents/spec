@@ -173,7 +173,7 @@ mapping to HTTP headers for those attributes, especially if specific attributes
 need to align with HTTP features or with other specifications that have explicit
 HTTP header bindings. Note that these attributes MUST also still appear in the
 HTTP message as HTTP headers with the `ce-` prefix as noted in
-[HTTP Header Names](#http-header-names).
+[HTTP Header Names](#3131-http-header-names).
 
 ##### 3.1.3.1. HTTP Header Names
 
