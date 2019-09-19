@@ -70,15 +70,16 @@ with exceptions noted below.
 | URI-reference | [string][json-string] following [RFC 3986][rfc3986]            |
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
 
-Extension specifications MAY define diverging mapping rules for the values of
-attributes they define.
+Extension specifications MAY define secondary mapping rules for the values of
+attributes they define, but MUST also include the previously defined primary
+mapping.
 
 For instance, the attribute value might be a data structure defined in a
 standard outside of CloudEvents, with a formal JSON mapping, and there might be
 risk of translation errors or information loss when the original format is not
 preserved.
 
-An extension specification that defines a diverging mapping rule for JSON, and
+An extension specification that defines a secondary mapping rule for JSON, and
 any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.

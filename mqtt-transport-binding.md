@@ -65,9 +65,9 @@ placed into the MQTT PUBLISH message payload section using an
 
 In the _binary_ content mode, the value of the event `data` is placed
 into the MQTT PUBLISH message's payload section as-is, with the
-`datacontenttype` attribute value declaring its media type; all other event
-attributes are mapped to the MQTT PUBLISH message's [properties
-section][5-publish-properties].
+`datacontenttype` attribute value declaring its media type in the MQTT
+PUBLISH message's [`Content Type`][5-content-type] property; all other
+event attributes are mapped to User Property fields.
 
 ### 1.4. Event Formats
 
@@ -88,14 +88,9 @@ mandate specific existing features to be used.
 This specification does not further define any of the [CloudEvents][ce] event
 attributes.
 
-Two of the event attributes, `datacontenttype` and `data` are handled specially
-and mapped onto MQTT constructs, all other attributes are transferred as
-metadata without further interpretation.
-
 This mapping is intentionally robust against changes, including the addition and
 removal of event attributes, and also accommodates vendor extensions to the
-event metadata. Any mention of event attributes other than `datacontenttype` and
-`data` is exemplary.
+event metadata.
 
 ### 2.1. datacontenttype Attribute
 
@@ -154,19 +149,15 @@ payload of the MQTT PUBLISH message.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][ce] attributes with exception of `datacontenttype` and `data`
-MUST be individually mapped to and from the User Property fields in the MQTT
-PUBLISH message, with exceptions noted below.
+All other [CloudEvents][ce] context attributes, including extensions, MUST be
+individually mapped to and from the User Property fields in the MQTT
+PUBLISH message.
 
-CloudEvents extensions that define their own attributes MAY define a diverging
+CloudEvents extensions that define their own attributes MAY define a secondary
 mapping to MQTT user properties or features for those attributes, especially if
 specific attributes need to align with MQTT features, or with other
-specifications that have explicit MQTT header bindings.
-
-An extension specification that defines a diverging mapping rule for MQTT, and
-any revision of such a specification, MUST also define explicit mapping rules
-for all other transport bindings that are part of the CloudEvents core at the
-time of the submission or revision.
+specifications that have explicit MQTT header bindings. However, they MUST
+also include the previously defined primary mapping.
 
 ##### 3.1.3.1 User Property Names
 
@@ -203,6 +194,7 @@ type: com.example.someevent
 time: 2018-04-05T03:56:24Z
 id: 1234-1234-1234
 source: /mycontext/subcontext
+datacontenttype: application/json; charset=utf-8
        .... further attributes ...
 
 ------------------ payload -------------------
@@ -262,6 +254,10 @@ Content Type: application/cloudevents+json; charset=utf-8
 {
     "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
+	"time" : 2018-04-05T03:56;24Z,
+	"id" : 1234-1234-1234,
+	"source" : "/mycontext/subcontext",
+	"datacontenttype" : "application/json; charset=utf-8",
 
     ... further attributes omitted ...
 
@@ -287,6 +283,10 @@ Topic Name: mytopic
 {
     "specversion" : "0.4-wip",
     "type" : "com.example.someevent",
+	"time" : 2018-04-05T03:56;24Z,
+	"id" : 1234-1234-1234,
+	"source" : "/mycontext/subcontext",
+	"datacontenttype" : "application/json; charset=utf-8",
 
     ... further attributes omitted ...
 

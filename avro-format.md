@@ -56,8 +56,9 @@ The CloudEvents type system MUST be mapped to Avro types as follows.
 | URI-reference | [string][avro-primitives] following [RFC 3986 §4.1][rfc3986-section41] |
 | Timestamp     | [string][avro-primitives] following [RFC 3339][rfc3339] (ISO 8601)     |
 
-Extension specifications MAY define diverging mapping rules for the values of
-attributes they define.
+Extension specifications MAY define secondary mapping rules for the values of
+attributes they define, but MUST also include the previously defined primary
+mapping.
 
 ### 2.3 OPTIONAL Attributes
 

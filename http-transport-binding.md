@@ -70,8 +70,9 @@ _binary_, _structured_ and _batched_. Every compliant implementation SHOULD
 support the _structured_ and _binary_ modes.
 
 In the _binary_ content mode, the value of the event `data` is placed into the
-HTTP request or response body as-is, with the `datacontenttype` attribute value
-declaring its media type; all other event attributes are mapped to HTTP headers.
+HTTP request, or response, body as-is, with the `datacontenttype` attribute
+value declaring its media type in the HTTP `Content-Type` header; all other
+event attributes are mapped to HTTP headers.
 
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the HTTP request or response body using an
@@ -102,15 +103,9 @@ identically to [HTTP over TLS]([RFC2818][RFC2818]).
 This specification does not further define any of the core [CloudEvents][ce]
 event attributes.
 
-Two of the event attributes, `datacontenttype` and `data` are handled specially
-and mapped onto HTTP constructs, all other attributes are transferred as
-metadata without further interpretation (except that extensions MAY define
-additional header mappings).
-
 This mapping is intentionally robust against changes, including the addition and
 removal of event attributes, and also accommodates vendor extensions to the
-event metadata. Any mention of event attributes other than `datacontenttype` and
-`data` is exemplary.
+event metadata.
 
 ### 2.1. datacontenttype Attribute
 
@@ -161,7 +156,8 @@ efficient transfer and without transcoding effort.
 
 For the _binary_ mode, the HTTP `Content-Type` header value corresponds to
 (MUST be populated from or written to) the CloudEvents `datacontenttype`
-attribute.
+attribute. Note that a `ce-datacontenttype` HTTP header MUST NOT also be
+present in the message.
 
 #### 3.1.2. Event Data Encoding
 
@@ -169,26 +165,21 @@ The [`data`](#22-data) byte-sequence is used as the HTTP message body.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][ce] attributes with the exception of `datacontenttype` MUST be
-individually mapped to and from distinct HTTP message headers, with exceptions
-noted below.
+All other [CloudEvents][ce] attributes, including extensions, MUST be
+individually mapped to and from distinct HTTP message header.
 
-CloudEvents extensions that define their own attributes MAY define a diverging
+CloudEvents extensions that define their own attributes MAY define a secondary
 mapping to HTTP headers for those attributes, especially if specific attributes
 need to align with HTTP features or with other specifications that have explicit
-HTTP header bindings.
-
-An extension specification that defines a diverging mapping rule for HTTP, and
-any revision of such a specification, MUST also define explicit mapping rules
-for all other transport bindings that are part of the CloudEvents core at the
-time of the submission or revision.
+HTTP header bindings. Note that these attributes MUST also still appear in the
+HTTP message as HTTP headers with the `ce-` prefix as noted in
+[HTTP Header Names](#3131-http-header-names).
 
 ##### 3.1.3.1. HTTP Header Names
 
-Except for attributes
-[explicitly handled in this specification](#2-use-of-cloudevents-attributes),
-the naming convention for the HTTP header mapping of well-known CloudEvents
-attributes is that each attribute name MUST be prefixed with "ce-".
+Except where noted, all CloudEvents context attributes, including extensions,
+MUST be mapped to HTTP headers with the same name as the attribute name but
+prefixed with `ce-`.
 
 Examples:
 
@@ -213,7 +204,7 @@ String values MUST be percent-encoded as described in [RFC3986, section
 2.4][rfc3986-section-2-4] before applying the header encoding rules described in
 [RFC7230, section 3.2.6][rfc7230-section-3-2s6].
 
-When decoding an HTTP message into a Cloud Event, these rules MUST be applied in
+When decoding an HTTP message into a CloudEvent, these rules MUST be applied in
 reverse -- [RFC7230, section 3.2.6][rfc7230-section-3-2-6] decoding to an ASCII
 string, and then a **single round** of percent-decoding as described in
 [RFC3986, section 2.4][rfc3986-section-2-4] to produce a valid UTF-8 String.

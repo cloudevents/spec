@@ -43,3 +43,13 @@ CURL -X POST example/webhook.json \
 -H 'content-type: application/cloudevents+json' \
 -d '@sample-event.json'
 ```
+
+## Conflicts
+
+Since this extension defines secondary, special, seialization that differs
+from other CloudEvents attributes, it is possible that the values of these two
+could differ by the time the event is received at a destination. In those
+cases, the serialization that followed the "general CloudEvents serialization
+rules" MUST be used as the CloudEvents attribute. The other, secodary,
+mapping MAY be picked-up and offered to the receiving application as
+"additional" metadata.
