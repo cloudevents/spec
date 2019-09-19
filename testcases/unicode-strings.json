@@ -9,8 +9,8 @@
     "id": "\"😉\u033c.is+Fine火\u0022",  // \u22\u1F609\u033c\u2e\u69\u73\u2b\u46\u69\u6e\u65\u706b\u22
 
     "source": "https://cloudevents.io/unicode-strings"
-    "type": "\"😉\u033c.is+Fine火\u0022",
+    "type": " -.-. . "
 
     // OPTIONAL field
-    "subject": "\"😉\u033c.is+Fine火\u0022"
+    "subject": " "
 }

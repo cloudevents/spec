@@ -6,6 +6,5 @@ ce-specversion: 0.4-wip
 ce-id: 123
 ce-source: https://cloudevents.io/contenttype
 ce-type: io.cloudevents.contenttype-test
-ce-datacontentencoding: Base64
 
-PG11Y2ggd293PSJ4bWwiLz4=
+<much wow="xml"/>

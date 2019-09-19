@@ -6,7 +6,6 @@ specversion: 0.4-wip
 id: 123
 source: https://cloudevents.io/contenttype
 type: io.cloudevents.contenttype-test
-datacontentencoding: Base64
 ------------------ payload ---------------
-PG11Y2ggd293PSJ4bWwiLz4=
+<much wow="xml"/>
 ------------------------------------------

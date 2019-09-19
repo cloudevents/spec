@@ -1,9 +1,9 @@
-POST / HTTP/1.1
+oPOST / HTTP/1.1
 Host: handler.example.com
 Content-Length: 0
 ce-specversion: 0.4-wip
 ce-id: 123
-ce-source: %2f
+ce-source: /
 ce-type: io.cloudevetns.url-test
-ce-schemaurl: %252f%252fanonymous%40example.com%2fa&b%3b%3fx'%3d%252f%2f%2f#%2f%2f
+ce-schemaurl: %252f%252fanonymous%40example.com/a&b;?x'=%252f//#%//
 

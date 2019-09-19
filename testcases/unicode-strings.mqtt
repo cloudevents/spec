@@ -2,10 +2,10 @@
 Topic Name: mytopic
 Content Type: 
 --------------- User Properties ----------
-specversion: 0.4-wip
-id: "😉̼.is+Fine火"
-source: https://cloudevents.io/unicode-strings
-type: "😉̼.is+Fine火"
-subject: "😉̼.is+Fine火"
+specversion:0.4-wip
+id:"😉̼.is+Fine火"
+source:https://cloudevents.io/unicode-strings
+type: -.-. . 
+subject: 
 ------------------ payload ---------------
 ------------------------------------------
