@@ -76,9 +76,10 @@ representation before surfacing the value to the API. An AMQP implementation
 SHOULD convert from/to the native runtime or language type system to the AMQP
 type system directly without translating through strings whenever possible.
 
-Extension specifications MAY define a secondary mapping rule for the values of
-attributes they define, but MUST also include the previously defined primary
-mapping.
+Extension specifications MAY define a
+[secondary mapping rule](./amqp-transport-binding.md#313-metadata-headers)
+for the values of attributes they define, but MUST also include the previously
+defined primary mapping.
 
 For instance, the attribute value may be a data structure defined in a standard
 outside of CloudEvents, with a formal AMQP mapping, and there might be risk of
