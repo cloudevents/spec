@@ -1,4 +1,4 @@
-# CloudEvents SDK Requirements - Version 0.4-wip
+# CloudEvents SDK Requirements - Version 1.0-rc1
 
 The intent of this document to describe bare minimum set of requirements for a
 new SDKs.

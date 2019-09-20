@@ -1,4 +1,4 @@
-# Kafka Transport Binding for CloudEvents - Version 0.4-wip
+# Kafka Transport Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
@@ -179,7 +179,7 @@ Key: mykey
 
 ------------------ headers -------------------
 
-ce_specversion: "0.4-wip"
+ce_specversion: "1.0-rc1"
 ce_type: "com.example.someevent"
 ce_source: "/mycontext/subcontext"
 ce_id: "1234-1234-1234"
@@ -245,7 +245,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 ------------------- value --------------------
 
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "datacontenttype" : "com.example.someevent",
 
     ... further attributes omitted ...

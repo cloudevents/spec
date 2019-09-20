@@ -1,4 +1,4 @@
-# CloudEvents - Version 0.4-wip
+# CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
@@ -280,7 +280,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 - Type: `String`
 - Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `0.4-wip` when referring to this version of the
+  producers MUST use a value of `1.0-rc1` when referring to this version of the
   specification.
 - Constraints:
   - REQUIRED
@@ -352,7 +352,7 @@ on the definition of OPTIONAL.
   for more information.
 - Constraints:
   - OPTIONAL
-  - If present, MUST be a non-empty URI-reference
+  - If present, MUST be a non-empty URI
 
 #### subject
 
@@ -536,7 +536,7 @@ The following example shows a CloudEvent serialized as JSON:
 
 ```JSON
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull",
     "subject" : "123",
