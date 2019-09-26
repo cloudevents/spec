@@ -167,7 +167,7 @@ The following table shows exemplary mappings:
 |             |        |                                                |
 | dataschema  | string | `"http://registry.com/subjects/ce/versions/1"` |
 | contenttype | string | `"application/avro"`                           |
-| data        | string | `"Q2xvdWRFdmVudHM="`                           |
+| data        | bytes  | `[avro-serialized-bytes]`                      |
 
 ## References
 
