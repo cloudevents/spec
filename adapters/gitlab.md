@@ -16,9 +16,8 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "repository.homepage" value              |
-| `specversion`         | `0.4-wip`                                |
+| `specversion`         | `1.0-rc1`                                |
 | `type`                | `com.gitlab.push`                        |
-| `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "checkout_sha" value                     |
@@ -31,9 +30,8 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "repository.homepage" value              |
-| `specversion`         | `0.4-wip`                                |
+| `specversion`         | `1.0-rc1`                                |
 | `type`                | `com.gitlab.tag_push`                    |
-| `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "ref" value                              |
@@ -46,9 +44,8 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID              |
 | `source`              | "repository.homepage" value                           |
-| `specversion`         | `0.4-wip`                                             |
+| `specversion`         | `1.0-rc1`                                             |
 | `type`                | `com.gitlab.issue.` + "object_attributes.state" value |
-| `datacontentencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
 | `dataschema`          | Omit                                                  |
 | `subject`             | "object_attributes.iid" value                         |
@@ -61,9 +58,8 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "commit.url" value                       |
-| `specversion`         | `0.4-wip`                                |
+| `specversion`         | `1.0-rc1`                                |
 | `type`                | `com.gitlab.note.commit`                 |
-| `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "object_attributes.id" value             |
@@ -76,9 +72,8 @@ based on the specified event.
 | :-------------------- | :----------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                     |
 | `source`              | "object_attributes.url" value, without the `#note\_...` part |
-| `specversion`         | `0.4-wip`                                                    |
+| `specversion`         | `1.0-rc1`                                                    |
 | `type`                | `com.gitlab.note.merge_request`                              |
-| `datacontentencoding` | Omit                                                         |
 | `datacontenttype`     | `application/json`                                           |
 | `dataschema`          | Omit                                                         |
 | `subject`             | "object_attributes.id" value                                 |
@@ -91,9 +86,8 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                    |
 | `source`              | "object_attributes.url" value without the `#note\_...` part |
-| `specversion`         | `0.4-wip`                                                   |
+| `specversion`         | `1.0-rc1`                                                   |
 | `type`                | `com.gitlab.note.issue`                                     |
-| `datacontentencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
 | `dataschema`          | Omit                                                        |
 | `subject`             | "object_attributes.id" value                                |
@@ -106,9 +100,8 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                    |
 | `source`              | "object_attributes.url" value without the `#note\_...` part |
-| `specversion`         | `0.4-wip`                                                   |
+| `specversion`         | `1.0-rc1`                                                   |
 | `type`                | `com.gitlab.note.snippet`                                   |
-| `datacontentencoding` | Omit                                                        |
 | `datacontenttype`     | `application/json`                                          |
 | `dataschema`          | Omit                                                        |
 | `subject`             | "object_attributes.id" value                                |
@@ -121,9 +114,8 @@ based on the specified event.
 | :-------------------- | :------------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                       |
 | `source`              | "repository.homepage" value                                    |
-| `specversion`         | `0.4-wip`                                                      |
+| `specversion`         | `1.0-rc1`                                                      |
 | `type`                | `com.gitlab.merge_request.` + "object_attributes.action" value |
-| `datacontentencoding` | Omit                                                           |
 | `datacontenttype`     | `application/json`                                             |
 | `dataschema`          | Omit                                                           |
 | `subject`             | "object_attributes.iid" value                                  |
@@ -136,9 +128,8 @@ based on the specified event.
 | :-------------------- | :--------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                   |
 | `source`              | "project.web_url" value                                    |
-| `specversion`         | `0.4-wip`                                                  |
+| `specversion`         | `1.0-rc1`                                                  |
 | `type`                | `com.gitlab.wiki_page.` + "object_attributes.action" value |
-| `datacontentencoding` | Omit                                                       |
 | `datacontenttype`     | `application/json`                                         |
 | `dataschema`          | Omit                                                       |
 | `subject`             | "object_attributes.slug" value                             |
@@ -151,9 +142,8 @@ based on the specified event.
 | :-------------------- | :-------------------------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID                  |
 | `source`              | "project.web_url" value                                   |
-| `specversion`         | `0.4-wip`                                                 |
+| `specversion`         | `1.0-rc1`                                                 |
 | `type`                | `com.gitlab.pipeline.` + "object_attributes.status" value |
-| `datacontentencoding` | Omit                                                      |
 | `datacontenttype`     | `application/json`                                        |
 | `dataschema`          | Omit                                                      |
 | `subject`             | "object_attributes.id" value                              |
@@ -166,9 +156,8 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | Generate a new unique value, e.g. a UUID |
 | `source`              | "repository.homepage" value              |
-| `specversion`         | `0.4-wip`                                |
+| `specversion`         | `1.0-rc1`                                |
 | `type`                | `com.gitlab.job.` + "job_status" value   |
-| `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
 | `dataschema`          | Omit                                     |
 | `subject`             | "job_id" value                           |

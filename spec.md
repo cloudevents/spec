@@ -1,4 +1,4 @@
-# CloudEvents - Version 0.4-wip
+# CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
@@ -14,7 +14,7 @@ This document is a working draft.
 - [Overview](#overview)
 - [Notations and Terminology](#notations-and-terminology)
 - [Context Attributes](#context-attributes)
-- [Data](#data)
+- [Event Data](#event-data)
 - [Size Limits](#size-limits)
 - [Privacy & Security](#privacy-and-security)
 - [Example](#example)
@@ -58,22 +58,6 @@ will then silently ignore that part of the message. The producer needs to be
 prepared for the situation where a consumer ignores that feature. An
 [Intermediary](#intermediary) SHOULD forward OPTIONAL attributes.
 
-### Attribute Naming Convention
-
-The CloudEvents specifications define mappings to various protocols and
-encodings, and the accompanying CloudEvents SDK targets various runtimes and
-languages. Some of these treat metadata elements as case-sensitive while others
-do not, and a single CloudEvent might be routed via multiple hops that involve a
-mix of protocols, encodings, and runtimes. Therefore, this specification limits
-the available character set of all attributes such that case-sensitivity issues
-or clashes with the permissible character set for identifiers in common
-languages are prevented.
-
-CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
-digits ('0' to '9') from the ASCII character set and MUST begin with a
-lower-case letter. Attribute names SHOULD be descriptive and terse and SHOULD
-NOT exceed 20 characters in length.
-
 ### Terminology
 
 This specification defines the following terms:
@@ -93,9 +77,9 @@ An "event" is a data record expressing an occurrence and its context. Events are
 routed from an event producer (the source) to interested event consumers. The
 routing can be performed based on information contained in the event, but an
 event will not identify a specific routing destination. Events will contain two
-types of information: the [Data](#data) representing the Occurrence and
-[Context](#context) metadata providing contextual information about the
-Occurrence. A single occurrence MAY result in more than one event.
+types of information: the [Event Data](#event-data) representing the
+Occurrence and [Context](#context) metadata providing contextual information
+about the Occurrence. A single occurrence MAY result in more than one event.
 
 #### Producer
 
@@ -132,7 +116,7 @@ or to other Events.
 
 Domain-specific information about the occurrence (i.e. the payload). This might
 include information about the occurrence, details about the data that was
-changed, or more. See the [Data](#data) section for more
+changed, or more. See the [Event Data](#event-data) section for more
 information.
 
 #### Message
@@ -154,6 +138,22 @@ attributes.
 These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
 inspected at the destination without having to deserialize the event data.
+
+### Attribute Naming Convention
+
+The CloudEvents specifications define mappings to various protocols and
+encodings, and the accompanying CloudEvents SDK targets various runtimes and
+languages. Some of these treat metadata elements as case-sensitive while others
+do not, and a single CloudEvent might be routed via multiple hops that involve a
+mix of protocols, encodings, and runtimes. Therefore, this specification limits
+the available character set of all attributes such that case-sensitivity issues
+or clashes with the permissible character set for identifiers in common
+languages are prevented.
+
+CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
+digits ('0' to '9') from the ASCII character set and MUST begin with a
+lower-case letter. Attribute names SHOULD be descriptive and terse and SHOULD
+NOT exceed 20 characters in length.
 
 ### Type System
 
@@ -280,7 +280,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 - Type: `String`
 - Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `0.4-wip` when referring to this version of the
+  producers MUST use a value of `1.0-rc1` when referring to this version of the
   specification.
 - Constraints:
   - REQUIRED
@@ -305,32 +305,11 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   - com.github.pull.create
   - com.example.object.delete.v2
 
-### OPTIONAL or Conditional Attributes
+### OPTIONAL Attributes
 
 The following attributes are OPTIONAL to appear in CloudEvents. See the
 [Notational Conventions](#notational-conventions) section for more information
 on the definition of OPTIONAL.
-
-#### datacontentencoding
-
-- Type: `String` per
-  [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
-- Description: Describes the content encoding for `data`.
-  There are cases where the value of `data` might need to be
-  encoded so that it can be carried within the serialization format being used.
-  For example, in JSON, binary data will likely need to be Base64 encoded.
-  When this attribute is set, the consumer can use its value to know how
-  to decode `data` value to retrieve its original contents.
-
-  If this attribute is supported, then the "Base64" encoding as defined in
-  [RFC 2045 Section 6.8](https://tools.ietf.org/html/rfc2045#section-6.8) MUST
-  be supported.
-
-- Constraints:
-  - The attribute MUST be set if `data` is encoded and not
-    in its original format. Otherwise the attribute MUST NOT be set.
-  - If present, MUST adhere to
-    [RFC 2045 Section 6.1](https://tools.ietf.org/html/rfc2045#section-6.1)
 
 #### datacontenttype
 
@@ -344,7 +323,7 @@ on the definition of OPTIONAL.
   `data` content is rendered for different `datacontenttype`
   values are defined in the event format specifications; for example, the JSON
   event format defines the relationship in
-  [section 3.1](./json-format.md#31-special-handling-of-data).
+  [section 3.1](./json-format.md#31-handling-of-data).
 
   When this attribute is omitted, `data` simply follows the event
   format's encoding rules. For the JSON event format, the `data` value
@@ -373,7 +352,7 @@ on the definition of OPTIONAL.
   for more information.
 - Constraints:
   - OPTIONAL
-  - If present, MUST be a non-empty URI-reference
+  - If present, MUST be a non-empty URI
 
 #### subject
 
@@ -427,8 +406,10 @@ See
 [CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
 for additional information concerning the use and definition of extensions.
 
-This specification places no restriction on the type or semantics of the
-extension attributes. Each definition of an extensions SHOULD fully define all
+This specification places no restriction on the semantics of the
+extension attributes, but they MUST use one of the types defined within the
+[type system](#type-system).
+Each definition of an extensions SHOULD fully define all
 aspects of the attribute - e.g. its name, semantic meaning and possible values
 or even to indicate that it places no restrictions on its values. New extension
 definitions SHOULD use a name that is descriptive enough to reduce the chances
@@ -440,37 +421,48 @@ extensions that might be of interest.
 Each specification that defines how to serialize a CloudEvent will define how
 extension attributes will appear.
 
+Extension attribtue MUST be serialized using the same general pattern as all
+CloudEvents context attributes. For example, in binary HTTP, that means they
+MUST appear as HTTP headers with the `ce-` prefix. The specification of an
+attribute MAY define a secondary serialization where the data is duplicated
+in some other location within the message.
+
+In cases where a secondary serialization is defined, the extension
+specification MUST also state what a receiver of the CloudEvent is to do
+if the data differs between those two serialization locations. Additionally,
+senders need to be prepared for intermediaries, and receivers, to not
+know about their extension and therefore the specialized serialization version
+version will most likely not be processed as a CloudEvent extension attribute.
+
+Many transports support the ability for senders to include additonal metadata,
+for example as HTTP headers. While a CloudEvents receiver is not mandated to
+process and pass them along, it is RECOMMENDED that they do so via some
+mechanism that makes it clear they are non-CloudEvents metadata.
+
 Here is an example that illustrates the need for additional attributes. In many
 IoT and enterprise use cases, an event could be used in a serverless application
 that performs actions across multiple types of events. To support such use
 cases, the event producer will need to add additional identity attributes to the
 "context attributes" which the event consumers can use to correlate this event
 with the other events. If such identity attributes happen to be part of the
-event "data", the event producer SHOULD also add the identity attributes to the
+event "data", the event producer would also add the identity attributes to the
 "context attributes" so that event consumers can easily access this information
 without needing to decode and examine the event data. Such identity attributes
 can also be used to help intermediate gateways determine how to route the
 events.
 
-## Data
+## Event Data
 
 As defined by the term [Data](#data), CloudEvents MAY include domain-specific
 information about the occurrence. When present, this information will be
 encapsulated within `data`.
 
-### data
-
 - Description: The event payload. This specification does not place any
   restriction on the type of this information. It is encoded into a media format
   which is specified by the `datacontenttype` attribute (e.g.
   application/json), and adheres to the `dataschema` format when those
-  repspective attributes are present.
+  respective attributes are present.
 
-  If `data`'s native syntax, or its syntax based on the `datacontenttype`
-  attribute if present, can not be copied directly into the desired
-  serialization format, and therefore needs to be further encoded, then
-  the `datacontentencoding` attribute MUST include the encoding mechanism
-  used.
 - Constraints:
   - OPTIONAL
 
@@ -528,10 +520,10 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 
 - Data
 
-  Domain specific [data](#data) SHOULD be encrypted to restrict visibility to
-  trusted parties. The mechanism employed for such encryption is an agreement
-  between producers and consumers and thus outside the scope of this
-  specification.
+  Domain specific [event data](#event-data) SHOULD be encrypted to restrict
+  visibility to trusted parties. The mechanism employed for such encryption is
+  an agreement between producers and consumers and thus outside the scope of
+  this specification.
 
 - Transport Bindings
 
@@ -544,16 +536,14 @@ The following example shows a CloudEvent serialized as JSON:
 
 ```JSON
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull",
     "subject" : "123",
     "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "othervalue": 5
-    },
+    "comexampleothervalue" : 5,
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }

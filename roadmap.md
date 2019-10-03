@@ -67,7 +67,7 @@ _0.3_ - Completed - 2019/06/13
       redaction).
    1. Consider validating transport bindings with load tests.
 
-_1.0-rc_
+_1.0-rc1_ - Completed - 2019/09/19
 
 1. Complete all issues and PRs tagged as `v1.0`.
 1. Decide on duration and exit criteria for 'verification & testing' period.

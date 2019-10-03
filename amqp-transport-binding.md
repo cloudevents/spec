@@ -1,4 +1,4 @@
-# AMQP Transport Binding for CloudEvents - Version 0.4-wip
+# AMQP Transport Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
@@ -160,13 +160,14 @@ All [CloudEvents][ce] attributes with exception of `datacontenttype` and `data`
 MUST be individually mapped to and from the AMQP
 [application-properties][app-properties] section, with exceptions noted below.
 
-CloudEvents extensions that define their own attributes MAY define a diverging
+CloudEvents extensions that define their own attributes MAY define a secondary
 mapping to AMQP properties for those attributes, also in different message
 sections, especially if specific attributes or their names need to align with
 AMQP features or with other specifications that have explicit AMQP header
-bindings.
+bindings. However, they MUST also include the previously defined primary
+mapping.
 
-An extension specification that defines a diverging mapping rule for AMQP, and
+An extension specification that defines a secondary mapping rule for AMQP, and
 any revision of such a specification, MUST also define explicit mapping rules
 for all other transport bindings that are part of the CloudEvents core at the
 time of the submission or revision.
@@ -201,7 +202,7 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:specversion: 0.4-wip
+cloudEvents:specversion: 1.0-rc1
 cloudEvents:type: com.example.someevent
 cloudEvents:time: 2018-04-05T03:56:24Z
 cloudEvents:id: 1234-1234-1234
@@ -263,7 +264,7 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

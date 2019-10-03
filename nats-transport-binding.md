@@ -1,4 +1,4 @@
-# NATS Transport Binding for CloudEvents - Version 0.4-wip
+# NATS Transport Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
@@ -128,7 +128,7 @@ Subject: mySubject
 ------------------ payload -------------------
 
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

@@ -1,4 +1,4 @@
-# JSON Event Format for CloudEvents - Version 0.4-wip
+# JSON Event Format for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
@@ -46,10 +46,9 @@ including extensions.
 For clarity, extension attributes are serialized using the same rules as
 specification defined attributes. This includes their syntax and placement
 within the JSON object. In particular, extensions are placed as top-level JSON
-properties. Extensions themselves are free to have nested properties, however
-the root of the extension MUST be serialized as a top-level JSON property. There
-were many reason for this design decision and they are covered in more detail in
-the [Primer](primer.md#json-extensions).
+properties. Extensions MUST be serialized as a top-level JSON property. There
+were many reasons for this design decision and they are covered in more detail
+in the [Primer](primer.md#json-extensions).
 
 ### 2.1. Base Type System
 
@@ -63,23 +62,24 @@ with exceptions noted below.
 
 | CloudEvents   | JSON                                                           |
 | ------------- | -------------------------------------------------------------- |
-| String        | [string][json-string]                                          |
+| Boolean       | [boolean][json-bool]
 | Integer       | [number][json-number], only the `int` component is permitted   |
+| String        | [string][json-string]                                          |
 | Binary        | [string][json-string], [Base64-encoded][base64] binary         |
 | URI           | [string][json-string] following [RFC 3986][rfc3986]            |
 | URI-reference | [string][json-string] following [RFC 3986][rfc3986]            |
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
-| Any           | [JSON value][json-value]                                       |
 
-Extension specifications MAY define diverging mapping rules for the values of
-attributes they define.
+Extension specifications MAY define secondary mapping rules for the values of
+attributes they define, but MUST also include the previously defined primary
+mapping.
 
 For instance, the attribute value might be a data structure defined in a
 standard outside of CloudEvents, with a formal JSON mapping, and there might be
 risk of translation errors or information loss when the original format is not
 preserved.
 
-An extension specification that defines a diverging mapping rule for JSON, and
+An extension specification that defines a secondary mapping rule for JSON, and
 any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.
@@ -89,30 +89,20 @@ inference using the rules from the mapping table, whereby the only potentially
 ambiguous JSON data type is `string`. The value is compatible with the
 respective CloudEvents type when the mapping rules are fulfilled.
 
-### 2.3. Mapping Data
+### 2.3. Examples
 
-If an implementation determines that the actual type of `data` is a `String`,
-the value MUST be represented as [JSON string][json-string] expression; for
-`Binary`, the value MUST represented as [JSON string][json-string] expression
-containing the [Base64][base64] encoded binary value.
-
-### 2.4. Examples
-
-The following table shows exemplary mappings:
+The following table shows exemplary attribute mappings:
 
 | CloudEvents     | Type          | Exemplary JSON Value            |
 | --------------- | ------------- | ------------------------------- |
 | type            | String        | "com.example.someevent"         |
-| specversion     | String        | "0.4-wip"                       |
+| specversion     | String        | "1.0-rc1"                       |
 | source          | URI-reference | "/mycontext"                    |
 | id              | String        | "1234-1234-1234"                |
 | time            | Timestamp     | "2018-04-05T17:31:00Z"          |
 | datacontenttype | String        | "application/json"              |
-| data            | String        | "<much wow=\"xml\"/>"           |
-| data            | Binary        | "Q2xvdWRFdmVudHM="              |
-| data            | Map           | { "objA" : "vA", "objB", "vB" } |
 
-### 2.5. JSONSchema Validation
+### 2.4. JSONSchema Validation
 
 The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
 [here](spec.json) and contains the definitions for validating events in JSON.
@@ -128,38 +118,32 @@ become members of the JSON object, with the respective JSON object member name
 matching the attribute name, and the member's type and value being mapped using
 the [type system mapping](#22-type-system-mapping).
 
-### 3.1. Special Handling of "data"
+### 3.1. Handling of "data"
 
-The mapping of `data` follows the rules laid out in
-[Section 2.3.](#23-mapping-data), with two additional rules:
+Before taking action, a JSON serializer MUST first determine the runtime data 
+type of the `data` content.  
 
-First, if an implementation determines that the type of `data` is
-`Binary` or `String`, it MUST inspect the `datacontenttype` attribute to
-determine whether it is indicated that the data value contains JSON data.
+If the implementation determines that the type of `data` is `Binary`, the value
+MUST be represented as a [JSON string][json-string] expression containing the 
+[Base64][base64] encoded binary value, and use the member name `data_base64`
+to store it inside the JSON object. 
 
-If the `datacontenttype` value is either ["application/json"][rfc4627] or any
-media type with a [structured +json suffix][rfc6839], the implementation MUST
-translate the `data` value into a [JSON value][json-value], and set
-the `data` attribute of the envelope JSON object to this JSON value.
+For any other type, the implementation MUST translate the `data` value into 
+a [JSON value][json-value], and use the member name `data`
+to store it inside the JSON object. 
 
-If the `datacontenttype` value does not follow the [structured +json
-suffix][rfc6839] but is known to use JSON encoding, the implementation MUST
-translate the `data` value into a [JSON value][json-value], and set
-the `data` attribute of the envelope JSON object to this JSON value. Its typical
-examples are, but not limited to, `text/json`,
-[`application/json-seq`][json-seq] and
-[`application/geo+json-seq`][json-geoseq].
+Out of this follows that use of the `data` and `data_base64` members is
+mutually exclusive in a JSON serialized CloudEvent. 
 
-Unlike all other attributes, for which value types are restricted to strings per
+When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
+member clearly indicates that the value is a Base64 encoded binary data, which
+the serializer MUST decode into a binary runtime data type. When a `data` 
+member is present, it is decoded using the default JSON type mapping for the 
+used runtime.  
+
+Unlike attributes, for which value types are restricted to strings per
 the [type-system mapping](#22-type-system-mapping), the resulting `data` member
-[JSON value][json-value] is unrestricted, and MAY also contain numeric and
-logical JSON types.
-
-Second, whether a Base64-encoded string in `data` is treated as
-`Binary` or as a `String` is also determined by the `datacontenttype` value. If
-the `datacontenttype` media type is known to contain text, the data attribute
-value is not further interpreted and treated as a text string. Otherwise, it is
-decoded and treated as a binary value.
+[JSON value][json-value] is unrestricted, and MAY contain any valid JSON.
 
 ### 3.2. Examples
 
@@ -167,15 +151,13 @@ Example event with `String`-valued `data`:
 
 ```JSON
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "otherValue": 5
-    },
+    "comexampleothervalue" : 5,
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
@@ -185,34 +167,30 @@ Example event with `Binary`-valued data
 
 ```JSON
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "B234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "otherValue": 5
-    },
+    "comexampleothervalue" : 5,
     "datacontenttype" : "application/vnd.apache.thrift.binary",
-    "data" : "... base64 encoded string ..."
+    "data_base64" : "... base64 encoded string ..."
 }
 ```
 
 Example event with JSON data for the "data" member, either derived from a `Map`
-or [JSON data](#31-special-handling-of-data) data:
+or [JSON data](#31-handling-of-data) data:
 
 ```JSON
 {
-    "specversion" : "0.4-wip",
+    "specversion" : "1.0-rc1",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "C234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
-    "comexampleextension2" : {
-        "otherValue": 5
-    },
+    "comexampleothervalue" : 5,
     "datacontenttype" : "application/json",
     "data" : {
         "appinfoA" : "abc",
@@ -254,28 +232,24 @@ second with JSON data.
 ```JSON
 [
   {
-      "specversion" : "0.4-wip",
+      "specversion" : "1.0-rc1",
       "type" : "com.example.someevent",
       "source" : "/mycontext/4",
       "id" : "B234-1234-1234",
       "time" : "2018-04-05T17:31:00Z",
       "comexampleextension1" : "value",
-      "comexampleextension2" : {
-          "otherValue": 5
-      },
+      "comexampleothervalue" : 5,
       "datacontenttype" : "application/vnd.apache.thrift.binary",
-      "data" : "... base64 encoded string ..."
+      "data_base64" : "... base64 encoded string ..."
   },
   {
-      "specversion" : "0.4-wip",
+      "specversion" : "1.0-rc1",
       "type" : "com.example.someotherevent",
       "source" : "/mycontext/9",
       "id" : "C234-1234-1234",
       "time" : "2018-04-05T17:31:05Z",
       "comexampleextension1" : "value",
-      "comexampleextension2" : {
-          "otherValue": 5
-      },
+      "comexampleothervalue" : 5,
       "datacontenttype" : "application/json",
       "data" : {
           "appinfoA" : "abc",
@@ -314,6 +288,7 @@ also valid in a request):
   https://www.iana.org/assignments/media-types/application/geo+json-seq
 [json-object]: https://tools.ietf.org/html/rfc7159#section-4
 [json-seq]: https://www.iana.org/assignments/media-types/application/json-seq
+[json-bool]: https://tools.ietf.org/html/rfc7159#section-3
 [json-number]: https://tools.ietf.org/html/rfc7159#section-6
 [json-string]: https://tools.ietf.org/html/rfc7159#section-7
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
