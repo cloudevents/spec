@@ -77,9 +77,9 @@ An "event" is a data record expressing an occurrence and its context. Events are
 routed from an event producer (the source) to interested event consumers. The
 routing can be performed based on information contained in the event, but an
 event will not identify a specific routing destination. Events will contain two
-types of information: the [Event Data](#event-data) representing the
-Occurrence and [Context](#context) metadata providing contextual information
-about the Occurrence. A single occurrence MAY result in more than one event.
+types of information: the [Event Data](#event-data) representing the Occurrence
+and [Context](#context) metadata providing contextual information about the
+Occurrence. A single occurrence MAY result in more than one event.
 
 #### Producer
 
@@ -151,9 +151,8 @@ or clashes with the permissible character set for identifiers in common
 languages are prevented.
 
 CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
-digits ('0' to '9') from the ASCII character set and MUST begin with a
-lower-case letter. Attribute names SHOULD be descriptive and terse and SHOULD
-NOT exceed 20 characters in length.
+digits ('0' to '9') from the ASCII character set.1 Attribute names SHOULD be
+descriptive and terse and SHOULD NOT exceed 20 characters in length.
 
 ### Type System
 
@@ -174,13 +173,13 @@ string-encoding for each type that MUST be supported by all implementations.
   are disallowed:
   - the "control characters" in the ranges U+0000-U+001F and U+007F-U+009F (both
     ranges inclusive), since most have no agreed-on meaning, and some, such as
-    U+000A (newline), are not usable in contexts such as HTTP headers. 
+    U+000A (newline), are not usable in contexts such as HTTP headers.
   - code points
     [identified as noncharacters by Unicode](http://www.unicode.org/faq/private_use.html#noncharacters).
-  - code points identifying Surrogates, U+D800-U+DBFF and U+DC00-U+DFFF, both ranges
-    inclusive, unless used properly in pairs. Thus (in JSON notation) "\uDEAD" is
-    invalid because it is an unpaired surrogate, while "\uD800\uDEAD" would be
-    legal.
+  - code points identifying Surrogates, U+D800-U+DBFF and U+DC00-U+DFFF, both
+    ranges inclusive, unless used properly in pairs. Thus (in JSON notation)
+    "\uDEAD" is invalid because it is an unpaired surrogate, while
+    "\uD800\uDEAD" would be legal.
 - `Binary` - Sequence of bytes.
   - String encoding: Base64 encoding per
     [RFC4648](https://tools.ietf.org/html/rfc4648).
@@ -193,9 +192,9 @@ string-encoding for each type that MUST be supported by all implementations.
 - `Timestamp` - Date and time expression using the Gregorian Calendar.
   - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
 
-All content attributes MUST be of scalar type (e.g. string, integer)
-that have a string-encoding defined. They MUST NOT be of complex type
-(e.g. structures, map).
+All content attributes MUST be of scalar type (e.g. string, integer) that have a
+string-encoding defined. They MUST NOT be of complex type (e.g. structures,
+map).
 
 A strongly-typed programming model that represents a CloudEvent or any extension
 MUST be able to convert from and to the canonical string-encoding to the
@@ -314,20 +313,19 @@ on the definition of OPTIONAL.
 #### datacontenttype
 
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: Content type of `data` value. This attribute
-  enables `data` to carry any type of content, whereby format and
-  encoding might differ from that of the chosen event format. For example, an
-  event rendered using the [JSON envelope](./json-format.md#3-envelope) format
-  might carry an XML payload in `data`, and the consumer is
-  informed by this attribute being set to "application/xml". The rules for how
-  `data` content is rendered for different `datacontenttype`
-  values are defined in the event format specifications; for example, the JSON
-  event format defines the relationship in
+- Description: Content type of `data` value. This attribute enables `data` to
+  carry any type of content, whereby format and encoding might differ from that
+  of the chosen event format. For example, an event rendered using the
+  [JSON envelope](./json-format.md#3-envelope) format might carry an XML payload
+  in `data`, and the consumer is informed by this attribute being set to
+  "application/xml". The rules for how `data` content is rendered for different
+  `datacontenttype` values are defined in the event format specifications; for
+  example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-handling-of-data).
 
-  When this attribute is omitted, `data` simply follows the event
-  format's encoding rules. For the JSON event format, the `data` value
-  can therefore be a JSON object, array, or value.
+  When this attribute is omitted, `data` simply follows the event format's
+  encoding rules. For the JSON event format, the `data` value can therefore be a
+  JSON object, array, or value.
 
   For the binary mode of some of the CloudEvents transport bindings, where the
   `data` content is immediately mapped into the payload of the transport frame,
@@ -346,8 +344,8 @@ on the definition of OPTIONAL.
 #### dataschema
 
 - Type: `URI`
-- Description: Identifies the schema that `data` adheres to.
-  Incompatible changes to the schema SHOULD be reflected by a different URI. See
+- Description: Identifies the schema that `data` adheres to. Incompatible
+  changes to the schema SHOULD be reflected by a different URI. See
   [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
   for more information.
 - Constraints:
@@ -388,11 +386,11 @@ on the definition of OPTIONAL.
 
 - Type: `Timestamp`
 - Description: Timestamp of when the occurrence happened. If the time of the
-  occurrence cannot be determined then this attribute MAY be set to some
-  other time (such as the current time) by the CloudEvents producer, however
-  all producers for the same `source` MUST be consistent in this respect.
-  In other words, either they all use the actual time of the occurrence or
-  they all use the same algorithm to determine the value used.
+  occurrence cannot be determined then this attribute MAY be set to some other
+  time (such as the current time) by the CloudEvents producer, however all
+  producers for the same `source` MUST be consistent in this respect. In other
+  words, either they all use the actual time of the occurrence or they all use
+  the same algorithm to determine the value used.
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in
@@ -406,17 +404,17 @@ See
 [CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
 for additional information concerning the use and definition of extensions.
 
-This specification places no restriction on the semantics of the
-extension attributes, but they MUST use one of the types defined within the
-[type system](#type-system).
-Each definition of an extensions SHOULD fully define all
-aspects of the attribute - e.g. its name, semantic meaning and possible values
-or even to indicate that it places no restrictions on its values. New extension
-definitions SHOULD use a name that is descriptive enough to reduce the chances
-of name collisions with other extensions. In particular, extension authors
-SHOULD check the [documented extensions](documented-extensions.md) document for
-the set of known extensions - not just for possible name conflicts but for
-extensions that might be of interest.
+This specification places no restriction on the semantics of the extension
+attributes, but they MUST use one of the types defined within the
+[type system](#type-system). Each definition of an extensions SHOULD fully
+define all aspects of the attribute - e.g. its name, semantic meaning and
+possible values or even to indicate that it places no restrictions on its
+values. New extension definitions SHOULD use a name that is descriptive enough
+to reduce the chances of name collisions with other extensions. In particular,
+extension authors SHOULD check the
+[documented extensions](documented-extensions.md) document for the set of known
+extensions - not just for possible name conflicts but for extensions that might
+be of interest.
 
 Each specification that defines how to serialize a CloudEvent will define how
 extension attributes will appear.
@@ -424,15 +422,15 @@ extension attributes will appear.
 Extension attribtue MUST be serialized using the same general pattern as all
 CloudEvents context attributes. For example, in binary HTTP, that means they
 MUST appear as HTTP headers with the `ce-` prefix. The specification of an
-attribute MAY define a secondary serialization where the data is duplicated
-in some other location within the message.
+attribute MAY define a secondary serialization where the data is duplicated in
+some other location within the message.
 
-In cases where a secondary serialization is defined, the extension
-specification MUST also state what a receiver of the CloudEvent is to do
-if the data differs between those two serialization locations. Additionally,
-senders need to be prepared for intermediaries, and receivers, to not
-know about their extension and therefore the specialized serialization version
-will most likely not be processed as a CloudEvent extension attribute.
+In cases where a secondary serialization is defined, the extension specification
+MUST also state what a receiver of the CloudEvent is to do if the data differs
+between those two serialization locations. Additionally, senders need to be
+prepared for intermediaries, and receivers, to not know about their extension
+and therefore the specialized serialization version will most likely not be
+processed as a CloudEvent extension attribute.
 
 Many transports support the ability for senders to include additonal metadata,
 for example as HTTP headers. While a CloudEvents receiver is not mandated to
@@ -459,9 +457,9 @@ encapsulated within `data`.
 
 - Description: The event payload. This specification does not place any
   restriction on the type of this information. It is encoded into a media format
-  which is specified by the `datacontenttype` attribute (e.g.
-  application/json), and adheres to the `dataschema` format when those
-  respective attributes are present.
+  which is specified by the `datacontenttype` attribute (e.g. application/json),
+  and adheres to the `dataschema` format when those respective attributes are
+  present.
 
 - Constraints:
   - OPTIONAL
