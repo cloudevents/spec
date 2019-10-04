@@ -115,10 +115,10 @@ solely for the purpose of proper delivery, and processing, of the message. Data
 that is not intended for that purpose should instead be placed within the event
 (`data`) itself.
 
-Additionally, it is assumed that the metadata needed by the transport layer
-to deliver the message to the target system is handled entirely by the
-transport and therefore is not included within the CloudEvents attributes.
-See the [Non-Goals](#non-goals) section for more details.
+Additionally, it is assumed that the metadata needed by the transport layer to
+deliver the message to the target system is handled entirely by the transport
+and therefore is not included within the CloudEvents attributes. See the
+[Non-Goals](#non-goals) section for more details.
 
 Along with the definition of these attributes, there will also be specifications
 of how to serialize the event in different formats (e.g. JSON) and transports
@@ -141,27 +141,25 @@ The following are considered beyond the scope of the specification:
 - Inclusion of transport-level routing information
 - Event persistence processes
 
-The CloudEvents spec will not include transport-level routing
-information (e.g. a destination URL to which the event is being sent).
-This is a common suggestion by those new to the concepts of CloudEvents.
-After much deliberation, the working group has come to the conclusion that
-routing is unnecessary in the spec: any transport protocol (e.g. HTTPS,
-MQTT, XMPP, or a Pub/Sub bus) already defines semantics for routing.
-For example, the CloudEvents [HTTPS binding](http-transport-binding.md)
-dictates headers and request body contents. CloudEvents don't need to
-include a destination URL in the spec to be HTTP compatible; the HTTP spec
-already includes one in the
+The CloudEvents spec will not include transport-level routing information (e.g.
+a destination URL to which the event is being sent). This is a common suggestion
+by those new to the concepts of CloudEvents. After much deliberation, the
+working group has come to the conclusion that routing is unnecessary in the
+spec: any transport protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
+defines semantics for routing. For example, the CloudEvents
+[HTTP binding](http-transport-binding.md) dictates headers and request body
+contents. CloudEvents don't need to include a destination URL in the spec to be
+HTTP compatible; the HTTP spec already includes one in the
 [Request-Line](https://tools.ietf.org/html/rfc2616#section-5.1).
 
-Routing information is not just redundant, it detracts.
-CloudEvents should increase interoperability and decouple the producer and
-consumer of events. Prohibiting routing information from the events format
-allows CloudEvents to be redelivered to new actions, or to be delivered
-over complex relays that include multiple channels. For example, a
-CloudEvent that was intended for a webhook should be deliverable to a
-dead-letter queue if the webhook address is unavailable. That dead-letter
-queue should be able to feed events to new actions that the original event
-emitter never imagined.
+Routing information is not just redundant, it detracts. CloudEvents should
+increase interoperability and decouple the producer and consumer of events.
+Prohibiting routing information from the events format allows CloudEvents to be
+redelivered to new actions, or to be delivered over complex relays that include
+multiple channels. For example, a CloudEvent that was intended for a webhook
+should be deliverable to a dead-letter queue if the webhook address is
+unavailable. That dead-letter queue should be able to feed events to new actions
+that the original event emitter never imagined.
 
 The CloudEvents that are produced and consumed within and across systems trigger
 behaviors that derive value. As such, archiving and/or replaying events can be
@@ -176,33 +174,32 @@ attributes may be defined that facilitate meeting persistence requirements but
 it is expected that these will continuously evolve along with industry best
 practices and advancements.
 
-
 ## Architecture
 
 The CloudEvents specification set defines four different kinds of protocol
 elements that form a layered architecture model.
 
-1. The [base specification](spec.md) defines an abstract information model
-   made up of attributes (key-value pairs) and associated rules for what
-   constitutes a CloudEvent.
-2. The [extensions](./spec.md#extension-context-attributes) add use-case specific
-   and potentially overlapping sets of extension attributes and associated
-   rules, e.g. to support different tracing standards.
+1. The [base specification](spec.md) defines an abstract information model made
+   up of attributes (key-value pairs) and associated rules for what constitutes
+   a CloudEvent.
+2. The [extensions](./spec.md#extension-context-attributes) add use-case
+   specific and potentially overlapping sets of extension attributes and
+   associated rules, e.g. to support different tracing standards.
 3. The event format encodings, e.g. [JSON](json-format.md), define how the
    information model of the base specification together with the chosen
-   extensions is encoded for mapping it to header and payload elements of
-   an application protocol.
-4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines
-   how the CloudEvent is bound to an application protocol's transport frame,
-   in the case of HTTP to the HTTP message. The transport binding does not
-   constrain how the transport frame is used, meaning that the HTTP binding
-   can be used with any HTTP method and with request and response messages.
+   extensions is encoded for mapping it to header and payload elements of an
+   application protocol.
+4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines how
+   the CloudEvent is bound to an application protocol's transport frame, in the
+   case of HTTP to the HTTP message. The transport binding does not constrain
+   how the transport frame is used, meaning that the HTTP binding can be used
+   with any HTTP method and with request and response messages.
 
 If required to assure broader interoperability, the CloudEvents specification
 set provides specific constraints for event delivery using a particular
-application protocol. The [HTTP Webhook](http-webhook.md) specification is
-not specific to CloudEvents and can be used to post any kind of one-way event
-and notifications to a conformant HTTP endpoint. However, the lack of such a
+application protocol. The [HTTP Webhook](http-webhook.md) specification is not
+specific to CloudEvents and can be used to post any kind of one-way event and
+notifications to a conformant HTTP endpoint. However, the lack of such a
 specification elsewhere makes it necessary for CloudEvents to define it.
 
 ### Transport Error Handling
@@ -210,8 +207,8 @@ specification elsewhere makes it necessary for CloudEvents to define it.
 The CloudEvents specification, for the most part, does not dictate a processing
 model associated with the creation or processing of CloudEvents. As such, if
 there are errors during the processing of a CloudEvent, the software
-encountering the error is encouraged to use the normal transport-level
-error reporting to report them.
+encountering the error is encouraged to use the normal transport-level error
+reporting to report them.
 
 ## Versioning of Attributes
 
@@ -303,10 +300,6 @@ extensions to a CloudEvent. For example, the
 headers to transport metadata; most HTTP servers will reject requests with
 excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
 size and number of extension attributes should be kept minimal.
-
-The specification places no restrictions on the type of the extension
-attributes. Meaning, they may be simple types (e.g. strings, integers), complex
-(e.g. structured) or undefined collection of attributes.
 
 If an extension becomes popular then the specification authors might consider
 moving it into the specification as a core attribute. This means that the
@@ -615,8 +608,8 @@ including being both a producer and a consumer of events.
 
    For a sports application, a developer using the framework might be interested
    in all events from today's game (subject) of a team in a league (topic of
-   interest) but wanting to handle reports of "goal" differently than reports
-   of "substitution". For this, the framework will need a suitable metadata
+   interest) but wanting to handle reports of "goal" differently than reports of
+   "substitution". For this, the framework will need a suitable metadata
    discriminator that frees it from having to understand the event details.
 
 ### Value Proposition
