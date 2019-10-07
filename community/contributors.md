@@ -27,6 +27,7 @@ Contributions do not constitute an official endorsement.
   - Rachel Myers - [@rachelmyers](https://github.com/rachelmyers)
   - Thomas Bouldin - [@inlined](https://github.com/inlined)
   - Mike McDonald, Morgan Hallmon, Robert-Jan Huijsman
+  - Scott Nichols - [@n3wscott](https://github.com/n3wscott)
 - **Huawei**
   - [Huawei Function Stage](http://www.huaweicloud.com/en-us/product/functionstage.html)
   - [Huawei Function Graph](https://www.huaweicloud.com/en-us/product/functiongraph.html)
