@@ -3,7 +3,7 @@
 ## Abstract
 
 This non-normative document provides an overview of the CloudEvents
-specification. It is meant to compliment the CloudEvent specification to provide
+specification. It is meant to complement the CloudEvent specification to provide
 additional background and insight into the history and design decisions made
 during the development of the specification. This allows the specification
 itself to focus on the normative technical details.
