@@ -432,7 +432,7 @@ specification MUST also state what a receiver of the CloudEvent is to do
 if the data differs between those two serialization locations. Additionally,
 senders need to be prepared for intermediaries, and receivers, to not
 know about their extension and therefore the specialized serialization version
-version will most likely not be processed as a CloudEvent extension attribute.
+will most likely not be processed as a CloudEvent extension attribute.
 
 Many transports support the ability for senders to include additonal metadata,
 for example as HTTP headers. While a CloudEvents receiver is not mandated to
