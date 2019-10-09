@@ -1,8 +1,8 @@
-# AMQP Transport Binding for CloudEvents - Version 1.0-rc1
+# AMQP Protocol Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
-The AMQP Transport Binding for CloudEvents defines how events are mapped to
+The AMQP Protocol Binding for CloudEvents defines how events are mapped to
 OASIS AMQP 1.0 ([OASIS][oasis-amqp-1.0]; ISO/IEC 19464:2014) messages.
 
 ## Status of this document
@@ -65,7 +65,7 @@ modes.
 
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the AMQP message's [application data][data] section using an
-[event format](event-format).
+event format as defined in the CloudEvents [spec][ce].
 
 In the _binary_ content mode, the value of the event `data` is placed
 into the AMQP message's [application data][data] section as-is, with the
@@ -303,10 +303,7 @@ content-type: application/cloudevents+json; charset=utf-8
   (AMQP) Version 1.0
 
 [ce]: ./spec.md
-[event-format]: ./spec.md#event-format
 [json-format]: ./json-format.md
-[amqp-format]: ./amqp-format.md
-[data-section]: 3.2.6
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
