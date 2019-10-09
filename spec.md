@@ -192,7 +192,7 @@ string-encoding for each type that MUST be supported by all implementations.
 - `Timestamp` - Date and time expression using the Gregorian Calendar.
   - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
 
-All content attributes MUST be of scalar type (e.g. string, integer) that have a
+All context attributes MUST be of scalar type (e.g. string, integer) that have a
 string-encoding defined. They MUST NOT be of complex type (e.g. structures,
 map).
 
