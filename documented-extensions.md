@@ -32,13 +32,13 @@ MAY), this usage only applies to events that use the extension.
 
 Extensions always follow a common placement strategy for in-memory formats (e.g.
 [JSON](json-format.md), XML) that are decided by those
-representations. Transport bindings (e.g. [HTTP](http-transport-binding.md),
-[MQTT](mqtt-transport-binding.md), [AMPQ](amqp-protocol-binding.md),
-[NATS](nats-transport-binding.md)) provide default placement for extensions, but
+representations. Protocol bindings (e.g. [HTTP](http-protocol-binding.md),
+[MQTT](mqtt-protocol-binding.md), [AMPQ](amqp-protocol-binding.md),
+[NATS](nats-protocol-binding.md)) provide default placement for extensions, but
 an extension MAY require special secondary representation when transported (e.g. tracing
 standards that require specific headers). Extension authors SHOULD only require
-special representation in transport bindings where extensions integrate with
-pre-existing specs; extensions with custom transport bindings are much more
+special representation in protocol bindings where extensions integrate with
+pre-existing specs; extensions with custom protocol bindings are much more
 likely to be dropped by middleware that does not understand the extension.
 
 As a convention, extensions of scalar types (e.g. `String`, `Binary`,

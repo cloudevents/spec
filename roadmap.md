@@ -29,7 +29,7 @@ _0.1_ - Completed - 2018/04/20
 1. Have at least 2 implementations of the specification that can demonstrate
    interoperability.
 1. Include a specification for mapping the CloudEvents specification to
-   [HTTP](http-transport-binding.md).
+   [HTTP](http-protocol-binding.md).
 1. Include a specification for mapping the CloudEvents specification to
    [JSON](json-format.md).
 1. Changes to the spec to facilitate adoption.
@@ -65,7 +65,7 @@ _0.3_ - Completed - 2019/06/13
    1. Consider defining uniqueness constraints of event `id`.
    1. Consider which fields will be immutable (prevents annotation or
       redaction).
-   1. Consider validating transport bindings with load tests.
+   1. Consider validating protocol bindings with load tests.
 
 _1.0-rc1_ - Completed - 2019/09/19
 
@@ -76,7 +76,7 @@ _1.0_
 1. Completion of exit criteria for 'verification & testing' period.
 1. Completion of as many `try-for-v1.0` issues and PRs as possible. The
    expectation is that these are non-breaking changes to the core spec.
-   Format and transport-binding specs may introduce breaking change if
+   Format and protocol-binding specs may introduce breaking change if
    necessary to align with the core spec.
 
 _Post 1.0_

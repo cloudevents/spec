@@ -34,7 +34,7 @@ they impose additional sampling.
 
 The Sampling extension uses the key `sampledrate` for in-memory formats.
 
-### Transport bindings
+### Protocol bindings
 
-The Sampling extension does not customize any transport binding's storage for
+The Sampling extension does not customize any protocol binding's storage for
 extensions.

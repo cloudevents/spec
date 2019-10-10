@@ -100,7 +100,7 @@ consumer can be developed and deployed independently. A producer can generate
 events before a consumer is listening, and a consumer can express an interest in
 an event or class of events that is not yet being produced. Note that the
 specifications produced by this effort are focused on interoperability of the
-event format and how it appears while being sent on various transports, such as
+event format and how it appears while being sent on various protocols, such as
 HTTP. The specifications will not focus on the processing model of either the
 event producer or event consumer.
 
@@ -115,19 +115,19 @@ solely for the purpose of proper delivery, and processing, of the message. Data
 that is not intended for that purpose should instead be placed within the event
 (`data`) itself.
 
-Additionally, it is assumed that the metadata needed by the transport layer to
-deliver the message to the target system is handled entirely by the transport
+Additionally, it is assumed that the metadata needed by the protocol layer to
+deliver the message to the target system is handled entirely by the protocol
 and therefore is not included within the CloudEvents attributes. See the
 [Non-Goals](#non-goals) section for more details.
 
 Along with the definition of these attributes, there will also be specifications
-of how to serialize the event in different formats (e.g. JSON) and transports
+of how to serialize the event in different formats (e.g. JSON) and protocols
 (e.g. HTTP, AMQP, Kafka).
 
 Batching of multiple events into a single API call is natively supported by some
-transports. To aid interoperability, it is left up to the transports if and how
-batching is implemented. Details may be found in the transport binding or in the
-transport specification. A batch of CloudEvents carries no semantic meaning and
+protocols. To aid interoperability, it is left up to the protocols if and how
+batching is implemented. Details may be found in the protocol binding or in the
+protocol specification. A batch of CloudEvents carries no semantic meaning and
 is not ordered. An [Intermediary](spec.md#intermediary) can add or remove
 batching as well as assign events to different batches.
 
@@ -138,16 +138,16 @@ The following are considered beyond the scope of the specification:
 - Function build and invocation process
 - Language-specific runtime APIs
 - Selecting a single identity/access control system
-- Inclusion of transport-level routing information
+- Inclusion of protocol-level routing information
 - Event persistence processes
 
-The CloudEvents spec will not include transport-level routing information (e.g.
+The CloudEvents spec will not include protocol-level routing information (e.g.
 a destination URL to which the event is being sent). This is a common suggestion
 by those new to the concepts of CloudEvents. After much deliberation, the
 working group has come to the conclusion that routing is unnecessary in the
-spec: any transport protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
+spec: any protocol protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
 defines semantics for routing. For example, the CloudEvents
-[HTTP binding](http-transport-binding.md) dictates headers and request body
+[HTTP binding](http-protocol-binding.md) dictates headers and request body
 contents. CloudEvents don't need to include a destination URL in the spec to be
 HTTP compatible; the HTTP spec already includes one in the
 [Request-Line](https://tools.ietf.org/html/rfc2616#section-5.1).
@@ -189,9 +189,9 @@ elements that form a layered architecture model.
    information model of the base specification together with the chosen
    extensions is encoded for mapping it to header and payload elements of an
    application protocol.
-4. The transport bindings, e.g. [HTTP](http-transport-binding.md), defines how
+4. The protocol bindings, e.g. [HTTP](http-protocol-binding.md), defines how
    the CloudEvent is bound to an application protocol's transport frame, in the
-   case of HTTP to the HTTP message. The transport binding does not constrain
+   case of HTTP to the HTTP message. The protocol binding does not constrain
    how the transport frame is used, meaning that the HTTP binding can be used
    with any HTTP method and with request and response messages.
 
@@ -202,12 +202,12 @@ specific to CloudEvents and can be used to post any kind of one-way event and
 notifications to a conformant HTTP endpoint. However, the lack of such a
 specification elsewhere makes it necessary for CloudEvents to define it.
 
-### Transport Error Handling
+### Protocol Error Handling
 
 The CloudEvents specification, for the most part, does not dictate a processing
 model associated with the creation or processing of CloudEvents. As such, if
 there are errors during the processing of a CloudEvent, the software
-encountering the error is encouraged to use the normal transport-level error
+encountering the error is encouraged to use the normal protocol-level error
 reporting to report them.
 
 ## Versioning of Attributes
@@ -296,7 +296,7 @@ Extension attributes should be kept minimal to ensure the CloudEvent can be
 properly serialized and transported. For example, the Event producers should
 consider the technical limitations that might be encountered when adding
 extensions to a CloudEvent. For example, the
-[HTTP Binary Mode](http-transport-binding.md#31-binary-content-mode) uses HTTP
+[HTTP Binary Mode](http-protocol-binding.md#31-binary-content-mode) uses HTTP
 headers to transport metadata; most HTTP servers will reject requests with
 excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
 size and number of extension attributes should be kept minimal.
@@ -446,7 +446,7 @@ protocol binding, it must belong to either one of the following categories:
   vendors using it in their products/services.
 
 Aside from formal status, a key criterion for whether a protocol or encoding
-shall qualify for a core CloudEvents event format or transport binding is
+shall qualify for a core CloudEvents event format or protocol binding is
 whether the group agrees that the specification will be of sustained practical
 benefit for any party that is unrelated to the product or project from which the
 protocol or encoding emerged. A base requirement for this is that the protocol
