@@ -143,7 +143,7 @@ fields in the Kafka message.
 
 ##### 3.2.3.1 Property Names
 
-CloudEvent attributes are prefixed with "ce_" for use in the
+CloudEvent attributes are prefixed with `ce_` for use in the
 [message-headers][Kafka-Message-Header] section.
 
 Examples:
@@ -218,7 +218,7 @@ and `data`, are represented.
 
 The event metadata and data are then rendered in accordance with the [event
 format](#14-event-formats) specification and the resulting data becomes the
-Kafka application [data][data] section.
+Kafka application [data](#21-data) section.
 
 #### 3.3.3. Metadata Headers
 
