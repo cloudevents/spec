@@ -189,14 +189,14 @@ exceptions noted below.
 | URI-reference | [string][amqp-string]       |
 | Timestamp     | [timestamp][amqp-timestamp] |
 
-All attribute values in an AMQP binary message MAY be represented using the
-native AMQP types above, or MAY be in canonical string form. An implementation
-MUST be able to interpret both forms on an incoming AMQP message. An
-implementation SHOULD use the native AMQP form on outgoing AMQP messages when it
-is efficient to do so, but MAY forward values as canonical strings. A robust
-implementation MAY further relax the requirements for incoming messages (for
-example accepting numeric types other than AMQP long) but MUST use only the
-prescribed AMQP types or canonical strings on outgoing messages.
+All attribute values in an AMQP binary message MUST either be represented using
+the native AMQP types above or the canonical string form. An implementation MUST
+be able to interpret both forms on an incoming AMQP message. An implementation
+SHOULD use the native AMQP form on outgoing AMQP messages when it is efficient
+to do so, but MAY forward values as canonical strings. A robust implementation
+MAY further relax the requirements for incoming messages (for example accepting
+numeric types other than AMQP long) but MUST be strict for outgoing messages as
+defined above.
 
 #### 3.1.4 Examples
 
