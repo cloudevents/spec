@@ -119,15 +119,33 @@ include information about the occurrence, details about the data that was
 changed, or more. See the [Event Data](#event-data) section for more
 information.
 
+#### Event Format
+
+An Event Format specifies how to serialize a CloudEvent as a sequence of bytes.
+Stand-alone event formats, such as the [JSON format](json-format.md), specify
+serialization independent of any protocol or storage medium.  Protocol Bindings
+MAY define formats that are dependent on the protocol.
+
 #### Message
 
 Events are transported from a source to a destination via messages.
+
+A "structured-mode message" is one where the event is fully encoded using
+a stand-alone event format and stored in the message body.
+
+A "binary-mode message" is one where the event data is stored in the message
+body, and event attributes are stored as part of message meta-data.
 
 #### Protocol
 
 Messages can be delivered through various industry standard protocol (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor
 specific protocols (AWS Kinesis, Azure Event Grid).
+
+#### Protocol Binding
+
+A protocol binding describes how events are sent and received over a given
+protocol, in particular how events are mapped to messages in that protocol.
 
 ## Context Attributes
 
@@ -158,7 +176,7 @@ descriptive and terse and SHOULD NOT exceed 20 characters in length.
 
 The following abstract data types are available for use in attributes. Each of
 these types MAY be represented differently by different event formats and in
-transport metadata fields. This specification defines a canonical
+protocol metadata fields. This specification defines a canonical
 string-encoding for each type that MUST be supported by all implementations.
 
 - `Boolean` - a boolean value of "true" or "false".
@@ -205,14 +223,14 @@ _datetime_ type in a given implementation, but it MUST be settable providing an
 RFC3339 string, and it MUST be convertible to an RFC3339 string when mapped to a
 header of an HTTP message.
 
-A CloudEvents transport binding or event format implementation MUST likewise be
+A CloudEvents protocol binding or event format implementation MUST likewise be
 able to convert from and to the canonical string-encoding to the corresponding
-data type in the encoding or in transport metadata fields.
+data type in the encoding or in protocol metadata fields.
 
 An attribute value of type `Timestamp` might indeed be routed as a string
 through multiple hops and only materialize as a native runtime/language type at
 the producer and ultimate consumer. The `Timestamp` might also be routed as a
-native transport type and might be mapped to/from the respective
+native protocol type and might be mapped to/from the respective
 language/runtime types at the producer and consumer ends, and never materialize
 as a string.
 
@@ -323,16 +341,20 @@ on the definition of OPTIONAL.
   example, the JSON event format defines the relationship in
   [section 3.1](./json-format.md#31-handling-of-data).
 
-  When this attribute is omitted, `data` simply follows the event format's
-  encoding rules. For the JSON event format, the `data` value can therefore be a
-  JSON object, array, or value.
+  For some binary mode protocol bindings, this field is directly mapped to the
+  respective protocol's content-type metadata property. Normative rules for the
+  binary mode and the content-type metadata mapping can be found in the
+  respective protocol
 
-  For the binary mode of some of the CloudEvents transport bindings, where the
-  `data` content is immediately mapped into the payload of the transport frame,
-  this field is directly mapped to the respective transport or application
-  protocol's content-type metadata property. Normative rules for the binary mode
-  and the content-type metadata mapping can be found in the respective transport
-  mapping specifications.
+  In some event formats the `datacontenttype` attribute MAY be omitted. For
+  example, if a JSON format event has no `datacontenttype` attribute, then it is
+  implied that the `data` is a JSON value conforming to the "application/json"
+  media type. In other words: a JSON-format event with no `datacontenttype` is
+  exactly equivalent to one with `datacontenttype="application/json"`.
+
+  When translating an event message with no `datacontenttype` attribute to a
+  different format or protocol binding, the target `datacontenttype` SHOULD be
+  set explicitly to the implied `datacontenttype` of the source.
 
 - Constraints:
   - OPTIONAL
@@ -432,7 +454,7 @@ prepared for intermediaries, and receivers, to not know about their extension
 and therefore the specialized serialization version will most likely not be
 processed as a CloudEvent extension attribute.
 
-Many transports support the ability for senders to include additonal metadata,
+Many protocols support the ability for senders to include additonal metadata,
 for example as HTTP headers. While a CloudEvents receiver is not mandated to
 process and pass them along, it is RECOMMENDED that they do so via some
 mechanism that makes it clear they are non-CloudEvents metadata.
@@ -473,13 +495,13 @@ that are storage or memory-constrained and therefore would struggle with large
 singular events.
 
 The "size" of an event is its wire-size and includes every bit that is
-transmitted on the wire for the event: transport frame-metadata, event metadata,
+transmitted on the wire for the event: protocol frame-metadata, event metadata,
 and event data, based on the chosen event format and the chosen protocol
 binding.
 
 If an application configuration requires for events to be routed across
-different transports or for events to be re-encoded, the least efficient
-transport and encoding used by the application SHOULD be considered for
+different protocols or for events to be re-encoded, the least efficient
+protocol and encoding used by the application SHOULD be considered for
 compliance with these size constraints:
 
 - Intermediaries MUST forward events of a size of 64 KByte or less.
@@ -523,9 +545,9 @@ Consider the following to prevent inadvertent leakage especially when leveraging
   an agreement between producers and consumers and thus outside the scope of
   this specification.
 
-- Transport Bindings
+- Protocol Bindings
 
-  Transport level security SHOULD be employed to ensure the trusted and secure
+  Protocol level security SHOULD be employed to ensure the trusted and secure
   exchange of CloudEvents.
 
 # Example
