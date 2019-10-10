@@ -67,11 +67,11 @@ In the _structured_ content mode, event metadata attributes and event data are
 placed into the AMQP message's [application data][data] section using an
 event format as defined in the CloudEvents [spec][ce].
 
-In the _binary_ content mode, the value of the event `data` is placed
-into the AMQP message's [application data][data] section as-is, with the
-`datacontenttype` attribute value declaring its media type; all other event
-attributes are mapped to the AMQP [application-properties][app-properties]
-section.
+In the _binary_ content mode, the value of the event `data` is placed into the
+AMQP message's [application data][data] section as-is, with the
+`datacontenttype` attribute value declaring its media type mapped to the AMQP
+`content-type` message property; all other event attributes are mapped to the
+AMQP [application-properties][app-properties] section.
 
 ### 1.4. Event Formats
 
@@ -90,8 +90,8 @@ This specification does not further define any of the [CloudEvents][ce] event
 attributes.
 
 One event attribute, `datacontenttype` is handled specially in *binary* content
-mode and mapped onto AMQP constructs. All other attributes are transferred as
-metadata without further interpretation.
+mode and mapped onto the AMQP content-type message property. All other
+attributes are transferred as metadata without further interpretation.
 
 This mapping is intentionally robust against changes, including the addition and
 removal of event attributes, and also accommodates vendor extensions to the
@@ -146,7 +146,7 @@ JSON text for use in AMQP.
 
 All [CloudEvents][ce] attributes with exception of `datacontenttype` MUST be
 individually mapped to and from the AMQP
-[application-properties][app-properties] section, with exceptions noted below.
+[application-properties][app-properties] section.
 
 CloudEvents extensions that define their own attributes MAY define a secondary
 mapping to AMQP properties for those attributes, also in different message
@@ -189,17 +189,14 @@ exceptions noted below.
 | URI-reference | [string][amqp-string]       |
 | Timestamp     | [timestamp][amqp-timestamp] |
 
-A CloudEvents AMQP *binary* mode implementation MUST allow for attribute values
-to be convertible from/to their canonical CloudEvents string representation. For
-instance, the `time` attribute MUST be convertible from and to a conformant
-RFC3339 string value.
-
-If an non-string attribute is received as string from a communicating party, an
-AMQP intermediary MAY convert it to the native AMQP representation before
-forwarding the event; an AMQP consumer SHOULD convert it to the native AMQP
-representation before surfacing the value to the API. An AMQP implementation
-SHOULD convert from/to the native runtime or language type system to the AMQP
-type system directly without translating through strings whenever possible.
+All attribute values in an AMQP binary message MAY be represented using the
+native AMQP types above, or MAY be in canonical string form. An implementation
+MUST be able to interpret both forms on an incoming AMQP message. An
+implementation SHOULD use the native AMQP form on outgoing AMQP messages when it
+is efficient to do so, but MAY forward values as canonical strings. A robust
+implementation MAY further relax the requirements for incoming messages (for
+example accepting numeric types other than AMQP long) but MUST use only the
+prescribed AMQP types or canonical strings on outgoing messages.
 
 #### 3.1.4 Examples
 
