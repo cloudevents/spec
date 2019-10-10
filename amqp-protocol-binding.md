@@ -177,7 +177,7 @@ The value for each AMQP application property is constructed from the respective
 attribute's AMQP type representation.
 
 The CloudEvents type system MUST be mapped to AMQP types as follows, with
-exceptions noted below.
+additional notes below.
 
 | CloudEvents   | AMQP                        |
 | ------------- | --------------------------- |
@@ -190,13 +190,16 @@ exceptions noted below.
 | Timestamp     | [timestamp][amqp-timestamp] |
 
 All attribute values in an AMQP binary message MUST either be represented using
-the native AMQP types above or the canonical string form. An implementation MUST
-be able to interpret both forms on an incoming AMQP message. An implementation
-SHOULD use the native AMQP form on outgoing AMQP messages when it is efficient
-to do so, but MAY forward values as canonical strings. A robust implementation
-MAY further relax the requirements for incoming messages (for example accepting
-numeric types other than AMQP long) but MUST be strict for outgoing messages as
-defined above.
+the native AMQP types above or the canonical string form.
+
+An implementation
+
+- MUST be able to interpret both forms on an incoming AMQP message  
+- MAY further relax the requirements for incoming messages (for example
+accepting numeric types other than AMQP long), but MUST be strict for outgoing
+messages.
+- SHOULD use the native AMQP form on outgoing AMQP messages when it is efficient
+to do so, but MAY forward values as canonical strings
 
 #### 3.1.4 Examples
 
