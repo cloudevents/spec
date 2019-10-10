@@ -31,7 +31,7 @@ The following documents are available:
 |                               |
 | **Optional Specifications:**  |
 | AMQP Event Format             |      [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/amqp-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md)       |
-| AMQP Transport Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/amqp-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-protocol-binding.md) |
+| AMQP Transport Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/amqp-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-protocol-binding.md) |
 | AVRO Event Format             | - | [master](./avro-format.md) |
 | HTTP Transport Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
 | JSON Event Format             |      [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/json-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/json-format.md)       |
