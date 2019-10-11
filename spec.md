@@ -150,8 +150,8 @@ protocol, in particular how events are mapped to messages in that protocol.
 ## Context Attributes
 
 Every CloudEvent conforming to this specification MUST include context
-attributes designated as REQUIRED and MAY include one or more OPTIONAL context
-attributes.
+attributes designated as REQUIRED, MAY include one or more OPTIONAL context
+attributes and MAY include one or more extension attributes.
 
 These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
@@ -210,9 +210,8 @@ string-encoding for each type that MUST be supported by all implementations.
 - `Timestamp` - Date and time expression using the Gregorian Calendar.
   - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
 
-All context attributes MUST be of scalar type (e.g. string, integer) that have a
-string-encoding defined. They MUST NOT be of complex type (e.g. structures,
-map).
+All context attribute values MUST be of one of the types listed above.
+Attribute values MAY be presented as native types or canonical strings.
 
 A strongly-typed programming model that represents a CloudEvent or any extension
 MUST be able to convert from and to the canonical string-encoding to the
@@ -235,7 +234,7 @@ language/runtime types at the producer and consumer ends, and never materialize
 as a string.
 
 The choice of serialization mechanism will determine how the context attributes
-and the event data will be materialized. For example, in the case of a JSON
+and the event data will be serialized. For example, in the case of a JSON
 serialization, the context attributes and the event data might both appear
 within the same JSON object.
 
@@ -420,39 +419,33 @@ on the definition of OPTIONAL.
 
 ### Extension Context Attributes
 
-CloudEvents producers MAY include additional context attributes in the event
-that might be used in ancillary actions related to the processing of the event.
+A CloudEvent MAY include any number of additional context attributes with
+distinct names, known as "extension attributes". Extension attributes MUST
+follow the same [naming convention](#attribute-naming-convention) and use the
+same [type system](#type-system) as standard attributes. Extension attributes
+have no defined meaning in this specification, they allow external systems to
+attach metadata to an event, much like HTTP custom headers.
+
+Extension attributes are always serialized according to binding rules like
+standard attributes. However this specification does not prevent an extension
+from copying event attribute values to other parts of a message, in order to
+interact with non-CloudEvents systems that also process the message. Extension
+specifications that do this SHOULD specify how receivers are to interpret
+messages if the copied values differ from the cloud-event serialized values.
+
+#### Defining Extensions
+
 See
 [CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
 for additional information concerning the use and definition of extensions.
 
-This specification places no restriction on the semantics of the extension
-attributes, but they MUST use one of the types defined within the
-[type system](#type-system). Each definition of an extensions SHOULD fully
-define all aspects of the attribute - e.g. its name, semantic meaning and
-possible values or even to indicate that it places no restrictions on its
-values. New extension definitions SHOULD use a name that is descriptive enough
-to reduce the chances of name collisions with other extensions. In particular,
-extension authors SHOULD check the
-[documented extensions](documented-extensions.md) document for the set of known
-extensions - not just for possible name conflicts but for extensions that might
-be of interest.
-
-Each specification that defines how to serialize a CloudEvent will define how
-extension attributes will appear.
-
-Extension attributes MUST be serialized using the same general pattern as all
-CloudEvents context attributes. For example, in binary HTTP, that means they
-MUST appear as HTTP headers with the `ce-` prefix. The specification of an
-attribute MAY define a secondary serialization where the data is duplicated in
-some other location within the message.
-
-In cases where a secondary serialization is defined, the extension specification
-MUST also state what a receiver of the CloudEvent is to do if the data differs
-between those two serialization locations. Additionally, senders need to be
-prepared for intermediaries, and receivers, to not know about their extension
-and therefore the specialized serialization version will most likely not be
-processed as a CloudEvent extension attribute.
+The definition of an extension SHOULD fully define all aspects of the
+mattribute - e.g. its name, type, semantic meaning and possible values. New
+extension definitions SHOULD use a name that is descriptive enough to reduce the
+chances of name collisions with other extensions. In particular, extension
+authors SHOULD check the [documented extensions](documented-extensions.md)
+document for the set of known extensions - not just for possible name conflicts
+but for extensions that might be of interest.
 
 Many protocols support the ability for senders to include additional metadata,
 for example as HTTP headers. While a CloudEvents receiver is not mandated to
