@@ -62,8 +62,6 @@ In the *structured* content mode, event metadata attributes and event data are
 placed into the Kafka message value section
 using an [event format](#14-event-formats).
 
-
-
 ### 1.4. Event Formats
 
 Event formats, used with the *structured* content mode, define how an event is
@@ -102,10 +100,10 @@ here.
 
 The receiver of the event can distinguish between the two content modes by
 inspecting the `ce_datacontenttype` [Header][Kafka-Message-Header] of the 
-Kafka message. If the value is prefixed with the CloudEvents media type
-`application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver uses *structured* mode, otherwise
-it defaults to *binary* mode.
+Kafka message. If no value is given, or if the value is prefixed with the
+CloudEvents media type `application/cloudevents`, indicating the use of a known
+[event format](#14-event-formats), the receiver uses *structured* mode,
+otherwise it uses *binary* mode.
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
 event format that it cannot handle, for instance
@@ -127,7 +125,6 @@ efficient transfer and without transcoding effort.
 
 For the *binary* mode, the header `ce_datacontenttype` property MUST be
 mapped directly to the CloudEvents `datacontenttype` attribute.
-
 
 #### 3.2.2. Event Data Encoding
 
@@ -202,13 +199,14 @@ hops, and across multiple transports.
 
 #### 3.3.1. Kafka Content-Type
 
-The [Kafka `content-type`] property field MUST be set to the media
-type of an [event format](#14-event-formats).
+If present, the Kafka message level header `ce_datacontenttype` MUST be set to
+the media type of an [event format](#14-event-formats).
+If not present, the [JSON event format][JSON-format] MUST be used.
 
 Example for the [JSON format][JSON-format]:
 
 ``` text
-content-type: application/cloudevents+json; charset=UTF-8
+ce_datacontenttype: application/cloudevents+json; charset=UTF-8
 ```
 
 #### 3.3.2. Event Data Encoding
@@ -240,13 +238,13 @@ Key: mykey
 
 ------------------ headers -------------------
 
-content-type: application/cloudevents+json; charset=UTF-8
+ce_datacontenttype: application/cloudevents+json; charset=UTF-8
 
 ------------------- value --------------------
 
 {
     "specversion" : "1.0-rc1",
-    "datacontenttype" : "com.example.someevent",
+    "type" : "com.example.someevent",
 
     ... further attributes omitted ...
 
