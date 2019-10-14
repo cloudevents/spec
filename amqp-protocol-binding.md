@@ -1,8 +1,8 @@
-# AMQP Transport Binding for CloudEvents - Version 1.0-rc1
+# AMQP Protocol Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
-The AMQP Transport Binding for CloudEvents defines how events are mapped to
+The AMQP Protocol Binding for CloudEvents defines how events are mapped to
 OASIS AMQP 1.0 ([OASIS][oasis-amqp-1.0]; ISO/IEC 19464:2014) messages.
 
 ## Status of this document
@@ -20,9 +20,6 @@ This document is a working draft.
 - 1.5. [Security](#15-security)
 
 2. [Use of CloudEvents Attributes](#2-use-of-cloudevents-attributes)
-
-- 2.1. [datacontenttype Attribute](#21-datacontenttype-attribute)
-- 2.2. [data](#22-data)
 
 3. [AMQP Message Mapping](#3-amqp-message-mapping)
 
@@ -68,21 +65,19 @@ modes.
 
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the AMQP message's [application data][data] section using an
-[event format](#14-event-formats).
+event format as defined in the CloudEvents [spec][ce].
 
-In the _binary_ content mode, the value of the event `data` is placed
-into the AMQP message's [application data][data] section as-is, with the
-`datacontenttype` attribute value declaring its media type; all other event
-attributes are mapped to the AMQP [application-properties][app-properties]
-section.
+In the _binary_ content mode, the value of the event `data` is placed into the
+AMQP message's [application data][data] section as-is, with the
+`datacontenttype` attribute value declaring its media type mapped to the AMQP
+`content-type` message property; all other event attributes are mapped to the
+AMQP [application-properties][app-properties] section.
 
 ### 1.4. Event Formats
 
 Event formats, used with the _stuctured_ content mode, define how an event is
 expressed in a particular data format. All implementations of this specification
-MUST support the [JSON event format][json-format] as well as the [AMQP event
-format][amqp-format] for the [application-properties][app-properties] section,
-but MAY support any additional, including proprietary, formats.
+MUST support the [JSON event format][json-format].
 
 ### 1.5. Security
 
@@ -94,33 +89,14 @@ mandate specific existing features to be used.
 This specification does not further define any of the [CloudEvents][ce] event
 attributes.
 
-Two of the event attributes, `datacontenttype` and `data` are handled specially
-and mapped onto AMQP constructs, all other attributes are transferred as
-metadata without further interpretation.
+One event attribute, `datacontenttype` is handled specially in *binary* content
+mode and mapped onto the AMQP content-type message property. All other
+attributes are transferred as metadata without further interpretation.
 
 This mapping is intentionally robust against changes, including the addition and
 removal of event attributes, and also accommodates vendor extensions to the
-event metadata. Any mention of event attributes other than `datacontenttype` and
-`data` is exemplary.
-
-### 2.1. datacontenttype Attribute
-
-The `datacontenttype` attribute is assumed to contain a [RFC2046][rfc2046]
-compliant media-type expression.
-
-### 2.2. data
-
-`data` is assumed to contain opaque application data that is
-encoded as declared by the `datacontenttype` attribute.
-
-An application is free to hold the information in any in-memory representation
-of its choosing, but as the value is transposed into AMQP as defined in this
-specification, the assumption is that the `data` value is made
-available as a sequence of bytes.
-
-For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data`
-value is made available as [UTF-8][rfc3629] encoded JSON text for use in AMQP.
+event metadata. Any mention of event attributes other than `datacontenttype`
+is exemplary.
 
 ## 3. AMQP Message Mapping
 
@@ -151,14 +127,26 @@ directly to the CloudEvents `datacontenttype` attribute.
 
 #### 3.1.2. Event Data Encoding
 
-The [`data`](#22-data) byte-sequence is used as the AMQP
+Event data is assumed to contain opaque application data that is
+encoded as declared by the `datacontenttype` attribute.
+
+An application is free to hold the information in any in-memory representation
+of its choosing, but as it is transposed into AMQP as defined in this
+specification, the assumption is that the event data is made available as a
+sequence of bytes. The byte sequence is used as the AMQP
 [application-data][data] section.
+
+Example:
+
+If the declared `datacontenttype` is `application/json;charset=utf-8`, the
+expectation is that the event data is made available as [UTF-8][rfc3629] encoded
+JSON text for use in AMQP.
 
 #### 3.1.3. Metadata Headers
 
-All [CloudEvents][ce] attributes with exception of `datacontenttype` and `data`
-MUST be individually mapped to and from the AMQP
-[application-properties][app-properties] section, with exceptions noted below.
+All [CloudEvents][ce] attributes with exception of `datacontenttype` MUST be
+individually mapped to and from the AMQP
+[application-properties][app-properties] section.
 
 CloudEvents extensions that define their own attributes MAY define a secondary
 mapping to AMQP properties for those attributes, also in different message
@@ -169,7 +157,7 @@ mapping.
 
 An extension specification that defines a secondary mapping rule for AMQP, and
 any revision of such a specification, MUST also define explicit mapping rules
-for all other transport bindings that are part of the CloudEvents core at the
+for all other protocol bindings that are part of the CloudEvents core at the
 time of the submission or revision.
 
 ##### 3.1.3.1 AMQP Application Property Names
@@ -186,8 +174,32 @@ Examples:
 ##### 3.1.3.2 AMQP Application Property Values
 
 The value for each AMQP application property is constructed from the respective
-attribute's AMQP type representation, compliant with the [AMQP event
-format][amqp-format] specification.
+attribute's AMQP type representation.
+
+The CloudEvents type system MUST be mapped to AMQP types as follows, with
+additional notes below.
+
+| CloudEvents   | AMQP                        |
+| ------------- | --------------------------- |
+| Boolean       | [boolean][amqp-boolean]     |
+| Integer       | [long][amqp-long]           |
+| String        | [string][amqp-string]       |
+| Binary        | [binary][amqp-binary]       |
+| URI           | [string][amqp-string]       |
+| URI-reference | [string][amqp-string]       |
+| Timestamp     | [timestamp][amqp-timestamp] |
+
+All attribute values in an AMQP binary message MUST either be represented using
+the native AMQP types above or the canonical string form.
+
+An implementation
+
+- MUST be able to interpret both forms on an incoming AMQP message  
+- MAY further relax the requirements for incoming messages (for example
+accepting numeric types other than AMQP long), but MUST be strict for outgoing
+messages.
+- SHOULD use the native AMQP form on outgoing AMQP messages when it is efficient
+to do so, but MAY forward values as canonical strings
 
 #### 3.1.4 Examples
 
@@ -292,8 +304,6 @@ content-type: application/cloudevents+json; charset=utf-8
 
 [ce]: ./spec.md
 [json-format]: ./json-format.md
-[amqp-format]: ./amqp-format.md
-[data-section]: 3.2.6
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046

@@ -33,7 +33,7 @@ MAY), this usage only applies to events that use the extension.
 Extensions always follow a common placement strategy for in-memory formats (e.g.
 [JSON](json-format.md), XML) that are decided by those
 representations. Transport bindings (e.g. [HTTP](http-transport-binding.md),
-[MQTT](mqtt-transport-binding.md), [AMPQ](amqp-transport-binding.md),
+[MQTT](mqtt-transport-binding.md), [AMPQ](amqp-protocol-binding.md),
 [NATS](nats-transport-binding.md)) provide default placement for extensions, but
 an extension MAY require special secondary representation when transported (e.g. tracing
 standards that require specific headers). Extension authors SHOULD only require
