@@ -20,7 +20,7 @@ those events.
   defining a causal relationship/grouping between multiple events. In cases
   where the CloudEvent is delivered to an event consumer via multiple hops,
   it is possible that the value of this attribute might change, or even be 
-  removed, due to transport semantics or business processing logic within 
+  removed, due to protocol semantics or business processing logic within 
   each hop.
 * Examples:
   * The ID of the entity that the event is associated with
@@ -35,8 +35,8 @@ those events.
 The partitionkey attribute extension uses the key `partitionkey` for
 in-memory formats.
 
-### Transport format
+### Protocol format
 
-The Partitioning extension does not customize any transport binding's storage for
+The Partitioning extension does not customize any protocol binding's storage for
 extensions.
 

@@ -1,8 +1,8 @@
-# NATS Transport Binding for CloudEvents - Version 1.0-rc1
+# NATS Protocol Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
-The [NATS][nats] Transport Binding for CloudEvents defines how events are mapped
+The [NATS][nats] Protocol Binding for CloudEvents defines how events are mapped
 to [NATS messages][nats-msg-proto].
 
 ## Status of this document
@@ -33,7 +33,7 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[CloudEvents][ce] is a standardized and transport-neutral definition of the
+[CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
 elements defined in the CloudEvents specification are to be used in the NATS
 protocol as client [produced][nats-pub-proto] and [consumed][nats-msg-proto]
@@ -105,7 +105,7 @@ MUST be the [JSON event format][json-format] serialized as specified by the
 
 The _structured_ content mode keeps event metadata and data together, allowing
 simple forwarding of the same event across multiple routing hops, and across
-multiple transports.
+multiple protocols.
 
 ### 3.1 Event Data Encoding
 

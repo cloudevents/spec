@@ -18,7 +18,7 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[CloudEvents][ce] is a standardized and transport-neutral definition of the
+[CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
 elements defined in the CloudEvents specification are to be represented in the
 [Avro 1.9.0][avro-primitives].

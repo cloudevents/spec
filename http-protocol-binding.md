@@ -1,8 +1,8 @@
-# HTTP Transport Binding for CloudEvents - Version 1.0-rc1
+# HTTP Protocol Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
-The HTTP Transport Binding for CloudEvents defines how events are mapped to HTTP
+The HTTP Protocol Binding for CloudEvents defines how events are mapped to HTTP
 1.1 request and response messages.
 
 ## Status of this document
@@ -34,7 +34,7 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[CloudEvents][ce] is a standardized and transport-neutral definition of the
+[CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
 elements defined in the CloudEvents specification are to be used in [HTTP
 1.1][rfc7230] requests and response messages.
@@ -255,7 +255,7 @@ Content-Length: nnnn
 
 The _structured_ content mode keeps event metadata and data together in the
 payload, allowing simple forwarding of the same event across multiple routing
-hops, and across multiple transports.
+hops, and across multiple protocols.
 
 #### 3.2.1. HTTP Content-Type
 

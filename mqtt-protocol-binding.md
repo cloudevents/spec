@@ -1,8 +1,8 @@
-# MQTT Transport Binding for CloudEvents - Version 1.0-rc1
+# MQTT Protocol Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
-The MQTT Transport Binding for CloudEvents defines how events are mapped to MQTT
+The MQTT Protocol Binding for CloudEvents defines how events are mapped to MQTT
 3.1.1 ([OASIS][oasis-mqtt-3.1.1]; ISO/IEC 20922:2016) and MQTT 5.0
 ([OASIS][oasis-mqtt-5]) messages.
 
@@ -34,7 +34,7 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[CloudEvents][ce] is a standardized and transport-neutral definition of the
+[CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
 elements defined in the CloudEvents specification are to be used in MQTT PUBLISH
 ([3.1.1][3-publish], [5.0][5-publish]) messages.
@@ -210,7 +210,7 @@ datacontenttype: application/json; charset=utf-8
 
 The _structured_ content mode keeps event metadata and data together in the
 payload, allowing simple forwarding of the same event across multiple routing
-hops, and across multiple transports. This is the only supported mode for MQTT
+hops, and across multiple protocols. This is the only supported mode for MQTT
 3.1.1
 
 #### 3.2.1. MQTT Content Type

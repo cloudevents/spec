@@ -30,14 +30,13 @@ The following documents are available:
 | CloudEvents                   |          [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/spec.md)          |          [master](https://github.com/cloudevents/spec/blob/master/spec.md)          |
 |                               |
 | **Optional Specifications:**  |
-| AMQP Event Format             |      [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/amqp-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/amqp-format.md)       |
 | AMQP Transport Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/amqp-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-protocol-binding.md) |
 | AVRO Event Format             | - | [master](./avro-format.md) |
-| HTTP Transport Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-transport-binding.md) |
+| HTTP Protocol Binding         | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/http-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-protocol-binding.md) |
 | JSON Event Format             |      [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/json-format.md)       |      [master](https://github.com/cloudevents/spec/blob/master/json-format.md)       |
-| Kafka Transport Binding       | - | [master](https://github.com/cloudevents/spec/blob/master/kafka-transport-binding.md) |
-| MQTT Transport Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/mqtt-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-transport-binding.md) |
-| NATS Transport Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-transport-binding.md) |
+| Kafka Protocol Binding        | - | [master](https://github.com/cloudevents/spec/blob/master/kafka-protocol-binding.md) |
+| MQTT Protocol Binding        | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/mqtt-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-protocol-binding.md) |
+| NATS Protocol Binding         | [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/nats-transport-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-protocol-binding.md) |
 | Web hook                      |      [v1.0-rc1](https://github.com/cloudevents/spec/blob/v1.0-rc1/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
 |                               |
 | **Additional Documentation:** |

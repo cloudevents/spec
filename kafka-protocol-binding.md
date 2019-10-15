@@ -1,8 +1,8 @@
-# Kafka Transport Binding for CloudEvents - Version 1.0-rc1
+# Kafka Protocol Binding for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
-The [Kafka][Kafka] Transport Binding for CloudEvents defines how events are
+The [Kafka][Kafka] Protocol Binding for CloudEvents defines how events are
 mapped to [Kafka messages][Kafka-Message-Format].
 
 ## Status of this document
@@ -27,7 +27,7 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[CloudEvents][CE] is a standardized and transport-neutral definition of the
+[CloudEvents][CE] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how
 the elements defined in the CloudEvents specification are to be used in the
 Kafka protocol as [Kafka messages][Kafka-Message-Format] (aka Kafka records).
@@ -114,7 +114,7 @@ forward it to another party as-is.
 
 ### 3.1. Key Attribute
 The 'key' attribute is populated by a partitionKeyExtractor function. The 
-partitionKeyExtractor is a transport specific function that contains bespoke logic 
+partitionKeyExtractor is a protocol specific function that contains bespoke logic 
 to extract and populate the value. A default implementation of the extractor will 
 use the [Partitioning](extensions/partitioning.md) extension value. 
 
@@ -198,7 +198,7 @@ ce_datacontenttype: application/avro
 
 The *structured* content mode keeps event metadata and data together in the
 payload, allowing simple forwarding of the same event across multiple routing
-hops, and across multiple transports.
+hops, and across multiple protocols.
 
 #### 3.3.1. Kafka Content-Type
 
