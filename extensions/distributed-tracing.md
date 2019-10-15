@@ -26,10 +26,10 @@ Prometheus are built.
 
 ## Encoding
 
-### In-memory formats
+### Stand-alone event formats
 
 The Distributed Tracing extension uses the key `distributedtracing` for
-in-memory formats
+stand-alone event formats.
 
 ### HTTP
 

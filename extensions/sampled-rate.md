@@ -30,9 +30,9 @@ they impose additional sampling.
 
 ## Encoding
 
-### In-memory formats
+### Stand-alone event formats
 
-The Sampling extension uses the key `sampledrate` for in-memory formats.
+The Sampling extension uses the key `sampledrate` for stand-alone event formats.
 
 ### Protocol bindings
 
