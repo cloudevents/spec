@@ -20,6 +20,8 @@ Contributions do not constitute an official endorsement.
   - Arun Gupta, Ajay Nair, Rob Leidle, Orr Weinstein
 - **commercetools**
   - Christoph Neijenhuis - [@cneijenhuis](https://github.com/cneijenhuis)
+- **Confluent**
+  - Neil Avery - [@bluemonk3y](https://github.com/bluemonk3y)
 - **Google**
   - [Google Cloud Functions](https://cloud.google.com/functions/) and
     [Cloud Functions for Firebase](https://firebase.google.com/docs/functions/)
