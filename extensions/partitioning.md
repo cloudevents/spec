@@ -26,15 +26,3 @@ same bucket are done so by using the same partition key on those events.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
-
-## Encoding
-
-### Stand-alone event formats
-
-The partitionkey attribute extension uses the key `partitionkey` for
-stand-alone event formats.
-
-### Protocol format
-
-The Partitioning extension does not customize any protocol binding's storage for
-extensions.
