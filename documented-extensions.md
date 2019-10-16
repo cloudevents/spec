@@ -34,7 +34,7 @@ Extensions attributes, while not defined by the core CloudEvents specifications,
 MUST follow the same serialization rules as defined by the format and protocol
 binding specifications. See 
 [Extension Context Attributes](spec.md#extension-context-attributes) for more
- information.
+information.
 
 ## Known Extensions
 
