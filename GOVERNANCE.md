@@ -77,7 +77,7 @@ If a vote is taken during a meeting, the follow rules will be followed:
   An acceptable absence would include situations where the person is not
   officially working at all, such as being on vacation, taking a sabbatical or
   there is a public holiday. However, situations such as a scheduling conflict
-  would not apply.  Absence from meetings during that time will not impact
+  would not apply. Absence from meetings during that time will not impact
   their voting rights.
 - Only members with voting rights will be allowed to vote.
 - A vote passes if more than 50% of the votes cast approve the motion.
@@ -122,8 +122,8 @@ To create a new release:
   - Add some descriptive text, or the list of PRs that have been merged since
     the previous release. The git query to get the list commits since the last
     release is:
-	`git log --pretty=format:%s master...v0.1 | grep -v "Merge pull"`.
-	Just replace "v0.1" with the name of the previous release.
+    `git log --pretty=format:%s master...v0.1 | grep -v "Merge pull"`.
+    Just replace "v0.1" with the name of the previous release.
   - Press `Publish release` button
 - Create a PR that modifies the version string in all of the files
   (but not the README.md table) to be the next version number with a `-wip`

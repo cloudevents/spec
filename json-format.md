@@ -62,7 +62,7 @@ with exceptions noted below.
 
 | CloudEvents   | JSON                                                           |
 | ------------- | -------------------------------------------------------------- |
-| Boolean       | [boolean][json-bool]
+| Boolean       | [boolean][json-bool]                                           |
 | Integer       | [number][json-number], only the `int` component is permitted   |
 | String        | [string][json-string]                                          |
 | Binary        | [string][json-string], [Base64-encoded][base64] binary         |
@@ -93,14 +93,14 @@ respective CloudEvents type when the mapping rules are fulfilled.
 
 The following table shows exemplary attribute mappings:
 
-| CloudEvents     | Type          | Exemplary JSON Value            |
-| --------------- | ------------- | ------------------------------- |
-| type            | String        | "com.example.someevent"         |
-| specversion     | String        | "1.0-rc1"                       |
-| source          | URI-reference | "/mycontext"                    |
-| id              | String        | "1234-1234-1234"                |
-| time            | Timestamp     | "2018-04-05T17:31:00Z"          |
-| datacontenttype | String        | "application/json"              |
+| CloudEvents     | Type          | Exemplary JSON Value    |
+| --------------- | ------------- | ----------------------- |
+| type            | String        | "com.example.someevent" |
+| specversion     | String        | "1.0-rc1"               |
+| source          | URI-reference | "/mycontext"            |
+| id              | String        | "1234-1234-1234"        |
+| time            | Timestamp     | "2018-04-05T17:31:00Z"  |
+| datacontenttype | String        | "application/json"      |
 
 ### 2.4. JSONSchema Validation
 
@@ -120,26 +120,26 @@ the [type system mapping](#22-type-system-mapping).
 
 ### 3.1. Handling of "data"
 
-Before taking action, a JSON serializer MUST first determine the runtime data 
-type of the `data` content.  
+Before taking action, a JSON serializer MUST first determine the runtime data
+type of the `data` content.
 
 If the implementation determines that the type of `data` is `Binary`, the value
-MUST be represented as a [JSON string][json-string] expression containing the 
+MUST be represented as a [JSON string][json-string] expression containing the
 [Base64][base64] encoded binary value, and use the member name `data_base64`
-to store it inside the JSON object. 
+to store it inside the JSON object.
 
-For any other type, the implementation MUST translate the `data` value into 
+For any other type, the implementation MUST translate the `data` value into
 a [JSON value][json-value], and use the member name `data`
-to store it inside the JSON object. 
+to store it inside the JSON object.
 
 Out of this follows that use of the `data` and `data_base64` members is
-mutually exclusive in a JSON serialized CloudEvent. 
+mutually exclusive in a JSON serialized CloudEvent.
 
 When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
 member clearly indicates that the value is a Base64 encoded binary data, which
-the serializer MUST decode into a binary runtime data type. When a `data` 
-member is present, it is decoded using the default JSON type mapping for the 
-used runtime.  
+the serializer MUST decode into a binary runtime data type. When a `data`
+member is present, it is decoded using the default JSON type mapping for the
+used runtime.
 
 Unlike attributes, for which value types are restricted to strings per
 the [type-system mapping](#22-type-system-mapping), the resulting `data` member
@@ -284,8 +284,7 @@ also valid in a request):
 [ce-types]: ./spec.md#type-system
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-format]: ./json-format.md
-[json-geoseq]:
-  https://www.iana.org/assignments/media-types/application/geo+json-seq
+[json-geoseq]: https://www.iana.org/assignments/media-types/application/geo+json-seq
 [json-object]: https://tools.ietf.org/html/rfc7159#section-4
 [json-seq]: https://www.iana.org/assignments/media-types/application/json-seq
 [json-bool]: https://tools.ietf.org/html/rfc7159#section-3

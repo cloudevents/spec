@@ -188,7 +188,7 @@ it.
 
 Reaching the delivery agreement is realized using the following validation
 handshake. The handshake can either be executed immediately at registration time
-or as a "pre-flight" request immediately preceding a delivery. 
+or as a "pre-flight" request immediately preceding a delivery.
 
 It is important to understand is that the handshake does not aim to establish an
 authentication or authorization context. It only serves to protect the sender
@@ -346,8 +346,7 @@ WebHook-Allowed-Rate: 100
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
-[webhooks]:
-  http://progrium.com/blog/2007/05/03/web-hooks-to-revolutionize-the-web/
+[webhooks]: http://progrium.com/blog/2007/05/03/web-hooks-to-revolutionize-the-web/
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [retry-after]: https://tools.ietf.org/html/rfc7231#section-7.1.3
 [authorization]: https://tools.ietf.org/html/rfc7235#section-4.2

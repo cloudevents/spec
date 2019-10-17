@@ -123,7 +123,7 @@ information.
 
 An Event Format specifies how to serialize a CloudEvent as a sequence of bytes.
 Stand-alone event formats, such as the [JSON format](json-format.md), specify
-serialization independent of any protocol or storage medium.  Protocol Bindings
+serialization independent of any protocol or storage medium. Protocol Bindings
 MAY define formats that are dependent on the protocol.
 
 #### Message

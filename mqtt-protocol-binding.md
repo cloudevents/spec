@@ -316,8 +316,7 @@ Topic Name: mytopic
 [json-format]: ./json-format.md
 [oasis-mqtt-3.1.1]: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
 [oasis-mqtt-5]: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
-[5-content-type]:
-  http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html#_Toc502667341
+[5-content-type]: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html#_Toc502667341
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
