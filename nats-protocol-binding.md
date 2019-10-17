@@ -1,4 +1,4 @@
-# NATS Protocol Binding for CloudEvents - Version 1.0-rc1
+# NATS Protocol Binding for CloudEvents - Version 1.0
 
 ## Abstract
 
@@ -128,7 +128,7 @@ Subject: mySubject
 ------------------ payload -------------------
 
 {
-    "specversion" : "1.0-rc1",
+    "specversion" : "1.0",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

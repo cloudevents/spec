@@ -72,7 +72,7 @@ _1.0-rc1_ - Completed - 2019/09/19
 1. Complete all issues and PRs tagged as `v1.0`.
 1. Decide on duration and exit criteria for 'verification & testing' period.
 
-_1.0_
+_1.0_ - Completed - 2019/10/24
 
 1. Completion of exit criteria for 'verification & testing' period.
 1. Completion of as many `try-for-v1.0` issues and PRs as possible. The
