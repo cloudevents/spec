@@ -27,14 +27,3 @@ they impose additional sampling.
   extension not being used at all.
 - Constraints
   - The rate MUST be greater than zero.
-
-## Encoding
-
-### In-memory formats
-
-The Sampling extension uses the key `sampledrate` for in-memory formats.
-
-### Protocol bindings
-
-The Sampling extension does not customize any protocol binding's storage for
-extensions.

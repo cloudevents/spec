@@ -30,20 +30,11 @@ Support for any extension is OPTIONAL. When an extension definition uses
 [RFC 2199](https://www.ietf.org/rfc/rfc2119.txt) keywords (e.g. MUST, SHOULD,
 MAY), this usage only applies to events that use the extension.
 
-Extensions always follow a common placement strategy for in-memory formats (e.g.
-[JSON](json-format.md), XML) that are decided by those
-representations. Protocol bindings (e.g. [HTTP](http-protocol-binding.md),
-[MQTT](mqtt-protocol-binding.md), [AMPQ](amqp-protocol-binding.md),
-[NATS](nats-protocol-binding.md)) provide default placement for extensions, but
-an extension MAY require special secondary representation when transported (e.g. tracing
-standards that require specific headers). Extension authors SHOULD only require
-special representation in protocol bindings where extensions integrate with
-pre-existing specs; extensions with custom protocol bindings are much more
-likely to be dropped by middleware that does not understand the extension.
-
-As a convention, extensions of scalar types (e.g. `String`, `Binary`,
-`URI-reference`, `Number`) document their `Value` and structured types document
-their `Attributes`.
+Extensions attributes, while not defined by the core CloudEvents specifications,
+MUST follow the same serialization rules as defined by the format and protocol
+binding specifications. See 
+[Extension Context Attributes](spec.md#extension-context-attributes) for more
+information.
 
 ## Known Extensions
 

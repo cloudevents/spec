@@ -1,15 +1,14 @@
 # Partitioning extension
 
-This extension defines an attribute for use by message brokers and their
-clients that support partitioning of events, typically for the purpose of
-scaling.
+This extension defines an attribute for use by message brokers and their clients
+that support partitioning of events, typically for the purpose of scaling.
 
-Often in large scale systems, during times of heavy load, events being received need to be
-partitioned into multiple buckets so that each bucket can be separately processed in order
-for the system to manage the incoming load. A partitioning key can be used to determine
-which bucket each event goes into. The entity sending the events can ensure that events
-that need to be placed into the same bucket are done so by using the same partition key on
-those events.
+Often in large scale systems, during times of heavy load, events being received
+need to be partitioned into multiple buckets so that each bucket can be
+separately processed in order for the system to manage the incoming load. A
+partitioning key can be used to determine which bucket each event goes into. The
+entity sending the events can ensure that events that need to be placed into the
+same bucket are done so by using the same partition key on those events.
 
 ## Attributes
 
@@ -27,16 +26,3 @@ those events.
 * Constraints:
   * REQUIRED
   * MUST be a non-empty string
-
-## Encoding
-
-### In-memory formats
-
-The partitionkey attribute extension uses the key `partitionkey` for
-in-memory formats.
-
-### Protocol format
-
-The Partitioning extension does not customize any protocol binding's storage for
-extensions.
-

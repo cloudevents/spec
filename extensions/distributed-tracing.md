@@ -24,14 +24,7 @@ Prometheus are built.
 - Constraints
   - OPTIONAL
 
-## Encoding
-
-### In-memory formats
-
-The Distributed Tracing extension uses the key `distributedtracing` for
-in-memory formats
-
-### HTTP
+## HTTP encoding
 
 To integrate with existing tracing libraries, the Distributed Tracing attributes
 MUST be encoded over HTTP(S) as headers. E.g.
@@ -46,10 +39,10 @@ CURL -X POST example/webhook.json \
 
 ## Conflicts
 
-Since this extension defines secondary, special, seialization that differs
+Since this extension defines secondary, special, serialization that differs
 from other CloudEvents attributes, it is possible that the values of these two
 could differ by the time the event is received at a destination. In those
 cases, the serialization that followed the "general CloudEvents serialization
-rules" MUST be used as the CloudEvents attribute. The other, secodary,
+rules" MUST be used as the CloudEvents attribute. The other, secondary,
 mapping MAY be picked-up and offered to the receiving application as
 "additional" metadata.
