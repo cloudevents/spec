@@ -89,7 +89,7 @@ mandate specific existing features to be used.
 This specification does not further define any of the [CloudEvents][ce] event
 attributes.
 
-One event attribute, `datacontenttype` is handled specially in *binary* content
+One event attribute, `datacontenttype` is handled specially in _binary_ content
 mode and mapped onto the AMQP content-type message property. All other
 attributes are transferred as metadata without further interpretation.
 
@@ -194,12 +194,12 @@ the native AMQP types above or the canonical string form.
 
 An implementation
 
-- MUST be able to interpret both forms on an incoming AMQP message  
+- MUST be able to interpret both forms on an incoming AMQP message
 - MAY further relax the requirements for incoming messages (for example
-accepting numeric types other than AMQP long), but MUST be strict for outgoing
-messages.
+  accepting numeric types other than AMQP long), but MUST be strict for outgoing
+  messages.
 - SHOULD use the native AMQP form on outgoing AMQP messages when it is efficient
-to do so, but MAY forward values as canonical strings
+  to do so, but MAY forward values as canonical strings
 
 #### 3.1.4 Examples
 
@@ -312,11 +312,7 @@ content-type: application/cloudevents+json; charset=utf-8
 [rfc4627]: https://tools.ietf.org/html/rfc4627
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159
-[oasis-amqp-1.0]:
-  http://docs.oasis-open.org/amqp/core/v1.0/amqp-core-overview-v1.0.html
-[message-format]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#section-message-format
-[data]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-data
-[app-properties]:
-  http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-application-properties
+[oasis-amqp-1.0]: http://docs.oasis-open.org/amqp/core/v1.0/amqp-core-overview-v1.0.html
+[message-format]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#section-message-format
+[data]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-data
+[app-properties]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#type-application-properties

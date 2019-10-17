@@ -7,6 +7,6 @@ CloudEvents attributes. In order to promote interoperability across multiple
 implementations of these adpaters, the following documents show the proposed
 algorithms that should be used:
 
-* [AWS S3](adapters/aws-s3.md)
-* [GitHub](adapters/github.md)
-* [GitLab](adapters/gitlab.md)
+- [AWS S3](adapters/aws-s3.md)
+- [GitHub](adapters/github.md)
+- [GitLab](adapters/gitlab.md)

@@ -73,6 +73,7 @@ _1.0-rc1_ - Completed - 2019/09/19
 1. Decide on duration and exit criteria for 'verification & testing' period.
 
 _1.0_
+
 1. Completion of exit criteria for 'verification & testing' period.
 1. Completion of as many `try-for-v1.0` issues and PRs as possible. The
    expectation is that these are non-breaking changes to the core spec.
@@ -80,7 +81,7 @@ _1.0_
    necessary to align with the core spec.
 
 _Post 1.0_
+
 - All remaining issues and PRs will be examined.
 - How, and when, future releases (major, minor or patch) will be released will
   be determined by based on the set of changes that have been approved.
-

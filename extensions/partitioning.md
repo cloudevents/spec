@@ -14,15 +14,15 @@ same bucket are done so by using the same partition key on those events.
 
 ### partitionkey
 
-* Type: `String`
-* Description: A partition key for the event, typically for the purposes of
+- Type: `String`
+- Description: A partition key for the event, typically for the purposes of
   defining a causal relationship/grouping between multiple events. In cases
   where the CloudEvent is delivered to an event consumer via multiple hops,
-  it is possible that the value of this attribute might change, or even be 
-  removed, due to protocol semantics or business processing logic within 
+  it is possible that the value of this attribute might change, or even be
+  removed, due to protocol semantics or business processing logic within
   each hop.
-* Examples:
-  * The ID of the entity that the event is associated with
-* Constraints:
-  * REQUIRED
-  * MUST be a non-empty string
+- Examples:
+  - The ID of the entity that the event is associated with
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty string

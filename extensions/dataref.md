@@ -15,37 +15,38 @@ attribute by using the `dataref` attribute.
 ## Attributes
 
 ### dataref
-* Type: `URI-reference`
-* Description: A reference to a location where the event payload is stored. The
+
+- Type: `URI-reference`
+- Description: A reference to a location where the event payload is stored. The
   location MAY not be accessible without further information (e.g. a pre-shared
   secret).
 
   Known as the "Claim Check Pattern", this attribute MAY be used for a variety
   of purposes, including:
 
-  * If the [Data](../spec.md#data) is too large to be included in the message,
+  - If the [Data](../spec.md#data) is too large to be included in the message,
     the `data` is not present, and the consumer can retrieve it using
     this attribute.
-  * If the consumer wants to verify that the [Data](../spec.md#data) has not
+  - If the consumer wants to verify that the [Data](../spec.md#data) has not
     been tampered with, it can retrieve it from a trusted source using this
     attribute.
-  * If the [Data](../spec.md#data) MUST only be viewed by trusted consumers
-    (e.g.  personally identifiable information), only a trusted consumer can
+  - If the [Data](../spec.md#data) MUST only be viewed by trusted consumers
+    (e.g. personally identifiable information), only a trusted consumer can
     retrieve it using this attribute and a pre-shared secret.
 
   If this attribute is used, the information SHOULD be accessible long enough
   for all consumers to retrieve it, but MAY not be stored for an extended period
   of time.
 
-* Constraints:
-  * OPTIONAL
+- Constraints:
+  - OPTIONAL
 
 # Examples
 
 The following example shows a CloudEvent in which the event producer has included
 both `data` and `dataref` (serialized as JSON):
 
-``` JSON
+```JSON
 {
     "specversion" : "1.0-rc1",
     "type" : "com.github.pull.create",
@@ -60,7 +61,7 @@ both `data` and `dataref` (serialized as JSON):
 The following example shows a CloudEvent in which a middleware has replaced the
 `data` with a `dataref` (serialized as JSON):
 
-``` JSON
+```JSON
 {
     "specversion" : "1.0-rc1",
     "type" : "com.github.pull.create",
@@ -70,4 +71,3 @@ The following example shows a CloudEvent in which a middleware has replaced the
     "dataref" : "https://tenant123.middleware.com/events/data/A234-1234-1234.xml"
 }
 ```
-
