@@ -49,20 +49,19 @@ in the Kafka protocol as [Kafka messages][Kafka-Message-Format].
 The specification defines two content modes for transferring events:
 *structured* and *binary*.
 
-The *binary* mode *only* applies to Kafka 0.11.0.0 and above, because Kafka
-0.10.x.x and below lack support for message level headers.
-
-In the *binary* content mode, the value of the event `data` MUST be
-placed into the Kafka message's value section as-is, with the
-`ce_datacontenttype` header value declaring its media type; all other
-event attributes MUST be mapped to the Kafka message's 
-[header section][Kafka-Message-Header].
-
 In the *structured* content mode, event metadata attributes and event data are
-placed into the Kafka message value section
-using an [event format](#14-event-formats).
+placed into the Kafka message value section using an
+[event format](#14-event-formats).
 
+In the *binary* content mode, the value of the event `data` MUST be placed into
+the Kafka message's value section as-is, with the `content-type` header value
+declaring its media type; all other event attributes MUST be mapped to the
+Kafka message's [header section][Kafka-Message-Header].
 
+Implementations that use Kafka 0.11.0.0 and above MAY use either *binary*
+or *structured* modes. Implementations that use Kafka 0.10.x.x and below
+MUST use only use *structured* mode and encode the event in JSON. This is
+because older versions of Kafka lacked support for message level headers.
 
 ### 1.4. Event Formats
 
@@ -95,28 +94,32 @@ value is made available as [UTF-8][RFC3629] encoded JSON text.
 
 ## 3. Kafka Message Mapping
 
-With Kafka 0.11.0.0 and above, the content mode is chosen by the sender of the 
+With Kafka 0.11.0.0 and above, the content mode is chosen by the sender of the
 event. Protocol usage patterns that might allow solicitation of events using a
 particular content mode might be defined by an application, but are not defined
 here.
 
 The receiver of the event can distinguish between the two content modes by
-inspecting the `ce_datacontenttype` [Header][Kafka-Message-Header] of the 
-Kafka message. If the value is prefixed with the CloudEvents media type
-`application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver uses *structured* mode, otherwise
-it defaults to *binary* mode.
+inspecting the `content-type` [Header][Kafka-Message-Header] of the
+Kafka message. If the header is present and its value is prefixed with the
+CloudEvents media type `application/cloudevents`, indicating the use of a known
+[event format](#14-event-formats), the receiver uses *structured* mode,
+otherwise it defaults to *binary* mode.
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
 event format that it cannot handle, for instance
 `application/cloudevents+avro`, it MAY still treat the event as binary and
 forward it to another party as-is.
 
+If the `content-type` header is not present then the receiver uses
+*structured* mode with the JSON event format.  
+
 ### 3.1. Key Attribute
-The 'key' attribute is populated by a partitionKeyExtractor function. The 
-partitionKeyExtractor is a protocol specific function that contains bespoke logic 
-to extract and populate the value. A default implementation of the extractor will 
-use the [Partitioning](extensions/partitioning.md) extension value. 
+The 'key' attribute is populated by a partitionKeyExtractor function. The
+partitionKeyExtractor is a protocol specific function that contains bespoke
+logic to extract and populate the value. A default implementation of the
+extractor will use the [Partitioning](extensions/partitioning.md) extension
+value.
 
 ### 3.2. Binary Content Mode
 
@@ -125,20 +128,20 @@ efficient transfer and without transcoding effort.
 
 #### 3.2.1. Content Type
 
-For the *binary* mode, the header `ce_datacontenttype` property MUST be
-mapped directly to the CloudEvents `datacontenttype` attribute.
+For the *binary* mode, the header `content-type` property MUST be mapped
+directly to the CloudEvents `datacontenttype` attribute.
 
 
 #### 3.2.2. Event Data Encoding
 
-The [`data`](#21-data) byte-sequence MUST be used as the
-value of the Kafka message.
+The [`data`](#21-data) byte-sequence MUST be used as the value of the Kafka
+message.
 
 #### 3.2.3. Metadata Headers
 
 All [CloudEvents][CE] attributes and
-[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions) 
-with exception of `data` MUST be individually mapped to and from the Header 
+[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
+with exception of `data` MUST be individually mapped to and from the Header
 fields in the Kafka message.
 
 ##### 3.2.3.1 Property Names
@@ -184,12 +187,12 @@ ce_type: "com.example.someevent"
 ce_source: "/mycontext/subcontext"
 ce_id: "1234-1234-1234"
 ce_time: "2018-04-05T03:56:24Z"
-ce_datacontenttype: application/avro
+content-type: application/avro
        .... further attributes ...
 
 ------------------- value --------------------
 
-            ... application data ...
+            ... application data encoded in Avro ...
 
 -----------------------------------------------
 ```
@@ -202,8 +205,8 @@ hops, and across multiple protocols.
 
 #### 3.3.1. Kafka Content-Type
 
-The [Kafka `content-type`] property field MUST be set to the media
-type of an [event format](#14-event-formats).
+If present, the Kafka message header property `content-type` MUST be set to the
+media type of an [event format](#14-event-formats).
 
 Example for the [JSON format][JSON-format]:
 
@@ -246,12 +249,16 @@ content-type: application/cloudevents+json; charset=UTF-8
 
 {
     "specversion" : "1.0-rc1",
-    "datacontenttype" : "com.example.someevent",
+    "type" : "com.example.someevent",
+    "source" : "/mycontext/subcontext",
+    "id" : "1234-1234-1234",
+    "time" : "2018-04-05T03:56:24Z",
+    "datacontenttype" : "application/xml",
 
     ... further attributes omitted ...
 
     "data" : {
-        ... application data ...
+        ... application data encoded in XML ...
     }
 }
 
@@ -262,7 +269,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 
 - [Kafka][Kafka] The distributed stream platform
 - [Kafka-Message-Format][Kafka-Message-Format] The Kafka format message
-- [RFC2046][RFC2046] Multipurpose Internet Mail Extensions (MIME) Part Two: 
+- [RFC2046][RFC2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
 - [RFC2119][RFC2119] Key words for use in RFCs to Indicate Requirement Levels
 - [RFC3629][RFC3629] UTF-8, a transformation format of ISO 10646
