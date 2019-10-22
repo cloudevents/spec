@@ -9,19 +9,18 @@ into CloudEvents.
 Each section below describes how to determine the CloudEvents attributes
 based on the event type.
 
-## /db/_changes
+## /db/\_changes
 
 ### Update
 
 | CloudEvents Attribute | Value                                    |
 | :-------------------- | :--------------------------------------- |
 | `id`                  | The event sequence identifier (`seq`) |
-| `source`              | The server URL / db_name             |
-| `specversion`         | `1.0-rc1`                                |
+| `source`              | The server URL / `db`            |
+| `specversion`         | `1.0`                                |
 | `type`                | `org.apache.couchdb.document.update`     |
 | `datacontenttype`     | `application/json`                       |
-| `dataschema`          | Omit                                     |
-| `subject`             | `id` value                           |
+| `subject`             | The document identifier (`id`)          |
 | `time`                | Current time                             |
 | `data`                | `changes` value (array of `revs`)           |
 
@@ -30,53 +29,46 @@ based on the event type.
 | CloudEvents Attribute | Value                                    |
 | :-------------------- | :--------------------------------------- |
 | `id`                  | The event sequence identifier (`seq`) |
-| `source`              | The server URL / db_name             |
-| `specversion`         | `1.0-rc1`                                |
+| `source`              | The server URL / `db`             |
+| `specversion`         | `1.0`                                |
 | `type`                | `org.apache.couchdb.document.delete`     |
 | `datacontenttype`     | `application/json`                       |
-| `dataschema`          | Omit                                     |
-| `subject`             | `id` value                               |
+| `subject`             | The document identifier (`id`)           |
 | `time`                | Current time                             |
 | `data`                | `changes` value (array of `revs`)        |
 
-## /_db_updates
+## /\_db\_updates
 
 ### Create
 
 | CloudEvents Attribute | Value                                    |
 | :-------------------- | :--------------------------------------- |
-| `id`                  | The event sequence identifier|
+| `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL    |
-| `specversion`         | `1.0-rc1`                                |
-| `type`                | `org.apache.couchdb.db.create`           |
-| `dataschema`          | Omit                                     |
-| `subject`             | The database name (db_name)              |
+| `specversion`         | `1.0`                                |
+| `type`                | `org.apache.couchdb.database.create`           |
+| `subject`             | The database name (`db_name`)              |
 | `time`                | Current time                             |
-| `data`                | Omit                      |
 
 ### Update
 
 | CloudEvents Attribute | Value                                    |
 | :-------------------- | :--------------------------------------- |
-| `id`                  | The event sequence identifier |
+| `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL    |
-| `specversion`         | `1.0-rc1`                                |
-| `type`                | `org.apache.couchdb.document.update`           |
-| `dataschema`          | Omit                                     |
-| `subject`             | The database name (db_name)              |
+| `specversion`         | `1.0`                                |
+| `type`                | `org.apache.couchdb.database.update`           |
+| `subject`             | The database name (`db_name`)              |
 | `time`                | Current time                             |
-| `data`                | Empty                      |
 
 ### Delete
 
 | CloudEvents Attribute | Value                                    |
 | :-------------------- | :--------------------------------------- |
-| `id`                  | The event sequence identifier |
+| `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL    |
-| `specversion`         | `1.0-rc1`                                |
-| `type`                | `org.apache.couchdb.db.delete`           |
-| `dataschema`          | Omit                                     |
-| `subject`             | The database name (db_name)              |
+| `specversion`         | `1.0`                                |
+| `type`                | `org.apache.couchdb.database.delete`           |
+| `subject`             | The database name (`db_name`)              |
 | `time`                | Current time                             |
-| `data`                | Empty                      |
 
