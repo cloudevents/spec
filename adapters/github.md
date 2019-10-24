@@ -16,7 +16,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                                            |
 | `source`              | "repository.url" value                                                           |
-| `specversion`         | `1.0-rc1`                                                                        |
+| `specversion`         | `1.0`                                                                            |
 | `type`                | `com.github.check_run.` + "action" value                                         |
 | `datacontentencoding` | Omit                                                                             |
 | `datacontenttype`     | `application/json`                                                               |
@@ -31,7 +31,7 @@ based on the specified event.
 | :-------------------- | :----------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value      |
 | `source`              | "repository.url" value                     |
-| `specversion`         | `1.0-rc1`                                  |
+| `specversion`         | `1.0`                                      |
 | `type`                | `com.github.check_suite.` + "action" value |
 | `datacontentencoding` | Omit                                       |
 | `datacontenttype`     | `application/json`                         |
@@ -46,7 +46,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                 |
 | `source`              | "comment.url" value + `/` + "comment.commit_id" value |
-| `specversion`         | `1.0-rc1`                                             |
+| `specversion`         | `1.0`                                                 |
 | `type`                | `com.github.commit_comment.` + "action" value         |
 | `datacontentencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
@@ -61,7 +61,7 @@ based on the specified event.
 | :-------------------- | :----------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value            |
 | `source`              | "repository.url" value                           |
-| `specversion`         | `1.0-rc1`                                        |
+| `specversion`         | `1.0`                                            |
 | `type`                | `com.github.content_reference.` + "action" value |
 | `datacontentencoding` | Omit                                             |
 | `datacontenttype`     | `application/json`                               |
@@ -76,7 +76,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value   |
 | `source`              | "repository.url" value                  |
-| `specversion`         | `1.0-rc1`                               |
+| `specversion`         | `1.0`                                   |
 | `type`                | `com.github.create.` + "ref_type" value |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
@@ -91,7 +91,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value   |
 | `source`              | "repository.url" value                  |
-| `specversion`         | `1.0-rc1`                               |
+| `specversion`         | `1.0`                                   |
 | `type`                | `com.github.delete.` + "ref_type" value |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
@@ -106,7 +106,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                           |
 | `source`              | "repository.url" value                                          |
-| `specversion`         | `1.0-rc1`                                                       |
+| `specversion`         | `1.0`                                                           |
 | `type`                | `com.github.deploy_key.` + "action" value                       |
 | `datacontentencoding` | Omit                                                            |
 | `datacontenttype`     | `application/json`                                              |
@@ -121,7 +121,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.deployment`               |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -136,7 +136,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                             |
 | `source`              | "deployment.url" value                                            |
-| `specversion`         | `1.0-rc1`                                                         |
+| `specversion`         | `1.0`                                                             |
 | `type`                | `com.github.deployment_status.` + "deployment_status.state" value |
 | `datacontentencoding` | Omit                                                              |
 | `datacontenttype`     | `application/json`                                                |
@@ -151,7 +151,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.fork`                     |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -166,7 +166,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "sender.url" value                    |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.github_app_authorization` |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -181,7 +181,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value       |
 | `source`              | "repository.url" value                      |
-| `specversion`         | `1.0-rc1`                                   |
+| `specversion`         | `1.0`                                       |
 | `type`                | `com.github.gollum.` + "pages.action" value |
 | `datacontentencoding` | Omit                                        |
 | `datacontenttype`     | `application/json`                          |
@@ -196,7 +196,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value               |
 | `source`              | "installation.account.url" value                    |
-| `specversion`         | `1.0-rc1`                                           |
+| `specversion`         | `1.0`                                               |
 | `type`                | `com.github.installation.` + "action" value         |
 | `datacontentencoding` | Omit                                                |
 | `datacontenttype`     | `application/json`                                  |
@@ -211,7 +211,7 @@ based on the specified event.
 | :-------------------- | :----------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                  |
 | `source`              | "installation.account.url" value                       |
-| `specversion`         | `1.0-rc1`                                              |
+| `specversion`         | `1.0`                                                  |
 | `type`                | `com.github.installation_repository.` + "action" value |
 | `datacontentencoding` | Omit                                                   |
 | `datacontenttype`     | `application/json`                                     |
@@ -226,7 +226,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value        |
 | `source`              | "issue.url" value                            |
-| `specversion`         | `1.0-rc1`                                    |
+| `specversion`         | `1.0`                                        |
 | `type`                | `com.github.issue_comment.` + "action" value |
 | `datacontentencoding` | Omit                                         |
 | `datacontenttype`     | `application/json`                           |
@@ -241,7 +241,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.issue.` + "action" value  |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -256,7 +256,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.label.` + "action" value  |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -271,7 +271,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value               |
 | `source`              | "sender.url" value without the `/username` portion  |
-| `specversion`         | `1.0-rc1`                                           |
+| `specversion`         | `1.0`                                               |
 | `type`                | `com.github.marketplace_purchase.` + "action" value |
 | `datacontentencoding` | Omit                                                |
 | `datacontenttype`     | `application/json`                                  |
@@ -286,7 +286,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.member.` + "action" value |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -301,7 +301,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                           |
 | `source`              | "team.url" value                                                |
-| `specversion`         | `1.0-rc1`                                                       |
+| `specversion`         | `1.0`                                                           |
 | `type`                | `com.github.membership.` + "scope" value + `.` + "action" value |
 | `datacontentencoding` | Omit                                                            |
 | `datacontenttype`     | `application/json`                                              |
@@ -316,7 +316,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.meta.` + "action" value   |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -331,7 +331,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value    |
 | `source`              | "repository.url" value                   |
-| `specversion`         | `1.0-rc1`                                |
+| `specversion`         | `1.0`                                    |
 | `type`                | `com.github.milestone.` + "action" value |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
@@ -346,7 +346,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value        |
 | `source`              | "organization.url" value                     |
-| `specversion`         | `1.0-rc1`                                    |
+| `specversion`         | `1.0`                                        |
 | `type`                | `com.github.organization.` + "action" value  |
 | `datacontentencoding` | Omit                                         |
 | `datacontenttype`     | `application/json`                           |
@@ -361,7 +361,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value    |
 | `source`              | "organization.url" value                 |
-| `specversion`         | `1.0-rc1`                                |
+| `specversion`         | `1.0`                                    |
 | `type`                | `com.github.org_block.` + "action" value |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
@@ -376,7 +376,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.page_build`               |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -391,7 +391,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value       |
 | `source`              | "repository.url" value                      |
-| `specversion`         | `1.0-rc1`                                   |
+| `specversion`         | `1.0`                                       |
 | `type`                | `com.github.project_card.` + "action" value |
 | `datacontentencoding` | Omit                                        |
 | `datacontenttype`     | `application/json`                          |
@@ -406,7 +406,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value         |
 | `source`              | "repository.url" value                        |
-| `specversion`         | `1.0-rc1`                                     |
+| `specversion`         | `1.0`                                         |
 | `type`                | `com.github.project_column.` + "action" value |
 | `datacontentencoding` | Omit                                          |
 | `datacontenttype`     | `application/json`                            |
@@ -421,7 +421,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value  |
 | `source`              | "repository.url" value                 |
-| `specversion`         | `1.0-rc1`                              |
+| `specversion`         | `1.0`                                  |
 | `type`                | `com.github.project.` + "action" value |
 | `datacontentencoding` | Omit                                   |
 | `datacontenttype`     | `application/json`                     |
@@ -436,7 +436,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.owner.url" value          |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.public`                   |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -451,7 +451,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value       |
 | `source`              | "repository.url" value                      |
-| `specversion`         | `1.0-rc1`                                   |
+| `specversion`         | `1.0`                                       |
 | `type`                | `com.github.pull_request.` + "action" value |
 | `datacontentencoding` | Omit                                        |
 | `datacontenttype`     | `application/json`                          |
@@ -466,7 +466,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value              |
 | `source`              | "pull_request.url" value                           |
-| `specversion`         | `1.0-rc1`                                          |
+| `specversion`         | `1.0`                                              |
 | `type`                | `com.github.pull_request_review.` + "action" value |
 | `datacontentencoding` | Omit                                               |
 | `datacontenttype`     | `application/json`                                 |
@@ -481,7 +481,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                      |
 | `source`              | "pull_request.url" value                                   |
-| `specversion`         | `1.0-rc1`                                                  |
+| `specversion`         | `1.0`                                                      |
 | `type`                | `com.github.pull_request_review_comment.` + "action" value |
 | `datacontentencoding` | Omit                                                       |
 | `datacontenttype`     | `application/json`                                         |
@@ -496,7 +496,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value   |
 | `source`              | "repository.url" value                  |
-| `specversion`         | `1.0-rc1`                               |
+| `specversion`         | `1.0`                                   |
 | `type`                | `com.github.push`                       |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
@@ -511,7 +511,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value           |
 | `source`              | "repository.url" value                          |
-| `specversion`         | `1.0-rc1`                                       |
+| `specversion`         | `1.0`                                           |
 | `type`                | `com.github.registry_package.` + "action" value |
 | `datacontentencoding` | Omit                                            |
 | `datacontenttype`     | `application/json`                              |
@@ -526,7 +526,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value  |
 | `source`              | "repository.url" value                 |
-| `specversion`         | `1.0-rc1`                              |
+| `specversion`         | `1.0`                                  |
 | `type`                | `com.github.release.` + "action" value |
 | `datacontentencoding` | Omit                                   |
 | `datacontenttype`     | `application/json`                     |
@@ -541,7 +541,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value     |
 | `source`              | "repository.owner.url" value              |
-| `specversion`         | `1.0-rc1`                                 |
+| `specversion`         | `1.0`                                     |
 | `type`                | `com.github.repository.` + "action" value |
 | `datacontentencoding` | Omit                                      |
 | `datacontenttype`     | `application/json`                        |
@@ -556,7 +556,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.owner.url" value          |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.repository_import`        |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -571,7 +571,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                         |
 | `source`              | "repository.url" value                                        |
-| `specversion`         | `1.0-rc1`                                                     |
+| `specversion`         | `1.0`                                                         |
 | `type`                | `com.github.repository_vulnerability_alert.` + "action" value |
 | `datacontentencoding` | Omit                                                          |
 | `datacontenttype`     | `application/json`                                            |
@@ -586,7 +586,7 @@ based on the specified event.
 | :-------------------- | :----------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value            |
 | `source`              | `github.com`                                     |
-| `specversion`         | `1.0-rc1`                                        |
+| `specversion`         | `1.0`                                            |
 | `type`                | `com.github.security_advisory.` + "action" value |
 | `datacontentencoding` | Omit                                             |
 | `datacontenttype`     | `application/json`                               |
@@ -601,7 +601,7 @@ based on the specified event.
 | :-------------------- | :---------------------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value                 |
 | `source`              | "repository.url" value                                |
-| `specversion`         | `1.0-rc1`                                             |
+| `specversion`         | `1.0`                                                 |
 | `type`                | `com.github.star.` + "action" value                   |
 | `datacontentencoding` | Omit                                                  |
 | `datacontenttype`     | `application/json`                                    |
@@ -616,7 +616,7 @@ based on the specified event.
 | :-------------------- | :--------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value    |
 | `source`              | "repository.url" value                   |
-| `specversion`         | `1.0-rc1`                                |
+| `specversion`         | `1.0`                                    |
 | `type`                | `com.github.status.` # + "state" value ? |
 | `datacontentencoding` | Omit                                     |
 | `datacontenttype`     | `application/json`                       |
@@ -631,7 +631,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.team.` + "action" value   |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
@@ -646,7 +646,7 @@ based on the specified event.
 | :-------------------- | :-------------------------------------- |
 | `id`                  | "X-GitHub-Delivery" HTTP header value   |
 | `source`              | "repository.url" value                  |
-| `specversion`         | `1.0-rc1`                               |
+| `specversion`         | `1.0`                                   |
 | `type`                | `com.github.team_add.` + "action" value |
 | `datacontentencoding` | Omit                                    |
 | `datacontenttype`     | `application/json`                      |
@@ -661,7 +661,7 @@ based on the specified event.
 | :-------------------- | :------------------------------------ |
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
-| `specversion`         | `1.0-rc1`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `com.github.watch.` + "action" value  |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |

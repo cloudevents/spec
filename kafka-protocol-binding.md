@@ -1,4 +1,4 @@
-# Kafka Protocol Binding for CloudEvents - Version 1.0-rc1
+# Kafka Protocol Binding for CloudEvents - Version 1.0
 
 ## Abstract
 
@@ -187,7 +187,7 @@ Key: mykey
 
 ------------------ headers -------------------
 
-ce_specversion: "1.0-rc1"
+ce_specversion: "1.0"
 ce_type: "com.example.someevent"
 ce_source: "/mycontext/subcontext"
 ce_id: "1234-1234-1234"
@@ -253,7 +253,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 ------------------- value --------------------
 
 {
-    "specversion" : "1.0-rc1",
+    "specversion" : "1.0",
     "type" : "com.example.someevent",
     "source" : "/mycontext/subcontext",
     "id" : "1234-1234-1234",
