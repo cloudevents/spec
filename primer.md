@@ -733,25 +733,25 @@ existing current event formats that are used in practice today was gathered.
 
 #### Microsoft - Event Grid
 
-```
+```json
 {
-    "topic":"/subscriptions/{subscription-id}",
-    "subject":"/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
-    "eventType":"Microsoft.Resources.ResourceWriteSuccess",
-    "eventTime":"2017-08-16T03:54:38.2696833Z",
-    "id":"25b3b0d0-d79b-44d5-9963-440d4e6a9bba",
-    "data": {
-        "authorization":"{azure_resource_manager_authorizations}",
-        "claims":"{azure_resource_manager_claims}",
-        "correlationId":"54ef1e39-6a82-44b3-abc1-bdeb6ce4d3c6",
-        "httpRequest":"",
-        "resourceProvider":"Microsoft.EventGrid",
-        "resourceUri":"/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
-        "operationName":"Microsoft.EventGrid/eventSubscriptions/write",
-        "status":"Succeeded",
-        "subscriptionId":"{subscription-id}",
-        "tenantId":"72f988bf-86f1-41af-91ab-2d7cd011db47"
-    }
+  "topic": "/subscriptions/{subscription-id}",
+  "subject": "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
+  "eventType": "Microsoft.Resources.ResourceWriteSuccess",
+  "eventTime": "2017-08-16T03:54:38.2696833Z",
+  "id": "25b3b0d0-d79b-44d5-9963-440d4e6a9bba",
+  "data": {
+    "authorization": "{azure_resource_manager_authorizations}",
+    "claims": "{azure_resource_manager_claims}",
+    "correlationId": "54ef1e39-6a82-44b3-abc1-bdeb6ce4d3c6",
+    "httpRequest": "",
+    "resourceProvider": "Microsoft.EventGrid",
+    "resourceUri": "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.EventGrid/eventSubscriptions/LogicAppdd584bdf-8347-49c9-b9a9-d1f980783501",
+    "operationName": "Microsoft.EventGrid/eventSubscriptions/write",
+    "status": "Succeeded",
+    "subscriptionId": "{subscription-id}",
+    "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+  }
 }
 ```
 
@@ -759,7 +759,7 @@ existing current event formats that are used in practice today was gathered.
 
 #### Google - Cloud Functions (potential future)
 
-```
+```json
 {
   "data": {
     "@type": "types.googleapis.com/google.pubsub.v1.PubsubMessage",
@@ -787,7 +787,7 @@ existing current event formats that are used in practice today was gathered.
 A high proportion of event-processing systems on AWS are converging on the use
 of this format.
 
-```
+```json
 {
   "version": "0",
   "id": "6a7e8feb-b491-4cf7-a9f1-bf3703467718",
@@ -808,7 +808,7 @@ of this format.
 
 #### IBM - OpenWhisk - Web Action Event
 
-```
+```json
 {
   "__ow_method": "post",
   "__ow_headers": {
@@ -826,7 +826,7 @@ of this format.
 
 #### OpenStack - Audit Middleware - Event
 
-```
+```json
 {
   "typeURI": "http://schemas.dmtf.org/cloud/audit/1.0/event",
   "id": "d8304637-3f63-5092-9ab3-18c9781871a2",
@@ -866,35 +866,35 @@ of this format.
 
 #### Adobe - I/O Events
 
-```
+```json
 {
-    "event_id": "639fd17a-d0bb-40ca-83a4-e78612bce5dc",
-    "event": {
-        "@id": "82235bac-2b81-4e70-90b5-2bd1f04b5c7b",
-        "@type": "xdmCreated",
-        "xdmEventEnvelope:objectType": "xdmAsset",
-        "activitystreams:to": {
-            "xdmImsUser:id": "D13A1E7053E46A220A4C86E1@AdobeID",
-            "@type": "xdmImsUser"
-        },
-        "activitystreams:generator": {
-            "xdmContentRepository:root": "https://cc-api-storage.adobe.io/",
-            "@type": "xdmContentRepository"
-        },
-        "activitystreams:actor": {
-            "xdmImsUser:id": "D13A1E7053E46A220A4C86E1@AdobeID",
-            "@type": "xdmImsUser"
-        },
-        "activitystreams:object": {
-            "@type": "xdmAsset",
-            "xdmAsset:asset_id": "urn:aaid:sc:us:4123ba4c-93a8-4c5d-b979-ffbbe4318185",
-            "xdmAsset:asset_name": "example.jpg",
-            "xdmAsset:etag": "6fc55d0389d856ae7deccebba54f110e",
-            "xdmAsset:path": "/MyFolder/example.jpg",
-            "xdmAsset:format": "image/jpeg"
-        },
-        "activitystreams:published": "2016-07-16T19:20:30+01:00"
-    }
+  "event_id": "639fd17a-d0bb-40ca-83a4-e78612bce5dc",
+  "event": {
+    "@id": "82235bac-2b81-4e70-90b5-2bd1f04b5c7b",
+    "@type": "xdmCreated",
+    "xdmEventEnvelope:objectType": "xdmAsset",
+    "activitystreams:to": {
+      "xdmImsUser:id": "D13A1E7053E46A220A4C86E1@AdobeID",
+      "@type": "xdmImsUser"
+    },
+    "activitystreams:generator": {
+      "xdmContentRepository:root": "https://cc-api-storage.adobe.io/",
+      "@type": "xdmContentRepository"
+    },
+    "activitystreams:actor": {
+      "xdmImsUser:id": "D13A1E7053E46A220A4C86E1@AdobeID",
+      "@type": "xdmImsUser"
+    },
+    "activitystreams:object": {
+      "@type": "xdmAsset",
+      "xdmAsset:asset_id": "urn:aaid:sc:us:4123ba4c-93a8-4c5d-b979-ffbbe4318185",
+      "xdmAsset:asset_name": "example.jpg",
+      "xdmAsset:etag": "6fc55d0389d856ae7deccebba54f110e",
+      "xdmAsset:path": "/MyFolder/example.jpg",
+      "xdmAsset:format": "image/jpeg"
+    },
+    "activitystreams:published": "2016-07-16T19:20:30+01:00"
+  }
 }
 ```
 
