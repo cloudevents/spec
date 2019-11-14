@@ -65,6 +65,7 @@ In addition to the documentation mentioned above, there are also an
 - [Java](https://github.com/cloudevents/sdk-java)
 - [Javascript](https://github.com/cloudevents/sdk-javascript)
 - [Python](https://github.com/cloudevents/sdk-python)
+- [Ruby](https://github.com/cloudevents/sdk-ruby)
 
 ## Community
 
