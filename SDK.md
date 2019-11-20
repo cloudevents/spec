@@ -11,6 +11,7 @@ following SDKs:
 - [Java SDK](https://github.com/cloudevents/sdk-java)
 - [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
 - [Python SDK](https://github.com/cloudevents/sdk-python)
+- [Ruby SDK](https://github.com/cloudevents/sdk-ruby)
 
 This is intended to provide guidance and requirements for SDK authors. This
 document is intended to be kept up to date with the CloudEvents spec.
