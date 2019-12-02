@@ -12,7 +12,7 @@ Prometheus are built.
 
 - Type: `String`
 - Description: Contains a version, trace ID, span ID, and trace options as
-  defined in [section 2.2.2](https://w3c.github.io/trace-context/#field-value)
+  defined in [section 3.2](https://w3c.github.io/trace-context/#traceparent-header)
 - Constraints
   - REQUIRED
 
@@ -20,7 +20,7 @@ Prometheus are built.
 
 - Type: `String`
 - Description: a comma-delimited list of key-value pairs, defined by
-  [section 2.3.2](https://w3c.github.io/trace-context/#header-value).
+  [section 3.3](https://w3c.github.io/trace-context/#tracestate-header).
 - Constraints
   - OPTIONAL
 
