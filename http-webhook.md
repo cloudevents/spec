@@ -8,10 +8,6 @@ formal definition for Web Hooks. This specification aims to provide such a
 definition for use with [CNCF CloudEvents][ce], but is considered generally
 usable beyond the scope of CloudEvents.
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)
