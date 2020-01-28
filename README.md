@@ -31,10 +31,10 @@ The following documents are available:
 |                               |
 | **Optional Specifications:**  |
 | AMQP Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/amqp-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-protocol-binding.md)  |
-| AVRO Event Format             |                                       -                                        |                             [master](./avro-format.md)                              |
+| AVRO Event Format             | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/avro-format.md)           | [master](https://github.com/cloudevents/spec/blob/master/avro-format.md)            |
 | HTTP Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-protocol-binding.md)  |
 | JSON Event Format             |      [v1.0](https://github.com/cloudevents/spec/blob/v1.0/json-format.md)      |      [master](https://github.com/cloudevents/spec/blob/master/json-format.md)       |
-| Kafka Protocol Binding        |                                       -                                        | [master](https://github.com/cloudevents/spec/blob/master/kafka-protocol-binding.md) |
+| Kafka Protocol Binding        | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/kafka-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/kafka-protocol-binding.md) |
 | MQTT Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/mqtt-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-protocol-binding.md)  |
 | NATS Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/nats-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-protocol-binding.md)  |
 | Web hook                      |     [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
