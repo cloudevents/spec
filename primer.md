@@ -764,7 +764,7 @@ existing current event formats that are used in practice today was gathered.
   "data": {
     "@type": "types.googleapis.com/google.pubsub.v1.PubsubMessage",
     "attributes": {
-      "foo": "bar",
+      "foo": "bar"
      },
      "messageId": "12345",
      "publishTime": "2017-06-05T12:00:00.000Z",
