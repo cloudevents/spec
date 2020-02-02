@@ -48,6 +48,26 @@ There are three categories of project membership:
    merge/close PRs, but only per the group's approval. See the [OWNERS](OWNERS)
    file for the current list of Admins.
 
+### Admins
+
+Since the role of an 'Admin' is mainly administrative, the list of Members
+within this group should not need to change regularly. The following rules
+govern adding and removing Admins:
+
+- New Admins can be proposed via a PR to edit the [OWNERS](OWNERS) file. Normal
+  PR voting rules apply.
+- Admins can be removed via a PR to edit the [OWNERS](OWNERS) file. Normal
+  PR voting rules apply.
+- Admins can request to be removed via a PR to edit the [OWNERS](OWNERS) file.
+  Since the group can not force an Admin to continue in that role, the PR
+  does not follow the normal voting rules and can be merged by any of the
+  Admins, including the person requesting to be removed. The exception to
+  this "self-merge" aspect is when they are the last Admin. See next bullet.
+- If a PR to edit the list of Admins would result in there not being any
+  Admins remaining, then the state of the project would need to be decided
+  first since a project without any Admins might imply that the project should
+  be shutdown.
+
 ## PRs
 
 Typically, PRs are expected to meet the following criteria prior to being
