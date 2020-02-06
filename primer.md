@@ -399,7 +399,14 @@ original event source. And as such, it is expected that CloudEvents attributes
 related to the event producer (such as 'source`and`id`) would be changed from
 the incoming CloudEvent.
 
-There might exist special cases in which it is necessary to create a CloudEvent that contains another CloudEvent. Although the specification does not define nesting explicitly, it is possible. While the inner event will always be encoded in a [stand-alone event format](spec.md#event-format), the outer event can be either binary or structured mode. The `datacontenttype` attribute of the outer event must not be set to `application/cloudevents+json` or any other media type that is used to denote the usage of structured mode. A correct example of event nesting would be:
+There might exist special cases in which it is necessary to create a CloudEvent
+that contains another CloudEvent. Although the specification does not define
+nesting explicitly, it is possible. While the inner event will always be encoded
+in a [stand-alone event format](spec.md#event-format), the outer event can be
+either binary or structured mode. The `datacontenttype` attribute of the outer
+event must not be set to `application/cloudevents+json` or any other media type
+that is used to denote the usage of structured mode. A correct example of event
+nesting would be:
 
 ```
 Content-Type: application/json
