@@ -202,6 +202,20 @@ specific to CloudEvents and can be used to post any kind of one-way event and
 notifications to a conformant HTTP endpoint. However, the lack of such a
 specification elsewhere makes it necessary for CloudEvents to define it.
 
+### Interoperability Constraints
+
+As stated in the [Design Goals](#design-goals) section, interoperability is
+a key objective of the specification. Therefore, there are places in the
+specification where restrictions are recommended. For example, in the
+[Size Limits](./spec.md#size-limits) section it hints that event sizes should
+not exceed 64KB. It is important to note that constraints such as these,
+where they are not mandated via a "MUST", are recommendations to increase
+the likelihood of interoperability between multiple implementations and
+deployments. Specific uses of the specification are free to ignore these
+recommendations but it is incumbent on those environments to ensure that all
+components involved in the delivery of the CloudEvents are able to
+leave the boundaries of the recommendations.
+
 ### Protocol Error Handling
 
 The CloudEvents specification, for the most part, does not dictate a processing
