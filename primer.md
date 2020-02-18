@@ -141,7 +141,7 @@ The CloudEvents spec will not include protocol-level routing information (e.g.
 a destination URL to which the event is being sent). This is a common suggestion
 by those new to the concepts of CloudEvents. After much deliberation, the
 working group has come to the conclusion that routing is unnecessary in the
-spec: any protocol protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
+spec: any protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
 defines semantics for routing. For example, the CloudEvents
 [HTTP binding](http-protocol-binding.md) dictates headers and request body
 contents. CloudEvents don't need to include a destination URL in the spec to be
