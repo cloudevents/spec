@@ -119,7 +119,8 @@
       "type": ["object", "string"]
     },
     "data_base64def": {
-      "type": "string"
+      "type": "string",
+      "contentEncoding": "base64"
     }
   }
 }
