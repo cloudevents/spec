@@ -392,7 +392,7 @@ However, if this entity is performing some type of semantic processing of the
 CloudEvent, typically resulting in a change to the value of the `data`
 attribute, then it may need to be considered a distinct "event source" from the
 original event source. And as such, it is expected that CloudEvents attributes
-related to the event producer (such as 'source`and`id`) would be changed from
+related to the event producer (such as `source` and `id`) would be changed from
 the incoming CloudEvent.
 
 ## Qualifying Protocols and Encodings
