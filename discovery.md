@@ -18,7 +18,6 @@ version.
 - [API Specification](#api-specification)
 - [Protocol Bindings](#protocol-bindings)
 - [Privacy & Security](#privacy-and-security)
-- [Example](#example)
 
 ## Overview
 
