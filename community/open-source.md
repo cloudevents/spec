@@ -43,3 +43,5 @@ CloudEvents, please include in the list below.
   dependency manager for Kubernetes which uses sensors to act on CloudEvents.
 - [cloudevent.js](https://github.com/smartiniOnGitHub/cloudevent.js): A
   CloudEvents library for Node.js.
+- [CloudEvents JSON Schema](https://marketplace.visualstudio.com/items?itemName=tsurdilovic.cloudevents-schema-vscode):
+Visual Studio Code extension for CloudEvents format.
