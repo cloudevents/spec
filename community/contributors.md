@@ -68,6 +68,7 @@ Contributions do not constitute an official endorsement.
   - Jim Curtis - [@jimcurtis64](https://github.com/jimcurtis2)
   - William Markito Oliveira - [@william_markito](https://github.com/markito)
   - Gunnar Morling - [@gunnarmorling](https://github.com/gunnarmorling/)
+  - Tihomir Surdilovic - [@tsurdilo](https://github.com/tsurdilo)
 - **SAP**
   - [kubeless](https://kubeless.io)
   - Nathan Oyler - [@notque](https://github.com/notque)
