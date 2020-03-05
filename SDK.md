@@ -18,12 +18,20 @@ document is intended to be kept up to date with the CloudEvents spec.
 
 ## Contribution Acceptance
 
-Being an open source community CloudEvents team is open for a new members as
+Being an open source community the CloudEvents team is open for new members as
 well open to their contributions. In order to ensure that an SDK is going to be
-supported and maintained CloudEvents community would like to ensure that:
+supported and maintained the CloudEvents community would like to ensure that:
 
 - Each SDK has active points of contact.
-- Each SDK supports ongoing changes to the [CloudEvent spec](spec.md).
+- Each SDK supports the latest(N), and N-1, major releases of the
+  [CloudEvent spec](spec.md)\*.
+- Within the scope of a major release, only support for the latest minor
+  version is needed.
+
+Support for release candidates is not required, but strongly encouraged.
+
+\* Note: v1.0 is a special case and it is recommended that as long as v1.0
+  is the latest version, SDKs should also support v0.3.
 
 ## Technical Requirements
 
