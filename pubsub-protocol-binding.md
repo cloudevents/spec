@@ -85,15 +85,15 @@ event metadata.
 
 ### 2.1. datacontenttype Attribute
 
-The assumption is that the `datacontenttype` attribute contains a [RFC2046][rfc2046]
+The `datacontenttype` attribute SHOULD contain a [RFC2046][rfc2046]
 compliant media-type expression.
 
 ### 2.2. data Attribute
 
-The assumption is that the `data` attribute contains opaque application data that is
+The `data` attribute SHOULD contain opaque application data that is
 encoded as declared by the `datacontenttype` attribute.
 
-An application is free to hold the information in any in-memory representation
+An application MAY hold the information in any in-memory representation
 of its choosing, but as the value is transposed into a Pub/Sub message as defined 
 in this specification, the assumption is that the `data` attribute value is made
 available as a sequence of bytes.
@@ -113,8 +113,8 @@ The receiver of the event can distinguish between the two content modes by
 inspecting the [Pub/Sub Attribute `Content-Type`][content-type] of the
 [Pub/Sub message][pubsub-message]. If the attribute is present and its value is prefixed 
 with the CloudEvents media type `application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver is expected to use _structured_ mode,
-otherwise it SHOULD default to _binary_ mode.
+[event format](#14-event-formats), the receiver SHOULD use _structured_ mode,
+otherwise it MUST default to _binary_ mode.
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
 event format that it cannot handle, for instance
