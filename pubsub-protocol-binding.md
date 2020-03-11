@@ -85,12 +85,12 @@ event metadata.
 
 ### 2.1. datacontenttype Attribute
 
-The `datacontenttype` attribute is assumed to contain a [RFC2046][rfc2046]
+The assumption is that the `datacontenttype` attribute contains a [RFC2046][rfc2046]
 compliant media-type expression.
 
 ### 2.2. data Attribute
 
-The `data` attribute is assumed to contain opaque application data that is
+The assumption is that the `data` attribute contains opaque application data that is
 encoded as declared by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
@@ -113,8 +113,8 @@ The receiver of the event can distinguish between the two content modes by
 inspecting the [Pub/Sub Attribute `Content-Type`][content-type] of the
 [Pub/Sub message][pubsub-message]. If the attribute is present and its value is prefixed 
 with the CloudEvents media type `application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver uses _structured_ mode,
-otherwise it defaults to _binary_ mode.
+[event format](#14-event-formats), the receiver is expected to use _structured_ mode,
+otherwise it SHOULD default to _binary_ mode.
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
 event format that it cannot handle, for instance
@@ -128,9 +128,8 @@ efficient transfer and without transcoding effort.
 
 #### 3.1.1. Content-Type
 
-For the _binary_ mode, the [Pub/Sub Attribute `Content-Type`][content-type] of the 
-[Pub/Sub message][pubsub-message] property, if present, MUST be mapped
-directly to the CloudEvents `datacontenttype` attribute.
+For the _binary_ mode, the [Pub/Sub Attribute `Content-Type`][content-type], if present, MUST 
+be used as the CloudEvents `datacontenttype` attribute.
 
 #### 3.1.2. Event Data Encoding
 
@@ -140,18 +139,7 @@ message data payload.
 #### 3.1.3. Metadata Attributes
 
 All [CloudEvents][ce] attributes 
-MUST be individually mapped to and from distinct Pub/Sub message attributes, with
-exceptions noted below.
-
-CloudEvents extensions that define their own attributes MAY define a diverging
-mapping to Pub/Sub attributes for those attributes, especially if specific attributes
-need to align with Pub/Sub features or with other specifications that have explicit
-Pub/Sub attribute bindings.
-
-An extension specification that defines a diverging mapping rule for Pub/Sub, and
-any revision of such a specification, MUST also define explicit mapping rules
-for all other transport bindings that are part of the CloudEvents core at the
-time of the submission or revision.
+MUST be individually mapped to and from distinct Pub/Sub message attributes.
 
 ##### 3.1.3.1 Pub/Sub Attribute Names
 
@@ -217,7 +205,7 @@ Example for the [JSON format][json-format]:
 The chosen [event format](#14-event-formats) defines how all attributes,
 including the `data` attribute, are represented.
 
-The event metadata and data is then rendered in accordance with the event format
+The event metadata and data are then rendered in accordance with the event format
 specification and the resulting data becomes the Pub/Sub message data.
 
 #### 3.2.3. Metadata Attributes
