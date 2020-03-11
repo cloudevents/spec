@@ -24,7 +24,7 @@ This document is a working draft.
 - 2.1. [datacontenttype Attribute](#21-datacontenttype-attribute)
 - 2.2. [data Attribute](#22-data-attribute)
 
-3. [Pub/Sub Message Mapping](#3-pub/sub-message-mapping)
+3. [Pub/Sub Message Mapping](#3-pubsub-message-mapping)
 
 - 3.1. [Binary Content Mode](#31-binary-content-mode)
 - 3.2. [Structured Content Mode](#32-structured-content-mode)
@@ -220,10 +220,10 @@ including the `data` attribute, are represented.
 The event metadata and data is then rendered in accordance with the event format
 specification and the resulting data becomes the Pub/Sub message data.
 
-#### 3.2.3. Metadata Headers
+#### 3.2.3. Metadata Attributes
 
 Implementations MAY include the same Pub/sub attributes as defined for the
-[binary mode](#313-metadata-headers).
+[binary mode](#313-metadata-attributes).
 
 All CloudEvents metadata attributes MUST be mapped into the payload, even if
 they are also mapped into Pub/Sub attributes.
