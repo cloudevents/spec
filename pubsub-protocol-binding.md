@@ -1,8 +1,8 @@
-# Pub/Sub Protocol Binding for CloudEvents - Version 1.0
+# Google Cloud Pub/Sub Protocol Binding for CloudEvents - Version 1.0
 
 ## Abstract
 
-The Pub/Sub Protocol Binding for CloudEvents defines how events are mapped to Pub/Sub
+The Google Cloud Pub/Sub Protocol Binding for CloudEvents defines how events are mapped to Pub/Sub
 1.1 request and response messages.
 
 ## Status of this document
