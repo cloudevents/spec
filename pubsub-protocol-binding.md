@@ -64,10 +64,9 @@ to Pub/Sub attributes.
 
 ### 1.4. Event Formats
 
-Event formats, used with the _structured_ content mode, define how an event is
-expressed in a particular data format. All implementations of this
-specification MUST support the [JSON event format][json-format], but MAY support
-any additional, including proprietary, formats.
+Event formats define how an event is expressed in a particular data format. 
+All implementations of this specification MUST support the [JSON event format][json-format], 
+but MAY support any additional, including proprietary, formats.
 
 ### 1.5. Security
 
