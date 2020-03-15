@@ -93,7 +93,7 @@ In order to achieve these goals, the project must describe:
 
 ## Communications
 
-The mailing list for e-mail communications:
+The main mailing list for e-mail communications:
 
 - Send emails to: [cncf-cloudevents](mailto:cncf-cloudevents@lists.cncf.io)
 - To subscribe see: https://lists.cncf.io/g/cncf-cloudevents
@@ -101,6 +101,14 @@ The mailing list for e-mail communications:
 
 And a #cloudevents Slack channel under
 [CNCF's Slack workspace](https://slack.cncf.io/).
+
+For SDK related comments and questions:
+
+- Email to: [cncf-cloudevents-sdk](mailto:cncf-cloudevents-sdk@lists.cncf.io)
+- To subscribe see: https://lists.cncf.io/g/cncf-cloudevents-sdk
+- Archives are at: https://lists.cncf.io/g/cncf-cloudevents-sdk/topics
+- Slack: #cloudeventssdk on [CNCF's Slack workspace](https://slack.cncf.io/)
+
 
 ## Meeting Time
 
