@@ -54,38 +54,38 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 This specification uses the following terms:
 
-**Source**
+#### Source
 
 An event source is a logical entity in a system on behalf of which events are
 produced based on occurrences.
 
-**Producer**
+#### Producer
 
 The entity producing the event. The event might reflect an occurrence on a
 source elsewhere in the system. The producer is the concrete entity that creates
 and sends the event related to an occurrence.
 
-**Intermediary**
+#### Intermediary
 
 An "intermediary" (also referred to as middleware) receives an event for the
 purpose of forwarding it to the next receiver, which might be another
 intermediary or a consumer. A typical task for an intermediary is to route the
 event to receivers based on the information in the event context.
 
-**Consumer**
+#### Consumer
 
 An entity receiving and processing events. Consumers may receive events from
 producers directly or via intermediaries. A consumer might listen and wait for
 events to be delivered to it or it might actively solicit them from the producer
 or intermediary.
 
-**Subscription**
+#### Subscription
 
 A relationship established between a consumer and a producer or an intermediary.
 The subscription reflects the consumer's interest in receiving events and
 describes the method for how to deliver those events.
 
-**Subscription Manager**
+#### Subscription Manager
 
 An entity, defined in this specification, that manages the lifecycle of a
 subscription on behalf of an event consumer and that distributes events to
@@ -113,19 +113,19 @@ event consumer and a subscription manager, whereby the key differentiator is how
 the event delivery channel to the consumer is initiated:
 
 - Subscriptions with consumer-solicited delivery ("pull"-style) are configured
-    on the subscription manager for delivering events through a communication
-    channel (like an AMQP link or a MQTT connection) initiated by the consumer
-    and connecting to the subscription manager. These kinds of subscriptions are
-    typically offered by messaging or eventing middleware and their lifetime
-    might be bounded by the lifetime of the communication channel.
+  on the subscription manager for delivering events through a communication
+  channel (like an AMQP link or a MQTT connection) initiated by the consumer
+  and connecting to the subscription manager. These kinds of subscriptions are
+  typically offered by messaging or eventing middleware and their lifetime
+  might be bounded by the lifetime of the communication channel.
 
-- Subscriptions with subscription-manager-initiated delivery ("push"-style)
-    are configured on the subscription manager for delivering events through a
-    communication channel that the subscription manager initiates when events
-    are available for delivery on the subscription. The configuration of such a
-    subscription MUST contain all information required for the subscription
-    manager to select a transport protocol, establish the desired communication
-    channel, and deliver the event(s).
+- Subscriptions with subscription-manager-initiated delivery ("push"-style) are
+  configured on the subscription manager for delivering events through a
+  communication channel that the subscription manager initiates when events
+  are available for delivery on the subscription. The configuration of such a
+  subscription MUST contain all information required for the subscription
+  manager to select a transport protocol, establish the desired communication
+  channel, and deliver the event(s).
 
 An application using CloudEvents might use only one of these styles or a
 combination of those.
@@ -152,9 +152,9 @@ subscribe to CloudEvents event streams without requiring CloudEvents-specific
 mechanisms or extensions. The conformance section in this document formally
 enumerates the requirements.
 
-*The descriptions of the protocol subscription mechanisms in this section are
+_The descriptions of the protocol subscription mechanisms in this section are
 non-normative. Please refer to the protocol specifications or documentation for
-normative definitions.*
+normative definitions._
 
 #### 3.1.1. MQTT 3.x/5.x
 
@@ -259,95 +259,96 @@ how many subscriptions are supported is implementation specific.
 Each subscription is represented by an object that has the following properties:
 
 - **id** (string) – REQUIRED. The unique identifier of the subscription in the
-    scope of the subscription manager.
+  scope of the subscription manager.
 - **protocol** (string) - REQUIRED. Identifier of a delivery protocol. Because of
-    WebSocket tunneling options for AMQP, MQTT and other protocols, the URI
-    scheme is not sufficient to identify the protocol. The protocols with
-    existing CloudEvents bindings are identified as "AMQP", "MQTT3", "MQTT5",
-    "HTTP", "KAFKA", and "NATS". An implementation MAY add support for further
-    protocols.
+  WebSocket tunneling options for AMQP, MQTT and other protocols, the URI
+  scheme is not sufficient to identify the protocol. The protocols with
+  existing CloudEvents bindings are identified as "AMQP", "MQTT3", "MQTT5",
+  "HTTP", "KAFKA", and "NATS". An implementation MAY add support for further
+  protocols.
 - **protocolsettings** (map) - OPTIONAL. A set of settings specific to the
-    selected delivery protocol provider. Options for those settings are listed
-    in the following subsection. An implementation can offer more options.
-    Examples for such settings are credentials, which generally vary by
-    transport, rate limits and retry policies, or the QoS mode for MQTT.
-    See the [Protocol Settings](#protocol-settings) section for further details.
+  selected delivery protocol provider. Options for those settings are listed
+  in the following subsection. An implementation can offer more options.
+  Examples for such settings are credentials, which generally vary by
+  transport, rate limits and retry policies, or the QoS mode for MQTT.
+  See the [Protocol Settings](#322-protocol-settings) section for further details.
 - **sink** (URI) - REQUIRED. The address to which events shall be delivered using
-    the selected protocol. The format of the address MUST be valid for the
-    selected protocol or one of the protocol's own transport bindings (e.g. AMQP
-    over WebSockets).
-- **filters** - OPTIONAL. A filter is an expression of a particular filter
-    dialect that evaluates to true or false and that determines whether an
-    instance of a cloud event should be delivered to the subscription's sink. If
-    a filter expression evaluates to false, the event MUST NOT be sent to the
-    sink. Support for particular filter dialects might vary across different
-    subscription managers. If a filter dialect is specified in a subscription
-    that is unsupported by the subscription manager, creation or updates of the
-    subscription MUST be rejected with an error. See the [Filter
-    Dialects](#filter-dialects) section for further details.
+  the selected protocol. The format of the address MUST be valid for the
+  selected protocol or one of the protocol's own transport bindings (e.g. AMQP
+  over WebSockets).
+- **filter** - OPTIONAL. A filter is an expression of a particular filter
+  dialect that evaluates to true or false and that determines whether an
+  instance of a cloud event should be delivered to the subscription's sink. If
+  a filter expression evaluates to false, the event MUST NOT be sent to the
+  sink. Support for particular filter dialects might vary across different
+  subscription managers. If a filter dialect is specified in a subscription
+  that is unsupported by the subscription manager, creation or updates of the
+  subscription MUST be rejected with an error. See the [Filter
+  Dialects](#323-filter-dialects) section for further details.
 
 #### 3.2.2 Protocol Settings
 
 This section enumerates protocol-specific delivery options for the
 protocol-settings map, including default values where necessary.
 
-###### 3.2.2.1. HTTP
+##### 3.2.2.1. HTTP
 
 For HTTP, the following settings properties SHOULD be supported by all
 implementations.
 
 - **proxyurl** (URI) – OPTIONAL. The URI of the proxy server to use for sending
-    the event(s).
-- **proxycredentials** (credentials) – OPTIONAL. A *credentials* object (see
-    "common objects" below) holding information for gaining access to the proxy.
+  the event(s).
+- **proxycredentials** (credentials) – OPTIONAL. A _credentials_ object (see
+  "common objects" below) holding information for gaining access to the proxy.
 - **headers** (map) – OPTIONAL. A set of key/value pairs that is copied into the
-    HTTP request as custom headers.
+  HTTP request as custom headers.
 - **method** (string) – OPTIONAL. The HTTP method to use for sending the message.
-    This defaults to POST if not set.
+  This defaults to POST if not set.
 
 ##### 3.2.2.2. MQTT
 
-All implementations that support MQTT MUST support the *topicname* settings. All
+All implementations that support MQTT MUST support the _topicname_ settings. All
 other settings SHOULD be supported.
 
 - **topicname** (string) – REQUIRED. The name of the MQTT topic to publish to.
 - **qos** (integer) – OPTIONAL. MQTT quality of service (QoS) level: 0 (at most
-    once), 1 (at least once), or 2 (exactly once). This defaults to 1 if not
-    set.
+  once), 1 (at least once), or 2 (exactly once). This defaults to 1 if not
+  set.
 - **retain** (boolean) – OPTIONAL. MQTT retain flag: true/false. This defaults to
-    false if not set.
+  false if not set.
 - **expiry** (integer) – OPTIONAL. MQTT expiry interval, in seconds. This value
-    has no default value and the message will not expire if the setting is
-    absent. This setting only applies to MQTT 5.0.
-- **userproperty** (map) – OPTIONAL. A set of key/value pairs that are copied into
-    the MQTT PUBLISH packet's user property section. This setting only applies
-    to MQTT 5.0.
+  has no default value and the message will not expire if the setting is
+  absent. This setting only applies to MQTT 5.0.
+- **userproperties** (map) – OPTIONAL. A set of key/value pairs that are copied into
+  the MQTT PUBLISH packet's user property section. This setting only applies
+  to MQTT 5.0.
 
 ##### 3.2.2.3. AMQP
 
 For AMQP, the address property MUST be supported by all implementations and
 other settings properties SHOULD be supported by all implementations.
 
--   **address** (string) – REQUIRED. The name of the send target node in the AMQP
-    container identified by the sink URI.
--   **linkname** (string) – OPTIONAL. Name to use for the AMQP link. If not set, a
-    random link name is used.
--   **sendersettlementmode** (string) – OPTIONAL. Allows to control the sender's
-    settlement mode, which determines whether transfers are performed "settled"
-    (without acknowledgement) or "unsettled" (with acknowledgement). Default
-    value is unsettled.
--   **linkproperties** (map) – OPTIONAL. A set of key/value pairs that are copied
-    into link properties for the send link.
+- **address** (string) – OPTIONAL. The link target node in the
+  AMQP container identified by the sink URI, if not expressed in the sink URI's
+  path portion.
+- **linkname** (string) – OPTIONAL. Name to use for the AMQP link. If not set,
+  a random link name is used.
+- **sendersettlementmode** (string) – OPTIONAL. Allows to control the sender's
+  settlement mode, which determines whether transfers are performed "settled"
+  (without acknowledgement) or "unsettled" (with acknowledgement). Default
+  value is unsettled.
+- **linkproperties** (map) – OPTIONAL. A set of key/value pairs that are
+  copied into link properties for the send link.
 
 ##### 3.2.2.4. Apache Kafka
 
-All implementations that support Apache Kafka MUST support the *topicname*
+All implementations that support Apache Kafka MUST support the _topicname_
 settings. All other settings SHOULD be supported.
 
 - **topicname** (string) - REQUIRED. The name of the Kafka topic to publish to.
-- **partitionkeyextractor** (string) - OPTIONAL. A partition key extractor expression
-    per the CloudEvents Kafka transport binding specification. 
-- **clientd** (string)
+- **partitionkeyextractor** (string) - OPTIONAL. A partition key extractor
+  expression per the CloudEvents Kafka transport binding specification.
+- **clientid** (string)
 - **acks** (string)
 
 ##### 3.2.2.5. NATS
@@ -373,46 +374,46 @@ dialect being used.
 The "simple" filter dialect is intended to support the most common filtering use
 cases:
 
--   Exact match
--   Prefix match
--   Suffix match
+- "Exact match" where the filter condition and an attribute value match exactly.
+- "Prefix match" where the filter condition is a prefix of the attribute value.
+- "Suffix match" where the filter condition is a suffix of the attribute value.
 
-This dialect is intentionally constrained to these filter types, as this has a
-potentially significant impact on the baseline performance of all
-implementations. In cases where more filter types or different expression
-languages are desired, the spec can be extended to introduce new dialects.
+This filter dialect is intentionally constrained to these filter types, since
+filtering has a potentially significant impact on the baseline performance of
+all implementations. In cases where more filter types or different expression
+languages are desired, further dialects can be introduced as extensions.
 
-However, these dialects will have varying support across event producers. It is
-up to the subscriber and producer to negotiate which filter dialects can be used
+Extension dialects will have varying support across event producers. It is up to
+the subscriber and producer to negotiate which filter dialects can be used
 within a given subscription.
 
-The filters specified in the simple dialect will be defined by specifying a
-"filters" property. This is an array of simple filter definitions. The semantics
-of this is such that the JSON array represents the AND logical operator, with
-each filter element being an operand. This means the filter criteria MUST
-evaluate to true for every filter in the array in order for a cloud event
-instance to be delivered to the target sink.
+The filter conditions specified in the simple dialect will be defined by
+specifying a "conditions" property holding an array of simple filter conditions,
+which are logically combined with an implicit "AND" operator. This means the
+filter criteria MUST evaluate to true for every filter in the array in order for
+a cloud event instance to be delivered to the target sink.
 
-Each simple filter will be defined using a JSON object with the following
-properties:
+Each simple filter is defined with the following properties:
 
-- type (string) - REQUIRED. Value MUST be one of the following: prefix_match, suffix_match, exact_match.
-- property (string) -  REQUIRED. the cloud event property to match the value indicated by the "value" property against. 
-- value (Any) - REQUIRED, the value to match the cloud event property against.
+- type (string) - REQUIRED. Value MUST be one of the following: prefix_match,
+  suffix_match, exact_match.
+- property (string) - REQUIRED. The CloudEvents attribute to match the value
+  indicated by the "value" property against.
+- value (Any) - REQUIRED, The value to match the CloudEvents attribute against.
 
 ###### 3.2.3.1.1. Example: Prefix match
 
 This filter will select events only with the event type having the prefix of
-"com.myorg".
+"com.example".
 
-``` JSON
-{  
-    "dialect": "simple",  
-    "filters": [{  
-        "type": "prefix_match",  
-        "property": "type",  
-        "value": "com.myorg"  
-    }]  
+```JSON
+{
+    "dialect": "simple",
+    "filters": [{
+        "type": "prefix_match",
+        "property": "type",
+        "value": "com.example"
+    }]
 }
 ```
 
@@ -421,80 +422,81 @@ This filter will select events only with the event type having the prefix of
 This filter will select events only with the event subject having the suffix of
 ".jpg".
 
-``` JSON
-{  
-    "dialect": "simple",  
+```JSON
+{
+    "dialect": "simple",
     "filters": [
-        {  
-            "type": "suffix_match",  
-            "property": "subject",  
-            "value": ".jpg"  
+        {
+            "type": "suffix_match",
+            "property": "subject",
+            "value": ".jpg"
         }
-    ]  
+    ]
 }
 ```
 
 ###### 3.2.3.1.3. Example: Exact match
 
 This filter will select events only with the event type equal to
-"com.myorg.my_event".
+"com.example.my_event".
 
-``` JSON
-{  
-    "dialect": "simple",  
+```JSON
+{
+    "dialect": "simple",
     "filters": [
-        {  
-            "type": "exact_match",  
-            "property": "type",  
-            "value": "com.myorg.my_event"  
+        {
+            "type": "exact_match",
+            "property": "type",
+            "value": "com.example.my_event"
         }
-   ]  
+   ]
 }
 ```
 
 ###### 3.2.3.1.4. Example: Exact match and suffix match
 
 This filter will select events only with the event type equal to
-"com.myorg.my_event" AND the event subject having the suffix of ".jpg".
+"com.example.my_event" AND the event subject having the suffix of ".jpg".
 
-``` JSON
-{  
-    "dialect": "simple",  
+```JSON
+{
+    "dialect": "simple",
     "filters": [
-        {  
-            "type": "exact_match",  
-            "property": "type",  
-            "value": "com.myorg.my_event"  
+        {
+            "type": "exact_match",
+            "property": "type",
+            "value": "com.example.my_event"
         },
-        {  
-            "type": "suffix_match",  
-            "property": "subject",  
-            "value": ".jpg"  
+        {
+            "type": "suffix_match",
+            "property": "subject",
+            "value": ".jpg"
         },
-    ]  
-}  
+    ]
+}
 ```
 
 #### 3.2.4. API Operations
 
 This section enumerates the abstract operations that are defined for
-subscription managers. The following sections define bindings of these
-abstract operations to concrete protocols.
+subscription managers. The following sections define bindings of these abstract
+operations to concrete protocols.
 
-The operations are `Create`, `Retrieve`, `Query`, `Update`, and `Delete`. Of those,
-only the `Retrieve` operation is REQUIRED for conformance. The `Create` and 
-`Delete` operations SHOULD be implemented. `Query` and `Update` are OPTIONAL.
+The operations are `Create`, `Retrieve`, `Query`, `Update`, and `Delete`. Of
+those, only the `Retrieve` operation is REQUIRED for conformance. The `Create`
+and `Delete` operations SHOULD be implemented. `Query` and `Update` are
+OPTIONAL.
 
-Protocol bindings SHOULD provide a discovery mechanism for which operations
-are supported.
+Protocol bindings SHOULD provide a discovery mechanism for which operations are
+supported.
 
 #### 3.2.4.1. Creating a subscription
 
 The **Create** operation SHOULD be supported by compliant Event Producers. It
-creates a new Subscription. The client proposes a subscription object which
-MUST contain all REQUIRED properties. The subscription manager then realizes
-the subscription and returns a subscription object that also contains all
-OPTIONAL properties for which default values have been applied.
+creates a new Subscription. The client proposes a subscription object which MUST
+contain all REQUIRED properties. The subscription manager then realizes the
+subscription and returns a subscription object that also contains all OPTIONAL
+properties for which default values have been applied.
 
 Parameters:
 
@@ -507,11 +509,11 @@ Result:
 Errors:
 
 - **ok** - the operation succeeded
-- **conflict** - a subscription with the given *id* already exists
+- **conflict** - a subscription with the given _id_ already exists
 - **invalid** - the proposed subscription object contains invalid information
 
-Protocol bindings MAY map the Create operation such that the proposed *id*
-is ignored and the subscription manager assigns one instead.
+Protocol bindings MAY map the Create operation such that the proposed _id_ is
+ignored and the subscription manager assigns one instead.
 
 #### 3.2.4.2. Retrieving a Subscription
 
@@ -529,7 +531,7 @@ Result:
 Errors:
 
 - **ok** - the operation succeeded
-- **notfound** - a subscription with the given *id* already exists
+- **notfound** - a subscription with the given _id_ already exists
 
 #### 3.2.4.3. Querying for a list of Subscriptions
 
@@ -553,17 +555,17 @@ Errors:
 
 Protocol bindings and implementations of such bindings MAY add custom filter
 constraints and pagination arguments as parameters. A request without filtering
-constraints SHOULD return all available subscriptions associated
-with or otherwise visible to the party making the request.
+constraints SHOULD return all available subscriptions associated with or
+otherwise visible to the party making the request.
 
 #### 3.2.4.4. Updating a Subscription
 
 The Update operation MAY be supported by compliant Event Producers. To request
 the update of a Subscription, the client submits a proposed subscription object
-whose *id* MUST match an existing subscription. All other properties MAY differ
-from the original subscription. The subscription manager then updates
-the subscription and returns a subscription object that also contains all
-OPTIONAL properties for which default values have been applied.
+whose _id_ MUST match an existing subscription. All other properties MAY differ
+from the original subscription. The subscription manager then updates the
+subscription and returns a subscription object that also contains all OPTIONAL
+properties for which default values have been applied.
 
 Parameters:
 
@@ -573,10 +575,10 @@ Result:
 
 - subscription (subscription) - REQUIRED. Realized subscription object.
 
-Protocol bindings MAY map the Update and the Create operation into a composite 
-"upsert" operation that creates a new subscription if one with the given *id* does
-not exist. In this case, the operation is **Create* and follows that operation's
-rules.
+Protocol bindings MAY map the Update and the Create operation into a composite
+"upsert" operation that creates a new subscription if one with the given _id_
+does not exist. In this case, the operation is \*_Create_ and follows that
+operation's rules.
 
 #### 3.2.8. Deleting a Subscription
 
@@ -594,18 +596,18 @@ Result:
 Errors:
 
 - **ok** - the operation succeeded
-- **notfound** - a subscription with the given *id* already exists
+- **notfound** - a subscription with the given _id_ already exists
 
 ### 3.3. HTTP Binding for the Subscription API
 
-(TBD) This will be a straightforward mapping of the described API
-to a basic HTTP CRUD API using PUT, POST, GET, DELETE, and OPTIONS.
+(TBD) This will be a straightforward mapping of the described API to a basic
+HTTP CRUD API using PUT, POST, GET, DELETE, and OPTIONS.
 
 ### 3.4. AMQP Binding for the Subscription API
 
 (TBD) This will be a set of bi-directional exchanges for the
-respective operations. 
+respective operations.
 
 ## 4. Conformance
 
-(TBD) Conformance clauses. 
+(TBD) Conformance clauses.
