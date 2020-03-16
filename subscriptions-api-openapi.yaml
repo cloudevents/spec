@@ -1,0 +1,206 @@
+openapi: "3.0.2"
+info:
+  title: CloudEvents Subscriptions API
+  version: "0.1 WIP"
+servers:
+  - url: https://server.example.com/v0.1
+paths:
+  /subscriptions:
+    get:
+      description: Retrieve one or multiple subscriptions
+      parameters:
+        - in: "query"
+          name: "id"
+          description: identifier of a specific subscription
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Subscription"
+                    description: the subscription that was requested with teh 'id' parameter
+                  - type: array
+                    description: a list of subscriptions
+                    items:
+                       $ref: "#/components/schemas/Subscription"
+    put:
+      description: Update a subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subscription"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subscription"
+      responses:
+        "200":
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "201":
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+          headers:
+            Location:
+              schema:
+                type: string
+                format: url
+        "400":
+          description: Invalid or malformed request
+    delete:
+      description: Delete a subscription
+      parameters:
+        - in: "query"
+          name: "id"
+          required: true
+          schema:
+            type: string
+          description: The id of an existing subscription
+      responses:
+        "200":
+          description: Successfully deleted
+        "400":
+          description: Invalid or malformed request
+        "404":
+          description: Subscription not found
+    options:
+      description: Discover supported features and methods for this endpoint
+      responses:
+        "200":
+          description: OK
+          headers:
+            Allow:
+              schema:
+                type: string
+                default: "GET,PUT,POST,DELETE,OPTIONS"
+components:
+  schemas:
+    Subscription:
+      properties:
+        id:
+          type: string
+          description: REQUIRED. The unique identifier of the subscription in the scope of the subscription manager.
+          example: 1119920371
+        protocol:
+          type: string
+          enum: ["HTTP", "MQTT3", "MQTT5", "AMQP", "NATS", "KAFKA"]
+          description: REQUIRED. Identifier of a delivery protocol.
+          example: "HTTP"
+        protocolsettings:
+          type: object
+          anyOf:
+            - $ref: "#/components/schemas/HTTPSettings"
+            - $ref: "#/components/schemas/MQTTSettings"
+            - $ref: "#/components/schemas/AMQPSettings"
+            - $ref: "#/components/schemas/NATSSettings"
+            - $ref: "#/components/schemas/ApacheKafkaSettings"
+          description: OPTIONAL. A set of settings specific to the selected delivery protocol provider.
+          example: null
+        sink:
+          type: string
+          format: url
+          description: REQUIRED. The address to which events shall be delivered using the selected protocol.
+          example: "https://endpoint.example.com/webhook"
+        filter:
+          $ref: "#/components/schemas/Filter"
+      required:
+        - id
+        - protocol
+    Filter:
+      properties:
+        dialect:
+          type: string
+          description: Filter dialect
+          example: "simple"
+          default: "simple"
+        conditions:
+          type: array
+          description: Filter conditions
+          items:
+            type: object
+    HTTPSettings:
+      properties:
+        proxyurl:
+          type: string
+          format: url
+        proxycredentials:
+          $ref: "#/components/schemas/Credentials"
+        headers:
+          type: object
+        method:
+          type: string
+    MQTTSettings:
+      properties:
+        topicname:
+          type: string
+        qos:
+          type: integer
+          format: int32
+        retain:
+          type: boolean
+        expiry:
+          type: integer
+          format: int32
+        userproperties:
+          type: object
+      required:
+        - topicname
+    AMQPSettings:
+      properties:
+        address:
+          type: string
+        linkname:
+          type: string
+        sendersettlementmode:
+          type: string
+          enum: ["settled", "unsettled"]
+        linkproperties:
+          type: object
+    ApacheKafkaSettings:
+      properties:
+        topicname:
+          type: string
+        partitionkeyextractor:
+          type: string
+        clientid:
+          type: string
+        ackmode:
+          type: integer
+      required:
+        - topicname
+    NATSSettings:
+      properties:
+        subject:
+          type: string
+      required:
+        - subject
+    Credentials:
+      properties:
+        username:
+          type: string
+        passkey:
+          type: string
+          format: password
+        accesstoken:
+          type: string
