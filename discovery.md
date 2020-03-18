@@ -348,8 +348,76 @@ prefix.
   - "com.github.pull.create"
   - "com.github.pull.\*"
 
+##### expandsources
+
+- Type: boolean
+- Description: If true, the `source` response attribute will be expanded
+  for each producer entity that matches the query.
+- Constraints:
+  - OPTIONAL
+  - If absent, a default value of false is used.
+
 ## Example Usage
 
+For these examples, we'll assume discovery is being served from an events broker
+that has access to events from multiple producer systems. Specifically, we will
+show these producers, each with these event types.
+
+* "Git Source Control"
+ * `git.pullrequest`
+ * `git.commit`
+ * `git.newissue`
+* "Cloud Storage"
+ * `cloud.storage.object.create`
+ * `cloud.storage.object.delete`
+ * `cloud.storage.object.update`
+* "Cloud RDBMS"
+ * `cloud.rdbms.row.insert`
+ * `cloud.rdbms.row.delete`
+ * `cloud.rdbms.table.create`
+ * `cloud.rdbms.table.drop`
+
+### Query for available producers.
+
+In order to configure a subscription, a user wants to brows available events
+on this broker. We start by listing the available producers, an empty discovery
+query and `expandsources` set to `false`
+
+`/discovery?expandsources=false`
+
+The returned data would correspond to this table. Some attributes are omitted.
+
+| producer           | type                          | source |
+| ------------------ | ----------------------------- | ------ |
+| Git Source Control | `git.pullrequest`             | []     |
+| Git Source Control | `git.commit`                  | []     |
+| Git Source Control | `git.newissue`                | []     |
+| Cloud Storage      | `cloud.storage.object.create` | []     |
+| Cloud Storage      | `cloud.storage.object.delete` | []     |
+| Cloud Storage      | `cloud.storage.object.update` | []     |
+| Cloud RDBMS        | `cloud.rdbms.row.insert`      | []     |
+| Cloud RDBMS        | `cloud.rdbms.row.delete`      | []     |
+| Cloud RDBMS        | `cloud.rdbms.table.create`    | []     |
+| Cloud RDBMS        | `cloud.rdbms.table.drop`      | []     |
+| Cloud RDBMS        | `cloud.rdbms.database.create` | []     |
+
+### More detail, based on producer
+
+From here, the user knows they want events from the "Cloud RDBMS" producer, so
+a second query is issued.
+
+`/discovery?producer="Cloud RDBMS"&expandsources=true`
+
+The returned data now only shows event types from the selected producer, but
+we also see available sources that could be used in a subscription.
+
+| producer           | type                          | source |
+| ------------------ | ----------------------------- | ------ |
+| Cloud RDBMS        | `cloud.rdbms.row.insert`      | ["db1/bobby", "db1/tables", "db2/users"] |
+| Cloud RDBMS        | `cloud.rdbms.row.delete`      | ["db1/bobby", "db1/tables", "db2/users"] |
+| Cloud RDBMS        | `cloud.rdbms.table.create`    | ["db1", "db2"]     |
+| Cloud RDBMS        | `cloud.rdbms.table.drop`      | ["db1", "db2"]     |
+| Cloud RDBMS        | `cloud.rdbms.database.create` | [] |
 
 ## Protocol Bindings
 
