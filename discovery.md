@@ -1,9 +1,9 @@
-# CloudSubscriptions: Discovery - Version 0.1
+# CloudSubscriptions: Discovery - Version 0.1-rc01
 
 ## Abstract
 
 CloudSubscriptions Discovery API is a vendor-neutral API specification for
-determining what events an Event Producer or middleware (Aggregator, Broker)
+determining what events an Event Producer or Aggregator / Broker
 has available, as well as how to subscribe to those events.
 
 ## Status of this document
@@ -23,20 +23,20 @@ version.
 
 The goal of the CloudDiscovery API is to enable connection between consumers of
 events and producers / aggregators / brokers of events and to facilitate the
-creation of CloudSubscriptions. The discovery and subscription APIs are
-control-plane APIs to enable events to be delivered over the eventing
-data-plane.
+creation of CloudSubscriptions.
 
-Discovery must allow for an event producer or middleware component to advertise
-the event types that are available, provide the necessary information to consume
-that event (schema / delivery protocol options), and the necessary information
-to create a subscription. The output of the API must be such that tooling can be
-built where all possible event producers and types aren’t known in advance.
+Discovery must allow for an event producer or intermediary component to
+advertise the event types that are available, provide the necessary information
+to consume that event (schema / delivery protocol options), and the necessary
+information to create a subscription. The output of the API must be such that
+tooling can be built where all possible event producers and types aren’t known
+in advance.
 
 There are several discovery use cases to consider from the viewpoint of event
 consumers.
 
-1. What sources are available, and what event types do they produce?
+1. What sources are available, and what event types do they produce, and
+   (optionally) what `source` attributes are available?
 2. What event types are available, and from which providers.
 
 The second case becomes relevant if multiple providers support the same event
@@ -50,20 +50,22 @@ in the discovery API to narrow down the selection of available events.
 The CloudEvent source attribute is a potential source of high fanout. For
 example consider a blob storage system where each directory constitutes a
 distinct `source` attribute value. For this reason, source is not the starting
-point for discovery, but an attribute that can be used in creating subscriptions.
+point for discovery, but an attribute that can be used when creating
+subscriptions. A producer is free to show different possible source values
+to different users in their system.
 
 There are use cases where the Discovery API is served as a collection of other
 producers. These take two forms:
 
-1. Middleware
-2. Aggregator (or *Events Broker*)
+1. Aggregator
+2. Events Broker
 
-In the Middleware case, discovery is a combined set of producers for where the
+In the aggregator case, discovery is a combined set of producers for where the
 discovery is passed through largely unmodified and subscriber URIs are generally
 absolute (back to the producer).
 
-In the aggregator use case, the aggregator is expected to modify the output of
-discovery and subscription URIs will be relative to the aggregator itself.
+In the events broker use case, it is allowable to modify the output of
+discovery and subscription URIs will be relative to the broker itself.
 
 ## Notations and Terminology
 
@@ -77,40 +79,35 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 This specification defines the following terms:
 
-### Producer
+#### Producer
 
 The "producer" is a specific instance, process or device that creates the data
 structure describing the CloudEvent.
 
-### Intermediary
+#### Intermediary
 
 An "intermediary" receives a message containing an event for the purpose of
 forwarding it to the next receiver, which might be another intermediary or a
 consumer. A typical task for an intermediary is to route the event to receivers
 based on the information in the event context.
 
-### Middleware
+#### Source
 
-Specific to discovery and subscription capabilities. Events middleware systems
-provide discovery services that may be directly passing through discovery from
-producers, or may aggregate or otherwise alter the discovery. This includes
-events brokers that may also be relaying discovery AND subscription information
-further upstream to event producers. Multiple middleware systems may exist
-between the producer and the consumer.
+The "source" is the context in which the occurrence happened. In a distributed
+system it might consist of multiple Producers. If a source is not aware of
+CloudEvents, an external producer creates the CloudEvent on behalf of the
+source.
 
-### Consumer
+#### Consumer
 
-The entity receiving the event - the destination for the events related to a
-Subscription when the events are “pushed” by the Event Producer. In some
-instances this might be the same entity as the Subscriber. It could be the
-eventual event consumer or a pub/sub messaging entity which delivers the event
-to the eventual event consumer.
+A "consumer" receives the event and acts upon it. It uses the context and data
+to execute some logic, which might lead to the occurrence of new events.
 
-### Subscription
+#### Subscription
 
-The request for events from an Event Producer or middleware system.
+The request for events from an Event Producer system.
 
-### Event Subscriber
+#### Event Subscriber
 
 The entity managing the lifecycle of a Subscription on behalf of an Event
 Consumer. In some instances this might be the same entity as the Event Consumer.
@@ -122,10 +119,6 @@ structure focuses on discovery where each document has a two part key of
 `producer` and `type`. This takes a denormalized view where the composite key
 of documents is the `producer` and `type`. Producer is defined as an arbitrary
 human readable string and type is the CloudEvent type attribute.
-
-// TODO
-// 1) need to rationalize fanout, broker aggregator scenario
-// 2) Does discovery need to be 2 levels? - producers -> types -> sources
 
 ### Producer entity Attributes
 
@@ -355,6 +348,8 @@ prefix.
   - "com.github.pull.create"
   - "com.github.pull.\*"
 
+## Example Usage
+
 
 ## Protocol Bindings
 
@@ -362,12 +357,7 @@ The discovery API can be implemented over different API systems. We provide
 API schema definitions for implementing this API using OpenAPI and gRPC as
 illustrative examples.
 
-
 ### OpenAPI
-
-**TODO**
-
-### gRPC
 
 **TODO**
 
