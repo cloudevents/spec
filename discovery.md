@@ -21,16 +21,16 @@ version.
 
 ## Overview
 
-The goal of the CloudDiscovery API is to enable connection between consumers of
+The goal of the CloudDiscovery API is to enable connections between consumers of
 events and producers / aggregators / brokers of events and to facilitate the
 creation of CloudSubscriptions.
 
-Discovery must allow for an event producer or intermediary component to
+Discovery allows for an event producer or intermediary component to
 advertise the event types that are available, provide the necessary information
 to consume that event (schema / delivery protocol options), and the necessary
-information to create a subscription. The output of the API must be such that
-tooling can be built where all possible event producers and types aren’t known
-in advance.
+information to create a subscription. The output of the API ought to be such
+that tooling can be built where all possible event producers and types aren’t
+known in advance.
 
 There are several discovery use cases to consider from the viewpoint of event
 consumers.
@@ -47,9 +47,9 @@ producer first, then event types helps users navigate without having to see larg
 lists of event types. Both of these cases require that filters can be used
 in the discovery API to narrow down the selection of available events.
 
-The CloudEvent source attribute is a potential source of high fanout. For
+The CloudEvent `source` attribute is a potential cause of high fanout. For
 example consider a blob storage system where each directory constitutes a
-distinct `source` attribute value. For this reason, source is not the starting
+distinct `source` attribute value. For this reason, `source` is not the starting
 point for discovery, but an attribute that can be used when creating
 subscriptions. A producer is free to show different possible source values
 to different users in their system.
@@ -118,7 +118,7 @@ The discovery API takes the declarative API design approach. This document
 structure focuses on discovery where each document has a two part key of
 `producer` and `type`. This takes a denormalized view where the composite key
 of documents is the `producer` and `type`. Producer is defined as an arbitrary
-human readable string and type is the CloudEvent type attribute.
+human readable string and `type` is the CloudEvent `type` attribute.
 
 ### Producer entity Attributes
 
@@ -155,7 +155,7 @@ requirements for the query API.
 - Type: `List` of `String`
 - Description: CloudEvents [`source`](https://github.com/cloudevents/spec/blob/master/spec.md#source-1)
   attribute values available from this producer for this event type. Values here
-  may be used to create subscriptions from this producer.
+  can be used to create subscriptions from this producer.
 - Constraints
   - OPTIONAL
 - Examples:
@@ -219,6 +219,18 @@ requirements for the query API.
   - OPTIONAL
   - If present, MUST be a non-empty URI
 
+#### dataschematype
+
+- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Description: If using `dataschemacontent` for inline schema storage, the
+  `dataschematype` indicates the type of schema represented there.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST adhere to the format specified in [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Examples:
+  - "application/json"
+  -
+
 #### dataschemacontent
 
 - Type: `String`
@@ -250,10 +262,10 @@ requirements for the query API.
 #### extensions
 
 - Type: `Map` of `String` to `String`
-- Description: Associative map of CloudEvents [Extension Content Attributes](https://github.com/cloudevents/spec/blob/master/spec.md#extension-context-attributes)
+- Description: Associative map of CloudEvents [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/spec.md#extension-context-attributes)
   that are used for this event `type`. Keys MUST be confirm to the extension
-  content attributes naming rules and value are the type of the extension
-  attribute, confirming to the CloudEvents [type system](https://github.com/cloudevents/spec/blob/master/spec.md#type-system).
+  context attributes naming rules and value are the type of the extension
+  attribute, conforming to the CloudEvents [type system](https://github.com/cloudevents/spec/blob/master/spec.md#type-system).
 - Constraints:
   - OPTIONAL
 
@@ -261,7 +273,7 @@ requirements for the query API.
 
 - Type: `URI-reference`
 - Description: URI indicating where CloudSubscriptions `subscribe` API calls
-  should be sent to.
+  MUST be sent to.
 - Constraints:
   - REQUIRED
 
@@ -355,13 +367,13 @@ prefix.
   for each producer entity that matches the query.
 - Constraints:
   - OPTIONAL
-  - If absent, a default value of false is used.
+  - If absent, a default value of `false` is used.
 
 ## Example Usage
 
 For these examples, we'll assume discovery is being served from an events broker
 that has access to events from multiple producer systems. Specifically, we will
-show these producers, each with these event types.
+show these producers, each with the specified event types.
 
 * "Git Source Control"
  * `git.pullrequest`
@@ -379,7 +391,7 @@ show these producers, each with these event types.
 
 ### Query for available producers.
 
-In order to configure a subscription, a user wants to brows available events
+In order to configure a subscription, a user wants to browse available events
 on this broker. We start by listing the available producers, an empty discovery
 query and `expandsources` set to `false`
 
