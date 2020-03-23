@@ -429,6 +429,83 @@ Content-Length: nnnn
 
 ```
 
+### 3.4. Multipart Structured Content Mode
+
+In the _multipart structured_ content mode several events are sent into a single HTTP multipart
+request or response body and they can be named. A multipart structured mode contains events serialized 
+using one or several [event formats](#14-event-formats) in the same envelope. The _multipart structured_ content mode is based
+on [RFC7578 "Returning Values from Forms: multipart/form-data"](https://tools.ietf.org/html/rfc7578).
+
+#### 3.4.1. HTTP Content-Type
+
+The [HTTP `Content-Type`][content-type] header MUST be set to the media type of `multipart/form-data` 
+and must include the [boundary parameter](https://tools.ietf.org/html/rfc7578#section-4.1)
+
+```text
+Content-Type: multipart/form-data; boundary=12345
+```
+
+#### 3.4.2. Event Data Encoding
+
+Every part of the `multipart/form-data` can use its own [event format](#14-event-formats).
+
+The specific encoding of the part MUST be set using the `Content-Type` header inside the part:
+
+```text
+Content-Type: application/cloudevents+json; charset=UTF-8
+```
+
+#### 3.4.3. Naming the events
+
+Every part of the multipart envelope containing an event MAY be named, 
+using the `Content-Disposition` header:
+
+```text
+Content-Disposition: form-data; name="event_a"
+```
+
+Names MUST be unique across one single multipart envelope.
+
+#### 3.4.3 Examples
+
+```text
+
+POST /myresource HTTP/1.1
+Host: webhook.example.com
+Content-Type: multipart/form-data; boundary=12345
+
+--12345
+Content-Type: application/cloudevents+json; charset=UTF-8
+Content-Disposition: form-data; name="event_a"
+
+{
+    "specversion" : "1.0",
+    "type" : "com.example.someevent",
+
+    ... further attributes omitted ...
+
+    "data" : {
+        ... application data ...
+    }
+}
+--12345
+Content-Type: application/cloudevents+json; charset=UTF-8
+Content-Disposition: form-data; name="event_b"
+
+{
+    "specversion" : "1.0",
+    "type" : "com.example.someotherevent",
+
+    ... further attributes omitted ...
+
+    "data" : {
+        ... application data ...
+    }
+}
+
+--12345
+```
+
 ## 4. References
 
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
