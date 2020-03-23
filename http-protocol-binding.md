@@ -439,6 +439,48 @@ Content-Length: nnnn
 
 ```
 
+### 3.4. Json Streaming Content Mode
+
+In the _json streaming_ content mode several events are sent into a single HTTP
+request or response body using [RFC7464](https://www.rfc-editor.org/rfc/rfc7464.html).
+
+#### 3.4.1. HTTP Content-Type
+
+The [HTTP `Content-Type`][content-type] header MUST be set to the media type `application/cloudevents-stream`
+
+```text
+Content-Type: application/cloudevents-stream; charset=UTF-8
+```
+
+#### 3.4.2. Examples
+
+```text
+PUT /myresource HTTP/1.1
+Host: webhook.example.com
+Content-Type: application/cloudevents-stream; charset=UTF-8
+
+<RS>{
+    "specversion" : "1.0",
+    "type" : "com.example.someevent",
+
+    ... further attributes omitted ...
+
+    "data" : {
+        ... application data ...
+    }
+}<LF>
+<RS>{
+    "specversion" : "1.0",
+    "type" : "com.example.someotherevent",
+
+    ... further attributes omitted ...
+
+    "data" : {
+        ... application data ...
+    }
+}<LF>
+```
+
 ## 4. References
 
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
