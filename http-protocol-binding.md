@@ -429,6 +429,57 @@ Content-Length: nnnn
 
 ```
 
+### 3.4. Multipart Binary Content Mode
+
+In the _multipart binary_ content mode several events are sent into a single HTTP multipart
+request or response body and they can be named. A multipart binary mode contains one event per part, 
+encoded in a similar fashion to [binary content mode]().
+The _multipart binary_ content mode is based on [RFC2046][rfc2046].
+
+#### 3.4.1. HTTP Content-Type
+
+The [HTTP `Content-Type`][content-type] header MUST be set to the media type of `multipart/cloudevents` 
+and must include the [boundary parameter](https://tools.ietf.org/html/rfc2046#section-5.1.1)
+
+```text
+Content-Type: multipart/cloudevents; boundary=12345
+```
+
+#### 3.4.2 Examples
+
+```text
+
+POST /myresource HTTP/1.1
+Host: webhook.example.com
+Content-Type: multipart/cloudevents; boundary=12345
+
+--12345
+ce-specversion: 1.0
+ce-type: com.example.someevent
+ce-time: 2018-04-05T03:56:24Z
+ce-id: 1234-1234-1234
+ce-source: /mycontext/subcontext
+    .... further attributes ...
+Content-Type: application/json; charset=utf-8
+
+{
+    ... application data ...
+}
+--12345
+ce-specversion: 1.0
+ce-type: com.example.anotherevent
+ce-time: 2018-04-05T03:56:24Z
+ce-id: 1234-1234-1234
+ce-source: /mycontext/subcontext
+    .... further attributes ...
+Content-Type: application/json; charset=utf-8
+
+{
+    ... application data ...
+}
+--12345
+```
+
 ## 4. References
 
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
