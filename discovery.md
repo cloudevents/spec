@@ -28,9 +28,9 @@ creation of CloudSubscriptions.
 Discovery allows for an event producer or intermediary component to
 advertise the event types that are available, provide the necessary information
 to consume that event (schema / delivery protocol options), and the necessary
-information to create a subscription. The output of the API ought to be such
-that tooling can be built where all possible event producers and types aren’t
-known in advance.
+information to create a subscription. The output of the API must be such that
+tooling can be built where all possible event producers and types aren’t known
+in advance.
 
 There are several discovery use cases to consider from the viewpoint of event
 consumers.
