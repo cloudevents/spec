@@ -298,6 +298,15 @@ prefix.
   - "com.github.pull.create"
   - "com.github.pull.\*"
 
+##### expandsources
+
+- Type: boolean
+- Description: If true, the `source` response attribute will be expanded
+  for each producer entity that matches the query.
+- Constraints:
+  - OPTIONAL
+  - If absent, a default value of false is used.
+
 ## Example Usage
 
 For these examples, we'll assume discovery is being served from an events broker
