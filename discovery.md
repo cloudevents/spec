@@ -35,9 +35,8 @@ known in advance.
 There are several discovery use cases to consider from the viewpoint of event
 consumers.
 
-1. What sources are available, and what event types do they produce, and
-   (optionally) what `source` attributes are available?
-2. What event types are available, and from which providers.
+1. What providers are available, and what event types do they produce?
+2. What event types are available, and from which providers?
 
 The second case becomes relevant if multiple providers support the same event
 types. Use case 1 is likely the dominant use case. Given the example of a public
@@ -49,23 +48,8 @@ in the discovery API to narrow down the selection of available events.
 
 The CloudEvent `source` attribute is a potential cause of high fanout. For
 example consider a blob storage system where each directory constitutes a
-distinct `source` attribute value. For this reason, `source` is not the starting
-point for discovery, but an attribute that can be used when creating
-subscriptions. A producer is free to show different possible source values
-to different users in their system.
-
-There are use cases where the Discovery API is served as a collection of other
-producers. These take two forms:
-
-1. Aggregator
-2. Events Broker
-
-In the aggregator case, discovery is a combined set of producers for where the
-discovery is passed through largely unmodified and subscriber URIs are generally
-absolute (back to the producer).
-
-In the events broker use case, it is allowable to modify the output of
-discovery and subscription URIs will be relative to the broker itself.
+distinct `source` attribute value. For this reason, `source` is not part of the
+discovery system.
 
 ## Notations and Terminology
 
@@ -112,24 +96,26 @@ The request for events from an Event Producer system.
 The entity managing the lifecycle of a Subscription on behalf of an Event
 Consumer. In some instances this might be the same entity as the Event Consumer.
 
+For example, a UI for connecting eventing producers to event consumers would
+be considered an event subscriber and a target user of this API.
+
 ## API Specification
 
-The discovery API takes the declarative API design approach. This document
-structure focuses on discovery where each document has a two part key of
-`producer` and `type`. This takes a denormalized view where the composite key
-of documents is the `producer` and `type`. Producer is defined as an arbitrary
-human readable string and `type` is the CloudEvent `type` attribute.
+This document structure focuses on discovery where each document has a two part
+key of `provider` and `type`. This takes a denormalized view where the composite
+key of documents is the `provider` and `type`. Provider is defined as an
+arbitrary human readable string and `type` is the CloudEvent `type` attribute.
 
-### Producer entity Attributes
+### Provider entity Attributes
 
-The `Producer` entity is the main component of the discovery API. This section
+The `Provider` entity is the main component of the discovery API. This section
 covers the structure of that entity and the next section describes the
 requirements for the query API.
 
-#### producer
+#### provider
 
 - Type: `String`
-- Description: Identifies the producer of the event. The producer string SHOULD
+- Description: Identifies the provider of the event. The producer string SHOULD
   be human readable and can identify a top level producer system.
 - Constraints:
   - REQUIRED
@@ -150,31 +136,6 @@ requirements for the query API.
 - Examples:
   - "http://cloud.example.com/docs/blobstorage"
 
-#### source
-
-- Type: `List` of `String`
-- Description: CloudEvents [`source`](https://github.com/cloudevents/spec/blob/master/spec.md#source-1)
-  attribute values available from this producer for this event type. Values here
-  can be used to create subscriptions from this producer.
-- Constraints
-  - OPTIONAL
-- Examples:
-  - Single Internet-wide unique URI with a DNS authority.
-   - ["https://github.com/cloudevents"]
-  - Application-specific identifiers
-   - ["/sensors/tn-1234567/alerts", "/sensors/tr-1234567/alerts"]
-
-#### sourcestructure
-
-- Type: `String`
-- Description: Documentation of the format of the source attribute for this
-  producer and event type combination.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty string
-- Examples:
-  - "github.com/[organization]/[repository]/pull/[id]"
-
 #### type
 
 - Type: `String`
@@ -193,8 +154,7 @@ requirements for the query API.
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - Description: CloudEvents [`specversion`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
   that will be used for events published for this producer, event type
-  combination. Compliant event producers MUST use a value of `1.0` when
-  referring to this version of the specification.
+  combination.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
@@ -289,17 +249,6 @@ requirements for the query API.
   - OPTIONAL
 - Examples:
 
-#### subscriptionttl
-
-- Type: `Integer`
-- Description: Time (in seconds) after which subscriptions of this will will
-  automatically expire.
-- Constraints:
-  - OPTIONAL
-  - If present, must be a positive Integer >= 1.
-- Examples:
-  - `604800` - producer will expire subscriptions in 7 days
-
 #### authscope
 
 - Type: `String`
@@ -338,17 +287,6 @@ prefix.
   - "Awesome Cloud Storage"
   - "Awesome Cloud\*"
 
-##### source
-
-- Type: `String`
-- Description: The specific [source](#source) to query for.
-- Constraints:
-  - OPTIONAL
-  - If present, must be non-empty
-- Examples:
-  - "/sensors/\*"
-  - "/sensors/tn-1234567/alerts"
-
 ##### type
 
 - Type: `String`
@@ -359,15 +297,6 @@ prefix.
 - Examples:
   - "com.github.pull.create"
   - "com.github.pull.\*"
-
-##### expandsources
-
-- Type: boolean
-- Description: If true, the `source` response attribute will be expanded
-  for each producer entity that matches the query.
-- Constraints:
-  - OPTIONAL
-  - If absent, a default value of `false` is used.
 
 ## Example Usage
 
@@ -397,39 +326,40 @@ query and `expandsources` set to `false`
 
 `/discovery?expandsources=false`
 
-The returned data would correspond to this table. Some attributes are omitted.
+The returned data would correspond to this table. Most attributes are omitted
+in the table below.
 
-| producer           | type                          | source |
-| ------------------ | ----------------------------- | ------ |
-| Git Source Control | `git.pullrequest`             | []     |
-| Git Source Control | `git.commit`                  | []     |
-| Git Source Control | `git.newissue`                | []     |
-| Cloud Storage      | `cloud.storage.object.create` | []     |
-| Cloud Storage      | `cloud.storage.object.delete` | []     |
-| Cloud Storage      | `cloud.storage.object.update` | []     |
-| Cloud RDBMS        | `cloud.rdbms.row.insert`      | []     |
-| Cloud RDBMS        | `cloud.rdbms.row.delete`      | []     |
-| Cloud RDBMS        | `cloud.rdbms.table.create`    | []     |
-| Cloud RDBMS        | `cloud.rdbms.table.drop`      | []     |
-| Cloud RDBMS        | `cloud.rdbms.database.create` | []     |
+| producer           | type                          |
+| ------------------ | ----------------------------- |
+| Git Source Control | `git.pullrequest`             |
+| Git Source Control | `git.commit`                  |
+| Git Source Control | `git.newissue`                |
+| Cloud Storage      | `cloud.storage.object.create` |
+| Cloud Storage      | `cloud.storage.object.delete` |
+| Cloud Storage      | `cloud.storage.object.update` |
+| Cloud RDBMS        | `cloud.rdbms.row.insert`      |
+| Cloud RDBMS        | `cloud.rdbms.row.delete`      |
+| Cloud RDBMS        | `cloud.rdbms.table.create`    |
+| Cloud RDBMS        | `cloud.rdbms.table.drop`      |
+| Cloud RDBMS        | `cloud.rdbms.database.create` |
 
 ### More detail, based on producer
 
 From here, the user knows they want events from the "Cloud RDBMS" producer, so
 a second query is issued.
 
-`/discovery?producer="Cloud RDBMS"&expandsources=true`
+`/discovery?producer="Cloud RDBMS"`
 
-The returned data now only shows event types from the selected producer, but
-we also see available sources that could be used in a subscription.
+The returned data now only shows event types from the selected producer and
+could be further refined based on the type.
 
-| producer           | type                          | source |
-| ------------------ | ----------------------------- | ------ |
-| Cloud RDBMS        | `cloud.rdbms.row.insert`      | ["db1/bobby", "db1/tables", "db2/users"] |
-| Cloud RDBMS        | `cloud.rdbms.row.delete`      | ["db1/bobby", "db1/tables", "db2/users"] |
-| Cloud RDBMS        | `cloud.rdbms.table.create`    | ["db1", "db2"]     |
-| Cloud RDBMS        | `cloud.rdbms.table.drop`      | ["db1", "db2"]     |
-| Cloud RDBMS        | `cloud.rdbms.database.create` | [] |
+| producer           | type                          |
+| ------------------ | ----------------------------- |
+| Cloud RDBMS        | `cloud.rdbms.row.insert`      |
+| Cloud RDBMS        | `cloud.rdbms.row.delete`      |
+| Cloud RDBMS        | `cloud.rdbms.table.create`    |
+| Cloud RDBMS        | `cloud.rdbms.table.drop`      |
+| Cloud RDBMS        | `cloud.rdbms.database.create` |
 
 ## Protocol Bindings
 
