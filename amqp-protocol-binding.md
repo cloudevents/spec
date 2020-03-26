@@ -115,6 +115,16 @@ If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
 treat the event as binary and forward it to another party as-is.
 
+When the `content-type` message property is not prefixed with the CloudEvents
+media type, being able to know when the message ought to be attempted to be
+parsed as a CloudEvent can be a challenge. While this specification can not
+mandate that senders do not include any of the CloudEvents message properties
+when the message is not a CloudEvent, it would be reasonable for a receiver
+to assume that if the message has all of the mandatory CloudEvents attributes
+as message properties then it's probably a CloudEvent. However, as with all
+CloudEvent messages, if it does not adhere to all of the normative language of
+this specification then it is not a valid CloudEvent.
+
 ### 3.1. Binary Content Mode
 
 The _binary_ content mode accommodates any shape of event data, and allows for
