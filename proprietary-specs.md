@@ -7,7 +7,7 @@ the responsibility of the respective project maintainers.
 - [Apache RocketMQ Transport Binding](https://github.com/apache/rocketmq-externals/blob/master/rocketmq-cloudevents-binding/rocketmq-transport-binding.md)
 - [Google Cloud Pub/Sub Protocol Binding](https://github.com/google/knative-gcp/blob/master/docs/spec/pubsub-protocol-binding.md)
 
-Want to add a binding to a proprietary transport?
+**Want to add a binding to a proprietary transport?**
 
 - Create a spec that follows the structure of an existing binding specification (e.g. [http](http-protocol-binding.md) or [amqp](amqp-protocol-binding.md)) - this will help SDK development.
   - **NOTES:**
