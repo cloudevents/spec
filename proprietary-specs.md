@@ -9,7 +9,9 @@ the responsibility of the respective project maintainers.
 
 Want to add a binding to a proprietary transport?
 
-- Create a specification that follows the structure of the existing binding specifications (e.g. [http binding](http-protocol-binding.md)) - this will help SDK development.
-  - **NOTE:** The specification needs to be publically accessible and manged by the proposing organization.
+- Create a spec that follows the structure of an existing binding specification (e.g. [http](http-protocol-binding.md) or [amqp](amqp-protocolbinding.md)) - this will help SDK development.
+  - **NOTES:**
+    - The spec needs to be publically accessible and manged by the proposing organization.
+    - The spec should clearly state the version(s) of CloudEvents supported.
 - Open a pull request against this file.
 - Respond to any comments on the pull request and potentially join one of the regularly scheduled working group sessions.
