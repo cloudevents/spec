@@ -101,7 +101,7 @@ be considered an event subscriber and a target user of this API.
 
 ## API Specification
 
-This API is specified as a REST API will well defined entities and relationships
+This API is specified as a REST API with well defined entities and relationships
 between those entities.
 
 All responses will have a content-type of `application/json` and are either
