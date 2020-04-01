@@ -231,12 +231,15 @@ applications of HTTP rather than inherent features of HTTP per-se.
 
 ### 3.2. Subscription Manager API
 
-Subscriptions where the delivery is initiated by the subscription manager
-("push"-style) require a mechanism to configure such subscriptions on the
-subscription manager.
-
-The subscription manager API defines a subscription object and an API for
+The subscription manager API defines a subscription object and a protocol for 
 creating, updating and deleting subscriptions on a subscription manager.
+
+The subscription object describes the consumer's interest in events and 
+defines the delivery method. The protocol allows to configure subscriptions
+on the subscription manager. Especially in case of subscription manager 
+initiated ("push"-style) delivery, the protocol is required to express the 
+consumer's interest to the subscription manager before the subscription 
+manager can initiate delivery.
 
 The protocol used to configure the subscription manager is decoupled from the
 delivery protocol, meaning that an application can configure a push delivery
