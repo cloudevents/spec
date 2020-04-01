@@ -50,6 +50,18 @@ This specification does not prescribe rules constraining transfer or settlement
 of event messages with Kafka; it solely defines how CloudEvents are expressed
 in the Kafka protocol as [Kafka messages][kafka-message-format].
 
+The Kafka documentation uses "message" and "record" somewhat interchangeably
+and therefore the terms should be considered being synonyms for this spec as
+well.
+
+Conceptually, Kafka is a log-oriented store for records, each holding a singular
+key/value pair. The store is commonly partitioned, and the partition for a
+record is typically chosen based on the key's value. Kafka clients accomplish
+this by using a hash function.
+
+This binding specification defines how attributes and data of a CloudEvent is
+mapped to the value, key, and headers sections of a Kafka message.
+
 ### 1.3. Content Modes
 
 The specification defines two content modes for transferring events:
@@ -130,14 +142,19 @@ this specification then it is not a valid CloudEvent.
 If the `content-type` header is not present then the receiver uses
 _structured_ mode with the JSON event format.
 
-### 3.1. Key Attribute
+### 3.1. Key mapping
 
-The 'key' attribute is populated by a partitionKeyExtractor function. The
-partitionKeyExtractor is a protocol specific function that contains bespoke
-logic to extract and populate the value. The key attribute MUST be encoded
-as UTF-8 string both in the Kafka message and in the CloudEvents extension.
-A default implementation of the extractor will use the
-[Partitioning](extensions/partitioning.md) extension value.
+The 'key' of the Kafka message is populated by a "Key Mapper" function, which
+might map the key directly from one of the CloudEvent's attributes, but might
+also use information from the application environment, from the CloudEvent's
+data or other sources.  
+
+The shape and configuration of the "Key Mapper" function is implementation
+specific.
+
+Every implementation SHOULD provide a default "Key Mapper" implementation that
+maps the [Partitioning](extensions/partitioning.md) `partitionKey` attribute
+value to the 'key' of the Kafka message as-is, if present.
 
 ### 3.2. Binary Content Mode
 
