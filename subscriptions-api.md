@@ -1,4 +1,4 @@
-# CNCF CloudEvents – Subscriptions API
+# CNCF CloudEvents – Subscriptions API - Version 0.1-rc01s
 
 ## Abstract
 
@@ -24,13 +24,14 @@ This document also does not formalize the relationship between a specific set of
 events and the subscription manager. An event producer that produces multiple
 different types of events can offer one subscription manager for all events or a
 subscription manager for each type of event, or any other combination. An event
-producer may also offer up the same set of events for subscription at multiple
-concurrent subscription managers. Such subscription offers are published in a
-CloudEvents Discovery service.
+producer can also offer up the same set of events for subscription at multiple
+concurrent subscription managers. Regardless of relationship between the event
+producer(s) and the subscription manager(s), the advertisement of the
+subscription offers are published in a CloudEvents Discovery service.
 
 As with the core CloudEvents specification, the goal of this specification is to
 reuse mechanisms based on existing standards and conventions where such exist
-and only introduce new mechanisms where required.
+and only introduce new mechanisms where needed.
 
 Therefore, this specification not only defines a new subscription management API
 for certain use-cases, but also refers to existing mechanisms available in the
@@ -74,7 +75,7 @@ event to receivers based on the information in the event context.
 
 #### Consumer
 
-An entity receiving and processing events. Consumers may receive events from
+An entity receiving and processing events. Consumers might receive events from
 producers directly or via intermediaries. A consumer might listen and wait for
 events to be delivered to it or it might actively solicit them from the producer
 or intermediary.
@@ -127,14 +128,14 @@ the event delivery channel to the consumer is initiated:
   manager to select a transport protocol, establish the desired communication
   channel, and deliver the event(s).
 
-An application using CloudEvents might use only one of these styles or a
+An end-to-end solution using CloudEvents might use only one of these styles or a
 combination of those.
 
-For instance, the application might use an MQTT broker to handle delivery of
+For instance, the solution might use an MQTT broker to handle delivery of
 events into connected devices that connect into the broker and subscribe on a
 particular MQTT topic, which acts as the subscription manager in the sense of
 this specification ("pull"-style). The events that ought to be shared with the
-connected devices might however originate elsewhere in the overall application,
+connected devices might however originate elsewhere in the overall solution,
 and some event router middleware's subscription manager might therefore be
 configured to initiate delivery of events ("push"-style) into the given MQTT
 broker topic whenever such events are available.
@@ -144,13 +145,13 @@ broker topic whenever such events are available.
 MQTT, AMQP, NATS, and Apache Kafka are protocols with a formal CloudEvents
 binding that have native mechanisms filling the role of a subscription manager.
 
-Using any of these subscription management mechanisms should allow an
+Using any of these subscription management mechanisms ought to allow an
 application to claim conformance with this specification. More specifically, an
-application that uses an MQTT or AMQP message broker as its middleware
-component should be able to use the native capabilities of those protocols to
-subscribe to CloudEvents event streams without requiring CloudEvents-specific
-mechanisms or extensions. The conformance section in this document formally
-enumerates the requirements.
+application that uses an MQTT or AMQP message broker as its middleware component
+ought be able to use the native capabilities of those protocols to subscribe to
+CloudEvents event streams without requiring CloudEvents Subscription
+API-specific mechanisms or extensions. The conformance section in this document
+formally enumerates the requirements.
 
 _The descriptions of the protocol subscription mechanisms in this section are
 non-normative. Please refer to the protocol specifications or documentation for
@@ -250,7 +251,7 @@ also have a separate CloudEvents subscription manager API endpoint
 implementation. If such a separate API endpoint exists and creating
 subscriptions is not feasible on such a separate API endpoint, the respective
 operation might not be available. For instance, creating an MQTT subscription is
-not feasible from outside an MQTT connection, but an existing subscription may
+not feasible from outside an MQTT connection, but an existing subscription might
 be enumerable through a subscription collection and deleting the subscription
 from the collection might terminate it.
 
@@ -271,21 +272,22 @@ Each subscription is represented by an object that has the following properties:
   protocols.
 - **protocolsettings** (map) - OPTIONAL. A set of settings specific to the
   selected delivery protocol provider. Options for those settings are listed
-  in the following subsection. An implementation can offer more options.
+  in the following subsection. An implementation MAY offer more options.
   Examples for such settings are credentials, which generally vary by
   transport, rate limits and retry policies, or the QoS mode for MQTT.
   See the [Protocol Settings](#322-protocol-settings) section for further details.
-- **sink** (URI) - REQUIRED. The address to which events shall be delivered using
+- **sink** (URI) - REQUIRED. The address to which events SHALL be delivered using
   the selected protocol. The format of the address MUST be valid for the
   selected protocol or one of the protocol's own transport bindings (e.g. AMQP
   over WebSockets).
 - **filter** - OPTIONAL. A filter is an expression of a particular filter
   dialect that evaluates to true or false and that determines whether an
-  instance of a cloud event should be delivered to the subscription's sink. If
-  a filter expression evaluates to false, the event MUST NOT be sent to the
-  sink. Support for particular filter dialects might vary across different
-  subscription managers. If a filter dialect is specified in a subscription
-  that is unsupported by the subscription manager, creation or updates of the
+  instance of a CloudEvent will be delivered to the subscription's sink. If a
+  filter expression evaluates to false, the event MUST NOT be sent to the sink.
+  If the expression evaluates to true, the event MUST be attempted to be
+  delivered. Support for particular filter dialects might vary across different
+  subscription managers. If a filter dialect is specified in a subscription that
+  is unsupported by the subscription manager, creation or updates of the
   subscription MUST be rejected with an error. See the [Filter
   Dialects](#323-filter-dialects) section for further details.
 
@@ -299,10 +301,6 @@ protocol-settings map, including default values where necessary.
 For HTTP, the following settings properties SHOULD be supported by all
 implementations.
 
-- **proxyurl** (URI) – OPTIONAL. The URI of the proxy server to use for sending
-  the event(s).
-- **proxycredentials** (credentials) – OPTIONAL. A _credentials_ object (see
-  "common objects" below) holding information for gaining access to the proxy.
 - **headers** (map) – OPTIONAL. A set of key/value pairs that is copied into the
   HTTP request as custom headers.
 - **method** (string) – OPTIONAL. The HTTP method to use for sending the message.
@@ -362,9 +360,10 @@ settings. All other settings SHOULD be supported.
 
 The filter expression language supported by an event producer is indicated by
 its dialect. This is intended to allow for flexibility, extensibility and to
-allow for a variety of filter dialects without enumerating them all in this spec or
-predicting what filtering needs every system will have in the future. This spec
-will specify a single "simple" dialect, which all implementations MUST support.
+allow for a variety of filter dialects without enumerating them all in this
+specification or predicting what filtering needs every system will have in the
+future. This specification will specify a single "basic" dialect, which all
+implementations MUST support.
 
 The dialect for a particular filter is indicated by specifying the "dialect"
 property at the root of the JSON object. The value of this is a string encoded
@@ -372,14 +371,14 @@ unique identifier for the filter dialect. Subscriptions specifying the "filter"
 property MUST specify a dialect. All other properties are dependent on the
 dialect being used.
 
-##### 3.2.3.1. "simple" filter dialect
+##### 3.2.3.1. "basic" filter dialect
 
-The "simple" filter dialect is intended to support the most common filtering use
+The "basic" filter dialect is intended to support the most common filtering use
 cases:
 
-- "Exact match" where the filter condition and an attribute value match exactly.
-- "Prefix match" where the filter condition is a prefix of the attribute value.
-- "Suffix match" where the filter condition is a suffix of the attribute value.
+- "Exact" match where the filter condition and an attribute value match exactly.
+- "Prefix" match where the filter condition is a prefix of the attribute value.
+- "Suffix" match where the filter condition is a suffix of the attribute value.
 
 This filter dialect is intentionally constrained to these filter types, since
 filtering has a potentially significant impact on the baseline performance of
@@ -390,19 +389,21 @@ Extension dialects will have varying support across event producers. It is up to
 the subscriber and producer to negotiate which filter dialects can be used
 within a given subscription.
 
-The filter conditions specified in the simple dialect will be defined by
-specifying a "conditions" property holding an array of simple filter conditions,
+The filter conditions specified in the basic dialect will be defined by
+specifying a "conditions" property holding an array of filter conditions,
 which are logically combined with an implicit "AND" operator. This means the
 filter criteria MUST evaluate to true for every filter in the array in order for
-a cloud event instance to be delivered to the target sink.
+a CloudEvent instance to be delivered to the target sink.
 
-Each simple filter is defined with the following properties:
+Each basic filter is defined with the following properties:
 
-- type (string) - REQUIRED. Value MUST be one of the following: prefix_match,
-  suffix_match, exact_match.
-- property (string) - REQUIRED. The CloudEvents attribute to match the value
-  indicated by the "value" property against.
-- value (Any) - REQUIRED, The value to match the CloudEvents attribute against.
+- type (string) - REQUIRED. Value MUST be one of the following: prefix, suffix,
+  exact.
+- property (string) - REQUIRED. The CloudEvents attribute (including extensions)
+  to match the value indicated by the "value" property against.
+- value (string) - REQUIRED, The value to match the CloudEvents attribute
+  against. This expression is a string and matches are executed against the
+  string representation of the attribute value.
 
 ###### 3.2.3.1.1. Example: Prefix match
 
@@ -411,9 +412,9 @@ This filter will select events only with the event type having the prefix of
 
 ```JSON
 {
-    "dialect": "simple",
+    "dialect": "basic",
     "filters": [{
-        "type": "prefix_match",
+        "type": "prefix",
         "property": "type",
         "value": "com.example"
     }]
@@ -427,10 +428,10 @@ This filter will select events only with the event subject having the suffix of
 
 ```JSON
 {
-    "dialect": "simple",
+    "dialect": "basic",
     "filters": [
         {
-            "type": "suffix_match",
+            "type": "suffix",
             "property": "subject",
             "value": ".jpg"
         }
@@ -445,10 +446,10 @@ This filter will select events only with the event type equal to
 
 ```JSON
 {
-    "dialect": "simple",
+    "dialect": "basic",
     "filters": [
         {
-            "type": "exact_match",
+            "type": "exact",
             "property": "type",
             "value": "com.example.my_event"
         }
@@ -463,15 +464,15 @@ This filter will select events only with the event type equal to
 
 ```JSON
 {
-    "dialect": "simple",
+    "dialect": "basic",
     "filters": [
         {
-            "type": "exact_match",
+            "type": "exact",
             "property": "type",
             "value": "com.example.my_event"
         },
         {
-            "type": "suffix_match",
+            "type": "suffix",
             "property": "subject",
             "value": ".jpg"
         },
