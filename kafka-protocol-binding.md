@@ -153,7 +153,7 @@ The shape and configuration of the "Key Mapper" function is implementation
 specific.
 
 Every implementation SHOULD provide a default "Key Mapper" implementation that
-maps the [Partitioning](extensions/partitioning.md) `partitionKey` attribute
+maps the [Partitioning](extensions/partitioning.md) `partitionkey` attribute
 value to the 'key' of the Kafka message as-is, if present.
 
 ### 3.2. Binary Content Mode
