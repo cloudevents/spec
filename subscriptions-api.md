@@ -146,7 +146,7 @@ binding that have native mechanisms filling the role of a subscription manager.
 
 Using any of these subscription management mechanisms should allow an
 application to claim conformance with this specification. More specifically, an
-application that uses an MQTT or AMQP message brokers as its middleware
+application that uses an MQTT or AMQP message broker as its middleware
 component should be able to use the native capabilities of those protocols to
 subscribe to CloudEvents event streams without requiring CloudEvents-specific
 mechanisms or extensions. The conformance section in this document formally
