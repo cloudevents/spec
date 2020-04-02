@@ -196,7 +196,7 @@ elements that form a layered architecture model.
    with any HTTP method and with request and response messages.
 
 If required to assure broader interoperability, the CloudEvents specification
-set provides specific constraints for event delivery using a particular
+set, (may or should) provide specific constraints for event delivery using a particular
 application protocol. The [HTTP Webhook](http-webhook.md) specification is not
 specific to CloudEvents and can be used to post any kind of one-way event and
 notifications to a conformant HTTP endpoint. However, the lack of such a
@@ -253,7 +253,10 @@ The `id` attribute is meant to be a value that is unique across all events
 related to one event source (where each event source is uniquely identified by
 its CloudEvents `source` attribute value). While the exact value used is
 producer defined, receivers of CloudEvents from a single event source can be
-assured that no two events will share the same `id` value. The only exception to
+assured that no two events will share the same `id` value. (We are implicitly 
+making a claim here that no two events will share the same `id` value, but do 
+not provide an explanation as to how this is guaranteed? Since this is out of 
+the scope of this spec.)The only exception to
 this is if some replay of the event is supported, and in those cases, the `id`
 can then be used to detect this.
 
@@ -528,19 +531,19 @@ development of the CloudEvent specification.
 The list below enumerates the various participants, and scenarios, that might be
 involved in the producing, managing or consuming of events.
 
-In these the roles of event producer and event consumer are kept distinct. A
+In these, the roles of event producer and event consumer are kept distinct. A
 single application context can always take on multiple roles concurrently,
 including being both a producer and a consumer of events.
 
-1. Applications produce events for consumption by other parties, for instance
-   for providing consumers with insights about end-user activities, state
+1. Applications produce events for consumption by other parties. Examples of
+   this include: providing consumers with insights about end-user activities, state
    changes or environment observations, or for allowing complementing the
    application's capabilities with event-driven extensions.
 
    Events are typically produced related to a context or a producer-chosen
    classification. For example, a temperature sensor in a room might be
    context-qualified by mount position, room, floor, and building. A sports
-   result might be classified by league and team.
+   result(event) might be classified by league and team.
 
    The producer application could run anywhere, such as on a server or a device.
 
@@ -611,15 +614,15 @@ including being both a producer and a consumer of events.
 
    To satisfy these needs, middleware will be interested in:
 
-   - A metadata discriminator usable for classification or contextualization of
+   - A metadata discriminator, usable for classification or contextualization of
      events so that consumers can express interest in one or multiple such
      classes or contexts. For instance, a consumer might be interested in all
      events related to a specific directory inside a file storage account.
-   - A metadata discriminator that allows distinguishing the subject of a
+   - A metadata discriminator, that allows distinguishing the subject of a
      particular event of that class or context. For instance, a consumer might
      want to filter out all events related to new files ending with ".jpg" (the
-     file name being the "new file" event's subject) for the context describing
-     specific directory inside a file storage account that it has registered
+     file name being the "new file" event's subject) for the purpose of describing
+     a specific directory inside a file storage account that it has registered
      interest on.
    - An indicator for the encoding of the event and its data.
    - An indicator for the structural layout (schema) for the event and its data.
@@ -633,9 +636,9 @@ including being both a producer and a consumer of events.
    or [Intermediary](spec.md#intermediary) when it routes events without making
    semantic changes.
 
-4. Frameworks and other abstractions make interactions with event platform
-   infrastructure simpler, and often provide common API surface areas for
-   multiple event platform infrastructures.
+4. Frameworks and other abstractions make interactions with the event platform
+   infrastructure simpler, and often expose common API surface areas for
+   other event platform infrastructures.
 
    Frameworks are often used for turning events into an object graph, and to
    dispatch the event to some specific handling user-code or user-rule that
@@ -649,7 +652,9 @@ including being both a producer and a consumer of events.
    in all events from today's game (subject) of a team in a league (topic of
    interest) but wanting to handle reports of "goal" differently than reports of
    "substitution". For this, the framework will need a suitable metadata
-   discriminator that frees it from having to understand the event details.
+   discriminator that frees it from having to understand the event details. To be 
+   clear, the suitable metadata discriminator SHOULD be populated by the producer,
+   and would not be the responsibility of the framework. 
 
 ### Value Proposition
 
@@ -658,7 +663,7 @@ CloudEvents.
 
 #### Normalizing Events Across Services & Platforms
 
-Major event publishers (e.g. AWS, Microsoft, Google, etc.) all publish events in
+Major event publishers, (e.g. AWS, Microsoft, Google, etc.) publish events in
 different formats on their respective platforms. There are even a few cases
 where services on the same provider publish events in different formats (e.g.
 AWS). This forces event consumers to implement custom logic to read or munge
@@ -677,7 +682,9 @@ came from and where it might be going. This prevents tooling to facilitate
 successful event delivery and consumers from knowing what to do with event data.
 
 CloudEvents offers useful metadata which middleware and consumers can rely upon
-to facilitate event routing, logging, delivery and receipt.
+to facilitate event routing, logging, delivery and receipt. (Not sure if we 
+need to revisit this, and state it a little differently? One of the non-goals
+was not to impact routing, delivery, receipt etc. I could be wrong)
 
 #### Increasing Portability of Functions-as-a-Service
 
