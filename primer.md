@@ -196,7 +196,7 @@ elements that form a layered architecture model.
    with any HTTP method and with request and response messages.
 
 If required to assure broader interoperability, the CloudEvents specification
-set, (may or should) provide specific constraints for event delivery using a particular
+set will provide specific constraints for event delivery using a particular
 application protocol. The [HTTP Webhook](http-webhook.md) specification is not
 specific to CloudEvents and can be used to post any kind of one-way event and
 notifications to a conformant HTTP endpoint. However, the lack of such a
@@ -253,10 +253,10 @@ The `id` attribute is meant to be a value that is unique across all events
 related to one event source (where each event source is uniquely identified by
 its CloudEvents `source` attribute value). While the exact value used is
 producer defined, receivers of CloudEvents from a single event source can be
-assured that no two events will share the same `id` value. (We are implicitly 
+assured that no two events will share the same `id` value. We are implicitly
 making a claim here that no two events will share the same `id` value, but do 
-not provide an explanation as to how this is guaranteed? Since this is out of 
-the scope of this spec.)The only exception to
+not provide an explanation as to how this is guaranteed, since this is out of
+the scope of this spec. The only exception to
 this is if some replay of the event is supported, and in those cases, the `id`
 can then be used to detect this.
 
@@ -653,7 +653,7 @@ including being both a producer and a consumer of events.
    interest) but wanting to handle reports of "goal" differently than reports of
    "substitution". For this, the framework will need a suitable metadata
    discriminator that frees it from having to understand the event details. To be 
-   clear, the suitable metadata discriminator SHOULD be populated by the producer,
+   clear, the suitable metadata discriminator should be populated by the producer,
    and would not be the responsibility of the framework. 
 
 ### Value Proposition
@@ -682,9 +682,7 @@ came from and where it might be going. This prevents tooling to facilitate
 successful event delivery and consumers from knowing what to do with event data.
 
 CloudEvents offers useful metadata which middleware and consumers can rely upon
-to facilitate event routing, logging, delivery and receipt. (Not sure if we 
-need to revisit this, and state it a little differently? One of the non-goals
-was not to impact routing, delivery, receipt etc. I could be wrong)
+to facilitate event routing, logging, delivery and receipt.
 
 #### Increasing Portability of Functions-as-a-Service
 
