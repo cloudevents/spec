@@ -29,6 +29,7 @@ This document is a working draft.
 - 3.1. [Binary Content Mode](#31-binary-content-mode)
 - 3.2. [Structured Content Mode](#32-structured-content-mode)
 - 3.3. [Batched Content Mode](#33-batched-content-mode)
+- 3.4. [Multipart Content Mode](#34-multipart-content-mode)
 
 4. [References](#4-references)
 
@@ -65,8 +66,8 @@ which is compatible with HTTP 1.1 semantics.
 
 ### 1.3. Content Modes
 
-This specification defines three content modes for transferring events:
-_binary_, _structured_ and _batched_. Every compliant implementation SHOULD
+This specification defines four content modes for transferring events:
+_binary_, _structured_, _batched_ and _multipart_. Every compliant implementation SHOULD
 support the _structured_ and _binary_ modes.
 
 In the _binary_ content mode, the value of the event `data` is placed into the
@@ -81,6 +82,10 @@ placed into the HTTP request or response body using an
 In the _batched_ content mode several events are batched into a single HTTP
 request or response body using an [event format](#14-event-formats) that
 supports batching.
+
+In the _multipart_ content mode several events are sent into a single HTTP
+request or response body allowing to represent, on each part, an event or in 
+binary mode or in structured mode.
 
 ### 1.4. Event Formats
 
@@ -136,12 +141,13 @@ events using a particular mode might be defined by an application, but are not
 defined here. The _batched_ mode MUST NOT be used unless solicited, and the
 gesture SHOULD allow the receiver to choose the maximum size of a batch.
 
-The receiver of the event can distinguish between the three modes by inspecting
+The receiver of the event can distinguish between the four modes by inspecting
 the `Content-Type` header value. If the value is prefixed with the CloudEvents
 media type `application/cloudevents`, indicating the use of a known
 [event format](#14-event-formats), the receiver uses _structured_ mode. If the
 value is prefixed with `application/cloudevents-batch`, the receiver uses the
-_batched_ mode. Otherwise it defaults to _binary_ mode.
+_batched_ mode. If the value is prefixed with `multipart/cloudevents`, the 
+receiver uses the _multipart_ mode. Otherwise it defaults to _binary_ mode.
 
 If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
@@ -439,12 +445,16 @@ Content-Length: nnnn
 
 ```
 
-### 3.4. Multipart Binary Content Mode
+### 3.4. Multipart Content Mode
 
-In the _multipart binary_ content mode several events are sent into a single HTTP multipart
-request or response body and they can be named. A multipart binary mode contains one event per part, 
-encoded in a similar fashion to [binary content mode]().
-The _multipart binary_ content mode is based on [RFC2046][rfc2046].
+In the _multipart_ content mode several events are sent into a single HTTP multipart
+request or response as described in [RFC2046, section 5.1][rfc2046-section-5.1]. 
+The _multipart_  content mode maps one event per part. Because each part consists in an 
+group of headers and a body, an event could be encoded following the same rules that applies
+to [Structured Content Mode](#32-structured-content-mode) and [Binary Content Mode](#31-binary-content-mode)
+within the part, respectively named _structured part_ and _binary part_.
+
+Every part of the HTTP envelope MUST be or a _structured part_ or a _binary part_.
 
 #### 3.4.1. HTTP Content-Type
 
@@ -455,10 +465,31 @@ and must include the [boundary parameter](https://tools.ietf.org/html/rfc2046#se
 Content-Type: multipart/cloudevents; boundary=12345
 ```
 
-#### 3.4.2 Examples
+#### 3.4.2. Structured Part
+
+All rules defined in [Structured Content Mode](#32-structured-content-mode) applies from the beginning of the 
+part up to the end of the part, outlined by the boundary delimiter.
+
+More [event formats](#14-event-formats) for several parts in the same envelope are allowed.
+
+#### 3.4.3. Binary Part
+
+All rules defined in [Binary Content Mode](#31-binary-content-mode) applies from the beginning of the 
+part up to the end of the part, outlined by the boundary delimiter.
+
+#### 3.4.4. Distinguish between structured and binary part
+
+The receiver of the event can distinguish between the two parts by inspecting
+the `Content-Type` header value. If the value is prefixed with the CloudEvents
+media type `application/cloudevents`, indicating the use of a known
+[event format](#14-event-formats), the receiver uses _structured_ mode. 
+Otherwise it defaults to _binary_ mode.
+
+#### 3.4.5. Examples
+
+This example shows two events in a single HTTP request, sent using the multipart content mode:
 
 ```text
-
 POST /myresource HTTP/1.1
 Host: webhook.example.com
 Content-Type: multipart/cloudevents; boundary=12345
@@ -476,8 +507,31 @@ Content-Type: application/json; charset=utf-8
     ... application data ...
 }
 --12345
+Content-Type: application/cloudevents+json; charset=UTF-8
+Content-Disposition: form-data; name="event_a"
+
+{
+    "specversion" : "1.0",
+    "type" : "com.example.someevent",
+
+    ... further attributes omitted ...
+
+    "data" : {
+        ... application data ...
+    }
+}
+--12345
+```
+
+This example shows two events in a single HTTP response, sent using the multipart content mode:
+
+```text
+HTTP/1.1 200 OK
+Content-Type: multipart/cloudevents; boundary=12345
+
+--12345
 ce-specversion: 1.0
-ce-type: com.example.anotherevent
+ce-type: com.example.someevent
 ce-time: 2018-04-05T03:56:24Z
 ce-id: 1234-1234-1234
 ce-source: /mycontext/subcontext
@@ -486,6 +540,20 @@ Content-Type: application/json; charset=utf-8
 
 {
     ... application data ...
+}
+--12345
+Content-Type: application/cloudevents+json; charset=UTF-8
+Content-Disposition: form-data; name="event_a"
+
+{
+    "specversion" : "1.0",
+    "type" : "com.example.someevent",
+
+    ... further attributes omitted ...
+
+    "data" : {
+        ... application data ...
+    }
 }
 --12345
 ```
@@ -518,6 +586,7 @@ Content-Type: application/json; charset=utf-8
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [json-array]: https://tools.ietf.org/html/rfc7159#section-5
 [rfc2046]: https://tools.ietf.org/html/rfc2046
+[rfc2046-section-5.1]: https://tools.ietf.org/html/rfc2046#section-5.1
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc2818]: https://tools.ietf.org/html/rfc2818
 [rfc3629]: https://tools.ietf.org/html/rfc3629
