@@ -22,8 +22,8 @@ version.
 ## Overview
 
 The goal of the CloudDiscovery API is to enable connections between consumers of
-events and producers / aggregators / brokers of events and to facilitate the
-creation of CloudSubscriptions.
+events and Event providers / producers / aggregators / brokers of events and to
+facilitate the creation of CloudSubscriptions.
 
 Discovery allows for an event producer or intermediary component to
 advertise the event types that are available, provide the necessary information
@@ -62,6 +62,12 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 ### Terminology
 
 This specification defines the following terms:
+
+#### Event Provider
+
+An "Event Provider" is a grouping terminology used to aid in the discovery
+process. It is a human readable name that developers can use to narrow in on
+the origin system that produces the events they are interested in.
 
 #### Producer
 
@@ -104,135 +110,35 @@ be considered an event subscriber and a target user of this API.
 This API is specified as a REST API with well defined entities and relationships
 between those entities.
 
-All responses will have a content-type of `application/json` and are either
-a single JSON encoded object or an array of objects.
-
 ### Entities in the API
 
-1. `Provider`
-2. `Type`
-3. `Producer`
+1. `eventprovider`
+2. `type`
+3. `producer`
 
-The `Provider` and `Type` entities form the basis of the directory and can be
-used to build user experiences around discovery. The `Producer` entity is
-keyed off of `{Provider.Name, Type.Name}` and provides the necessary details to
-create a subscription for events of that `ce-type` from the selected `provider`.
-
-### REST Paths
-
-Each path in the REST API represents either represents a list (or search) over
-and entity class, or the retrieval of an individual entity by name. Each of
-these operations MUST be supported by compliant discovery providers.
-
-#### `/types?matching=[search term]`
-
-Returns a list of all types in the discovery system, optionally filtering on
-a provided search term (`matching`).
-
-##### matching
-
-* Type: `string`
-* Description: Search term that provides case insensitive match against `type`
-  names. The parameter can match any portion of the type name.
-* Constraints:
-  * OPTIONAL
-  * If present, must be non-empty
-* Examples:
-  * `"com.storage.object"`
-    * matches:
-      * `"com.storage.object.create"`
-      * `"com.storage.object.delete"`
-      * `"com.storage.object.update"`
-
-##### Returns
-
-A JSON array of `type` entities.
-
-#### `/types/{name}`
-
-Retrieves an individual type entity by exact match on the `type` name.
-
-##### Returns
-
-A `type` entity as a JSON object.
-
-#### `/types/{name}/providers`
-
-Retrieves the details about providers that offer the specified `type`.
-
-##### Returns
-
-A JSON array of `provider` entities.
-
-#### `/providers?matching=[search term]`
-
-Returns a list of all providers int he discovery system, optionally filtering on
-a provided search term (`matching`).
-
-##### matching
-
-* Type: `string`
-* Description: Search term that provides case insensitive match against
-  `provider` names. The parameter can match any portion of the provider name.
-* Constraints:
-  * OPTIONAL
-  * If present, must be non-empty
-* Examples:
-  * `"storage"`
-    * matches:
-      * `"Awesome Cloud Storage"`
-      * `"File storage system"`
-      * `"storage Storage STORAGE"`
-
-##### Returns
-
-A JSON array of `provider` entities.
-
-#### `/providers/{name}`
-
-Retrieves an individual provider entity by exact match on the `provider` name.
-
-##### Returns
-
-A `provider` entity as a JSON object.
-
-#### `/providers/{name}/types`
-
-Retrieves the details about the types that are offered by the specified
-`provider`.
-
-##### Returns
-
-A JSON array of `type` entities
-
-#### `/producer/{provider.name}/{type.name}`
-
-Retrieves the `producer` entity that specifies the information necessary to
-create subscriptions and to consume the events. The `provider.name` and
-`type.name` items in the request path correspond to the information that can
-be obtained via the `/provider` and `/type` API calls.
-
-##### Returns
-
-A `producer` entity as a JSON object.
+The `EventProvider` and `Type` entities form the basis of the directory and can
+be used to build user experiences around discovery. The `Producer` entity is
+keyed off of `{EventProvider.Name, Type.Name}` and provides the necessary
+details to create a subscription for events of that `ce-type` from the selected
+`EventProvider`.
 
 ### Entity Specifications
 
 This section details the fields that make up each of the entities referenced
 earlier in this document.
 
-#### `provider` entity
+#### `eventprovider` entity
 
 Used in discovery for enumerating the different providers represented in this
 discovery system.
 
-##### `provider` entity attributes
+##### `eventprovider` entity attributes
 
-###### provider
+###### name
 
 - Type: `String`
-- Description: Identifies the provider of the event by nane. The producer string
-  SHOULD be human readable and can identify a top level producer system.
+- Description: The `name` attribute SHOULD be human readable and can identify a
+  top level event provider system.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
@@ -253,19 +159,20 @@ discovery system.
 
 - Type: `URI`
 - Description: Absolute URI that provides a link back to the producer, or
-  documentation about the producer. This is for human consumption.
+  documentation about the producer. This is intended for a developer to
+  use in order to learn more about this provider events produced.
 - Constraints:
   - OPTIONAL
-  - If present, MUST be a non-empty URI
+  - If present, MUST be a non-empty absolute URI
 - Examples:
   - "http://cloud.example.com/docs/blobstorage"
 
 
-##### `provider` entity examples
+##### `eventprovider` entity examples
 
 ```json
 {
-  "provider": "Cloud Storage Provider",
+  "name": "Cloud Storage Provider",
   "description": "Blob storage in the cloud",
   "provider_uri": "https://cloud.example.com/docs/storage"
 }
@@ -276,15 +183,15 @@ And a list of valid `provider` entities.
 ```json
 [
   {
-    "provider": "Cloud Storage Provider",
+    "name": "Cloud Storage Provider",
     "description": "Blob storage in the cloud",
     "provider_uri": "https://cloud.example.com/docs/storage"
   },
   {
-    "provider": "Cloud MySQL"
+    "name": "Cloud MySQL"
   },
   {
-    "provider": "Cloud OtherSQL",
+    "name": "Cloud OtherSQL",
     "description": "Highly scalable SQL service"
   }
 ]
@@ -309,16 +216,6 @@ in this discovery system.
 - Examples:
   - "com.github.pull.create"
   - "com.example.object.delete.v2"
-
-###### specversion
-
-- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: CloudEvents [`specversion`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
-  that will be used for events published for this producer, event type
-  combination.
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty string
 
 ###### datacontenttype
 
@@ -372,7 +269,7 @@ A single `type` entity.
 {
   "type": "com.example.storage.object.create",
   "specversion": "1.0",
-  "datacontenttype", "application/json",
+  "datacontenttype": "application/json",
   "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json"
 }
 ```
@@ -389,11 +286,11 @@ The `Provider` entity is the main component of the discovery API. This section
 covers the structure of that entity and the next section describes the
 requirements for the query API.
 
-###### provider
+###### eventprovider
 
 - Type: `String`
-- Description: Identifies the provider of the event. The producer string SHOULD
-  be human readable and can identify a top level producer system.
+- Description: Identifies the provider of the event. The `eventprovider` string
+  SHOULD be human readable and can identify a top level producer system.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
@@ -536,11 +433,129 @@ requirements for the query API.
 - Example:
   - "storage.read"
 
+### REST Paths
+
+Each path in the REST API represents either represents a list (or search) over
+and entity class, or the retrieval of an individual entity by name. Each of
+these operations MUST be supported by compliant discovery providers.
+
+#### `/providers?matching=[search term]`
+
+Returns a list of all providers in the discovery system, optionally filtering on
+a provided search term (`matching`).
+
+##### matching
+
+* Type: `string`
+* Description: Search term that provides case insensitive match against
+  `provider` names. The parameter can match any portion of the provider name.
+* Constraints:
+  * OPTIONAL
+  * If present, must be non-empty
+* Examples:
+  * `"storage"`
+    * matches:
+      * `"Awesome Cloud Storage"`
+      * `"File storage system"`
+      * `"storage Storage STORAGE"`
+
+##### Returns
+
+Upon successful processing, the response MUST be a JSON array of `provider`
+entities.
+
+#### `/providers/{name}`
+
+Retrieves an individual provider entity by exact match on the `provider` name.
+
+##### Returns
+
+Upon successful processing, the response MUST be a JSON object that is a single
+`provider` entity.
+
+#### `/providers/{name}/types`
+
+Retrieves the details about the types that are offered by the specified
+`provider`.
+
+##### Returns
+
+Upon successful processing, the response MUST be a JSON array of `type` entity
+objects.
+
+#### `/types?matching=[search term]`
+
+MUST return a list of all Types in the discovery system. If the matching query
+parameter is specified then the returned list MUST only include Types that match
+the search term value.
+
+##### matching
+
+* Type: `string`
+* Description: Search term that provides case insensitive match against `type`
+  names. The parameter can match any portion of the type name.
+* Constraints:
+  * OPTIONAL
+  * If present, MUST be non-empty
+* Examples:
+  * `"com.storage.object"`
+    * matches:
+      * `"com.storage.object.create"`
+      * `"com.storage.object.delete"`
+      * `"com.storage.object.update"`
+  * `"storage"`
+    * matches:
+      * `"com.storage.object.create"`
+      * `"com.storage.object.delete"`
+      * `"com.storage.object.update"`
+  * `"create"`
+    * matches:
+      * `"com.storage.object.create"`
+
+##### Returns
+
+A JSON array of `type` entities.
+
+#### `/types/{name}`
+
+Retrieves an individual type entity by exact match on the `type` name. Type
+names must conform to the [CloudEvents type](https://github.com/cloudevents/spec/blob/v1.0/spec.md#type)
+attribute specification.
+
+##### Returns
+
+A `type` entity as a JSON object.
+
+#### `/types/{name}/providers`
+
+Retrieves the details about providers that offer the specified `type`.
+
+##### Returns
+
+A JSON array of `provider` entities.
+
+#### `/producer/{provider.name}/{type.name}`
+
+Retrieves the `producer` entity that specifies the information necessary to
+create subscriptions and to consume the events. The `provider.name` and
+`type.name` items in the request path correspond to the information that can
+be obtained via the `/provider` and `/type` API calls.
+
+##### Returns
+
+A `producer` entity as a JSON object.
+
+
 ## Protocol Bindings
 
 The discovery API can be implemented over different API systems. We provide
 API schema definitions for implementing this API using OpenAPI and gRPC as
 illustrative examples.
+
+### REST, JSON HTTP API
+
+All responses will have a content-type of `application/json` and are either
+a single JSON encoded object or an array of objects.
 
 ### OpenAPI
 
