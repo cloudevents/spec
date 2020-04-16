@@ -538,8 +538,8 @@ A JSON array of `provider` entities.
 
 Retrieves the `producer` entity that specifies the information necessary to
 create subscriptions and to consume the events. The `provider.name` and
-`type.name` items in the request path correspond to the information that can
-be obtained via the `/provider` and `/type` API calls.
+`type.name` items in the request path make up the composite key for the
+information that can be obtained via the `/provider` and `/type` API calls.
 
 ##### Returns
 
