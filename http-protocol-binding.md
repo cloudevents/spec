@@ -83,8 +83,8 @@ In the _batched_ content mode several events are batched into a single HTTP
 request or response body using an [event format](#14-event-formats) that
 supports batching.
 
-In the _multipart_ content mode several events are sent into a single HTTP
-request or response body allowing to represent, on each part, an event or in 
+In the _multipart_ content mode several events are sent in a single HTTP
+request or response body allowing to represent, on each part, an event in 
 binary mode or in structured mode.
 
 ### 1.4. Event Formats
@@ -447,9 +447,9 @@ Content-Length: nnnn
 
 ### 3.4. Multipart Content Mode
 
-In the _multipart_ content mode several events are sent into a single HTTP multipart
+In the _multipart_ content mode several events are sent in a single HTTP multipart
 request or response as described in [RFC2046, section 5.1][rfc2046-section-5.1]. 
-The _multipart_  content mode maps one event per part. Because each part consists in an 
+The _multipart_  content mode maps one event per part. Because each part consists in a 
 group of headers and a body, an event could be encoded following the same rules that applies
 to [Structured Content Mode](#32-structured-content-mode) and [Binary Content Mode](#31-binary-content-mode)
 within the part, respectively named _structured part_ and _binary part_.
@@ -459,7 +459,7 @@ Every part of the HTTP envelope MUST be or a _structured part_ or a _binary part
 #### 3.4.1. HTTP Content-Type
 
 The [HTTP `Content-Type`][content-type] header MUST be set to the media type of `multipart/cloudevents` 
-and must include the [boundary parameter](https://tools.ietf.org/html/rfc2046#section-5.1.1)
+and MUST include the [boundary parameter](https://tools.ietf.org/html/rfc2046#section-5.1.1)
 
 ```text
 Content-Type: multipart/cloudevents; boundary=12345
@@ -467,15 +467,15 @@ Content-Type: multipart/cloudevents; boundary=12345
 
 #### 3.4.2. Structured Part
 
-All rules defined in [Structured Content Mode](#32-structured-content-mode) applies from the beginning of the 
-part up to the end of the part, outlined by the boundary delimiter.
+A _structured part_ MUST conform to all rules defined by [Structured Content Mode](#32-structured-content-mode)
+from the beginning up to to the end of the part, outlined by the boundary delimiter.
 
 More [event formats](#14-event-formats) for several parts in the same envelope are allowed.
 
 #### 3.4.3. Binary Part
 
-All rules defined in [Binary Content Mode](#31-binary-content-mode) applies from the beginning of the 
-part up to the end of the part, outlined by the boundary delimiter.
+A _binary part_ MUST conform to all rules defined by [Binary Content Mode](#31-binary-content-mode)
+from the beginning up to to the end of the part, outlined by the boundary delimiter.
 
 #### 3.4.4. Distinguish between structured and binary part
 
