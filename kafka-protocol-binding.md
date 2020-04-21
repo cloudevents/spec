@@ -25,7 +25,7 @@ This document is a working draft.
 
 3. [Kafka Message Mapping](#3-kafka-message-mapping)
 
-- 3.1. [Key Attribute](#31-key-attribute)
+- 3.1. [Key Mapping](#31-key-mapping)
 - 3.2. [Binary Content Mode](#32-binary-content-mode)
 - 3.3. [Structured Content Mode](#33-structured-content-mode)
 
@@ -49,6 +49,18 @@ interpreted as described in [RFC2119][rfc2119].
 This specification does not prescribe rules constraining transfer or settlement
 of event messages with Kafka; it solely defines how CloudEvents are expressed
 in the Kafka protocol as [Kafka messages][kafka-message-format].
+
+The Kafka documentation uses "message" and "record" somewhat interchangeably and
+therefore the terms are to be considered being synonyms for this specification
+as well.
+
+Conceptually, Kafka is a log-oriented store for records, each holding a singular
+key/value pair. The store is commonly partitioned, and the partition for a
+record is typically chosen based on the key's value. Kafka clients accomplish
+this by using a hash function.
+
+This binding specification defines how attributes and data of a CloudEvent is
+mapped to the value, key, and headers sections of a Kafka message.
 
 ### 1.3. Content Modes
 
@@ -130,14 +142,25 @@ this specification then it is not a valid CloudEvent.
 If the `content-type` header is not present then the receiver uses
 _structured_ mode with the JSON event format.
 
-### 3.1. Key Attribute
+### 3.1. Key Mapping
 
-The 'key' attribute is populated by a partitionKeyExtractor function. The
-partitionKeyExtractor is a protocol specific function that contains bespoke
-logic to extract and populate the value. The key attribute MUST be encoded
-as UTF-8 string both in the Kafka message and in the CloudEvents extension.
-A default implementation of the extractor will use the
-[Partitioning](extensions/partitioning.md) extension value.
+The 'key' of the Kafka message is populated by a "Key Mapper" function, which
+might map the key directly from one of the CloudEvent's attributes, but might
+also use information from the application environment, from the CloudEvent's
+data or other sources.  
+
+The shape and configuration of the "Key Mapper" function is implementation
+specific.
+
+Every implementation SHOULD provide a default "Key Mapper" implementation that
+maps the [Partitioning](extensions/partitioning.md) `partitionkey` attribute
+value to the 'key' of the Kafka message as-is, if present. 
+
+A mapping function MUST NOT modify the CloudEvent. This means that the
+aforementioned `partitionkey` attribute MUST still be included with the
+transmitted event, if present. It also means that a mapping function that uses
+key information from an out-of-band source, like a parameter or configuration
+setting, MUST NOT add an attribute to the CloudEvent.
 
 ### 3.2. Binary Content Mode
 
