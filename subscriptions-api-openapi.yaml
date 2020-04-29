@@ -116,7 +116,6 @@ components:
             - $ref: "#/components/schemas/NATSSettings"
             - $ref: "#/components/schemas/ApacheKafkaSettings"
           description: OPTIONAL. A set of settings specific to the selected delivery protocol provider.
-          example: null
         sink:
           type: string
           format: url
