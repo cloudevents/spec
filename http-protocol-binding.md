@@ -454,7 +454,7 @@ group of headers and a body, an event could be encoded following the same rules 
 to [Structured Content Mode](#32-structured-content-mode) and [Binary Content Mode](#31-binary-content-mode)
 within the part, respectively named _structured part_ and _binary part_.
 
-Every part of the HTTP envelope MUST be or a _structured part_ or a _binary part_.
+Every part of the HTTP envelope MUST be either a _structured part_ or a _binary part_.
 
 #### 3.4.1. HTTP Content-Type
 
