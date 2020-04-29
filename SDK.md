@@ -39,7 +39,7 @@ Each SDK MUST meet these requirements:
 
 - Supports CloudEvents at spec milestones and ongoing development version.
   - Encode a canonical Event into a transport specific encoded message.
-  - Decode transport specific encoded messages into a Conical Event.
+  - Decode transport specific encoded messages into a Canonical Event.
 - Idiomatic usage of the programming language.
   - Using current language version(s).
 - Supports HTTP transport renderings in both `structured` and `binary`
@@ -48,7 +48,7 @@ Each SDK MUST meet these requirements:
 ### Object Model Structure Guidelines
 
 Each SDK will provide a generic CloudEvents class/object/structure that
-represents the conical form of an Event.
+represents the canonical form of an Event.
 
 The SDK should enable users to bypass implementing transport specific encoding
 and decoding of the CloudEvents `Event` object. The general flow for Objects
