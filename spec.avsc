@@ -1,22 +1,56 @@
 {
-  "namespace":"io.cloudevents",
+  "namespace": "io.cloudevents.avro",
   "type":"record",
   "name":"CloudEvent",
   "version":"1.0",
   "doc":"Avro Event Format for CloudEvents",
   "fields":[
     {
-      "name":"attribute",
-      "type":{
-        "type":"map",
-        "values":[
-          "null",
-          "boolean",
-          "int",
-          "string",
-          "bytes"
-        ]
-      }
+      "name": "specversion",
+      "type": "string",
+      "default": "1.0"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "source",
+      "type": "string"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "logicalType": "uuid"
+    },
+    {
+      "name": "time",
+      "type": "string",
+      "logicalType": "timestamp-millis"
+    },
+    {
+      "name": "dataschema",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "datacontenttype",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "subject",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
     },
     {
       "name": "data",
