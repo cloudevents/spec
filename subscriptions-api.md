@@ -124,7 +124,7 @@ the event delivery channel to the consumer is initiated:
   configured on the subscription manager for delivering events through a
   communication channel that the subscription manager initiates when events
   are available for delivery on the subscription. The configuration of such a
-  subscription MUST contain all information required for the subscription
+  subscription MUST contain all information needed for the subscription
   manager to select a transport protocol, establish the desired communication
   channel, and deliver the event(s).
 
@@ -190,7 +190,7 @@ the message stream available at the distribution node. If the distribution mode
 is "move", messages are exclusively owned by the link and are removed from the
 source when the transfer is settled successfully.
 
-Supporting the "copy" mode, is optional for the underlying implementation of the
+Supporting the "copy" mode, is OPTIONAL for the underlying implementation of the
 broker
 
 The link source can also be configured with filters. The AMQP core specification
@@ -238,7 +238,7 @@ creating, updating and deleting subscriptions on a subscription manager.
 The subscription object describes the consumer's interest in events and 
 defines the delivery method. The protocol allows to configure subscriptions
 on the subscription manager. Especially in case of subscription manager 
-initiated ("push"-style) delivery, the protocol is required to express the 
+initiated ("push"-style) delivery, the protocol is used to express the 
 consumer's interest to the subscription manager before the subscription 
 manager can initiate delivery.
 

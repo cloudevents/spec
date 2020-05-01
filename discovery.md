@@ -40,10 +40,10 @@ consumers.
 
 The second case becomes relevant if multiple providers support the same event
 types. Use case 1 is likely the dominant use case. Given the example of a public
-cloud provider where all producers produce events, there may be dozens of
+cloud provider where all producers produce events, there might be dozens of
 sources (producer systems) and hundreds of event types. The discovery funnel of
 producer first, then event types helps users navigate without having to see large
-lists of event types. Both of these cases require that filters can be used
+lists of event types. Both of these cases show the importance of using filters
 in the discovery API to narrow down the selection of available events.
 
 The CloudEvent `source` attribute is a potential cause of high fanout. For
@@ -380,7 +380,7 @@ requirements for the query API.
 ###### protocols
 
 - Type: `List` of `String`
-- Description: This field describes the different values that may be passed
+- Description: This field describes the different values that might be passed
   in the `protocol` field of the CloudSubscriptions API. The protocols with
   existing CloudEvents bindings are identified as AMQP, MQTT3, MQTT5, HTTP,
   KAFKA, and NATS. An implementation MAY add support for further
@@ -399,7 +399,7 @@ requirements for the query API.
 - Description: Associative map of CloudEvents [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/spec.md#extension-context-attributes)
   that are used for this event `type`. Keys MUST be confirm to the extension
   context attributes naming rules and value are the type of the extension
-  attribute, conforming to the CloudEvents [type system](https://github.com/cloudevents/spec/blob/master/spec.md#type-system).
+  attribute, conforming to the CloudEvents [type system](./spec.md#type-system).
 - Constraints:
   - OPTIONAL
 
@@ -426,7 +426,7 @@ requirements for the query API.
 ###### authscope
 
 - Type: `String`
-- Description: Authorization scope required for creating subscriptions.
+- Description: Authorization scope needed for creating subscriptions.
   The actual meaning of this field is determined on a per-producer basis.
 - Constraints:
   - OPTIONAL
@@ -451,7 +451,7 @@ a provided search term (`matching`).
   `provider` names. The parameter can match any portion of the provider name.
 * Constraints:
   * OPTIONAL
-  * If present, must be non-empty
+  * If present, MUST be non-empty
 * Examples:
   * `"storage"`
     * matches:
@@ -519,7 +519,7 @@ A JSON array of `type` entities.
 #### `/types/{name}`
 
 Retrieves an individual type entity by exact match on the `type` name. Type
-names must conform to the [CloudEvents type](https://github.com/cloudevents/spec/blob/v1.0/spec.md#type)
+names MUST conform to the [CloudEvents type](./spec.md#type)
 attribute specification.
 
 ##### Returns
