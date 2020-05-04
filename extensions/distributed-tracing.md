@@ -4,7 +4,7 @@ This extension embeds context from
 [Distributed Tracing](https://w3c.github.io/trace-context/) so that distributed
 systems can include traces that span an event-driven system. This extensions is meant
 to contain historical data of the parent trace, in order to diagnose eventual failures of the 
-systems through tracing platforms like Prometheus.
+systems through tracing platforms like Jaeger, Zipkin, etc.
 
 ## Attributes
 
