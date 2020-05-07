@@ -34,7 +34,7 @@ if used, MUST carry the same trace information contained in protocol specific tr
 
 Given a multi hop event transmission, the Distributed Tracing Extension, if used, MUST 
 carry the trace information of the starting trace of the transmission. 
-In other words, it MUST NOT carry trace information of the actual hop, since these information are usually 
+In other words, it MUST NOT carry trace information of each individual hop, since this information is usually 
 carried using protocol specific defined headers, understood by tools like [OpenTelemetry](https://opentelemetry.io/).
  
 Middleware between the source and the sink of the event could eventually add a Distributed Tracing Extension
