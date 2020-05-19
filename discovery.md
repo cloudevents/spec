@@ -22,8 +22,8 @@ version.
 ## Overview
 
 The goal of the CloudDiscovery API is to enable connections between consumers of
-events and Event producers to facilitate the creation of
-CloudSubscriptions. Note that whether an Event producer is a single entity,
+events and Event producers to facilitate the creation of a
+CloudSubscription. Note that whether an Event producer is a single entity,
 an aggregator/broker of multiple event producers, or an intermediary is an
 implementation detail of the producer and does not change how an event
 consumer interacts with a specification compliant producer.
@@ -54,7 +54,7 @@ example, consider a blob storage system where each directory constitutes a
 distinct `source` attribute value. For this reason, the exact CloudEvents
 `source` attribute value that might appear in a CloudEvent will not appear in
 the Discovery API query result. Instead, a higher level classifier
-(`sourceclass`) will be used to represent the abstract notion of the generic
+(`service`) will be used to represent the abstract notion of the generic
 event producer of those events - in the example case, the blob storage service
 itself.
 
@@ -89,6 +89,12 @@ system it might consist of multiple Producers. If a source is not aware of
 CloudEvents, an external producer creates the CloudEvent on behalf of the
 source.
 
+#### Service
+
+A "service" represents the entity which manages one or more event "sources".
+For example, an Object Store service might have a set of event sources
+where each event source maps to a bucket.
+
 #### Consumer
 
 A "consumer" receives the event and acts upon it. It uses the context and data
@@ -117,8 +123,8 @@ its basic conceptual structure:
 ( `*` means zero or more, `+` means one or more, `?` means optional)
 
 ```
-- sources: *
-  - sourceclass: [unique identifier for producer of the specified event types]
+- services: *
+  - service: [unique identifier for producer of the specified event types]
     description: [human string] ?
     uri: [URI reference for human documentation] ?
     specversion: [ce-speciversion value] ? (required?)
@@ -143,8 +149,8 @@ its basic conceptual structure:
 
 An example:
 ```
-- sources:
-  - sourceclass: example.com
+- services:
+  - service: example.com
     subscriptionuri: https://events.example.com
     protocols:
     - protocol: HTTP
@@ -159,18 +165,18 @@ with the wire format/API defined by this specification.
 
 And some sample queries:
 
-- `http://.../?sourceclass=example.com`
+- `http://.../?service=example.com`
   - Shows entire data model for `example.com`
 
 - `http://.../?type=com.example.widget.create`
-  - Shows all SourceClasses that have `com.example.widget.create` as one of
+  - Shows all Services that have `com.example.widget.create` as one of
     its `types`.
-  - Does this show entire data model for all SourceClasses that have this
+  - Does this show entire data model for all Services that have this
     `type` (meaning all of its types), or does it just show the type referenced
     in the query? I'm leaning towards all.
 
 - `http://.../?protocol=HTTP&type=com.example.widget.create
-  - Same as previous except only shows SourceClasses that also supports the
+  - Same as previous except only shows Services that also supports the
     `HTTP` subscription protocol.
 
 
