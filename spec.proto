@@ -1,0 +1,44 @@
+/**
+ * License goes here ....
+ */
+
+syntax = "proto3";
+
+package io.cloudevents;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "io.cloudevents.proto";
+
+message CloudEvent {
+
+  // The set of CloudEvent attributes
+  map<string, CloudEventAttribute> attributes = 1;
+
+  // The Data portion of a CloudEvent
+  oneof data_oneof {
+
+    // Binary data
+    bytes raw_data = 2;
+
+    // String data
+    string text_data = 3;
+
+    // Protobuf Message data
+    google.protobuf.Any proto_data = 4;
+  }
+
+  message CloudEventAttribute {
+
+    oneof attr_oneof {
+       bool ce_boolean = 1;
+      sfixed32 ce_integer = 2;
+      string ce_string = 3;
+      bytes ce_binary = 4;
+      string ce_uri = 5;
+      string ce_uri_reference = 6;
+      google.protobuf.Timestamp ce_timestamp = 7;
+    }
+  }
+}
