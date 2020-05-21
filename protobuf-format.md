@@ -63,11 +63,13 @@ The CloudEvents type system is mapped to protobuf as follows :
 This section defines how CloudEvents attributes are represented in the protobuf
 [schema][proto-schema].
 
-In protobuf the CloudEvent attributes are representing using a map construct enabling
+Required and Optional attributes are represented explicitly as protobuf fields.
+
+CloudEvent extension attributes are represented using a map construct enabling
 direct support of the CloudEvent [type system][ce-types].
 
 ```proto
-map<string, CloudEventAttribute> attributes = 1;
+map<string, CloudEventAttribute> extensions = 1;
 
 message CloudEventAttribute {
 
@@ -85,16 +87,10 @@ message CloudEventAttribute {
 
 NOTE: Field assignment numbers are non-normative.
 
-In this model a CloudEvent attribute's name is used as the map *key* and is
-associated with its *value* stored in the appropriately typed property, eg:
+In this model an extension attribute's name is used as the map *key* and is
+associated with its *value* stored in the appropriately typed property.
 
-| Attribute | protobuf *key* | protobuf property  |
-| --------- | ------------ | --------------- |
-| id | id | ce_string |
-| source | source | ce_uri_reference |
-| time | time | ce_timestamp |
-
-This approach allows for attributes (including custom extensions) to be represented and transported
+This approach allows for extensions to be represented and transported
 with no loss of *type* information.
 
 ## 3. Data
@@ -144,32 +140,25 @@ The following code-snippets show how proto representations might be constucted a
 
 ```java
 public static Spec.CloudEvent plainTextExample() {
-  Spec.CloudEvent.Builder b = Spec.CloudEvent.newBuilder();
+    Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
 
-  // Attributes
-  setAttribute(b,"specversion","1.0");
-  setAttribute(b, "type", "org.cloudevents.examples");
-  setAttribute(b, "id", UUID.randomUUID().toString());
-  setTimeAttribute(b, "timestamp");
+    //-- Required Attributes
+    withCurrentTime(ceBuilder)
+      .setId(UUID.randomUUID().toString())
+      .setSpecVersion("1.0")
+      .setType("io.cloudevent.example")
+      .setSource("producer-1")
 
-  setAttribute(b, "datacontenttype", "text/plain");
+      //--  Optional Attributes
+      .setDataContentType("text/plain")
 
-  // Data
-  b.setTextData("This is a plain text message");
+      // Data
+      .setTextData("This is a plain text message");
 
-  // Build it
-  return b.build();
-
+      // Build it
+      return ceBuilder.build();
 }
 
-public static void setAttribute(Spec.CloudEvent.Builder bldr, String key, String val) {
-
-  Spec.CloudEvent.CloudEventAttribute.Builder ab = Spec.CloudEvent.CloudEventAttribute.newBuilder();
-
-  ab.setCeString(val);
-
-  bldr.putAttributes(key, ab.build());
-}
 ```
 
 ## References

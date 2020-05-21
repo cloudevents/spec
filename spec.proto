@@ -13,26 +13,40 @@ option java_package = "io.cloudevents.proto";
 
 message CloudEvent {
 
-  // The set of CloudEvent attributes
-  map<string, CloudEventAttribute> attributes = 1;
+  // -- Standard CloudEvent Context Attributes
 
-  // The Data portion of a CloudEvent
+  // Required
+  string id = 1;
+  string source = 2; // URI-reference
+  string spec_version = 3;
+  string type = 4;
+
+  // Optional
+  string data_content_type = 5; // RFC 2046
+  string data_schema = 6;       // URI
+  string subject = 7;
+  google.protobuf.Timestamp time = 8;
+
+  // -- CloudEvent Extension Attributes
+  map<string, CloudEventAttribute> extensions = 9;
+
+  // -- CloudEvent Data
   oneof data_oneof {
 
     // Binary data
-    bytes raw_data = 2;
+    bytes raw_data = 10;
 
     // String data
-    string text_data = 3;
+    string text_data = 11;
 
     // Protobuf Message data
-    google.protobuf.Any proto_data = 4;
+    google.protobuf.Any proto_data = 12;
   }
 
   message CloudEventAttribute {
 
     oneof attr_oneof {
-       bool ce_boolean = 1;
+      bool ce_boolean = 1;
       sfixed32 ce_integer = 2;
       string ce_string = 3;
       bytes ce_binary = 4;
