@@ -140,7 +140,7 @@ its basic conceptual structure:
       dataschema: [ce-dataschema URI] ?
       dataschematype: [string per RFC 2046] ?
       dataschemacontent: [schema] ?
-      dataschemacontent: 
+      dataschemacontent:
       extensions: *
       - name: [CE context attribute name]
         type: [CE type string]
@@ -162,30 +162,6 @@ An example:
 Note: the above is just a sample and implementations are free to use any
 internal model they wish to store the data as long as they are compliant
 with the wire format/API defined by this specification.
-
-And some sample queries:
-
-- `http://.../?service=example.com`
-  - Shows entire data model for `example.com`
-
-- `http://.../?type=com.example.widget.create`
-  - Shows all Services that have `com.example.widget.create` as one of
-    its `types`.
-  - Does this show entire data model for all Services that have this
-    `type` (meaning all of its types), or does it just show the type referenced
-    in the query? I'm leaning towards all.
-
-- `http://.../?protocol=HTTP&type=com.example.widget.create
-  - Same as previous except only shows Services that also supports the
-    `HTTP` subscription protocol.
-
-
-Questions:
-- does specifying the same attribute multiple times imply OR or AND? OR
-- does specifying diffrent attributes imply OR or AND?  AND
-
--- current end of propsal --
-
 
 ### Entities in the API
 
