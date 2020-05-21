@@ -1,4 +1,4 @@
-# AMQP Protocol Binding for CloudEvents - Version 1.0
+# AMQP Protocol Binding for CloudEvents - Version 1.x-wip
 
 ## Abstract
 
@@ -224,7 +224,7 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:specversion: 1.0
+cloudEvents:specversion: 1.x-wip
 cloudEvents:type: com.example.someevent
 cloudEvents:time: 2018-04-05T03:56:24Z
 cloudEvents:id: 1234-1234-1234
@@ -286,7 +286,7 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "specversion" : "1.0",
+    "specversion" : "1.x-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

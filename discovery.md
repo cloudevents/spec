@@ -1,4 +1,4 @@
-# CloudSubscriptions: Discovery - Version 0.1-rc01
+# CloudSubscriptions: Discovery - Version 0.1-wip
 
 ## Abstract
 
@@ -268,7 +268,7 @@ A single `type` entity.
 ```json
 {
   "type": "com.example.storage.object.create",
-  "specversion": "1.0",
+  "specversion": "1.x-wip",
   "datacontenttype": "application/json",
   "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json"
 }

@@ -48,7 +48,7 @@ both `data` and `dataref` (serialized as JSON):
 
 ```JSON
 {
-    "specversion" : "1.0",
+    "specversion" : "1.x-wip",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull/123",
     "id" : "A234-1234-1234",
@@ -63,7 +63,7 @@ The following example shows a CloudEvent in which a middleware has replaced the
 
 ```JSON
 {
-    "specversion" : "1.0",
+    "specversion" : "1.x-wip",
     "type" : "com.github.pull.create",
     "source" : "https://github.com/cloudevents/spec/pull/123",
     "id" : "A234-1234-1234",
