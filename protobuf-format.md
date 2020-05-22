@@ -85,8 +85,6 @@ message CloudEventAttribute {
 }
 ```
 
-NOTE: Field assignment numbers are non-normative.
-
 In this model an extension attribute's name is used as the map *key* and is
 associated with its *value* stored in the appropriately typed property.
 
@@ -138,6 +136,8 @@ Transports that allow content identification MUST use the following designation:
 
 The following code-snippets show how proto representations might be constucted asuming the availability of some convenience methods ...
 
+### 5.1 Plain Text event data
+
 ```java
 public static Spec.CloudEvent plainTextExample() {
     Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
@@ -155,10 +155,80 @@ public static Spec.CloudEvent plainTextExample() {
       // Data
       .setTextData("This is a plain text message");
 
-      // Build it
-      return ceBuilder.build();
+    // Build it
+    return ceBuilder.build();
 }
 
+```
+
+### 5.2 Proto message as event data
+
+Where the event data payload is itself a protobuf message (with its own schema)
+a protocol buffer idiomatic method can be used to carry the data.
+
+```java
+private static Spec.CloudEvent protoExample() {
+
+      //-- Build an event data protobuf object.
+      Test.SomeData.Builder dataBuilder = Test.SomeData.newBuilder();
+
+      dataBuilder
+         .setSomeText("this is an important message")
+         .setIsImportant(true);
+
+      //-- Build the CloudEvent.
+      Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
+
+      withCurrentTime(ceBuilder)
+         .setId(UUID.randomUUID().toString())
+         .setSpecVersion("1.0")
+         .setType("io.cloudevent.example")
+         .setSource("producer-2")
+
+         // Add the proto data into the CloudEvent envelope
+         .setProtoData(Any.pack(dataBuilder.build()));
+
+      //-- Done.
+      return ceBuilder.build();
+
+   }
+```
+
+### 5.3 Custom Atrribute Extensions
+
+Custom attributes can be added to the proto representation allowing the type
+information to be retained.
+
+```java
+private static Spec.CloudEvent extensionExample() {
+  Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
+
+  // Required Attributes
+  withCurrentTime(ceBuilder)
+      .setId(UUID.randomUUID().toString())
+      .setSpecVersion("1.0")
+      .setType("io.cloudevent.example")
+      ;
+
+  // Add a custom extension
+  withExtension(ceBuilder, "my-booelaan", false);
+  withExtension(ceBuilder, "my-integer", 56);
+
+  // Done
+  return ceBuilder.build();
+}
+
+// Add a boolean extension attribute
+public static Spec.CloudEvent.Builder withExtension(Spec.CloudEvent.Builder b, String name, boolean value) {
+
+  Spec.CloudEvent.CloudEventAttribute.Builder ab = Spec.CloudEvent.CloudEventAttribute.newBuilder();
+
+  ab.setCeBoolean(value); // Set the boolean value
+
+  b.putExtensions(name, ab.build()); // Put the value in the attribute map.
+
+  return b;
+}
 ```
 
 ## References
