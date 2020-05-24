@@ -26,7 +26,7 @@
       "description": "The version of the CloudEvents specification which the event uses.",
       "$ref": "#/definitions/specversiondef",
       "examples": [
-        "1.0"
+        "1.x-wip"
       ]
     },
     "type": {
