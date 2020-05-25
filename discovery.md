@@ -3,8 +3,8 @@
 ## Abstract
 
 CloudSubscriptions Discovery API is a vendor-neutral API specification for
-determining what events an Event Producer or Aggregator / Broker
-has available, as well as how to subscribe to those events.
+determining what events an Event Producer has available, as well as how to
+subscribe to those events.
 
 ## Status of this document
 
@@ -22,10 +22,13 @@ version.
 ## Overview
 
 The goal of the CloudDiscovery API is to enable connections between consumers of
-events and Event providers / producers / aggregators / brokers of events and to
-facilitate the creation of CloudSubscriptions.
+events and Event producers to facilitate the creation of a
+CloudSubscription. Note that whether an Event producer is a single entity,
+an aggregator/broker of multiple event producers, or an intermediary is an
+implementation detail of the producer and does not change how an event
+consumer interacts with a specification compliant producer.
 
-Discovery allows for an event producer or intermediary component to
+Discovery allows for an event producer to
 advertise the event types that are available, provide the necessary information
 to consume that event (schema / delivery protocol options), and the necessary
 information to create a subscription. The output of the API ought to be such
@@ -35,10 +38,10 @@ known in advance.
 There are several discovery use cases to consider from the viewpoint of event
 consumers.
 
-1. What providers are available, and what event types do they produce?
-2. What event types are available, and from which providers?
+1. What event sources are available, and what event types do they produce?
+2. What event types are available, and from which event sources?
 
-The second case becomes relevant if multiple providers support the same event
+The second case becomes relevant if multiple sources support the same event
 types. Use case 1 is likely the dominant use case. Given the example of a public
 cloud provider where all producers produce events, there might be dozens of
 sources (producer systems) and hundreds of event types. The discovery funnel of
@@ -47,9 +50,13 @@ lists of event types. Both of these cases show the importance of using filters
 in the discovery API to narrow down the selection of available events.
 
 The CloudEvent `source` attribute is a potential cause of high fanout. For
-example consider a blob storage system where each directory constitutes a
-distinct `source` attribute value. For this reason, `source` is not part of the
-discovery system.
+example, consider a blob storage system where each directory constitutes a
+distinct `source` attribute value. For this reason, the exact CloudEvents
+`source` attribute value that might appear in a CloudEvent will not appear in
+the Discovery API query result. Instead, a higher level classifier
+(`service`) will be used to represent the abstract notion of the generic
+event producer of those events - in the example case, the blob storage service
+itself.
 
 ## Notations and Terminology
 
@@ -62,12 +69,6 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 ### Terminology
 
 This specification defines the following terms:
-
-#### Event Provider
-
-An "Event Provider" is a grouping terminology used to aid in the discovery
-process. It is a human readable name that developers can use to narrow in on
-the origin system that produces the events they are interested in.
 
 #### Producer
 
@@ -87,6 +88,12 @@ The "source" is the context in which the occurrence happened. In a distributed
 system it might consist of multiple Producers. If a source is not aware of
 CloudEvents, an external producer creates the CloudEvent on behalf of the
 source.
+
+#### Service
+
+A "service" represents the entity which manages one or more event "sources".
+For example, an Object Store service might have a set of event sources
+where each event source maps to a bucket.
 
 #### Consumer
 
@@ -109,6 +116,52 @@ be considered an event subscriber and a target user of this API.
 
 This API is specified as a REST API with well defined entities and relationships
 between those entities.
+
+To help explain the data model, the following non-normative pseudo yaml shows
+its basic conceptual structure:
+
+( `*` means zero or more, `+` means one or more, `?` means optional)
+
+```
+- services: *
+  - service: [unique identifier for producer of the specified event types]
+    description: [human string] ?
+    uri: [URI reference for human documentation] ?
+    specversion: [ce-speciversion value] ? (required?)
+    subscriptionuri: [URI to which the Subscribe request will be sent]
+    subscriptionconfig: *
+    authscope: [string] ?  (explain)
+    protocols: +
+    - protocol: [string]
+    types: *
+    - type: [ce-type value]
+      description: [human string] ?
+      datacontenttype: [ce-datacontenttype value] ?
+      dataschema: [ce-dataschema URI] ?
+      dataschematype: [string per RFC 2046] ?
+      dataschemacontent: [schema] ?
+      dataschemacontent:
+      extensions: *
+      - name: [CE context attribute name]
+        type: [CE type string]
+        spec: [URI to specification defining the extension] ?
+```
+
+An example:
+```
+- services:
+  - service: example.com
+    subscriptionuri: https://events.example.com
+    protocols:
+    - protocol: HTTP
+    types:
+    - type: com.example.widget.create
+    - type: com.example.widget.delete
+```
+
+Note: the above is just a sample and implementations are free to use any
+internal model they wish to store the data as long as they are compliant
+with the wire format/API defined by this specification.
 
 ### Entities in the API
 
@@ -220,7 +273,7 @@ in this discovery system.
 ###### datacontenttype
 
 - Type: `String`
-- Description: CloudEevnts [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
+- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
   attribute. Indicating how the `data` attribute of subscribed events will be
   encoded.
 - Constraints:
@@ -230,7 +283,7 @@ in this discovery system.
 ###### dataschema
 
 - Type: `URI`
-- Description: CloudEevnts [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
+- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
   attribute. This identifies the canonical storage location of the schema of
   the `data` attribute of subscribed events.
 - Constraints:
@@ -336,7 +389,7 @@ requirements for the query API.
 ###### datacontenttype
 
 - Type: `String`
-- Description: CloudEevnts [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
+- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
   attribute. Indicating how the `data` attribute of subscribed events will be
   encoded.
 - Constraints:
@@ -346,7 +399,7 @@ requirements for the query API.
 ###### dataschema
 
 - Type: `URI`
-- Description: CloudEevnts [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
+- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
   attribute. This identifies the canonical storage location of the schema of
   the `data` attribute of subscribed events.
 - Constraints:
