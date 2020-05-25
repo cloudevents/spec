@@ -442,7 +442,9 @@ Content-Length: nnnn
 ### 3.4. Json Streaming Content Mode
 
 In the _json streaming_ content mode several events are sent into a single HTTP
-request or response body using [RFC7464](https://www.rfc-editor.org/rfc/rfc7464.html).
+request or response body encoding each CloudEvent using the [JSON format][json-format].
+In order to send several events, each event should be delimited by `<RS>` and `<LF>`
+characters, following the [RFC7464].
 
 #### 3.4.1. HTTP Content-Type
 
@@ -499,6 +501,7 @@ Content-Type: application/cloudevents-stream; charset=UTF-8
   Routing
 - [RFC7231][rfc7231] Hypertext Transfer Protocol (HTTP/1.1): Semantics and
   Content
+- [RFC7464][RFC7464] JavaScript Object Notation (JSON) Text Sequences
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
@@ -524,4 +527,5 @@ Content-Type: application/cloudevents-stream; charset=UTF-8
 [rfc7230-section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
+[RFC7464]: https://tools.ietf.org/html/rfc7464.html
 [rfc7540]: https://tools.ietf.org/html/rfc7540
