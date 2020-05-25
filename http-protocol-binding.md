@@ -29,6 +29,7 @@ This document is a working draft.
 - 3.1. [Binary Content Mode](#31-binary-content-mode)
 - 3.2. [Structured Content Mode](#32-structured-content-mode)
 - 3.3. [Batched Content Mode](#33-batched-content-mode)
+- 3.4. [Json Streaming Content Mode](#34-json-streaming-content-mode)
 
 4. [References](#4-references)
 
@@ -65,8 +66,8 @@ which is compatible with HTTP 1.1 semantics.
 
 ### 1.3. Content Modes
 
-This specification defines three content modes for transferring events:
-_binary_, _structured_ and _batched_. Every compliant implementation SHOULD
+This specification defines four content modes for transferring events:
+_binary_, _structured_, _batched_ and _json streaming_. Every compliant implementation SHOULD
 support the _structured_ and _binary_ modes.
 
 In the _binary_ content mode, the value of the event `data` is placed into the
@@ -81,6 +82,10 @@ placed into the HTTP request or response body using an
 In the _batched_ content mode several events are batched into a single HTTP
 request or response body using an [event format](#14-event-formats) that
 supports batching.
+
+In the _json streaming_ content mode several events are streamed into a single HTTP
+request or response body using the [JSON event format][json-format]. This stream is 
+potentially infinite.
 
 ### 1.4. Event Formats
 
@@ -141,7 +146,9 @@ the `Content-Type` header value. If the value is prefixed with the CloudEvents
 media type `application/cloudevents`, indicating the use of a known
 [event format](#14-event-formats), the receiver uses _structured_ mode. If the
 value is prefixed with `application/cloudevents-batch`, the receiver uses the
-_batched_ mode. Otherwise it defaults to _binary_ mode.
+_batched_ mode. If the value is prefixed with `application/cloudevents-stream`,
+the receiver uses the _json streaming_ mode. Otherwise it defaults to _binary_ 
+mode.
 
 If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
@@ -441,10 +448,10 @@ Content-Length: nnnn
 
 ### 3.4. Json Streaming Content Mode
 
-In the _json streaming_ content mode several events are sent into a single HTTP
+In the _json streaming_ content mode several events are streamed into a single HTTP
 request or response body encoding each CloudEvent using the [JSON format][json-format].
-In order to send several events, each event should be delimited by `<RS>` and `<LF>`
-characters, following the [RFC7464].
+In order to send several events, each event MUST be delimited by `<RS>` and `<LF>`
+characters, following the [rfc7464]. This stream could be potentially infinite.
 
 #### 3.4.1. HTTP Content-Type
 
@@ -501,7 +508,7 @@ Content-Type: application/cloudevents-stream; charset=UTF-8
   Routing
 - [RFC7231][rfc7231] Hypertext Transfer Protocol (HTTP/1.1): Semantics and
   Content
-- [RFC7464][RFC7464] JavaScript Object Notation (JSON) Text Sequences
+- [RFC7464][rfc7464] JavaScript Object Notation (JSON) Text Sequences
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
@@ -527,5 +534,5 @@ Content-Type: application/cloudevents-stream; charset=UTF-8
 [rfc7230-section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
-[RFC7464]: https://tools.ietf.org/html/rfc7464.html
+[rfc7464]: https://tools.ietf.org/html/rfc7464.html
 [rfc7540]: https://tools.ietf.org/html/rfc7540
