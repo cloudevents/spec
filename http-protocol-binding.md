@@ -534,5 +534,5 @@ Content-Type: application/cloudevents-stream; charset=UTF-8
 [rfc7230-section-5-1]: https://tools.ietf.org/html/rfc7230#section-5.1
 [rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
-[rfc7464]: https://tools.ietf.org/html/rfc7464.html
+[rfc7464]: https://tools.ietf.org/html/rfc7464
 [rfc7540]: https://tools.ietf.org/html/rfc7540
