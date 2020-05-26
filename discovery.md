@@ -165,38 +165,38 @@ with the wire format/API defined by this specification.
 
 ### Entities in the API
 
-1. `eventprovider`
-2. `type`
-3. `producer`
+1. `Service`
+2. `Type`
+3. `Producer`
 
-The `EventProvider` and `Type` entities form the basis of the directory and can
+The `Service` and `Type` entities form the basis of the directory and can
 be used to build user experiences around discovery. The `Producer` entity is
-keyed off of `{EventProvider.Name, Type.Name}` and provides the necessary
+keyed off of `{Service.Name, Type.Name}` and provides the necessary
 details to create a subscription for events of that `ce-type` from the selected
-`EventProvider`.
+`Service`.
 
 ### Entity Specifications
 
 This section details the fields that make up each of the entities referenced
 earlier in this document.
 
-#### `eventprovider` entity
+#### `service` entity
 
-Used in discovery for enumerating the different providers represented in this
+Used in discovery for enumerating the different services represented in this
 discovery system.
 
-##### `eventprovider` entity attributes
+##### `service` entity attributes
 
 ###### name
 
 - Type: `String`
 - Description: The `name` attribute SHOULD be human readable and can identify a
-  top level event provider system.
+  top level service.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
 - Examples:
-  - "GitHub.com"
+  - "GitHub"
   - "Awesome Cloud Storage"
   - "com.example.microservices.userlogin"
 
@@ -208,12 +208,12 @@ discovery system.
   - OPTIONAL
   - If present, MUST be a non-empty string
 
-###### provider_uri
+###### service_uri
 
 - Type: `URI`
 - Description: Absolute URI that provides a link back to the producer, or
   documentation about the producer. This is intended for a developer to
-  use in order to learn more about this provider events produced.
+  use in order to learn more about this service events produced.
 - Constraints:
   - OPTIONAL
   - If present, MUST be a non-empty absolute URI
@@ -221,24 +221,24 @@ discovery system.
   - "http://cloud.example.com/docs/blobstorage"
 
 
-##### `eventprovider` entity examples
+##### `service` entity examples
 
 ```json
 {
-  "name": "Cloud Storage Provider",
+  "name": "Cloud Storage Service",
   "description": "Blob storage in the cloud",
-  "provider_uri": "https://cloud.example.com/docs/storage"
+  "service_uri": "https://cloud.example.com/docs/storage"
 }
 ```
 
-And a list of valid `provider` entities.
+And a list of valid `service` entities.
 
 ```json
 [
   {
-    "name": "Cloud Storage Provider",
+    "name": "Cloud Storage Service",
     "description": "Blob storage in the cloud",
-    "provider_uri": "https://cloud.example.com/docs/storage"
+    "service_uri": "https://cloud.example.com/docs/storage"
   },
   {
     "name": "Cloud MySQL"
@@ -278,7 +278,8 @@ in this discovery system.
   encoded.
 - Constraints:
   - OPTIONAL
-  - If present, MUST adhere to the format specified in [RFC 2046](https://tools.ietf.org/html/rfc2046)
+  - If present, MUST adhere to the format specified in
+    [RFC 2046](https://tools.ietf.org/html/rfc2046)
 
 ###### dataschema
 
@@ -297,7 +298,8 @@ in this discovery system.
   `dataschematype` indicates the type of schema represented there.
 - Constraints:
   - OPTIONAL
-  - If present, MUST adhere to the format specified in [RFC 2046](https://tools.ietf.org/html/rfc2046)
+  - If present, MUST adhere to the format specified in
+    [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - Examples:
   - "application/json"
   -
@@ -330,20 +332,21 @@ A single `type` entity.
 #### `producer` entity
 
 Once discovery narrows down to a specific event `type` that we want to subscribe
-to from a specific `provider`, the appropriate `producer` entity can be
-retrieved by key. The key is a composite key of the `provider` and `type` names.
+to from a specific `service`, the appropriate `producer` entity can be
+retrieved by key. The key is a composite key of the `service` and `type` names.
 
 ##### `producer` entity Attributes
 
-The `Provider` entity is the main component of the discovery API. This section
+The `Service` entity is the main component of the discovery API. This section
 covers the structure of that entity and the next section describes the
 requirements for the query API.
 
-###### eventprovider
+###### service
 
 - Type: `String`
-- Description: Identifies the provider of the event. The `eventprovider` string
-  SHOULD be human readable and can identify a top level producer system.
+- Description: Identifies the service of which the event is related. The
+  `service` string SHOULD be human readable and can identify a top level
+  producer system.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
@@ -490,18 +493,18 @@ requirements for the query API.
 
 Each path in the REST API represents either represents a list (or search) over
 and entity class, or the retrieval of an individual entity by name. Each of
-these operations MUST be supported by compliant discovery providers.
+these operations MUST be supported by compliant discovery implementations.
 
-#### `/providers?matching=[search term]`
+#### `/services?matching=[search term]`
 
-Returns a list of all providers in the discovery system, optionally filtering on
+Returns a list of all services in the discovery system, optionally filtering on
 a provided search term (`matching`).
 
 ##### matching
 
 * Type: `string`
 * Description: Search term that provides case insensitive match against
-  `provider` names. The parameter can match any portion of the provider name.
+  `service` names. The parameter can match any portion of the service name.
 * Constraints:
   * OPTIONAL
   * If present, MUST be non-empty
@@ -514,22 +517,22 @@ a provided search term (`matching`).
 
 ##### Returns
 
-Upon successful processing, the response MUST be a JSON array of `provider`
+Upon successful processing, the response MUST be a JSON array of `service`
 entities.
 
-#### `/providers/{name}`
+#### `/services/{name}`
 
-Retrieves an individual provider entity by exact match on the `provider` name.
+Retrieves an individual service entity by exact match on the `service` name.
 
 ##### Returns
 
 Upon successful processing, the response MUST be a JSON object that is a single
-`provider` entity.
+`service` entity.
 
-#### `/providers/{name}/types`
+#### `/services/{name}/types`
 
 Retrieves the details about the types that are offered by the specified
-`provider`.
+`service`.
 
 ##### Returns
 
@@ -579,20 +582,20 @@ attribute specification.
 
 A `type` entity as a JSON object.
 
-#### `/types/{name}/providers`
+#### `/types/{name}/services`
 
-Retrieves the details about providers that offer the specified `type`.
+Retrieves the details about services that offer the specified `type`.
 
 ##### Returns
 
-A JSON array of `provider` entities.
+A JSON array of `service` entities.
 
-#### `/producer/{provider.name}/{type.name}`
+#### `/producer/{service.name}/{type.name}`
 
 Retrieves the `producer` entity that specifies the information necessary to
-create subscriptions and to consume the events. The `provider.name` and
+create subscriptions and to consume the events. The `service.name` and
 `type.name` items in the request path make up the composite key for the
-information that can be obtained via the `/provider` and `/type` API calls.
+information that can be obtained via the `/service` and `/type` API calls.
 
 ##### Returns
 
