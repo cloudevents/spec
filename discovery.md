@@ -68,34 +68,41 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### Terminology
 
+Note: some of the terms defined below are taken from the
+[CloudEvents](spec.md) specification, and are marked with a reference to
+the original definition. Any difference between the definitions is accidental
+and the CloudEvents version takes precendence.
+
 This specification defines the following terms:
 
-#### Producer
+#### Service
 
-The "producer" is a specific instance, process or device that creates the data
-structure describing the CloudEvent.
+A "service" represents the entity which manages one or more event
+[sources](#source-ce).
+For example, an Object Store service might have a set of event sources
+where each event source maps to a bucket.
 
-#### Intermediary
-
-An "intermediary" receives a message containing an event for the purpose of
-forwarding it to the next receiver, which might be another intermediary or a
-consumer. A typical task for an intermediary is to route the event to receivers
-based on the information in the event context.
-
-#### Source
+#### Source [[CE](./spec.md#source)]
 
 The "source" is the context in which the occurrence happened. In a distributed
 system it might consist of multiple Producers. If a source is not aware of
 CloudEvents, an external producer creates the CloudEvent on behalf of the
 source.
 
-#### Service
+#### Producer [[CE](./spec.md#producer)]
 
-A "service" represents the entity which manages one or more event "sources".
-For example, an Object Store service might have a set of event sources
-where each event source maps to a bucket.
+The "producer" is a specific instance, process or device that creates the data
+structure describing the CloudEvent.
 
-#### Consumer
+#### Intermediary [[CE](./spec.md#intermediary)]
+
+An "intermediary" receives a message containing an event for the purpose of
+forwarding it to the next receiver, which might be another intermediary or a
+[Consumer](#consumer-ce). A typical task for an intermediary is to route the
+event to receivers based on the information in the
+event [Context](./spec.md#context).
+
+#### Consumer [[CE](./spec.md#consumer)]
 
 A "consumer" receives the event and acts upon it. It uses the context and data
 to execute some logic, which might lead to the occurrence of new events.
