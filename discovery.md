@@ -243,9 +243,7 @@ entity.
   - OPTIONAL
   - If present, MUST be a non-empty absolute URI
 - Examples:
-  - `http://cloud.example.com/docs/blobstorage`
-
-###### specversions
+  - "http://cloud.example.com/docs/blobstorage"
 
 - Type: Array of `Strings` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - Description: CloudEvents [`specversions`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
@@ -254,7 +252,7 @@ entity.
   - REQUIRED
   - MUST be a non-empty array or non-empty strings
 
-###### subscriptionurl
+##### subscriptionurl
 
 - Type: `URL`
 - Description: An absolute URL indicating where CloudSubscriptions `subscribe`
@@ -262,7 +260,7 @@ entity.
 - Constraints:
   - REQUIRED
 
-###### subscriptionconfig
+##### subscriptionconfig
 
 - Type: `Map` of `String` to `String`
 - Description: A map indicating supported options for the `config` parameter
@@ -275,7 +273,7 @@ entity.
 - Examples:
   - ??
 
-###### authscope
+##### authscope
 
 - Type: `String`
 - Description: Authorization scope needed for creating subscriptions.
@@ -285,7 +283,7 @@ entity.
 - Example:
   - `storage.read`
 
-###### protocols
+##### protocols
 
 - Type: `List` of `String`
 - Description: This field describes the different values that might be passed
@@ -315,7 +313,7 @@ entity.
   - `com.github.pull.create`
   - `com.example.object.delete.v2`
 
-##### description (Type)
+###### description (type)
 
 - Type: `String`
 - Description: Human readable description.
@@ -323,7 +321,7 @@ entity.
   - OPTIONAL
   - If present, MUST be a non-empty string
 
-##### datacontenttype
+###### datacontenttype
 
 - Type: `String`
 - Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
@@ -334,7 +332,7 @@ entity.
   - If present, MUST adhere to the format specified in
     [RFC 2046](https://tools.ietf.org/html/rfc2046)
 
-##### dataschema
+###### dataschema
 
 - Type: `URI`
 - Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
@@ -344,7 +342,7 @@ entity.
   - OPTIONAL
   - If present, MUST be a non-empty URI
 
-##### dataschematype
+###### dataschematype
 
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - Description: If using `dataschemacontent` for inline schema storage, the
@@ -356,7 +354,7 @@ entity.
 - Examples:
   - `application/json`
 
-##### dataschemacontent
+###### dataschemacontent
 
 - Type: `String`
 - Description: An inline representation of the schema of the `data` attribute
@@ -367,6 +365,19 @@ entity.
   - If present, MUST be a non-empty string containing a schema compatible with
     the `datacontenttype`.
   - If `dataschama` is present, this field MUST NOT be present.
+
+###### sourcetemplate
+
+- Type: `URI Template`
+- Description: A URI Template according to [RFC
+  6570](https://tools.ietf.org/html/rfc6570) that defines how the source
+  attribute will be generated.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a Level 1 template compliant to [RFC
+    6570](https://tools.ietf.org/html/rfc6570)
+- Examples:
+  - "http://blob.store/{bucket}"
 
 ###### extensions
 
@@ -402,12 +413,12 @@ entity.
       "type": "com.example.storage.object.create",
       "specversions": [ "1.x-wip" ],
       "datacontenttype": "application/json",
-      "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json"
+      "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json",
+      "sourcetemplate":"https://storage.example.com/service/storage/{objectID}"
     }
   ]
 }
 ```
-
 
 ### REST Paths
 
