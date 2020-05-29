@@ -118,12 +118,9 @@ oneof data_oneof {
 }
 ```
 
-Before encoding, a protobuf serializer MUST first determine the runtime data type
-of the content. This can be determined by examining the data for invalid UTF-8
-sequences or by consulting the `datacontenttype` attribute.
-
 * Where the data is a protobuf message it MUST be stored in the `proto_data`
-property.
+property; the `dataschema` attribute SHOULD be populated with the URL of the
+data's proto type.
 * If the implementation determines that the type of the data is text, the value
 MUST be stored in the `text_data` property.
 * If the implementation determines that the type of the data is binary, the value
@@ -191,8 +188,11 @@ private static Spec.CloudEvent protoExample() {
       .setType("io.cloudevent.example")
       .setSource("producer-2")
 
-      // Add the proto data into the CloudEvent envelope
+      // Add the proto data into the CloudEvent envelope.
       .setProtoData(Any.pack(dataBuilder.build()));
+
+      // Set the schema URL.
+      withAttribute(ceBuilder,"dataschema",ceBuilder.getProtoData().getTypeUrl());
 
       //-- Done.
       return ceBuilder.build();
