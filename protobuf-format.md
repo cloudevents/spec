@@ -2,8 +2,8 @@
 
 ## Abstract
 
-[Protocol Buffers][proto-home] is a mechanism for marshalling structured data.
-This document defines how CloudEvents are represented using [version 3][proto-3]
+[Protocol Buffers][proto-home] is a mechanism for marshalling structured data,
+this document defines how CloudEvents are represented using [version 3][proto-3]
 of that specification.
 
 In this document the terms *Protocol Buffers*, *protobuf*, and *proto* are used
@@ -26,12 +26,13 @@ This document is a working draft.
 [CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
 elements defined in the CloudEvents specification are are represented using
-a protobuf schema. The  [schema][proto-schema] defines an envolope/body
-construct similar to that prescriped in the [JSON format][json-format].
+a protobuf schema.
 
 The [Attributes](#2-attributes) section describes the naming conventions and
 data type mappings for CloudEvents attributes for use as protobuf message
 properties.
+
+The [Data](#3-data) section describes how the event payload is carried.
 
 ### 1.1. Conformance
 
@@ -44,7 +45,12 @@ interpreted as described in [RFC2119][rfc2119].
 There is no official IANA *media-type* designation for protobuf, as such this
 specification uses 'application/x-protobuf' to identify such content.
 
-## 2. Type System
+## 2. Attributes
+
+This section defines how CloudEvents attributes are represented in the protobuf
+[schema][proto-schema].
+
+## 2.1 Type System
 
 The CloudEvents type system is mapped to protobuf as follows :
 
@@ -58,18 +64,17 @@ The CloudEvents type system is mapped to protobuf as follows :
 | URI-reference | [string][proto-scalars] following [RFC 3986 §4.1][rfc3986-section41] |
 | Timestamp     | [Timestamp][proto-timestamp]  |
 
-## 2. Attributes
+## 2.3 Required Attributes
 
-This section defines how CloudEvents attributes are represented in the protobuf
-[schema][proto-schema].
+Required attributes are represented explicitly as protobuf fields.
 
-Required and Optional attributes are represented explicitly as protobuf fields.
+## 2.4 Optional Attributes & Extensions
 
-CloudEvent extension attributes are represented using a map construct enabling
+Optional and extension attributes are represented using a map construct enabling
 direct support of the CloudEvent [type system][ce-types].
 
 ```proto
-map<string, CloudEventAttribute> extensions = 1;
+map<string, CloudEventAttribute> attributes = 1;
 
 message CloudEventAttribute {
 
@@ -85,10 +90,10 @@ message CloudEventAttribute {
 }
 ```
 
-In this model an extension attribute's name is used as the map *key* and is
+In this model an attribute's name is used as the map *key* and is
 associated with its *value* stored in the appropriately typed property.
 
-This approach allows for extensions to be represented and transported
+This approach allows for attributes to be represented and transported
 with no loss of *type* information.
 
 ## 3. Data
@@ -103,7 +108,7 @@ The specification allows for data payloads of the following types to be explicit
 oneof data_oneof {
 
     // Binary data
-    bytes raw_data = 2;
+    bytes binary_data = 2;
 
     // String data
     string text_data = 3;
@@ -122,11 +127,11 @@ property.
 * If the implementation determines that the type of the data is text, the value
 MUST be stored in the `text_data` property.
 * If the implementation determines that the type of the data is binary, the value
-MUST be stored in the `raw_data` property.
+MUST be stored in the `binary_data` property.
 
 ## 4. Transport
 
-Transports that allow content identification MUST use the following designation:
+Transports that support content identification MUST use the following designation:
 
 ```text
    application/cloudevents+x-protobuf
@@ -140,22 +145,23 @@ The following code-snippets show how proto representations might be constucted a
 
 ```java
 public static Spec.CloudEvent plainTextExample() {
-    Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
+  Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
 
-    //-- Required Attributes
-    withCurrentTime(ceBuilder)
-      .setId(UUID.randomUUID().toString())
-      .setSpecVersion("1.0")
-      .setType("io.cloudevent.example")
-      .setSource("producer-1")
+  ceBuilder
+    //-- Required Attributes.
+    .setId(UUID.randomUUID().toString())
+    .setSpecVersion("1.0")
+    .setType("io.cloudevent.example")
+    .setSource("producer-1")
 
-      //--  Optional Attributes
-      .setDataContentType("text/plain")
+    //-- Data.
+    .setTextData("This is a plain text message");
 
-      // Data
-      .setTextData("This is a plain text message");
+    //-- Optional Attributes
+    withCurrentTime(ceBuilder, "time");
+    withAttribute(ceBuilder, "datacontenttype", "text/plain");
 
-    // Build it
+    // Build it.
     return ceBuilder.build();
 }
 
@@ -169,66 +175,29 @@ a protocol buffer idiomatic method can be used to carry the data.
 ```java
 private static Spec.CloudEvent protoExample() {
 
-      //-- Build an event data protobuf object.
-      Test.SomeData.Builder dataBuilder = Test.SomeData.newBuilder();
+  //-- Build an event data protobuf object.
+  Test.SomeData.Builder dataBuilder = Test.SomeData.newBuilder();
 
-      dataBuilder
-         .setSomeText("this is an important message")
-         .setIsImportant(true);
+  dataBuilder
+    .setSomeText("this is an important message")
+    .setIsImportant(true);
 
-      //-- Build the CloudEvent.
-      Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
+  //-- Build the CloudEvent.
+  Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
 
-      withCurrentTime(ceBuilder)
-         .setId(UUID.randomUUID().toString())
-         .setSpecVersion("1.0")
-         .setType("io.cloudevent.example")
-         .setSource("producer-2")
+    ceBuilder
+      .setId(UUID.randomUUID().toString())
+      .setSpecVersion("1.0")
+      .setType("io.cloudevent.example")
+      .setSource("producer-2")
 
-         // Add the proto data into the CloudEvent envelope
-         .setProtoData(Any.pack(dataBuilder.build()));
+      // Add the proto data into the CloudEvent envelope
+      .setProtoData(Any.pack(dataBuilder.build()));
 
       //-- Done.
       return ceBuilder.build();
 
    }
-```
-
-### 5.3 Custom Atrribute Extensions
-
-Custom attributes can be added to the proto representation allowing the type
-information to be retained.
-
-```java
-private static Spec.CloudEvent extensionExample() {
-  Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
-
-  // Required Attributes
-  withCurrentTime(ceBuilder)
-      .setId(UUID.randomUUID().toString())
-      .setSpecVersion("1.0")
-      .setType("io.cloudevent.example")
-      ;
-
-  // Add a custom extension
-  withExtension(ceBuilder, "my-booelaan", false);
-  withExtension(ceBuilder, "my-integer", 56);
-
-  // Done
-  return ceBuilder.build();
-}
-
-// Add a boolean extension attribute
-public static Spec.CloudEvent.Builder withExtension(Spec.CloudEvent.Builder b, String name, boolean value) {
-
-  Spec.CloudEvent.CloudEventAttribute.Builder ab = Spec.CloudEvent.CloudEventAttribute.newBuilder();
-
-  ab.setCeBoolean(value); // Set the boolean value
-
-  b.putExtensions(name, ab.build()); // Put the value in the attribute map.
-
-  return b;
-}
 ```
 
 ## References
