@@ -153,5 +153,5 @@ conference. Please see the
 [meeting minutes](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for any future plans.
 
-[proto-working]: https://github.com/cloudevents/spec/blob/master/protobuf-format.md
-[proto-latest]: https://github.com/cloudevents/spec/blob/master/protobuf-format.md
+[proto-working]: ./protobuf-format.md
+[proto-latest]: ./protobuf-format.md
