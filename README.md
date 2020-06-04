@@ -37,6 +37,7 @@ The following documents are available:
 | Kafka Protocol Binding        | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/kafka-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/kafka-protocol-binding.md) |
 | MQTT Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/mqtt-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/mqtt-protocol-binding.md)  |
 | NATS Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/nats-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-protocol-binding.md)  |
+| Protobuf Event Format | | [master](proto-working) |
 | Web hook                      |     [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
 |                               |
 | **Additional Documentation:** |
@@ -151,3 +152,6 @@ Periodically, the group may have in-person meetings that coincide with a major
 conference. Please see the
 [meeting minutes](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for any future plans.
+
+[proto-working]: https://github.com/cloudevents/spec/blob/master/protobuf-format.md
+[proto-latest]: https://github.com/cloudevents/spec/blob/master/protobuf-format.md
