@@ -43,7 +43,7 @@ interpreted as described in [RFC2119][rfc2119].
 ### 1.2 Content-Type
 
 There is no official IANA *media-type* designation for protobuf, as such this
-specification uses 'application/x-protobuf' to identify such content.
+specification uses 'application/protobuf' to identify such content.
 
 ## 2. Attributes
 
@@ -131,12 +131,12 @@ MUST be stored in the `binary_data` property.
 Transports that support content identification MUST use the following designation:
 
 ```text
-   application/cloudevents+x-protobuf
+   application/cloudevents+protobuf
 ```
 
 ## 5. Examples
 
-The following code-snippets show how proto representations might be constucted asuming the availability of some convenience methods ...
+The following code-snippets shows how proto representations might be constucted asuming the availability of some convenience methods ...
 
 ### 5.1 Plain Text event data
 
@@ -182,22 +182,22 @@ private static Spec.CloudEvent protoExample() {
   //-- Build the CloudEvent.
   Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
 
-    ceBuilder
-      .setId(UUID.randomUUID().toString())
-      .setSpecVersion("1.0")
-      .setType("io.cloudevent.example")
-      .setSource("producer-2")
+  ceBuilder
+    .setId(UUID.randomUUID().toString())
+    .setSpecVersion("1.0")
+    .setType("io.cloudevent.example")
+    .setSource("producer-2")
 
-      // Add the proto data into the CloudEvent envelope.
-      .setProtoData(Any.pack(dataBuilder.build()));
+    // Add the proto data into the CloudEvent envelope.
+    .setProtoData(Any.pack(dataBuilder.build()));
 
-      // Set the schema URL.
-      withAttribute(ceBuilder,"dataschema",ceBuilder.getProtoData().getTypeUrl());
+    // Set the schema URL.
+    withAttribute(ceBuilder,"dataschema",ceBuilder.getProtoData().getTypeUrl());
 
-      //-- Done.
-      return ceBuilder.build();
+    //-- Done.
+    return ceBuilder.build();
 
-   }
+}
 ```
 
 ## References
