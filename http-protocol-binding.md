@@ -83,7 +83,7 @@ In the _batched_ content mode several events are batched into a single HTTP
 request or response body using an [event format](#14-event-formats) that
 supports batching.
 
-In the _json streaming_ content mode several events are streamed into a single HTTP
+In the _json streaming_ content mode several events are streamed in a single HTTP
 request or response body using the [JSON event format][json-format]. This stream is 
 potentially infinite.
 
