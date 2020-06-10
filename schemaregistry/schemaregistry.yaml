@@ -19,9 +19,9 @@ paths:
                   type: string
       tags:
       -  'groups'
-  /schemagroups/{group-name}:
+  /schemagroups/{group-id}:
     parameters:
-      - name: group-name
+      - name: group-id
         in: path
         description: schema group
         required: true
@@ -75,9 +75,9 @@ paths:
           description: Specified group not found
       tags:
       -  'groups'
-  /schemagroups/{group-name}/schemas:
+  /schemagroups/{group-id}/schemas:
     parameters:
-    - name: group-name
+    - name: group-id
       in: path
       description: schema group
       required: true
@@ -86,8 +86,8 @@ paths:
     get:
       tags:
       - 'groups'
-      summary: Get schemas for group name
-      description: Returns schema by group name.
+      summary: List schemas for group id
+      description: Returns schema by group id.
       operationId: getSchemasByGroup
       responses:
         '200':
@@ -104,24 +104,24 @@ paths:
       tags:
       - 'groups'
       summary: Deletes all schemas in group
-      description: Deletes all schemas under specified group name.
+      description: Deletes all schemas under specified group id.
       operationId: deleteSchemasByGroup
       responses:
         '204':
           description: OK no content
         '404':
           description: Group not found
-  /schemagroups/{group-name}/schemas/{schema-name}:
+  /schemagroups/{group-id}/schemas/{schema-id}:
     parameters:
-      - name: group-name
+      - name: group-id
         in: path
         description: schema group
         required: true
         schema:
           type: string
-      - name: schema-name
+      - name: schema-id
         in: path
-        description: schema name
+        description: schema id
         required: true
         schema:
           type: string
@@ -146,7 +146,7 @@ paths:
         '400': 
           description: Invalid request
       tags:
-        - 'runtime'
+        - 'registration'
     get:
       summary: Get latest version of schema
       description: Get latest version of schema. 
@@ -166,17 +166,17 @@ paths:
           description: Matching schema not found
       tags:
         - 'schemas'
-  /schemagroups/{group-name}/schemas/{schema-name}/versions:
+  /schemagroups/{group-id}/schemas/{schema-id}/versions:
     parameters:
-      - name: group-name
+      - name: group-id
         in: path
         description: schema group
         required: true
         schema:
           type: string
-      - name: schema-name
+      - name: schema-id
         in: path
-        description: schema name
+        description: schema id
         required: true
         schema:
           type: string
@@ -194,18 +194,18 @@ paths:
                 items: 
                   type: integer
       tags:
-        - 'schemas'
-  /schemagroups/{group-name}/schemas/{schema-name}/versions/{version-number}:
+        - 'versions'
+  /schemagroups/{group-id}/schemas/{schema-id}/versions/{version-number}:
     parameters:
-      - name: group-name
+      - name: group-id
         in: path
         description: schema group
         required: true
         schema:
           type: string
-      - name: schema-name
+      - name: schema-id
         in: path
-        description: schema name
+        description: schema id
         required: true
         schema:
           type: string
@@ -224,7 +224,7 @@ paths:
         '404':
           description: Specified schema not found
       tags:
-        - 'schemas'
+        - 'versions'
     delete:
       summary: Delete specified version of schema
       operationId: deleteSchemaVersion
@@ -232,7 +232,7 @@ paths:
         '204':
           description: OK no content
       tags:
-        - 'schemas'
+        - 'versions'
 
 components: 
   schemas:
@@ -246,12 +246,14 @@ components:
     SchemaGroup:
       type: object
       properties:
-        name:
+        id:
           type: string
-        createdTimeUtc:
+        description:
+          type: string
+        createdtimeutc:
           type: string
           format: date-time
-        updatedTimeUtc:
+        updatedtimeutc:
           type: string
           format: date-time
         format:

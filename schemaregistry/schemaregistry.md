@@ -1,4 +1,4 @@
-# CNCF Schema Registry API Version 0.1-rc01s
+# CNCF Schema Registry API Version 0.1-wip
 
 ## Abstract
 
@@ -16,7 +16,7 @@ Schema-dependent serialization formats and related frameworks such as Apache
 Avro are popular in eventing and messaging scenarios. With most of the metadata
 information such as names and types of fields being held externally in schema
 documents, these frameworks are able to produce very compact on-wire
-representations of structured data that is carries as the payload of events and
+representations of structured data that is carried as the payload of events and
 messages. While the wire-footprint savings are often very significant, the added
 cost is that of schema handling. All communicating parties who need to
 deserialize the event or message payload need access to the schema used to
@@ -28,37 +28,19 @@ intermediaries to validate the data structure's compliance with a set of rules.
 
 This specification defines a very simple API focused on storing, organizing, and
 accessing such documents. While there are very sophisticated metadata management
-solutions available as open source und under neutral governance already, the focus
+solutions available as open source and under neutral governance already, the focus
 of this specification is not great sophistication but straightforward simplicity.
 
 This schema registry deals with only three top-level elements:
 
 - Schema Group: A named collection of schemas. Each group holds a logically
-  related set of schemas, typically belonging to a particular application or
-  subject to shared access control rules.
+  related set of schemas, typically managed by a single entity, belonging to a
+  particular application and/or having a shared access control management scope.
 - Schema: A document describing the structure, names, and types of some
   structured data payload.
 - Version: A specific version of a schema document. Even though not prescribed
   in this specification, an implementation might choose to impose compatibility
   constraints on versions following the initial version of a schema.
-
-> NOTE: There are two fundamentally different options for how we can organize
-> multiple schema formats and this specification draft reflects both: 
->
-> 1) In an "ideal" REST service, any data entity can be represented ("R" in
->    REST) in multiple different data formats, which a client can request in
->    prioritized order during content-type negotiation. If a service offers up
->    the same entity in JSON, Protobuf, and Avro formats, there would therefore
->    be three distinct schemas, each defining a representation of the data
->    entity for the respective format. From the same "REST" mindset perspective,
->    the ideal representation of this set of schemas, which differ with regards
->    to the format they describe, but ought to be semantically identical, is to
->    also differentiate them only by their content type and maintain them under
->    the exact same name as if they were one schema.
-> 2) Since the above strategy is truly RESTful, but quite esoteric if you've not
->    grown up as a RESTafarian, the alternative strategy for concurrently
->    handling multiple schema formats is much simpler: Constrain each schema
->    group to a single format.
 
 ## 2. Schema Registry Elements
 
@@ -100,22 +82,28 @@ The data model for a schema group consists of three attributes:
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
-  - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax
+  - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax. This allows for "dot
+    notation", e.g. `org.example.myapp.module` for logical organization of
+    schema groups, even though the namespace is flat.
   - MUST be unique within the scope of the schema registry
 - Examples:
   - mygroup
   - my-group
+  - org.example.myapp.module
+  - events@example.com
 
 #### format
 
 - Type: `String`
 - Description: Defines the schema format managed by this schema group. The
-  formats supported by an implementation are specific to the implementation.
-  This specification does not mandate support for particular formats.
+  formats supported by an implementation are specific to the implementation. If
+  the format is omitted for the schema group, the format MUST be specified at
+  the schema-level. This specification does not mandate support for particular
+  formats.
 - Constraints:
-  - OPTIONAL. If not set, each schema in the group MAY have multiple, concurrent
-    format representations. See XXXX
+  - OPTIONAL.
   - MUST be a non-empty string, if present.
+  - MUST NOT be modified if at least one schema exists in the group.
 - Examples:
   - "avro"
   - "json-schema"
@@ -130,6 +118,22 @@ The data model for a schema group consists of three attributes:
 - Examples:
   - "This group holds schemas for the fabulous example app."
 
+#### createdtimeutc
+
+- Type: `Timestamp`
+- Description: Instant when the schema group was added to the registry.
+- Constraints:
+  - OPTIONAL
+  - Assigned by the server.
+
+#### updatedtimeutc
+
+- Type: `Timestamp`
+- Description: Instant when the schema group was last updated
+- Constraints:
+  - OPTIONAL
+  - Assigned by the server.
+
 ## 2.2. Schema and Schema Version
 
 Conceptually, a schema is a description of a data structure. Since data
@@ -138,8 +142,12 @@ time. Therefore, a schema often has multiple versions.
 
 For simple scenarios, the API allows for version management to be automatic and
 transparent. Whenever a schema is updated, a new version number is assigned and
-prior schema versions are retained. The latest available schema is always the
-default version that is retrieved when the API is given just the schema `id`.
+prior schema versions are retained. This specification does not mandate a
+retention policy, but implementations MAY retire and remove outdated schema
+versions.
+
+The latest available schema is always the default version that is retrieved when
+the URL to the schema is given without the version specified.
 
 A newer schema version might introduce breaking changes or it might only
 introduce careful changes that preserve compatibility. These strategies are not
@@ -147,23 +155,16 @@ subject of this specification, but the API provides a conflict handling
 mechanism that allows an implementation to reject updates that do not comply
 with a compatibility policy, if one has been implemented.
 
-### 2.2.1. Multi-format schema sets
+### 2.2.1. Multi-format schema groups
 
 If the schema format has not been restricted at the schema group level, each
-schema may describe the same data structure for encoding in different formats
-concurrently. That implies that the schema managed by this registry is not
-a single document, but MAY be a set of documents that all describe the exact
-same data structure, each in their own particular syntax and using their own 
-type model.
-
-The schema version therefore relates to this abstract notion of schema and the
-described data structure. All documents coexisting within the same version
-SHOULD describe the exact same data structure.
+schema MAY have its own format. This choice is mutually exclusive. If a format
+has been defined for the group, schemas in the group MUST use that format. 
 
 ### 2.2.2. Schema attributes
 
 As per the definition above, the schema object is a collection of versions
-of schema documents. It only has an identifier attribute.
+of schema documents. An implementation MAY add further attributes.
 
 #### id
 
@@ -177,6 +178,47 @@ of schema documents. It only has an identifier attribute.
 - Examples:
   - myschema
   - my-schema
+
+#### format
+
+- Type: `String`
+- Description: Defines the format of this schema. The formats supported by an
+  implementation are specific to the implementation. If the format has been omitted
+  for the schema group, the format MUST be specified at the schema-level. This
+  specification does not mandate support for particular formats.
+- Constraints:
+  - REQUIRED if not set at the schema group level.
+  - MUST be null (not present) if set at the schema group level.
+  - MUST be a non-empty string, if present.
+- Examples:
+  - "avro"
+  - "json-schema"
+  - "xsd11"
+
+#### description
+
+- Type: `String`
+- Description: Explains the purpose of the schema.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - "This schema describes the toppings for a Pizza."
+
+  #### createdtimeutc
+
+- Type: `Timestamp`
+- Description: Instant when the schema was added to the registry.
+- Constraints:
+  - OPTIONAL
+  - Assigned by the server.
+
+#### updatedtimeutc
+
+- Type: `Timestamp`
+- Description: Instant when the schema was last updated
+- Constraints:
+  - OPTIONAL
+  - Assigned by the server.
 
 ### 2.2.3 Schema version attributes
 
@@ -195,26 +237,13 @@ registry.
 - Type: `Integer`
 - Description: The version of the schema. This is a simple counter and tracks
   the version in the scope of this schema within the schema group. The schema
-  document MAY indicate a schema that follows a different versioning scheme.
+  document content MAY indicate a different versioning scheme.
 - Constraints:
   - REQUIRED
   - Assigned by server.
 - Examples:
   - 1
   - 2
-
-#### format
-
-- Type: `String`
-- Description: 
-- Constraints:
-  - OPTIONAL. Can be used if and only if not format has been set for the schema
-    group hosting the schema.
-  - MUST be a non-empty string, if present.
-- Examples:
-  - "avro"
-  - "json-schema"
-  - "xsd11"
 
 #### id
 
@@ -225,7 +254,24 @@ registry.
   - OPTIONAL
   - Assigned by the server.
 - Examples:
-  - { ... guid ... }  
+  - { ... guid ... }
+
+#### description
+
+- Type: `String`
+- Description: Explains details of the schema version.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - "This version adds support for different types of Pizza crust."  
+
+#### createdtimeutc
+
+- Type: `Timestamp`
+- Description: Instant when the schema version was added to the registry.
+- Constraints:
+  - OPTIONAL
+  - Assigned by the server.
 
 ## 3. HTTP ("REST") API 
 
@@ -240,11 +286,12 @@ documents required for serialization or validation.
 
 These dependencies are reflected in the path structure:
 
-`/schemagroups/{group-id}/schemas/{schema-id}/versions/{version}`
+`[/schemagroups]/{group-id}/schemas/{schema-id}/versions/{version}`
 
-The name of the first segment of the path is a suggestion and MAY differ between
-implementations and the registry does not need to be anchored at the site root.
-The segment names `schemas` and `versions` MUST be used.
+The name of the first segment of the path ("/schemagroups") is an illustrative
+suggestion and MAY differ between implementations and the registry does not need
+to be anchored at the site root. The segment names `schemas` and `versions` MUST
+be used.
 
 - `{group-id}` corresponds to the schema group's [`id` attribute](#id)
 - `{schema-id}` corresponds to the schema's [`id` attribute](#id-1)
@@ -252,6 +299,20 @@ The segment names `schemas` and `versions` MUST be used.
 
 ### 3.2. Operations at the groups level
 
+#### 3.2.1. List schema groups
+#### 3.2.2. Get schema group
+#### 3.2.3. Create schema group
+#### 3.2.4. Delete schema group
+
 ### 3.3 Operations at the schemas level 
 
+#### 3.3.1. List schemas for the group
+#### 3.3.2. Delete all schemas from the group
+#### 3.3.3. Add a new schema version
+#### 3.3.4. Get the latest version of a schema
+#### 3.3.4. Delete a schema
+
 ### 3.4 Operations at the versions level
+
+#### 3.4.1. List all versions of the schema
+#### 3.4.2. Get a specific schema version
