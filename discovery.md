@@ -144,6 +144,7 @@ Service:
 ```
 {
   "url": "[unique URL to this service]",
+  "name": "[unique name for this services]",
   "description": "[human string]", ?
   "docsurl": "[URL reference for human documentation]", ?
   "specversion": "[ce-specversion value]",
@@ -177,7 +178,7 @@ An example:
 ```json
 {
   "url": "https://example.com/services/widgetService",
-  "specversion": "v1.0",
+  "specversion": "1.0",
   "subscriptionurl": "https://events.example.com",
   "protocols": [ "HTTP" ],
   "type": [
@@ -369,14 +370,24 @@ entity.
 
 ###### extensions
 
-- Type: `Map` of `String` to `String`
-- Description: Associative map of CloudEvents
+- Type: `Array` of structures
+- Description: An array or CloudEvents
   [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/spec.md#extension-context-attributes)
-  that are used for this event `type`. Keys MUST be confirm to the extension
-  context attributes naming rules and value are the type of the extension
-  attribute, conforming to the CloudEvents [type system](./spec.md#type-system).
+  that are used for this event `type`. The structure contains the following
+  attributes:
+  - `name` - the CloudEvents context attribute name used by this extension.
+    It MUST adhere to the CloudEvents context attrbibute naming rules
+  - `type` - the data type of the extension attribute. It MUST adhere to the
+    CloudEvents [type system](./spec.md#type-system)
+  - `specurl` - an attribute pointing to the specification that
+    defines the extension
 - Constraints:
   - OPTIONAL
+  - if present, the `name` attribute in the structure is REQUIRED
+  - if present, the `type` attribute in the structure is REQUIRED
+  - if present, the `specurl` attribute in the structure is OPTIONAL
+- Examples:
+  - `{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/extensions/dataref.md" }`
 
 #### Service Examples
 
@@ -465,7 +476,7 @@ whose `name` attribute contains the `search term` value (case insensitive).
 * Type: `string`
 * Description: Search term that provides case insensitive match against
   the Service's `name` attribute. The parameter can match any portion
-  of the service's `description` value.
+  of the service's `name` value.
 * Constraints:
   * OPTIONAL
   * If present, MUST be non-empty
