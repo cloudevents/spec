@@ -44,7 +44,7 @@ paths:
       - 'groups'
     put:
       summary: Create schema group
-      description: Create schema group with specified format format in registry namespace.
+      description: Create schema group with specified format in registry namespace.
       operationId: createGroup 
       requestBody:
         description: schema group description
@@ -93,7 +93,7 @@ paths:
         '200':
           description: OK
           content:
-            application/json;format=avro:
+            application/json:
               schema:
                 type: array
                 items: 

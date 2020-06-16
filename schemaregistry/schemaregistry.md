@@ -44,7 +44,10 @@ This schema registry deals with only three top-level elements:
 
 ## 2. Schema Registry Elements
 
-This section further describes the elements enumerated in the introduction.
+This section further describes the elements enumerated in the introduction. All
+data types used in this section are defined in the core CloudEvents
+specification and MUST follow the respective formatting and syntax rules unless
+specified otherwise.
 
 ### 2.1. Schema Group
 
@@ -73,7 +76,7 @@ rules.
 
 ### 2.1.1. Schema group attributes
 
-The data model for a schema group consists of three attributes:
+The data model for a schema group consists of these attributes:
 
 #### id
 
@@ -128,7 +131,7 @@ The data model for a schema group consists of three attributes:
 
 #### updatedtimeutc
 
-- Type: `Timestamp`
+- Type: `Timestamp` 
 - Description: Instant when the schema group was last updated
 - Constraints:
   - OPTIONAL
@@ -174,7 +177,7 @@ of schema documents. An implementation MAY add further attributes.
   - REQUIRED
   - MUST be a non-empty string
   - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax
-  - MUST be unique within the scope of the schema registry
+  - MUST be unique within the scope of the schema group
 - Examples:
   - myschema
   - my-schema
@@ -204,7 +207,7 @@ of schema documents. An implementation MAY add further attributes.
 - Examples:
   - "This schema describes the toppings for a Pizza."
 
-  #### createdtimeutc
+#### createdtimeutc
 
 - Type: `Timestamp`
 - Description: Instant when the schema was added to the registry.
@@ -227,10 +230,8 @@ document or binary stream. An implementation SHOULD validate whether a
 schema version is valid according to the rules of its format, for instance
 whether it is a valid Avro schema document when the format is Apache Avro.
 
-Within the scope of the schema set, the version is identified by the combination
-of a version number and an optional format identifier. The schema version MAY
-also have an additional, optional unique identifier within the scope of the
-registry.
+The schema version MAY also have an additional, optional unique identifier
+within the scope of the registry.
 
 #### version
 
@@ -279,6 +280,8 @@ This section informally describes the HTTP API binding of this schema registry.
 The formal definition is the [OpenAPI document](./schemaregistry.yaml) that is
 part of this specification.
 
+This section is therefore non-normative.
+
 ### 3.1. Path hierarchy
 
 Schema groups contain schemas and those contain schema versions, which are the
@@ -286,7 +289,7 @@ documents required for serialization or validation.
 
 These dependencies are reflected in the path structure:
 
-`[/schemagroups]/{group-id}/schemas/{schema-id}/versions/{version}`
+`/schemagroups/{group-id}/schemas/{schema-id}/versions/{version}`
 
 The name of the first segment of the path ("/schemagroups") is an illustrative
 suggestion and MAY differ between implementations and the registry does not need
@@ -300,19 +303,105 @@ be used.
 ### 3.2. Operations at the groups level
 
 #### 3.2.1. List schema groups
+
+Schema groups are enumerated with a GET on the root of the registry hierarchy,
+in the exemplary structure above identified as `/schemagroups`.
+
+The result is a JSON encoded array of strings enumerating the `id` values of the
+schema groups.
+
 #### 3.2.2. Get schema group
+
+The details of a schema group are retrieved with a GET on the group's path in
+the schema groups collection, for instance `/schemagroups/mygroup`. 
+
+The result is a JSON object that contains the attributes of the schema group.
+
 #### 3.2.3. Create schema group
+
+A schema group is created with a PUT on the desired group's path in
+the schema groups collection, for instance `/schemagroups/mygroup`.
+
+The payload is a JSON object that contains the attributes of the schema group.
+
+The operation returns the effective attributes as a JSON object when the schwema
+group has been created or updated.
+
 #### 3.2.4. Delete schema group
+
+A schema group is deleted with a DELETE on the desired group's path in
+the schema groups collection, for instance `/schemagroups/mygroup`.
 
 ### 3.3 Operations at the schemas level 
 
 #### 3.3.1. List schemas for the group
+
+Schemas within a schema group are enumerated with a GET on the `schemas`
+collection of the group, for instance `/schemagroups/mygroup/schemas`.
+
+The result is a JSON encoded array of strings enumerating the `id` values of the
+schemas within the group.
+
 #### 3.3.2. Delete all schemas from the group
+
+All schemas of a schema group can be deleted DELETE on the `schemas`
+collection of the group, for instance `/schemagroups/mygroup/schemas`.
+
 #### 3.3.3. Add a new schema version
+
+A new schema or a new version of a schema is added to the version collection
+with a POST on the desired schema's path in the schemas collection, for instance
+`/schemagroups/mygroup/schemas/myschema`.
+
+This operation will either create a new schema and store the document under the
+first version identifier assigned by the server or will update the schema by
+assigning a new version to the given document and storing it.
+
+The payload of the request is the schema document. All further attributes such
+as the `description` or the `format` indicator are passed either via the query
+string or as HTTP headers.  
+
+The ´Content-Type´ for the payload MUST be preserved by the registry and
+returned when the schema is requested, independent of the format identifier. 
+
 #### 3.3.4. Get the latest version of a schema
+
+The latest version of a schema is retrieved via a GET on schema's path in the
+schemas collection, for instance `/schemagroups/mygroup/schemas/myschema`. 
+
+The returned payload is the schema document. Further attributes such as the
+`description` and the `format` indicator are returned as HTTP headers.
+
+The returned ´Content-Type´ is the same that was passed when the schema version
+was registered.
+
+The HEAD method SHOULD also be implemented.
+
 #### 3.3.4. Delete a schema
+
+A schema including all its versions is deleted with a DELETE on schema's path in the
+schemas collection, for instance `/schemagroups/mygroup/schemas/myschema`
 
 ### 3.4 Operations at the versions level
 
 #### 3.4.1. List all versions of the schema
+
+Versions of a schema within a schema group are enumerated with a GET on the
+`versions` collection of the schema, for instance
+`/schemagroups/mygroup/schemas/myschemas/versions`.
+
+The result is a JSON encoded array of integers enumerating the `version` values of the
+schemas within the group.
+
 #### 3.4.2. Get a specific schema version
+
+A specific version of a schema is retrieved via a GET on schema version's path in the
+`versions` collection, for instance `/schemagroups/mygroup/schemas/myschema`.
+
+The returned payload is the schema document. Further attributes such as the
+`description` and the `format` indicator are returned as HTTP headers.
+
+The returned ´Content-Type´ is the same that was passed when the schema version
+was registered.
+
+The HEAD method SHOULD also be implemented.
