@@ -3,7 +3,7 @@
 ## Abstract
 
 CloudSubscriptions Discovery API is a vendor-neutral API specification for
-determining what events are available from a particular system, as well as
+determining what events are available from a particular service, as well as
 how to subscribe to those events.
 
 ## Status of this document
@@ -21,10 +21,10 @@ version.
 
 ## Overview
 
-In order for consumers to receive events from event producers, they need
-to first subscribe, or ask for, events from those producers. To do so, there
+In order for consumers to receive events from services, they need
+to first subscribe, or ask for, events from those services. To do so, there
 is often a process necessary that involves steps such as discovering which
-event producer is of interest, what events it generates and how to create the
+service is of interest, what events it generates and how to create the
 subscription for those events.
 
 This specification defines a set of APIs to allow for consumers to perform
@@ -33,7 +33,7 @@ as a catalog of [Services](#service) (event producers), that consumers can
 query to find the ones of interest. Once found, additional metadata is
 provided in order to consume and subscribe to events. The goal
 of this API is to be such that tooling can be built where all all possible
-event producers and event types aren't known in advance.
+services and event types aren't known in advance.
 
 The deployment relationship of a Discovery Endpoint to the Services and
 Event Producers that it advertises is out of scope of this specification.
@@ -50,8 +50,8 @@ consumers.
 The second case becomes relevant if multiple services support the same event
 types. Use case 1 is likely the dominant use case. Given the example of a public
 cloud provider where all services generate events, there might be dozens of
-sources (producer systems) and hundreds of event types. The discovery funnel of
-serviecs first, then event types helps users navigate without having to see
+sources and hundreds of event types. The discovery funnel of
+services first, then event types helps users navigate without having to see
 large lists of event types. Both of these cases show the importance of using
 filters in the discovery API to narrow down the selection of available events.
 
@@ -147,7 +147,7 @@ Service:
   "name": "[unique name for this services]",
   "description": "[human string]", ?
   "docsurl": "[URL reference for human documentation]", ?
-  "specversion": "[ce-specversion value]",
+  "specversions": [ "[ce-specversion value]" + ],
   "subscriptionurl": "[URL to which the Subscribe request will be sent]",
   "subscriptionconfig": { ?
     "[key]": "[value]", *
@@ -178,7 +178,7 @@ An example:
 ```json
 {
   "url": "https://example.com/services/widgetService",
-  "specversion": "1.0",
+  "specversions": [ "1.0" ],
   "subscriptionurl": "https://events.example.com",
   "protocols": [ "HTTP" ],
   "type": [
@@ -245,14 +245,14 @@ entity.
 - Examples:
   - `http://cloud.example.com/docs/blobstorage`
 
-###### specversion
+###### specversions
 
-- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: CloudEvents [`specversion`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
-  that will be used for events published for this service.
+- Type: Array of `Strings` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Description: CloudEvents [`specversions`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
+  that can be used for events published for this service.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty string
+  - MUST be a non-empty array or non-empty strings
 
 ###### subscriptionurl
 
@@ -400,7 +400,7 @@ entity.
   "types": [
     {
       "type": "com.example.storage.object.create",
-      "specversion": "1.x-wip",
+      "specversions": [ "1.x-wip" ],
       "datacontenttype": "application/json",
       "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json"
     }
