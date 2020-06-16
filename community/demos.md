@@ -2,6 +2,9 @@ If you have a demo of CloudEvents in action, please add a link here. If there
 isn't an associated blog or github repo, feel free to add descriptive text as a
 markdown file in `community/demos/`.
 
+- [Orchestrating Cloud Events](https://salaboy.com/2020/05/18/orchestrating-cloud-events-with-zeebe/)
+  - Blog post describing how Cloud Events can be orchestrated using an orchestration engine. Example included that you can run in your own environment with links to GitHub repositories needed. 
+    - [Demo Code and instructions]: https://github.com/salaboy/zeebe-cloud-events-examples
 - CNCF/Kube-Con EU May 2018
 
   - CloudEvents interop demo during Austen Collins'
