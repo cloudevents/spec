@@ -77,7 +77,8 @@ AMQP [application-properties][app-properties] section.
 
 Event formats, used with the _stuctured_ content mode, define how an event is
 expressed in a particular data format. All implementations of this specification
-MUST support the [JSON event format][json-format].
+that support the _structured_ content mode MUST support the [JSON event
+format][json-format].
 
 ### 1.5. Security
 
