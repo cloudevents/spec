@@ -3,8 +3,11 @@ isn't an associated blog or github repo, feel free to add descriptive text as a
 markdown file in `community/demos/`.
 
 - [Orchestrating Cloud Events](https://salaboy.com/2020/05/18/orchestrating-cloud-events-with-zeebe/)
-  - Blog post describing how Cloud Events can be orchestrated using an orchestration engine. Example included that you can run in your own environment with links to GitHub repositories needed. 
-    - [Demo Code and instructions]: https://github.com/salaboy/zeebe-cloud-events-examples
+
+  - Description: Blog post describing how Cloud Events can be orchestrated using an orchestration engine. Example included that you can run in your own environment with links to GitHub repositories needed.
+  - Instructions: You can find the [Demo Code and instructions here](https://github.com/salaboy/zeebe-cloud-events-examples).
+  - Tags: Cloud Events, Java, Orchestration, Workflow, KNative, Example
+  
 - CNCF/Kube-Con EU May 2018
 
   - CloudEvents interop demo during Austen Collins'
