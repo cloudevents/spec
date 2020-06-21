@@ -3,8 +3,8 @@
 ## Abstract
 
 CloudSubscriptions Discovery API is a vendor-neutral API specification for
-determining what events an Event Producer has available, as well as how to
-subscribe to those events.
+determining what events are available from a particular service, as well as
+how to subscribe to those events.
 
 ## Status of this document
 
@@ -21,33 +21,39 @@ version.
 
 ## Overview
 
-The goal of the CloudDiscovery API is to enable connections between consumers of
-events and Event producers to facilitate the creation of a
-CloudSubscription. Note that whether an Event producer is a single entity,
-an aggregator/broker of multiple event producers, or an intermediary is an
-implementation detail of the producer and does not change how an event
-consumer interacts with a specification compliant producer.
+In order for consumers to receive events from services, they need
+to first subscribe, or ask for, events from those services. To do so, there
+is often a process necessary that involves steps such as discovering which
+service is of interest, what events it generates and how to create the
+subscription for those events.
 
-Discovery allows for an event producer to
-advertise the event types that are available, provide the necessary information
-to consume that event (schema / delivery protocol options), and the necessary
-information to create a subscription. The output of the API ought to be such
-that tooling can be built where all possible event producers and types aren’t
-known in advance.
+This specification defines a set of APIs to allow for consumers to perform
+these queries against a "Discovery Endpoint". A Discovery Endpoint acts
+as a catalog of [Services](#service) (event producers), that consumers can
+query to find the ones of interest. Once found, additional metadata is
+provided in order to consume and subscribe to events. The goal
+of this API is to be such that tooling can be built where all all possible
+services and event types aren't known in advance.
+
+The deployment relationship of a Discovery Endpoint to the Services and
+Event Producers that it advertises is out of scope of this specification.
+For example, a Discovery Endpoint could choose to be implemented as part of a
+Service, or Event Producer, or it could be acting as an independent aggregrator
+of this metadata. This implementation detail will be transparent to consumers.
 
 There are several discovery use cases to consider from the viewpoint of event
 consumers.
 
-1. What event sources are available, and what event types do they produce?
-2. What event types are available, and from which event sources?
+1. What services are available, and what event types do they generate?
+2. What event types are available, and from which services?
 
-The second case becomes relevant if multiple sources support the same event
+The second case becomes relevant if multiple services support the same event
 types. Use case 1 is likely the dominant use case. Given the example of a public
-cloud provider where all producers produce events, there might be dozens of
-sources (producer systems) and hundreds of event types. The discovery funnel of
-producer first, then event types helps users navigate without having to see large
-lists of event types. Both of these cases show the importance of using filters
-in the discovery API to narrow down the selection of available events.
+cloud provider where all services generate events, there might be dozens of
+sources and hundreds of event types. The discovery funnel of
+services first, then event types helps users navigate without having to see
+large lists of event types. Both of these cases show the importance of using
+filters in the discovery API to narrow down the selection of available events.
 
 The CloudEvent `source` attribute is a potential cause of high fanout. For
 example, consider a blob storage system where each directory constitutes a
@@ -75,10 +81,18 @@ and the CloudEvents version takes precendence.
 
 This specification defines the following terms:
 
+#### Discovery Endpoint
+
+A compliant implementation of this specification that advertises the set
+of Services, Event Types and other metadata to aid in the creation of an
+Event Subcription.
+
 #### Service
 
 A "service" represents the entity which manages one or more event
-[sources](#source-ce).
+[sources](#source-ce) and is associated with [producers](#producer-ce)
+that are responsible for the generatation of events.
+
 For example, an Object Store service might have a set of event sources
 where each event source maps to a bucket.
 
@@ -109,360 +123,142 @@ to execute some logic, which might lead to the occurrence of new events.
 
 #### Subscription
 
-The request for events from an Event Producer system.
+The request for events from a Service.
+
 
 ## API Specification
 
-This API is specified as a REST API with well defined entities and relationships
-between those entities.
+This API is specified as a REST API with well defined entities and
+relationships between those entities.
 
-To help explain the data model, the following non-normative pseudo yaml shows
-its basic conceptual structure:
+### Services
 
-( `*` means zero or more, `+` means one or more, `?` means optional)
+At the core of the data model is the concept of a [Service](#service). The
+API then exposes multiple ways to query over a list of Services. To help
+explain the Service resource, the following non-normative pseudo json shows
+its basic structure:
 
+(`*` means zero or more, `+` means one or more, `?` means optional)
+
+Service:
 ```
-- services: *
-  - service: [unique identifier for producer of the specified event types]
-    description: [human string] ?
-    uri: [URI reference for human documentation] ?
-    specversion: [ce-speciversion value] ? (required?)
-    subscriptionuri: [URI to which the Subscribe request will be sent]
-    subscriptionconfig: *
-    authscope: [string] ?  (explain)
-    protocols: +
-    - protocol: [string]
-    types: *
-    - type: [ce-type value]
-      description: [human string] ?
-      datacontenttype: [ce-datacontenttype value] ?
-      dataschema: [ce-dataschema URI] ?
-      dataschematype: [string per RFC 2046] ?
-      dataschemacontent: [schema] ?
-      dataschemacontent:
-      extensions: *
-      - name: [CE context attribute name]
-        type: [CE type string]
-        spec: [URI to specification defining the extension] ?
+{
+  "url": "[unique URL to this service]",
+  "name": "[unique name for this services]",
+  "description": "[human string]", ?
+  "docsurl": "[URL reference for human documentation]", ?
+  "specversions": [ "[ce-specversion value]" + ],
+  "subscriptionurl": "[URL to which the Subscribe request will be sent]",
+  "subscriptionconfig": { ?
+    "[key]": "[value]", *
+  },
+  "authscope": "[string]", ?
+  "protocols": [ "[string]" + ],
+  "types": [ ?
+    { *
+      "type": "[ce-type value]",
+      "description": "[human string]", ?
+      "datacontenttype": "[ce-datacontenttype value]", ?
+      "dataschema": "[ce-dataschema URI]", ?
+      "dataschematype": "[string per RFC 2046]", ?
+      "dataschemacontent": "[schema]", ?
+      "extensions": [ ?
+        { *
+          "name": "[CE context attribute name]",
+          "type": "[CE type string]",
+          "specurl": "[URL to specification defining the extension]" ?
+        }
+      ]
+    }
+  ]
+}
 ```
 
 An example:
-```
-- services:
-  - service: example.com
-    subscriptionuri: https://events.example.com
-    protocols:
-    - protocol: HTTP
-    types:
-    - type: com.example.widget.create
-    - type: com.example.widget.delete
+```json
+{
+  "url": "https://example.com/services/widgetService",
+  "specversions": [ "1.0" ],
+  "subscriptionurl": "https://events.example.com",
+  "protocols": [ "HTTP" ],
+  "type": [
+    {
+      "type": "com.example.widget.create",
+      "type": "com.example.widget.delete"
+    }
+  ]
+}
 ```
 
 Note: the above is just a sample and implementations are free to use any
 internal model they wish to store the data as long as they are compliant
 with the wire format/API defined by this specification.
 
-### Entities in the API
+#### Service Attributes
 
-1. `Service`
-2. `Type`
-3. `Producer`
+The following sections define the attributes that appear in a Service
+entity.
 
-The `Service` and `Type` entities form the basis of the directory and can
-be used to build user experiences around discovery. The `Producer` entity is
-keyed off of `{Service.Name, Type.Name}` and provides the necessary
-details to create a subscription for events of that `ce-type` from the selected
-`Service`.
-
-### Entity Specifications
-
-This section details the fields that make up each of the entities referenced
-earlier in this document.
-
-#### `service` entity
-
-Used in discovery for enumerating the different services represented in this
-discovery system.
-
-##### `service` entity attributes
-
-###### name
-
+##### name
 - Type: `String`
-- Description: The `name` attribute SHOULD be human readable and can identify a
-  top level service.
+- Description: A unique identifier for this Service. This value MUST be
+  unique within the scope of this Discovery Endpoint.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty string
+  - MUST be a valid `fsegment` per RFC1738.
 - Examples:
-  - "GitHub"
-  - "Awesome Cloud Storage"
-  - "com.example.microservices.userlogin"
+  - `storage`
+  - `github`
 
-###### description
+##### url
+
+- Type: `URL`
+- Description: A URL that references this Service. This value MUST
+  be usable in subsequent requests, by authorized clients, to retrieve this
+  Service entity.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty URL
+  - MUST end with `fsegments` (per RFC1738) of: `/services/{name}` where
+    `name` is the Service's `name` attribute.
+- Examples:
+  - `http://example.com/services/storage`
+  - `http://discovery.github.com/services/github`
+
+##### description (Service)
 
 - Type: `String`
-- Description: Human readable description .
+- Description: Human readable description.
 - Constraints:
   - OPTIONAL
   - If present, MUST be a non-empty string
 
-###### service_uri
+##### docsurl
 
-- Type: `URI`
-- Description: Absolute URI that provides a link back to the producer, or
-  documentation about the producer. This is intended for a developer to
-  use in order to learn more about this service events produced.
+- Type: `URL`
+- Description: Absolute URL that provides a link to additional documentation
+  about the service.  This is intended for a developer to
+  use in order to learn more about this service's events produced.
 - Constraints:
   - OPTIONAL
   - If present, MUST be a non-empty absolute URI
 - Examples:
-  - "http://cloud.example.com/docs/blobstorage"
+  - `http://cloud.example.com/docs/blobstorage`
 
+###### specversions
 
-##### `service` entity examples
-
-```json
-{
-  "name": "Cloud Storage Service",
-  "description": "Blob storage in the cloud",
-  "service_uri": "https://cloud.example.com/docs/storage"
-}
-```
-
-And a list of valid `service` entities.
-
-```json
-[
-  {
-    "name": "Cloud Storage Service",
-    "description": "Blob storage in the cloud",
-    "service_uri": "https://cloud.example.com/docs/storage"
-  },
-  {
-    "name": "Cloud MySQL"
-  },
-  {
-    "name": "Cloud OtherSQL",
-    "description": "Highly scalable SQL service"
-  }
-]
-```
-
-#### `type` entity
-
-Used in discovery for enumerating the different CloudEvent `type`s represented
-in this discovery system.
-
-##### `type` entity attributes
-
-###### type
-
-- Type: `String`
-- Description: CloudEvents [`type`](https://github.com/cloudevents/spec/blob/master/spec.md#type)
-  attribute.
+- Type: Array of `Strings` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Description: CloudEvents [`specversions`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
+  that can be used for events published for this service.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty string, following the constraints as defined in the
-    CloudEvents spec.
-- Examples:
-  - "com.github.pull.create"
-  - "com.example.object.delete.v2"
+  - MUST be a non-empty array or non-empty strings
 
-###### datacontenttype
+###### subscriptionurl
 
-- Type: `String`
-- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
-  attribute. Indicating how the `data` attribute of subscribed events will be
-  encoded.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in
-    [RFC 2046](https://tools.ietf.org/html/rfc2046)
-
-###### dataschema
-
-- Type: `URI`
-- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
-  attribute. This identifies the canonical storage location of the schema of
-  the `data` attribute of subscribed events.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty URI
-
-###### dataschematype
-
-- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: If using `dataschemacontent` for inline schema storage, the
-  `dataschematype` indicates the type of schema represented there.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in
-    [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Examples:
-  - "application/json"
-  -
-
-###### dataschemacontent
-
-- Type: `String`
-- Description: An inline representation of the schema of the `data` attribute
-  encoding mechanism. This is an alternative to using the `dataschema`
-  attribute.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty string containing a schema compatible with
-    the `datacontenttype`.
-  - If `dataschama` is present, this field MUST NOT be present.
-
-##### `type` entity examples
-
-A single `type` entity.
-
-```json
-{
-  "type": "com.example.storage.object.create",
-  "specversion": "1.x-wip",
-  "datacontenttype": "application/json",
-  "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json"
-}
-```
-
-#### `producer` entity
-
-Once discovery narrows down to a specific event `type` that we want to subscribe
-to from a specific `service`, the appropriate `producer` entity can be
-retrieved by key. The key is a composite key of the `service` and `type` names.
-
-##### `producer` entity Attributes
-
-The `Service` entity is the main component of the discovery API. This section
-covers the structure of that entity and the next section describes the
-requirements for the query API.
-
-###### service
-
-- Type: `String`
-- Description: Identifies the service of which the event is related. The
-  `service` string SHOULD be human readable and can identify a top level
-  producer system.
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty string
-- Examples:
-  - "GitHub.com"
-  - "Awesome Cloud Storage"
-  - "com.example.microservices.userlogin"
-
-###### produceruri
-
-- Type: `URI`
-- Description: Absolute URI that provides a link back to the producer, or
-  documentation about the producer. This is for human consumption.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty URI
-- Examples:
-  - "http://cloud.example.com/docs/blobstorage"
-
-###### type
-
-- Type: `String`
-- Description: CloudEvents [`type`](https://github.com/cloudevents/spec/blob/master/spec.md#type)
-  attribute.
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty string, following the constraints as defined in the
-    CloudEvents spec.
-- Examples:
-  - "com.github.pull.create"
-  - "com.example.object.delete.v2"
-
-###### specversion
-
-- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: CloudEvents [`specversion`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
-  that will be used for events published for this producer, event type
-  combination.
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty string
-
-###### datacontenttype
-
-- Type: `String`
-- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
-  attribute. Indicating how the `data` attribute of subscribed events will be
-  encoded.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in [RFC 2046](https://tools.ietf.org/html/rfc2046)
-
-###### dataschema
-
-- Type: `URI`
-- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
-  attribute. This identifies the canonical storage location of the schema of
-  the `data` attribute of subscribed events.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty URI
-
-###### dataschematype
-
-- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: If using `dataschemacontent` for inline schema storage, the
-  `dataschematype` indicates the type of schema represented there.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Examples:
-  - "application/json"
-  -
-
-###### dataschemacontent
-
-- Type: `String`
-- Description: An inline representation of the schema of the `data` attribute
-  encoding mechanism. This is an alternative to using the `dataschema`
-  attribute.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty string containing a schema compatible with
-    the `datacontenttype`.
-  - If `dataschama` is present, this field MUST NOT be present.
-
-###### protocols
-
-- Type: `List` of `String`
-- Description: This field describes the different values that might be passed
-  in the `protocol` field of the CloudSubscriptions API. The protocols with
-  existing CloudEvents bindings are identified as AMQP, MQTT3, MQTT5, HTTP,
-  KAFKA, and NATS. An implementation MAY add support for further
-  protocols. All producers MUST support at least one delivery protocol, and MAY
-  support additional protocols.
-- Constraints:
-  - REQUIRED
-  - MUST be non-empty.
-- Examples:
-  - ["HTTP"]
-  - ["HTTP", "AMQP", "KAFKA"]
-
-###### extensions
-
-- Type: `Map` of `String` to `String`
-- Description: Associative map of CloudEvents [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/spec.md#extension-context-attributes)
-  that are used for this event `type`. Keys MUST be confirm to the extension
-  context attributes naming rules and value are the type of the extension
-  attribute, conforming to the CloudEvents [type system](./spec.md#type-system).
-- Constraints:
-  - OPTIONAL
-
-###### subscriptionendpoint
-
-- Type: `URI-reference`
-- Description: URI indicating where CloudSubscriptions `subscribe` API calls
-  MUST be sent to.
+- Type: `URL`
+- Description: An absolute URL indicating where CloudSubscriptions `subscribe`
+  API calls MUST be sent to.
 - Constraints:
   - REQUIRED
 
@@ -477,33 +273,210 @@ requirements for the query API.
 - Constraints:
   - OPTIONAL
 - Examples:
+  - ??
 
 ###### authscope
 
 - Type: `String`
 - Description: Authorization scope needed for creating subscriptions.
-  The actual meaning of this field is determined on a per-producer basis.
+  The actual meaning of this field is determined on a per-service basis.
 - Constraints:
   - OPTIONAL
 - Example:
-  - "storage.read"
+  - `storage.read`
+
+###### protocols
+
+- Type: `List` of `String`
+- Description: This field describes the different values that might be passed
+  in the `protocol` field of the CloudSubscriptions API. The protocols with
+  existing CloudEvents bindings are identified as AMQP, MQTT3, MQTT5, HTTP,
+  KAFKA, and NATS. An implementation MAY add support for further
+  protocols. All services MUST support at least one delivery protocol, and MAY
+  support additional protocols.
+- Constraints:
+  - REQUIRED
+  - MUST be non-empty.
+- Examples:
+  - `[ "HTTP" ]`
+  - `[ "HTTP", "AMQP", "KAFKA" ]`
+
+##### type
+
+- Type: `String`
+- Description: CloudEvents
+  [`type`](https://github.com/cloudevents/spec/blob/master/spec.md#type)
+  attribute.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty string, following the constraints as defined in the
+    CloudEvents spec.
+- Examples:
+  - `com.github.pull.create`
+  - `com.example.object.delete.v2`
+
+##### description (Type)
+
+- Type: `String`
+- Description: Human readable description.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a non-empty string
+
+##### datacontenttype
+
+- Type: `String`
+- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
+  attribute. Indicating how the `data` attribute of subscribed events will be
+  encoded.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST adhere to the format specified in
+    [RFC 2046](https://tools.ietf.org/html/rfc2046)
+
+##### dataschema
+
+- Type: `URI`
+- Description: CloudEvents [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
+  attribute. This identifies the canonical storage location of the schema of
+  the `data` attribute of subscribed events.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a non-empty URI
+
+##### dataschematype
+
+- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Description: If using `dataschemacontent` for inline schema storage, the
+  `dataschematype` indicates the type of schema represented there.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST adhere to the format specified in
+    [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Examples:
+  - `application/json`
+
+##### dataschemacontent
+
+- Type: `String`
+- Description: An inline representation of the schema of the `data` attribute
+  encoding mechanism. This is an alternative to using the `dataschema`
+  attribute.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a non-empty string containing a schema compatible with
+    the `datacontenttype`.
+  - If `dataschama` is present, this field MUST NOT be present.
+
+###### extensions
+
+- Type: `Array` of structures
+- Description: An array or CloudEvents
+  [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/spec.md#extension-context-attributes)
+  that are used for this event `type`. The structure contains the following
+  attributes:
+  - `name` - the CloudEvents context attribute name used by this extension.
+    It MUST adhere to the CloudEvents context attrbibute naming rules
+  - `type` - the data type of the extension attribute. It MUST adhere to the
+    CloudEvents [type system](./spec.md#type-system)
+  - `specurl` - an attribute pointing to the specification that
+    defines the extension
+- Constraints:
+  - OPTIONAL
+  - if present, the `name` attribute in the structure is REQUIRED
+  - if present, the `type` attribute in the structure is REQUIRED
+  - if present, the `specurl` attribute in the structure is OPTIONAL
+- Examples:
+  - `{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/extensions/dataref.md" }`
+
+#### Service Examples
+
+```json
+{
+  "url": "https://storage.example.com/service/storage",
+  "name": "storage",
+  "description": "Blob storage in the cloud",
+  "service_uri": "https://cloud.example.com/docs/storage",
+  "types": [
+    {
+      "type": "com.example.storage.object.create",
+      "specversions": [ "1.x-wip" ],
+      "datacontenttype": "application/json",
+      "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json"
+    }
+  ]
+}
+```
+
 
 ### REST Paths
 
-Each path in the REST API represents either represents a list (or search) over
-and entity class, or the retrieval of an individual entity by name. Each of
+Each path in the REST API represents either a list (or search) over
+the Discovery Endpoint, or the retrieval of an individual entity. All of
 these operations MUST be supported by compliant discovery implementations.
 
-#### `/services?matching=[search term]`
+Note: the relative paths specified below are NOT REQUIRED to be at the root
+of the `fpath` (per RFC1738). However, they are REQUIRED to match the end
+of it. For example, the follow are valid URLs/paths:
 
-Returns a list of all services in the discovery system, optionally filtering on
-a provided search term (`matching`).
+```
+https://example.com/services
+https://example.com/myAggregator/services
+```
 
-##### matching
+Note: for each query if the client is not authorized to see any particular
+entity then that entity MUST be excluded from the response. In cases where
+response is a single entity, then the response MUST result in an error
+as if the entity did not exist (e.g. for HTTP the response would be 
+`404 Not Found`). In cases where the response is an array, then the response
+MUST return a successful status with an array, even if that array is empty.
+
+#### Services
+
+#### `/services`
+
+This MUST return an array of zero or more Services. The list MUST contain
+all Services available via this Discovery Enpoint.
+
+When encoded in JSON, the response format MUST adhere to the following:
+
+```
+[
+  {
+    "url": "SERVICE-URL",
+    "name": "{name}",
+    ... remainder of Service attributes ...
+  }
+  ...
+]
+```
+
+##### `/services/{name}`
+
+If this refers to a valid Service, then this MUST return that single
+Service entity.
+
+When encoded in JSON, the response format MUST adhere to the following:
+
+```
+{
+  "url": "SERVICE-URL",
+  "name": "{name}",
+  ... remainder of Service attributes ...
+}
+```
+
+##### `/services?matching=[search term]`
+
+Same as `/services` but the array MUST be limited to just those Services
+whose `name` attribute contains the `search term` value (case insensitive).
+
+###### matching
 
 * Type: `string`
 * Description: Search term that provides case insensitive match against
-  `service` names. The parameter can match any portion of the service name.
+  the Service's `name` attribute. The parameter can match any portion
+  of the service's `name` value.
 * Constraints:
   * OPTIONAL
   * If present, MUST be non-empty
@@ -514,41 +487,61 @@ a provided search term (`matching`).
       * `"File storage system"`
       * `"storage Storage STORAGE"`
 
-##### Returns
 
-Upon successful processing, the response MUST be a JSON array of `service`
-entities.
+#### Types
 
-#### `/services/{name}`
+##### `/types`
 
-Retrieves an individual service entity by exact match on the `service` name.
+This MUST return an array of zero or more Types values, where each Type's
+value is an array of Services that support that Type.
 
-##### Returns
+When encoded in JSON, the response format MUST adhere to the following:
 
-Upon successful processing, the response MUST be a JSON object that is a single
-`service` entity.
+```
+[
+  "TYPE-VALUE": [
+    {
+      "url": "SERVICE-url",
+      "name: "{name}",
+      ... remainder of Service attributes ...
+    }
+    ...
+  ]
+  ...
+]
+```
 
-#### `/services/{name}/types`
+##### `/types/{type}`
 
-Retrieves the details about the types that are offered by the specified
-`service`.
+This MUST returns an array of one or more Services that support the Type value
+specified. Type value MUST conform to the [CloudEvents type](./spec.md#type)
+attribute specification.
 
-##### Returns
+When encoded in JSON, the response format MUST adhere to the following:
 
-Upon successful processing, the response MUST be a JSON array of `type` entity
-objects.
+```
+{
+  "TYPE-VALUE": [
+    {
+      "url": "SERVICE-url",
+      "name: "{name}",
+      ... remainder of Service attributes ...
+    }
+    ...
+  ]
+}
+```
 
-#### `/types?matching=[search term]`
+##### `/types?matching=[search term]`
 
-MUST return a list of all Types in the discovery system. If the matching query
-parameter is specified then the returned list MUST only include Types that match
-the search term value.
+Same as `/types` but the array MUST be limited to just those Types
+whose value contains the `search term` value (case insensitive).
 
-##### matching
+###### matching
 
 * Type: `string`
-* Description: Search term that provides case insensitive match against `type`
-  names. The parameter can match any portion of the type name.
+* Description: Search term that provides case insensitive match against
+  the Type's value. The parameter can match any portion of the value.
 * Constraints:
   * OPTIONAL
   * If present, MUST be non-empty
@@ -567,39 +560,6 @@ the search term value.
     * matches:
       * `"com.storage.object.create"`
 
-##### Returns
-
-A JSON array of `type` entities.
-
-#### `/types/{name}`
-
-Retrieves an individual type entity by exact match on the `type` name. Type
-names MUST conform to the [CloudEvents type](./spec.md#type)
-attribute specification.
-
-##### Returns
-
-A `type` entity as a JSON object.
-
-#### `/types/{name}/services`
-
-Retrieves the details about services that offer the specified `type`.
-
-##### Returns
-
-A JSON array of `service` entities.
-
-#### `/producer/{service.name}/{type.name}`
-
-Retrieves the `producer` entity that specifies the information necessary to
-create subscriptions and to consume the events. The `service.name` and
-`type.name` items in the request path make up the composite key for the
-information that can be obtained via the `/service` and `/type` API calls.
-
-##### Returns
-
-A `producer` entity as a JSON object.
-
 
 ## Protocol Bindings
 
@@ -607,17 +567,19 @@ The discovery API can be implemented over different API systems. We provide
 API schema definitions for implementing this API using OpenAPI and gRPC as
 illustrative examples.
 
-### REST, JSON HTTP API
+### HTTP Binding
 
-All responses will have a content-type of `application/json` and are either
-a single JSON encoded object or an array of objects.
+When using JSON, the HTTP `Content-Type` value MUST be `application/json`.
+
+...
 
 ### OpenAPI
 
-**TODO**
+...
 
 ## Privacy and Security
 
-The CloudDiscovery API does not place restrictions on producers choice of an
-authentication and authorization mechanism. Discovery output MAY be different
-for different principals.
+The CloudDiscovery API does not place restrictions on implementation's choice
+of an authentication and authorization mechanism. While the list of entities
+returned from each query MAY differ, the format of the output MUST adhere
+to this specification.
