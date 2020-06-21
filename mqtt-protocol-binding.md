@@ -73,10 +73,8 @@ event attributes are mapped to User Property fields.
 
 Event formats, used with the _structured_ content mode, define how an event is
 expressed in a particular data format. All implementations of this specification
-MUST support the [JSON event format][json-format].
-
-MQTT 5.0 implementations MAY support any additional, including proprietary,
-formats.
+that support the _structured_ content mode MUST support the [JSON event
+format][json-format].
 
 ### 1.5. Security
 
