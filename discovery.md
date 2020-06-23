@@ -243,7 +243,9 @@ entity.
   - OPTIONAL
   - If present, MUST be a non-empty absolute URI
 - Examples:
-  - "http://cloud.example.com/docs/blobstorage"
+  - `http://cloud.example.com/docs/blobstorage`
+
+##### specversions
 
 - Type: Array of `Strings` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - Description: CloudEvents [`specversions`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
@@ -414,7 +416,7 @@ entity.
       "specversions": [ "1.x-wip" ],
       "datacontenttype": "application/json",
       "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json",
-      "sourcetemplate":"https://storage.example.com/service/storage/{objectID}"
+      "sourcetemplate": "https://storage.example.com/service/storage/{objectID}"
     }
   ]
 }
