@@ -26,7 +26,7 @@ We define a project `cloudevents/sdk-x` _not actively maintained_ if:
 
 6. No commits on master from `sdk-x-maintainers` since 4 months
 7. Issues and/or PRs are not being triaged from `sdk-x-mantainers` since 2 months
-8. Security patches are not being **released** from `sdk-x-mantainers` since 2 months
+8. Security patches are not being **released** from `sdk-x-mantainers` since 1 months from CVE disclosures
 
 To prevent projects _not actively maintained_, we define different actions the community might take: 
 
