@@ -25,7 +25,7 @@ We define an SDK project _healthy_ if:
 2. It supports the latest versions of the integrated libraries/frameworks
 3. It receives security patches regularly
 4. It supports the last N-1 major versions of CloudEvents spec, as defined in
-   [Contribution Acceptance](../SDK.md#Contribution-Acceptance)
+   [Contribution Acceptance](../SDK.md#contribution-acceptance)
 5. Issues and PRs are triaged (labeled, commented, reviewed, etc) regularly
 
 We define a project `cloudevents/sdk-x` _not actively maintained_ if:
