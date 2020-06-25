@@ -7,6 +7,11 @@ markdown file in `community/demos/`.
   - Blog post about Cloud Events Orchestration using an workflow engine([Zeebe](http://zeebe.io)). 
   - Instructions: You can find the [Demo Code and instructions here](https://github.com/salaboy/zeebe-cloud-events-examples).
   
+- [Gaining business visibility into processes implement by Cloud Events](https://blog.bernd-ruecker.com/gaining-visibility-into-processes-spanning-multiple-microservices-a1fc751c4c13s)
+
+  - Blog post on how to use process events monitoring to understand the business process behind a choreography using Cloud Events
+  - Instructions: You can find the [used sample application on GitHub](https://github.com/berndruecker/flowing-retail/). [This recording walks you through](https://www.youtube.com/watch?v=JptEJZ10Ra4)
+   
 - CNCF/Kube-Con EU May 2018
 
   - CloudEvents interop demo during Austen Collins'
