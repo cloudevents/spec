@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Cloud Native Data Schema Registry
-  version: 0.1
+  version: "0.1"
 paths:
   /schemagroups:
     get:
