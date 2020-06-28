@@ -318,8 +318,8 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   - SHOULD be prefixed with a reverse-DNS name. The prefixed domain dictates the
     organization which defines the semantics of this event type.
 - Examples
-  - com.github.pull.create
-  - com.example.object.delete.v2
+  - com.github.pull_request.opened
+  - com.example.object.deleted.v2
 
 ### OPTIONAL Attributes
 
@@ -550,7 +550,7 @@ The following example shows a CloudEvent serialized as JSON:
 ```JSON
 {
     "specversion" : "1.x-wip",
-    "type" : "com.github.pull.create",
+    "type" : "com.github.pull_request.opened",
     "source" : "https://github.com/cloudevents/spec/pull",
     "subject" : "123",
     "id" : "A234-1234-1234",
