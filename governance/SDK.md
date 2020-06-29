@@ -30,13 +30,13 @@ We define an SDK project _healthy_ if:
 
 We define a project `cloudevents/sdk-x` _not actively maintained_ if:
 
-6. No commits on master from `sdk-x-maintainers` since 4 months
-7. Issues and/or PRs are not being triaged from `sdk-x-mantainers` since 2
-   months
-8. Security patches are not being **released** from `sdk-x-mantainers` since 1
+6. No commits on master from `sdk-x-maintainers` for 4 months
+7. Issues and/or PRs are not being triaged from `sdk-x-mantainers` for 2 months
+8. Security patches are not being **released** from `sdk-x-mantainers` for 1
    months from CVE disclosures
 
-To prevent the project from becoming _not actively maintained_, the community MAY takes the following actions:
+To prevent the project from becoming _not actively maintained_, the community
+MAY takes the following actions:
 
 - Temporary security patches delivered by an _sdk maintainer_ not part of
   `sdk-x-maintainers` group
@@ -51,8 +51,9 @@ in criteria 8, the community could decide to entitle one or more members from
 the larger _sdk maintainers_ group to perform security patches and release new
 minor versions of the project.
 
-Because the people entitled to perform security patches need write permissions on the repository, the community MUST temporarily grant these permissions.
-After the release of the patch, these permissions MUST be revoked.
+Because the people entitled to perform security patches need write permissions
+on the repository, the community must temporarily grant these permissions. After
+the release of the patch, these permissions must be revoked.
 
 Because of the urgent nature of security patches, an _informal_ vote during the
 CloudEvents SDK meeting is enough to assign the security patch to the _sdk
@@ -63,36 +64,42 @@ enhancements.
 
 ### Handover to a new maintainer/group of maintainers
 
-If a project is not meeting the criteria 1, 2, 4, 5, 6, 7, 8, the community
-MAY decides to handover the project to a new maintainer/group of
-maintainers. The community can perform the handover to a new maintainer
-if all the following conditions are met:
+If a project is not meeting the criteria 1, 2, 4, 5, 6, 7, 8, the community MAY
+decides to handover the project to a new maintainer/group of maintainers. The
+community can perform the handover to a new maintainer if all the following
+conditions are met:
 
-* A vote to add the new maintainer MUST have **already taken place** with
-  all people entitled to vote abstaining.
-* One of the following conditions had been met:
-  * The new maintainer(s) already meet the requirements enlisted in [New maintainers section](#new-maintainers)
-  * The new maintainer(s) performed the required PRs, Reviews and Code changes to meet the [New maintainers criteria](#new-maintainers) but they were unable to merge them due to inactivity of the current maintainer(s).
+- A vote to add the new maintainer must have **already taken place** with all
+  people entitled to vote abstaining.
+- One of the following conditions had been met:
+  - The new maintainer(s) already meet the requirements enlisted in
+    [New maintainers section](#new-maintainers)
+  - The new maintainer(s) performed the required PRs, Reviews and Code changes
+    to meet the [New maintainers criteria](#new-maintainers) but they were
+    unable to merge them due to inactivity of the current maintainer(s).
 
 The new maintainer must show the good will to keep the project healthy and
 community could ask for an eventual plan to improve the quality of the project.
 
-Once a new maintainer is identified, the community can proceed with a vote
-to handover the project using the
+Once a new maintainer is identified, the community can proceed with a vote to
+handover the project using the
 [Asynchronous voting process](#asynchronous-voting-process). If more than one
-new maintainer wants to handover the project, separate voting process must be
-done for all of them, and both of them must follow the same voting criteria (and
+new maintainer wants to maintain the project, separate voting process must be
+done for all of them, and all of them must follow the same voting criteria (and
 not the ones from [New maintainers section](#new-maintainers)).
 
 The voting criteria are:
 
 - 1 week to vote
-- 2/3 of the agreement to accept the vote
+- At least 2/3 of the votes cast agree to the proposal
 - All _sdk maintainers_ are entitled to vote
 
 ### Archive a project
 
-If a project is not following the criteria 1, 2, 4, 5, 6, 7, 8, the community MAY decides to archive the project. Prior to archiving, the community SHOULD first consider performing a search for a new maintainer to [handover the project](#handover-to-a-new-maintainergroup-of-maintainers).
+If a project is not following the criteria 1, 2, 4, 5, 6, 7, 8, the community
+MAY decides to archive the project. Prior to archiving, the community SHOULD
+first consider performing a search for a new maintainer to
+[handover the project](#handover-to-a-new-maintainergroup-of-maintainers).
 
 If no new maintainer is found, the community can proceed to archive the project
 using the [Asynchronous voting process](#asynchronous-voting-process).
@@ -100,7 +107,7 @@ using the [Asynchronous voting process](#asynchronous-voting-process).
 The voting criteria are:
 
 - 2 weeks to vote
-- 2/3 of the agreement to accept the vote
+- At least 2/3 of the votes cast agree to the proposal
 - All _sdk maintainers_ are entitled to vote
 
 ## Asynchronous voting process
@@ -114,13 +121,14 @@ The voting is defined by:
 - The set of people/groups entitled to vote
 - A voting period
 - The percentage of agreements required to accept the change
-- A voting manager, a member of the community entitled to manage the vote. The voting manager MUST be part of people entitled to vote.
+- A voting manager, a member of the community entitled to manage the vote. The
+  voting manager must be part of people entitled to vote.
 
 To start a vote, the voting manager opens an issue in the
 [CloudEvents Spec](https://github.com/cloudevents/spec/issues) with:
 
 - A binary question to be voted on
-- Tags of the entitled people/groups to vote (depending on the question)
+- Github IDs of people who are entitled to vote
 - The expiration date of the vote
 - The percentage of agreements to accept the change
 
@@ -145,16 +153,16 @@ ensure visibility to the voting, people should be remembered to vote during
 Serverless WG meetings and community channels (Slack, ...).
 
 At the end of the voting period, the voting manager will count the votes,
-writing on the issue the results. Votes after the expiration date MUST not be
+writing on the issue the results. Votes after the expiration date must not be
 considered; To calculate the agreement percentage, the voting manager should
 account the people who have expressed a vote, without taking in account the
 abstentions.
 
-If the vote passes, the voting manager should proceed with the change. If the vote
-does not pass, then a new vote for the same change MUST NOT happen for the
+If the vote passes, the voting manager should proceed with the change. If the
+vote does not pass, then a new vote for the same change must NOT happen for the
 next 6 months.
 
-This voting process MUST be used only to resolve the issues identified in this
+This voting process must be used only to resolve the issues identified in this
 document:
 
 - Change to the rules in this document
