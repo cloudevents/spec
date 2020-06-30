@@ -30,10 +30,15 @@ We define an SDK project _healthy_ if:
 
 We define a project `cloudevents/sdk-x` _not actively maintained_ if:
 
-6. No commits on master from `sdk-x-maintainers` for 4 months
-7. Issues and/or PRs are not being triaged from `sdk-x-mantainers` for 2 months
-8. Security patches are not being **released** from `sdk-x-mantainers` for 1
+6. Issues and/or PRs are not being triaged from `sdk-x-mantainers` for 2 months
+7. Security patches are not being **released** from `sdk-x-mantainers` for 1
    months from CVE disclosures
+
+It may happen that there has been no necessary activity within the SDK for at
+least 4 months. The other SDK maintainers will evaluate what "no necessary
+activity" means, but often this could mean "no commits", or "no issue
+discussions". However, if the SDK is stable and does not need to be update then
+it might be determined that it current state is acceptable.
 
 To prevent the project from becoming _not actively maintained_, the community
 MAY takes the following actions:
@@ -47,7 +52,7 @@ MAY takes the following actions:
 
 If a project `cloudevents/sdk-x` meets _healthy_ criteria 1, 2, 4, but the
 `sdk-x-maintainers` group is not actively performing security patches as defined
-in criteria 8, the community could decide to entitle one or more members from
+in criteria 7, the community could decide to entitle one or more members from
 the larger _sdk maintainers_ group to perform security patches and release new
 minor versions of the project.
 
@@ -64,7 +69,7 @@ enhancements.
 
 ### Handover to a new maintainer/group of maintainers
 
-If a project is not meeting the criteria 1, 2, 4, 5, 6, 7, 8, the community MAY
+If a project is not meeting the criteria 1, 2, 4, 5, 6, 7, the community MAY
 decides to handover the project to a new maintainer/group of maintainers. The
 community can perform the handover to a new maintainer if all the following
 conditions are met:
@@ -96,9 +101,9 @@ The voting criteria are:
 
 ### Archive a project
 
-If a project is not following the criteria 1, 2, 4, 5, 6, 7, 8, the community
-MAY decides to archive the project. Prior to archiving, the community SHOULD
-first consider performing a search for a new maintainer to
+If a project is not following the criteria 1, 2, 4, 5, 6, 7, the community MAY
+decides to archive the project. Prior to archiving, the community SHOULD first
+consider performing a search for a new maintainer to
 [handover the project](#handover-to-a-new-maintainergroup-of-maintainers).
 
 If no new maintainer is found, the community can proceed to archive the project
