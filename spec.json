@@ -33,8 +33,8 @@
       "description": "Describes the type of event related to the originating occurrence.",
       "$ref": "#/definitions/typedef",
       "examples" : [
-        "com.github.pull.create",
-        "com.example.object.delete.v2"
+        "com.github.pull_request.opened",
+        "com.example.object.deleted.v2"
       ]
     },
     "datacontenttype": {
