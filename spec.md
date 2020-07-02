@@ -136,6 +136,8 @@ a stand-alone event format and stored in the message body.
 A "binary-mode message" is one where the event data is stored in the message
 body, and event attributes are stored as part of message meta-data.
 
+Protocol Bindings MAY define additional message modes that are specific to the protocol.
+
 #### Protocol
 
 Messages can be delivered through various industry standard protocol (e.g. HTTP,
