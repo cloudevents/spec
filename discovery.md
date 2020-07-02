@@ -505,13 +505,13 @@ whose `name` attribute contains the `search term` value (case insensitive).
 
 ##### `/types`
 
-This MUST return an array of zero or more Types values, where each Type's
+This MUST return a map of zero or more Types values, where each Type's
 value is an array of Services that support that Type.
 
 When encoded in JSON, the response format MUST adhere to the following:
 
 ```
-[
+{
   "TYPE-VALUE": [
     {
       "url": "SERVICE-url",
@@ -521,12 +521,12 @@ When encoded in JSON, the response format MUST adhere to the following:
     ...
   ]
   ...
-]
+}
 ```
 
 ##### `/types/{type}`
 
-This MUST returns an array of one or more Services that support the Type value
+This MUST returns a map of one or more Services that support the Type value
 specified. Type value MUST conform to the [CloudEvents type](./spec.md#type)
 attribute specification.
 
@@ -547,7 +547,7 @@ When encoded in JSON, the response format MUST adhere to the following:
 
 ##### `/types?matching=[search term]`
 
-Same as `/types` but the array MUST be limited to just those Types
+Same as `/types` but the map MUST be limited to just those Types
 whose value contains the `search term` value (case insensitive).
 
 ###### matching
