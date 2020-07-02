@@ -91,7 +91,7 @@ Event Subcription.
 
 A "service" represents the entity which manages one or more event
 [sources](#source-ce) and is associated with [producers](#producer-ce)
-that are responsible for the generatation of events.
+that are responsible for the generation of events.
 
 For example, an Object Store service might have a set of event sources
 where each event source maps to a bucket.
