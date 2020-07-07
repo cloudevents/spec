@@ -143,6 +143,7 @@ its basic structure:
 Service:
 ```
 {
+  "id": "[a globally unique UUID]",
   "url": "[unique URL to this service]",
   "name": "[unique name for this services]",
   "description": "[human string]", ?
@@ -177,7 +178,9 @@ Service:
 An example:
 ```json
 {
+  "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
   "url": "https://example.com/services/widgetService",
+  "name": "widgets",
   "specversions": [ "1.0" ],
   "subscriptionurl": "https://events.example.com",
   "protocols": [ "HTTP" ],
@@ -198,6 +201,18 @@ with the wire format/API defined by this specification.
 
 The following sections define the attributes that appear in a Service
 entity.
+
+##### id
+- Type: `String`
+- Description: A unique identifier for this Service. This value MUST be
+  globally unique. While other metadata within this Service MAY change,
+  this value MUST NOT. Clients can use this value to ensure that the Service
+  entity returned from a query refers to a previously retrieved Service.
+- Constraints:
+  - REQUIRED
+  - MUST be a valid UUID per RFC4122.
+- Examples:
+  - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
 
 ##### name
 - Type: `String`
@@ -406,6 +421,7 @@ entity.
 
 ```json
 {
+  "id": "3db60532-e839-417e-8644-e255f338776a",
   "url": "https://storage.example.com/service/storage",
   "name": "storage",
   "description": "Blob storage in the cloud",
@@ -456,7 +472,8 @@ When encoded in JSON, the response format MUST adhere to the following:
 ```
 [
   {
-    "url": "SERVICE-URL",
+    "id": "{id}",
+    "url": "{url}",
     "name": "{name}",
     ... remainder of Service attributes ...
   }
@@ -473,7 +490,8 @@ When encoded in JSON, the response format MUST adhere to the following:
 
 ```
 {
-  "url": "SERVICE-URL",
+  "id": "{id}",
+  "url": "{url}",
   "name": "{name}",
   ... remainder of Service attributes ...
 }
@@ -514,7 +532,8 @@ When encoded in JSON, the response format MUST adhere to the following:
 {
   "TYPE-VALUE": [
     {
-      "url": "SERVICE-url",
+      "id: "{id}",
+      "url": "{url}",
       "name: "{name}",
       ... remainder of Service attributes ...
     }
@@ -534,9 +553,10 @@ When encoded in JSON, the response format MUST adhere to the following:
 
 ```
 {
-  "TYPE-VALUE": [
+  "{type}": [
     {
-      "url": "SERVICE-url",
+      "id: "{id}",
+      "url": "{url}",
       "name: "{name}",
       ... remainder of Service attributes ...
     }
