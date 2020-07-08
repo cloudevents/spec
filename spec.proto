@@ -28,8 +28,12 @@ message CloudEvent {
   // Optional & Extension
   map<string, CloudEventAttribute> attributes = 5;
 
-  // -- CloudEvent Data
-  google.protobuf.Any data = 6;
+  // -- CloudEvent Data (Bytes, Text, or Proto)
+  oneof data_oneof {
+    bytes binary_data = 6;
+    string text_data = 7;
+    google.protobuf.Any proto_data = 8;
+  }
 
   /**
    * The CloudEvent specification defines

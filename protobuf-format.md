@@ -118,13 +118,15 @@ oneof data_oneof {
 }
 ```
 
-* Where the data is a protobuf message it MUST be stored in the `proto_data`
-property; the `dataschema` attribute SHOULD be populated with the URL of the
-data's proto type.
-* If the implementation determines that the type of the data is text, the value
-MUST be stored in the `text_data` property.
-* If the implementation determines that the type of the data is binary, the value
-MUST be stored in the `binary_data` property.
+* Where the data is a protobuf message it MUST be stored in the `proto_data` property.
+
+* When the type of the data is text, the value MUST be stored in the `text_data` property.
+  * `datacontenttype` SHOULD be popuplated wiht the appropriate media-type.
+
+* When the type of the data is binary the value MUST be stored in the `binary_data` property.
+  * `datacontenttype` SHOULD be populated with the appropriate media-type.
+
+
 
 ## 4. Transport
 
@@ -191,8 +193,8 @@ private static Spec.CloudEvent protoExample() {
     // Add the proto data into the CloudEvent envelope.
     .setProtoData(Any.pack(dataBuilder.build()));
 
-    // Set the schema URL.
-    withAttribute(ceBuilder,"dataschema",ceBuilder.getProtoData().getTypeUrl());
+    // Set Content-Type (Optional)
+    withAttribute(ceBuilder,"datacontenttype", "application/protobuf");
 
     //-- Done.
     return ceBuilder.build();
