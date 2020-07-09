@@ -136,7 +136,7 @@ a stand-alone event format and stored in the message body.
 A "binary-mode message" is one where the event data is stored in the message
 body, and event attributes are stored as part of message meta-data.
 
-Regardless of which mode is used, protocol bindings MAY choose provide
+Regardless of which mode is used, protocol bindings MAY choose to provide
 additional formatting and structure to the message body. For example, a
 wrapper around the event might be used, or several events could be batched
 together into a single message.
