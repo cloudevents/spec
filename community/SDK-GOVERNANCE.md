@@ -10,21 +10,33 @@ The community is organized as follows:
 
 ## New maintainers
 
-Maintainers are a crucial part of this community: they keep alive our projects and ensure both development and maintenance.
-We define a set of criteria, followed by a vote, to include an active contributor as maintainer of one or more sdk projects.
-The active contributor may propose himself to become a maintainer, although we encourage the community to include him as part of the group.
+Maintainers are a crucial part of this community: they keep alive our projects
+and ensure both development and maintenance. We define a set of criteria,
+followed by a vote, to include an active contributor as maintainer of one or
+more sdk projects. The active contributor may propose himself to become a
+maintainer, although we encourage the community to include him as part of the
+group.
 
-The criteria for a contributor to `sdk-x` to become part of `sdk-x-maintainers` is:
+The criteria for a contributor to `sdk-x` to become part of `sdk-x-maintainers`
+is:
 
 1. At least 20 reviews on eligible PRs
 1. At least 20 submitted eligible PRs as author
 
-When we refer to the term _eligible PR_, we explicit PRs with substantial contributions to the project.
-Because a _"substantial contribution"_ may vary between the different technologies used, each project defines in the `CONTRIBUTING.md` (available at the root of the Github Repository) what _eligible PR_ means for it.
+When we refer to the term _eligible PR_, we explicit PRs with substantial
+contributions to the project. Because a _"substantial contribution"_ may vary
+between the different technologies used, each project defines in the
+`CONTRIBUTING.md` (available at the root of the Github Repository) what
+_eligible PR_ means for it.
 
-If the contributor miss one of those criteria, he cannot ask to become maintainer of the project, **unless** the situation defined in [handover the project](#handover-to-a-new-maintainergroup-of-maintainers) applies.
+If the contributor miss one of those criteria, he cannot ask to become
+maintainer of the project, **unless** the situation defined in
+[handover the project](#handover-to-a-new-maintainergroup-of-maintainers)
+applies.
 
-As soon as the contributor meets the criteria, he can ask (or an existing maintainer can ask) to proceed with a vote using the [Asynchronous voting process](#asynchronous-voting-process).
+As soon as the contributor meets the criteria, he can ask (or an existing
+maintainer can ask) to proceed with a vote using the
+[Asynchronous voting process](#asynchronous-voting-process).
 
 The voting criteria are:
 
@@ -32,7 +44,8 @@ The voting criteria are:
 - At least 2/3 of the votes cast agree to the proposal
 - _sdk-x maintainers_ are entitled to vote
 
-If **nobody** votes, then the contributor may proceed with the [handover of the project](#handover-to-a-new-maintainergroup-of-maintainers).
+If **nobody** votes, then the contributor may proceed with the
+[handover of the project](#handover-to-a-new-maintainergroup-of-maintainers).
 
 ## Ensuring projects health
 
@@ -139,7 +152,9 @@ The voting criteria are:
 
 ## Modifying this document
 
-In order to modify this document, the community should proceed with a vote on the changes using the [Asynchronous voting process](#asynchronous-voting-process).
+In order to modify this document, the community should proceed with a vote on
+the changes using the
+[Asynchronous voting process](#asynchronous-voting-process).
 
 The voting criteria are:
 
