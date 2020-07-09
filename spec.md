@@ -136,7 +136,9 @@ a stand-alone event format and stored in the message body.
 A "binary-mode message" is one where the event data is stored in the message
 body, and event attributes are stored as part of message meta-data.
 
-Protocol Bindings MAY use the message body as the request or response body directly, or MAY embed the message body in another structure. Protocol Bindings MAY batch several message bodies together into a single request or response.
+Protocol Bindings MAY use the message body as the request or response body
+directly, or MAY embed the message body in another structure. Protocol Bindings
+MAY batch several message bodies together into a single request or response.
 
 #### Protocol
 
