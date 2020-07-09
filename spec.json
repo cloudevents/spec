@@ -116,7 +116,7 @@
       "type": "string"
     },
     "datadef": {
-      "type": ["object", "string"]
+      "type": ["object", "string", "number", "array", "boolean", "null"]
     },
     "data_base64def": {
       "type": "string",
