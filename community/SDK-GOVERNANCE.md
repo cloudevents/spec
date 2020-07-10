@@ -10,32 +10,32 @@ The community is organized as follows:
 
 ## New maintainers
 
-Maintainers are a crucial part of this community: they keep alive our projects
+Maintainers are a crucial part of this community. They keep our projects alive
 and ensure both development and maintenance. We define a set of criteria,
 followed by a vote, to include an active contributor as maintainer of one or
-more sdk projects. The active contributor may propose himself to become a
-maintainer, although we encourage the community to include him as part of the
-group.
+more SDK projects. An active contributor may propose themselves as a maintainer,
+although we encourage the existing maintainers to nominate active contributors
+proactively.
 
-The criteria for a contributor to `sdk-x` to become part of `sdk-x-maintainers`
-is:
+The criteria for a contributor to become a maintainer for a given SDK repository
+are:
 
 1. At least 20 reviews on eligible PRs
 1. At least 20 submitted eligible PRs as author
 
-When we refer to the term _eligible PR_, we explicit PRs with substantial
-contributions to the project. Because a _"substantial contribution"_ may vary
-between the different technologies used, each project defines in the
-`CONTRIBUTING.md` (available at the root of the Github Repository) what
-_eligible PR_ means for it.
+When we refer to the term _eligible pull requests_, we explicit mean pull
+requests with substantial contributions to the project. Because a _"substantial
+contribution"_ may vary between the different technologies used, each project
+defines in the `CONTRIBUTING.md` (available at the root of the Github
+Repository) what _eligible PR_ means for it.
 
-If the contributor miss one of those criteria, he cannot ask to become
-maintainer of the project, **unless** the situation defined in
+If a contributor does not meet these criteria, he should not be considered for
+approval as a maintainer of the project, **unless** the situation defined in
 [handover the project](#handover-to-a-new-maintainergroup-of-maintainers)
 applies.
 
-As soon as the contributor meets the criteria, he can ask (or an existing
-maintainer can ask) to proceed with a vote using the
+Once a contributor has met the above criteria, he, or an existing maintainer,
+can ask to proceed with a vote using the
 [Asynchronous voting process](#asynchronous-voting-process).
 
 The voting criteria are:
