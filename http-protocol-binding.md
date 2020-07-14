@@ -371,7 +371,7 @@ The batch MAY be empty. All batched CloudEvents MUST have the same `specversion`
 attribute. Other attributes MAY differ, including the `datacontenttype`
 attribute.
 
-#### 3.2.3 Examples
+#### 3.3.3. Examples
 
 This example shows two batched CloudEvents, sent with a PUT request:
 
