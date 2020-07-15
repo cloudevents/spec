@@ -1,0 +1,170 @@
+openapi: '3.0.2'
+info:
+  title: CloudEvents discovery API
+  description: CloudEvents discovery API specification according to [Discovery - Version 0.1-wip](https://github.com/cloudevents/spec/blob/master/discovery.md#service).
+  version: '0.1-WIP'
+servers:
+  - url: https://api.cloudevents.io/test/v0.1
+paths:
+  /services:
+    get:
+      parameters:
+       - in: query
+         name: matching
+         description: The search term.
+         required: false
+         schema:
+           type: string
+      responses:
+        '200':
+          description: A list of services (optionally matching the query parameter).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/service'
+  /services/{name}:
+    get:
+      parameters:
+       - in: path
+         name: name
+         description: The name of the service to be returned.
+         required: true
+         schema:
+           type: string
+      responses:
+        '200':
+          description: The corresponding service.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/service'
+  /types:
+    get:
+      parameters:
+       - in: query
+         name: matching
+         description: The search term.
+         required: false
+         schema:
+           type: string
+      responses:
+        '200':
+          description: A list of types (optionally matching the query parameter).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/type'
+  /types/{type}:
+    get:
+      parameters:
+       - in: path
+         name: type
+         description: The name of the type to be returned.
+         required: true
+         schema:
+           type: string
+      responses:
+        '200':
+          description: The corresponding service.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/type'
+components:
+  schemas:
+    service:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the service.
+          example: bf5ff5cc-d059-4c79-a89a-2513e45a1340
+        name:
+          type: string
+          description: A unique identifier for this Service. This value MUST be unique within the scope of this Discovery Endpoint.
+          example: storage, github
+        url:
+          type: string
+          description: A URL that references this Service. This value MUST be usable in subsequent requests, by authorized clients, to retrieve this Service entity.
+          example: http://example.com/services/storage, http://discovery.github.com/services/github
+        description:
+          type: string
+          description: Human readable description.
+        docsurl:
+          type: string
+          description: Absolute URL that provides a link to additional documentation about the service. This is intended for a developer to use in order to learn more about this service's events produced.
+          example: http://cloud.example.com/docs/blobstorage
+        specversions:
+          type: object
+          description: CloudEvents specversions that can be used for events published for this service.
+        subscriptionurl:
+          type: string
+          description: An absolute URL indicating where CloudSubscriptions subscribe API calls MUST be sent to.
+        subscriptionconfig:
+          type: object
+          description: "A map indicating supported options for the config parameter for the CloudSubscriptions subscribe() API call. Keys are the name of keys in the allowed config map, the values indicate the type of that parameter, confirming to the CloudEvents type system. TODO: Needs resolution with CloudSubscriptions API"
+          additionalProperties:
+            type: string
+        authscope:
+          type: string
+          description: Authorization scope needed for creating subscriptions. The actual meaning of this field is determined on a per-service basis.
+          example: storage.read
+        protocols:
+          type: array
+          description: This field describes the different values that might be passed in the protocol field of the CloudSubscriptions API. The protocols with existing CloudEvents bindings are identified as AMQP, MQTT3, MQTT5, HTTP, KAFKA, and NATS. An implementation MAY add support for further protocols. All services MUST support at least one delivery protocol, and MAY support additional protocols.
+          items:
+            type: string
+            description: protocol
+          example: '[ "HTTP", "AMQP", "KAFKA" ]'
+        types:
+          type: array
+          description: List of event types available in this service.
+          items:
+            $ref: '#/components/schemas/type'
+    type:
+      type: object
+      properties:
+        type:
+          type: string
+          description: CloudEvents type attribute.
+          example: com.github.pull.create, com.example.object.delete.v2
+        description:
+          type: string
+          description: Human readable description.
+        dataschema:
+          type: string
+          description: CloudEvents datacontenttype attribute. Indicating how the data attribute of subscribed events will be encoded.
+        dataschematype:
+          type: string
+          description: If using dataschemacontent for inline schema storage, the dataschematype indicates the type of schema represented there.
+        dataschemacontent:
+          type: string
+          description: An inline representation of the schema of the data attribute encoding mechanism. This is an alternative to using the dataschema attribute.
+        sourcetemplate:
+          type: string
+          description: A URI Template according to RFC 6570 that defines how the source attribute will be generated.
+          example: "http://blob.store/{bucket}"
+        extensions:
+          type: array
+          description: An array or CloudEvents Extension Context Attributes that are used for this event type.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: The CloudEvents context attribute name used by this extension.
+              type:
+                type: string
+                description: The data type of the extension attribute.
+              specurl:
+                type: string
+                description: An attribute pointing to the specification that defines the extension.
+          example: '{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/extensions/dataref.md" }'
