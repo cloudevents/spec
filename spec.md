@@ -136,6 +136,9 @@ a stand-alone event format and stored in the message body.
 A "binary-mode message" is one where the event data is stored in the message
 body, and event attributes are stored as part of message meta-data.
 
+While protocol bindings typically use "binary-mode messages" directly on the
+wire, "structure-mode messages" are often embedded in an envelope.
+
 #### Protocol
 
 Messages can be delivered through various industry standard protocol (e.g. HTTP,
@@ -145,7 +148,13 @@ specific protocols (AWS Kinesis, Azure Event Grid).
 #### Protocol Binding
 
 A protocol binding describes how events are sent and received over a given
-protocol, in particular how events are mapped to messages in that protocol.
+protocol.
+
+Protocol bindings MAY choose to use an [Event Format](#event-format) to map an
+event directly to the transport envelope body, or MAY provide additional
+formatting and structure to the envelope. For example, a wrapper around a
+structured-mode message might be used, or several messages could be batched
+together into a transport envelope body.
 
 ## Context Attributes
 
