@@ -150,20 +150,20 @@ value using the union types described for the `data` record.
 
 The following table shows exemplary mappings:
 
-| CloudEvents | Type   | Exemplary Avro Value                           |
-| ----------- | ------ | ---------------------------------------------- |
-| type        | string | `"com.example.someevent"`                      |
-| specversion | string | `"1.0`                                         |
-| source      | string | `"/mycontext"`                                 |
-| id          | string | `"7a0dc520-c870-4193c8"`                       |
-| time        | string | `"2019-06-05T23:45:00Z"`                       |
-| dataschema  | string | `"http://registry.com/schema/v1/much.json"`    |
-| contenttype | string | `"application/json"`                           |
-| data        | bytes  | `"{"much":{"wow":"json"}}"`                    |
-|             |        |                                                |
-| dataschema  | string | `"http://registry.com/subjects/ce/versions/1"` |
-| contenttype | string | `"application/avro"`                           |
-| data        | bytes  | `[avro-serialized-bytes]`                      |
+| CloudEvents     | Type   | Exemplary Avro Value                           |
+| ----------------| ------ | ---------------------------------------------- |
+| type            | string | `"com.example.someevent"`                      |
+| specversion     | string | `"1.0`                                         |
+| source          | string | `"/mycontext"`                                 |
+| id              | string | `"7a0dc520-c870-4193c8"`                       |
+| time            | string | `"2019-06-05T23:45:00Z"`                       |
+| dataschema      | string | `"http://registry.com/schema/v1/much.json"`    |
+| datacontenttype | string | `"application/json"`                           |
+| data            | bytes  | `"{"much":{"wow":"json"}}"`                    |
+|                 |        |                                                |
+| dataschema      | string | `"http://registry.com/subjects/ce/versions/1"` |
+| datacontenttype | string | `"application/avro"`                           |
+| data            | bytes  | `[avro-serialized-bytes]`                      |
 
 ## References
 
