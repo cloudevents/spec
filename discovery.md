@@ -206,13 +206,37 @@ entity.
 - Type: `String`
 - Description: A unique identifier for this Service. This value MUST be
   globally unique. While other metadata within this Service MAY change,
-  this value MUST NOT. Clients can use this value to ensure that the Service
-  entity returned from a query refers to a previously retrieved Service.
+  this value MUST NOT. Because it is expected that Clients will use this
+  value to know whether a Service returned by a query is the same Service
+  returned by a previous query, Discovery Endpoints MUST ensure this value
+  is immutable for the lifetime of a Service entity.
+  See the Primer for more information.
 - Constraints:
   - REQUIRED
   - MUST be a valid UUID per RFC4122.
 - Examples:
   - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+
+---
+For Primer:
+Per the Discovery API specification, the Service's `ID` is a globally
+unique identifier for the Service. By ensuring that this value is immutable,
+clients will be able to know when a Service is returned from the
+Discovery Enpoints whether it is the same underlying Service as was returned
+in a previous query despite any changes to its metadata - even if all of the
+metadata has changed (except, of course, for the `ID`).
+
+Additionally, Discovery Endpoints may have multiple "views" over the set
+of Services that they expose. Meaning, the same list of Services might
+produce a different set of metadata based on these "views". In these cases,
+the `ID` attribute would very likely be the same across those views if the
+underlying Service is indeed the same Service. However, this is not a firm
+requirement, and it is an implementation detail of the Discovery Endpoints.
+
+However, it is expected that given the same set of inputs (e.g. Discovery
+Endpoint URL, user credentials, etc.), that the same `ID` would be returned
+each time for the same Service.
+---
 
 ##### name
 - Type: `String`
