@@ -83,10 +83,6 @@ components:
     service:
       type: object
       properties:
-        id:
-          type: string
-          description: Unique identifier for the service.
-          example: bf5ff5cc-d059-4c79-a89a-2513e45a1340
         name:
           type: string
           description: A unique identifier for this Service. This value MUST be unique within the scope of this Discovery Endpoint.
