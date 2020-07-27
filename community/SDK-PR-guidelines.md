@@ -42,7 +42,7 @@ git checkout -b 48-fix-http-agent-error
 ## Commit Messages
 
 Please follow the
-[Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/#summary).
+[Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0-beta.4/#summary).
 The first line of your commit should be prefixed with a type, be a single
 sentence with no period, and succinctly indicate what this commit changes.
 

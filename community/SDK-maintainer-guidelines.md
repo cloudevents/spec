@@ -22,7 +22,7 @@ stale and outdated.
 
 ## Commit Messages
 
-Use the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0/)
+Use the [Conventional Commits specification](https://www.conventionalcommits.org/en/v1.0.0-beta.4/)
 when writing commit messages. This convention works nicely with [SemVer](http://semver.org/)
 by describing features, fixes and breaking changes made in commit messages. By structuring
 your commit messages in this way, they effectively communicate intent and effect of the
