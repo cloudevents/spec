@@ -32,7 +32,7 @@ these queries against a "Discovery Endpoint". A Discovery Endpoint acts
 as a catalog of [Services](#service) (event producers), that consumers can
 query to find the ones of interest. Once found, additional metadata is
 provided in order to consume and subscribe to events. The goal
-of this API is to be such that tooling can be built where all all possible
+of this API is to be such that tooling can be built where all possible
 services and event types aren't known in advance.
 
 The deployment relationship of a Discovery Endpoint to the Services and
@@ -141,6 +141,7 @@ its basic structure:
 (`*` means zero or more, `+` means one or more, `?` means optional)
 
 Service:
+
 ```
 {
   "url": "[unique URL to this service]",
@@ -175,15 +176,17 @@ Service:
 ```
 
 An example:
+
 ```json
 {
   "url": "https://example.com/services/widgetService",
   "specversions": [ "1.0" ],
   "subscriptionurl": "https://events.example.com",
   "protocols": [ "HTTP" ],
-  "type": [
+  "types": [
     {
       "type": "com.example.widget.create",
+    }, {
       "type": "com.example.widget.delete"
     }
   ]
@@ -409,7 +412,7 @@ entity.
   "url": "https://storage.example.com/service/storage",
   "name": "storage",
   "description": "Blob storage in the cloud",
-  "service_uri": "https://cloud.example.com/docs/storage",
+  "subscriptionurl": "https://cloud.example.com/docs/storage",
   "types": [
     {
       "type": "com.example.storage.object.create",
