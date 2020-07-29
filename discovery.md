@@ -438,11 +438,14 @@ https://example.com/myAggregator/services
 ```
 
 Note: for each query if the client is not authorized to see any particular
-entity then that entity MUST be excluded from the response. In cases where
-response is a single entity, then the response MUST result in an error
-as if the entity did not exist (e.g. for HTTP the response would be 
+entity then that entity SHOULD be excluded from the response. In cases where
+response is a single entity, then the response SHOULD result in an error
+as if the entity did not exist (e.g. for HTTP the response would be
 `404 Not Found`). In cases where the response is an array, then the response
-MUST return a successful status with an array, even if that array is empty.
+SHOULD return a successful status with an array, even if that array is empty.
+As Discovery service can be decoupled from Services permission checks, the
+above requirement is OPTIONAL. If the information is available to the 
+Discovery service, it is highly RECOMMENDED.
 
 #### Services
 
