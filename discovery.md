@@ -205,11 +205,32 @@ entity.
 ##### id
 - Type: `String`
 - Description: A unique identifier for this Service. This value MUST be
-  globally unique. While other metadata within this Service MAY change,
-  this value MUST NOT. Because it is expected that Clients will use this
-  value to know whether a Service returned by a query is the same Service
-  returned by a previous query, Discovery Endpoints MUST ensure this value
-  is immutable for the lifetime of a Service entity.
+  globally unique. While other metadata about this Service MAY change,
+  this value MUST NOT so that clients can use this attribute to know whether
+  a Service returned by a query is the same Service returned by a previous
+  query.
+
+  Typically, this value is defined by the Discovery Endpoint, or one of the
+  components behind it. However, there might be cases where the value is
+  provided to the Discovery Endpoint, for example, during an "import" type of
+  operation.
+
+  Whether a change to a Service would result in changing of the Service's
+  metadata (except `id`) and thus be just an update of an existing Service,
+  or whether the change would result in a brand new Service (with a new `id`)
+  is not defined by this specification.
+
+  For example, if a Service's implementation is upgraded to a new version
+  then whether this would result in a new Service (and `id`) or is an update
+  to the existing Service's metadata, is an implementation choice. Likewise,
+  this specifcation makes no statement, or guarantees, as to the forwards or
+  backwards compatibility a Service as it changes over time.
+
+  Note, unlike the `name` attribute which only needs to be unique within the
+  scope of a single Discovery Endpoint, the global uniqueness aspect of this
+  attribute allows for the discovery of the same Service across multiple
+  Discovery Endpoints.
+
   See the Primer for more information.
 - Constraints:
   - REQUIRED
@@ -217,52 +238,32 @@ entity.
 - Examples:
   - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
 
----
-For Primer:
-Per the Discovery API specification, the Service's `ID` is a globally
-unique identifier for the Service. By ensuring that this value is immutable,
-clients will be able to know when a Service is returned from the
-Discovery Enpoints whether it is the same underlying Service as was returned
-in a previous query despite any changes to its metadata - even if all of the
-metadata has changed (except, of course, for the `ID`).
-
-Additionally, Discovery Endpoints may have multiple "views" over the set
-of Services that they expose. Meaning, the same list of Services might
-produce a different set of metadata based on these "views". In these cases,
-the `ID` attribute would very likely be the same across those views if the
-underlying Service is indeed the same Service. However, this is not a firm
-requirement, and it is an implementation detail of the Discovery Endpoints.
-
-However, it is expected that given the same set of inputs (e.g. Discovery
-Endpoint URL, user credentials, etc.), that the same `ID` would be returned
-each time for the same Service.
----
-
 ##### name
 - Type: `String`
-- Description: A unique identifier for this Service. This value MUST be
-  unique within the scope of this Discovery Endpoint.
+- Description: A unique human readable identifier for this Service. This
+  value MUST be unique (case insensitive) within the scope of this Discovery
+  Endpoint. Note, this differs from the `id` attribute which is globally
+  unique.
 - Constraints:
   - REQUIRED
-  - MUST be a valid `fsegment` per RFC1738.
 - Examples:
-  - `storage`
-  - `github`
+  - `my storage service`
+  - `cool git offering`
 
 ##### url
 
 - Type: `URL`
-- Description: A URL that references this Service. This value MUST
+- Description: An absolute URL that references this Service. This value MUST
   be usable in subsequent requests, by authorized clients, to retrieve this
   Service entity.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty URL
-  - MUST end with `fsegments` (per RFC1738) of: `/services/{name}` where
-    `name` is the Service's `name` attribute.
+  - MUST end with `fsegments` (per RFC1738) of: `/services/{id}` where
+    `id` is the Service's `id` attribute.
 - Examples:
-  - `http://example.com/services/storage`
-  - `http://discovery.github.com/services/github`
+  - `http://example.com/services/bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+  - `http://discovery.github.com/services/892abefc-0293-9273-bead-92830efaefa0`
 
 ##### description (Service)
 
@@ -505,7 +506,7 @@ When encoded in JSON, the response format MUST adhere to the following:
 ]
 ```
 
-##### `/services/{name}`
+##### `/services/{id}`
 
 If this refers to a valid Service, then this MUST return that single
 Service entity.
@@ -521,7 +522,7 @@ When encoded in JSON, the response format MUST adhere to the following:
 }
 ```
 
-##### `/services?matching=[search term]`
+##### `/services?name=[search term]`
 
 Same as `/services` but the array MUST be limited to just those Services
 whose `name` attribute contains the `search term` value (case insensitive).
