@@ -62,12 +62,14 @@ And with that, the 'Discovery' and 'Subscription API' specifications were born.
 
 ...
 
-### Use Cases
+## Use Cases
 
 The following list of use cases were driving considerations during the
 development of these specifications. These are not meant to imply that other
 use cases are not supported, rather they are enumerated here to help provide
 insight into the team's focus during the development cycle.
+
+### Consumers
 
 - Consumer wants to programmatically determine the list of events (event types)
   that a producer will generate so they can properly specify the list of events
@@ -87,7 +89,17 @@ insight into the team's focus during the development cycle.
   sent, and whether filtering can be done by the producer or whether the
   consumer will need to to it themselves.
 
-- ...
+### Intermediaries
+
+- In order to route subscriptions to producers and to provide a combined
+  discovery endpoint to consumers, an intermediary aggregates the producers'
+  event catalogs.
+
+### Producers
+
+- Producer wants to register with an intermediary. As the intermediary also
+  provides a discovery endpoint, the producer transfers a catalog describing the
+  events it produces to the intermediary.
 
 ## Architecture
 
