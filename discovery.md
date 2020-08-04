@@ -522,26 +522,21 @@ When encoded in JSON, the response format MUST adhere to the following:
 }
 ```
 
-##### `/services?name=[search term]`
+##### `/services?name={name}`
 
-Same as `/services` but the array MUST be limited to just those Services
-whose `name` attribute contains the `search term` value (case insensitive).
+This returns a single Service entity whose `name` attribute exactly matches
+the `name` query parameter value specified (case insensitive).
 
-###### matching
+When encoded in JSON, the response format MUST adhere to the following:
 
-* Type: `string`
-* Description: Search term that provides case insensitive match against
-  the Service's `name` attribute. The parameter can match any portion
-  of the service's `name` value.
-* Constraints:
-  * OPTIONAL
-  * If present, MUST be non-empty
-* Examples:
-  * `"storage"`
-    * matches:
-      * `"Awesome Cloud Storage"`
-      * `"File storage system"`
-      * `"storage Storage STORAGE"`
+```
+{
+  "id": "{id}",
+  "url": "{url}",
+  "name": "{name}",
+  ... remainder of Service attributes ...
+}
+```
 
 
 #### Types
