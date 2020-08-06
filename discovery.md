@@ -144,6 +144,7 @@ Service:
 
 ```
 {
+  "id": "[a globally unique UUID]",
   "url": "[unique URL to this service]",
   "name": "[unique name for this services]",
   "description": "[human string]", ?
@@ -179,7 +180,9 @@ An example:
 
 ```json
 {
+  "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
   "url": "https://example.com/services/widgetService",
+  "name": "widgets",
   "specversions": [ "1.0" ],
   "subscriptionurl": "https://events.example.com",
   "protocols": [ "HTTP" ],
@@ -202,31 +205,68 @@ with the wire format/API defined by this specification.
 The following sections define the attributes that appear in a Service
 entity.
 
-##### name
+##### id
 - Type: `String`
 - Description: A unique identifier for this Service. This value MUST be
-  unique within the scope of this Discovery Endpoint.
+  globally unique. While other metadata about this Service MAY change,
+  this value MUST NOT so that clients can use this attribute to know whether
+  a Service returned by a query is the same Service returned by a previous
+  query.
+
+  Typically, this value is defined by the Discovery Endpoint, or one of the
+  components behind it. However, there might be cases where the value is
+  provided to the Discovery Endpoint, for example, during an "import" type of
+  operation.
+
+  Whether a change to a Service would result in changing of the Service's
+  metadata (except `id`) and thus be just an update of an existing Service,
+  or whether the change would result in a brand new Service (with a new `id`)
+  is not defined by this specification.
+
+  For example, if a Service's implementation is upgraded to a new version
+  then whether this would result in a new Service (and `id`) or is an update
+  to the existing Service's metadata, is an implementation choice. Likewise,
+  this specifcation makes no statement, or guarantees, as to the forwards or
+  backwards compatibility a Service as it changes over time.
+
+  Note, unlike the `name` attribute which only needs to be unique within the
+  scope of a single Discovery Endpoint, the global uniqueness aspect of this
+  attribute allows for the discovery of the same Service across multiple
+  Discovery Endpoints.
+
+  See the Primer for more information.
 - Constraints:
   - REQUIRED
-  - MUST be a valid `fsegment` per RFC1738.
+  - MUST be a valid UUID per RFC4122.
 - Examples:
-  - `storage`
-  - `github`
+  - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+
+##### name
+- Type: `String`
+- Description: A unique human readable identifier for this Service. This
+  value MUST be unique (case insensitive) within the scope of this Discovery
+  Endpoint. Note, this differs from the `id` attribute which is globally
+  unique.
+- Constraints:
+  - REQUIRED
+- Examples:
+  - `my storage service`
+  - `cool git offering`
 
 ##### url
 
 - Type: `URL`
-- Description: A URL that references this Service. This value MUST
+- Description: An absolute URL that references this Service. This value MUST
   be usable in subsequent requests, by authorized clients, to retrieve this
   Service entity.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty URL
-  - MUST end with `fsegments` (per RFC1738) of: `/services/{name}` where
-    `name` is the Service's `name` attribute.
+  - MUST end with `fsegments` (per RFC1738) of: `/services/{id}` where
+    `id` is the Service's `id` attribute.
 - Examples:
-  - `http://example.com/services/storage`
-  - `http://discovery.github.com/services/github`
+  - `http://example.com/services/bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+  - `http://discovery.github.com/services/892abefc-0293-9273-bead-92830efaefa0`
 
 ##### description (Service)
 
@@ -409,6 +449,7 @@ entity.
 
 ```json
 {
+  "id": "3db60532-e839-417e-8644-e255f338776a",
   "url": "https://storage.example.com/service/storage",
   "name": "storage",
   "description": "Blob storage in the cloud",
@@ -462,7 +503,8 @@ When encoded in JSON, the response format MUST adhere to the following:
 ```
 [
   {
-    "url": "SERVICE-URL",
+    "id": "{id}",
+    "url": "{url}",
     "name": "{name}",
     ... remainder of Service attributes ...
   }
@@ -470,7 +512,7 @@ When encoded in JSON, the response format MUST adhere to the following:
 ]
 ```
 
-##### `/services/{name}`
+##### `/services/{id}`
 
 If this refers to a valid Service, then this MUST return that single
 Service entity.
@@ -479,32 +521,28 @@ When encoded in JSON, the response format MUST adhere to the following:
 
 ```
 {
-  "url": "SERVICE-URL",
+  "id": "{id}",
+  "url": "{url}",
   "name": "{name}",
   ... remainder of Service attributes ...
 }
 ```
 
-##### `/services?matching=[search term]`
+##### `/services?name={name}`
 
-Same as `/services` but the array MUST be limited to just those Services
-whose `name` attribute contains the `search term` value (case insensitive).
+This returns a single Service entity whose `name` attribute exactly matches
+the `name` query parameter value specified (case insensitive).
 
-###### matching
+When encoded in JSON, the response format MUST adhere to the following:
 
-* Type: `string`
-* Description: Search term that provides case insensitive match against
-  the Service's `name` attribute. The parameter can match any portion
-  of the service's `name` value.
-* Constraints:
-  * OPTIONAL
-  * If present, MUST be non-empty
-* Examples:
-  * `"storage"`
-    * matches:
-      * `"Awesome Cloud Storage"`
-      * `"File storage system"`
-      * `"storage Storage STORAGE"`
+```
+{
+  "id": "{id}",
+  "url": "{url}",
+  "name": "{name}",
+  ... remainder of Service attributes ...
+}
+```
 
 
 #### Types
@@ -520,7 +558,8 @@ When encoded in JSON, the response format MUST adhere to the following:
 {
   "TYPE-VALUE": [
     {
-      "url": "SERVICE-url",
+      "id: "{id}",
+      "url": "{url}",
       "name: "{name}",
       ... remainder of Service attributes ...
     }
@@ -540,9 +579,10 @@ When encoded in JSON, the response format MUST adhere to the following:
 
 ```
 {
-  "TYPE-VALUE": [
+  "{type}": [
     {
-      "url": "SERVICE-url",
+      "id: "{id}",
+      "url": "{url}",
       "name: "{name}",
       ... remainder of Service attributes ...
     }

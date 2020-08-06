@@ -116,6 +116,27 @@ insight into the team's focus during the development cycle.
 - REST Queries vs GraphQL
 ...
 
+### The `id` attribute
+
+Per the Discovery API specification, the Service's `id` is a globally
+unique identifier for the Service. By ensuring that this value is immutable,
+clients will be able to know when a Service is returned from the
+Discovery Enpoints whether it is the same underlying Service as was returned
+in a previous query despite any changes to its metadata - even if all of the
+metadata has changed (except, of course, for the `id`). This includes the
+cases where the same Service is returned from multiple Discovery Endpoints.
+
+Additionally, Discovery Endpoints may have multiple "views" over the set
+of Services that they expose. Meaning, the same list of Services might
+produce a different set of metadata based on these "views". In these cases,
+the `id` attribute would be the same across those views if the Discovery
+Endpoints wish for the underlying Service to be considered to be the same
+Service.
+
+However, it is expected that given the same set of inputs (e.g. Discovery
+Endpoint URL, user credentials, etc.), that the same `id` would be returned
+each time for the same Service.
+
 ## Examples
 ...
 
