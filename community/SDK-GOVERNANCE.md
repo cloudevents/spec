@@ -20,21 +20,22 @@ proactively.
 The criteria for a contributor to become a maintainer for a given SDK repository
 are:
 
-1. At least 20 reviews on eligible PRs
-1. At least 20 submitted eligible PRs as author
+1. Significant number, and regular, reviewer on non-trivial PRs, _AND_
+1. Significant number, and regular, author of non-trivial PRs
 
-When we refer to the term _eligible pull requests_, we explicit mean pull
-requests with substantial contributions to the project. Because a _"substantial
-contribution"_ may vary between the different technologies used, each project
-defines in the `CONTRIBUTING.md` (available at the root of the Github
-Repository) what _eligible PR_ means for it.
+Note that the definition of _"significant"_ is purposely left as undefined since it is
+very subjective and depends on the technological choices of the sdk projects.
+The purpose of these requirements are to demonstrate the person's expertise and regular commitment to the project - not simply to achieve a certain level of activity.
 
-If a contributor does not meet these criteria, he should not be considered for
+Each sdk project MAY define in the `CONTRIBUTING.md` (available at the root of the Github Repository)
+stricter requirements, in order to meet the community demands, e.g. _we require that the contributor submitted at least 20 PRs_.
+
+If a contributor does not meet these criteria, they should not be considered for
 approval as a maintainer of the project, **unless** the situation defined in
 [handover the project](#handover-to-a-new-maintainergroup-of-maintainers)
 applies.
 
-Once a contributor has met the above criteria, he, or an existing maintainer,
+Once a contributor has met the above criteria, they, or an existing maintainer,
 can ask to proceed with a vote using the
 [Asynchronous voting process](#asynchronous-voting-process).
 
