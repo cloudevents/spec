@@ -145,7 +145,13 @@ specific protocols (AWS Kinesis, Azure Event Grid).
 #### Protocol Binding
 
 A protocol binding describes how events are sent and received over a given
-protocol, in particular how events are mapped to messages in that protocol.
+protocol.
+
+Protocol bindings MAY choose to use an [Event Format](#event-format) to map an
+event directly to the transport envelope body, or MAY provide additional
+formatting and structure to the envelope. For example, a wrapper around a
+structured-mode message might be used, or several messages could be batched
+together into a transport envelope body.
 
 ## Context Attributes
 

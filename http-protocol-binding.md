@@ -76,11 +76,13 @@ event attributes are mapped to HTTP headers.
 
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the HTTP request or response body using an
-[event format](#14-event-formats).
+[event format](#14-event-formats) that supports
+[structured-mode messages][ce-message].
 
-In the _batched_ content mode several events are batched into a single HTTP
-request or response body using an [event format](#14-event-formats) that
-supports batching.
+In the _batched_ content mode, event metadata attributes and event data of
+multiple events are batched into a single HTTP request or response body using
+an [event format](#14-event-formats) that supports batching
+[structured-mode messages][ce-message].
 
 ### 1.4. Event Formats
 
@@ -91,7 +93,7 @@ event format][json-format], but MAY support any additional, including
 proprietary, formats.
 
 Event formats MAY additionally define how a batch of events is expressed. Those
-can be used with the _batched_ content mode
+can be used with the _batched_ content mode.
 
 ### 1.5. Security
 
@@ -461,6 +463,7 @@ Content-Length: nnnn
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
+[ce-message]: ./spec.md#message
 [ce-types]: ./spec.md#type-system
 [json-format]: ./json-format.md
 [json-batch-format]: ./json-format.md#4-json-batch-format
