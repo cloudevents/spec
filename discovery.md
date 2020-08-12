@@ -453,6 +453,7 @@ entity.
   "url": "https://storage.example.com/service/storage",
   "name": "storage",
   "description": "Blob storage in the cloud",
+  "protocols": ["HTTP"],
   "subscriptionurl": "https://cloud.example.com/docs/storage",
   "types": [
     {
