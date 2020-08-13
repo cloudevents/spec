@@ -23,12 +23,15 @@ are:
 1. Significant number, and regular, reviewer on non-trivial PRs, _AND_
 1. Significant number, and regular, author of non-trivial PRs
 
-Note that the definition of _"significant"_ is purposely left as undefined since it is
-very subjective and depends on the technological choices of the sdk projects.
-The purpose of these requirements are to demonstrate the person's expertise and regular commitment to the project - not simply to achieve a certain level of activity.
+Note that the definition of _"significant"_ is purposely left as undefined since
+it is very subjective and depends on the technological choices of the sdk
+projects. The purpose of these requirements are to demonstrate the person's
+expertise and regular commitment to the project - not simply to achieve a
+certain level of activity.
 
-Each sdk project MAY define in the `CONTRIBUTING.md` (available at the root of the Github Repository)
-stricter requirements, in order to meet the community demands, e.g. _we require that the contributor submitted at least 20 PRs_.
+Each sdk project MAY define in the `CONTRIBUTING.md` (available at the root of
+the Github Repository) stricter requirements, in order to meet the community
+demands, e.g. _we require that the contributor submitted at least 20 PRs_.
 
 If a contributor does not meet these criteria, they should not be considered for
 approval as a maintainer of the project, **unless** the situation defined in
