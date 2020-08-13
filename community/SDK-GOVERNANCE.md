@@ -10,7 +10,46 @@ The community is organized as follows:
 
 ## New maintainers
 
-TBD
+Maintainers are a crucial part of this community. They keep our projects alive
+and ensure both development and maintenance. We define a set of criteria,
+followed by a vote, to include an active contributor as maintainer of one or
+more SDK projects. An active contributor may propose themselves as a maintainer,
+although we encourage the existing maintainers to nominate active contributors
+proactively.
+
+The criteria for a contributor to become a maintainer for a given SDK repository
+are:
+
+1. Significant number, and regular, reviewer on non-trivial PRs, _AND_
+1. Significant number, and regular, author of non-trivial PRs
+
+Note that the definition of _"significant"_ is purposely left as undefined since
+it is very subjective and depends on the technological choices of the sdk
+projects. The purpose of these requirements are to demonstrate the person's
+expertise and regular commitment to the project - not simply to achieve a
+certain level of activity.
+
+Each sdk project MAY define in the `CONTRIBUTING.md` (available at the root of
+the Github Repository) stricter requirements, in order to meet the community
+demands, e.g. _we require that the contributor submitted at least 20 PRs_.
+
+If a contributor does not meet these criteria, they should not be considered for
+approval as a maintainer of the project, **unless** the situation defined in
+[handover the project](#handover-to-a-new-maintainergroup-of-maintainers)
+applies.
+
+Once a contributor has met the above criteria, they, or an existing maintainer,
+can ask to proceed with a vote using the
+[Asynchronous voting process](#asynchronous-voting-process).
+
+The voting criteria are:
+
+- 1 week to vote
+- At least 2/3 of the votes cast agree to the proposal
+- _sdk-x maintainers_ are entitled to vote
+
+If **nobody** votes, then the contributor may proceed with the
+[handover of the project](#handover-to-a-new-maintainergroup-of-maintainers).
 
 ## Ensuring projects health
 
@@ -112,6 +151,18 @@ using the [Asynchronous voting process](#asynchronous-voting-process).
 The voting criteria are:
 
 - 2 weeks to vote
+- At least 2/3 of the votes cast agree to the proposal
+- All _sdk maintainers_ are entitled to vote
+
+## Modifying this document
+
+In order to modify this document, the community should proceed with a vote on
+the changes using the
+[Asynchronous voting process](#asynchronous-voting-process).
+
+The voting criteria are:
+
+- 1 week to vote
 - At least 2/3 of the votes cast agree to the proposal
 - All _sdk maintainers_ are entitled to vote
 
