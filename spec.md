@@ -436,7 +436,7 @@ See
 for additional information concerning the use and definition of extensions.
 
 The definition of an extension SHOULD fully define all aspects of the
-mattribute - e.g. its name, type, semantic meaning and possible values. New
+attribute - e.g. its name, type, semantic meaning and possible values. New
 extension definitions SHOULD use a name that is descriptive enough to reduce the
 chances of name collisions with other extensions. In particular, extension
 authors SHOULD check the [documented extensions](documented-extensions.md)
