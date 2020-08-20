@@ -41,19 +41,8 @@ a Discovery Endpoint could choose to be implemented as part of a Service, or
 Event Producer, or it could be acting as an independent aggregrator of this
 metadata. This implementation detail will be transparent to consumers.
 
-There are several discovery use cases to consider from the viewpoint of event
-consumers.
-
-1. What services are available, and what event types do they generate?
-2. What event types are available, and from which services?
-
-The second case becomes relevant if multiple services support the same event
-types. Use case 1 is likely the dominant use case. Given the example of a public
-cloud provider where all services generate events, there might be dozens of
-sources and hundreds of event types. The discovery funnel of services first,
-then event types helps users navigate without having to see large lists of event
-types. Both of these cases show the importance of using filters in the discovery
-API to narrow down the selection of available events.
+The main usecase to condider from the viewpoint of the event consumer is what
+services are available, and what event types do they generate?
 
 The CloudEvent `source` attribute is a potential cause of high fanout. For
 example, consider a blob storage system where each directory constitutes a
@@ -156,7 +145,7 @@ Service:
   "protocols": [ "[string]" + ],
   "types": [ ?
     { *
-      "type": "[ce-type value]",
+      "name": "[ce-type value]",
       "description": "[human string]", ?
       "datacontenttype": "[ce-datacontenttype value]", ?
       "dataschema": "[ce-dataschema URI]", ?
@@ -186,10 +175,10 @@ An example:
   "protocols": ["HTTP"],
   "types": [
     {
-      "type": "com.example.widget.create"
+      "name": "com.example.widget.create"
     },
     {
-      "type": "com.example.widget.delete"
+      "name": "com.example.widget.delete"
     }
   ]
 }
@@ -345,7 +334,7 @@ The following sections define the attributes that appear in a Service entity.
   - `[ "HTTP" ]`
   - `[ "HTTP", "AMQP", "KAFKA" ]`
 
-##### type
+##### name
 
 - Type: `String`
 - Description: CloudEvents
@@ -460,7 +449,7 @@ The following sections define the attributes that appear in a Service entity.
   "subscriptionurl": "https://cloud.example.com/docs/storage",
   "types": [
     {
-      "type": "com.example.storage.object.create",
+      "name": "com.example.storage.object.create",
       "specversions": ["1.x-wip"],
       "datacontenttype": "application/json",
       "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json",
@@ -547,80 +536,6 @@ When encoded in JSON, the response format MUST adhere to the following:
   ... remainder of Service attributes ...
 }
 ```
-
-#### Types
-
-##### `/types`
-
-This MUST return a map of zero or more Types values, where each Type's value is
-an array of Services that support that Type.
-
-When encoded in JSON, the response format MUST adhere to the following:
-
-```
-{
-  "TYPE-VALUE": [
-    {
-      "id: "{id}",
-      "url": "{url}",
-      "name: "{name}",
-      ... remainder of Service attributes ...
-    }
-    ...
-  ]
-  ...
-}
-```
-
-##### `/types/{type}`
-
-This MUST returns a map of one or more Services that support the Type value
-specified. Type value MUST conform to the [CloudEvents type](./spec.md#type)
-attribute specification.
-
-When encoded in JSON, the response format MUST adhere to the following:
-
-```
-{
-  "{type}": [
-    {
-      "id: "{id}",
-      "url": "{url}",
-      "name: "{name}",
-      ... remainder of Service attributes ...
-    }
-    ...
-  ]
-}
-```
-
-##### `/types?matching=[search term]`
-
-Same as `/types` but the map MUST be limited to just those Types whose value
-contains the `search term` value (case insensitive).
-
-###### matching
-
-- Type: `string`
-- Description: Search term that provides case insensitive match against the
-  Type's value. The parameter can match any portion of the value.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be non-empty
-- Examples:
-  - `"com.storage.object"`
-    - matches:
-      - `"com.storage.object.create"`
-      - `"com.storage.object.delete"`
-      - `"com.storage.object.update"`
-  - `"storage"`
-    - matches:
-      - `"com.storage.object.create"`
-      - `"com.storage.object.delete"`
-      - `"com.storage.object.update"`
-  - `"create"`
-    - matches:
-      - `"com.storage.object.create"`
 
 ## Protocol Bindings
 

@@ -42,42 +42,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/service'
-  /types:
-    get:
-      parameters:
-       - in: query
-         name: matching
-         description: The search term.
-         required: false
-         schema:
-           type: string
-      responses:
-        '200':
-          description: A list of types (optionally matching the query parameter).
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/type'
-  /types/{type}:
-    get:
-      parameters:
-       - in: path
-         name: type
-         description: The name of the type to be returned.
-         required: true
-         schema:
-           type: string
-      responses:
-        '200':
-          description: The corresponding service.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/type'
 components:
   schemas:
     service:
@@ -128,7 +92,7 @@ components:
     type:
       type: object
       properties:
-        type:
+        name:
           type: string
           description: CloudEvents type attribute.
           example: com.github.pull.create, com.example.object.delete.v2
