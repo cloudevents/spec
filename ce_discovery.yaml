@@ -84,7 +84,7 @@ components:
             type: string
             description: protocol
           example: '[ "HTTP", "AMQP", "KAFKA" ]'
-        types:
+        events:
           type: array
           description: List of event types available in this service.
           items:
@@ -92,7 +92,7 @@ components:
     type:
       type: object
       properties:
-        name:
+        type:
           type: string
           description: CloudEvents type attribute.
           example: com.github.pull.create, com.example.object.delete.v2

@@ -143,9 +143,9 @@ Service:
   },
   "authscope": "[string]", ?
   "protocols": [ "[string]" + ],
-  "types": [ ?
+  "events": [ ?
     { *
-      "name": "[ce-type value]",
+      "type": "[ce-type value]",
       "description": "[human string]", ?
       "datacontenttype": "[ce-datacontenttype value]", ?
       "dataschema": "[ce-dataschema URI]", ?
@@ -173,12 +173,12 @@ An example:
   "specversions": ["1.0"],
   "subscriptionurl": "https://events.example.com",
   "protocols": ["HTTP"],
-  "types": [
+  "events": [
     {
-      "name": "com.example.widget.create"
+      "type": "com.example.widget.create"
     },
     {
-      "name": "com.example.widget.delete"
+      "type": "com.example.widget.delete"
     }
   ]
 }
@@ -334,7 +334,7 @@ The following sections define the attributes that appear in a Service entity.
   - `[ "HTTP" ]`
   - `[ "HTTP", "AMQP", "KAFKA" ]`
 
-##### name
+##### type
 
 - Type: `String`
 - Description: CloudEvents
@@ -447,9 +447,9 @@ The following sections define the attributes that appear in a Service entity.
   "description": "Blob storage in the cloud",
   "protocols": ["HTTP"],
   "subscriptionurl": "https://cloud.example.com/docs/storage",
-  "types": [
+  "events": [
     {
-      "name": "com.example.storage.object.create",
+      "type": "com.example.storage.object.create",
       "specversions": ["1.x-wip"],
       "datacontenttype": "application/json",
       "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json",
