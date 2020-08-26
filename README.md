@@ -65,17 +65,21 @@ In addition to the documentation mentioned above, there are also an
 - [Go](https://github.com/cloudevents/sdk-go)
 - [Java](https://github.com/cloudevents/sdk-java)
 - [Javascript](https://github.com/cloudevents/sdk-javascript)
+- [PHP](https://github.com/cloudevents/sdk-php)
 - [Python](https://github.com/cloudevents/sdk-python)
 - [Ruby](https://github.com/cloudevents/sdk-ruby)
+- [Rust](https://github.com/cloudevents/sdk-rust)
 
 ## Community
 
 Learn more about the people and organizations who are creating a dynamic cloud
 native ecosystem by making our systems interoperable with CloudEvents.
 
+- Our [Governance](community/GOVERNANCE.md) documentation.
+- How to [contribute](community/CONTRIBUTING.md) via issues and pull requests.
 - [Contributors](community/contributors.md): people and organizations who helped
   us get started or are actively working on the CloudEvents specification.
-- Coming soon: [demos & open source](community/README.md) -- if you have
+- [Demos & open source](community/README.md) -- if you have
   something to share about your use of CloudEvents, please submit a PR!
 
 ## Process
@@ -110,35 +114,33 @@ For SDK related comments and questions:
 - Archives are at: https://lists.cncf.io/g/cncf-cloudevents-sdk/topics
 - Slack: #cloudeventssdk on [CNCF's Slack workspace](https://slack.cncf.io/)
 
-
 ## Meeting Time
 
 See the [CNCF public events calendar](https://www.cncf.io/community/calendar/).
 This specification is being developed by the
 [CNCF Serverless Working Group](https://github.com/cncf/wg-serverless). This
-working group meets every Thursday at 9AM PT (USA Pacific):
+working group meets every Thursday at 9AM PT (USA Pacific)
+([World Time Zone Converter](http://www.thetimezoneconverter.com/?t=9:00%20am&tz=San%20Francisco&)):
 
 Join from PC, Mac, Linux, iOS or Android: https://zoom.us/my/cncfserverlesswg
 
-Or iPhone one-tap :
-
-    US: +16465588656,,3361029682#  or +16699006833,,3361029682#
-
-Or Telephone:
-
-    Dial:
-        US: +1 646 558 8656 (US Toll) or +1 669 900 6833 (US Toll)
-        or +1 855 880 1246 (Toll Free) or +1 877 369 0926 (Toll Free)
-
 Meeting ID: 336 102 9682
 
-International numbers available:
-https://zoom.us/zoomconference?m=QpOqQYfTzY_Gbj9_8jPtsplp1pnVUKDr
+Or mobile one-tap :
+```
+    US: +16465588656,,3361029682#  or +16699006833,,3361029682#
+```
+
+Or Telephone:
+```
+    US: +1 646 558 8656 (US Toll) or +1 669 900 6833 (US Toll)
+    or +1 855 880 1246 (Toll Free) or +1 877 369 0926 (Toll Free)
+```
+
+International numbers available
+[here](https://zoom.us/zoomconference?m=QpOqQYfTzY_Gbj9_8jPtsplp1pnVUKDr).
 
 NOTE: Please use \*6 to mute/un-mute your phone during the call.
-
-World Time Zone Converter:
-http://www.thetimezoneconverter.com/?t=9:00%20am&tz=San%20Francisco&
 
 ## Meeting Minutes
 

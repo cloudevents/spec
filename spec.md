@@ -1,4 +1,4 @@
-# CloudEvents - Version 1.0
+# CloudEvents - Version 1.x-wip
 
 ## Abstract
 
@@ -145,7 +145,13 @@ specific protocols (AWS Kinesis, Azure Event Grid).
 #### Protocol Binding
 
 A protocol binding describes how events are sent and received over a given
-protocol, in particular how events are mapped to messages in that protocol.
+protocol.
+
+Protocol bindings MAY choose to use an [Event Format](#event-format) to map an
+event directly to the transport envelope body, or MAY provide additional
+formatting and structure to the envelope. For example, a wrapper around a
+structured-mode message might be used, or several messages could be batched
+together into a transport envelope body.
 
 ## Context Attributes
 
@@ -296,7 +302,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 - Type: `String`
 - Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `1.0` when referring to this version of the
+  producers MUST use a value of `1.x-wip` when referring to this version of the
   specification.
 - Constraints:
   - REQUIRED
@@ -318,8 +324,8 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   - SHOULD be prefixed with a reverse-DNS name. The prefixed domain dictates the
     organization which defines the semantics of this event type.
 - Examples
-  - com.github.pull.create
-  - com.example.object.delete.v2
+  - com.github.pull_request.opened
+  - com.example.object.deleted.v2
 
 ### OPTIONAL Attributes
 
@@ -549,8 +555,8 @@ The following example shows a CloudEvent serialized as JSON:
 
 ```JSON
 {
-    "specversion" : "1.0",
-    "type" : "com.github.pull.create",
+    "specversion" : "1.x-wip",
+    "type" : "com.github.pull_request.opened",
     "source" : "https://github.com/cloudevents/spec/pull",
     "subject" : "123",
     "id" : "A234-1234-1234",

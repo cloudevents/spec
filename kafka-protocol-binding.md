@@ -1,4 +1,4 @@
-# Kafka Protocol Binding for CloudEvents - Version 1.0
+# Kafka Protocol Binding for CloudEvents - Version 1.x-wip
 
 ## Abstract
 
@@ -76,16 +76,17 @@ the Kafka message's value section as-is, with the `content-type` header value
 declaring its media type; all other event attributes MUST be mapped to the
 Kafka message's [header section][kafka-message-header].
 
-Implementations that use Kafka 0.11.0.0 and above MAY use either _binary_
-or _structured_ modes. Implementations that use Kafka 0.10.x.x and below
-MUST use only use _structured_ mode and encode the event in JSON. This is
-because older versions of Kafka lacked support for message level headers.
+Implementations that use Kafka 0.11.0.0 and above MAY use either _binary_ or
+_structured_ modes. Implementations that use Kafka 0.10.x.x and below MUST only
+use _structured_ mode and encode the event in JSON. This is because older
+versions of Kafka lacked support for message level headers.
 
 ### 1.4. Event Formats
 
 Event formats, used with the _structured_ content mode, define how an event is
-expressed in a particular data format. All implementations of this
-specification MUST support the [JSON event format][json-format].
+expressed in a particular data format. All implementations of this specification
+that support the _structured_ content mode MUST support the [JSON event
+format][json-format].
 
 ### 1.5. Security
 
@@ -222,7 +223,7 @@ Key: mykey
 
 ------------------ headers -------------------
 
-ce_specversion: "1.0"
+ce_specversion: "1.x-wip"
 ce_type: "com.example.someevent"
 ce_source: "/mycontext/subcontext"
 ce_id: "1234-1234-1234"
@@ -288,7 +289,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 ------------------- value --------------------
 
 {
-    "specversion" : "1.0",
+    "specversion" : "1.x-wip",
     "type" : "com.example.someevent",
     "source" : "/mycontext/subcontext",
     "id" : "1234-1234-1234",

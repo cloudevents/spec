@@ -1,4 +1,4 @@
-# HTTP 1.1 Web Hooks for Event Delivery - Version 1.0
+# HTTP 1.1 Web Hooks for Event Delivery - Version 1.x-wip
 
 ## Abstract
 

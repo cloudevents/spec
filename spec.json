@@ -26,15 +26,15 @@
       "description": "The version of the CloudEvents specification which the event uses.",
       "$ref": "#/definitions/specversiondef",
       "examples": [
-        "1.0"
+        "1.x-wip"
       ]
     },
     "type": {
       "description": "Describes the type of event related to the originating occurrence.",
       "$ref": "#/definitions/typedef",
       "examples" : [
-        "com.github.pull.create",
-        "com.example.object.delete.v2"
+        "com.github.pull_request.opened",
+        "com.example.object.deleted.v2"
       ]
     },
     "datacontenttype": {
@@ -116,7 +116,7 @@
       "type": "string"
     },
     "datadef": {
-      "type": ["object", "string"]
+      "type": ["object", "string", "number", "array", "boolean", "null"]
     },
     "data_base64def": {
       "type": "string",

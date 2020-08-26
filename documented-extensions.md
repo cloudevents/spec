@@ -19,10 +19,10 @@ might be changed, or removed, at any time. As such, inclusion of an attribute in
 this document does not need to meet the same level of maturity, or popularity,
 as attributes defined in the [CloudEvents specification](spec.md). To be
 included in this document, aside from the normal PR review process, the
-attribute needs to have at least two [Voting](GOVERNANCE.md#membership) member
-organizations stating their support for its inclusion as comments in the PR. If
-the author of the PR is also a Voting member, then they are allowed to be one of
-two.
+attribute needs to have at least two
+[Voting](community/GOVERNANCE.md#membership) member organizations stating their
+support for its inclusion as comments in the PR. If the author of the PR is
+also a Voting member, then they are allowed to be one of two.
 
 ## Usage
 

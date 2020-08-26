@@ -1,4 +1,4 @@
-# AMQP Protocol Binding for CloudEvents - Version 1.0
+# AMQP Protocol Binding for CloudEvents - Version 1.x-wip
 
 ## Abstract
 
@@ -77,7 +77,8 @@ AMQP [application-properties][app-properties] section.
 
 Event formats, used with the _stuctured_ content mode, define how an event is
 expressed in a particular data format. All implementations of this specification
-MUST support the [JSON event format][json-format].
+that support the _structured_ content mode MUST support the [JSON event
+format][json-format].
 
 ### 1.5. Security
 
@@ -224,7 +225,7 @@ content-type: application/json; charset=utf-8
 
 ----------- application-properties -----------
 
-cloudEvents:specversion: 1.0
+cloudEvents:specversion: 1.x-wip
 cloudEvents:type: com.example.someevent
 cloudEvents:time: 2018-04-05T03:56:24Z
 cloudEvents:id: 1234-1234-1234
@@ -286,7 +287,7 @@ content-type: application/cloudevents+json; charset=utf-8
 ------------- application-data --------------------------
 
 {
-    "specversion" : "1.0",
+    "specversion" : "1.x-wip",
     "type" : "com.example.someevent",
 
     ... further attributes omitted ...

@@ -1,8 +1,8 @@
 {
   "namespace":"io.cloudevents",
   "type":"record",
-  "name":"CloudEvent",
-  "version":"1.0",
+  "name":"AvroCloudEvent",
+  "version":"1.x-wip",
   "doc":"Avro Event Format for CloudEvents",
   "fields":[
     {
@@ -31,7 +31,7 @@
             "boolean",
             {
               "type": "record",
-              "name": "CloudEventData",
+              "name": "AvroCloudEventData",
               "doc": "Representation of a JSON Value",
               "fields": [
                 {
@@ -41,8 +41,8 @@
                     "values": [
                       "null",
                       "boolean",
-                      { "type": "map", "values": "CloudEventData" },
-                      { "type": "array", "items": "CloudEventData" },
+                      { "type": "map", "values": "AvroCloudEventData" },
+                      { "type": "array", "items": "AvroCloudEventData" },
                       "double",
                       "string"
                     ]
@@ -54,7 +54,7 @@
             "string"
           ]
         },
-        { "type": "array", "items": "CloudEventData" },
+        { "type": "array", "items": "AvroCloudEventData" },
         "double",
         "string"
       ]

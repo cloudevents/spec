@@ -45,8 +45,8 @@ There are three categories of project membership:
    administrative actions on behalf of the group. For example, manage the
    website, github repos and moderate the meetings. Their actions should be done
    with the knowledge and consent of the group. They also have the ability to
-   merge/close PRs, but only per the group's approval. See the [OWNERS](OWNERS)
-   file for the current list of Admins.
+   merge/close PRs, but only per the group's approval. See the
+   [OWNERS](../OWNERS) file for the current list of Admins.
 
 ### Admins
 
@@ -54,12 +54,12 @@ Since the role of an 'Admin' is mainly administrative, the list of Members
 within this group should not need to change regularly. The following rules
 govern adding and removing Admins:
 
-- New Admins can be proposed via a PR to edit the [OWNERS](OWNERS) file. Normal
+- New Admins can be proposed via a PR to edit the [OWNERS](../OWNERS) file.
+  Normal PR voting rules apply.
+- Admins can be removed via a PR to edit the [OWNERS](../OWNERS) file. Normal
   PR voting rules apply.
-- Admins can be removed via a PR to edit the [OWNERS](OWNERS) file. Normal
-  PR voting rules apply.
-- Admins can request to be removed via a PR to edit the [OWNERS](OWNERS) file.
-  Since the group can not force an Admin to continue in that role, the PR
+- Admins can request to be removed via a PR to edit the [OWNERS](../OWNERS)
+  file.  Since the group can not force an Admin to continue in that role, the PR
   does not follow the normal voting rules and can be merged by any of the
   Admins, including the person requesting to be removed. The exception to
   this "self-merge" aspect is when they are the last Admin. See next bullet.
@@ -93,7 +93,7 @@ If a vote is taken during a meeting, the follow rules will be followed:
   meeting, not during.
 - A "primary" or "alternate" member may request a leave-of-absence via an
   e-mail to the mailing list, or a message to the
-  [public slack channel](README.md#communications), prior to the absence.
+  [public slack channel](../README.md#communications), prior to the absence.
   An acceptable absence would include situations where the person is not
   officially working at all, such as being on vacation, taking a sabbatical or
   there is a public holiday. However, situations such as a scheduling conflict
@@ -127,7 +127,7 @@ The specifications produced will adhere to the following:
   during the release cycle.
 
 Note that these rules do not apply to the
-[documented extensions](documented-extensions.md).
+[documented extensions](../documented-extensions.md).
 
 To create a new release:
 
@@ -156,3 +156,8 @@ To create a new release:
     [twitter account](https://twitter.com/cloudeventsio)
   - Add it to the "announcement" section of our
     [website](https://cloudevents.io/)
+
+## Additional Information
+
+- We adhere to the CNCF's
+  [Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md) guidelines

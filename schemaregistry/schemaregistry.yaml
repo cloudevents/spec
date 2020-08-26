@@ -1,0 +1,315 @@
+openapi: 3.0.0
+info:
+  title: Cloud Native Data Schema Registry
+  version: "0.1"
+paths:
+  /schemagroups:
+    get:
+      summary: 'Get list of schema groups'
+      description: 'Get all schema groups in namespace.'
+      operationId: getGroups
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+      tags:
+      -  'groups'
+  /schemagroups/{group-id}:
+    parameters:
+      - name: group-id
+        in: path
+        description: schema group
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get schema group
+      description: Get schema group description in registry namespace.
+      operationId: getGroup
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaGroup'
+        '404':
+          description: Specified group not found
+      tags:
+      - 'groups'
+    put:
+      summary: Create schema group
+      description: Create schema group with specified format in registry namespace.
+      operationId: createGroup 
+      requestBody:
+        description: schema group description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchemaGroup'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+        '409':
+          description: Schema group already exists
+      tags:
+      -  'groups'
+    delete:
+      summary: Delete schema group
+      description: Delete schema group in schema registry namespace.
+      operationId: deleteGroup
+      responses:
+        '204':
+          description: OK no content
+        '404':
+          description: Specified group not found
+      tags:
+      -  'groups'
+  /schemagroups/{group-id}/schemas:
+    parameters:
+    - name: group-id
+      in: path
+      description: schema group
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - 'groups'
+      summary: List schemas for group id
+      description: Returns schema by group id.
+      operationId: getSchemasByGroup
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  type: string
+        '404':
+          description: Group not found
+    delete:
+      tags:
+      - 'groups'
+      summary: Deletes all schemas in group
+      description: Deletes all schemas under specified group id.
+      operationId: deleteSchemasByGroup
+      responses:
+        '204':
+          description: OK no content
+        '404':
+          description: Group not found
+  /schemagroups/{group-id}/schemas/{schema-id}:
+    parameters:
+      - name: group-id
+        in: path
+        description: schema group
+        required: true
+        schema:
+          type: string
+      - name: schema-id
+        in: path
+        description: schema id
+        required: true
+        schema:
+          type: string
+    post: 
+      summary: Register schema
+      description: >
+        Register schema.
+        If schema of specified name does not exist in specified group, schema is created at version 1.
+        If schema of specified name exists already in specified group, schema is created at latest version + 1.
+        If schema with identical content already exists, existing schema's ID is returned. 
+      operationId: createSchema
+      requestBody:
+        description: schema content
+        required: true
+        content:
+          application/json;format=avro:
+            schema:
+              $ref: '#/components/schemas/SchemaBytePayload'
+      responses:
+        '200':
+          $ref: '#/components/responses/SchemaIdResponse'
+        '400': 
+          description: Invalid request
+      tags:
+        - 'registration'
+    get:
+      summary: Get latest version of schema
+      description: Get latest version of schema. 
+      operationId: getLatestSchema
+      responses: 
+        '200':
+          $ref: '#/components/responses/SchemaBytePayloadResponse'
+      tags:
+        - 'schemas'
+    delete:
+      summary: Delete schema
+      operationId: deleteSchema
+      responses:
+        '204':
+          description: OK no content
+        '404':
+          description: Matching schema not found
+      tags:
+        - 'schemas'
+  /schemagroups/{group-id}/schemas/{schema-id}/versions:
+    parameters:
+      - name: group-id
+        in: path
+        description: schema group
+        required: true
+        schema:
+          type: string
+      - name: schema-id
+        in: path
+        description: schema id
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get list of versions
+      description: Get list of versions for specified schema
+      operationId: getSchemaVersions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json;format=avro:
+              schema:
+                type: array
+                items: 
+                  type: integer
+      tags:
+        - 'versions'
+  /schemagroups/{group-id}/schemas/{schema-id}/versions/{version-number}:
+    parameters:
+      - name: group-id
+        in: path
+        description: schema group
+        required: true
+        schema:
+          type: string
+      - name: schema-id
+        in: path
+        description: schema id
+        required: true
+        schema:
+          type: string
+      - name: version-number
+        in: path
+        description: version number
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get specified version of schema
+      operationId: getSchemaVersion
+      responses:
+        '200':
+          $ref: '#/components/responses/SchemaBytePayloadResponse'
+        '404':
+          description: Specified schema not found
+      tags:
+        - 'versions'
+    delete:
+      summary: Delete specified version of schema
+      operationId: deleteSchemaVersion
+      responses:
+        '204':
+          description: OK no content
+      tags:
+        - 'versions'
+
+components: 
+  schemas:
+    SchemaId:
+      type: object
+      properties:
+        id:
+          type: string
+    SchemaBytePayload:
+      type: string
+    SchemaGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        createdtimeutc:
+          type: string
+          format: date-time
+        updatedtimeutc:
+          type: string
+          format: date-time
+        format:
+          type: string
+        groupProperties:
+          type: object
+          additionalProperties:
+            type: string
+  responses:
+    SchemaIdResponse:
+      description: OK
+      headers:
+        Location:
+          schema:
+            type: string
+        Schema-Id:
+          schema:
+            type: string
+            format: uuid
+          description: unique schema identifier
+        Schema-Id-Location: 
+          schema:
+            type: string
+            format: url
+          description: location of schema resource
+        Schema-Version:
+          schema:
+            type: integer
+          description: version of returned schema
+      content:
+        application/json;format=avro:
+          schema:
+            $ref: '#/components/schemas/SchemaId'
+        application/json;format=protobuf:
+          schema:
+            $ref: '#/components/schemas/SchemaId'
+    SchemaBytePayloadResponse:
+      description: OK
+      headers: 
+        Location:
+          schema:
+            type: string
+        Schema-Id:
+          schema:
+            type: string
+          description: schema identifier
+        Schema-Id-Location: 
+          schema:
+            type: string
+            format: url
+          description: location of schema resource
+        Schema-Version:
+          schema:
+            type: integer
+          description: version of returned schema
+      content:
+        application/json;format=avro:
+          schema:
+            $ref: '#/components/schemas/SchemaBytePayload'
