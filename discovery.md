@@ -38,24 +38,13 @@ advance.
 The deployment relationship of a Discovery Endpoint to the Services and Event
 Producers that it advertises is out of scope of this specification. For example,
 a Discovery Endpoint could choose to be implemented as part of a Service, or
-Event Producer, or it could be acting as an independent aggregrator of this
+Event Producer, or it could be acting as an independent aggregator of this
 metadata. This implementation detail will be transparent to consumers.
 
-There are several discovery use cases to consider from the viewpoint of event
-consumers.
+The main use-case to consider from the viewpoint of the event consumer is what
+services are available, and what event types do they generate?
 
-1. What services are available, and what event types do they generate?
-2. What event types are available, and from which services?
-
-The second case becomes relevant if multiple services support the same event
-types. Use case 1 is likely the dominant use case. Given the example of a public
-cloud provider where all services generate events, there might be dozens of
-sources and hundreds of event types. The discovery funnel of services first,
-then event types helps users navigate without having to see large lists of event
-types. Both of these cases show the importance of using filters in the discovery
-API to narrow down the selection of available events.
-
-The CloudEvent `source` attribute is a potential cause of high fanout. For
+The CloudEvent `source` attribute is a potential cause of high fan-out. For
 example, consider a blob storage system where each directory constitutes a
 distinct `source` attribute value. For this reason, the exact CloudEvents
 `source` attribute value that might appear in a CloudEvent will not appear in
@@ -76,7 +65,7 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 Note: some of the terms defined below are taken from the [CloudEvents](spec.md)
 specification, and are marked with a reference to the original definition. Any
 difference between the definitions is accidental and the CloudEvents version
-takes precendence.
+takes precedence.
 
 This specification defines the following terms:
 
@@ -84,7 +73,7 @@ This specification defines the following terms:
 
 A compliant implementation of this specification that advertises the set of
 Services, Event Types and other metadata to aid in the creation of an Event
-Subcription.
+Subscription.
 
 #### Service
 
@@ -154,7 +143,7 @@ Service:
   },
   "authscope": "[string]", ?
   "protocols": [ "[string]" + ],
-  "types": [ ?
+  "events": [ ?
     { *
       "type": "[ce-type value]",
       "description": "[human string]", ?
@@ -184,7 +173,7 @@ An example:
   "specversions": ["1.0"],
   "subscriptionurl": "https://events.example.com",
   "protocols": ["HTTP"],
-  "types": [
+  "events": [
     {
       "type": "com.example.widget.create"
     },
@@ -224,7 +213,7 @@ The following sections define the attributes that appear in a Service entity.
   For example, if a Service's implementation is upgraded to a new version then
   whether this would result in a new Service (and `id`) or is an update to the
   existing Service's metadata, is an implementation choice. Likewise, this
-  specifcation makes no statement, or guarantees, as to the forwards or
+  specification makes no statement, or guarantees, as to the forwards or
   backwards compatibility a Service as it changes over time.
 
   Note, unlike the `name` attribute which only needs to be unique within the
@@ -435,7 +424,7 @@ The following sections define the attributes that appear in a Service entity.
   that are used for this event `type`. The structure contains the following
   attributes:
   - `name` - the CloudEvents context attribute name used by this extension. It
-    MUST adhere to the CloudEvents context attrbibute naming rules
+    MUST adhere to the CloudEvents context attribute naming rules
   - `type` - the data type of the extension attribute. It MUST adhere to the
     CloudEvents [type system](./spec.md#type-system)
   - `specurl` - an attribute pointing to the specification that defines the
@@ -458,7 +447,7 @@ The following sections define the attributes that appear in a Service entity.
   "description": "Blob storage in the cloud",
   "protocols": ["HTTP"],
   "subscriptionurl": "https://cloud.example.com/docs/storage",
-  "types": [
+  "events": [
     {
       "type": "com.example.storage.object.create",
       "specversions": ["1.x-wip"],
@@ -547,80 +536,6 @@ When encoded in JSON, the response format MUST adhere to the following:
   ... remainder of Service attributes ...
 }
 ```
-
-#### Types
-
-##### `/types`
-
-This MUST return a map of zero or more Types values, where each Type's value is
-an array of Services that support that Type.
-
-When encoded in JSON, the response format MUST adhere to the following:
-
-```
-{
-  "TYPE-VALUE": [
-    {
-      "id: "{id}",
-      "url": "{url}",
-      "name: "{name}",
-      ... remainder of Service attributes ...
-    }
-    ...
-  ]
-  ...
-}
-```
-
-##### `/types/{type}`
-
-This MUST returns a map of one or more Services that support the Type value
-specified. Type value MUST conform to the [CloudEvents type](./spec.md#type)
-attribute specification.
-
-When encoded in JSON, the response format MUST adhere to the following:
-
-```
-{
-  "{type}": [
-    {
-      "id: "{id}",
-      "url": "{url}",
-      "name: "{name}",
-      ... remainder of Service attributes ...
-    }
-    ...
-  ]
-}
-```
-
-##### `/types?matching=[search term]`
-
-Same as `/types` but the map MUST be limited to just those Types whose value
-contains the `search term` value (case insensitive).
-
-###### matching
-
-- Type: `string`
-- Description: Search term that provides case insensitive match against the
-  Type's value. The parameter can match any portion of the value.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be non-empty
-- Examples:
-  - `"com.storage.object"`
-    - matches:
-      - `"com.storage.object.create"`
-      - `"com.storage.object.delete"`
-      - `"com.storage.object.update"`
-  - `"storage"`
-    - matches:
-      - `"com.storage.object.create"`
-      - `"com.storage.object.delete"`
-      - `"com.storage.object.update"`
-  - `"create"`
-    - matches:
-      - `"com.storage.object.create"`
 
 ## Protocol Bindings
 
