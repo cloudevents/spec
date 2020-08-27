@@ -38,13 +38,13 @@ advance.
 The deployment relationship of a Discovery Endpoint to the Services and Event
 Producers that it advertises is out of scope of this specification. For example,
 a Discovery Endpoint could choose to be implemented as part of a Service, or
-Event Producer, or it could be acting as an independent aggregrator of this
+Event Producer, or it could be acting as an independent aggregator of this
 metadata. This implementation detail will be transparent to consumers.
 
-The main usecase to condider from the viewpoint of the event consumer is what
+The main use-case to consider from the viewpoint of the event consumer is what
 services are available, and what event types do they generate?
 
-The CloudEvent `source` attribute is a potential cause of high fanout. For
+The CloudEvent `source` attribute is a potential cause of high fan-out. For
 example, consider a blob storage system where each directory constitutes a
 distinct `source` attribute value. For this reason, the exact CloudEvents
 `source` attribute value that might appear in a CloudEvent will not appear in
@@ -65,7 +65,7 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 Note: some of the terms defined below are taken from the [CloudEvents](spec.md)
 specification, and are marked with a reference to the original definition. Any
 difference between the definitions is accidental and the CloudEvents version
-takes precendence.
+takes precedence.
 
 This specification defines the following terms:
 
@@ -73,7 +73,7 @@ This specification defines the following terms:
 
 A compliant implementation of this specification that advertises the set of
 Services, Event Types and other metadata to aid in the creation of an Event
-Subcription.
+Subscription.
 
 #### Service
 
@@ -213,7 +213,7 @@ The following sections define the attributes that appear in a Service entity.
   For example, if a Service's implementation is upgraded to a new version then
   whether this would result in a new Service (and `id`) or is an update to the
   existing Service's metadata, is an implementation choice. Likewise, this
-  specifcation makes no statement, or guarantees, as to the forwards or
+  specification makes no statement, or guarantees, as to the forwards or
   backwards compatibility a Service as it changes over time.
 
   Note, unlike the `name` attribute which only needs to be unique within the
@@ -424,7 +424,7 @@ The following sections define the attributes that appear in a Service entity.
   that are used for this event `type`. The structure contains the following
   attributes:
   - `name` - the CloudEvents context attribute name used by this extension. It
-    MUST adhere to the CloudEvents context attrbibute naming rules
+    MUST adhere to the CloudEvents context attribute naming rules
   - `type` - the data type of the extension attribute. It MUST adhere to the
     CloudEvents [type system](./spec.md#type-system)
   - `specurl` - an attribute pointing to the specification that defines the
