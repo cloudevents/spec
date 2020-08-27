@@ -19,13 +19,13 @@ message CloudEvent {
 
   // -- CloudEvent Context Attributes
 
-  // Required
+  // Required Attributes
   string id = 1;
   string source = 2; // URI-reference
   string spec_version = 3;
   string type = 4;
 
-  // Optional & Extension
+  // Optional & Extension Attributes
   map<string, CloudEventAttribute> attributes = 5;
 
   // -- CloudEvent Data (Bytes, Text, or Proto)
@@ -43,13 +43,13 @@ message CloudEvent {
   message CloudEventAttribute {
 
     oneof attr_oneof {
-      bool cloud_event_boolean = 1;
-      sfixed32 cloud_event_integer = 2;
-      string cloud_event_string = 3;
-      bytes cloud_event_binary = 4;
-      string cloud_event_uri = 5;
-      string cloud_event_uri_reference = 6;
-      google.protobuf.Timestamp cloud_event_timestamp = 7;
+      bool ce_boolean = 1;
+      int32 ce_integer = 2;
+      string ce_string = 3;
+      bytes ce_bytes = 4;
+      string ce_uri = 5;
+      string ce_uri_ref = 6;
+      google.protobuf.Timestamp ce_timestamp = 7;
     }
   }
 }
