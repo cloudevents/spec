@@ -15,8 +15,8 @@ version.
 
 - [Overview](#overview)
 - [Notations and Terminology](#notations-and-terminology)
+- [Resource Model](#resource-model)
 - [API Specification](#api-specification)
-- [Protocol Bindings](#protocol-bindings)
 - [Privacy & Security](#privacy-and-security)
 
 ## Overview
@@ -113,10 +113,9 @@ to execute some logic, which might lead to the occurrence of new events.
 
 The request for events from a Service.
 
-## API Specification
+## Resource Model
 
-This API is specified as a REST API with well defined entities and relationships
-between those entities.
+This sections defines the resource model of a Discovery Endpoint.
 
 ### Services
 
@@ -459,11 +458,10 @@ The following sections define the attributes that appear in a Service entity.
 }
 ```
 
-### REST Paths
+## API Specification
 
-Each path in the REST API represents either a list (or search) over the
-Discovery Endpoint, or the retrieval of an individual entity. All of these
-operations MUST be supported by compliant discovery implementations.
+All of the APIs specified below MUST be supported by compliant Discovery
+Endpoint implementations.
 
 Note: the relative paths specified below are NOT REQUIRED to be at the root of
 the `fpath` (per RFC1738). However, they are REQUIRED to match the end of it.
@@ -474,26 +472,30 @@ https://example.com/services
 https://example.com/myAggregator/services
 ```
 
-Note: for each query if the client is not authorized to see any particular
-entity then that entity SHOULD be excluded from the response. In cases where
-response is a single entity, then the response SHOULD result in an error as if
-the entity did not exist (e.g. for HTTP the response would be `404 Not Found`).
-In cases where the response is an array, then the response SHOULD return a
-successful status with an array, even if that array is empty. As Discovery
-service can be decoupled from Services permission checks, the above requirement
-is OPTIONAL. If the information is available to the Discovery service, it is
-highly RECOMMENDED.
+If a Discovery Endpoint can perform authorization checks to determine
+which client can see which Service, and the requesting client is not allowed
+access to a particular Service, then the Discovery Endpoint MUST respond
+as if that Service did does exist. For example, it would be excluded from
+any array of Services returned and it would result in a `404 Not Found`
+error for a request to that Service directly.
+
+Unless there is some out-of-band agreement, all APIs MUST use JSON encoding,
+which means when there is an HTTP Body the HTTP `Content-Type` Header MUST
+be `application/json`.
 
 #### Services
 
-#### `/services`
+#### `GET /services`
 
-This MUST return an array of zero or more Services. The list MUST contain all
+This MUST return an array of zero or more Services. The array MUST contain all
 Services available via this Discovery Enpoint.
 
 When encoded in JSON, the response format MUST adhere to the following:
 
 ```
+200 OK
+Content-Type: application/json
+
 [
   {
     "id": "{id}",
@@ -505,14 +507,36 @@ When encoded in JSON, the response format MUST adhere to the following:
 ]
 ```
 
-##### `/services/{id}`
+##### `GET /services/{id}`
 
 If this refers to a valid Service, then this MUST return that single Service
 entity.
 
-When encoded in JSON, the response format MUST adhere to the following:
+The following responses are defined by this specification:
+- `200 OK` and the new Service representation in the HTTP Response Body.
+- `204 No Content` to indicate that the Service is in the process of being
+  created but has not yet completed.  The HTTP Response Body MAY be empty.
+- `404 Not Found` if there is no Service with the specified `id`.
+- `406 Not Acceptable` to indicate that the Service at this endpoint has
+  failed to be created due to the creation request being syntactically invalid.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+- `409 Conflict` to indicate that the Service at this endpoint has failed
+  to be created due to the value of one or more of the attributes of the
+  creation request being invalid.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+
+TODO: Define the shape of errors in the Body
+
+Other responses are allowed, but not defined by this specification.
+
+In the case of `200 OK`, the response format MUST adhere to the following:
 
 ```
+200 OK
+Content-Type: application/json
+
 {
   "id": "{id}",
   "url": "{url}",
@@ -521,7 +545,174 @@ When encoded in JSON, the response format MUST adhere to the following:
 }
 ```
 
-##### `/services?name={name}`
+Note: in the case of `406 Not Acceptable` or `409 Conflict`, it is an
+implementation choice as to how long these responses will be returned. But it
+is expected that a `404 Not Found` will eventually be returned.
+
+#### `POST /services`
+
+This MUST add a Service to the list of Services available at this Discovery
+Endpoint. The Body of the request message MUST contain a valid single Service
+definition, with the exception that it MUST NOT include an `id` attribute.
+The `id` MUST be generated by the Discovery Enpoint.
+
+An error MUST be generated if the request can not be fulfilled.
+
+The follow responses are defined by this specification:
+- `201 Created` if the new Service was added. The response MUST include
+  an HTTP `Location` Header with a value that points to the new Service.
+  The HTTP Response Body MUST include the JSON represenation of the
+  newly created Service.
+- `202 Accepted` to indicate that the request has been accepted but not
+  processed yet. The response MUST include an HTTP `Location` Header with
+  a value that can be used to determine the status of the request. The
+  HTTP Response Body MAY be empty.
+- `406 Not Acceptable` to indicate that the request message is syntactically
+  invalid.  For example, if it contains an `id` attribute.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+- `409 Conflict` to indicate that the request message is syntactically valid,
+  but the value of one or more of the attributes are invalid - for example, the
+  `name` is not unique.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+
+Other responses are allowed, but not defined by this specification.
+
+If a `202 Accepted` was returned, an HTTP `GET` to the `Location` endpoint
+can be used to determine the status of the original request.
+This specification defines the following responses:
+- `200 OK` and the new Service representation in the HTTP Response Body -
+  meaning that this URL is the final URL of the newly added Service. Note:
+  in this case the URL MUST adhere to the normal `/services/{id}` format.
+- `204 No Content` to indicate that the `POST` request is not completed yet.
+  The HTTP Response Body MAY be empty.
+- `301 Moved Permanently` to indicate that the Service was successfully
+  added and can be found at the URL in the REQUIRED `Location` header of the
+  response.
+- `406 Not Acceptable` to indicate that the original request message was
+  syntactically invalid.  For example, if it contains an `id` attribute.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+- `409 Conflict` to indicate that the original request message is
+  syntactically valid, but the value of one or more of the attributes are
+  invalid - for example, the `name` is not unique.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+
+Other responses are allowed, but not defined by this specification, however
+they are related to the `GET` itself and not the original add request.
+
+How long the Discovery Endpoint will support the original `Location` URL is
+an implementation choice, however, it MUST be available immediately upon
+return of the `202 Accepted`. Meaning, a `404 Not Found` MUST NOT be returned
+in response to a `GET` to the `Location` URL during the time the creation
+request is being processed.
+
+##### `PUT /services/{id}`
+
+This operation is used to either add or update a Service in a Discovery
+Endpoint. If a Service already exists with the specified `id` then this
+MUST attempt to update that Service. If not, then a new Service MUST be
+added with that `id`.
+
+The Body of the request message MUST contain a single Service
+definition. Unlike the `POST` operation, the Service MUST contain an `id`
+attribute that matches the `{id}` in the `PUT` URL.
+
+An error MUST be generated if the request can not be fulfilled.
+
+The follow responses are defined by this specification:
+- `200 OK` if an existing Service was updated.
+  The HTTP Response Body MUST include the JSON represenation of the
+  newly created Service.
+- `201 Created` if a new Service was added.
+  The HTTP Response Body MUST include the JSON represenation of the
+  newly created Service.
+- `202 Accepted` to indicate that the request has been accepted but not
+  processed yet. The response MUST include an HTTP `Location` Header with
+  a URL that can be used to determine the status of the request. The
+  HTTP Response Body MAY be empty.
+  Note: in the case of updating an existing Service, the URL MUST NOT be the
+  same as the Service's URL.
+- `403 Forbidden` if this Discovery Endpoint does not support creation of
+  new Services with pre-defined `id` values. This means that the client
+  would need to use the `POST` method above instead.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+- `406 Not Acceptable` to indicate that the request message is syntactically
+  invalid.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+- `409 Conflict` to indicate that the request message is syntactically valid,
+  but the value of one or more of the attributes are invalid - for example, the
+  `name` is not unique.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+
+Other responses are allowed, but not defined by this specification.
+
+If a `202 Accepted` was returned, an HTTP `GET` to the `Location` endpoint
+can be used to determine the status of the original request. This specification
+defines the following responses:
+- `200 OK` indicates that the `PUT` was successful. The HTTP Response Body
+  MAY be empty - thus clients are expected to use the Service's true URL
+  to retrieve the current version of the Service.
+- `204 No Content` to indicate that the `PUT` request is not completed yet.
+  The HTTP Response Body MAY be empty.
+- `406 Not Acceptable` to indicate that the request message is syntactically
+  invalid.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+- `409 Conflict` to indicate that the original request message is
+  syntactically valid, but the value of one or more of the attributes are
+  invalid - for example, the `name` is not unique.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+
+Other responses are allowed, but not defined by this specification, however
+they are related to the `GET` itself and not the original `PUT` request.
+
+How long the Discovery Endpoint will support the original `Location` URL is
+an implementation choice, however, it MUST be available immediately upon
+return of the `202 Accepted`. Meaning, a `404 Not Found` MUST NOT be returned
+in response to a `GET` to the `Location` URL during the time the creation
+request is being processed.
+
+##### `DELETE /services/{id}`
+
+This MUST delete the Service at the referenced URL. If the Service can not
+be deleted then an error MUST be generated.
+
+If an error is not generated, the Discovery Endpoint MUST return one of:
+- `200 OK` if the new Service was deleted
+- `202 Accepted` to indicate that the request has been accepted but not
+  processed yet
+
+Other responses are allowed, but not defined by this specification.
+
+In the case of `202 Accepted` the Discovery Endpoint MUST include an
+HTTP `Location` Header in the response pointing to an endpoint that the
+client can use to determine the status of the delete.
+
+A successful HTTP `GET` to the `Location` endpoint MUST either return:
+- `200 OK` meaning the the original Service was successfully deleted
+- `204 No Content` to indicate that the `DELETE` request is not completed yet
+- `409 Conflict` to indicate that the original `DELETE` request message failed.
+  The HTTP Response Body SHOULD contain information as to why the create
+  failed.
+
+Note that any other failure response indicates that the `GET` to the
+`Location` URL itself failed and not the original delete request.
+
+How long the Discovery Endpoint will support the `Location` URL is an
+implementation choice.
+
+If the Service is successfully deleted any HTTP `GET` to the Service's
+original URL MUST return an HTTP `404 Gone` unless that URL happens to be
+reused in the future (e.g. the Service was restored from a backup).
+
+##### `GET /services?name={name}`
 
 This returns a single Service entity whose `name` attribute exactly matches the
 `name` query parameter value specified (case insensitive).
@@ -529,6 +720,9 @@ This returns a single Service entity whose `name` attribute exactly matches the
 When encoded in JSON, the response format MUST adhere to the following:
 
 ```
+200 OK
+Content-Type: application/json
+
 {
   "id": "{id}",
   "url": "{url}",
@@ -536,18 +730,6 @@ When encoded in JSON, the response format MUST adhere to the following:
   ... remainder of Service attributes ...
 }
 ```
-
-## Protocol Bindings
-
-The discovery API can be implemented over different API systems. We provide API
-schema definitions for implementing this API using OpenAPI and gRPC as
-illustrative examples.
-
-### HTTP Binding
-
-When using JSON, the HTTP `Content-Type` value MUST be `application/json`.
-
-...
 
 ### OpenAPI
 
