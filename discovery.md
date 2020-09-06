@@ -132,6 +132,8 @@ Service:
 ```
 {
   "id": "[a globally unique UUID]",
+  "discversion": "[discovery entry version number]",
+  "updated": "[the time of this entry's last update]"
   "url": "[unique URL to this service]",
   "name": "[unique name for this services]",
   "description": "[human string]", ?
@@ -168,6 +170,8 @@ An example:
 ```json
 {
   "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
+  "discversion": 1,
+  "updated": "2018-04-05T17:31:00Z",
   "url": "https://example.com/services/widgetService",
   "name": "widgets",
   "specversions": ["1.0"],
@@ -203,7 +207,10 @@ The following sections define the attributes that appear in a Service entity.
   Typically, this value is defined by the Discovery Endpoint, or one of the
   components behind it. However, there might be cases where the value is
   provided to the Discovery Endpoint, for example, during an "import" type of
-  operation.
+  operation. In these "import" type of cases the attribute is REQUIRED to be
+  in the client's request. However, in cases where the Service has no
+  associated `id` that needs to be retained, this attribuet MUST NOT be
+  present in the client's request.
 
   Whether a change to a Service would result in changing of the Service's
   metadata (except `id`) and thus be just an update of an existing Service, or
@@ -224,10 +231,84 @@ The following sections define the attributes that appear in a Service entity.
   See the Primer for more information.
 
 - Constraints:
-  - REQUIRED
+  - conditionally REQUIRED. See above.
   - MUST be a valid UUID per RFC4122.
 - Examples:
   - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+
+##### discversion
+
+- Type: `Integer`
+- Description: The Discovery Endpoint's version number of this Service Entry.
+  A monotonically increasing number, starting with `1` that is
+  increased by `1` each time an update is performed on this Discovery
+  Endpoint's entry. Note: this version value is not related to the version
+  of the Service itself representated by this entry. This value is meant to
+  be used to know when the Discovery Enpoint's metadata about the Service
+  has been updated.
+
+  While this attibute is REQUIRED to be part of the the Service's description
+  when returned from a Discovery Endpoint, depending on the action from the
+  client it might not be mandatory to appear in a client's request. For a
+  "create" operation, this attribute MUST NOT appear. For an "import" type
+  of operation, where it is important for the entry to retain a previously
+  defined value, this attribute MUST appear
+
+  A client MAY choose to include this attribute on an "update" operation.
+  If present then the Discovery Endpoint MUST ensure that the value
+  on the incoming request matches the current value within the Discovery
+  Endpoint, and if it does not then an error MUST be generated and the Service
+  MUST NOT be updated. However, if the incoming request does not include this
+  attribute then the Discovery Endpoint MUST skip the version matching check.
+
+- Constraints:
+  - Conditionally REQUIRED. See above.
+- Examples:
+  - `1`
+  - `42`
+
+##### updated
+
+- Type: `String` encoded [RFC 3339](https://tools.ietf.org/html/rfc3339)
+  Timestamp
+- Description: The time when this Service's entry was last updated.
+  Discovery Endpoints MUST set this value each time any change is made to
+  the entry. Note: this timestamp is not related to any updates to the Service
+  itself represented by this entry - this value is meant to be used to know
+  when the Discovery Endpoint's metadata about the Service has been updated.
+
+  While this attribute is REQUIRED to be part of the Service's descriptions
+  when returned from a Discovery Endpoint, depending on the action from the
+  client it might not be mandatory to appear in a client's request. For a
+  "create" operation, this attribute MUST NOT appear. For an "import" type
+  of operation, where it is important for the entry to retain a previously
+  defined value, this attribute MUST appear.
+
+  A client MAY choose to include this attribute on an "update" operation.
+  If present then the Discovery Endpoint MUST ensure that the value on the
+  incoming request matches the current value within the Discovery
+  Endpoint, and if it does not then an error MUST be generated and the Service
+  MUST NOT be updated. However, if the incoming request does not include this
+  attribute then the Discovery Endpoint MUST skip this timestamp check.
+
+  For ease of implmentation and to ensure interoperability, the following
+  constraints apply:
+  - All values MUST use upper case letters (e.g. 'Z' not 'z')
+  - All values MUST NOT include the `time-secfrac` component
+  - All values MUST be in UTC. Therefore, all values MUST NOT use the
+    `time-numoffset` component, and instead MUST use `Z` for the `time-offset`
+
+  While this attribute is a Timestamp, it MUST be treated as String for
+  comparision purposes.  Meaning, the "timestamp check" discussed above MUST
+  be a case-sensitive string compare operation. This ensures that in order to
+  perform a comparision check between two values, an alphabetically larger
+  string will be a more recent timestamp.
+
+- Constraints:
+  - Conditionally REQUIRED. See above.
+- Examples:
+  - `2018-04-05T17:31:00Z`
+
 
 ##### name
 
