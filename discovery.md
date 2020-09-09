@@ -115,7 +115,7 @@ The request for events from a Service.
 
 ## Resource Model
 
-This sections defines the resource model of a Discovery Endpoint.
+This section defines the resource model of a Discovery Endpoint.
 
 ### Services
 
@@ -460,8 +460,8 @@ The following sections define the attributes that appear in a Service entity.
 
 ## API Specification
 
-All of the APIs specified below MUST be supported by compliant Discovery
-Endpoint implementations.
+All of the API endpoints specified below MUST be supported by compliant
+Discovery Endpoint implementations.
 
 Note: the relative paths specified below are NOT REQUIRED to be at the root of
 the `fpath` (per RFC1738). However, they are REQUIRED to match the end of it.
@@ -688,6 +688,7 @@ If an error is not generated, the Discovery Endpoint MUST return one of:
 - `200 OK` if the new Service was deleted
 - `202 Accepted` to indicate that the request has been accepted but not
   processed yet
+- `404 Not Found` if there is no Service with the specified `id`.
 
 Other responses are allowed, but not defined by this specification.
 
@@ -699,7 +700,7 @@ A successful HTTP `GET` to the `Location` endpoint MUST either return:
 - `200 OK` meaning the the original Service was successfully deleted
 - `204 No Content` to indicate that the `DELETE` request is not completed yet
 - `409 Conflict` to indicate that the original `DELETE` request message failed.
-  The HTTP Response Body SHOULD contain information as to why the create
+  The HTTP Response Body SHOULD contain information as to why the delete
   failed.
 
 Note that any other failure response indicates that the `GET` to the
