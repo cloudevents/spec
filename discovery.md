@@ -475,7 +475,7 @@ https://example.com/myAggregator/services
 If a Discovery Endpoint can perform authorization checks to determine
 which client can see which Service, and the requesting client is not allowed
 access to a particular Service, then the Discovery Endpoint MUST respond
-as if that Service did does exist. For example, it would be excluded from
+as if that Service does not exist. For example, it would be excluded from
 any array of Services returned and it would result in a `404 Not Found`
 error for a request to that Service directly.
 
