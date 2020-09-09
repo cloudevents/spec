@@ -545,9 +545,12 @@ Content-Type: application/json
 }
 ```
 
-Note: in the case of `406 Not Acceptable` or `409 Conflict`, it is an
-implementation choice as to how long these responses will be returned. But it
-is expected that a `404 Not Found` will eventually be returned.
+Note: the `406 Not Acceptable` and `409 Conflict` cases are for situations
+where a create request returned a `202 Accepted` and the client is doing a
+`GET` to this endpoint to determine the status of that create request.
+It is an implementation choice as to how long these 2 responses will be
+returned. But it is expected that a `404 Not Found` will eventually be
+returned instead.
 
 #### `POST /services`
 
@@ -694,7 +697,9 @@ Other responses are allowed, but not defined by this specification.
 
 In the case of `202 Accepted` the Discovery Endpoint MUST include an
 HTTP `Location` Header in the response pointing to an endpoint that the
-client can use to determine the status of the delete.
+client can use to determine the status of the delete. The format/location
+of this endpoint is an implementation choice and out of scope for this
+specification.
 
 A successful HTTP `GET` to the `Location` endpoint MUST either return:
 - `200 OK` meaning the the original Service was successfully deleted
