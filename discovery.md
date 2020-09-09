@@ -207,7 +207,7 @@ The following sections define the attributes that appear in a Service entity.
   Typically, this value is defined by the Discovery Endpoint, or one of the
   components behind it. However, there might be cases where the value is
   provided to the Discovery Endpoint, for example, during an "import" type of
-  operation. In these "import" type of cases the attribute is REQUIRED to be
+  operation. In these "import" cases the attribute is REQUIRED to be
   in the client's request. However, in cases where the Service has no
   associated `id` that needs to be retained, this attribuet MUST NOT be
   present in the client's request.
@@ -260,6 +260,9 @@ The following sections define the attributes that appear in a Service entity.
   Endpoint, and if it does not then an error MUST be generated and the Service
   MUST NOT be updated. However, if the incoming request does not include this
   attribute then the Discovery Endpoint MUST skip the version matching check.
+  Note: regardless of whether the incoming request had this attribute or not,
+  a subsequent retrieval of this Service Entry will have an updated value
+  for this attribute.
 
 - Constraints:
   - Conditionally REQUIRED. See above.
@@ -290,6 +293,9 @@ The following sections define the attributes that appear in a Service entity.
   Endpoint, and if it does not then an error MUST be generated and the Service
   MUST NOT be updated. However, if the incoming request does not include this
   attribute then the Discovery Endpoint MUST skip this timestamp check.
+  Note: regardless of whether the incoming request had this attribute or not,
+  a subsequent retrieval of this Service Entry will have an updated value
+  for this attribute.
 
   For ease of implmentation and to ensure interoperability, the following
   constraints apply:
