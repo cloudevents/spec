@@ -57,7 +57,7 @@ The CloudEvents type system is mapped to protobuf as follows :
 | CloudEvents   | protobuf |
 | ------------- | ---------------------------------------------------------------------- |
 | Boolean       | [boolean][proto-scalars] |
-| Integer       | [sint32][proto-scalars] |
+| Integer       | [int32][proto-scalars] |
 | String        | [string][proto-scalars] |
 | Binary        | [bytes][proto-scalars] |
 | URI           | [string][proto-scalars] following [RFC 3986 §4.3][rfc3986-section43]|
@@ -74,13 +74,13 @@ Optional and extension attributes are represented using a map construct enabling
 direct support of the CloudEvent [type system][ce-types].
 
 ```proto
-map<string, CloudEventAttribute> attribute = 1;
+map<string, CloudEventAttributeValue> attribute = 1;
 
-message CloudEventAttribute {
+message CloudEventAttributeValue {
 
     oneof attr_oneof {
       bool ce_boolean = 1;
-      sfixed32 ce_integer = 2;
+      int32 ce_integer = 2;
       string ce_string = 3;
       bytes ce_binary = 4;
       string ce_uri = 5;
@@ -158,12 +158,12 @@ public static Spec.CloudEvent plainTextExample() {
     //-- Data.
     .setTextData("This is a plain text message");
 
-    //-- Optional Attributes
-    withCurrentTime(ceBuilder, "time");
-    withAttribute(ceBuilder, "datacontenttype", "text/plain");
+  //-- Optional Attributes
+  withCurrentTime(ceBuilder, "time");
+  withAttribute(ceBuilder, "datacontenttype", "text/plain");
 
-    // Build it.
-    return ceBuilder.build();
+  // Build it.
+  return ceBuilder.build();
 }
 
 ```
@@ -195,14 +195,14 @@ private static Spec.CloudEvent protoExample() {
     // Add the proto data into the CloudEvent envelope.
     .setProtoData(Any.pack(dataBuilder.build()));
 
-    // Add the protto type URL
-    withAttribute(ceBuilder, "dataschema", ceBuilder.getProtoData().getTypeUrl());
+  // Add the protto type URL
+  withAttribute(ceBuilder, "dataschema", ceBuilder.getProtoData().getTypeUrl());
 
-    // Set Content-Type (Optional)
-    withAttribute(ceBuilder, "datacontenttype", "application/protobuf");
+  // Set Content-Type (Optional)
+  withAttribute(ceBuilder, "datacontenttype", "application/protobuf");
 
-    //-- Done.
-    return ceBuilder.build();
+  //-- Done.
+  return ceBuilder.build();
 
 }
 ```

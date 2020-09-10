@@ -26,7 +26,7 @@ message CloudEvent {
   string type = 4;
 
   // Optional & Extension Attributes
-  map<string, CloudEventAttribute> attribute = 5;
+  map<string, CloudEventAttributeValue> attribute = 5;
 
   // -- CloudEvent Data (Bytes, Text, or Proto)
   oneof data_oneof {
@@ -37,10 +37,10 @@ message CloudEvent {
 
   /**
    * The CloudEvent specification defines
-   * seven atrribute types...
+   * seven attribute value types...
    */
 
-  message CloudEventAttribute {
+  message CloudEventAttributeValue {
 
     oneof attr_oneof {
       bool ce_boolean = 1;
