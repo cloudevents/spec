@@ -115,28 +115,28 @@ the event delivery channel to the consumer is initiated:
 
 - Subscriptions with consumer-solicited delivery ("pull"-style) are configured
   on the subscription manager for delivering events through a communication
-  channel (like an AMQP link or a MQTT connection) initiated by the consumer
-  and connecting to the subscription manager. These kinds of subscriptions are
-  typically offered by messaging or eventing middleware and their lifetime
-  might be bounded by the lifetime of the communication channel.
+  channel (like an AMQP link or a MQTT connection) initiated by the consumer and
+  connecting to the subscription manager. These kinds of subscriptions are
+  typically offered by messaging or eventing middleware and their lifetime might
+  be bounded by the lifetime of the communication channel.
 
 - Subscriptions with subscription-manager-initiated delivery ("push"-style) are
   configured on the subscription manager for delivering events through a
-  communication channel that the subscription manager initiates when events
-  are available for delivery on the subscription. The configuration of such a
-  subscription MUST contain all information needed for the subscription
-  manager to select a transport protocol, establish the desired communication
-  channel, and deliver the event(s).
+  communication channel that the subscription manager initiates when events are
+  available for delivery on the subscription. The configuration of such a
+  subscription MUST contain all information needed for the subscription manager
+  to select a transport protocol, establish the desired communication channel,
+  and deliver the event(s).
 
 An end-to-end solution using CloudEvents might use only one of these styles or a
 combination of those.
 
-For instance, the solution might use an MQTT broker to handle delivery of
-events into connected devices that connect into the broker and subscribe on a
+For instance, the solution might use an MQTT broker to handle delivery of events
+into connected devices that connect into the broker and subscribe on a
 particular MQTT topic, which acts as the subscription manager in the sense of
 this specification ("pull"-style). The events that ought to be shared with the
-connected devices might however originate elsewhere in the overall solution,
-and some event router middleware's subscription manager might therefore be
+connected devices might however originate elsewhere in the overall solution, and
+some event router middleware's subscription manager might therefore be
 configured to initiate delivery of events ("push"-style) into the given MQTT
 broker topic whenever such events are available.
 
@@ -175,9 +175,10 @@ Events are published using the "PUBLISH" operation on a path into the topic
 hierarchy, and all current subscriptions whose topic filters match the path
 receive a message.
 
-The operations are normatively defined in the [MQTT
-3.1.1](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html) and [MQTT
-5.0](http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html) specifications.
+The operations are normatively defined in the
+[MQTT 3.1.1](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html) and
+[MQTT 5.0](http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+specifications.
 
 #### 3.1.2. AMQP 1.0
 
@@ -232,15 +233,15 @@ applications of HTTP rather than inherent features of HTTP per-se.
 
 ### 3.2. Subscription Manager API
 
-The subscription manager API defines a subscription object and a protocol for 
+The subscription manager API defines a subscription object and a protocol for
 creating, updating and deleting subscriptions on a subscription manager.
 
-The subscription object describes the consumer's interest in events and 
-defines the delivery method. The protocol allows to configure subscriptions
-on the subscription manager. Especially in case of subscription manager 
-initiated ("push"-style) delivery, the protocol is used to express the 
-consumer's interest to the subscription manager before the subscription 
-manager can initiate delivery.
+The subscription object describes the consumer's interest in events and defines
+the delivery method. The protocol allows to configure subscriptions on the
+subscription manager. Especially in case of subscription manager initiated
+("push"-style) delivery, the protocol is used to express the consumer's interest
+to the subscription manager before the subscription manager can initiate
+delivery.
 
 The protocol used to configure the subscription manager is decoupled from the
 delivery protocol, meaning that an application can configure a push delivery
@@ -264,20 +265,19 @@ Each subscription is represented by an object that has the following properties:
 
 - **id** (string) – REQUIRED. The unique identifier of the subscription in the
   scope of the subscription manager.
-- **protocol** (string) - REQUIRED. Identifier of a delivery protocol. Because of
-  WebSocket tunneling options for AMQP, MQTT and other protocols, the URI
-  scheme is not sufficient to identify the protocol. The protocols with
-  existing CloudEvents bindings are identified as "AMQP", "MQTT3", "MQTT5",
-  "HTTP", "KAFKA", and "NATS". An implementation MAY add support for further
-  protocols.
+- **protocol** (string) - REQUIRED. Identifier of a delivery protocol. Because
+  of WebSocket tunneling options for AMQP, MQTT and other protocols, the URI
+  scheme is not sufficient to identify the protocol. The protocols with existing
+  CloudEvents bindings are identified as "AMQP", "MQTT3", "MQTT5", "HTTP",
+  "KAFKA", and "NATS". An implementation MAY add support for further protocols.
 - **protocolsettings** (map) - OPTIONAL. A set of settings specific to the
-  selected delivery protocol provider. Options for those settings are listed
-  in the following subsection. An implementation MAY offer more options.
-  Examples for such settings are credentials, which generally vary by
-  transport, rate limits and retry policies, or the QoS mode for MQTT.
-  See the [Protocol Settings](#322-protocol-settings) section for further details.
-- **sink** (URI) - REQUIRED. The address to which events SHALL be delivered using
-  the selected protocol. The format of the address MUST be valid for the
+  selected delivery protocol provider. Options for those settings are listed in
+  the following subsection. An implementation MAY offer more options. Examples
+  for such settings are credentials, which generally vary by transport, rate
+  limits and retry policies, or the QoS mode for MQTT. See the
+  [Protocol Settings](#322-protocol-settings) section for further details.
+- **sink** (URI) - REQUIRED. The address to which events SHALL be delivered
+  using the selected protocol. The format of the address MUST be valid for the
   selected protocol or one of the protocol's own transport bindings (e.g. AMQP
   over WebSockets).
 - **filter** - OPTIONAL. A filter is an expression of a particular filter
@@ -288,8 +288,8 @@ Each subscription is represented by an object that has the following properties:
   delivered. Support for particular filter dialects might vary across different
   subscription managers. If a filter dialect is specified in a subscription that
   is unsupported by the subscription manager, creation or updates of the
-  subscription MUST be rejected with an error. See the [Filter
-  Dialects](#323-filter-dialects) section for further details.
+  subscription MUST be rejected with an error. See the
+  [Filter Dialects](#323-filter-dialects) section for further details.
 
 #### 3.2.2 Protocol Settings
 
@@ -303,8 +303,8 @@ implementations.
 
 - **headers** (map) – OPTIONAL. A set of key/value pairs that is copied into the
   HTTP request as custom headers.
-- **method** (string) – OPTIONAL. The HTTP method to use for sending the message.
-  This defaults to POST if not set.
+- **method** (string) – OPTIONAL. The HTTP method to use for sending the
+  message. This defaults to POST if not set.
 
 ##### 3.2.2.2. MQTT
 
@@ -313,33 +313,31 @@ other settings SHOULD be supported.
 
 - **topicname** (string) – REQUIRED. The name of the MQTT topic to publish to.
 - **qos** (integer) – OPTIONAL. MQTT quality of service (QoS) level: 0 (at most
-  once), 1 (at least once), or 2 (exactly once). This defaults to 1 if not
-  set.
-- **retain** (boolean) – OPTIONAL. MQTT retain flag: true/false. This defaults to
-  false if not set.
+  once), 1 (at least once), or 2 (exactly once). This defaults to 1 if not set.
+- **retain** (boolean) – OPTIONAL. MQTT retain flag: true/false. This defaults
+  to false if not set.
 - **expiry** (integer) – OPTIONAL. MQTT expiry interval, in seconds. This value
-  has no default value and the message will not expire if the setting is
-  absent. This setting only applies to MQTT 5.0.
-- **userproperties** (map) – OPTIONAL. A set of key/value pairs that are copied into
-  the MQTT PUBLISH packet's user property section. This setting only applies
-  to MQTT 5.0.
+  has no default value and the message will not expire if the setting is absent.
+  This setting only applies to MQTT 5.0.
+- **userproperties** (map) – OPTIONAL. A set of key/value pairs that are copied
+  into the MQTT PUBLISH packet's user property section. This setting only
+  applies to MQTT 5.0.
 
 ##### 3.2.2.3. AMQP
 
 For AMQP, the address property MUST be supported by all implementations and
 other settings properties SHOULD be supported by all implementations.
 
-- **address** (string) – OPTIONAL. The link target node in the
-  AMQP container identified by the sink URI, if not expressed in the sink URI's
-  path portion.
-- **linkname** (string) – OPTIONAL. Name to use for the AMQP link. If not set,
-  a random link name is used.
+- **address** (string) – OPTIONAL. The link target node in the AMQP container
+  identified by the sink URI, if not expressed in the sink URI's path portion.
+- **linkname** (string) – OPTIONAL. Name to use for the AMQP link. If not set, a
+  random link name is used.
 - **sendersettlementmode** (string) – OPTIONAL. Allows to control the sender's
   settlement mode, which determines whether transfers are performed "settled"
-  (without acknowledgement) or "unsettled" (with acknowledgement). Default
-  value is unsettled.
-- **linkproperties** (map) – OPTIONAL. A set of key/value pairs that are
-  copied into link properties for the send link.
+  (without acknowledgement) or "unsettled" (with acknowledgement). Default value
+  is unsettled.
+- **linkproperties** (map) – OPTIONAL. A set of key/value pairs that are copied
+  into link properties for the send link.
 
 ##### 3.2.2.4. Apache Kafka
 
@@ -390,10 +388,10 @@ the subscriber and producer to negotiate which filter dialects can be used
 within a given subscription.
 
 The filter conditions specified in the basic dialect will be defined by
-specifying a "conditions" property holding an array of filter conditions,
-which are logically combined with an implicit "AND" operator. This means the
-filter criteria MUST evaluate to true for every filter in the array in order for
-a CloudEvent instance to be delivered to the target sink.
+specifying a "conditions" property holding an array of filter conditions, which
+are logically combined with an implicit "AND" operator. This means the filter
+criteria MUST evaluate to true for every filter in the array in order for a
+CloudEvent instance to be delivered to the target sink.
 
 Each basic filter is defined with the following properties:
 
@@ -475,7 +473,7 @@ This filter will select events only with the event type equal to
             "type": "suffix",
             "property": "subject",
             "value": ".jpg"
-        },
+        }
     ]
 }
 ```
@@ -609,8 +607,8 @@ HTTP CRUD API using PUT, POST, GET, DELETE, and OPTIONS.
 
 ### 3.4. AMQP Binding for the Subscription API
 
-(TBD) This will be a set of bi-directional exchanges for the
-respective operations.
+(TBD) This will be a set of bi-directional exchanges for the respective
+operations.
 
 ## 4. Conformance
 
