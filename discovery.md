@@ -202,14 +202,6 @@ The following sections define the attributes that appear in a Service entity.
   NOT so that clients can use this attribute to know whether a Service returned
   by a query is the same Service returned by a previous query.
 
-  Typically, this value is defined by the Discovery Endpoint, or one of the
-  components behind it. However, there might be cases where the value is
-  provided to the Discovery Endpoint, for example, during an "import" type of
-  operation. In these "import" cases the attribute is REQUIRED to be
-  in the client's request. However, in cases where the Service has no
-  associated `id` that needs to be retained, this attribute MUST NOT be
-  present in the client's request.
-
   Whether a change to a Service would result in changing of the Service's
   metadata (except `id`) and thus be just an update of an existing Service, or
   whether the change would result in a brand new Service (with a new `id`) is
@@ -229,7 +221,7 @@ The following sections define the attributes that appear in a Service entity.
   See the Primer for more information.
 
 - Constraints:
-  - conditionally REQUIRED. See above.
+  - REQUIRED in responses from the Discovery Endpoint.
   - MUST be a valid UUID per RFC4122.
 - Examples:
   - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
@@ -246,26 +238,8 @@ The following sections define the attributes that appear in a Service entity.
   integer comparision to determine which version of this Service Entry is the
   latest - meaning, the one with the larger integer value.
 
-  While this attibute is REQUIRED to be part of the the Service's description
-  when returned from a Discovery Endpoint, depending on the action from the
-  client it might not be mandatory to appear in a client's request. For a
-  "create" operation, this attribute MUST NOT appear. For an "import" type
-  of operation, where it is important for the entry to retain a previously
-  defined value, this attribute MUST appear.
-
-  A client MAY choose to include this attribute on an "update" operation.
-  If present then the Discovery Endpoint MUST ensure that the value
-  on the incoming request matches the current value within the Discovery
-  Endpoint, and if it does not then an error MUST be generated and the Service
-  Entry MUST NOT be updated. However, if the incoming request does not include
-  this attribute then the Discovery Endpoint MUST skip the version matching
-  check.
-  Note: regardless of whether the incoming request has this attribute or not,
-  a subsequent retrieval of this Service Entry MUST have an updated value
-  for this attribute.
-
 - Constraints:
-  - Conditionally REQUIRED. See above.
+  - REQUIRED in responses from the Discovery Endpoint.
 - Examples:
   - `42`
   - `915148800`
