@@ -81,8 +81,7 @@ depending on the subprotocols the client supports.
 The server MUST reply with the chosen CloudEvents subprotocol using the
 `Sec-WebSocket-Protocol` header. If the server doesn't support any of the
 subprotocols included in the opening handshake, the server response should not
-contain any `Sec-WebSocket-Protocol` header and the client SHOULD close the
-connection.
+contain any `Sec-WebSocket-Protocol` header.
 
 #### 1.4.1 Example
 
