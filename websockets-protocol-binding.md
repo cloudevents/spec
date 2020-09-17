@@ -75,7 +75,7 @@ specified in the [RFC6455][rfc6455-section-4].
 
 In addition, the client MUST include, in the opening handshake, the
 [`Sec-WebSocket-Protocol` header][rfc6455-section-1-9]. The client MUST include
-in this header one or more [CloudEvents subprotocols](#15-subprotocols),
+in this header one or more [CloudEvents subprotocols](#15-cloudevents-subprotocols),
 depending on the subprotocols the client supports.
 
 The server MUST reply with the chosen CloudEvents subprotocol using the
