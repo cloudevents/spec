@@ -628,6 +628,29 @@ The Body of the request message MUST contain a single Service
 definition. Unlike the `POST` operation, the Service MUST contain an `id`
 attribute that matches the `{id}` in the `PUT` URL.
 
+In the case of a new Service being created, the sender MAY choose to include
+the `epoch` attribute. It will do so only in cases where it is doing an
+"import" type of operation where preserving the previously defined value
+is needed. For "create" type of operations the sender MUST NOT include it.
+
+When a Service with the specified `id` already exists, the client
+MAY choose to include the `epoch` attribute. If present then the Discovery
+Endpoint MUST ensure that the value on the incoming request matches the
+current value on the Service. If they do not match then an error MUST be
+generated and the Service MUST NOT be updated. However, if the incoming
+request does not include this attribute then this verification MUST NOT
+be done.
+
+Additionally, when a Service with the specified `id` aleady exists, the
+`epoch` value MUST be updated with a larger value, indicating that the
+Service has been updated.
+
+Note: in order to perform an "import" type of operation when the
+Service in question already exists and the client wishes to preserve the
+`epoch` value it has, then the client MUST first delete the
+Service. This is because the Discovery Endpoint can not distinguish
+between an "update" and an "import" with respect to `epoch` value processing.
+
 The follow responses are defined by this specification:
 - `200 OK` if an existing Service was updated.
   The HTTP Response Body MUST include the JSON represenation of the
