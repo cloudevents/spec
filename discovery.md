@@ -642,8 +642,8 @@ request does not include this attribute then this verification MUST NOT
 be done.
 
 Additionally, when a Service with the specified `id` aleady exists, the
-`epoch` value MUST be updated with a larger value, indicating that the
-Service has been updated.
+`epoch` value MUST be updated by the Discovery Endpint to a larger value,
+indicating that the Service has been updated.
 
 Note: in order to perform an "import" type of operation when the
 Service in question already exists and the client wishes to preserve the
