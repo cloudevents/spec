@@ -29,7 +29,7 @@ elements defined in the CloudEvents specification are are represented using
 a protobuf schema.
 
 The [Attributes](#2-attributes) section describes the naming conventions and
-data type mappings for CloudEvents attributes for use as protobuf message
+data type mappings for CloudEvent attributes for use as protobuf message
 properties.
 
 The [Data](#3-data) section describes how the event payload is carried.
@@ -74,7 +74,7 @@ Optional and extension attributes are represented using a map construct enabling
 direct support of the CloudEvent [type system][ce-types].
 
 ```proto
-map<string, CloudEventAttributeValue> attribute = 1;
+map<string, CloudEventAttributeValue> attributes = 1;
 
 message CloudEventAttributeValue {
 
@@ -123,7 +123,7 @@ oneof data_oneof {
   * `dataschema` SHOULD be populated with the type URL of the protobuf data message.
 
 * When the type of the data is text, the value MUST be stored in the `text_data` property.
-  * `datacontenttype` SHOULD be popuplated with the appropriate media-type.
+  * `datacontenttype` SHOULD be populated with the appropriate media-type.
 
 * When the type of the data is binary the value MUST be stored in the `binary_data` property.
   * `datacontenttype` SHOULD be populated with the appropriate media-type.
@@ -145,8 +145,8 @@ The following code-snippets shows how proto representations might be constucted 
 ### 5.1 Plain Text event data
 
 ```java
-public static Spec.CloudEvent plainTextExample() {
-  Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
+public static CloudEvent plainTextExample() {
+  CloudEvent.Builder ceBuilder = CloudEvent.newBuilder();
 
   ceBuilder
     //-- Required Attributes.
@@ -184,7 +184,7 @@ private static Spec.CloudEvent protoExample() {
     .setIsImportant(true);
 
   //-- Build the CloudEvent.
-  Spec.CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
+  CloudEvent.Builder ceBuilder = Spec.CloudEvent.newBuilder();
 
   ceBuilder
     .setId(UUID.randomUUID().toString())

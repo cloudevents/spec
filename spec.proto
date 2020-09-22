@@ -13,9 +13,9 @@ package io.cloudevents.v1;
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
-option csharp_namespace = "Io.CloudEvents.V1.Proto";
 option go_package = "cloudevents.io/genproto/v1";
-option java_package = "io.cloudvents.v1.proto";
+option java_package = "io.cloudevents.v1.proto";
+option java_multiple_files = true;
 option php_namespace = "Io\\CloudEvents\\V1\\Proto";
 option ruby_package = "Io::CloudEvents::V1::Proto";
 
@@ -30,7 +30,7 @@ message CloudEvent {
   string type = 4;
 
   // Optional & Extension Attributes
-  map<string, CloudEventAttributeValue> attribute = 5;
+  map<string, CloudEventAttributeValue> attributes = 5;
 
   // -- CloudEvent Data (Bytes, Text, or Proto)
   oneof data_oneof {
