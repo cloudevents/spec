@@ -131,6 +131,7 @@ Service:
 ```
 {
   "id": "[a globally unique UUID]",
+  "epoch": "[discovery entry epoch value]",
   "url": "[unique URL to this service]",
   "name": "[unique name for this services]",
   "description": "[human string]", ?
@@ -167,6 +168,7 @@ An example:
 ```json
 {
   "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
+  "epoch": 1,
   "url": "https://example.com/services/widgetService",
   "name": "widgets",
   "specversions": ["1.0"],
@@ -199,11 +201,6 @@ The following sections define the attributes that appear in a Service entity.
   NOT so that clients can use this attribute to know whether a Service returned
   by a query is the same Service returned by a previous query.
 
-  Typically, this value is defined by the Discovery Endpoint, or one of the
-  components behind it. However, there might be cases where the value is
-  provided to the Discovery Endpoint, for example, during an "import" type of
-  operation.
-
   Whether a change to a Service would result in changing of the Service's
   metadata (except `id`) and thus be just an update of an existing Service, or
   whether the change would result in a brand new Service (with a new `id`) is
@@ -223,10 +220,28 @@ The following sections define the attributes that appear in a Service entity.
   See the Primer for more information.
 
 - Constraints:
-  - REQUIRED
+  - REQUIRED in responses from the Discovery Endpoint.
   - MUST be a valid UUID per RFC4122.
 - Examples:
   - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+
+##### epoch
+
+- Type: `Integer`
+- Description: The Discovery Endpoint's epoch value for this Service Entry.
+  This specification does not mandate any particular semantic meaning to
+  the value used. For example, implementations are free to use a value that
+  represents a timestamp or could choose to simply use a monotomically
+  increasing number. The only requirement is that the value MUST always
+  increase each time the Service Entry is updated. This allows for a quick
+  integer comparision to determine which version of this Service Entry is the
+  latest - meaning, the one with the larger integer value.
+
+- Constraints:
+  - REQUIRED in responses from the Discovery Endpoint.
+- Examples:
+  - `42`
+  - `915148800`
 
 ##### name
 
