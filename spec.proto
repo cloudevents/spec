@@ -33,7 +33,7 @@ message CloudEvent {
   map<string, CloudEventAttributeValue> attributes = 5;
 
   // -- CloudEvent Data (Bytes, Text, or Proto)
-  oneof data_oneof {
+  oneof  data {
     bytes binary_data = 6;
     string text_data = 7;
     google.protobuf.Any proto_data = 8;
@@ -46,7 +46,7 @@ message CloudEvent {
 
   message CloudEventAttributeValue {
 
-    oneof attr_oneof {
+    oneof attr {
       bool ce_boolean = 1;
       int32 ce_integer = 2;
       string ce_string = 3;

@@ -78,7 +78,7 @@ map<string, CloudEventAttributeValue> attributes = 1;
 
 message CloudEventAttributeValue {
 
-    oneof attr_oneof {
+    oneof attr {
       bool ce_boolean = 1;
       int32 ce_integer = 2;
       string ce_string = 3;
@@ -105,7 +105,7 @@ The specification allows for data payloads of the following types to be explicit
 * protobuf object/message
 
 ```proto
-oneof data_oneof {
+oneof data {
 
     // Binary data
     bytes binary_data = 2;
