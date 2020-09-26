@@ -629,6 +629,10 @@ array MAY include the `id` or `epoch` attributes but they MUST be ignored by
 the Discovery Endpoint. Both of these attributes' values MUST be defined by
 the Discovery Endpoint.
 
+If any Service specified in the request matches the `name` of any existing
+Service, or the same `name` is used more than once within the request, then
+an error MUST be generated.
+
 If the Discovery Endpoint is unable to successully add all of the Services
 in the incoming request then an error MUST be generated and none of the
 specified Services are to be added to the Discovery Endpoint.
@@ -682,6 +686,23 @@ Discovery Endpoint MUST assign appropriate values.
 If the Discovery Endpoint is unable to successully add all of the Services
 in the incoming request then an error MUST be generated and none of the
 specified Services are to be added, or updated, in the Discovery Endpoint.
+
+The Services in the request message MUST be processed in the order in which
+they appear. While any error in the overall process MUST rollback any changes
+made due to the request, the processing of each Service in the request MUST be
+applied as if all previous Services in the request were already completed.
+This means that attribute uniqueness checking, such as on the `name`
+attribute, MUST be done on the new state of all Services as if all previously
+specified Services in the incoming request were already successfully processed.
+
+For example, if a Discovery Endpoint has a Service called `MyService`, it is
+possible to rename that Service to `YourService` and then to add, or update,
+another Service to use `MyService` as its `name`. But this is only true if
+the rename of the first Service happens first the request message.
+
+Likewise, while it might be less than optimal, it is technically possible for
+a request to update a Service multiple times if the same `id` is used more
+than once within a request.
 
 The follow responses are defined by this specification:
 - `201 Created` if all the specified Services were processed successfully.
