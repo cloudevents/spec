@@ -121,35 +121,14 @@ This specification is being developed by the
 working group meets every Thursday at 9AM PT (USA Pacific)
 ([World Time Zone Converter](http://www.thetimezoneconverter.com/?t=9:00%20am&tz=San%20Francisco&)):
 
-Join from PC, Mac, Linux, iOS or Android: https://zoom.us/my/cncfserverlesswg
-
-Meeting ID: 336 102 9682
-
-Or mobile one-tap :
-```
-    US: +16465588656,,3361029682#  or +16699006833,,3361029682#
-```
-
-Or Telephone:
-```
-    US: +1 646 558 8656 (US Toll) or +1 669 900 6833 (US Toll)
-    or +1 855 880 1246 (Toll Free) or +1 877 369 0926 (Toll Free)
-```
-
-International numbers available
-[here](https://zoom.us/zoomconference?m=QpOqQYfTzY_Gbj9_8jPtsplp1pnVUKDr).
-
-NOTE: Please use \*6 to mute/un-mute your phone during the call.
-
-## Meeting Minutes
-
-The minutes from our calls are available
-[here](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#).
+Please see the
+[meeting minutes doc](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
+for the latest information on how to join the calls.
 
 Recording from our calls are available
 [here](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt).
 
 Periodically, the group may have in-person meetings that coincide with a major
 conference. Please see the
-[meeting minutes](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
+[meeting minutes doc](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for any future plans.
