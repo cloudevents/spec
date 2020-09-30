@@ -1,4 +1,5 @@
 .idea/
 gen/
 .vscode/
+gen/
 .DS_Store
