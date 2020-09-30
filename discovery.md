@@ -678,10 +678,13 @@ Content-Type: application/json
 This MUST add, or update, the specified Services to the list of Services
 available at this Discovery Endpoint. The Body of the request message MUST
 contain an array of zero or more Service Entries. For convinience to clients,
-the presence of the `id` and `epoch` attributes are OPTIONAL. If either is
-present then those value MUST be preserved by the Discovery Endpoint and
-not modified as a result of this operation. If they are not present then the
-Discovery Endpoint MUST assign appropriate values.
+the presence of the `id` and `epoch` attributes are OPTIONAL. If `id` is
+present then it MUST be retained as a result of this operation and any existing
+Service with that `id` MUST be replaced. If `epoch` is present then the
+`epoch` value of the resulting Service MUST be the larger than the maximum of
+the incoming Service and any existing Service with that same `id`. If either
+attribute is not present then the Discovery Endpoint MUST assign appropriate
+value to the missing attribute.
 
 If the Discovery Endpoint is unable to successully add all of the Services
 in the incoming request then an error MUST be generated and none of the
@@ -795,9 +798,11 @@ request message MUST contain a single Service definition, however the presence
 of the `epoch` attribute is OPTIONAL. The Service MUST contain an `id`
 attribute that matches the `{id}` in the `PUT` URL.
 
-If `epoch` attribute is present then this value MUST be preserved and not
-updated as a result of this operation. If not present then the Discovery
-Endpoint MUST assign a value.
+If `epoch` attribute is present then the resulting value of this attribute
+MUST result in a value that is larger than both the incoming `epoch` value and
+any existing Service's `epoch` value.  If it is not present then the Discovery
+Endpoint MUST assign a value that is larger than any existing Service's
+`epoch` value.
 
 The follow responses are defined by this specification:
 - `200 OK` if an existing Service was updated.
