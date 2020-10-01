@@ -75,8 +75,9 @@ specified in the [RFC6455][rfc6455-section-4].
 
 In addition, the client MUST include, in the opening handshake, the
 [`Sec-WebSocket-Protocol` header][rfc6455-section-1-9]. The client MUST include
-in this header one or more [CloudEvents subprotocols](#15-cloudevents-subprotocols),
-depending on the subprotocols the client supports.
+in this header one or more
+[CloudEvents subprotocols](#15-cloudevents-subprotocols), depending on the
+subprotocols the client supports.
 
 The server MUST reply with the chosen CloudEvents subprotocol using the
 `Sec-WebSocket-Protocol` header. If the server doesn't support any of the
@@ -93,7 +94,7 @@ Host: server.example.com
 Upgrade: websocket
 Connection: Upgrade
 Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
-Sec-WebSocket-Protocol: json.cloudevents, avro.cloudevents
+Sec-WebSocket-Protocol: cloudevents.json, cloudevents.avro
 Sec-WebSocket-Version: 13
 Origin: http://example.com
 ```
@@ -105,19 +106,20 @@ HTTP/1.1 101 Switching Protocols
 Upgrade: websocket
 Connection: Upgrade
 Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
-Sec-WebSocket-Protocol: json.cloudevents
+Sec-WebSocket-Protocol: cloudevents.json
 ```
 
 ### 1.5. CloudEvents Subprotocols
 
 This specification maps a WebSocket subprotocol to each defined event format in
 the CloudEvents specification, following the guidelines discussed in the
-[RFC6455][rfc6455-section-1-9]:
+[RFC6455][rfc6455-section-1-9]. For each subprotocol, senders MUST use the
+specified WebSocket frame type:
 
-| Subprotocol        | Event format                     |
-| ------------------ | -------------------------------- |
-| `json.cloudevents` | [JSON event format][json-format] |
-| `avro.cloudevents` | [AVRO event format][avro-format] |
+| Subprotocol        | Event format                     | Frame Type |
+| ------------------ | -------------------------------- | ---------- |
+| `cloudevents.json` | [JSON event format][json-format] | Text       |
+| `cloudevents.avro` | [AVRO event format][avro-format] | Binary     |
 
 All implementations of this specification MUST support the [JSON event
 format][json-format].
