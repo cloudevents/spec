@@ -123,12 +123,12 @@ the [type system mapping](#22-type-system-mapping).
 Before taking action, a JSON serializer MUST first determine the runtime data
 type of the `data` content.
 
-If the implementation determines that the type of `data` is `Binary`, the value
+If the implementation determines that the type of data is `Binary`, the value
 MUST be represented as a [JSON string][json-string] expression containing the
 [Base64][base64] encoded binary value, and use the member name `data_base64`
 to store it inside the JSON object.
 
-For any other type, the implementation MUST translate the `data` value into
+For any other type, the implementation MUST translate the data value into
 a [JSON value][json-value], and use the member name `data`
 to store it inside the JSON object.
 
