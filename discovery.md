@@ -681,7 +681,7 @@ contain an array of zero or more Service Entries. For convinience to clients,
 the presence of the `id` and `epoch` attributes are OPTIONAL. If `id` is
 present then it MUST be retained as a result of this operation and any existing
 Service with that `id` MUST be replaced. If `epoch` is present then the
-`epoch` value of the resulting Service MUST be the larger than the maximum of
+`epoch` value of the resulting Service MUST be larger than the maximum of
 the incoming Service and any existing Service with that same `id`. If either
 attribute is not present then the Discovery Endpoint MUST assign appropriate
 value to the missing attribute.
