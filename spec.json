@@ -104,8 +104,7 @@
     },
     "dataschemadef": {
       "type": "string",
-      "format": "uri",
-      "minLength": 1
+      "format": "uri"
     },
     "subjectdef": {
       "type": "string",
