@@ -100,26 +100,26 @@
       "minLength": 1
     },
     "datacontenttypedef": {
-      "type": "string"
+      "type": ["string", "null"]
     },
     "dataschemadef": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "uri",
       "minLength": 1
     },
     "subjectdef": {
-      "type": "string",
+      "type": ["string", "null"],
       "minLength": 1
     },
     "timedef": {
-      "format": "date-time",
-      "type": "string"
+      "type": ["string", "null"],
+      "format": "date-time"
     },
     "datadef": {
       "type": ["object", "string", "number", "array", "boolean", "null"]
     },
     "data_base64def": {
-      "type": "string",
+      "type": ["string", "null"],
       "contentEncoding": "base64"
     }
   }
