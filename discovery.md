@@ -624,7 +624,7 @@ upon return of the `202 Accepted` from the original request.
 
 This MUST add the specified Services to the list of Services available at this
 Discovery Endpoint. The Body of the request message MUST contain an array of
-zero or more Service Entries. For convinience to clients, each Service in the
+zero or more Service Entries. For convenience to clients, each Service in the
 array MAY include the `id` or `epoch` attributes but they MUST be ignored by
 the Discovery Endpoint. Both of these attributes' values MUST be defined by
 the Discovery Endpoint.
