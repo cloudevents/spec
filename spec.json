@@ -100,7 +100,8 @@
       "minLength": 1
     },
     "datacontenttypedef": {
-      "type": ["string", "null"]
+      "type": ["string", "null"],
+      "minLength": 1
     },
     "dataschemadef": {
       "type": ["string", "null"],
@@ -113,7 +114,8 @@
     },
     "timedef": {
       "type": ["string", "null"],
-      "format": "date-time"
+      "format": "date-time",
+      "minLength": 1
     },
     "datadef": {
       "type": ["object", "string", "number", "array", "boolean", "null"]

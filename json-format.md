@@ -72,7 +72,7 @@ with exceptions noted below.
 
 Unset attributes MAY be encoded to the JSON value of `null`. When decoding
 attributes and a `null` value is encountered, it MUST be treated as the
-equivilent of unset or omitted.
+equivalent of unset or omitted.
 
 Extension specifications MAY define secondary mapping rules for the values of
 attributes they define, but MUST also include the previously defined primary
