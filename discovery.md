@@ -386,7 +386,7 @@ The following sections define the attributes that appear in a Service entity.
 
 - Type: `URI`
 - Description: CloudEvents
-  [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
+  [`dataschema`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
   attribute. This identifies the canonical storage location of the schema of the
   `data` attribute of subscribed events.
 - Constraints:
