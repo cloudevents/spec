@@ -70,6 +70,10 @@ with exceptions noted below.
 | URI-reference | [string][json-string] following [RFC 3986][rfc3986]            |
 | Timestamp     | [string][json-string] following [RFC 3339][rfc3339] (ISO 8601) |
 
+Unset attributes MAY be encoded to the JSON value of `null`. When decoding
+attributes and a `null` value is encountered, it MUST be treated as the
+equivalent of unset or omitted.
+
 Extension specifications MAY define secondary mapping rules for the values of
 attributes they define, but MUST also include the previously defined primary
 mapping.
@@ -93,14 +97,17 @@ respective CloudEvents type when the mapping rules are fulfilled.
 
 The following table shows exemplary attribute mappings:
 
-| CloudEvents     | Type          | Exemplary JSON Value    |
-| --------------- | ------------- | ----------------------- |
-| type            | String        | "com.example.someevent" |
-| specversion     | String        | "1.x-wip"               |
-| source          | URI-reference | "/mycontext"            |
-| id              | String        | "1234-1234-1234"        |
-| time            | Timestamp     | "2018-04-05T17:31:00Z"  |
-| datacontenttype | String        | "application/json"      |
+| CloudEvents     | Type             | Exemplary JSON Value    |
+| --------------- | ---------------- | ----------------------- |
+| type            | String           | "com.example.someevent" |
+| specversion     | String           | "1.x-wip"               |
+| source          | URI-reference    | "/mycontext"            |
+| subject         | String           | "larger-context"        |
+| subject         | String (null)    | null                    |
+| id              | String           | "1234-1234-1234"        |
+| time            | Timestamp        | "2018-04-05T17:31:00Z"  |
+| time            | Timestamp (null) | null                    |
+| datacontenttype | String           | "application/json"      |
 
 ### 2.4. JSONSchema Validation
 
@@ -118,6 +125,8 @@ become members of the JSON object, with the respective JSON object member name
 matching the attribute name, and the member's type and value being mapped using
 the [type system mapping](#22-type-system-mapping).
 
+OPTIONAL not omitted attributes MAY be represeted as a `null` JSON value.
+
 ### 3.1. Handling of "data"
 
 Before taking action, a JSON serializer MUST first determine the runtime data
@@ -125,24 +134,24 @@ type of the `data` content.
 
 If the implementation determines that the type of data is `Binary`, the value
 MUST be represented as a [JSON string][json-string] expression containing the
-[Base64][base64] encoded binary value, and use the member name `data_base64`
-to store it inside the JSON object.
+[Base64][base64] encoded binary value, and use the member name `data_base64` to
+store it inside the JSON object.
 
-For any other type, the implementation MUST translate the data value into
-a [JSON value][json-value], and use the member name `data`
-to store it inside the JSON object.
+For any other type, the implementation MUST translate the data value into a
+[JSON value][json-value], and use the member name `data` to store it inside the
+JSON object.
 
-Out of this follows that use of the `data` and `data_base64` members is
-mutually exclusive in a JSON serialized CloudEvent.
+Out of this follows that use of the `data` and `data_base64` members is mutually
+exclusive in a JSON serialized CloudEvent.
 
 When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
 member clearly indicates that the value is a Base64 encoded binary data, which
-the serializer MUST decode into a binary runtime data type. When a `data`
-member is present, it is decoded using the default JSON type mapping for the
-used runtime.
+the serializer MUST decode into a binary runtime data type. When a `data` member
+is present, it is decoded using the default JSON type mapping for the used
+runtime.
 
-Unlike attributes, for which value types are restricted to strings per
-the [type-system mapping](#22-type-system-mapping), the resulting `data` member
+Unlike attributes, for which value types are restricted to strings per the
+[type-system mapping](#22-type-system-mapping), the resulting `data` member
 [JSON value][json-value] is unrestricted, and MAY contain any valid JSON.
 
 ### 3.2. Examples
@@ -158,6 +167,7 @@ Example event with `String`-valued `data`:
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleothervalue" : 5,
+    "unsetextension": null,
     "datacontenttype" : "text/xml",
     "data" : "<much wow=\"xml\"/>"
 }
@@ -187,6 +197,7 @@ or [JSON data](#31-handling-of-data) data:
     "specversion" : "1.x-wip",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
+    "subject": null,
     "id" : "C234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
@@ -284,7 +295,7 @@ also valid in a request):
 [ce-types]: ./spec.md#type-system
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-format]: ./json-format.md
-[json-geoseq]: https://www.iana.org/assignments/media-types/application/geo+json-seq
+[json-geoseq]:https://www.iana.org/assignments/media-types/application/geo+json-seq
 [json-object]: https://tools.ietf.org/html/rfc7159#section-4
 [json-seq]: https://www.iana.org/assignments/media-types/application/json-seq
 [json-bool]: https://tools.ietf.org/html/rfc7159#section-3
