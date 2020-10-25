@@ -264,7 +264,8 @@ how many subscriptions are supported is implementation specific.
 Each subscription is represented by an object that has the following properties:
 
 - **id** (string) – REQUIRED. The unique identifier of the subscription in the
-  scope of the subscription manager.
+  scope of the subscription manager. This value MUST be unique within the scope
+  of the subscription manager and MUST be immutable.
 - **protocol** (string) - REQUIRED. Identifier of a delivery protocol. Because
   of WebSocket tunneling options for AMQP, MQTT and other protocols, the URI
   scheme is not sufficient to identify the protocol. The protocols with existing
@@ -280,7 +281,7 @@ Each subscription is represented by an object that has the following properties:
   using the selected protocol. The format of the address MUST be valid for the
   selected protocol or one of the protocol's own transport bindings (e.g. AMQP
   over WebSockets).
-- **filter** - OPTIONAL. A filter is an expression of a particular filter
+- **filters** - OPTIONAL. One or more filter expressions of a particular filter
   dialect that evaluates to true or false and that determines whether an
   instance of a CloudEvent will be delivered to the subscription's sink. If a
   filter expression evaluates to false, the event MUST NOT be sent to the sink.
@@ -289,7 +290,35 @@ Each subscription is represented by an object that has the following properties:
   subscription managers. If a filter dialect is specified in a subscription that
   is unsupported by the subscription manager, creation or updates of the
   subscription MUST be rejected with an error. See the
-  [Filter Dialects](#323-filter-dialects) section for further details.
+  [Filters](#323-filters) section for further details.
+- **config** (map) - OPTIONAL. A set of key/value pairs that modify the
+  configuation of the subscription. The `key` MUST be ones of the
+  `subscriptionconfig` keys specified in the Discovery Endpoint Service
+  definition. The `value` MUST conform to the data type specified by the
+  value in the `subscriptionconfig` entry for the `key`.
+
+Below is an example JSON serialization of a susbcription:
+
+```JSON
+{
+  "id": "sub-193-18365",
+  "protocol": "HTTP",
+  "protocolsettings": {
+    "method": "POST"
+  },
+  "sink": "http://example.com/event-processor",
+  "filters": [{
+    "dialect": "basic",
+    "type": "prefix",
+    "property": "type",
+    "value": "com.example"
+  }],
+  "config": {
+	"data": "hello",
+    "interval": 5
+  }
+}
+```
 
 #### 3.2.2 Protocol Settings
 
@@ -354,29 +383,48 @@ settings. All other settings SHOULD be supported.
 
 - **subject** (string) - REQUIRED. The name of the NATS subject to publish to.
 
-#### 3.2.3 Filter Dialects
+#### 3.2.3 Filters
+
+Filters allow for subscriptions to specify that only a subset of events
+are to be delivered to the sink based on a set of criteria. The `filters`
+property in a subscription is an array of filter expressions that are logically
+combined with an implicit "AND" operator. This means the filter criteria
+MUST evaluate to true for every filter expression in the array in order
+for an event to be delivered to the target sink.
+
+If any of the filter expressions evaluate to false, the event MUST NOT be
+sent to the sink. If all of the filter expressions evaluare to true, the
+event MUST be attempted to be delivered.
+
+Each filter expression includes the specification of a `dialect` that
+defines the type of filter and the set of additional properties that are
+allowed within the filter expression. If a filter dialect is specified in a
+subscription that is unsupported by the subscription manager, creation or
+update of the subscription MUST be rejected with an error.
+
+##### 3.2.3.1 Filter Dialects
 
 The filter expression language supported by an event producer is indicated by
 its dialect. This is intended to allow for flexibility, extensibility and to
 allow for a variety of filter dialects without enumerating them all in this
 specification or predicting what filtering needs every system will have in the
-future. This specification will specify a single "basic" dialect, which all
+future. This specification defines a `basic` dialect, which all
 implementations MUST support.
 
-The dialect for a particular filter is indicated by specifying the "dialect"
-property at the root of the JSON object. The value of this is a string encoded
-unique identifier for the filter dialect. Subscriptions specifying the "filter"
-property MUST specify a dialect. All other properties are dependent on the
+The dialect for a particular filter is indicated by specifying the `dialect`
+in a `filter` expression. The value of this is a URI-reference encoded unique
+identifier for the filter dialect. Subscriptions specifying a `filter`
+MUST specify a dialect. All other properties are dependent on the
 dialect being used.
 
-##### 3.2.3.1. "basic" filter dialect
+##### 3.2.3.2. "basic" filter dialect
 
-The "basic" filter dialect is intended to support the most common filtering use
-cases:
+The `basic` filter dialect is intended to support the most common filtering
+use cases:
 
-- "Exact" match where the filter condition and an attribute value match exactly.
-- "Prefix" match where the filter condition is a prefix of the attribute value.
-- "Suffix" match where the filter condition is a suffix of the attribute value.
+- `exact` match where the filter condition and an attribute value match exactly.
+- `prefix` match where the filter condition is a prefix of the attribute value.
+- `suffix` match where the filter condition is a suffix of the attribute value.
 
 This filter dialect is intentionally constrained to these filter types, since
 filtering has a potentially significant impact on the baseline performance of
@@ -387,21 +435,19 @@ Extension dialects will have varying support across event producers. It is up to
 the subscriber and producer to negotiate which filter dialects can be used
 within a given subscription.
 
-The filter conditions specified in the basic dialect will be defined by
-specifying a "conditions" property holding an array of filter conditions, which
-are logically combined with an implicit "AND" operator. This means the filter
-criteria MUST evaluate to true for every filter in the array in order for a
-CloudEvent instance to be delivered to the target sink.
+Each `basic` filter expression is defined with the following properties:
 
-Each basic filter is defined with the following properties:
-
-- type (string) - REQUIRED. Value MUST be one of the following: prefix, suffix,
-  exact.
-- property (string) - REQUIRED. The CloudEvents attribute (including extensions)
-  to match the value indicated by the "value" property against.
-- value (string) - REQUIRED, The value to match the CloudEvents attribute
+- `type` (string) - REQUIRED. Value MUST be one of the following:
+  `prefix`, `suffix`, exact`.
+- `property` (string) - REQUIRED. The CloudEvents attribute
+   (including extensions) to match the value indicated by the `value` property
+   against.
+- `value` (string) - REQUIRED. The value to match the CloudEvents attribute
   against. This expression is a string and matches are executed against the
   string representation of the attribute value.
+
+Note: the string comparisions MUST be case sensitive and take into account all
+whitespace - including leading and trailing whitespace.
 
 ###### 3.2.3.1.1. Example: Prefix match
 
@@ -410,12 +456,12 @@ This filter will select events only with the event type having the prefix of
 
 ```JSON
 {
+  "filters": [{
     "dialect": "basic",
-    "filters": [{
-        "type": "prefix",
-        "property": "type",
-        "value": "com.example"
-    }]
+    "type": "prefix",
+    "property": "type",
+    "value": "com.example"
+  }]
 }
 ```
 
@@ -426,14 +472,12 @@ This filter will select events only with the event subject having the suffix of
 
 ```JSON
 {
+  "filters": [{
     "dialect": "basic",
-    "filters": [
-        {
-            "type": "suffix",
-            "property": "subject",
-            "value": ".jpg"
-        }
-    ]
+    "type": "suffix",
+    "property": "subject",
+    "value": ".jpg"
+  }]
 }
 ```
 
@@ -444,14 +488,12 @@ This filter will select events only with the event type equal to
 
 ```JSON
 {
+  "filters": [{
     "dialect": "basic",
-    "filters": [
-        {
-            "type": "exact",
-            "property": "type",
-            "value": "com.example.my_event"
-        }
-   ]
+    "type": "exact",
+    "property": "type",
+    "value": "com.example.my_event"
+  }]
 }
 ```
 
@@ -462,19 +504,20 @@ This filter will select events only with the event type equal to
 
 ```JSON
 {
-    "dialect": "basic",
-    "filters": [
-        {
-            "type": "exact",
-            "property": "type",
-            "value": "com.example.my_event"
-        },
-        {
-            "type": "suffix",
-            "property": "subject",
-            "value": ".jpg"
-        }
-    ]
+  "filters": [
+    {
+      "dialect": "basic",
+      "type": "exact",
+      "property": "type",
+      "value": "com.example.my_event"
+    },
+    {
+      "dialect": "basic",
+      "type": "suffix",
+      "property": "subject",
+      "value": ".jpg"
+    }
+  ]
 }
 ```
 
@@ -496,9 +539,10 @@ supported.
 
 The **Create** operation SHOULD be supported by compliant Event Producers. It
 creates a new Subscription. The client proposes a subscription object which MUST
-contain all REQUIRED properties. The subscription manager then realizes the
-subscription and returns a subscription object that also contains all OPTIONAL
-properties for which default values have been applied.
+contain all REQUIRED properties with the exception of the `ID` property, which
+will be defined by the subscription manager. The subscription manager then
+realizes the subscription and returns a subscription object that also contains
+all OPTIONAL properties for which default values have been applied.
 
 Parameters:
 
@@ -604,6 +648,52 @@ Errors:
 
 (TBD) This will be a straightforward mapping of the described API to a basic
 HTTP CRUD API using PUT, POST, GET, DELETE, and OPTIONS.
+
+Placeholders:
+```
+Create:
+POST /subscriptions
+Content-Type: application/json
+
+{
+  "protocol": "...",
+  "protocolsettings": { ... }
+  "sink": "...",
+  "filters": [{
+    "dialect": "...",
+    "type": "...",
+    "property": "...",
+    "value": "..."
+  }],
+  "config": { ... }
+}
+
+Note: no ID in the request
+
+Retrieve:
+GET /subscriptions/{id}
+
+Delete:
+DELETE /subscriptions/{id}
+
+Update:
+PUT /subscriptions/{id}
+Content-Type: application/json
+
+{
+  "protocol": "...",
+  "protocolsettings": { ... }
+  "sink": "...",
+  "filters": [{
+    "dialect": "...",
+    "type": "...",
+    "property": "...",
+    "value": "i..."
+  }],
+  "config": { ... }
+}
+
+```
 
 ### 3.4. AMQP Binding for the Subscription API
 

@@ -139,8 +139,9 @@ Service:
   "specversions": [ "[ce-specversion value]" + ],
   "subscriptionurl": "[URL to which the Subscribe request will be sent]",
   "subscriptionconfig": { ?
-    "[key]": "[value]", *
+    "[key]": "[type]", *
   },
+  "subscrioptiondialects": [ "[dialect]" ], ?
   "authscope": "[string]", ?
   "protocols": [ "[string]" + ],
   "events": [ ?
@@ -173,6 +174,7 @@ An example:
   "name": "widgets",
   "specversions": ["1.0"],
   "subscriptionurl": "https://events.example.com",
+  "subscriptiondialects": [ "basic" ],
   "protocols": ["HTTP"],
   "events": [
     {
@@ -313,7 +315,7 @@ The following sections define the attributes that appear in a Service entity.
 - Type: `Map` of `String` to `String`
 - Description: A map indicating supported options for the `config` parameter for
   the CloudSubscriptions subscribe() API call. Keys are the name of keys in the
-  allowed config map, the values indicate the type of that parameter, confirming
+  allowed config map, the values indicate the type of that parameter, conforming
   to the CloudEvents
   [type system](https://github.com/cloudevents/spec/blob/master/spec.md#type-system).
   TODO: Needs resolution with CloudSubscriptions API
@@ -321,6 +323,16 @@ The following sections define the attributes that appear in a Service entity.
   - OPTIONAL
 - Examples:
   - ??
+
+##### subscriptiondialects
+
+- Type: `Array` or `URI-reference` valuies
+- Description: An array of filter dialects that MAY be used in the
+  Cloud Subscriptions subscribe() API call.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `basic`
 
 ##### authscope
 
