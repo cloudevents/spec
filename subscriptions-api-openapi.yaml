@@ -7,55 +7,25 @@ servers:
 paths:
   /subscriptions:
     get:
-      description: Retrieve one or multiple subscriptions
-      parameters:
-        - in: "query"
-          name: "id"
-          description: identifier of a specific subscription
-          required: false
-          schema:
-            type: string
+      description: Retrieve multiple subscriptions
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "#/components/schemas/Subscription"
-                    description: the subscription that was requested with teh 'id' parameter
-                  - type: array
-                    description: a list of subscriptions
-                    items:
-                       $ref: "#/components/schemas/Subscription"
-    put:
-      description: Update a subscription
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Subscription"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Subscription"
+                type: array
+                description: a list of subscriptions
+                items:
+                  $ref: "#/components/schemas/Subscription"
     post:
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Subscription"
+              $ref: "#/components/schemas/SubscriptionRequest"
       responses:
         "200":
-          description: Updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Subscription"
-        "201":
           description: Created successfully
           content:
             application/json:
@@ -68,10 +38,65 @@ paths:
                 format: url
         "400":
           description: Invalid or malformed request
+    options:
+      description: Discover supported features and methods for this endpoint
+      responses:
+        "200":
+          description: OK
+          headers:
+            Allow:
+              schema:
+                type: string
+                default: "GET,POST,OPTIONS"
+  /subscriptions/{id}:
+    get:
+      description: Retrieve one or multiple subscriptions
+      parameters:
+        - in: "path"
+          name: "id"
+          description: identifier of a specific subscription
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "404":
+          description: Subscription not found
+    put:
+      description: Update a subscription
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          schema:
+            type: string
+          description: The id of an existing subscription
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subscription"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "400":
+          description: Invalid or malformed request
+        "404":
+          description: Subscription not found
     delete:
       description: Delete a subscription
       parameters:
-        - in: "query"
+        - in: "path"
           name: "id"
           required: true
           schema:
@@ -80,12 +105,17 @@ paths:
       responses:
         "200":
           description: Successfully deleted
-        "400":
-          description: Invalid or malformed request
         "404":
           description: Subscription not found
     options:
       description: Discover supported features and methods for this endpoint
+      parameters:
+        - in: "path"
+          name: "id"
+          description: identifier of a specific subscription
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -96,6 +126,33 @@ paths:
                 default: "GET,PUT,POST,DELETE,OPTIONS"
 components:
   schemas:
+    SubscriptionRequest:
+      properties:
+        protocol:
+          type: string
+          enum: ["HTTP", "MQTT3", "MQTT5", "AMQP", "NATS", "KAFKA"]
+          description: REQUIRED. Identifier of a delivery protocol.
+          example: "HTTP"
+        protocolsettings:
+          type: object
+          anyOf:
+            - $ref: "#/components/schemas/HTTPSettings"
+            - $ref: "#/components/schemas/MQTTSettings"
+            - $ref: "#/components/schemas/AMQPSettings"
+            - $ref: "#/components/schemas/NATSSettings"
+            - $ref: "#/components/schemas/ApacheKafkaSettings"
+          description: OPTIONAL. A set of settings specific to the selected delivery protocol provider.
+        sink:
+          type: string
+          format: url
+          description: REQUIRED. The address to which events shall be delivered using the selected protocol.
+          example: "https://endpoint.example.com/webhook"
+        filter:
+          $ref: "#/components/schemas/Filter"
+      required:
+        - protocol
+        - protocolsettings
+        - sink
     Subscription:
       properties:
         id:
