@@ -120,6 +120,7 @@ specified WebSocket frame type:
 | ------------------ | -------------------------------- | ---------- |
 | `cloudevents.json` | [JSON event format][json-format] | Text       |
 | `cloudevents.avro` | [AVRO event format][avro-format] | Binary     |
+| `cloudevents.proto` | [Protobuf event format][proto-format] | Binary |
 
 All implementations of this specification MUST support the [JSON event
 format][json-format]. This specification doesn't support the [JSON batch
@@ -159,6 +160,7 @@ format specification and the resulting data becomes the payload.
 [json-format]: ./json-format.md
 [json-batch-format]: ./json-format.md#4-json-batch-format
 [avro-format]: ./avro-format.md
+[proto-format]: ./protobuf-format.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc6455]: https://tools.ietf.org/html/rfc6455
 [rfc6455-section-1-3]: https://tools.ietf.org/html/rfc6455#section-1.3
