@@ -258,8 +258,9 @@ The following sections define the attributes that appear in a Service entity.
 ##### url
 
 - Type: `URL`
-- Description: An absolute URL that references this Service. This value MUST be
-  usable in subsequent requests, by authorized clients, to retrieve this Service
+- Description: An absolute URL that references this Service within this
+  Discovery Endpoint. This value MUST be usable in subsequent requests, by
+  authorized clients, to retrieve this Service
   entity.
 - Constraints:
   - REQUIRED
