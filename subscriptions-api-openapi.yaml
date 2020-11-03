@@ -197,11 +197,6 @@ components:
             type: object
     HTTPSettings:
       properties:
-        proxyurl:
-          type: string
-          format: url
-        proxycredentials:
-          $ref: "#/components/schemas/Credentials"
         headers:
           type: object
         method:
@@ -251,12 +246,3 @@ components:
           type: string
       required:
         - subject
-    Credentials:
-      properties:
-        username:
-          type: string
-        passkey:
-          type: string
-          format: password
-        accesstoken:
-          type: string
