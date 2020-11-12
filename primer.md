@@ -175,14 +175,18 @@ attributes may be defined that facilitate meeting persistence requirements but
 it is expected that these will continuously evolve along with industry best
 practices and advancements.
 
-The CloudEvents spec currently does not mandate or advocates any specific
+The CloudEvents spec currently does not mandate or advocate any specific
 mechanism or principles in the matter of Authorization, Data Integrity and
-Confidentiality, as the core intention behind this spec is not to define
+Confidentiality, as the current intention behind this spec is not to define
 Security principles with regards to CloudEvents. Every implementor has a
 different principle for enhancing their security model. We leave it up to the
 implementor of the spec to provide additional details for hardening their
 security model as an extension field, which can be furthermore interpreted by
 the components implemented by the implementor of the specification themselves.
+However, if the community observes a pattern in usage of certain extension
+fields, as a standard way to deal with the topic of data integrity. In that
+case, such extension fields can be declared as official extension to the
+CloudEvent specification.
 
 ## Architecture
 
