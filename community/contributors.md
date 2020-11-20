@@ -70,6 +70,7 @@ Contributions do not constitute an official endorsement.
   - William Markito Oliveira - [@william_markito](https://github.com/markito)
   - Gunnar Morling - [@gunnarmorling](https://github.com/gunnarmorling/)
   - Tihomir Surdilovic - [@tsurdilo](https://github.com/tsurdilo)
+  - Lance Ball - [@lance](https://github.com/lance)
 - **SAP**
   - [kubeless](https://kubeless.io)
   - Nathan Oyler - [@notque](https://github.com/notque)
