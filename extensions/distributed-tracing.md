@@ -2,9 +2,10 @@
 
 This extension embeds context from
 [Distributed Tracing](https://w3c.github.io/trace-context/) so that distributed
-systems can include traces that span an event-driven system. This extensions is meant
-to contain historical data of the parent trace, in order to diagnose eventual failures of the 
-systems through tracing platforms like Jaeger, Zipkin, etc.
+systems can include traces that span an event-driven system. This extension is
+meant to contain historical data of the parent trace, in order to diagnose
+eventual failures of the system through tracing platforms like Jaeger, Zipkin,
+etc.
 
 ## Attributes
 
@@ -35,10 +36,10 @@ if used, MUST carry the same trace information contained in protocol specific tr
 Given a multi hop event transmission, the Distributed Tracing Extension, if used, MUST 
 carry the trace information of the starting trace of the transmission. 
 In other words, it MUST NOT carry trace information of each individual hop, since this information is usually 
-carried using protocol specific defined headers, understood by tools like [OpenTelemetry](https://opentelemetry.io/).
+carried using protocol specific headers, understood by tools like [OpenTelemetry](https://opentelemetry.io/).
  
 Middleware between the source and the sink of the event could eventually add a Distributed Tracing Extension
-if the source didn't included any, in order to provide to the sink the starting trace of the transmission.
+if the source didn't include any, in order to provide to the sink the starting trace of the transmission.
 
 An example with HTTP:
 

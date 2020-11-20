@@ -51,8 +51,7 @@ of event messages with Kafka; it solely defines how CloudEvents are expressed
 in the Kafka protocol as [Kafka messages][kafka-message-format].
 
 The Kafka documentation uses "message" and "record" somewhat interchangeably and
-therefore the terms are to be considered being synonyms for this specification
-as well.
+therefore the terms are to be considered synonyms in this specification as well.
 
 Conceptually, Kafka is a log-oriented store for records, each holding a singular
 key/value pair. The store is commonly partitioned, and the partition for a
@@ -130,15 +129,14 @@ event format that it cannot handle, for instance
 `application/cloudevents+avro`, it MAY still treat the event as binary and
 forward it to another party as-is.
 
-When the `content-type` header is not prefixed with the CloudEvents
-media type, being able to know when the message ought to be attempted to be
-parsed as a CloudEvent can be a challenge. While this specification can not
-mandate that senders do not include any of the CloudEvents headers
-when the message is not a CloudEvent, it would be reasonable for a receiver
-to assume that if the message has all of the mandatory CloudEvents attributes
-as headers then it's probably a CloudEvent. However, as with all
-CloudEvent messages, if it does not adhere to all of the normative language of
-this specification then it is not a valid CloudEvent.
+When the `content-type` header value is not prefixed with the CloudEvents media
+type, knowing when the message should be parsed as a CloudEvent can be a
+challenge. While this specification can not mandate that senders do not include
+any of the CloudEvents headers when the message is not a CloudEvent, it would be
+reasonable for a receiver to assume that if the message has all of the mandatory
+CloudEvents attributes as headers then it's probably a CloudEvent. However, as
+with all CloudEvent messages, if it does not adhere to all of the normative
+language of this specification then it is not a valid CloudEvent.
 
 If the `content-type` header is not present then the receiver uses
 _structured_ mode with the JSON event format.
