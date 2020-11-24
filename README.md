@@ -59,8 +59,8 @@ events into CloudEvents, see
 
 ## SDKs
 
-In addition to the documentation mentioned above, there are also an
-[SDK proposal](SDK.md) and a set of SDKs being developed:
+In addition to the documentation mentioned above, there is also an
+[SDK proposal](SDK.md). A set of SDKs is also being developed:
 
 - [CSharp](https://github.com/cloudevents/sdk-csharp)
 - [Go](https://github.com/cloudevents/sdk-go)
