@@ -198,7 +198,7 @@ CRLF sequence with OPTIONAL whitespace around the header value.
 
 String values MUST be percent-encoded as described in [RFC3986, section
 2.4][rfc3986-section-2-4] before applying the header encoding rules described in
-[RFC7230, section 3.2.6][rfc7230-section-3-2s6].
+[RFC7230, section 3.2.6][rfc7230-section-3-2-6].
 
 When decoding an HTTP message into a CloudEvent, these rules MUST be applied in
 reverse -- [RFC7230, section 3.2.6][rfc7230-section-3-2-6] decoding to an ASCII
