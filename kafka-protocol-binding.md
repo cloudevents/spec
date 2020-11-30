@@ -130,7 +130,7 @@ event format that it cannot handle, for instance
 forward it to another party as-is.
 
 When the `content-type` header value is not prefixed with the CloudEvents media
-type, knowing when the message should be parsed as a CloudEvent can be a
+type, knowing when the message ought to be parsed as a CloudEvent can be a
 challenge. While this specification can not mandate that senders do not include
 any of the CloudEvents headers when the message is not a CloudEvent, it would be
 reasonable for a receiver to assume that if the message has all of the mandatory
