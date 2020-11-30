@@ -29,9 +29,6 @@ CloudEvents, please include in the list below.
 - [Gloo](https://github.com/solo-io/gloo): is a function gateway built on top of
   [Envoy Proxy](https://envoyproxy.io/) by [Solo.io](https://www.solo.io/) that
   supports CloudEvents.
-- [Dispatch](https://github.com/vmware-archive/dispatch): is a function
-  framework / gateway by [VMWare](https://vmware.github.io/dispatch/) that
-  support CloudEvents.
 - [cloudevents-python](https://github.com/williamhogman/cloudevents-python): A
   CloudEvents library for python.
 - [CloudEvents.live](https://cloudevents.live/): A real-time debugger/request
@@ -46,3 +43,4 @@ CloudEvents, please include in the list below.
 - [CloudEvents JSON Schema](https://marketplace.visualstudio.com/items?itemName=tsurdilovic.cloudevents-schema-vscode):
 Visual Studio Code extension for CloudEvents format.
 - [Knative Eventing](https://knative.dev) implements CloudEvents based sources and event delivery abstractions build on top of Kubernetes.
+- [VMware Event Broker Appliance](https://vmweventbroker.io) enables event driven workflows from vCenter Server Events.
