@@ -38,7 +38,7 @@ The following documents are available:
 | MQTT Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/mqtt-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/mqtt-protocol-binding.md)    |
 | NATS Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/nats-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/nats-protocol-binding.md)    |
 | WebSockets Protocol Binding   |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/websockets-protocol-binding.md) |
-| Protobuf Event Format         |                                                                                 |                                 [master][proto-working]                                  |
+| Protobuf Event Format         |                                                                                 | [master](https://github.com/cloudevents/spec/blob/master/protobuf-format.md)                                  |
 | Web hook                      |      [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-webhook.md)      |        [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)         |
 |                               |
 | **Additional Documentation:** |
@@ -134,6 +134,3 @@ Periodically, the group may have in-person meetings that coincide with a major
 conference. Please see the
 [meeting minutes doc](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for any future plans.
-
-[proto-working]: ./protobuf-format.md
-[proto-latest]: ./protobuf-format.md
