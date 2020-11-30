@@ -45,3 +45,4 @@ CloudEvents, please include in the list below.
   CloudEvents library for Node.js.
 - [CloudEvents JSON Schema](https://marketplace.visualstudio.com/items?itemName=tsurdilovic.cloudevents-schema-vscode):
 Visual Studio Code extension for CloudEvents format.
+- [Knative Eventing](https://knative.dev) implements CloudEvents based sources and event delivery abstractions build on top of Kubernetes.
