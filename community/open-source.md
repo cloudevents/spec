@@ -3,8 +3,8 @@ CloudEvents, please include in the list below.
 
 - [CloudEvents.NET](https://github.com/aliencube/CloudEvents.NET): is a .NET
   implementation of the CloudEvents [spec](../spec.md) and
-  [HTTP protocol binding](../http-protocol-binding.md). It has been released
-  to [nuget.org](https://www.nuget.org/packages?q=Aliencube.CloudEventsNet). It
+  [HTTP protocol binding](../http-protocol-binding.md). It has been released to
+  [nuget.org](https://www.nuget.org/packages?q=Aliencube.CloudEventsNet). It
   also contains some app
   [samples](https://github.com/aliencube/CloudEvents.NET/tree/master/sample)
   of 1) console app to Web API, and 2) Web API to Azure Event Grid, which
@@ -21,8 +21,8 @@ CloudEvents, please include in the list below.
   for event-driven, serverless architectures. The Event Gateway combines both
   API Gateway and Pub/Sub functionality into a single event-driven experience.
 - [CloudEvents Extend API](https://github.com/goextend/cloudevents-extend-api)
-  is a JavaScript programming model for Extend which
-  allows handling Cloud Events.
+  is a JavaScript programming model for Extend which allows handling Cloud
+  Events.
 - [CloudEvents Verify](https://github.com/btbd/CEVerify): is a tool to help
   verify CloudEvents according to the proper specifications. It is currently
   being hosted publicly [here](http://soaphub.org/ceverify).
@@ -41,6 +41,8 @@ CloudEvents, please include in the list below.
 - [cloudevent.js](https://github.com/smartiniOnGitHub/cloudevent.js): A
   CloudEvents library for Node.js.
 - [CloudEvents JSON Schema](https://marketplace.visualstudio.com/items?itemName=tsurdilovic.cloudevents-schema-vscode):
-Visual Studio Code extension for CloudEvents format.
-- [Knative Eventing](https://knative.dev) implements CloudEvents based sources and event delivery abstractions build on top of Kubernetes.
-- [VMware Event Broker Appliance](https://vmweventbroker.io) enables event driven workflows from vCenter Server Events.
+  Visual Studio Code extension for CloudEvents format.
+- [Knative Eventing](https://knative.dev) implements CloudEvents based sources
+  and event delivery abstractions build on top of Kubernetes.
+- [VMware Event Broker Appliance](https://vmweventbroker.io) enables event
+  driven workflows from vCenter Server Events.
