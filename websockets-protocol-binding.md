@@ -48,9 +48,9 @@ This specification does not prescribe rules constraining the use or handling of
 specific [HTTP target resource][rfc7230-section-5-1] to establish the WebSocket
 upgrade.
 
-This specification prescribe rules constraining the [WebSockets
+This specification prescribes rules constraining the [WebSockets
 Subprotocols][rfc6455-section-5-1] in order to reach agreement on the event
-format to use, in order to exchange serialized CloudEvents.
+format to use when sending and receiving serialized CloudEvents.
 
 Events are sent as WebSocket messages, serialized using an [event
 format][ce-event-format].
@@ -62,7 +62,7 @@ transferring events: _structured_ and _binary_.
 
 Because of the nature of WebSockets messages, this specification supports only
 _structured_ data mode, hence event metadata attributes and event data are
-placed into the WebSockets messages using an [event format][ce-event-format].
+sent in WebSocket messages using an [event format][ce-event-format].
 
 The [event format][ce-event-format] to be used in a full-duplex WebSocket stream
 is agreed during the [handshake](#14-handshake) and cannot change during the
@@ -123,7 +123,7 @@ specified WebSocket frame type:
 | `cloudevents.proto` | [Protobuf event format][proto-format] | Binary |
 
 All implementations of this specification MUST support the [JSON event
-format][json-format]. This specification doesn't support the [JSON batch
+format][json-format]. This specification does not support the [JSON batch
 format][json-batch-format].
 
 ### 1.6. Security
@@ -146,7 +146,7 @@ contains a CloudEvent serialized using the agreed event format.
 The chosen [event format][ce-event-format] defines how all attributes, including
 the payload, are represented.
 
-The event metadata and data MUST then be rendered in accordance with the event
+The event metadata and data MUST be rendered in accordance with the event
 format specification and the resulting data becomes the payload.
 
 ## 4. References

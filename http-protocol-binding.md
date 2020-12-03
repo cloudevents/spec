@@ -150,15 +150,15 @@ If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
 treat the event as binary and forward it to another party as-is.
 
-When the `Content-Type` header is not prefixed with the CloudEvents media type,
-being able to know when the message ought to be attempted to be parsed as a
-CloudEvent can be a challenge. While this specification can not mandate that
-senders do not include any of the CloudEvents HTTP headers when the message
-is not a CloudEvent, it would be reasonable for a receiver to assume that if
-the message has all of the mandatory CloudEvents attributes as HTTP headers
-then it's probably a CloudEvent. However, as with all CloudEvent messages, if
-it does not adhere to all of the normative language of this specification
-then it is not a valid CloudEvent.
+When the `Content-Type` header value is not prefixed with the CloudEvents media
+type, knowing when the message ought to be parsed as a CloudEvent can be a
+challenge. While this specification can not mandate that senders do not include
+any of the CloudEvents HTTP headers when the message is not a CloudEvent, it
+would be reasonable for a receiver to assume that if the message has all of the
+mandatory CloudEvents attributes as HTTP headers then it's probably a
+CloudEvent. However, as with all CloudEvent messages, if it does not adhere to
+all of the normative language of this specification then it is not a valid
+CloudEvent.
 
 ### 3.1. Binary Content Mode
 

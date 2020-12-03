@@ -93,7 +93,7 @@ message CloudEventAttributeValue {
 In this model an attribute's name is used as the map *key* and is
 associated with its *value* stored in the appropriately typed property.
 
-This approach allows for attributes to be represented and transported
+This approach allows attributes to be represented and transported
 with no loss of *type* information.
 
 ## 3. Data
@@ -140,7 +140,8 @@ Transports that support content identification MUST use the following designatio
 
 ## 5. Examples
 
-The following code-snippets shows how proto representations might be constucted asuming the availability of some convenience methods ...
+The following code-snippets show how proto representations might be constucted
+assuming the availability of some convenience methods.
 
 ### 5.1 Plain Text event data
 
