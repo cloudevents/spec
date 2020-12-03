@@ -36,7 +36,7 @@ provide interoperability across services, platforms, and systems.
 
 - Constraints:
   - REQUIRED
-  - MUST be https://github.com/cloudevents/spec/tree/v1.0/adapters/error/schema.json"
+  - MUST be https://github.com/cloudevents/spec/tree/v1.0/adapters/error/dataschema.json"
 
 ### data
 
