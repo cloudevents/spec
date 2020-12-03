@@ -125,6 +125,20 @@ The specifications produced will adhere to the following:
   single logical unit and released at the same time, at the same version number.
   This is true regardless of whether each individual document actually changed
   during the release cycle.
+- When a new release of a specification is ready, it will be given a version
+  number matching the appropriate semver version string but with a suffix of
+  `-rc#` (release candidate). This will indicate that the authors believe it
+  is ready for final release but it needs to go through a testing period to
+  allow for broader testing before it promoted to its final version number.
+  This will be true for updates to existing specifications and for new
+  specifications.
+- Since changing the CloudEvents `specversion` string could have a significant
+  impact on implementations, all non-breaking changes will be made as
+  "patch" version updates - this allows for the value "on the wire" to remain
+  unchanged. If a breaking change is introduced the normal semver rules will
+  apply and the "major" version number will change. The net effect of this is
+  that the "minor" version number will always be zero and the `specversion`
+  string will always be of the form `X.0`.
 
 Note that these rules do not apply to the
 [documented extensions](../documented-extensions.md).

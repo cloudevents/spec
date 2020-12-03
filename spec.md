@@ -304,6 +304,13 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   uses. This enables the interpretation of the context. Compliant event
   producers MUST use a value of `1.x-wip` when referring to this version of the
   specification.
+
+  Currently, this attribute will only have the 'major' and 'minor' version
+  numbers included in it. This allows for 'patch' changes to the specification
+  to be made without changing this property's value in the serialization.
+  Note: for 'release candidate' releases a suffix might be used for testing
+  purposes.
+
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
