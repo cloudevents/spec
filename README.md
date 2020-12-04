@@ -106,14 +106,14 @@ The main mailing list for e-mail communications:
 - Archives are at: https://lists.cncf.io/g/cncf-cloudevents/topics
 
 And a #cloudevents Slack channel under
-[CNCF's Slack workspace](https://slack.cncf.io/).
+[CNCF's Slack workspace](http://slack.cncf.io/).
 
 For SDK related comments and questions:
 
 - Email to: [cncf-cloudevents-sdk](mailto:cncf-cloudevents-sdk@lists.cncf.io)
 - To subscribe see: https://lists.cncf.io/g/cncf-cloudevents-sdk
 - Archives are at: https://lists.cncf.io/g/cncf-cloudevents-sdk/topics
-- Slack: #cloudeventssdk on [CNCF's Slack workspace](https://slack.cncf.io/)
+- Slack: #cloudeventssdk on [CNCF's Slack workspace](http://slack.cncf.io/)
 
 ## Meeting Time
 
