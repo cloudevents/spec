@@ -173,7 +173,7 @@ time of the submission or revision.
 
 ##### 3.1.3.1 AMQP Application Property Names
 
-Cloud Event attributes are prefixed with "cloudEvents:" for use in the
+CloudEvent attributes are prefixed with "cloudEvents:" for use in the
 [application-properties][app-properties] section.
 
 Examples:

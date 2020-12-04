@@ -64,13 +64,13 @@ The CloudEvents type system is mapped to protobuf as follows :
 | URI-reference | [string][proto-scalars] following [RFC 3986 §4.1][rfc3986-section41] |
 | Timestamp     | [Timestamp][proto-timestamp]  |
 
-## 2.3 Required Attributes
+## 2.3 REQUIRED Attributes
 
-Required attributes are represented explicitly as protobuf fields.
+REQUIRED attributes are represented explicitly as protobuf fields.
 
-## 2.4 Optional Attributes & Extensions
+## 2.4 OPTIONAL Attributes & Extensions
 
-Optional and extension attributes are represented using a map construct enabling
+OPTIONAL and extension attributes are represented using a map construct enabling
 direct support of the CloudEvent [type system][ce-types].
 
 ```proto
@@ -150,7 +150,7 @@ public static CloudEvent plainTextExample() {
   CloudEvent.Builder ceBuilder = CloudEvent.newBuilder();
 
   ceBuilder
-    //-- Required Attributes.
+    //-- REQUIRED Attributes.
     .setId(UUID.randomUUID().toString())
     .setSpecVersion("1.0")
     .setType("io.cloudevent.example")
@@ -159,7 +159,7 @@ public static CloudEvent plainTextExample() {
     //-- Data.
     .setTextData("This is a plain text message");
 
-  //-- Optional Attributes
+  //-- OPTIONAL Attributes
   withCurrentTime(ceBuilder, "time");
   withAttribute(ceBuilder, "datacontenttype", "text/plain");
 
@@ -199,7 +199,7 @@ private static Spec.CloudEvent protoExample() {
   // Add the protto type URL
   withAttribute(ceBuilder, "dataschema", ceBuilder.getProtoData().getTypeUrl());
 
-  // Set Content-Type (Optional)
+  // Set Content-Type (OPTIONAL)
   withAttribute(ceBuilder, "datacontenttype", "application/protobuf");
 
   //-- Done.

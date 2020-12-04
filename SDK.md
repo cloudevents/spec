@@ -10,6 +10,7 @@ following SDKs:
 - [Go SDK](https://github.com/cloudevents/sdk-go)
 - [Java SDK](https://github.com/cloudevents/sdk-java)
 - [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
+- [PHP SDK](https://github.com/cloudevents/sdk-php)
 - [Python SDK](https://github.com/cloudevents/sdk-python)
 - [Ruby SDK](https://github.com/cloudevents/sdk-ruby)
 - [Rust SDK](https://github.com/cloudevents/sdk-rust)
