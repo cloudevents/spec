@@ -6,9 +6,9 @@ verify:
 	@tools/verify-links.sh -t -v .
 	@echo Running the spec phrase checker:
 	@tools/verify-specs.sh -v \
-		documented-extensions.md \
 		amqp-protocol-binding.md \
 		avro-format.md \
+		documented-extensions.md \
 		http-protocol-binding.md \
 		http-webhook.md \
 		json-format.md \
@@ -20,7 +20,7 @@ verify:
 		websockets-protocol-binding.md \
 		\
 		discovery.md \
-		subscriptions-api.md \
-		pagination.md
+		pagination.md \
+		subscriptions-api.md 
 	@echo Running the doc phrase checker:
 	@tools/verify-docs.sh -v .
