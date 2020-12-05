@@ -1,13 +1,20 @@
 {
   "$schema": "http://json-schema.org/schema",
+  "title": "Error",
+  "description": "A single error",
   "type": "object",
   "properties": {
-    "errormessage": { "type": "string" },
+    "errormessage": {
+      "description": "Human readable error message, intended to be used by developers",
+      "type": "string"
+    },
     "errorlink": {
+      "description": "A URL to the more detailed information about the error",
       "type": "string",
       "pattern": "uri"
     },
     "metadata": {
+      "description": "A object containing metadata associated with the error",
       "type": "object"
     }
   }
