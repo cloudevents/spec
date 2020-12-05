@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/schema",
+  "$schema": "http://json-schema.org/schema#",
   "title": "Error",
   "description": "A single error",
   "type": "object",
