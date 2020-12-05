@@ -60,7 +60,7 @@ provide interoperability across services, platforms, and systems.
 
 ### errorlink
 
-- Type: URI-reference
+- Type: URI
 - Description: URL to documentation related to the error.
 - Constraints:
   - OPTIONAL
