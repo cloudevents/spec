@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "errormessage": { "type": "string" },
+    "errorlink": {
+      "type": "string",
+      "pattern": "uri"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "required": ["errormessage"]
+}
