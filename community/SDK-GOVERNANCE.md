@@ -29,7 +29,7 @@ projects. The purpose of these requirements are to demonstrate the person's
 expertise and regular commitment to the project - not simply to achieve a
 certain level of activity.
 
-Each sdk project may define in their `CONTRIBUTING.md` file stricter
+Each sdk project may define in its `CONTRIBUTING.md` file stricter
 requirements, in order to meet the community demands, e.g. _we require that
 the contributor submitted at least 20 PRs_.
 
@@ -80,7 +80,7 @@ discussions". However, if the SDK is stable and does not need to be update then
 it might be determined that it current state is acceptable.
 
 To prevent the project from becoming _not actively maintained_, the community
-may takes the following actions:
+may take the following actions:
 
 - Temporary security patches delivered by an _sdk maintainer_ not part of
   `sdk-x-maintainers` group
@@ -109,7 +109,7 @@ enhancements.
 ### Handover to a new maintainer/group of maintainers
 
 If a project is not meeting the criteria 1, 2, 4, 5, 6, 7, the community may
-decides to handover the project to a new maintainer/group of maintainers. The
+decide to hand over the project to a new maintainer/group of maintainers. The
 community can perform the handover to a new maintainer if all the following
 conditions are met:
 
@@ -141,7 +141,7 @@ The voting criteria are:
 ### Archive a project
 
 If a project is not following the criteria 1, 2, 4, 5, 6, 7, the community may
-decides to archive the project. Prior to archiving, the community should first
+decide to archive the project. Prior to archiving, the community should first
 consider performing a search for a new maintainer to
 [handover the project](#handover-to-a-new-maintainergroup-of-maintainers).
 
