@@ -192,6 +192,7 @@ for file in ${mdFiles}; do
         if curl -f -s -k --connect-timeout 10 ${ref} > /dev/null 2>&1 ; then
           break
         fi
+        sleep 3
         let try=try+1
         if [ ${try} -eq ${maxRetries} ]; then
           extra=""
