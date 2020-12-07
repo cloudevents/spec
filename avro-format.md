@@ -1,4 +1,4 @@
-# Avro Event Format for CloudEvents - Version 1.x-wip
+# Avro Event Format for CloudEvents - Version 1.0.1
 
 ## Abstract
 
@@ -82,7 +82,7 @@ described by the [CloudEvent Avro Schema](./spec.avsc):
   "namespace": "io.cloudevents",
   "type": "record",
   "name": "CloudEvent",
-  "version": "1.x-wip",
+  "version": "1.0",
   "doc": "Avro Event Format for CloudEvents",
   "fields": [
     {
@@ -157,7 +157,7 @@ The following table shows exemplary mappings:
 | CloudEvents | Type   | Exemplary Avro Value                           |
 | ----------- | ------ | ---------------------------------------------- |
 | type        | string | `"com.example.someevent"`                      |
-| specversion | string | `"1.x-wip"`                                    |
+| specversion | string | `"1.0"`                                        |
 | source      | string | `"/mycontext"`                                 |
 | id          | string | `"7a0dc520-c870-4193c8"`                       |
 | time        | string | `"2019-06-05T23:45:00Z"`                       |

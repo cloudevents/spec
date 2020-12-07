@@ -1,4 +1,4 @@
-# CloudEvents - Version 1.x-wip
+# CloudEvents - Version 1.0.1
 
 ## Abstract
 
@@ -302,7 +302,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
 - Type: `String`
 - Description: The version of the CloudEvents specification which the event
   uses. This enables the interpretation of the context. Compliant event
-  producers MUST use a value of `1.x-wip` when referring to this version of the
+  producers MUST use a value of `1.0` when referring to this version of the
   specification.
 
   Currently, this attribute will only have the 'major' and 'minor' version
@@ -562,7 +562,7 @@ The following example shows a CloudEvent serialized as JSON:
 
 ```JSON
 {
-    "specversion" : "1.x-wip",
+    "specversion" : "1.0",
     "type" : "com.github.pull_request.opened",
     "source" : "https://github.com/cloudevents/spec/pull",
     "subject" : "123",

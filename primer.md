@@ -1,4 +1,4 @@
-# CloudEvents Primer - Version 1.x-wip
+# CloudEvents Primer - Version 1.0.1
 
 ## Abstract
 
@@ -441,13 +441,13 @@ nesting would be:
 
 ```
 Content-Type: application/json
-ce-specversion: 1.x-wip
+ce-specversion: 1.0
 ce-type: myevent
 ce-id: 1234-1234-1234
 ce-source: example.com
 
 {
-  "specversion": "1.x-wip",
+  "specversion": "1.0",
   "type": "coolevent",
   "id": "xxxx-xxxx-xxxx",
   "source": "bigco.com",

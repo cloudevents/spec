@@ -1,4 +1,4 @@
-# JSON Event Format for CloudEvents - Version 1.x-wip
+# JSON Event Format for CloudEvents - Version 1.0.1
 
 ## Abstract
 
@@ -100,7 +100,7 @@ The following table shows exemplary attribute mappings:
 | CloudEvents     | Type             | Exemplary JSON Value    |
 | --------------- | ---------------- | ----------------------- |
 | type            | String           | "com.example.someevent" |
-| specversion     | String           | "1.x-wip"               |
+| specversion     | String           | "1.0"                   |
 | source          | URI-reference    | "/mycontext"            |
 | subject         | String           | "larger-context"        |
 | subject         | String (null)    | null                    |
@@ -160,7 +160,7 @@ Example event with `String`-valued `data`:
 
 ```JSON
 {
-    "specversion" : "1.x-wip",
+    "specversion" : "1.0",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "A234-1234-1234",
@@ -177,7 +177,7 @@ Example event with `Binary`-valued data
 
 ```JSON
 {
-    "specversion" : "1.x-wip",
+    "specversion" : "1.0",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "id" : "B234-1234-1234",
@@ -194,7 +194,7 @@ or [JSON data](#31-handling-of-data) data:
 
 ```JSON
 {
-    "specversion" : "1.x-wip",
+    "specversion" : "1.0",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "subject": null,
@@ -243,7 +243,7 @@ second with JSON data.
 ```JSON
 [
   {
-      "specversion" : "1.x-wip",
+      "specversion" : "1.0",
       "type" : "com.example.someevent",
       "source" : "/mycontext/4",
       "id" : "B234-1234-1234",
@@ -254,7 +254,7 @@ second with JSON data.
       "data_base64" : "... base64 encoded string ..."
   },
   {
-      "specversion" : "1.x-wip",
+      "specversion" : "1.0",
       "type" : "com.example.someotherevent",
       "source" : "/mycontext/9",
       "id" : "C234-1234-1234",
