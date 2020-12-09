@@ -191,8 +191,9 @@ string-encoding for each type that MUST be supported by all implementations.
   inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
   Event formats do not have to use this encoding, but they MUST only use
   `Integer` values in this range.
-  - String encoding: Integer portion of the JSON Number per
+  - String encoding: Integer component of the JSON Number per
     [RFC 7159, Section 6](https://tools.ietf.org/html/rfc7159#section-6)
+     optionally prefixed with a minus sign.
 - `String` - Sequence of allowable Unicode characters. The following characters
   are disallowed:
   - the "control characters" in the ranges U+0000-U+001F and U+007F-U+009F (both
