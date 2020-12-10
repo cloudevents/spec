@@ -396,7 +396,7 @@ schemas within the group.
 #### 3.4.2. Get a specific schema version
 
 A specific version of a schema is retrieved via a GET on schema version's path in the
-`versions` collection, for instance `/schemagroups/mygroup/schemas/myschema`.
+`versions` collection, for instance `/schemagroups/mygroup/schemas/myschema/versions/myversion`.
 
 The returned payload is the schema document. Further attributes such as the
 `description` and the `format` indicator are returned as HTTP headers.
