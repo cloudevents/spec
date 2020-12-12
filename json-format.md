@@ -63,7 +63,7 @@ with exceptions noted below.
 | CloudEvents   | JSON                                                           |
 | ------------- | -------------------------------------------------------------- |
 | Boolean       | [boolean][json-bool]                                           |
-| Integer       | [number][json-number], only the `int` component is permitted   |
+| Integer       | [number][json-number], only the integer component optionally prefixed with a minus sign is permitted |
 | String        | [string][json-string]                                          |
 | Binary        | [string][json-string], [Base64-encoded][base64] binary         |
 | URI           | [string][json-string] following [RFC 3986][rfc3986]            |
