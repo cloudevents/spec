@@ -1,4 +1,4 @@
-# NATS Protocol Binding for CloudEvents - Version 1.0.1
+# NATS Protocol Binding for CloudEvents - Version 1.0.2-wip
 
 ## Abstract
 

@@ -1,4 +1,4 @@
-# Kafka Protocol Binding for CloudEvents - Version 1.0.1
+# Kafka Protocol Binding for CloudEvents - Version 1.0.2-wip
 
 ## Abstract
 

@@ -1,4 +1,4 @@
-# Avro Event Format for CloudEvents - Version 1.0.1
+# Avro Event Format for CloudEvents - Version 1.0.2-wip
 
 ## Abstract
 

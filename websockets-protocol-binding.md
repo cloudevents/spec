@@ -1,4 +1,4 @@
-# WebSockets Protocol Binding for CloudEvents - Version 1.0.1
+# WebSockets Protocol Binding for CloudEvents - Version 1.0.2-wip
 
 ## Abstract
 
