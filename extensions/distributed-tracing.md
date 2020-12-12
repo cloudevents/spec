@@ -46,7 +46,7 @@ An example with HTTP:
 ```bash
 CURL -X POST example/webhook.json \
 -H 'ce-id: 1' \
--H 'ce-specversion: 1.x-wip' \
+-H 'ce-specversion: 1.0' \
 -H 'ce-type: example' \
 -H 'ce-source: http://localhost' \
 -H 'ce-traceparent:  00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-01' \

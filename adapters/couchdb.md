@@ -18,7 +18,7 @@ based on the event type.
 | :-------------------- | :------------------------------------ |
 | `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL / `db`                 |
-| `specversion`         | `1.x-wip`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `org.apache.couchdb.document.updated` |
 | `datacontenttype`     | `application/json`                    |
 | `subject`             | The document identifier (`id`)        |
@@ -31,7 +31,7 @@ based on the event type.
 | :-------------------- | :------------------------------------ |
 | `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL / `db`                 |
-| `specversion`         | `1.x-wip`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `org.apache.couchdb.document.deleted` |
 | `datacontenttype`     | `application/json`                    |
 | `subject`             | The document identifier (`id`)        |
@@ -46,7 +46,7 @@ based on the event type.
 | :-------------------- | :------------------------------------ |
 | `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL                        |
-| `specversion`         | `1.x-wip`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `org.apache.couchdb.database.created` |
 | `subject`             | The database name (`db_name`)         |
 | `time`                | Current time                          |
@@ -57,7 +57,7 @@ based on the event type.
 | :-------------------- | :------------------------------------ |
 | `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL                        |
-| `specversion`         | `1.x-wip`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `org.apache.couchdb.database.updated` |
 | `subject`             | The database name (`db_name`)         |
 | `time`                | Current time                          |
@@ -68,7 +68,7 @@ based on the event type.
 | :-------------------- | :------------------------------------ |
 | `id`                  | The event sequence identifier (`seq`) |
 | `source`              | The server URL                        |
-| `specversion`         | `1.x-wip`                             |
+| `specversion`         | `1.0`                                 |
 | `type`                | `org.apache.couchdb.database.deleted` |
 | `subject`             | The database name (`db_name`)         |
 | `time`                | Current time                          |

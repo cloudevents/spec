@@ -27,25 +27,25 @@ The following documents are available:
 |                               |                                 Latest Release                                  |                                      Working Draft                                       |
 | :---------------------------- | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
 | **Core Specification:**       |
-| CloudEvents                   |          [v1.0](https://github.com/cloudevents/spec/blob/v1.0/spec.md)          |            [master](https://github.com/cloudevents/spec/blob/master/spec.md)             |
+| CloudEvents                   |          [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md)          |            [master](https://github.com/cloudevents/spec/blob/master/spec.md)             |
 |                               |
 | **Optional Specifications:**  |
-| AMQP Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/amqp-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/amqp-protocol-binding.md)    |
-| AVRO Event Format             |      [v1.0](https://github.com/cloudevents/spec/blob/v1.0/avro-format.md)       |         [master](https://github.com/cloudevents/spec/blob/master/avro-format.md)         |
-| HTTP Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/http-protocol-binding.md)    |
-| JSON Event Format             |      [v1.0](https://github.com/cloudevents/spec/blob/v1.0/json-format.md)       |         [master](https://github.com/cloudevents/spec/blob/master/json-format.md)         |
-| Kafka Protocol Binding        | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/kafka-protocol-binding.md) |   [master](https://github.com/cloudevents/spec/blob/master/kafka-protocol-binding.md)    |
-| MQTT Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/mqtt-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/mqtt-protocol-binding.md)    |
-| NATS Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/nats-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/nats-protocol-binding.md)    |
+| AMQP Protocol Binding         | [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/amqp-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/amqp-protocol-binding.md)    |
+| AVRO Event Format             |      [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/avro-format.md)       |         [master](https://github.com/cloudevents/spec/blob/master/avro-format.md)         |
+| HTTP Protocol Binding         | [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/http-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/http-protocol-binding.md)    |
+| JSON Event Format             |      [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/json-format.md)       |         [master](https://github.com/cloudevents/spec/blob/master/json-format.md)         |
+| Kafka Protocol Binding        | [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/kafka-protocol-binding.md) |   [master](https://github.com/cloudevents/spec/blob/master/kafka-protocol-binding.md)    |
+| MQTT Protocol Binding         | [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/mqtt-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/mqtt-protocol-binding.md)    |
+| NATS Protocol Binding         | [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/nats-protocol-binding.md)  |    [master](https://github.com/cloudevents/spec/blob/master/nats-protocol-binding.md)    |
 | WebSockets Protocol Binding   |                                        -                                        | [master](https://github.com/cloudevents/spec/blob/master/websockets-protocol-binding.md) |
-| Protobuf Event Format         |                                                                                 | [master](https://github.com/cloudevents/spec/blob/master/protobuf-format.md)                                  |
-| Web hook                      |      [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-webhook.md)      |        [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)         |
+| Protobuf Event Format         |                                                                                 | [v1.0-rc1](https://github.com/cloudevents/spec/blob/master/protobuf-format.md)                                  |
+| Web hook                      |      [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/http-webhook.md)      |        [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)         |
 |                               |
 | **Additional Documentation:** |
 | CloudEvents Adapters          |                                        -                                        |          [master](https://github.com/cloudevents/spec/blob/master/adapters.md)           |
 | CloudEvents SDK Requirements  |                                        -                                        |             [master](https://github.com/cloudevents/spec/blob/master/SDK.md)             |
 | Documented Extensions         |                                        -                                        |    [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)    |
-| Primer                        |         [v1.0](https://github.com/cloudevents/spec/blob/v1.0/primer.md)         |           [master](https://github.com/cloudevents/spec/blob/master/primer.md)            |
+| Primer                        |         [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/primer.md)         |           [master](https://github.com/cloudevents/spec/blob/master/primer.md)            |
 | Proprietary Specifications    |                                        -                                        |      [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)      |
 
 If you are new to CloudEvents, it is recommended that you start by reading the

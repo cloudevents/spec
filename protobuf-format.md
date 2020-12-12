@@ -1,4 +1,4 @@
-# Protobuf Event Format for CloudEvents - Version 1.0
+# Protobuf Event Format for CloudEvents - Version 1.0-rc1
 
 ## Abstract
 
