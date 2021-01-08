@@ -274,8 +274,8 @@ Each subscription is represented by an object that has the following properties:
 - **protocolsettings** (map) - OPTIONAL. A set of settings specific to the
   selected delivery protocol provider. Options for those settings are listed in
   the following subsection. An implementation MAY offer more options. Examples
-  for such settings are credentials, which generally vary by transport, rate
-  limits and retry policies, or the QoS mode for MQTT. See the
+  for such settings are credentials, which generally vary by transport, retry
+  policies, or the QoS mode for MQTT. See the
   [Protocol Settings](#322-protocol-settings) section for further details.
 - **sink** (URI) - REQUIRED. The address to which events SHALL be delivered
   using the selected protocol. The format of the address MUST be valid for the
@@ -296,6 +296,32 @@ Each subscription is represented by an object that has the following properties:
   `subscriptionconfig` keys specified in the Discovery Endpoint Service
   definition. The `value` MUST conform to the data type specified by the
   value in the `subscriptionconfig` entry for the `key`.
+
+In general the intent of this specification is to consider the processing of
+events to have 3 conceptual phases:
+- event generation. This phase creates the events and is typically controlled
+  by the **config** property. This might include settings that influence how
+  often events are generated, or the scope of the event sources being
+  monitored.
+- event filtering. This phase, as the name implies, will "filter" the stream
+  of events generated from the previous phase. The **filters** property will be
+  used to specify how this filtering will be done. Whether this is done
+  separately from the event generation phase, or as part of it, is an
+  implementation choice. It is also possible for Subscription Managers to
+  control this aspect of the event stream via the **config** property if they
+  so choose.
+- event transmission. This phase controls how the events are sent to the sink.
+  Typically, by this step in the processing the set of events to be sent are
+  already known and the only variable is the exact mechanism that will be used
+  to send them.  The **protocol** and **protocolsettings** properties will
+  control this phase.
+
+Additionally, it might be possible for one Subscription property to have
+influence over multiple phases of the event processing. Regardless of which
+aspect of the Subscription is controlled by which of the above
+phases/properties, the Service description specified by the Discovery
+specification SHOULD contain enough information for a consumer to know which
+properties to use when creating a Subscription to get the desired results.
 
 Below is an example JSON serialization of a susbcription:
 
