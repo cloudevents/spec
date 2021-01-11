@@ -167,7 +167,7 @@ To create a new release:
   any potential noteworthy activities of the group:
   - Send it to the mailing list
   - Announce the release on our
-    [twitter account](https://twitter.com/cloudeventsio)
+    [twitter account](http://twitter.com/cloudeventsio)
   - Add it to the "announcement" section of our
     [website](https://cloudevents.io/)
 
