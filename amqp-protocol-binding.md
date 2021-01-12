@@ -1,4 +1,4 @@
-# AMQP Protocol Binding for CloudEvents - Version 1.0.1
+# AMQP Protocol Binding for CloudEvents - Version 1.0.2-wip
 
 ## Abstract
 

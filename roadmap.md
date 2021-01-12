@@ -80,7 +80,12 @@ _1.0_ - Completed - 2019/10/24
    Format and protocol-binding specs may introduce breaking change if
    necessary to align with the core spec.
 
-_Post 1.0_
+_1.0.1_ - Completed - 2020/12/10
+
+1. See [V1.0.1 Release](https://github.com/cloudevents/spec/releases/tag/v1.0.1)
+   for details.
+
+_Future_
 
 - All remaining issues and PRs will be examined.
 - How, and when, future releases (major, minor or patch) will be released will
