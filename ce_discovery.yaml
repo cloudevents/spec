@@ -108,7 +108,7 @@ components:
           example: '[ "HTTP", "AMQP", "KAFKA" ]'
         events:
           type: array
-          description: List of event types available in this service.
+          description: List of EventType objects that specify the CloudEvent types available from this service.
           items:
             $ref: '#/components/schemas/eventtype'
     eventtype:

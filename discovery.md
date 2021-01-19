@@ -364,7 +364,7 @@ The following sections define the attributes that appear in a Service entity.
 ##### events
 
 - Type: List of `EventType` objects
-- Description: This field contains the event type definitions that the service produces.
+- Description: This field contains the EventType definitions available from this service.
 - Constraints:
   - OPTIONAL
 - Examples:
