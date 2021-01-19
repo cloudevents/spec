@@ -327,7 +327,7 @@ The following sections define the attributes that appear in a Service entity.
 
 ##### subscriptiondialects
 
-- Type: `Array` or `URI-reference` valuies
+- Type: List of `String` values
 - Description: An array of filter dialects that MAY be used in the
   Cloud Subscriptions subscribe() API call.
 - Constraints:
