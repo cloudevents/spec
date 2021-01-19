@@ -361,6 +361,19 @@ The following sections define the attributes that appear in a Service entity.
   - `[ "HTTP" ]`
   - `[ "HTTP", "AMQP", "KAFKA" ]`
 
+##### events
+
+- Type: List of `EventType` objects
+- Description: This field contains the event type definitions that the service produces.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `[ { "type": "com.example.object.delete.v2" } ]`
+
+#### EventType Attributes
+
+The following sections define the attributes that appear in EventType definitions of a Service object.
+
 ##### type
 
 - Type: `String`

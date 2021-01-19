@@ -110,8 +110,8 @@ components:
           type: array
           description: List of event types available in this service.
           items:
-            $ref: '#/components/schemas/type'
-    type:
+            $ref: '#/components/schemas/eventtype'
+    eventtype:
       type: object
       properties:
         type:
