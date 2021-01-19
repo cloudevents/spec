@@ -63,8 +63,12 @@ components:
           description: Absolute URL that provides a link to additional documentation about the service. This is intended for a developer to use in order to learn more about this service's events produced.
           example: http://cloud.example.com/docs/blobstorage
         specversions:
-          type: object
+          type: array
           description: CloudEvents specversions that can be used for events published for this service.
+          items:
+            type: string
+            description: version
+          example: '[ "1.0" ]'
         subscriptionurl:
           type: string
           description: An absolute URL indicating where CloudSubscriptions subscribe API calls MUST be sent to.

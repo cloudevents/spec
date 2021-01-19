@@ -295,13 +295,13 @@ The following sections define the attributes that appear in a Service entity.
 
 ##### specversions
 
-- Type: Array of `Strings` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Type: Array of `String` values
 - Description: CloudEvents
   [`specversions`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
   that can be used for events published for this service.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty array or non-empty strings
+  - MUST be a non-empty array of non-empty strings
 
 ##### subscriptionurl
 
