@@ -20,6 +20,7 @@ paths:
                   $ref: "#/components/schemas/Subscription"
     post:
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -78,6 +79,7 @@ paths:
           description: The id of an existing subscription
 
       requestBody:
+        required: true
         content:
           application/json:
             schema:
