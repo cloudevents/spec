@@ -55,7 +55,7 @@ paths:
         - in: "path"
           name: "id"
           description: identifier of a specific subscription
-          required: false
+          required: true
           schema:
             type: string
       responses:
@@ -113,7 +113,7 @@ paths:
         - in: "path"
           name: "id"
           description: identifier of a specific subscription
-          required: false
+          required: true
           schema:
             type: string
       responses:
