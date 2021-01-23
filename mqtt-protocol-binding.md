@@ -6,10 +6,6 @@ The MQTT Protocol Binding for CloudEvents defines how events are mapped to MQTT
 3.1.1 ([OASIS][oasis-mqtt-3.1.1]; ISO/IEC 20922:2016) and MQTT 5.0
 ([OASIS][oasis-mqtt-5]) messages.
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)

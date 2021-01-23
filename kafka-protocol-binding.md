@@ -5,10 +5,6 @@
 The [Kafka][kafka] Protocol Binding for CloudEvents defines how events are
 mapped to [Kafka messages][kafka-message-format].
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)

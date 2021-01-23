@@ -11,7 +11,7 @@ interchangeably.
 
 ## Status of this document
 
-This document is a working draft.
+This document is a release candidate.
 
 ## Table of Contents
 
