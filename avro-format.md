@@ -5,10 +5,6 @@
 The Avro Format for CloudEvents defines how events attributes are expressed in
 the [Avro 1.9.0 Specification][avro-spec].
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)

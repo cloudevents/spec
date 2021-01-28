@@ -5,10 +5,6 @@
 The HTTP Protocol Binding for CloudEvents defines how events are mapped to HTTP
 1.1 request and response messages.
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)
