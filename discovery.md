@@ -295,13 +295,13 @@ The following sections define the attributes that appear in a Service entity.
 
 ##### specversions
 
-- Type: Array of `Strings` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
+- Type: Array of `String` values
 - Description: CloudEvents
   [`specversions`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
   that can be used for events published for this service.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty array or non-empty strings
+  - MUST be a non-empty array of non-empty strings
 
 ##### subscriptionurl
 
@@ -327,7 +327,7 @@ The following sections define the attributes that appear in a Service entity.
 
 ##### subscriptiondialects
 
-- Type: `Array` or `URI-reference` valuies
+- Type: List of `String` values
 - Description: An array of filter dialects that MAY be used in the
   Cloud Subscriptions subscribe() API call.
 - Constraints:
@@ -360,6 +360,19 @@ The following sections define the attributes that appear in a Service entity.
 - Examples:
   - `[ "HTTP" ]`
   - `[ "HTTP", "AMQP", "KAFKA" ]`
+
+##### events
+
+- Type: List of `EventType` objects
+- Description: This field contains the EventType definitions available from this service.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `[ { "type": "com.example.object.delete.v2" } ]`
+
+#### EventType Attributes
+
+The following sections define the attributes that appear in EventType definitions of a Service object.
 
 ##### type
 

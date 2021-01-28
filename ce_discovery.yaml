@@ -47,14 +47,24 @@ components:
     service:
       type: object
       properties:
+        id:
+          type: string
+          description: A unique identifier for this Service. This value MUST be globally unique.
+          format: uuid
+          example: bf5ff5cc-d059-4c79-a89a-2513e45a1340
+        epoch:
+          type: integer
+          description: The Discovery Endpoint's epoch value for this Service Entry.
+          format: int64
+          example: 42
         name:
           type: string
-          description: A unique identifier for this Service. This value MUST be unique within the scope of this Discovery Endpoint.
-          example: storage, github
+          description: A unique identifier for this Service.
+          example: my storage service
         url:
           type: string
           description: A URL that references this Service. This value MUST be usable in subsequent requests, by authorized clients, to retrieve this Service entity.
-          example: http://example.com/services/storage, http://discovery.github.com/services/github
+          example: http://example.com/services/bf5ff5cc-d059-4c79-a89a-2513e45a1340
         description:
           type: string
           description: Human readable description.
@@ -63,16 +73,28 @@ components:
           description: Absolute URL that provides a link to additional documentation about the service. This is intended for a developer to use in order to learn more about this service's events produced.
           example: http://cloud.example.com/docs/blobstorage
         specversions:
-          type: object
+          type: array
           description: CloudEvents specversions that can be used for events published for this service.
+          items:
+            type: string
+            description: version
+          example: '[ "1.0" ]'
         subscriptionurl:
           type: string
           description: An absolute URL indicating where CloudSubscriptions subscribe API calls MUST be sent to.
+          format: url
         subscriptionconfig:
           type: object
           description: "A map indicating supported options for the config parameter for the CloudSubscriptions subscribe() API call. Keys are the name of keys in the allowed config map, the values indicate the type of that parameter, confirming to the CloudEvents type system. TODO: Needs resolution with CloudSubscriptions API"
           additionalProperties:
             type: string
+        subscriptiondialects:
+          type: array
+          description: Filter dialects that can be used in subscriptions for this service.
+          items:
+            type: string
+            description: filter dialect
+          example: '[ "basic" ]'
         authscope:
           type: string
           description: Authorization scope needed for creating subscriptions. The actual meaning of this field is determined on a per-service basis.
@@ -86,10 +108,10 @@ components:
           example: '[ "HTTP", "AMQP", "KAFKA" ]'
         events:
           type: array
-          description: List of event types available in this service.
+          description: List of EventType objects that specify the CloudEvent types available from this service.
           items:
-            $ref: '#/components/schemas/type'
-    type:
+            $ref: '#/components/schemas/eventtype'
+    eventtype:
       type: object
       properties:
         type:
