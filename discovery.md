@@ -132,8 +132,8 @@ Service:
 {
   "id": "[a globally unique UUID]",
   "epoch": "[discovery entry epoch value]",
-  "url": "[unique URL to this service]",
   "name": "[unique name for this services]",
+  "url": "[unique URL to this service]",
   "description": "[human string]", ?
   "docsurl": "[URL reference for human documentation]", ?
   "specversions": [ "[ce-specversion value]" + ],
@@ -152,6 +152,7 @@ Service:
       "dataschema": "[ce-dataschema URI]", ?
       "dataschematype": "[string per RFC 2046]", ?
       "dataschemacontent": "[schema]", ?
+      "sourcetemplate": "[URI template per RFC 6570, level 1]", ?
       "extensions": [ ?
         { *
           "name": "[CE context attribute name]",
@@ -170,8 +171,8 @@ An example:
 {
   "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
   "epoch": 1,
-  "url": "https://example.com/services/widgetService",
   "name": "widgets",
+  "url": "https://example.com/services/widgetService",
   "specversions": ["1.0"],
   "subscriptionurl": "https://events.example.com",
   "subscriptiondialects": [ "basic" ],
@@ -632,7 +633,7 @@ original request. The following responses are defined:
 - `200 OK` indicates that the original request was successfully processed.
   - Unless otherwise noted for a specific operation, the response MUST also
     include the HTTP Headers and HTTP Response Body that is defined for the
-	original operation as if the response were sent synchronously.
+    original operation as if the response were sent synchronously.
 - `202 Accepted` indicates that the original request is still being processed.
   The response body MAY be empty.
 - `406 Not Acceptable` to indicate that the original request failed to be
@@ -667,7 +668,7 @@ The follow responses are defined by this specification:
 - `201 Created` if all the specified Services were processed successfully.
   - If there was only one Service in the incoming request, then the response
     MUST include an HTTP `Location` Header with a value that points to the
-	correspdonding Service.
+    correspdonding Service.
   - If the request contained more than one Service, then the HTTP `Location`
     Header MUST NOT appear in the response.
   - The HTTP Response Body MUST include an array of `id` values whose order
@@ -737,7 +738,7 @@ The follow responses are defined by this specification:
 - `201 Created` if all the specified Services were processed successfully.
   - If there was only one Service in the incoming request, then the response
     MUST include an HTTP `Location` Header with a value that points to the
-	correspoding Service.
+    correspoding Service.
   - If the request contained more than one Service, then the HTTP `Location`
     Header MUST NOT appear in the response.
   - The HTTP Response Body MUST include an array of `id` values whose order
