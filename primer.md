@@ -131,6 +131,19 @@ protocol specification. A batch of CloudEvents carries no semantic meaning and
 is not ordered. An [Intermediary](spec.md#intermediary) can add or remove
 batching as well as assign events to different batches.
 
+The purpose, or semantic meaning, of an event is out of scope for the
+CloudEvents specification. As long as the message being sent conforms to the
+specification, then it is a valid CloudEvent. As an example that might not
+be obvious to everyone, errors or exceptions can be tranmitted as CloudEvents.
+It would then be up to the event producer to define the CloudEvents attribute
+values that would be used, just like any other event it might generate.
+
+Since not all event producers generate their events as CloudEvents, there are
+a set of [adapters](./adapters.md) defined that show how to map events from
+some popular event producers into CloudEvents. These adapters are non-normative
+but are the specification authors' best guess as to how the CloudEvents 
+attribute would be populated if the event producer produced them natively.
+
 ### Non-Goals
 
 The following are considered beyond the scope of the specification:
@@ -268,7 +281,7 @@ related to one event source (where each event source is uniquely identified by
 its CloudEvents `source` attribute value). While the exact value used is
 producer defined, receivers of CloudEvents from a single event source can be
 assured that no two events will share the same `id` value. We are implicitly
-making a claim here that no two events will share the same `id` value, but do 
+making a claim here that no two events will share the same `id` value, but do
 not provide an explanation as to how this is guaranteed, since this is out of
 the scope of this spec. The only exception to
 this is if some replay of the event is supported, and in those cases, the `id`
@@ -666,9 +679,9 @@ including being both a producer and a consumer of events.
    in all events from today's game (subject) of a team in a league (topic of
    interest) but wanting to handle reports of "goal" differently than reports of
    "substitution". For this, the framework will need a suitable metadata
-   discriminator that frees it from having to understand the event details. To be 
-   clear, the suitable metadata discriminator should be populated by the producer,
-   and would not be the responsibility of the framework. 
+   discriminator that frees it from having to understand the event details. To
+   be clear, the suitable metadata discriminator should be populated by the
+   producer, and would not be the responsibility of the framework.
 
 ### Value Proposition
 
