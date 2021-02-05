@@ -1,12 +1,13 @@
-openapi: "3.0.2"
+openapi: 3.0.0
 info:
   title: CloudEvents Subscriptions API
-  version: "0.1 WIP"
+  version: 0.2-WIP
 servers:
   - url: https://server.example.com/v0.1
 paths:
   /subscriptions:
     get:
+      operationId: getSubscriptions
       description: Retrieve multiple subscriptions
       responses:
         "200":
@@ -19,12 +20,13 @@ paths:
                 items:
                   $ref: "#/components/schemas/Subscription"
     post:
+      operationId: createSubscription
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SubscriptionRequest"
+              $ref: "#/components/schemas/Subscription"
       responses:
         "200":
           description: Created successfully
@@ -40,6 +42,7 @@ paths:
         "400":
           description: Invalid or malformed request
     options:
+      operationId: getFeatures
       description: Discover supported features and methods for this endpoint
       responses:
         "200":
@@ -51,7 +54,8 @@ paths:
                 default: "GET,POST,OPTIONS"
   /subscriptions/{id}:
     get:
-      description: Retrieve one or multiple subscriptions
+      operationId: getSubscription
+      description: Retrieve a subscription
       parameters:
         - in: "path"
           name: "id"
@@ -69,6 +73,7 @@ paths:
         "404":
           description: Subscription not found
     put:
+      operationId: updateSubscription
       description: Update a subscription
       parameters:
         - in: "path"
@@ -96,6 +101,7 @@ paths:
         "404":
           description: Subscription not found
     delete:
+      operationId: deleteSubscription
       description: Delete a subscription
       parameters:
         - in: "path"
@@ -110,6 +116,7 @@ paths:
         "404":
           description: Subscription not found
     options:
+      operationId: getSubscriptionFeatures
       description: Discover supported features and methods for this endpoint
       parameters:
         - in: "path"
@@ -131,120 +138,280 @@ components:
     SubscriptionRequest:
       properties:
         protocol:
-          type: string
-          enum: ["HTTP", "MQTT3", "MQTT5", "AMQP", "NATS", "KAFKA"]
-          description: REQUIRED. Identifier of a delivery protocol.
-          example: "HTTP"
-        protocolsettings:
-          type: object
-          anyOf:
-            - $ref: "#/components/schemas/HTTPSettings"
-            - $ref: "#/components/schemas/MQTTSettings"
-            - $ref: "#/components/schemas/AMQPSettings"
-            - $ref: "#/components/schemas/NATSSettings"
-            - $ref: "#/components/schemas/ApacheKafkaSettings"
-          description: OPTIONAL. A set of settings specific to the selected delivery protocol provider.
+          $ref: "#/components/schemas/Protocol"
+        protocolSettings:
+          oneOf:
+            - $ref: "#/components/schemas/ProtocolSettings"
+            - $ref:  "#/components/schemas/AMQPSettings"
+            - $ref:  "#/components/schemas/ApacheKafkaSettings"
+            - $ref:  "#/components/schemas/HTTPSettings"
+            - $ref:  "#/components/schemas/MQTTSettings"
+            - $ref:  "#/components/schemas/NATSSettings"
         sink:
           type: string
           format: url
           description: REQUIRED. The address to which events shall be delivered using the selected protocol.
           example: "https://endpoint.example.com/webhook"
+        sinkCredentials:
+          oneOf:
+            - $ref: "#/components/schemas/SinkCredential"
+            - $ref: "#/components/schemas/AccessTokenCredential"
+            - $ref: "#/components/schemas/PlainCredential"
+            - $ref: "#/components/schemas/RefreshTokenCredential"
+        source:
+          type: string
+          format: uri-reference
+          description: OPTIONAL. Source to which the subscription applies. May be implied by the request address.
+        types:
+          description: "CloudEvent types eligible to be delivered by this subscription"
+          type: array
+          items:
+            type: string
         filter:
           $ref: "#/components/schemas/Filter"
-      required:
-        - protocol
-        - protocolsettings
-        - sink
-    Subscription:
-      properties:
-        id:
-          type: string
-          description: REQUIRED. The unique identifier of the subscription in the scope of the subscription manager.
-          example: 1119920371
-        protocol:
-          type: string
-          enum: ["HTTP", "MQTT3", "MQTT5", "AMQP", "NATS", "KAFKA"]
-          description: REQUIRED. Identifier of a delivery protocol.
-          example: "HTTP"
-        protocolsettings:
+        config:
+          description: OPTIONAL. Implementation-specific configuration parameters needed by the subscription manager for acquiring events.
           type: object
-          anyOf:
-            - $ref: "#/components/schemas/HTTPSettings"
-            - $ref: "#/components/schemas/MQTTSettings"
-            - $ref: "#/components/schemas/AMQPSettings"
-            - $ref: "#/components/schemas/NATSSettings"
-            - $ref: "#/components/schemas/ApacheKafkaSettings"
-          description: OPTIONAL. A set of settings specific to the selected delivery protocol provider.
-        sink:
-          type: string
-          format: url
-          description: REQUIRED. The address to which events shall be delivered using the selected protocol.
-          example: "https://endpoint.example.com/webhook"
-        filter:
-          $ref: "#/components/schemas/Filter"
+          additionalProperties:
+            type: string
       required:
         - id
         - protocol
+    Subscription:
+      type: object
+      title: "Subscription"
+      allOf:
+        - $ref: "#/components/schemas/SubscriptionRequest"
+        - type: object
+          properties:
+            id:
+              type: string
+              description: REQUIRED. The unique identifier of the subscription in the scope of the subscription manager.
+              example: 1119920371
+      required:
+        - id
+    Protocol:
+      type: string
+      enum: ["HTTP", "MQTT3", "MQTT5", "AMQP", "NATS", "KAFKA"]
+      description: REQUIRED. Identifier of a delivery protocol.
+      example: "HTTP"
     Filter:
+      title: "Filter"
+      description: "A filter from a selection of multiple filter types and dialects"
+      type: object
+      minProperties: 1
+      maxProperties: 1
       properties:
-        dialect:
+        all:
+          $ref: "#/components/schemas/AllFilter"
+        any:
+          $ref: "#/components/schemas/AnyFilter"
+        not:
+          $ref: "#/components/schemas/NotFilter"
+        exact:
+          $ref: "#/components/schemas/ExactFilter"
+        prefix:
+          $ref: "#/components/schemas/PrefixFilter"
+        suffix:
+          $ref: "#/components/schemas/SuffixFilter"
+      additionalProperties:
+        $ref: "#/components/schemas/DialectFilter"
+    AllFilter:
+      title: "all filter"
+      description: "This filter evaluates to 'true' if all contained filters are 'true'"
+      type: array
+      minItems: 1
+      items:
+        title: "Filter entry"
+        $ref: "#/components/schemas/Filter"
+    AnyFilter:
+      title: "any filter"
+      description: "This filter evaluates to 'true' if any of the contained filters are 'true'"
+      type: "array"
+      minItems: 1
+      items:
+        title: "Filter entry"
+        $ref: "#/components/schemas/Filter"
+    NotFilter:
+      title: "not filter"
+      description: "This filter evaluates to 'true' if all contained filters are 'true'"
+      properties:
+        filter:
+          title: "Filter entry"
+          $ref: "#/components/schemas/Filter"
+    ExactFilter:
+      title: "exact filter"
+      description: "This filter evaluates to 'true' if the 'value' exactly matches the value of the indicated CloudEvents context attribute"
+      required:
+        - attribute
+        - value
+      properties:
+        attribute:
           type: string
-          description: Filter dialect
-          example: "simple"
-          default: "simple"
-        conditions:
-          type: array
-          description: Filter conditions
-          items:
-            type: object
+          description: attribute name
+        value:
+          type: string
+          description: value
+    PrefixFilter:
+      title: "prefix filter"
+      description: "This filter evaluates to 'true' if the 'value' is a prefix of the value of the indicated CloudEvents context attribute"
+      required:
+        - attribute
+        - value
+      properties:
+        attribute:
+          type: string
+          description: attribute name
+        value:
+          type: string
+          description: value
+    SuffixFilter:
+      title: "prefix filter"
+      description: "This filter evaluates to 'true' if the 'value' is a suffix of the value of the indicated CloudEvents context attribute"
+      required:
+        - attribute
+        - value
+      properties:
+        attribute:
+          type: string
+          description: attribute name
+        value:
+          type: string
+          description: value
+    DialectFilter:
+      title: "dialect filter"
+      description: "This filter evaluates to 'true' based on the rules of specific dialect indicated by the key of the filter"
+      required:
+        - expression
+      properties:
+        attribute:
+          type: string
+          description: attribute name
+        expression:
+          type: string
+          description: value
+    ProtocolSettings:
+      type: object
+      additionalProperties: false
     HTTPSettings:
-      properties:
-        headers:
-          type: object
-        method:
-          type: string
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            headers:
+              type: object
+              additionalProperties:
+                type: string
+            method:
+              type: string
     MQTTSettings:
-      properties:
-        topicname:
-          type: string
-        qos:
-          type: integer
-          format: int32
-        retain:
-          type: boolean
-        expiry:
-          type: integer
-          format: int32
-        userproperties:
-          type: object
-      required:
-        - topicname
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            topicName:
+              type: string
+            qos:
+              type: integer
+              format: int32
+            retain:
+              type: boolean
+            expiry:
+              type: integer
+              format: int32
+            userProperties:
+              type: object
+          required:
+            - topicName
     AMQPSettings:
-      properties:
-        address:
-          type: string
-        linkname:
-          type: string
-        sendersettlementmode:
-          type: string
-          enum: ["settled", "unsettled"]
-        linkproperties:
-          type: object
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            address:
+              type: string
+            linkName:
+              type: string
+            senderSettlementMode:
+              type: string
+              enum: ["settled", "unsettled"]
+            linkProperties:
+              type: object
+              additionalProperties: 
+                 type: string
     ApacheKafkaSettings:
-      properties:
-        topicname:
-          type: string
-        partitionkeyextractor:
-          type: string
-        clientid:
-          type: string
-        ackmode:
-          type: integer
-      required:
-        - topicname
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            topicName:
+              type: string
+            partitionKeyExtractor:
+              type: string
+            clientId:
+              type: string
+            ackMode:
+              type: integer
+          required:
+            - topicName
     NATSSettings:
-      properties:
-        subject:
-          type: string
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            subject:
+              type: string
+          required:
+            - subject
+    SinkCredential:
+      type: object
+      additionalProperties: false
+    PlainCredential:
+      type: object
+      description: A plain credential as a combination of an identifier and a secret.
+      allOf:
+        - $ref: "#/components/schemas/SinkCredential"
+        - properties:
+            identifier:
+              description: The identifier might be an account or username.
+              type: string
+            secret:
+              description: The secret might be a password or passphrase.
+              type: string
+    AccessTokenCredential:
+      type: object
+      description: An access token credential.
+      allOf:
+        - $ref: "#/components/schemas/SinkCredential"
+        - properties:
+            accessToken:
+              description: REQUIRED. An access token is a previously acquired token granting access to the target resource.
+              type: string
+            expiresUtc:
+              type: string
+              format: date-time
+              description: RECOMMENDED. An absolute UTC instant at which the token shall be considered expired.
+            type:
+              description: OPTIONAL. Type of the access token (See https://tools.ietf.org/html/rfc6749#section-7.1).
+              type: string
+              default: bearer
+          required:
+            - accessToken
+            - expiresUtc
+    RefreshTokenCredential:
+      type: object
+      description: An access token credential with a refresh token.
+      allOf:
+        - $ref: "#/components/schemas/AccessTokenCredential"
+        - type: object
+          properties:
+            refreshToken:
+              description: REQUIRED. An refresh token credential used to acquire access tokens.
+              type: string
+            tokenEndpoint:
+              type: string
+              format: uri
+              description: REQUIRED. A URL at which the refresh token can be traded for an access token.
       required:
-        - subject
+        - refreshToken
+        - tokenEndpoint
