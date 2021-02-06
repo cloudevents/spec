@@ -168,7 +168,15 @@ components:
           items:
             type: string
         filter:
-          $ref: "#/components/schemas/Filter"
+          oneOf:
+            - $ref: "#/components/schemas/Filter"
+            - $ref: "#/components/schemas/AllFilter"
+            - $ref: "#/components/schemas/AnyFilter"
+            - $ref: "#/components/schemas/NotFilter"
+            - $ref: "#/components/schemas/ExactFilter"
+            - $ref: "#/components/schemas/PrefixFilter"
+            - $ref: "#/components/schemas/SuffixFilter"
+            - $ref: "#/components/schemas/DialectFilter"
         config:
           description: OPTIONAL. Implementation-specific configuration parameters needed by the subscription manager for acquiring events.
           type: object
@@ -212,7 +220,15 @@ components:
               minItems: 1
               items:
                 title: "Filter entry"
-                $ref: "#/components/schemas/Filter"
+                oneOf:
+                - $ref: "#/components/schemas/Filter"
+                - $ref: "#/components/schemas/AllFilter"
+                - $ref: "#/components/schemas/AnyFilter"
+                - $ref: "#/components/schemas/NotFilter"
+                - $ref: "#/components/schemas/ExactFilter"
+                - $ref: "#/components/schemas/PrefixFilter"
+                - $ref: "#/components/schemas/SuffixFilter"
+                - $ref: "#/components/schemas/DialectFilter"
           additionalProperties: false
     AnyFilter:
       allOf:
@@ -226,7 +242,15 @@ components:
               minItems: 1
               items:
                 title: "Filter entry"
-                $ref: "#/components/schemas/Filter"
+                oneOf:
+                  - $ref: "#/components/schemas/Filter"
+                  - $ref: "#/components/schemas/AllFilter"
+                  - $ref: "#/components/schemas/AnyFilter"
+                  - $ref: "#/components/schemas/NotFilter"
+                  - $ref: "#/components/schemas/ExactFilter"
+                  - $ref: "#/components/schemas/PrefixFilter"
+                  - $ref: "#/components/schemas/SuffixFilter"
+                  - $ref: "#/components/schemas/DialectFilter"
           additionalProperties: false
     NotFilter:
       allOf:
@@ -239,7 +263,15 @@ components:
               properties:
                 filter:
                   title: "Filter entry"
-                  $ref: "#/components/schemas/Filter"
+                  oneOf:
+                    - $ref: "#/components/schemas/Filter"
+                    - $ref: "#/components/schemas/AllFilter"
+                    - $ref: "#/components/schemas/AnyFilter"
+                    - $ref: "#/components/schemas/NotFilter"
+                    - $ref: "#/components/schemas/ExactFilter"
+                    - $ref: "#/components/schemas/PrefixFilter"
+                    - $ref: "#/components/schemas/SuffixFilter"
+                    - $ref: "#/components/schemas/DialectFilter"
           additionalProperties: false
     ExactFilter:
       allOf:
