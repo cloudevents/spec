@@ -168,7 +168,7 @@ components:
           items:
             type: string
         filter:
-          $ref: "#/components/schemas/Filter"
+          $ref: "#/components/schemas/FilterBase"
         config:
           description: OPTIONAL. Implementation-specific configuration parameters needed by the subscription manager for acquiring events.
           type: object
@@ -196,100 +196,139 @@ components:
       description: REQUIRED. Identifier of a delivery protocol.
       example: "HTTP"
     Filter:
-      title: "Filter"
+      oneOf:
+         - $ref: "#/components/schemas/FilterBase"
+         - $ref: "#/components/schemas/AllFilter"
+         - $ref: "#/components/schemas/AnyFilter"
+         - $ref: "#/components/schemas/NotFilter"
+         - $ref: "#/components/schemas/ExactFilter"
+         - $ref: "#/components/schemas/PrefixFilter"
+         - $ref: "#/components/schemas/SuffixFilter"
+         - $ref: "#/components/schemas/SuffixFilter"
+    FilterBase:
+      title: "FilterBase"
       description: "A filter from a selection of multiple filter types and dialects"
       type: object
-      minProperties: 1
-      maxProperties: 1
-      properties:
-        all:
-          $ref: "#/components/schemas/AllFilter"
-        any:
-          $ref: "#/components/schemas/AnyFilter"
-        not:
-          $ref: "#/components/schemas/NotFilter"
-        exact:
-          $ref: "#/components/schemas/ExactFilter"
-        prefix:
-          $ref: "#/components/schemas/PrefixFilter"
-        suffix:
-          $ref: "#/components/schemas/SuffixFilter"
-      additionalProperties:
-        $ref: "#/components/schemas/DialectFilter"
+      additionalProperties: false
     AllFilter:
-      title: "all filter"
-      description: "This filter evaluates to 'true' if all contained filters are 'true'"
-      type: array
-      minItems: 1
-      items:
-        title: "Filter entry"
-        $ref: "#/components/schemas/Filter"
+      allOf:
+        - $ref: "#/components/schemas/FilterBase"
+        - type: object
+          description: "all filter" 
+          properties:
+            all:
+              description: "This filter evaluates to 'true' if all contained filters are 'true'"
+              type: array
+              minItems: 1
+              items:
+                title: "FilterBase entry"
+                $ref: "#/components/schemas/FilterBase"
+          additionalProperties: false
     AnyFilter:
-      title: "any filter"
-      description: "This filter evaluates to 'true' if any of the contained filters are 'true'"
-      type: "array"
-      minItems: 1
-      items:
-        title: "Filter entry"
-        $ref: "#/components/schemas/Filter"
+      allOf:
+        - $ref: "#/components/schemas/FilterBase"
+        - type: object
+          description: "any filter" 
+          properties:
+            any:
+              description: "This filter evaluates to 'true' if any contained filters are 'true'"
+              type: array
+              minItems: 1
+              items:
+                title: "FilterBase entry"
+                $ref: "#/components/schemas/FilterBase"
+          additionalProperties: false
     NotFilter:
-      title: "not filter"
-      description: "This filter evaluates to 'true' if all contained filters are 'true'"
-      properties:
-        filter:
-          title: "Filter entry"
-          $ref: "#/components/schemas/Filter"
+      allOf:
+        - $ref: "#/components/schemas/FilterBase"
+        - type: object
+          description: "not filter" 
+          properties:
+            not:
+              type: object
+              properties:
+                filter:
+                  title: "FilterBase entry"
+                  $ref: "#/components/schemas/FilterBase"
+          additionalProperties: false
     ExactFilter:
-      title: "exact filter"
-      description: "This filter evaluates to 'true' if the 'value' exactly matches the value of the indicated CloudEvents context attribute"
-      required:
-        - attribute
-        - value
-      properties:
-        attribute:
-          type: string
-          description: attribute name
-        value:
-          type: string
-          description: value
+      allOf:
+        - $ref: "#/components/schemas/FilterBase"
+        - type: object
+          description: "all filter" 
+          properties:
+            exact:
+              title: "exact filter"
+              description: "This filter evaluates to 'true' if the 'value' exactly matches the value of the indicated CloudEvents context attribute"
+              required:
+                - attribute
+                - value
+              properties:
+                attribute:
+                  type: string
+                  description: attribute name
+                value:
+                  type: string
+                  description: value
+          additionalProperties: false
     PrefixFilter:
-      title: "prefix filter"
-      description: "This filter evaluates to 'true' if the 'value' is a prefix of the value of the indicated CloudEvents context attribute"
-      required:
-        - attribute
-        - value
-      properties:
-        attribute:
-          type: string
-          description: attribute name
-        value:
-          type: string
-          description: value
+      allOf:
+        - $ref: "#/components/schemas/FilterBase"
+        - type: object
+          description: "all filter" 
+          properties:
+            prefix:
+              title: "prefix filter"
+              description: "This filter evaluates to 'true' if the 'value' is a prefix of the value of the indicated CloudEvents context attribute"
+              required:
+                - attribute
+                - value
+              properties:
+                attribute:
+                  type: string
+                  description: attribute name
+                value:
+                  type: string
+                  description: value
+              additionalProperties: false
     SuffixFilter:
-      title: "prefix filter"
-      description: "This filter evaluates to 'true' if the 'value' is a suffix of the value of the indicated CloudEvents context attribute"
-      required:
-        - attribute
-        - value
-      properties:
-        attribute:
-          type: string
-          description: attribute name
-        value:
-          type: string
-          description: value
+      allOf:
+        - $ref: "#/components/schemas/FilterBase"
+        - type: object
+          description: "all filter" 
+          properties:
+            suffix:
+              title: "suffix filter"
+              description: "This filter evaluates to 'true' if the 'value' is a suffix of the value of the indicated CloudEvents context attribute"
+              required:
+                - attribute
+                - value
+              properties:
+                attribute:
+                  type: string
+                  description: attribute name
+                value:
+                  type: string
+                  description: value
+              additionalProperties: false
     DialectFilter:
-      title: "dialect filter"
-      description: "This filter evaluates to 'true' based on the rules of specific dialect indicated by the key of the filter"
-      required:
-        - expression
-      properties:
-        attribute:
-          type: string
-          description: attribute name
-        expression:
-          type: string
-          description: value
+      allOf:
+        - $ref: "#/components/schemas/FilterBase"
+        - type: object
+          minProperties: 1
+          maxProperties: 1
+          additionalProperties:
+            title: "dialect filter"
+            description: "This filter evaluates to 'true' based on the rules of specific dialect indicated by the key of the filter"
+            required:
+              - expression
+            properties:
+              attribute:
+                type: string
+                description: attribute name
+              expression:
+                type: string
+                description: value
     ProtocolSettings:
       type: object
       additionalProperties: false
