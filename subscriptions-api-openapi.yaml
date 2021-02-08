@@ -26,9 +26,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Subscription"
+              $ref: "#/components/schemas/SubscriptionRequest"
       responses:
-        "200":
+        "201":
           description: Created successfully
           content:
             application/json:
