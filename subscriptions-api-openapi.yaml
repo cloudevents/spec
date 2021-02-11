@@ -132,7 +132,7 @@ paths:
             Allow:
               schema:
                 type: string
-                default: "GET,PUT,POST,DELETE,OPTIONS"
+                default: "GET,PUT,DELETE,OPTIONS"
 components:
   schemas:
     SubscriptionRequest:
@@ -183,7 +183,7 @@ components:
           additionalProperties:
             type: string
       required:
-        - id
+        - sink
         - protocol
     Subscription:
       type: object
@@ -198,6 +198,8 @@ components:
               example: 1119920371
       required:
         - id
+        - sink
+        - protocol
     Protocol:
       type: string
       enum: ["HTTP", "MQTT3", "MQTT5", "AMQP", "NATS", "KAFKA"]
