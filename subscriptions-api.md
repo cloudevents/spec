@@ -261,48 +261,167 @@ from the collection might terminate it.
 A subscription manager manages a collection of subscriptions. The upper limit on
 how many subscriptions are supported is implementation specific.
 
+To help explain the subscription resource, the following non-normative pseudo
+ json shows its basic structure:
+
+(`*` means zero or more, `+` means one or more, `?` means optional)
+
+Subscription:
+
+```
+{
+  "id": "[a subscription manager scoped unique string]",
+  "source": "[...]", ?
+  "types": "[ "[ce-type values]" + ]", ?
+  "config": { ?
+    "[key]": [subscription manager specific value], *
+  },
+
+  "filter": { ?
+    "[dialect name]": [dialect specific object] ?
+  },
+
+  "sink": "[URI to where events are delivered]",
+  "protocol": "[delivery protocol]",
+  "protocolsettings": { ?
+    "[key]": "[type]", *
+  }
+}
+```
+
+
 Each subscription is represented by an object that has the following properties:
 
-- **id** (string) – REQUIRED. The unique identifier of the subscription in the
-  scope of the subscription manager. This value MUST be unique within the scope
-  of the subscription manager and MUST be immutable.
-- **protocol** (string) - REQUIRED. Identifier of a delivery protocol. Because
-  of WebSocket tunneling options for AMQP, MQTT and other protocols, the URI
-  scheme is not sufficient to identify the protocol. The protocols with existing
-  CloudEvents bindings are identified as "AMQP", "MQTT3", "MQTT5", "HTTP",
-  "KAFKA", and "NATS". An implementation MAY add support for further protocols.
-- **protocolsettings** (map) - OPTIONAL. A set of settings specific to the
-  selected delivery protocol provider. Options for those settings are listed in
-  the following subsection. An implementation MAY offer more options. Examples
-  for such settings are credentials, which generally vary by transport, retry
-  policies, or the QoS mode for MQTT. See the
-  [Protocol Settings](#322-protocol-settings) section for further details.
-- **sink** (URI) - REQUIRED. The address to which events SHALL be delivered
-  using the selected protocol. The format of the address MUST be valid for the
-  selected protocol or one of the protocol's own transport bindings (e.g. AMQP
-  over WebSockets).
-- **filters** - OPTIONAL. One or more filter expressions of a particular filter
-  dialect that evaluates to true or false and that determines whether an
-  instance of a CloudEvent will be delivered to the subscription's sink. If a
-  filter expression evaluates to false, the event MUST NOT be sent to the sink.
-  If the expression evaluates to true, the event MUST be attempted to be
-  delivered. Support for particular filter dialects might vary across different
-  subscription managers. If a filter dialect is specified in a subscription that
-  is unsupported by the subscription manager, creation or updates of the
-  subscription MUST be rejected with an error. See the
-  [Filters](#323-filters) section for further details.
-- **config** (map) - OPTIONAL. A set of key/value pairs that modify the
-  configuation of the subscription. The `key` MUST be ones of the
-  `subscriptionconfig` keys specified in the Discovery Endpoint Service
-  definition. The `value` MUST conform to the data type specified by the
-  value in the `subscriptionconfig` entry for the `key`.
+##### id
+- Type: `String`
+- Description: The unique identifier of the subscription in the scope of the
+  subscription manager. This value MUST be unique within the scope of the
+  subscription manager and MUST be immutable.
+
+- Constraints:
+  - REQUIRED when retrieving the object
+  - if present on the input to a subscribe operation then it MUST be ignored
+- Examples:
+  - `f1d15fd0-6893-11eb-9439-0242ac130002`
+  - `bigco-subscription-1234`
+
+##### source
+- Type: `URI-reference` - a CloudEvents `source` value
+- Description: Indicates the source to which the subscription is related.
+  When present on a subscribe request, all events generated due to this
+  subscription MUST have a CloudEvents `source` property that matches this
+  value. If this property is not present on a subscribe request then there
+  are no constraints placed on the CloudEvents `source` property for the
+  events generated.
+
+  TODO: add something to discovery to indicate if manager supports this
+  
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a non-empty URI
+- Examples:
+  - `/sensors/tn-1234567/alerts`
+
+##### types
+- Type: `Array of Strings` - array of CloudEvents `type` values
+- Description: Indicates which types of events the subscriber is interested
+  in receiving. When present on a subscribe request, all events generated
+  due to this subscription MUST have a CloudEvents `type` property that
+  matches one of these values.
+
+- Constraints:
+  - OPTIONAL
+  - If present, any value present MUST a non-empty string
+- Examples:
+  - `com.github.pull_request.opened`
+  - `com.example.object.deleted`
+
+##### config
+- Type: `Map` of subscription manager defined types
+- Description: A set of key/value pairs that modify the configuration of
+  of the subscription related to the event generation process. While this
+  specification places no constraints on the data type of the map values.
+  When there is a Discovery Enpoint Service definition defined for the
+  subscription manager, then the `key` MUST be one of the `subscriptionconfig`
+  keys specified in the Discovery Endpoint Service definition.  The `value`
+  MUST conform to the data type specified by the value in the
+  `subscriptionconfig` entry for the `key`
+
+- Constraints:
+  - OPTIONAL
+  - If present, any "key" used in the map MUST be a non-empty string
+- Examples:
+  - `{ "interval": 5 }`
+
+##### filter
+- Type: `Object`
+- Description: A filter expression that evaluates to true or false and that
+  determines whether an instance of a CloudEvent will be delivered to the
+  subscription's sink. If a filter expression evaluates to false, the event
+  MUST NOT be sent to the sink. If the expression evaluates to ttue, the event
+  MUST be attempted to be delivered. Absence of a filter implies a value
+  of true.
+
+  Each filter dialect MUST have a name that is unique within the scope of the
+  subscription manager. Each dialect will define the semantics and syntax of
+  the filter expression language. See the [Filters](#323-filters) section for
+  more information.
+
+  If a subscription manager does not support filters, or the filter dialect
+  specified in a subscription request, then it MUST generate an error and
+  reject the subscription create or update request.
+
+- Constraints:
+  - OPTIONAL for both subscription managers and subscribers to support
+- Examples:
+  - "prefix": [ "type": "com.github.issue" ]
+
+##### sink
+- Type: `URI`
+- Description: The address to which events MUST be sent. The format of the
+  address MUST be valid for the protocol specified in the `protocol`
+  property, or one of the protocol's own transport bindings (e.g. AMQP over
+  WebSockets).
+
+- Constraints:
+  - REQUIRED
+- Examples:
+  - `https://example.com/event-processor`
+
+##### protocol
+- Type: `String`
+- Description: Identifier of a delivery protocol. Because of WebSocket
+  tunneling options for AMQP, MQTT and other protocols, the URI scheme is not
+  sufficient to identify the protocol. The protocols with existing CloudEvents
+  bindings are identified as `AMQP`, `MQTT3`, `MQTT5`, `HTTP`, `KAFKA`, and
+  `NATS`. An implementation MAY add support for further protocols.
+
+- Constraints:
+  - REQUIRED
+  - Value comparisons MUST be case sensitive.
+- Examples:
+  - `HTTP`
+
+##### protcolsettings
+- Type: Map of protocol specific properties
+- Description: A set of settings specific to the selected delivery protocol
+  provider. Options for these settings are listed in the following subsection.
+  An subscription manager MAY offer more options. See the [Protocol
+  Settings](#322-protocol-settings) section for future details.
+  
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - Credentials
+  - Retry policies
+  - QoS modes
 
 In general the intent of this specification is to consider the processing of
 events to have 3 conceptual phases:
 - event generation. This phase creates the events and is typically controlled
-  by the **config** property. This might include settings that influence how
-  often events are generated, or the scope of the event sources being
-  monitored.
+  by the `config`, `source` and `types` properties. This might include settings
+  that influence how often events are generated, or the scope of the event
+  sources being monitored.
 - event filtering. This phase, as the name implies, will "filter" the stream
   of events generated from the previous phase. The **filters** property will be
   used to specify how this filtering will be done. Whether this is done
@@ -323,26 +442,28 @@ phases/properties, the Service description specified by the Discovery
 specification SHOULD contain enough information for a consumer to know which
 properties to use when creating a Subscription to get the desired results.
 
-Below is an example JSON serialization of a susbcription:
+Below is an example JSON serialization of a susbcription resource:
 
 ```JSON
 {
   "id": "sub-193-18365",
+
+  "config": {
+    "data": "hello",
+    "interval": 5
+  },
+
+  "filter": {
+    "prefix": {
+      "type": "com.example."
+    }
+  },
+
   "protocol": "HTTP",
   "protocolsettings": {
     "method": "POST"
   },
   "sink": "http://example.com/event-processor",
-  "filters": [{
-    "dialect": "basic",
-    "type": "prefix",
-    "property": "type",
-    "value": "com.example"
-  }],
-  "config": {
-	"data": "hello",
-    "interval": 5
-  }
 }
 ```
 
@@ -356,71 +477,145 @@ protocol-settings map, including default values where necessary.
 For HTTP, the following settings properties SHOULD be supported by all
 implementations.
 
-- **headers** (map) – OPTIONAL. A set of key/value pairs that is copied into the
-  HTTP request as custom headers.
-- **method** (string) – OPTIONAL. The HTTP method to use for sending the
-  message. This defaults to POST if not set.
+###### headers
+- Type: `Map`
+- Description: A set of key/value pairs that is copied into the HTTP request
+  as custom headers.
+- Constraints:
+  - OPTIONAL
+
+###### method
+- Type: `String`
+- Description: The HTTP method to use for sending the message. This defaults
+  to POST if not set.
+- Constraints:
+  - OPTIONAL
 
 ##### 3.2.2.2. MQTT
 
-All implementations that support MQTT MUST support the _topicname_ settings. All
-other settings SHOULD be supported.
+All implementations that support MQTT MUST support the _topicname_ settings.
+All other settings SHOULD be supported.
 
 - **topicname** (string) – REQUIRED. The name of the MQTT topic to publish to.
-- **qos** (integer) – OPTIONAL. MQTT quality of service (QoS) level: 0 (at most
-  once), 1 (at least once), or 2 (exactly once). This defaults to 1 if not set.
-- **retain** (boolean) – OPTIONAL. MQTT retain flag: true/false. This defaults
-  to false if not set.
-- **expiry** (integer) – OPTIONAL. MQTT expiry interval, in seconds. This value
-  has no default value and the message will not expire if the setting is absent.
-  This setting only applies to MQTT 5.0.
-- **userproperties** (map) – OPTIONAL. A set of key/value pairs that are copied
-  into the MQTT PUBLISH packet's user property section. This setting only
-  applies to MQTT 5.0.
+
+###### topicname
+- Type: `String`
+- Description: The name of the MQTT topic to publish to.
+- Constraints:
+  - REQUIRED
+
+###### qos
+- Type: `Integer`
+- Description: MQTT quality of service (QoS) level: 0 (at most once), 1 (at
+  least once), or 2 (exactly once). This defaults to 1 if not set.
+- Constraints:
+  - OPTIONAL
+
+###### retain
+- Type: `Boolean`
+- Description: MQTT retain flag: true/false. This defaults to false if not set.
+- Constraints:
+  - OPTIONAL
+
+###### expiry
+- Type: `Integer`
+- Description: MQTT expiry interval, in seconds. This value has no default
+  value and the message will not expire if the setting is absent.  This
+  setting only applies to MQTT 5.0.
+- Constraints:
+  - OPTIONAL
+
+###### userproperties
+- Type: `Map`
+- Description: A set of key/value pairs that are copied into the MQTT PUBLISH
+  packet's user property section. This setting only applies to MQTT 5.0.
+- Constraints:
+  - OPTIONAL
 
 ##### 3.2.2.3. AMQP
 
 For AMQP, the address property MUST be supported by all implementations and
 other settings properties SHOULD be supported by all implementations.
 
-- **address** (string) – OPTIONAL. The link target node in the AMQP container
-  identified by the sink URI, if not expressed in the sink URI's path portion.
-- **linkname** (string) – OPTIONAL. Name to use for the AMQP link. If not set, a
-  random link name is used.
-- **sendersettlementmode** (string) – OPTIONAL. Allows to control the sender's
-  settlement mode, which determines whether transfers are performed "settled"
-  (without acknowledgement) or "unsettled" (with acknowledgement). Default value
-  is unsettled.
-- **linkproperties** (map) – OPTIONAL. A set of key/value pairs that are copied
-  into link properties for the send link.
+###### address
+- Type: `String`
+- Description: The link target node in the AMQP container identified by the
+  sink URI, if not expressed in the sink URI's path portion.
+- Constraints:
+  - OPTIONAL
+
+###### linkname
+- Type: `String`
+- Description: Name to use for the AMQP link. If not set, a random link name
+  is used.
+- Constraints:
+  - OPTIONAL
+
+###### sendersettlementmode
+- Type: `String`
+- Description: Allows to control the sender's settlement mode, which
+  determines whether transfers are performed "settled" (without
+  acknowledgement) or "unsettled" (with acknowledgement). Default value is
+  unsettled.
+- Constraints:
+  - OPTIONAL
+
+###### linkproperties
+- Type: `Map`
+- Description: A set of key/value pairs that are copied into link properties
+  for the send link.
+- Constraints:
+  - OPTIONAL
 
 ##### 3.2.2.4. Apache Kafka
 
 All implementations that support Apache Kafka MUST support the _topicname_
 settings. All other settings SHOULD be supported.
 
-- **topicname** (string) - REQUIRED. The name of the Kafka topic to publish to.
-- **partitionkeyextractor** (string) - OPTIONAL. A partition key extractor
-  expression per the CloudEvents Kafka transport binding specification.
-- **clientid** (string)
-- **acks** (string)
+###### topicname
+- Type: `String`
+- Description: The name of the Kafka topic to publish to.
+- Constraints:
+  - OPTIONAL
+
+###### partitionkeyextractor
+- Type: `String`
+- Description: A partition key extractor expression per the CloudEvents Kafka
+  transport binding specification.
+- Constraints:
+  - OPTIONAL
+
+###### clientid
+- Type: `String`
+- Description:
+- Constraints:
+  - OPTIONAL
+
+###### acks
+- Type: `String`
+- Description:
+- Constraints:
+  - OPTIONAL
 
 ##### 3.2.2.5. NATS
 
-- **subject** (string) - REQUIRED. The name of the NATS subject to publish to.
+###### subject
+- Type: `String`
+- Description: The name of the NATS subject to publish to.
+- Constraints:
+  - REQUIRED
+
 
 #### 3.2.3 Filters
 
 Filters allow for subscriptions to specify that only a subset of events
-are to be delivered to the sink based on a set of criteria. The `filters`
-property in a subscription is an array of filter expressions that are logically
-combined with an implicit "AND" operator. This means the filter criteria
-MUST evaluate to true for every filter expression in the array in order
-for an event to be delivered to the target sink.
+are to be delivered to the sink based on a set of criteria. The `filter`
+property in a subscription is a filter expressions that evaluates to either
+true or false for each event generated.
 
 If any of the filter expressions evaluate to false, the event MUST NOT be
-sent to the sink. If all of the filter expressions evaluare to true, the
-event MUST be attempted to be delivered.
+sent to the sink. If the filter expression evalutes to true, the event MUST be
+attempted to be delivered.
 
 Each filter expression includes the specification of a `dialect` that
 defines the type of filter and the set of additional properties that are
@@ -434,116 +629,116 @@ The filter expression language supported by an event producer is indicated by
 its dialect. This is intended to allow for flexibility, extensibility and to
 allow for a variety of filter dialects without enumerating them all in this
 specification or predicting what filtering needs every system will have in the
-future. This specification defines a `basic` dialect, which all
-implementations MUST support.
+future.
 
-The dialect for a particular filter is indicated by specifying the `dialect`
-in a `filter` expression. The value of this is a URI-reference encoded unique
-identifier for the filter dialect. Subscriptions specifying a `filter`
-MUST specify a dialect. All other properties are dependent on the
-dialect being used.
+Filter dialects are identified by a unique `URI-Reference`.
 
-##### 3.2.3.2. "basic" filter dialect
-
-The `basic` filter dialect is intended to support the most common filtering
-use cases:
-
-- `exact` match where the filter condition and an attribute value match exactly.
-- `prefix` match where the filter condition is a prefix of the attribute value.
-- `suffix` match where the filter condition is a suffix of the attribute value.
-
-This filter dialect is intentionally constrained to these filter types, since
-filtering has a potentially significant impact on the baseline performance of
-all implementations. In cases where more filter types or different expression
-languages are desired, further dialects can be introduced as extensions.
-
-Extension dialects will have varying support across event producers. It is up to
-the subscriber and producer to negotiate which filter dialects can be used
-within a given subscription.
-
-Each `basic` filter expression is defined with the following properties:
-
-- `type` (string) - REQUIRED. Value MUST be one of the following:
-  `prefix`, `suffix`, exact`.
-- `property` (string) - REQUIRED. The CloudEvents attribute
-   (including extensions) to match the value indicated by the `value` property
-   against.
-- `value` (string) - REQUIRED. The value to match the CloudEvents attribute
-  against. This expression is a string and matches are executed against the
-  string representation of the attribute value.
-
-Note: the string comparisions MUST be case sensitive and take into account all
-whitespace - including leading and trailing whitespace.
-
-###### 3.2.3.1.1. Example: Prefix match
-
-This filter will select events only with the event type having the prefix of
-"com.example".
-
-```JSON
-{
-  "filters": [{
-    "dialect": "basic",
-    "type": "prefix",
-    "property": "type",
-    "value": "com.example"
-  }]
-}
+When encoded in JSON, a filter is encoded as follows:
+```
+{ "dialect URI-Reference" : { <dialect-specific-properties> } }
 ```
 
-###### 3.2.3.1.2. Example: Suffix match
+This specification defines the following 6 filter dialects that all
+implementations MUST support:
 
-This filter will select events only with the event subject having the suffix of
-".jpg".
+###### `exact` filter dialect
 
-```JSON
-{
-  "filters": [{
-    "dialect": "basic",
-    "type": "suffix",
-    "property": "subject",
-    "value": ".jpg"
-  }]
-}
+Use of this MUST include exactly one nested property, where the key is the
+name of the CloudEvents attribute to be matched, and its value is the String
+value to use in the comparison. To evaluate to true the value of the
+matching CloudEvents attribute MUST exactly match the value String specified
+(case sensitive).
+
+The attribute name and value specified in the filter express MUST NOT be 
+empty strings.
+
+For example:
+```json
+{ "exact": { "type": "com.github.push" } }
 ```
 
-###### 3.2.3.1.3. Example: Exact match
+###### `prefix` filter dialect
 
-This filter will select events only with the event type equal to
-"com.example.my_event".
+Use of this MUST include exactly one nested property, where the key is the
+name of the CloudEvents attribute to be matched, and its value is the String
+value to use in the comparison. To evaluate to true the value of the
+matching CloudEvents attribute MUST start with the value String specified
+(case sensitive).
 
-```JSON
-{
-  "filters": [{
-    "dialect": "basic",
-    "type": "exact",
-    "property": "type",
-    "value": "com.example.my_event"
-  }]
-}
+The attribute name and value specified in the filter express MUST NOT be 
+empty strings.
+
+For example:
+```json
+{ "prefix": { "type": "com.github." } }
 ```
 
-###### 3.2.3.1.4. Example: Exact match and suffix match
+###### `suffix` filter dialect
 
-This filter will select events only with the event type equal to
-"com.example.my_event" AND the event subject having the suffix of ".jpg".
+Use of this MUST include exactly one nested property, where the key is the
+name of the CloudEvents attribute to be matched, and its value is the String
+value to use in the comparison. To evaluate to true the value of the
+matching CloudEvents attribute MUST end with the value String specified
+(case sensitive).
 
-```JSON
+The attribute name and value specified in the filter express MUST NOT be 
+empty strings.
+
+For example:
+```json
+{ "suffix": { "type": ".created" } }
+```
+
+###### `all` filter dialect
+
+Use of this MUST include a nested array of filter expressions, where all
+nested filter expressions MUST evaluate to true in order for the `all`
+filter expression to be true. The order in which the nested expressions are
+are listed is the order in which they MUST be evaluated.
+
+Note: there MUST be at least one filter expression in the array.
+
+For example:
+```json
 {
-  "filters": [
-    {
-      "dialect": "basic",
-      "type": "exact",
-      "property": "type",
-      "value": "com.example.my_event"
-    },
-    {
-      "dialect": "basic",
-      "type": "suffix",
-      "property": "subject",
-      "value": ".jpg"
-    }
+  "all": [
+    { "exact": { "type": "com.github.push" } },
+    { "exact": { "subject": "https://github.com/cloudevents/spec" } }
   ]
+}
+```
+
+###### `any` filter dialect
+
+Use of this MUST include one nested array of filter expressions, where at least
+one nested filter expressions MUST evaluate to true in order for the `any`
+filter expression to be true. The order in which the nested expressions are
+are listed is the order in which they MUST be evaluated, and processing MUST
+stop on the first successful match.
+
+Note: there MUST be at least one filter expression in the array.
+
+For example:
+```json
+{
+  "any": [
+    { "exact": { "type": "com.github.push" } },
+    { "exact": { "subject": "https://github.com/cloudevents/spec" } }
+  ]
+}
+```
+
+###### `not` filter dialect
+
+Use of this MUST include one nested filter expression, where the result of this
+filter expression is the inverse of the result of the nested expression.
+In other words, if the nested expression evaluated to true, then the `not`
+filter expression's result is false.
+
+For example:
+```json
+{
+  "not": { "exact": { "type": "com.github.push" } }
 }
 ```
 
@@ -682,16 +877,11 @@ POST /subscriptions
 Content-Type: application/json
 
 {
-  "protocol": "...",
-  "protocolsettings": { ... }
-  "sink": "...",
-  "filters": [{
-    "dialect": "...",
-    "type": "...",
-    "property": "...",
-    "value": "..."
-  }],
   "config": { ... }
+  "filter": { ... },
+  "protocol": "...",
+  "protocolsettings": { ... },
+  "sink": "..."
 }
 
 Note: no ID in the request
@@ -707,16 +897,12 @@ PUT /subscriptions/{id}
 Content-Type: application/json
 
 {
-  "protocol": "...",
-  "protocolsettings": { ... }
-  "sink": "...",
-  "filters": [{
-    "dialect": "...",
-    "type": "...",
-    "property": "...",
-    "value": "i..."
-  }],
+  "id": "...",
   "config": { ... }
+  "filter": { ... },
+  "protocol": "...",
+  "protocolsettings": { ... },
+  "sink": "..."
 }
 
 ```
