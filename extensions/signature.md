@@ -15,8 +15,7 @@ of selection.
 
 This extension supports a few general usage models:
 
-- Where the algorithm used to produce an embeded signature needs to be shared (
-  eg the `data` is a signed JWT).
+- Where the algorithm used to produce an attached signature needs to be shared.
 - Where the `data` is signed with a detached signature.
 - Where the context attributes are signed.
 
@@ -24,9 +23,8 @@ This extension supports a few general usage models:
 
 ### sigdata
 
-- Type: `String`
-- Description: The Base64 encoded value (per [RFC4648](rfc4648)) of the binary
-signature generated for the event `data`.
+- Type: `Binary`
+- Description: The binary signature generated for the event `data`.
 - Constraints:
 
   - OPTIONAL
@@ -42,9 +40,9 @@ signature generated for the event `data`.
 
 ### sigattr
 
-- Type: `String`
-- Description : The Base64 encoded value [RFC4648](rfc4648) of the binary
-signature generated for the context attributes (as-per method described below).
+- Type: `Binary`
+- Description : The binary signature generated for the context attributes 
+(as-per method described below).
 - Constraints:
 
   - OPTIONAL
