@@ -60,7 +60,7 @@ attributes (as-per method described below).
 
 - Type: `String`
 - Description: Defines the familly of attributes that participated in
-the signing function. See [SigAttrType Values](sigattrtype-values)
+the signing function. See [SigAttrType Values](#sigattrtype-values)
 - Constraints:
 
   - OPTIONAL
