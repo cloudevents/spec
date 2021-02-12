@@ -17,7 +17,7 @@ This extension supports a few general usage models:
 
 - Where the algorithm used to produce an attached signature needs to be shared.
 - Where the `data` is signed with a detached signature.
-- Where the context attributes are signed.
+- Where the CloudEvent context attributes are signed.
 
 ## Attributes
 
@@ -41,8 +41,8 @@ This extension supports a few general usage models:
 ### sigattr
 
 - Type: `Binary`
-- Description : The binary signature generated for the context attributes 
-(as-per method described below).
+- Description : The binary signature generated for the CloudEvent context
+attributes (as-per method described below).
 - Constraints:
 
   - OPTIONAL
@@ -89,7 +89,7 @@ and extension* context attributes participated in the signing process.
 NOTE: atributes defined by this extension *ARE NOT* considered during the
 signing process.
 
-## Attribute Signing & verification process
+## Attribute signing & verification process
 
 - The set of attributes to be considered is constructed based on the scheme
 defined by `sigattrtype`.
@@ -97,7 +97,7 @@ defined by `sigattrtype`.
   - Any attribute with a null or empty value is ignored.
   - Atrributes defined in this extension are ignored.
 
-- The attributes are sorted, by name, into acending alphabetical order.
+- The selected attributes are sorted by name into acending alphabetical order.
 
 - The string value of each attribute are concatenated according to sorted
 order.
