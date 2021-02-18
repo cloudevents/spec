@@ -136,7 +136,7 @@ unary-logical-operator = not-operator
 binary-logic-operator = "AND" | "OR" | "XOR"
 
 unary-numeric-operator = "-"
-binary-numeric-comparison-operator = "=" | ">=" | "<=" | "<" | ">"
+binary-comparison-operator = "=" | "!=" | "<>" | ">=" | "<=" | "<" | ">"
 binary-numeric-arithmetic-operator = "+" | "-" | "*" | "/" | "%"
 
 like-operator = "LIKE"
@@ -145,7 +145,7 @@ in-operator = "IN"
 
 unary-operation ::= (unary-numeric-operator | unary-logical-operator) expression
 
-binary-operation ::= expression (binary-numeric-comparison-operator | binary-numeric-arithmetic-operator | binary-logic-operator) expression
+binary-operation ::= expression (binary-comparison-operator | binary-numeric-arithmetic-operator | binary-logic-operator) expression
 
 like-operation ::= expression not-operator? like-operator string-literal
 
@@ -227,10 +227,14 @@ Corresponds to the syntactic rule `binary-operation`:
 | Definition                              | Semantics                                                                                       |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | `x = y: Boolean x Boolean -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                           |
+| `x != y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                           |
+| `x <> y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                           |
 | `x AND y: Boolean x Boolean -> Boolean` | Returns the logical and of `x` and `y`                                                          |
 | `x OR y: Boolean x Boolean -> Boolean`  | Returns the logical or of `x` and `y`                                                           |
 | `x XOR y: Boolean x Boolean -> Boolean` | Returns the logical xor of `x` and `y`                                                          |
 | `x = y: Integer x Integer -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                           |
+| `x != y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                           |
+| `x <> y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                           |
 | `x < y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly lower than `y`                                                |
 | `x <= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is lower or equal to `y`                                                  |
 | `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly greater than `y`                                              |
@@ -241,6 +245,8 @@ Corresponds to the syntactic rule `binary-operation`:
 | `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                  |
 | `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                           |
 | `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                           |
+| `x != y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                           |
+| `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                           |
 
 #### 3.4.3. Like operator
 
