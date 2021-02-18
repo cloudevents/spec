@@ -55,7 +55,7 @@ producer, in an intermediary, and it can be implemented using any tech stack.
 The CloudEvents Expression Language assumes the input always includes, but it's not limited to, a single valid and type
 checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of the
 other input values. The evaluation of an expression observes the concept of [referential
-transparency][referential-transparency-wiki].
+transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a boolean _true_ or _false_ and it might include an error.
 
 The CloudEvents Expression Language doesn't support the handling of the data field of the CloudEvent instances, due to
 its polymorphic nature and complexity. We strongly encourage users that needs this functionality to use other more
