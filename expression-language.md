@@ -53,7 +53,7 @@ The language is not constrained to a particular execution environment, which mea
 producer, in an intermediary, and it can be implemented using any tech stack.
 
 The CloudEvents Expression Language assumes the input always includes, but it's not limited to, a single valid and type
-checked CloudEvent instance. An expression cannot mutate the value of the input CloudEvent instance, nor any of the
+checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of the
 other input values. The evaluation of an expression observes the concept of [referential
 transparency][referential-transparency-wiki].
 
@@ -68,7 +68,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### 1.2. Relation to the Subscriptions API
 
-The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to filter out the input values
+The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to filter on the input values.
 
 <!-- TODO -->
 
@@ -96,12 +96,12 @@ The root of the expression is the `expression` rule:
 expression ::= value-identifier | literal | unary-operation | binary-operation | function-invocation | ( "(" expression ")" )
 ```
 
-Nested expressions must be correctly parenthesized.
+Nested expressions MUST be correctly parenthesized.
 
 ### 2.2. Value identifiers and literals
 
 Value identifiers in CESQL have the same restrictions of the [Attribute Naming
-Convention][ce-attribute-naming-convention] from the CloudEvents spec. A value identifier cannot be greater than 20
+Convention][ce-attribute-naming-convention] from the CloudEvents spec. A value identifier MUST NOT be greater than 20
 characters in length.
 
 ```ebnf
@@ -272,7 +272,7 @@ Both `%` and `_` can be escaped with `\`, in order to be matched literally. For 
 | `EXISTS identifier: Any -> Boolean` | Returns `true` if the attribute `identifier` exists in the input CloudEvent |
 
 Note: `EXISTS` MUST always return `true` for the required context attributes because the input CloudEvent is always
-assumed valid, e.g. `EXISTS id` must always return `true`.
+assumed valid, e.g. `EXISTS id` MUST always return `true`.
 
 #### 3.4.5. In operator
 
