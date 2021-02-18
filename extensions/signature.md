@@ -8,7 +8,7 @@ This specification does not:
 
 - Declare a mechanism for public key exchange.
 - Declare a mechanism for public key selection during signature verification.
-Implementors may consider leveraging the CloudEvent `source` as a method
+Implementors MAY consider leveraging the CloudEvent `source` as a method
 of selection.
 
 ## Usage
@@ -36,7 +36,7 @@ This extension supports a few general usage models:
 - Constraints:
 
   - OPTIONAL
-  - *Should* be present when `sigdata` is present.
+  - SHOULD be present when `sigdata` is present.
 
 ### sigattr
 
@@ -54,17 +54,17 @@ attributes (as-per method described below).
 - Constraints:
 
   - OPTIONAL
-  - *Should* be present when `sigattr` ifs present.
+  - SHOULD be present when `sigattr` ifs present.
 
 ### sigattrtype
 
 - Type: `String`
-- Description: Defines the familly of attributes that participated in
+- Description: Defines the family of attributes that participated in
 the signing function. See [SigAttrType Values](#sigattrtype-values)
 - Constraints:
 
   - OPTIONAL
-  - *MUST* be present when `sigattr` is present.
+  - MUST be present when `sigattr` is present.
 
 ## SigAttrType Values
 
@@ -95,9 +95,9 @@ signing process.
 defined by `sigattrtype`.
 
   - Any attribute with a null or empty value is ignored.
-  - Atrributes defined in this extension are ignored.
+  - Attributes defined in this extension are ignored.
 
-- The selected attributes are sorted by name into acending alphabetical order.
+- The selected attributes are sorted by name into ascending alphabetical order.
 
 - The string value of each attribute are concatenated according to sorted
 order.
