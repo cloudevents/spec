@@ -5,10 +5,6 @@
 The AMQP Protocol Binding for CloudEvents defines how events are mapped to
 OASIS AMQP 1.0 ([OASIS][oasis-amqp-1.0]; ISO/IEC 19464:2014) messages.
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)

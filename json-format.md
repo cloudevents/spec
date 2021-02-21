@@ -5,10 +5,6 @@
 The JSON Format for CloudEvents defines how events are expressed in JavaScript
 Object Notation (JSON) Data Interchange Format ([RFC8259][rfc8259]).
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)

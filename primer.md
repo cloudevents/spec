@@ -8,10 +8,6 @@ additional background and insight into the history and design decisions made
 during the development of the specification. This allows the specification
 itself to focus on the normative technical details.
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 - [History](#history)
