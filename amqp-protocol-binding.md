@@ -50,7 +50,7 @@ AMQP 1.0 messages.
 AMQP-based messaging and eventing infrastructures often provide higher-level
 programming-level abstractions that do not expose all AMQP protocol elements, or
 map AMQP protocol elements or names to proprietary constructs. This
-specification uses AMQP terminology, and implementers can refer the the
+specification uses AMQP terminology, and implementers can refer to the
 respective infrastructure's AMQP documentation to determine the mapping into a
 programming-level abstraction.
 
