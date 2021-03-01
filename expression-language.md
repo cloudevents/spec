@@ -413,7 +413,7 @@ sequence = 10
 _CloudEvent including the extension 'hop' and 'ttl', where 'hop' is smaller than 'ttl'_
 
 ```
-INT(hop) < INT(ttl)
+hop < ttl
 ```
 
 ## 5. References
