@@ -50,7 +50,7 @@ system][ce-type-system] and it features boolean and arithmetics operations, as w
 manipulation.
 
 The language is not constrained to a particular execution environment, which means it might run in a source, in a
-producer, in an intermediary, and it can be implemented using any tech stack.
+producer, in an intermediary, and it can be implemented using any technology stack.
 
 The CloudEvents Expression Language assumes the input always includes, but it's not limited to, a single valid and type
 checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of the
@@ -100,13 +100,13 @@ Nested expressions MUST be correctly parenthesized.
 
 ### 2.2. Value identifiers and literals
 
-Value identifiers in CESQL have the same restrictions of the [Attribute Naming
+Value identifiers in CESQL MUST follow the same restrictions of the [Attribute Naming
 Convention][ce-attribute-naming-convention] from the CloudEvents spec. A value identifier MUST NOT be greater than 20
 characters in length.
 
 ```ebnf
 lowercase-char ::= [a-z]
-value-identifier ::= lowercase-char ( lowercase-char | digit )*
+value-identifier ::= ( lowercase-char | digit ) ( lowercase-char | digit )*
 ```
 
 CESQL defines 3 different literal kinds: integer numbers, `true` or `false` booleans and `''` or `""` delimited strings.
