@@ -31,6 +31,7 @@ This document is a working draft.
 - 3.4. [Operators](#34-operators)
 - 3.5. [Functions](#35-functions)
 - 3.6. [Evaluation of the expression](#36-evaluation-of-the-expression)
+- 3.7. [Type casting](#37-type-casting)
 
 4. [Examples](#4-examples)
 5. [References](#5-references)
@@ -190,8 +191,8 @@ _String_.
 Each CloudEvent context attribute and extension MUST be addressable from an expression using its identifier, as defined
 by the spec. For example, using `id` in an expression will address to the CloudEvent [id attribute][ce-id-attribute].
 
-Unless otherwise specified, every attribute and extension MUST be represented by the _String_ type. Through explicit
-casting, the user can convert the addressed value instances to _Integer_ and _Boolean_.
+Unless otherwise specified, every attribute and extension MUST be represented by the _String_ type as its initial type. 
+Through explicit and implicit type casting, the user can convert the addressed value instances to _Integer_ and _Boolean_.
 
 When addressed an attribute not included in the input event, an empty _String_ MUST be assumed as value
 
@@ -327,6 +328,55 @@ the expression matches the input, otherwise `false`.
 
 An evaluation might return an error together with the return value, which the evaluator MUST notify to the user.
 
+#### 3.7. Type casting
+
+CESQL supports both implicit and explicit type casting. Users can perform explicit type casting through the functions defined in the [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
+
+When input parameters types of operator/function doesn't match the signatures, the CESQL engine MUST try to perform an implicit cast.
+
+Implicit casts must follow the same semantics of their equivalent explicit cast functions, as defined in [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
+
+We refer in this paragraph to **ambiguous** operator/function as an operator/function that is overloaded with another operator/function definition with same symbol/name and arity but different parameter types. 
+
+A CESQL engine MUST apply the following implicit casting rules in order:
+
+1. If the operator/function is unary (input parameter `x`):
+    1. If it's not ambiguous, cast `x` to the target type
+    1. If it's ambiguous, raise an error and the cast result is undefined
+1. If the operator is binary (left parameter `x` and right parameter `y`):
+    1. If it's not ambiguous, cast `x` and `y` to the target types
+    1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator using the `y` type as the right parameter type:
+        1. If such operator definition exists and is unique, cast `x` to the type of the left parameter
+        2. Otherwise, raise an error and the cast results are undefined
+1. If the function is n-ary with `n > 1`:
+    1. If it's not ambiguous, cast all the parameters to the target type
+    1. If it's ambiguous, raise an error and the cast results are undefined
+1. If the operator is n-ary with `n > 2`:
+    1. If it's not ambiguous, cast all the parameters to the target type
+    1. If it's ambiguous, raise an error and the cast results are undefined
+
+For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a _Boolean_, this expression:
+
+```
+MY_STRING_PREDICATE(sequence + 10)
+```
+
+MUST be evaluated as follows:
+
+1. `sequence` is casted to _Integer_ using the same semantics of `INT`
+2. `sequence + 10` is executed
+3. `sequence + 10` result is casted to _String_ using the same semantics of `STRING`
+4. `MY_STRING_PREDICATE` is invoked with the result of the previous point as input.
+
+Another example, in this expression `sequence` is casted to _Integer_:
+
+```
+sequence = 10
+```
+
+`=` is arity 2 ambiguous operator, because it's defined for `String x String`, `Boolean x Boolean` and `Integer x Integer`. 
+Because the right parameter of the operator is an _Integer_ and there is only one `=` definition which uses the type _Integer_ as right parameter, `sequence` is casted to _Integer_.
+
 ## 4. Examples
 
 _CloudEvent including a subject_
@@ -357,7 +407,7 @@ or the subject with value 'Francesco Guardiani'_
 _CloudEvent including the extension 'sequence' with numeric value 10_
 
 ```
-INT(sequence) = 10
+sequence = 10
 ```
 
 _CloudEvent including the extension 'hop' and 'ttl', where 'hop' is smaller than 'ttl'_
