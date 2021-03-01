@@ -178,9 +178,9 @@ function-invocation ::= function-identifier "(" parameter-list? ")"
 
 The type system contains 3 types:
 
-- _String_: Sequence of allowable Unicode characters
-- _Integer_: A signed 32-bit integer
-- _Boolean_: A boolean value of "true" or "false"
+- _String_: Sequence of Unicode characters.
+- _Integer_: A whole number in the range -2,147,483,648 to +2,147,483,647 inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
+- _Boolean_: A boolean value of "true" or "false".
 
 The [types defined in the CloudEvents specification][ce-type-system] URI, URI Reference and String are represented as
 _String_.
@@ -240,13 +240,18 @@ Corresponds to the syntactic rule `binary-operation`:
 | `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly greater than `y`                                              |
 | `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater or equal to `y`                                                |
 | `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                              |
-| `x / y: Integer x Integer -> Integer`   | Returns the rounded division of `x` and `y`. Returns `0` if `y = 0` and raise an error          |
-| `x % y: Integer x Integer -> Integer`   | Returns the remainder of the division of `x` and `y`. Returns `0` if `y = 0` and raise an error |
+| `x / y: Integer x Integer -> Integer`   | Returns the truncated division of `x` and `y`. Returns `0` if `y = 0` and raise an error          |
+| `x % y: Integer x Integer -> Integer`   | Returns the remainder of the truncated division of `x` and `y`. Returns `0` if `y = 0` and raise an error |
 | `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                  |
 | `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                           |
 | `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                           |
 | `x != y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                           |
 | `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                           |
+
+The modulo and divisions MUST follow the [truncated divisions definition][modulo-operation-wiki], that is:
+
+* The remainder of the modulo MUST have the same sign as the dividend
+* The quotient MUST be rounded towards zero _truncating_ the decimal part.
 
 #### 3.4.3. Like operator
 
@@ -373,3 +378,4 @@ INT(hop) < INT(ttl)
 [ce-id-attribute]: ./spec.md#id
 [subscriptions-filter-dialect]: ./subscriptions-api.md#3231-filter-dialects
 [ebnf-xml-spec]: https://www.w3.org/TR/REC-xml/#sec-notation
+[modulo-operation-wiki]: https://en.wikipedia.org/wiki/Modulo_operation
