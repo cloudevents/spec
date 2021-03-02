@@ -61,15 +61,15 @@ this by using a hash function.
 This binding specification defines how attributes and data of a CloudEvent is
 mapped to the value and headers sections of a Kafka record.
 
-Generally, the user should configure the key and/or the partition of the Kafka
+Generally, the user SHOULD configure the key and/or the partition of the Kafka
 record in a way that makes more sense for his/her use case (e.g. streaming
 applications), in order to co-partition values, define relationships between
-events, etc. This spec provides an optional definition to map the key section of
+events, etc. This spec provides an OPTIONAL definition to map the key section of
 the Kafka record, without constraining the user to implement it nor use it. An
 example use case of this definition is when the sink of the event is a Kafka
 topic, but the source is another transport (e.g. HTTP), and the user needs a way
-to key the record. As a counter example, It doesn't make sense to use it when
-the sink and source are Kafka topics, because this may cause the re-keying of
+to key the record. As a counter example, it doesn't make sense to use it when
+the sink and source are Kafka topics, because this might cause the re-keying of
 the records.
 
 ### 1.3. Content Modes
