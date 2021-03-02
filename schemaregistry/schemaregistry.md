@@ -324,7 +324,7 @@ the schema groups collection, for instance `/schemagroups/mygroup`.
 
 The payload is a JSON object that contains the attributes of the schema group.
 
-The operation returns the effective attributes as a JSON object when the schwema
+The operation returns the effective attributes as a JSON object when the schema
 group has been created or updated.
 
 #### 3.2.4. Delete schema group
