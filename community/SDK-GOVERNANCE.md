@@ -12,15 +12,17 @@ The community is organized as follows:
 
 To propose a new SDK for the community, a PR should be opened in the `spec`
 repository with the documentation changes necessary to point to the new repo.
-For example, changes to the `README.md` and `SDK.md` files. At that time the
-community will proceed with a vote using the
-[Asynchronous voting process](#asynchronous-voting-process).
-
-The first comment in the PR should include:
+For example, changes to the `README.md` and `SDK.md` files. The first comment
+in the PR should include:
 - desired repo name (e.g. `SDK-...`)
 - list of initial maintainers (github IDs)
 
-The voting criteria are:
+Ideally, the new SDK should integrate with a technology stack that the existing
+SDKs do not already have support for.
+
+The community will proceed with a vote using the
+[Asynchronous voting process](#asynchronous-voting-process). The voting
+criteria are:
 
 - 1 week to vote
 - At least 2/3 of the votes cast agree to the proposal
