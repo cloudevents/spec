@@ -34,9 +34,9 @@ This document is a working draft.
 ## 1. Introduction
 
 [CloudEvents][ce] is a standardized and protocol-agnostic definition of the
-structure and metadata description of events. This specification defines how
-the elements defined in the CloudEvents specification are to be used in the
-Kafka protocol as [Kafka messages][kafka-message-format] (aka Kafka records).
+structure and metadata description of events. This specification defines how the
+elements defined in the CloudEvents specification are to be used in the Kafka
+protocol as [Kafka messages][kafka-message-format] (aka Kafka records).
 
 ### 1.1. Conformance
 
@@ -47,8 +47,8 @@ interpreted as described in [RFC2119][rfc2119].
 ### 1.2. Relation to Kafka
 
 This specification does not prescribe rules constraining transfer or settlement
-of event messages with Kafka; it solely defines how CloudEvents are expressed
-in the Kafka protocol as [Kafka messages][kafka-message-format].
+of event messages with Kafka; it solely defines how CloudEvents are expressed in
+the Kafka protocol as [Kafka messages][kafka-message-format].
 
 The Kafka documentation uses "message" and "record" somewhat interchangeably and
 therefore the terms are to be considered synonyms in this specification as well.
@@ -59,7 +59,18 @@ record is typically chosen based on the key's value. Kafka clients accomplish
 this by using a hash function.
 
 This binding specification defines how attributes and data of a CloudEvent is
-mapped to the value, key, and headers sections of a Kafka message.
+mapped to the value and headers sections of a Kafka record.
+
+Generally, the user SHOULD configure the key and/or the partition of the Kafka
+record in a way that makes more sense for his/her use case (e.g. streaming
+applications), in order to co-partition values, define relationships between
+events, etc. This spec provides an OPTIONAL definition to map the key section of
+the Kafka record, without constraining the user to implement it nor use it. An
+example use case of this definition is when the sink of the event is a Kafka
+topic, but the source is another transport (e.g. HTTP), and the user needs a way
+to key the record. As a counter example, it doesn't make sense to use it when
+the sink and source are Kafka topics, because this might cause the re-keying of
+the records.
 
 ### 1.3. Content Modes
 
@@ -72,8 +83,8 @@ placed into the Kafka message value section using an
 
 In the _binary_ content mode, the value of the event `data` MUST be placed into
 the Kafka message's value section as-is, with the `content-type` header value
-declaring its media type; all other event attributes MUST be mapped to the
-Kafka message's [header section][kafka-message-header].
+declaring its media type; all other event attributes MUST be mapped to the Kafka
+message's [header section][kafka-message-header].
 
 Implementations that use Kafka 0.11.0.0 and above MAY use either _binary_ or
 _structured_ modes. Implementations that use Kafka 0.10.x.x and below MUST only
@@ -99,16 +110,16 @@ attributes.
 
 ### 2.1. data
 
-`data` is assumed to contain opaque application data that is
-encoded as declared by the `datacontenttype` attribute.
+`data` is assumed to contain opaque application data that is encoded as declared
+by the `datacontenttype` attribute.
 
 An application is free to hold the information in any in-memory representation
 of its choosing, but as the value is transposed into Kafka as defined in this
 specification, core Kafka provides data available as a sequence of bytes.
 
 For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data`
-value is made available as [UTF-8][rfc3629] encoded JSON text.
+`application/json;charset=utf-8`, the expectation is that the `data` value is
+made available as [UTF-8][rfc3629] encoded JSON text.
 
 ## 3. Kafka Message Mapping
 
@@ -118,16 +129,15 @@ particular content mode might be defined by an application, but are not defined
 here.
 
 The receiver of the event can distinguish between the two content modes by
-inspecting the `content-type` [Header][kafka-message-header] of the
-Kafka message. If the header is present and its value is prefixed with the
-CloudEvents media type `application/cloudevents`, indicating the use of a known
+inspecting the `content-type` [Header][kafka-message-header] of the Kafka
+message. If the header is present and its value is prefixed with the CloudEvents
+media type `application/cloudevents`, indicating the use of a known
 [event format](#14-event-formats), the receiver uses _structured_ mode,
 otherwise it defaults to _binary_ mode.
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
-event format that it cannot handle, for instance
-`application/cloudevents+avro`, it MAY still treat the event as binary and
-forward it to another party as-is.
+event format that it cannot handle, for instance `application/cloudevents+avro`,
+it MAY still treat the event as binary and forward it to another party as-is.
 
 When the `content-type` header value is not prefixed with the CloudEvents media
 type, knowing when the message ought to be parsed as a CloudEvent can be a
@@ -138,22 +148,25 @@ CloudEvents attributes as headers then it's probably a CloudEvent. However, as
 with all CloudEvent messages, if it does not adhere to all of the normative
 language of this specification then it is not a valid CloudEvent.
 
-If the `content-type` header is not present then the receiver uses
-_structured_ mode with the JSON event format.
+If the `content-type` header is not present then the receiver uses _structured_
+mode with the JSON event format.
 
 ### 3.1. Key Mapping
 
-The 'key' of the Kafka message is populated by a "Key Mapper" function, which
-might map the key directly from one of the CloudEvent's attributes, but might
-also use information from the application environment, from the CloudEvent's
-data or other sources.  
+Every implementation MUST, by default, map the user provided record key to the
+Kafka record key.
+
+The 'key' of the Kafka message MAY be populated by a "Key Mapper" function,
+which might map the key directly from one of the CloudEvent's attributes, but
+might also use information from the application environment, from the
+CloudEvent's data or other sources.
 
 The shape and configuration of the "Key Mapper" function is implementation
 specific.
 
-Every implementation SHOULD provide a default "Key Mapper" implementation that
+Every implementation SHOULD provide an opt-in "Key Mapper" implementation that
 maps the [Partitioning](extensions/partitioning.md) `partitionkey` attribute
-value to the 'key' of the Kafka message as-is, if present. 
+value to the 'key' of the Kafka message as-is, if present.
 
 A mapping function MUST NOT modify the CloudEvent. This means that the
 aforementioned `partitionkey` attribute MUST still be included with the
@@ -197,18 +210,18 @@ Examples:
 
 ##### 3.2.4.2 Property Values
 
-The value for each Kafka header is constructed from the respective
-header's Kafka representation, compliant with the [Kafka message
+The value for each Kafka header is constructed from the respective header's
+Kafka representation, compliant with the [Kafka message
 format][kafka-message-format] specification.
 
 #### 3.2.5 Example
 
-This example shows the _binary_ mode mapping of an event into the
-Kafka message. All other CloudEvents attributes
-are mapped to Kafka Header fields with prefix `ce_`.
+This example shows the _binary_ mode mapping of an event into the Kafka message.
+All other CloudEvents attributes are mapped to Kafka Header fields with prefix
+`ce_`.
 
-Mind that `ce_` here does refer to the event `data`
-content carried in the payload.
+Mind that `ce_` here does refer to the event `data` content carried in the
+payload.
 
 ```text
 ------------------ Message -------------------
@@ -255,12 +268,12 @@ content-type: application/cloudevents+json; charset=UTF-8
 
 #### 3.3.2. Event Data Encoding
 
-The chosen [event format](#14-event-formats) defines how all attributes,
-and `data`, are represented.
+The chosen [event format](#14-event-formats) defines how all attributes, and
+`data`, are represented.
 
-The event metadata and data are then rendered in accordance with the [event
-format](#14-event-formats) specification and the resulting data becomes the
-Kafka application [data](#21-data) section.
+The event metadata and data are then rendered in accordance with the
+[event format](#14-event-formats) specification and the resulting data becomes
+the Kafka application [data](#21-data) section.
 
 #### 3.3.3. Metadata Headers
 
