@@ -156,9 +156,6 @@ set-expression ::= "(" expression ("," expression)* ")"
 in-operation ::= expression not-operator? in-operator set-expression
 ```
 
-Note: the `set-expression` supports only compile-time set definition, hence the language doesn't include a _set_ type
-that can be manipulated at runtime.
-
 ### 2.4. Functions invocation
 
 CESQL supports N arity function invocation:
@@ -177,14 +174,16 @@ function-invocation ::= function-identifier "(" parameter-list? ")"
 
 ### 3.1. Type System
 
-The type system contains 3 types:
+The type system contains 3 _primitive_ types:
 
 - _String_: Sequence of Unicode characters.
 - _Integer_: A whole number in the range -2,147,483,648 to +2,147,483,647 inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
 - _Boolean_: A boolean value of "true" or "false".
 
-The [types defined in the CloudEvents specification][ce-type-system] URI, URI Reference and String are represented as
+The [types defined in the CloudEvents specification][ce-type-system] URI, URI Reference and Timestamp are represented as
 _String_.
+
+The type system also includes _Set_, which is an unordered collection of _String_s of arbitrary length. This type can be used in the `IN` operator.
 
 ### 3.2. CloudEvent context identifiers and types
 
@@ -284,11 +283,10 @@ assumed valid, e.g. `EXISTS id` MUST always return `true`.
 
 | Definition                                             | Semantics                                                                |
 | ------------------------------------------------------ | ------------------------------------------------------------------------ |
-| `x IN (y1, y2, ...): String x String^n -> Boolean`     | Returns `true` if `x` is an element included in the set of `yN` elements |
+| `x IN (y1, y2, ...): String x String^n -> Boolean`     | Returns `true` if `x` is an element included in the _Set_ of `yN` elements |
 | `x NOT IN (y1, y2, ...): String x String^n -> Boolean` | Same as `NOT (x IN set)`                                                 |
 
-The set of values `yN` can be of arbitrary length, and the matching is done using the same semantics of the equal `=`
-operator.
+The matching is done using the same semantics of the equal `=` operator.
 
 ### 3.5. Functions
 
@@ -330,7 +328,7 @@ An evaluation might return an error together with the return value, which the ev
 
 #### 3.7. Type casting
 
-CESQL supports both implicit and explicit type casting. Users can perform explicit type casting through the functions defined in the [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
+CESQL supports both implicit and explicit type casting among the _primitive_ types. Users can perform explicit type casting through the functions defined in the [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
 
 When input parameters types of operator/function doesn't match the signatures, the CESQL engine MUST try to perform an implicit cast.
 
