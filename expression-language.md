@@ -56,7 +56,8 @@ producer, in an intermediary, and it can be implemented using any technology sta
 The CloudEvents Expression Language assumes the input always includes, but it's not limited to, a single valid and type
 checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of the
 other input values. The evaluation of an expression observes the concept of [referential
-transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a boolean _true_ or _false_ and it might include an error.
+transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a boolean _true_ or
+_false_ and it might include an error.
 
 The CloudEvents Expression Language doesn't support the handling of the data field of the CloudEvent instances, due to
 its polymorphic nature and complexity. We strongly encourage users that needs this functionality to use other more
@@ -177,21 +178,24 @@ function-invocation ::= function-identifier "(" parameter-list? ")"
 The type system contains 3 _primitive_ types:
 
 - _String_: Sequence of Unicode characters.
-- _Integer_: A whole number in the range -2,147,483,648 to +2,147,483,647 inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
+- _Integer_: A whole number in the range -2,147,483,648 to +2,147,483,647 inclusive. This is the range of a signed,
+  32-bit, twos-complement encoding.
 - _Boolean_: A boolean value of "true" or "false".
 
 The [types defined in the CloudEvents specification][ce-type-system] URI, URI Reference and Timestamp are represented as
 _String_.
 
-The type system also includes _Set_, which is an unordered collection of _String_s of arbitrary length. This type can be used in the `IN` operator.
+The type system also includes _Set_, which is an unordered collection of \_String_s of arbitrary length. This type can
+be used in the `IN` operator.
 
 ### 3.2. CloudEvent context identifiers and types
 
 Each CloudEvent context attribute and extension MUST be addressable from an expression using its identifier, as defined
 by the spec. For example, using `id` in an expression will address to the CloudEvent [id attribute][ce-id-attribute].
 
-Unless otherwise specified, every attribute and extension MUST be represented by the _String_ type as its initial type. 
-Through explicit and implicit type casting, the user can convert the addressed value instances to _Integer_ and _Boolean_.
+Unless otherwise specified, every attribute and extension MUST be represented by the _String_ type as its initial type.
+Through explicit and implicit type casting, the user can convert the addressed value instances to _Integer_ and
+_Boolean_.
 
 When addressed an attribute not included in the input event, an empty _String_ MUST be assumed as value
 
@@ -224,34 +228,34 @@ Corresponds to the syntactic rule `unary-operation`:
 
 Corresponds to the syntactic rule `binary-operation`:
 
-| Definition                              | Semantics                                                                                       |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `x = y: Boolean x Boolean -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                           |
-| `x != y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                           |
-| `x <> y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                           |
-| `x AND y: Boolean x Boolean -> Boolean` | Returns the logical and of `x` and `y`                                                          |
-| `x OR y: Boolean x Boolean -> Boolean`  | Returns the logical or of `x` and `y`                                                           |
-| `x XOR y: Boolean x Boolean -> Boolean` | Returns the logical xor of `x` and `y`                                                          |
-| `x = y: Integer x Integer -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                           |
-| `x != y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                           |
-| `x <> y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                           |
-| `x < y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly lower than `y`                                                |
-| `x <= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is lower or equal to `y`                                                  |
-| `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly greater than `y`                                              |
-| `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater or equal to `y`                                                |
-| `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                              |
-| `x / y: Integer x Integer -> Integer`   | Returns the truncated division of `x` and `y`. Returns `0` if `y = 0` and raise an error          |
+| Definition                              | Semantics                                                                                                 |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `x = y: Boolean x Boolean -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                     |
+| `x != y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                     |
+| `x <> y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                     |
+| `x AND y: Boolean x Boolean -> Boolean` | Returns the logical and of `x` and `y`                                                                    |
+| `x OR y: Boolean x Boolean -> Boolean`  | Returns the logical or of `x` and `y`                                                                     |
+| `x XOR y: Boolean x Boolean -> Boolean` | Returns the logical xor of `x` and `y`                                                                    |
+| `x = y: Integer x Integer -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                     |
+| `x != y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                     |
+| `x <> y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                     |
+| `x < y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly lower than `y`                                                          |
+| `x <= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is lower or equal to `y`                                                            |
+| `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly greater than `y`                                                        |
+| `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater or equal to `y`                                                          |
+| `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                                        |
+| `x / y: Integer x Integer -> Integer`   | Returns the truncated division of `x` and `y`. Returns `0` if `y = 0` and raise an error                  |
 | `x % y: Integer x Integer -> Integer`   | Returns the remainder of the truncated division of `x` and `y`. Returns `0` if `y = 0` and raise an error |
-| `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                  |
-| `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                           |
-| `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                           |
-| `x != y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                           |
-| `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                           |
+| `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                            |
+| `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                                     |
+| `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                                     |
+| `x != y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                     |
+| `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                     |
 
 The modulo and divisions MUST follow the [truncated divisions definition][modulo-operation-wiki], that is:
 
-* The remainder of the modulo MUST have the same sign as the dividend
-* The quotient MUST be rounded towards zero _truncating_ the decimal part.
+- The remainder of the modulo MUST have the same sign as the dividend
+- The quotient MUST be rounded towards zero _truncating_ the decimal part.
 
 #### 3.4.3. Like operator
 
@@ -281,10 +285,10 @@ assumed valid, e.g. `EXISTS id` MUST always return `true`.
 
 #### 3.4.5. In operator
 
-| Definition                                             | Semantics                                                                |
-| ------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Definition                                             | Semantics                                                                  |
+| ------------------------------------------------------ | -------------------------------------------------------------------------- |
 | `x IN (y1, y2, ...): String x String^n -> Boolean`     | Returns `true` if `x` is an element included in the _Set_ of `yN` elements |
-| `x NOT IN (y1, y2, ...): String x String^n -> Boolean` | Same as `NOT (x IN set)`                                                 |
+| `x NOT IN (y1, y2, ...): String x String^n -> Boolean` | Same as `NOT (x IN set)`                                                   |
 
 The matching is done using the same semantics of the equal `=` operator.
 
@@ -328,32 +332,38 @@ An evaluation might return an error together with the return value, which the ev
 
 #### 3.7. Type casting
 
-CESQL supports both implicit and explicit type casting among the _primitive_ types. Users can perform explicit type casting through the functions defined in the [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
+CESQL supports both implicit and explicit type casting among the _primitive_ types. Users can perform explicit type
+casting through the functions defined in the [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
 
-When input parameters types of operator/function doesn't match the signatures, the CESQL engine MUST try to perform an implicit cast.
+When input parameters types of operator/function doesn't match the signatures, the CESQL engine MUST try to perform an
+implicit cast.
 
-Implicit casts must follow the same semantics of their equivalent explicit cast functions, as defined in [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
+Implicit casts must follow the same semantics of their equivalent explicit cast functions, as defined in
+[Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
 
-We refer in this paragraph to **ambiguous** operator/function as an operator/function that is overloaded with another operator/function definition with same symbol/name and arity but different parameter types. 
+We refer in this paragraph to **ambiguous** operator/function as an operator/function that is overloaded with another
+operator/function definition with same symbol/name and arity but different parameter types.
 
 A CESQL engine MUST apply the following implicit casting rules in order:
 
 1. If the operator/function is unary (input parameter `x`):
-    1. If it's not ambiguous, cast `x` to the target type
-    1. If it's ambiguous, raise an error and the cast result is undefined
+   1. If it's not ambiguous, cast `x` to the target type
+   1. If it's ambiguous, raise an error and the cast result is undefined
 1. If the operator is binary (left parameter `x` and right parameter `y`):
-    1. If it's not ambiguous, cast `x` and `y` to the target types
-    1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator using the `y` type as the right parameter type:
-        1. If such operator definition exists and is unique, cast `x` to the type of the left parameter
-        2. Otherwise, raise an error and the cast results are undefined
+   1. If it's not ambiguous, cast `x` and `y` to the target types
+   1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator
+      using the `y` type as the right parameter type:
+      1. If such operator definition exists and is unique, cast `x` to the type of the left parameter
+      2. Otherwise, raise an error and the cast results are undefined
 1. If the function is n-ary with `n > 1`:
-    1. If it's not ambiguous, cast all the parameters to the target type
-    1. If it's ambiguous, raise an error and the cast results are undefined
+   1. If it's not ambiguous, cast all the parameters to the target type
+   1. If it's ambiguous, raise an error and the cast results are undefined
 1. If the operator is n-ary with `n > 2`:
-    1. If it's not ambiguous, cast all the parameters to the target type
-    1. If it's ambiguous, raise an error and the cast results are undefined
+   1. If it's not ambiguous, cast all the parameters to the target type
+   1. If it's ambiguous, raise an error and the cast results are undefined
 
-For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a _Boolean_, this expression:
+For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a
+_Boolean_, this expression:
 
 ```
 MY_STRING_PREDICATE(sequence + 10)
@@ -372,8 +382,9 @@ Another example, in this expression `sequence` is casted to _Integer_:
 sequence = 10
 ```
 
-`=` is arity 2 ambiguous operator, because it's defined for `String x String`, `Boolean x Boolean` and `Integer x Integer`. 
-Because the right parameter of the operator is an _Integer_ and there is only one `=` definition which uses the type _Integer_ as right parameter, `sequence` is casted to _Integer_.
+`=` is arity 2 ambiguous operator, because it's defined for `String x String`, `Boolean x Boolean` and
+`Integer x Integer`. Because the right parameter of the operator is an _Integer_ and there is only one `=` definition
+which uses the type _Integer_ as right parameter, `sequence` is casted to _Integer_.
 
 ## 4. Examples
 
