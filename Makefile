@@ -17,10 +17,6 @@ verify:
 		nats-protocol-binding.md \
 		protobuf-format.md \
 		spec.md \
-		websockets-protocol-binding.md \
-		\
-		discovery.md \
-		pagination.md \
-		subscriptions-api.md 
+		websockets-protocol-binding.md
 	@echo Running the doc phrase checker:
 	@tools/verify-docs.sh -v .
