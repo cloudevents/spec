@@ -292,24 +292,15 @@ checking is out of scope of the specification and not recommended.
 ### data
 
 Event consumers can use the `datacontenttype` attribute of a CloudEvent to
-determine what the type is, for example `application/json` or `image/png`. There
-are no restrictions on the encoding format of data that may be included with a
-CloudEvent. Event consumers can expect that the event data is transported
-unaltered due to any encoding used by an SDK to facilitate transport over a
-given protocol. When a CloudEvent is sent by an event producer over a supported
-protocol, the event `data` may be encoded in Base64 form for transmission.
-However, on the receiving end of the transmission this data will be decoded into
-its original unaltered form. CloudEvent SDKs are responsible for encoding and
-decoding this data.
-
-Consider an example. An IoT device is creating CloudEvents with JSON expressed
-as a sequence of bytes, i.e. in binary form. It may set the `datacontenttype`
-attribute on the event to `application/json` even though the data itself is in
-binary form. A receiver of this event should expect to find the data attribute
-still in its original binary form even after having been transmitted over the
-wire. It is the responsibility of the event consumer to convert this data from
-its binary form into JSON or other data type as specified by the
-`datacontenttype` attribute.
+determine the type of `data`, for example `application/json` or `image/png`.
+There are no restrictions on the encoding format of data that may be included
+with a CloudEvent. Event consumers can expect that the event data is
+transported unaltered due to any encoding used by an SDK to facilitate
+transport over a given protocol.  CloudEvent SDKs should avoid modifying the
+event data in any way.  This includes actions such as syntax reformatting.
+Even though it might appear to not influence the semantic meaning of the
+information, the SDK can not be sure if the original format is meaningful to
+the consumer's processing.
 
 ## CloudEvent Attribute Extensions
 
