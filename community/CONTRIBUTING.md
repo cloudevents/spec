@@ -29,7 +29,8 @@ set of changes you'd like to see. See the
 [Spec Formatting Conventions](#spec-formatting-conventions) section for the
 guidelines we follow for how documents are formatted.
 
-Please use [conventional commits](https://conventionalcommits.org)
+Please use [conventional commits](https://conventionalcommits.org) when writing
+commit messages.
 
 Each PR must be signed per the following section.
 
