@@ -535,7 +535,8 @@ compliant Discovery Endpoint implementations.
 #### `GET /services`
 
 This MUST return an array of zero or more Services. The array MUST contain all
-Services available via this Discovery Enpoint.
+Services available via this Discovery Enpoint. Any Service previously returned
+to a client that does not appear in this result can be assumed to be deleted.
 
 In the case of `200 OK`, the response format MUST adhere to the following:
 
