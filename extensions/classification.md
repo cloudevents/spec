@@ -6,6 +6,8 @@ Organisations will typically have their own internal Information Management poli
 
 This extension is not opinionated on how this classification will be used and does for example imply different encryption schemes etc.
 
+For Sainsburys-tech colleagues, additional information can be found on our internal confluence under `/display/IC/Information+Classification+Extension`, which for example includes the values from our own classification policies.
+
 ## Attributes
 
 ### classification
