@@ -132,6 +132,12 @@ Service:
   "url": "[unique URL to this service]",
   "description": "[human string]", ?
   "docsurl": "[URL reference for human documentation]", ?
+  "deprecated": { ?
+	"effectivetime": "[RFC3339 timestamp of when the service will enter a deprecated state]", ?
+    "removaltime": "[RFC3339 timestamp of when service will be removed]", ?
+    "alternative": "[URL to possible alternative service]", ?
+    "docsurl": "[URL reference to additional information]" ?
+  },
   "specversions": [ "[ce-specversion value]" + ],
   "subscriptionurl": "[URL to which the Subscribe request will be sent]",
   "subscriptionconfig": { ?
@@ -307,6 +313,57 @@ The following sections define the attributes that appear in a Service entity.
   - If present, MUST be a non-empty absolute URI
 - Examples:
   - `http://cloud.example.com/docs/blobstorage`
+
+##### deprecated
+
+- Type: Object containing 2 properties:
+  - effectivetime<br>
+    An OPTIONAL property indicating the time when the Service entered, or will
+	enter, a deprecated state. The date MAY be in the past or future.
+	If present, this MUST be an [RFC3339][rfc3339] timestamp.
+
+  - removaltime<br>
+    An OPTIONAL property indicating the time when the Service MAY be removed.
+    The Service MUST NOT be deleted before this time. If this property is not
+    present then client can not make any assumption as to when the Service
+    might be removed. Note: as with most Service properties, this property
+    is mutable. If present, this MUST be an [RFC3339][rfc3339] timestamp.
+
+  - alternative<br>
+    An OPTIONAL property specifying the URL to an alternative Service the
+    client can consider as a replacement for this Service. There is no
+    guarantee that the referenced Service is an exact replacement, rather the
+    client is expected to investigate the Service to determine if it is
+    appropriate.
+
+  - docsurl<br>
+    An OPTIONAL property specifying the URL to additional information about
+	the deprecation of the Service. This specification does not mandate any
+	particular format or information, however some possibilities include:
+	reasons for the deprecation or additional information about likely
+	alternative Services.
+
+- Description: Presence of this property (even without any nested properties)
+  indicates that the Service is, or will be, deprecated and will be removed at
+  some point in the future.
+
+  This specification makes no statement as to whether any existing subscription
+  will still be valid and usable after this date. However, it is expected that
+  new subscription requests after the Service is deleted will likely be
+  rejected.
+
+  Note that a Discovery Endpoint is not mandated to use this attribute in
+  advance of removing a Service, but is it RECOMMENDED that they do so.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `"deprecated": {}`
+  - ```
+    "deprecated": {
+      "removaltime": "2030-12-19T00:00:00-00:00",
+      "alternative": "https://discovery.example.com/services/123"
+    }
+    ````
 
 ##### specversions
 
@@ -1085,3 +1142,5 @@ Additionally, implementations MAY choose different authentication schemes for
 each of the APIs defined in this specifications. For example, a valid choice
 might be to allow the "features" APIs to not mandate any authentication at all,
 while the "discovery" APIs might be restricted to authorized users.
+
+[rfc3339]: https://tools.ietf.org/html/rfc3339
