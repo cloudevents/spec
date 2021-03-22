@@ -1,16 +1,16 @@
 # Information Classification
 
 As part of ISO27001 control objective A8.2 aims to address 'Information
-Classification' whereby information and data in an organisation is properly
-managed, including classifcation in relation to sensitivity of the data,
-legislation etc. A.8.2.2 requires that electronic assets should be 'labelled',
-and this extension allows the `data` of cloudevents to be appropriately labelled
+Classification' whereby information and data in an organization is properly
+managed, including classification in relation to sensitivity of the data,
+legislation etc. A.8.2.2 requires that electronic assets should be 'labeled',
+and this extension allows the `data` of cloudevents to be appropriately labeled
 with the `classification` of the event being shared.
 
-Organisations will typically have their own internal Information Management
+organizations will typically have their own internal Information Management
 policies and standards that might address these control objectives differently,
-however this extension should provide a consistent framework for labelling
-events, where organisation can use their own internal values for
+however this extension should provide a consistent framework for labeling
+events, where organization can use their own internal values for
 `classification`.
 
 This extension is not opinionated on how this classification will be used and
@@ -33,7 +33,7 @@ which for example includes the values from our own classification policies.
 
 # Examples
 
-The following example shows a CloudEvent the producer has labelled as PUBLIC:
+The following example shows a CloudEvent the producer has labeled as PUBLIC:
 
 ```JSON
 {
