@@ -95,7 +95,7 @@ INT(hop) < INT(ttl) AND INT(hop) < 1000
 The root of the expression is the `expression` rule:
 
 ```ebnf
-expression ::= value-identifier | literal | unary-operation | binary-operation | function-invocation | ( "(" expression ")" )
+expression ::= value-identifier | boolean-literal | unary-operation | binary-operation | function-invocation | like-operation | exists-operation | in-operation | ( "(" expression ")" )
 ```
 
 Nested expressions MUST be correctly parenthesized.
@@ -134,7 +134,7 @@ operators.
 
 ```ebnf
 not-operator = "NOT"
-unary-logical-operator = not-operator
+unary-logic-operator = not-operator
 binary-logic-operator = "AND" | "OR" | "XOR"
 
 unary-numeric-operator = "-"
@@ -145,7 +145,7 @@ like-operator = "LIKE"
 exists-operator = "EXISTS"
 in-operator = "IN"
 
-unary-operation ::= (unary-numeric-operator | unary-logical-operator) expression
+unary-operation ::= (unary-numeric-operator | unary-logic-operator) expression
 
 binary-operation ::= expression (binary-comparison-operator | binary-numeric-arithmetic-operator | binary-logic-operator) expression
 
