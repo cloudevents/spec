@@ -11,9 +11,9 @@ expression
     | functionIdentifier LR_BRACKET functionParameterList RR_BRACKET #functionInvocationExpression
     | unaryLogicOperator expression #unarylogicExpression
     | unaryNumericOperator expression # unaryNumericExpression
-    | left=expression binaryComparisonOperator right=expression #binaryComparisonExpression
-    | left=expression binaryLogicOperator right=expression #binaryLogicExpression
-    | left=expression binaryNumericOperator right=expression #binaryNumericExpression
+    | expression binaryComparisonOperator expression #binaryComparisonExpression
+    | expression binaryLogicOperator expression #binaryLogicExpression
+    | expression binaryNumericOperator expression #binaryNumericExpression
     | expression notOperator? likeOperator stringLiteral #likeExpression
     | existsOperator identifier #existsExpression
     | expression notOperator? inOperator setExpression #inExpression
