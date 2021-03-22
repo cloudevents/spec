@@ -6,25 +6,39 @@ import CESQLLexer;
 cesql: expression EOF;
 
 // Structure of operations, function invocations and expression
-expression
-    : functionIdentifier LR_BRACKET functionParameterList RR_BRACKET #functionInvocationExpression
-    | unaryLogicOperator expression #unarylogicExpression
+functionInvocation
+    : functionIdentifier LR_BRACKET functionParameterList RR_BRACKET
+    ;
+
+unaryOperation
+    : unaryLogicOperator expression #unarylogicExpression
     | unaryNumericOperator expression # unaryNumericExpression
-    | expression binaryLogicOperator expression #binaryLogicExpression
-    | expression binaryComparisonOperator expression #binaryComparisonExpression
-    | expression binaryNumericOperator expression #binaryNumericExpression
+    ;
+
+expression
+    : functionInvocation #functionInvocationExpression
+    | unaryOperation #unaryExpression
+    // LIKE, EXISTS and IN takes precedence over all the other operators
     | expression notOperator? likeOperator stringLiteral #likeExpression
     | existsOperator identifier #existsExpression
     | expression notOperator? inOperator setExpression #inExpression
+    // Numeric operations
+    | expression (STAR | DIVIDE | MODULE) expression #binaryMultiplicativeExpression
+    | expression (PLUS | MINUS) expression #binaryAdditiveExpression
+    // Comparison operations
+    | expression binaryComparisonOperator expression #binaryComparisonExpression
+    // Logic operations
+    |<assoc=right> expression binaryLogicOperator expression #binaryLogicExpression
+    // Subexpressions and atoms
     | LR_BRACKET expression RR_BRACKET #subExpression
     | atom #atomExpression
     ;
 
 atom
-    : booleanLiteral #booleanLiteralExpression
-    | integerLiteral #integerLiteralExpression
-    | stringLiteral #stringLiteralExpression
-    | identifier #identifierExpression
+    : booleanLiteral #booleanAtom
+    | integerLiteral #integerAtom
+    | stringLiteral #stringAtom
+    | identifier #identifierAtom
     ;
 
 // Identifiers
