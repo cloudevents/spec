@@ -7,8 +7,7 @@ cesql: expression EOF;
 
 // Structure of operations, function invocations and expression
 expression
-    : LR_BRACKET expression RR_BRACKET #subExpression
-    | functionIdentifier LR_BRACKET functionParameterList RR_BRACKET #functionInvocationExpression
+    : functionIdentifier LR_BRACKET functionParameterList RR_BRACKET #functionInvocationExpression
     | unaryLogicOperator expression #unarylogicExpression
     | unaryNumericOperator expression # unaryNumericExpression
     | expression binaryLogicOperator expression #binaryLogicExpression
@@ -17,7 +16,12 @@ expression
     | expression notOperator? likeOperator stringLiteral #likeExpression
     | existsOperator identifier #existsExpression
     | expression notOperator? inOperator setExpression #inExpression
-    | booleanLiteral #booleanLiteralExpression
+    | LR_BRACKET expression RR_BRACKET #subExpression
+    | atom #atomExpression
+    ;
+
+atom
+    : booleanLiteral #booleanLiteralExpression
     | integerLiteral #integerLiteralExpression
     | stringLiteral #stringLiteralExpression
     | identifier #identifierExpression
