@@ -244,7 +244,7 @@ Corresponds to the syntactic rule `binary-operation`:
 | `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly greater than `y`                                                        |
 | `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater or equal to `y`                                                          |
 | `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                                        |
-| `x / y: Integer x Integer -> Integer`   | Returns the truncated division of `x` and `y`. Returns `0` if `y = 0` and raise an error                  |
+| `x / y: Integer x Integer -> Integer`   | Returns the truncated division of `x` and `y`. Returns `+2147483647` (max value of `Integer` type) if `y = 0` and `x` is positive, `-2147483648` (min value of `Integer` type) if `y = 0` and `x` is negative, and in both cases it raise an error                  |
 | `x % y: Integer x Integer -> Integer`   | Returns the remainder of the truncated division of `x` and `y`. Returns `0` if `y = 0` and raise an error |
 | `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                            |
 | `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                                     |
