@@ -58,11 +58,16 @@ LIKE: 'LIKE';
 EXISTS: 'EXISTS';
 IN: 'IN';
 
+// Booleans
+
+TRUE: 'TRUE';
+FALSE: 'FALSE';
+
 // Literals
 
-STRING_LITERAL:                      DQUOTA_STRING | SQUOTA_STRING;
+DQUOTED_STRING_LITERAL:                      DQUOTA_STRING;
+SQUOTED_STRING_LITERAL:                      SQUOTA_STRING;
 INTEGER_LITERAL:                     INT_DIGIT+;
-BOOLEAN_LITERAL:                     'TRUE'| 'FALSE';
 
 // Identifiers
 

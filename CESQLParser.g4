@@ -11,7 +11,7 @@ functionInvocation
     ;
 
 unaryOperation
-    : unaryLogicOperator expression #unarylogicExpression
+    : unaryLogicOperator expression #unaryLogicExpression
     | unaryNumericOperator expression # unaryNumericExpression
     ;
 
@@ -48,8 +48,8 @@ functionIdentifier: FUNCTION_IDENTIFIER;
 
 // Literals
 
-booleanLiteral: BOOLEAN_LITERAL;
-stringLiteral: STRING_LITERAL;
+booleanLiteral: (TRUE | FALSE);
+stringLiteral: (DQUOTED_STRING_LITERAL | SQUOTED_STRING_LITERAL);
 integerLiteral: INTEGER_LITERAL;
 
 // Operators
@@ -68,10 +68,6 @@ unaryLogicOperator
 
 binaryComparisonOperator
     : (EQUAL | EXCLAMATION EQUAL | LESS GREATER | GREATER EQUAL | LESS EQUAL | LESS | GREATER)
-    ;
-
-binaryNumericOperator
-    : (STAR | DIVIDE | MODULE | PLUS | MINUS)
     ;
 
 binaryLogicOperator
