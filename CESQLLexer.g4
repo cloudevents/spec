@@ -11,7 +11,7 @@ SPACE:                               [ \t\r\n]+    -> skip;
 
 // Fragments for Literal primitives
 
-fragment ID_LITERAL:                 [a-z0-9]+;
+fragment ID_LITERAL:                 [a-zA-Z0-9]+;
 fragment DQUOTA_STRING:              '"' ( '\\'. | '""' | ~('"'| '\\') )* '"';
 fragment SQUOTA_STRING:              '\'' ('\\'. | '\'\'' | ~('\'' | '\\'))* '\'';
 fragment INT_DIGIT:                  [0-9];
