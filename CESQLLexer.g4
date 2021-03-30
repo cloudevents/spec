@@ -15,7 +15,7 @@ fragment ID_LITERAL:                 [a-zA-Z0-9]+;
 fragment DQUOTA_STRING:              '"' ( '\\'. | '""' | ~('"'| '\\') )* '"';
 fragment SQUOTA_STRING:              '\'' ('\\'. | '\'\'' | ~('\'' | '\\'))* '\'';
 fragment INT_DIGIT:                  [0-9];
-fragment FN_LITERAL:                 [A-Z][A-Z_]*;
+fragment FN_LITERAL:                 [A-Z] [A-Z_]*;
 
 // Constructors symbols
 
@@ -48,12 +48,12 @@ MINUS:                               '-';
 // - Comparison
 
 EQUAL:                        '=';
+NOT_EQUAL:                    '!=';
 GREATER:                      '>';
 GREATER_OR_EQUAL:             '>=';
 LESS:                         '<';
 LESS_GREATER:                 '<>';
 LESS_OR_EQUAL:                '<=';
-EXCLAMATION:                  '!';
 
 // Like, exists, in
 
@@ -70,9 +70,9 @@ FALSE: 'FALSE';
 
 DQUOTED_STRING_LITERAL:                      DQUOTA_STRING;
 SQUOTED_STRING_LITERAL:                      SQUOTA_STRING;
-INTEGER_LITERAL:                     INT_DIGIT+;
+INTEGER_LITERAL:                             INT_DIGIT+;
 
 // Identifiers
 
-IDENTIFIER:                                  ID_LITERAL;
+IDENTIFIER:                                 ID_LITERAL;
 FUNCTION_IDENTIFIER:                        FN_LITERAL;
