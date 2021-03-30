@@ -11,24 +11,24 @@ functionInvocation
     ;
 
 unaryOperation
-    : unaryLogicOperator expression #unaryLogicExpression
-    | unaryNumericOperator expression # unaryNumericExpression
+    : NOT expression #unaryLogicExpression
+    | MINUS expression # unaryNumericExpression
     ;
 
 expression
     : functionInvocation #functionInvocationExpression
     | unaryOperation #unaryExpression
     // LIKE, EXISTS and IN takes precedence over all the other operators
-    | expression notOperator? likeOperator stringLiteral #likeExpression
-    | existsOperator identifier #existsExpression
-    | expression notOperator? inOperator setExpression #inExpression
+    | expression NOT? LIKE stringLiteral #likeExpression
+    | EXISTS identifier #existsExpression
+    | expression NOT? IN setExpression #inExpression
     // Numeric operations
     | expression (STAR | DIVIDE | MODULE) expression #binaryMultiplicativeExpression
     | expression (PLUS | MINUS) expression #binaryAdditiveExpression
     // Comparison operations
-    | expression binaryComparisonOperator expression #binaryComparisonExpression
+    | expression (EQUAL | EXCLAMATION EQUAL | LESS_GREATER | GREATER_OR_EQUAL | LESS_OR_EQUAL | LESS | GREATER) expression #binaryComparisonExpression
     // Logic operations
-    |<assoc=right> expression binaryLogicOperator expression #binaryLogicExpression
+    |<assoc=right> expression (AND | OR | XOR) expression #binaryLogicExpression
     // Subexpressions and atoms
     | LR_BRACKET expression RR_BRACKET #subExpression
     | atom #atomExpression
@@ -52,40 +52,6 @@ booleanLiteral: (TRUE | FALSE);
 stringLiteral: (DQUOTED_STRING_LITERAL | SQUOTED_STRING_LITERAL);
 integerLiteral: INTEGER_LITERAL;
 
-// Operators
-
-unaryNumericOperator
-    : MINUS
-    ;
-
-notOperator
-    : NOT
-    ;
-
-unaryLogicOperator
-    : notOperator
-    ;
-
-binaryComparisonOperator
-    : (EQUAL | EXCLAMATION EQUAL | LESS GREATER | GREATER EQUAL | LESS EQUAL | LESS | GREATER)
-    ;
-
-binaryLogicOperator
-    : (AND | OR | XOR)
-    ;
-
-likeOperator
-    : LIKE
-    ;
-
-existsOperator
-    : EXISTS
-    ;
-
-inOperator
-    : IN
-    ;
-
 // Functions
 
 functionParameter
@@ -99,5 +65,5 @@ functionParameterList
 // Sets
 
 setExpression
-    : expression ( COMMA expression )* // Non-empty set is not allowed
+    : expression ( COMMA expression )* // Empty sets are not allowed
     ;

@@ -49,7 +49,10 @@ MINUS:                               '-';
 
 EQUAL:                        '=';
 GREATER:                      '>';
+GREATER_OR_EQUAL:             '>=';
 LESS:                         '<';
+LESS_GREATER:                 '<>';
+LESS_OR_EQUAL:                '<=';
 EXCLAMATION:                  '!';
 
 // Like, exists, in
