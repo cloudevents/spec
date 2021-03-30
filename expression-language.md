@@ -362,6 +362,8 @@ A CESQL engine MUST apply the following implicit casting rules in order:
 1. If the operator is n-ary with `n > 2`:
    1. If it's not ambiguous, cast all the parameters to the target type
    1. If it's ambiguous, raise an error and the cast results are undefined
+   
+Note that no implicit casting rules are defined for the `EXISTS` and `IN` operator.
 
 For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a
 _Boolean_, this expression:
