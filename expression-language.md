@@ -318,7 +318,7 @@ The following tables show the built-in functions that MUST be supported by a CES
 | `TRIM(x): String -> String`                                | Returns `x` with leading and trailing trimmed whitespaces                                                                                                                                                                  |
 | `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raise an error                                                                                   |
 | `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raise an error                                                                                     |
-| `SUBSTRING(x, b, e): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `b` (included) and ending with index `e` (excluded). Returns `SUBSTRING(x, b, LENGTH(x))` if `LENGTH(x) < e`. Returns `x` and raise an error if `b < 0 OR e < 0 OR e < b` |
+| `SUBSTRING(x, b, e): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `b` (included) and ending with index `e` (excluded). Returns `SUBSTRING(x, b, LENGTH(x))` if `LENGTH(x) < e`. Returns `SUBSTRING(x, 0, e)` if `b < 0`. Returns `SUBSTRING(x, 0, LENGTH(x))` if `LENGTH(x) < e` and `b < 0`. Returns `x` and raise an error if `e < 0 OR e < b` |
 
 ### 3.6. Evaluation of the expression
 
