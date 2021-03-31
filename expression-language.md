@@ -314,6 +314,8 @@ But the followings are invalid, so the engine MUST reject them:
 * `ABC(x...): String x String x String -> Integer`: Arity is variable, but there are no initial fixed arguments
 * `ABC(x, y, z): String x String x String -> Integer`: Arity is equal to three
 
+When a function invocation cannot be dispatched, the return value is undefined.
+
 The following tables show the built-in functions that MUST be supported by a CESQL evaluator.
 
 #### 3.5.1. Casting and type checking
