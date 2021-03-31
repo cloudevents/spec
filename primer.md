@@ -18,7 +18,7 @@ This document is a working draft.
 - [CloudEvents Concepts](#cloudevents-concepts)
 - [Design Goals](#design-goals)
 - [Architecture](#architecture)
-- [Versioning of Attributes](#versioning-of-attributes)
+- [Versioning of CloudEvents](#versioning-of-cloudevents)
 - [CloudEvent Attributes](#cloudevent-attributes)
 - [CloudEvent Attribute Extensions](#cloudevent-attribute-extensions)
 - [Creating CloudEvents](#creating-cloudevents)
@@ -238,23 +238,70 @@ there are errors during the processing of a CloudEvent, the software
 encountering the error is encouraged to use the normal protocol-level error
 reporting to report them.
 
-## Versioning of Attributes
+## Versioning of CloudEvents
 
-For certain CloudEvents attributes, the entity or data model referenced by its
-value might change over time. For example, `dataschema` might reference one
-particular version of a schema document. Often these attribute values will then
-distinguish each variant by including some version-specific string as part of
-its value. For example, a version number (`v1`, `v2`), or a date (`2018-01-01`)
-might be used.
+For many CloudEvents, the schema of the data within the event might
+change over time. The CloudEvents specification does not mandate any
+particular pattern to be used, or even the use or consideration of
+versioning at all. This decision is up to each event producer.
 
-The CloudEvents specification does not mandate any particular pattern to be
-used, or even the use of version strings at all. This decision is up to each
-event producer. However, when a version-specific string is included, care should
-be taken whenever its value changes as event consumers might be reliant on the
-existing value and thus a change could be interpreted as a "breaking change".
-Some form of communication between producers and consumers should be established
-to ensure the event consumers know what possible values might be used. In
-general, this is true for all CloudEvents attributes as well.
+However, event producers are encouraged to consider how they might
+evolve their schema without breaking consumers. Two specific
+context attributes are particularly important in this respect, but
+differ in expected usage: `type` and `dataschema`. The differences
+between these attributes with respect to versioning are described
+below.
+
+Event producers are encouraged to consider versioning from the
+outset, before first declaring a particular CloudEvent to be
+"stable". Documentation of the chosen versioning scheme, including
+the rationale behind it, is likely to be appreciated by consumers.
+
+### The role of the `type` attribute within versioning
+
+The `type` attribute is expected to be the primary means by which
+consumers identify the type of event that they receive. This could
+be achieved by subscribing to a specific CloudEvent type, or by
+filtering all received CloudEvents by type locally. But consumers
+who have identified a CloudEvent type will generally expect the data
+within that type to only change in backwardly-compatible ways,
+unless clearly indicated otherwise. The precise meaning of
+"backwardly-compatible" will vary by data content type.
+
+When a CloudEvent's data changes in a backwardly-compatible way, the
+value of the `type` attribute should generally stay the same.
+
+When a CloudEvent's data changes in a backwardly-incompatible way,
+the value of the `type` attribute should generally change. The event
+producer is encouraged to produce both the old event and the new
+event for some time (potentially forever) in order to avoid
+disrupting consumers.
+
+When considering the value of the `type` attribute, event producers
+may choose any versioning scheme they wish, such as a version number
+(`v1`, `v2`) or a date (`2018-01-01`) as part of the value. They may
+also use the `type` attribute to convey that a particular version is
+not yet stable, and may go through breaking changes. Alternatively,
+they may choose not to include a version in the type value at all.
+
+### The role of the `dataschema` attribute within versioning
+
+The `dataschema` attribute is expected to be informational, largely
+to be used during development and by tooling that is able to provide
+diagnostic information over arbitrary CloudEvents with a data
+content type understood by that tooling.
+
+When a CloudEvent's data changes in a backwardly-compatible way, the
+value of the `dataschema` attribute should generally change to
+reflect that. An alternative approproach is for the URI to stay the
+same, but for the content served from that URI to change to reflect
+the updated schema. The latter approach may be simpler for event
+producers to implement, but is less convenient for consumers who may
+wish to cache the schema content by URI.
+
+When a CloudEvent's data changes in a backwardly-incompatible way,
+the value of `dataschema` attribute should generally change,
+along with the `type` attribute as described above.
 
 ## CloudEvent Attributes
 
