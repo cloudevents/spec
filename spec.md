@@ -324,7 +324,7 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   routing, observability, policy enforcement, etc. The format of this is
   producer defined and might include information such as the version of the
   `type` - see
-  [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
+  [Versioning of CloudEvents in the Primer](primer.md#versioning-of-cloudevents)
   for more information.
 - Constraints:
   - REQUIRED
@@ -381,7 +381,7 @@ on the definition of OPTIONAL.
 - Type: `URI`
 - Description: Identifies the schema that `data` adheres to. Incompatible
   changes to the schema SHOULD be reflected by a different URI. See
-  [Versioning of Attributes in the Primer](primer.md#versioning-of-attributes)
+  [Versioning of CloudEvents in the Primer](primer.md#versioning-of-cloudevents)
   for more information.
 - Constraints:
   - OPTIONAL
