@@ -6,12 +6,8 @@ import CESQLLexer;
 cesql: expression EOF;
 
 // Structure of operations, function invocations and expression
-functionInvocation
-    : functionIdentifier functionParameterList
-    ;
-
 expression
-    : functionInvocation #functionInvocationExpression
+    : functionIdentifier functionParameterList #functionInvocationExpression
     // unary operators are the highest priority
     | NOT expression #unaryLogicExpression
     | MINUS expression # unaryNumericExpression
@@ -40,8 +36,12 @@ atom
 
 // Identifiers
 
-identifier: IDENTIFIER;
-functionIdentifier: FUNCTION_IDENTIFIER;
+identifier
+    : (IDENTIFIER | IDENTIFIER_WITH_NUMBER)
+    ;
+functionIdentifier
+    : (IDENTIFIER | FUNCTION_IDENTIFIER_WITH_UNDERSCORE)
+    ;
 
 // Literals
 

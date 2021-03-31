@@ -74,5 +74,6 @@ INTEGER_LITERAL:                             INT_DIGIT+;
 
 // Identifiers
 
-IDENTIFIER:                                 ID_LITERAL;
-FUNCTION_IDENTIFIER:                        FN_LITERAL;
+IDENTIFIER:                                 [a-zA-Z]+;
+IDENTIFIER_WITH_NUMBER: [a-zA-Z0-9]+;
+FUNCTION_IDENTIFIER_WITH_UNDERSCORE:                        [A-Z] [A-Z_]*;
