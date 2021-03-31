@@ -324,8 +324,7 @@ The following tables show the built-in functions that MUST be supported by a CES
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `INT(x): String -> Integer`     | Returns `x` converted to _Integer_, if possible. Otherwise, returns `0` and raise an error                                       |
 | `BOOL(x): String -> Boolean`    | Returns `true` if the String value is `"true"`, `false` if the String value is `"false"`, otherwise `false` and returns an error |
-| `STRING(x): Integer -> String`  | Returns `x` converted to _String_                                                                                                |
-| `STRING(x): Boolean -> String`  | Returns `x` converted to _String_                                                                                                |
+| `STRING(x): Any -> String`  | Returns `x` converted to _String_                                                                                                |
 | `IS_BOOL(x): String -> Boolean` | Returns `true` if `x` can be converted to _Boolean_ without raising an error, `false` otherwise                                  |
 | `IS_INT(x): String -> Boolean`  | Returns `true` if `x` can be converted to _Integer_ without raising an error, `false` otherwise                                  |
 
