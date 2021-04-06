@@ -38,7 +38,7 @@ This document is a working draft.
 
 ## 1. Introduction
 
-CloudEvents SQL expressions (also known as CESQL) allow matching of CloudEvent attributes against complex expressions
+CloudEvents SQL expressions (also known as CESQL) allow computing values and matching of CloudEvent attributes against complex expressions
 that lean on the syntax of Structured Query Language (SQL) `WHERE` clauses. Using SQL-derived expressions for message
 filtering is in widespread implementation use because the Java Message Service (JMS) message selector syntax also leans
 on SQL. Note that neither the SQL standard (ISO 9075) nor the JMS standard nor any other SQL dialect are used as a
@@ -56,8 +56,7 @@ producer, in an intermediary, and it can be implemented using any technology sta
 The CloudEvents Expression Language assumes the input always includes, but it's not limited to, a single valid and type
 checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of the
 other input values. The evaluation of an expression observes the concept of [referential
-transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a boolean _true_ or
-_false_ and it might include an error.
+transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a _boolean_, an _integer_ or a _string_, and it might include an error.
 
 The CloudEvents Expression Language doesn't support the handling of the data field of the CloudEvent instances, due to
 its polymorphic nature and complexity. We strongly encourage users that needs this functionality to use other more
@@ -71,6 +70,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 ### 1.2. Relation to the Subscriptions API
 
 The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to filter on the input values.
+
+When used as a filter predicate, the expression output value is always casted to a boolean value.
 
 <!-- TODO -->
 
@@ -325,8 +326,7 @@ The following tables show the built-in functions that MUST be supported by a CES
 Operators MUST be evaluated in order, where the parenthesized expressions have the highest priority over all the other
 operators.
 
-A CESQL expression, when evaluated, MUST always return a Boolean `true` if the evaluation of the predicate described by
-the expression matches the input, otherwise `false`.
+A CESQL expression, when evaluated, MUST return a value which type is included in the [type system](#31-type-system).
 
 An evaluation might return an error together with the return value, which the evaluator MUST notify to the user.
 
