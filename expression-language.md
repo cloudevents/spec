@@ -320,6 +320,12 @@ The following tables show the built-in functions that MUST be supported by a CES
 | `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raise an error                                                                                     |
 | `SUBSTRING(x, b, e): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `b` (included) and ending with index `e` (excluded). Returns `SUBSTRING(x, b, LENGTH(x))` if `LENGTH(x) < e`. Returns `x` and raise an error if `b < 0 OR e < 0 OR e < b` |
 
+#### 3.5.3. Built-in Math functions
+
+| Definition                                                 | Semantics                                                                                                                                                                                                                  |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ABS(x): Integer -> Integer` | Returns the absolute value of `x` |
+
 ### 3.6. Evaluation of the expression
 
 Operators MUST be evaluated in order, where the parenthesized expressions have the highest priority over all the other
