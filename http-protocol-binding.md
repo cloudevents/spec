@@ -227,8 +227,8 @@ attribute values do not support parenthetical comments, so the
 initial decoding only needs to handle double-quoted values, including
 backslash escapes. Header values produced via the percent-encoding
 described here will never include double-quoted values, but they MUST
-be supported for compatibility with older versions of this
-specification which did not require double-quote and space
+be supported when receiving events, for compatibility with older versions
+of this specification which did not require double-quote and space
 characters to be percent-encoded.
 
 Percent encoding is performed by considering each Unicode character
