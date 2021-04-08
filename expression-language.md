@@ -299,7 +299,7 @@ CESQL provides the concept of function, and defines some built-in that every eng
 A function is identified by its name, its parameters and the return value. A function can be variadic, that is the arity is not fixed.
 
 CESQL allows overloading, that is the engine MUST be able to distinguish between two functions defined with the same name but different arity.
-Because of implicit casting, no functions with the same 
+Because of implicit casting, no functions with the same name and same arity but different types are allowed.
 
 An overload on a variadic function is allowed only if the number of initial fixed arguments is greater than the maximum arity for that particular function name. Only one variadic overload is allowed.
 
