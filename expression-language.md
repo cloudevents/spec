@@ -295,6 +295,28 @@ The matching is done using the same semantics of the equal `=` operator, but usi
 
 ### 3.5. Functions
 
+CESQL provides the concept of function, and defines some built-in that every engine MUST implement. An engine SHOULD also allow users to define their custom functions.
+
+A function is identified by its name, its parameters and the return value. A function can be variadic, that is the arity is not fixed.
+
+CESQL allows overloading, that is the engine MUST be able to distinguish between two functions defined with the same name but different arity.
+Because of implicit casting, no functions with the same name and same arity but different types are allowed.
+
+An overload on a variadic function is allowed only if the number of initial fixed arguments is greater than the maximum arity for that particular function name. Only one variadic overload is allowed.
+
+For example, the following definitions are valid:
+
+* `ABC(x): String -> Integer`: Arity is equal to one
+* `ABC(x, y): String x String x String -> Integer`: Arity is equal to three
+* `ABC(x, y, z, ...): String x String x String x String^n -> Integer`: Arity is variable, but the initial fixed arguments are at least 3
+
+But the followings are invalid, so the engine MUST reject them:
+
+* `ABC(x...): String x String x String -> Integer`: Arity is variable, but there are no initial fixed arguments
+* `ABC(x, y, z): String x String x String -> Integer`: Arity is equal to three
+
+When a function invocation cannot be dispatched, the return value is undefined.
+
 The following tables show the built-in functions that MUST be supported by a CESQL evaluator.
 
 #### 3.5.1. Casting and type checking
@@ -303,8 +325,7 @@ The following tables show the built-in functions that MUST be supported by a CES
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `INT(x): String -> Integer`     | Returns `x` converted to _Integer_, if possible. Otherwise, returns `0` and raise an error                                       |
 | `BOOL(x): String -> Boolean`    | Returns `true` if the String value is `"true"`, `false` if the String value is `"false"`, otherwise `false` and returns an error |
-| `STRING(x): Integer -> String`  | Returns `x` converted to _String_                                                                                                |
-| `STRING(x): Boolean -> String`  | Returns `x` converted to _String_                                                                                                |
+| `STRING(x): Any -> String`  | Returns `x` converted to _String_                                                                                                |
 | `IS_BOOL(x): String -> Boolean` | Returns `true` if `x` can be converted to _Boolean_ without raising an error, `false` otherwise                                  |
 | `IS_INT(x): String -> Boolean`  | Returns `true` if `x` can be converted to _Integer_ without raising an error, `false` otherwise                                  |
 
