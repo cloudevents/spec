@@ -57,3 +57,12 @@ message CloudEvent {
     }
   }
 }
+
+/**
+ * CloudEvent Protobuf Batch Format
+ *
+ */
+
+message CloudEventBatch {
+  repeated CloudEvent events = 1;
+}

@@ -19,7 +19,8 @@ This document is a working draft.
 2. [Attributes](#2-attributes)
 3. [Data](#3-data)
 4. [Transport](#4-transport)
-5. [Examples](#5-examples)
+5. [Batch Format](#5-batch-format)
+6. [Examples](#6-examples)
 
 ## 1. Introduction
 
@@ -128,8 +129,6 @@ oneof data {
 * When the type of the data is binary the value MUST be stored in the `binary_data` property.
   * `datacontenttype` SHOULD be populated with the appropriate media-type.
 
-
-
 ## 4. Transport
 
 Transports that support content identification MUST use the following designation:
@@ -138,12 +137,40 @@ Transports that support content identification MUST use the following designatio
    application/cloudevents+protobuf
 ```
 
-## 5. Examples
+## 5. Batch Format
+
+Batch format allows for a set of CloudEvents to be represented, no relationship
+between those events is implied.
+
+Although the _protobuf batch format_ builds on the _protobuf format_ it is considered
+seperate, that is to say that support of _protobuf format_ does not indicate support
+of the batch representation. The batch format MUST only be used where supported.
+
+### 5.1 Envelope
+
+The enveloping container is a _CloudEventBatch_ protobuf message containing a
+repeating set of _CloudEvent_ message(s):
+
+```proto
+message CloudEventBatch {
+  repeated CloudEvent events = 1;
+}
+```
+
+### 5.2 Batch Media Type
+
+A compliant protobuf batch representation is identifed using the following media-type
+
+```text
+   application/cloudevents-batch+protobuf
+```
+
+## 6. Examples
 
 The following code-snippets show how proto representations might be constucted
 assuming the availability of some convenience methods.
 
-### 5.1 Plain Text event data
+### 6.1 Plain Text event data
 
 ```java
 public static CloudEvent plainTextExample() {
@@ -169,7 +196,7 @@ public static CloudEvent plainTextExample() {
 
 ```
 
-### 5.2 Proto message as event data
+### 6.2 Proto message as event data
 
 Where the event data payload is itself a protobuf message (with its own schema)
 a protocol buffer idiomatic method can be used to carry the data.
