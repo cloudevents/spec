@@ -288,10 +288,10 @@ assumed valid, e.g. `EXISTS id` MUST always return `true`.
 
 | Definition                                             | Semantics                                                                  |
 | ------------------------------------------------------ | -------------------------------------------------------------------------- |
-| `x IN (y1, y2, ...): String x String^n -> Boolean`     | Returns `true` if `x` is an element included in the _Set_ of `yN` elements |
-| `x NOT IN (y1, y2, ...): String x String^n -> Boolean` | Same as `NOT (x IN set)`                                                   |
+| `x IN (y1, y2, ...): Any x Any^n -> Boolean`     | Returns `true` if `x` is equal to an element in the _Set_ of `yN` elements |
+| `x NOT IN (y1, y2, ...): Any x Any^n -> Boolean` | Same as `NOT (x IN set)`                                                   |
 
-The matching is done using the same semantics of the equal `=` operator.
+The matching is done using the same semantics of the equal `=` operator, but using `x` type as the target type for the implicit type casting.
 
 ### 3.5. Functions
 
@@ -361,6 +361,8 @@ A CESQL engine MUST apply the following implicit casting rules in order:
 1. If the operator is n-ary with `n > 2`:
    1. If it's not ambiguous, cast all the parameters to the target type
    1. If it's ambiguous, raise an error and the cast results are undefined
+
+for the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
 
 For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a
 _Boolean_, this expression:
