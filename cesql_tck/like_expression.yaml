@@ -1,0 +1,80 @@
+name: Like expression
+tests:
+  - name: Exact match
+    expression: "'abc' LIKE 'abc'"
+    result: true
+  - name: Exact match (negate)
+    expression: "'abc' NOT LIKE 'abc'"
+    result: false
+
+  - name: Percentage operator (1)
+    expression: "'abc' LIKE 'a%b%c'"
+    result: true
+  - name: Percentage operator (2)
+    expression: "'azbc' LIKE 'a%b%c'"
+    result: true
+  - name: Percentage operator (3)
+    expression: "'azzzbzzzc' LIKE 'a%b%c'"
+    result: true
+  - name: Percentage operator (4)
+    expression: "'a%b%c' LIKE 'a%b%c'"
+    result: true
+  - name: Percentage operator (5)
+    expression: "'ac' LIKE 'abc'"
+    result: false
+  - name: Percentage operator (6)
+    expression: "'' LIKE 'abc'"
+    result: false
+
+  - name: Underscore operator (1)
+    expression: "'abc' LIKE 'a_b_c'"
+    result: false
+  - name: Underscore operator (2)
+    expression: "'a_b_c' LIKE 'a_b_c'"
+    result: true
+  - name: Underscore operator (3)
+    expression: "'abzc' LIKE 'a_b_c'"
+    result: false
+  - name: Underscore operator (4)
+    expression: "'azbc' LIKE 'a_b_c'"
+    result: false
+  - name: Underscore operator (5)
+    expression: "'azbzc' LIKE 'a_b_c'"
+    result: true
+
+  - name: Escaped underscore wildcards (1)
+    expression: "'a_b_c' LIKE 'a\\_b\\_c'"
+    result: true
+  - name: Escaped underscore wildcards (2)
+    expression: "'a_b_c' NOT LIKE 'a\\_b\\_c'"
+    result: false
+  - name: Escaped underscore wildcards (3)
+    expression: "'azbzc' LIKE 'a\\_b\\_c'"
+    result: false
+  - name: Escaped underscore wildcards (4)
+    expression: "'abc' LIKE 'a\\_b\\_c'"
+    result: false
+
+  - name: Escaped percentage wildcards (1)
+    expression: "'abc' LIKE 'a\\%b\\%c'"
+    result: false
+  - name: Escaped percentage wildcards (2)
+    expression: "'a%b%c' LIKE 'a\\%b\\%c'"
+    result: true
+  - name: Escaped percentage wildcards (3)
+    expression: "'azbzc' LIKE 'a\\%b\\%c'"
+    result: false
+  - name: Escaped percentage wildcards (4)
+    expression: "'abc' LIKE 'a\\%b\\%c'"
+    result: false
+
+  - name: With access to event attributes
+    expression: "myext LIKE 'abc%123\\%456\\_d_f'"
+    eventOverrides:
+      myext: "abc123123%456_dzf"
+    result: true
+  - name: With access to event attributes (negated)
+    expression: "myext NOT LIKE 'abc%123\\%456\\_d_f'"
+    eventOverrides:
+      myext: "abc123123%456_dzf"
+    result: false

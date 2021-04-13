@@ -1,0 +1,53 @@
+name: Context attributest test
+tests:
+  - name: Access to required attribute
+    expression: id
+    eventOverrides:
+      id: myId
+    result: myId
+  - name: Access to optional attribute
+    expression: subject
+    eventOverrides:
+      subject: mySubject
+    result: mySubject
+  - name: Absent optional attribute
+    expression: subject
+    event:
+      specversion: "1.0"
+      id: myId
+      source: localhost.localdomain
+      type: myType
+    result: ""
+    error: missingAttribute
+  - name: Access to optional boolean extension
+    expression: mybool
+    eventOverrides:
+      mybool: true
+    result: true
+  - name: Access to optional integer extension
+    expression: myint
+    eventOverrides:
+      myint: 10
+    result: 10
+  - name: Access to optional string extension
+    expression: myext
+    eventOverrides:
+      myext: "my extension"
+    result: "my extension"
+  - name: URL type cohercion to string
+    expression: source
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+    result: "http://localhost/source"
+  - name: Timestamp type cohercion to string
+    expression: time
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+      time: 2018-04-26T14:48:09+02:00
+    result: 2018-04-26T14:48:09+02:00

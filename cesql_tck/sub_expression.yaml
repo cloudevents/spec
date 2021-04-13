@@ -1,0 +1,12 @@
+name: Sub expressions
+tests:
+  - name: Sub expression with literal
+    expression: "(TRUE)"
+    result: true
+
+  - name: Math (1)
+    expression: "4 * (2 + 3)"
+    result: 20
+  - name: Math (2)
+    expression: "(2 + 3) * 4"
+    result: 20

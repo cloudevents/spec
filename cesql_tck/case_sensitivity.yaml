@@ -1,0 +1,25 @@
+name: Case sensitivity
+tests:
+  - name: TRUE
+    expression: TRUE
+    result: true
+  - name: true
+    expression: true
+    result: true
+  - name: tRuE
+    expression: tRuE
+    result: true
+
+  - name: FALSE
+    expression: FALSE
+    result: false
+  - name: false
+    expression: false
+    result: false
+  - name: FaLsE
+    expression: FaLsE
+    result: false
+
+  - name: String literals casing preserved
+    expression: "'aBcD'"
+    result: aBcD
