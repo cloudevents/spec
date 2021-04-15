@@ -49,8 +49,9 @@ The following documents are available:
 | Proprietary Specifications    |                                        -                                        |      [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)      |
 
 If you are new to CloudEvents, it is recommended that you start by reading the
-[Primer](primer.md) for an overview of the specification's goals and design
-decisions, and then move on to the [core specification](spec.md).
+[Primer](cloudevents/primer.md) for an overview of the specification's goals
+and design decisions, and then move on to the
+[core specification](cloudevents/spec.md).
 
 Since not all event producers generate CloudEvents by default, there is
 documentation describing the recommended process for adapting some popular
@@ -60,7 +61,7 @@ events into CloudEvents, see
 ## SDKs
 
 In addition to the documentation mentioned above, there is also an
-[SDK proposal](SDK.md). A set of SDKs is also being developed:
+[SDK proposal](cloudevents/SDK.md). A set of SDKs is also being developed:
 
 - [CSharp](https://github.com/cloudevents/sdk-csharp)
 - [Go](https://github.com/cloudevents/sdk-go)
@@ -85,9 +86,10 @@ native ecosystem by making our systems interoperable with CloudEvents.
 
 ## Process
 
-The CloudEvents project is working to formalize the [specification](spec.md)
-based on [design goals](primer.md#design-goals) which focus on interoperability
-between systems which generate and respond to events.
+The CloudEvents project is working to formalize the
+[specification](cloudevents/spec.md) based on
+[design goals](cloudevents/primer.md#design-goals) which focus on
+interoperability between systems which generate and respond to events.
 
 In order to achieve these goals, the project must describe:
 

@@ -2,8 +2,9 @@ If you have created (or know of) an open source library or product that uses
 CloudEvents, please include in the list below.
 
 - [CloudEvents.NET](https://github.com/aliencube/CloudEvents.NET): is a .NET
-  implementation of the CloudEvents [spec](../spec.md) and
-  [HTTP protocol binding](../http-protocol-binding.md). It has been released to
+  implementation of the CloudEvents [spec](../cloudevents/spec.md) and
+  [HTTP protocol binding](../cloudevents/http-protocol-binding.md). It has
+  been released to
   [nuget.org](https://www.nuget.org/packages?q=Aliencube.CloudEventsNet). It
   also contains some app
   [samples](https://github.com/aliencube/CloudEvents.NET/tree/master/sample)

@@ -62,10 +62,10 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### Terminology
 
-Note: some of the terms defined below are taken from the [CloudEvents](spec.md)
-specification, and are marked with a reference to the original definition. Any
-difference between the definitions is accidental and the CloudEvents version
-takes precedence.
+Note: some of the terms defined below are taken from the
+[CloudEvents](../cloudevents/spec.md) specification, and are marked with a
+reference to the original definition. Any difference between the definitions
+is accidental and the CloudEvents version takes precedence.
 
 This specification defines the following terms:
 
@@ -84,27 +84,27 @@ responsible for the generation of events.
 For example, an Object Store service might have a set of event sources where
 each event source maps to a bucket.
 
-#### Source [[CE](./spec.md#source)]
+#### Source [[CE](../cloudevents/spec.md#source)]
 
 The "source" is the context in which the occurrence happened. In a distributed
 system it might consist of multiple Producers. If a source is not aware of
 CloudEvents, an external producer creates the CloudEvent on behalf of the
 source.
 
-#### Producer [[CE](./spec.md#producer)]
+#### Producer [[CE](../cloudevents/spec.md#producer)]
 
 The "producer" is a specific instance, process or device that creates the data
 structure describing the CloudEvent.
 
-#### Intermediary [[CE](./spec.md#intermediary)]
+#### Intermediary [[CE](../cloudevents/spec.md#intermediary)]
 
 An "intermediary" receives a message containing an event for the purpose of
 forwarding it to the next receiver, which might be another intermediary or a
 [Consumer](#consumer-ce). A typical task for an intermediary is to route the
 event to receivers based on the information in the event
-[Context](./spec.md#context).
+[Context](../cloudevents/spec.md#context).
 
-#### Consumer [[CE](./spec.md#consumer)]
+#### Consumer [[CE](../cloudevents/spec.md#consumer)]
 
 A "consumer" receives the event and acts upon it. It uses the context and data
 to execute some logic, which might lead to the occurrence of new events.
@@ -467,7 +467,7 @@ The following sections define the attributes that appear in EventType definition
   - `name` - the CloudEvents context attribute name used by this extension. It
     MUST adhere to the CloudEvents context attribute naming rules
   - `type` - the data type of the extension attribute. It MUST adhere to the
-    CloudEvents [type system](./spec.md#type-system)
+    CloudEvents [type system](../cloudevents/spec.md#type-system)
   - `specurl` - an attribute pointing to the specification that defines the
     extension
 - Constraints:
@@ -556,8 +556,8 @@ Content-Type: application/json
 ]
 ```
 
-Implementations MAY use the [pagination](pagination.md) specification
-if the number of Services returned is large. Clients SHOULD be
+Implementations MAY use the [pagination](../pagination/pagination.md)
+specification if the number of Services returned is large. Clients SHOULD be
 prepared to support paginated responses.
 
 #### `GET /services/{id}`
