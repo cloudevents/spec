@@ -249,7 +249,7 @@ percent-encoded:
 Attribute values are already constrained to prohibit characters in
 the range U+0000-U+001F inclusive and U+007F-U+009F inclusive;
 however for simplicity and to account for potential future changes,
-it is encouraged that any HTTP header encoding implementation treats
+it is RECOMMENDED that any HTTP header encoding implementation treats
 such characters as requiring percent-encoding.
 
 Space and double-quote are encoded to avoid requiring any further
