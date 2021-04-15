@@ -349,9 +349,13 @@ The following tables show the built-in functions that MUST be supported by a CES
 Operators MUST be evaluated in order, where the parenthesized expressions have the highest priority over all the other
 operators.
 
-A CESQL expression, when evaluated, MUST return a value which type is included in the [type system](#31-type-system).
+Because CESQL expressions are total, they always define a return value, included in the [type system](#31-type-system), even after an error occurs.
+When evaluating an expression, the evaluator can operate in two modes, in relation to error handling:
 
-An evaluation might return an error together with the return value, which the evaluator MUST notify to the user.
+* Fail fast mode: When an error is triggered, the execution just quits and returns the error, without any result.
+* Complete evaluation mode: When an error is triggered, the execution continues, and the evaluation of the expression returns both the result and the error(s).
+
+The fail fast mode MUST be supported by the evaluator, while the complete evaluation mode MAY be supported by the evaluator.
 
 #### 3.7. Type casting
 
