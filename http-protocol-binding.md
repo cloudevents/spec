@@ -222,11 +222,12 @@ quoting, due to space and quote characters being encoded.
 
 When decoding an HTTP message into a CloudEvent, any quoted string
 as described in [RFC7230, section 3.2.6][rfc7230-section-3-2-6]
-appearing as an HTTP header value MUST be decoded to an ASCII string,
-and then a **single round** of percent-decoding must be performed as
-described below. HTTP headers for CloudEvent attribute values do not
-support parenthetical comments, so the initial decoding only needs
-to handle double-quoted values, including backslash escapes. Header
+appearing as an HTTP header value MUST be decoded to an ASCII
+string, and then a **single round** of percent-decoding must be
+performed as described below. HTTP headers for CloudEvent attribute
+values do not support parenthetical comments, so the initial
+decoding only needs to handle double-quoted values, including
+processing backslash escapes within double-quoted values. Header
 values produced via the percent-encoding described here will never
 include double-quoted values, but they MUST be supported when
 receiving events, for compatibility with older versions of this
