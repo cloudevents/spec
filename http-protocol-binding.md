@@ -213,22 +213,24 @@ and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
 printable characters from the US-ASCII character set, and are terminated by a
 CRLF sequence with OPTIONAL whitespace around the header value.
 
-When encoding a CloudEvent as an HTTP message, string values MUST be
-percent-encoded as described below. This is compatible with
-[RFC3986, section 2.1][rfc3986-section-2-1] but is more specific
-about what needs encoding. The resulting string does not then need
-any further quoting, due to space and quote characters being encoded.
+When encoding a CloudEvent as an HTTP message, string values
+represented as HTTP header values MUST be percent-encoded as
+described below. This is compatible with [RFC3986, section
+2.1][rfc3986-section-2-1] but is more specific about what needs
+encoding. The resulting string does not then need any further
+quoting, due to space and quote characters being encoded.
 
-When decoding an HTTP message into a CloudEvent, quoted strings as
-described in [RFC7230, section 3.2.6][rfc7230-section-3-2-6] MUST be
-decoded to an ASCII string, and then a **single round** of
-percent-decoding as described below. HTTP headers for CloudEvent
-attribute values do not support parenthetical comments, so the
-initial decoding only needs to handle double-quoted values, including
-backslash escapes. Header values produced via the percent-encoding
-described here will never include double-quoted values, but they MUST
-be supported when receiving events, for compatibility with older versions
-of this specification which did not require double-quote and space
+When decoding an HTTP message into a CloudEvent, any quoted string
+as described in [RFC7230, section 3.2.6][rfc7230-section-3-2-6]
+appearing as an HTTP header value MUST be decoded to an ASCII string,
+and then a **single round** of percent-decoding must be performed as
+described below. HTTP headers for CloudEvent attribute values do not
+support parenthetical comments, so the initial decoding only needs
+to handle double-quoted values, including backslash escapes. Header
+values produced via the percent-encoding described here will never
+include double-quoted values, but they MUST be supported when
+receiving events, for compatibility with older versions of this
+specification which did not require double-quote and space
 characters to be percent-encoded.
 
 Percent encoding is performed by considering each Unicode character
