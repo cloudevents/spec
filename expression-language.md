@@ -323,11 +323,11 @@ The following tables show the built-in functions that MUST be supported by a CES
 
 | Definition                      | Semantics                                                                                                                        |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `INT(x): String -> Integer`     | Returns `x` converted to _Integer_, if possible. Otherwise, returns `0` and raise an error                                       |
-| `BOOL(x): String -> Boolean`    | Returns `true` if the String value is `"true"`, `false` if the String value is `"false"`, otherwise `false` and returns an error |
-| `STRING(x): Any -> String`  | Returns `x` converted to _String_                                                                                                |
-| `IS_BOOL(x): String -> Boolean` | Returns `true` if `x` can be converted to _Boolean_ without raising an error, `false` otherwise                                  |
-| `IS_INT(x): String -> Boolean`  | Returns `true` if `x` can be converted to _Integer_ without raising an error, `false` otherwise                                  |
+| `INT(x): Any -> Integer`     | If `x` is a _String_, returns `x` converted to _Integer_. If `x` is a _Integer_, returns `x`. Otherwise, returns `0` and raise an error.                                       |
+| `BOOL(x): Any -> Boolean`    | If `x` is a _String_, returns `true` if `x` is case insensitive equals to `"true"`, `false` if `x` is case insensitive equals to `"false"`. If `x` is a _Boolean_, returns `x`. Otherwise, returns `false` and raise an error |
+| `STRING(x): Any -> String`  | If `x` is a _String_, returns `x`. If `x` is an _Integer_, returns the base 10 decimal representation of `x`. If `x` is a _Boolean_ equal to `true`, returns `"true"`, if is a _Boolean_ equal to `false`, returns `"false"`.                                                                                             |
+| `IS_BOOL(x): Any -> Boolean` | Returns `true` if `x` is a _String_ and can be converted to _Boolean_ without raising an error, returns `true` if `x` is _Boolean_, returns `false` otherwise                                  |
+| `IS_INT(x): Any -> Boolean`  | Returns `true` if `x` is a _String_ and can be converted to _Integer_ without raising an error, returns `true` if `x` is _Integer_, `false` otherwise                                  |
 
 #### 3.5.2. Built-in String manipulation
 
