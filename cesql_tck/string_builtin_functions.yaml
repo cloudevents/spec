@@ -32,6 +32,9 @@ tests:
   - name: CONCAT_WS (3)
     expression: "CONCAT_WS(',', 'a')"
     result: "a"
+  - name: CONCAT_WS without arguments doesn't exist
+    expression: CONCAT_WS()
+    error: missingFunction
 
   - name: LOWER (1)
     expression: "LOWER('ABC')"
