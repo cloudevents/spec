@@ -132,24 +132,24 @@ The receiver of the event can distinguish between the two content modes by
 inspecting the `content-type` [Header][kafka-message-header] of the Kafka
 message. If the header is present and its value is prefixed with the CloudEvents
 media type `application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver uses _structured_ mode,
-otherwise it defaults to _binary_ mode.
+[event format](#14-event-formats), the receiver uses _structured_ mode. If the
+`content-type` header, nor any other `ce_` prefixed header are present, then the
+receiver uses _structured_ mode with the JSON event format. If none of the above
+conditions applies, the receiver should use _binary_ mode.
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
 event format that it cannot handle, for instance `application/cloudevents+avro`,
 it MAY still treat the event as binary and forward it to another party as-is.
 
-When the `content-type` header value is not prefixed with the CloudEvents media
-type, knowing when the message ought to be parsed as a CloudEvent can be a
-challenge. While this specification can not mandate that senders do not include
-any of the CloudEvents headers when the message is not a CloudEvent, it would be
-reasonable for a receiver to assume that if the message has all of the mandatory
-CloudEvents attributes as headers then it's probably a CloudEvent. However, as
-with all CloudEvent messages, if it does not adhere to all of the normative
-language of this specification then it is not a valid CloudEvent.
-
-If the `content-type` header is not present then the receiver uses _structured_
-mode with the JSON event format.
+When the `content-type` header value is present but is not prefixed with the
+CloudEvents media type, knowing when the message ought to be parsed as a
+CloudEvent can be a challenge. While this specification can not mandate that
+senders do not include any of the CloudEvents headers when the message is not a
+CloudEvent, it would be reasonable for a receiver to assume that if the message
+has all of the mandatory CloudEvents attributes as headers then it's probably a
+CloudEvent. However, as with all CloudEvent messages, if it does not adhere to
+all of the normative language of this specification then it is not a valid
+CloudEvent.
 
 ### 3.1. Key Mapping
 
