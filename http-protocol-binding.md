@@ -236,7 +236,7 @@ not require double-quote and space characters to be percent-encoded.
 
 Percent encoding is performed by considering each Unicode character
 within the attribute's canonical string representation. Any
-character represented in memory as a [surrogate
+character represented in memory as a [Unicode surrogate
 pair][surrogate-pair] MUST be treated as a single Unicode character.
 The following characters MUST be percent-encoded:
 
