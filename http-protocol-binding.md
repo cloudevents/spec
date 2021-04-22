@@ -222,11 +222,11 @@ encoding. The resulting string SHOULD NOT be further encoded.
 and double-quote character is already percent-encoded.)
 
 When decoding an HTTP message into a CloudEvent, any HTTP header
-value MUST have quoted string escaping as described in [RFC7230,
-section 3.2.6][rfc7230-section-3-2-6] applied in reverse, and then a
-single round of percent-decoding MUST be performed as described
+value MUST first be unescaped with respect to double-quoted strings,
+as described in [RFC7230, section 3.2.6][rfc7230-section-3-2-6]. A single
+round of percent-decoding MUST then be performed as described
 below. HTTP headers for CloudEvent attribute values do not support
-parenthetical comments, so the initial decoding only needs to handle
+parenthetical comments, so the initial unescaping only needs to handle
 double-quoted values, including processing backslash escapes within
 double-quoted values. Header values produced via the
 percent-encoding described here will never include double-quoted
