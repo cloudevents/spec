@@ -315,7 +315,7 @@ Each subscription is represented by an object that has the following properties:
   events generated.
 
   TODO: add something to discovery to indicate if manager supports this
-  
+
 - Constraints:
   - OPTIONAL
   - If present, MUST be a non-empty URI
@@ -402,13 +402,13 @@ Each subscription is represented by an object that has the following properties:
 - Examples:
   - `HTTP`
 
-##### protcolsettings
+##### protocolsettings
 - Type: Map of protocol specific properties
 - Description: A set of settings specific to the selected delivery protocol
   provider. Options for these settings are listed in the following subsection.
   An subscription manager MAY offer more options. See the [Protocol
   Settings](#322-protocol-settings) section for future details.
-  
+
 - Constraints:
   - OPTIONAL
 - Examples:
@@ -442,7 +442,7 @@ phases/properties, the Service description specified by the Discovery
 specification SHOULD contain enough information for a consumer to know which
 properties to use when creating a Subscription to get the desired results.
 
-Below is an example JSON serialization of a susbcription resource:
+Below is an example JSON serialization of a subscription resource:
 
 ```JSON
 {
@@ -614,7 +614,7 @@ property in a subscription is a filter expressions that evaluates to either
 true or false for each event generated.
 
 If any of the filter expressions evaluate to false, the event MUST NOT be
-sent to the sink. If the filter expression evalutes to true, the event MUST be
+sent to the sink. If the filter expression evaluates to true, the event MUST be
 attempted to be delivered.
 
 Each filter expression includes the specification of a `dialect` that
@@ -649,7 +649,7 @@ value to use in the comparison. To evaluate to true the value of the
 matching CloudEvents attribute MUST exactly match the value String specified
 (case sensitive).
 
-The attribute name and value specified in the filter express MUST NOT be 
+The attribute name and value specified in the filter express MUST NOT be
 empty strings.
 
 For example:
@@ -665,7 +665,7 @@ value to use in the comparison. To evaluate to true the value of the
 matching CloudEvents attribute MUST start with the value String specified
 (case sensitive).
 
-The attribute name and value specified in the filter express MUST NOT be 
+The attribute name and value specified in the filter express MUST NOT be
 empty strings.
 
 For example:
@@ -681,7 +681,7 @@ value to use in the comparison. To evaluate to true the value of the
 matching CloudEvents attribute MUST end with the value String specified
 (case sensitive).
 
-The attribute name and value specified in the filter express MUST NOT be 
+The attribute name and value specified in the filter express MUST NOT be
 empty strings.
 
 For example:
