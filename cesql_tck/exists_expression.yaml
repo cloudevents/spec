@@ -1,0 +1,57 @@
+name: Exists expression
+tests:
+  - name: required attributes always exist
+    expression: EXISTS specversion AND EXISTS id AND EXISTS type AND EXISTS SOURCE
+    result: true
+
+  - name: optional attribute available
+    expression: EXISTS time
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+      time: 2018-04-26T14:48:09+02:00
+    result: true
+  - name: optional attribute absent
+    expression: EXISTS time
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+    result: false
+  - name: optional attribute absent (negated)
+    expression: NOT EXISTS time
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+    result: true
+
+  - name: optional extension available
+    expression: EXISTS myext
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+      myext: my value
+    result: true
+  - name: optional extension absent
+    expression: EXISTS myext
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+    result: false
+  - name: optional extension absent (negated)
+    expression: NOT EXISTS myext
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+    result: true

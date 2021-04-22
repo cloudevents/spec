@@ -1,0 +1,142 @@
+name: String builtin functions
+tests:
+  - name: LENGTH (1)
+    expression: "LENGTH('abc')"
+    result: 3
+  - name: LENGTH (2)
+    expression: "LENGTH('')"
+    result: 0
+  - name: LENGTH (3)
+    expression: "LENGTH('2')"
+    result: 1
+  - name: LENGTH (4)
+    expression: "LENGTH(TRUE)"
+    result: 4
+
+  - name: CONCAT (1)
+    expression: "CONCAT('a', 'b', 'c')"
+    result: abc
+  - name: CONCAT (2)
+    expression: "CONCAT()"
+    result: ""
+  - name: CONCAT (3)
+    expression: "CONCAT('a')"
+    result: "a"
+
+  - name: CONCAT_WS (1)
+    expression: "CONCAT_WS(',', 'a', 'b', 'c')"
+    result: a,b,c
+  - name: CONCAT_WS (2)
+    expression: "CONCAT_WS(',')"
+    result: ""
+  - name: CONCAT_WS (3)
+    expression: "CONCAT_WS(',', 'a')"
+    result: "a"
+  - name: CONCAT_WS without arguments doesn't exist
+    expression: CONCAT_WS()
+    error: missingFunction
+
+  - name: LOWER (1)
+    expression: "LOWER('ABC')"
+    result: abc
+  - name: LOWER (2)
+    expression: "LOWER('AbC')"
+    result: abc
+  - name: LOWER (3)
+    expression: "LOWER('abc')"
+    result: abc
+
+  - name: UPPER (1)
+    expression: "UPPER('ABC')"
+    result: ABC
+  - name: UPPER (2)
+    expression: "UPPER('AbC')"
+    result: ABC
+  - name: UPPER (3)
+    expression: "UPPER('abc')"
+    result: ABC
+
+  - name: TRIM (1)
+    expression: "TRIM('   a b c   ')"
+    result: "a b c"
+  - name: TRIM (2)
+    expression: "TRIM('   a b c')"
+    result: "a b c"
+  - name: TRIM (3)
+    expression: "TRIM('a b c   ')"
+    result: "a b c"
+  - name: TRIM (4)
+    expression: "TRIM('a b c')"
+    result: "a b c"
+
+  - name: LEFT (1)
+    expression: LEFT('abc', 2)
+    result: ab
+  - name: LEFT (2)
+    expression: LEFT('abc', 10)
+    result: abc
+  - name: LEFT (3)
+    expression: LEFT('', 0)
+    result: ""
+  - name: LEFT (4)
+    expression: LEFT('abc', -2)
+    result: "abc"
+    error: functionEvaluation
+
+  - name: RIGHT (1)
+    expression: RIGHT('abc', 2)
+    result: bc
+  - name: RIGHT (2)
+    expression: RIGHT('abc', 10)
+    result: abc
+  - name: RIGHT (3)
+    expression: RIGHT('', 0)
+    result: ""
+  - name: RIGHT (4)
+    expression: RIGHT('abc', -2)
+    result: "abc"
+    error: functionEvaluation
+
+  - name: SUBSTRING (1)
+    expression: "SUBSTRING('abcdef', 1)"
+    result: "abcdef"
+  - name: SUBSTRING (2)
+    expression: "SUBSTRING('abcdef', 2)"
+    result: "bcdef"
+  - name: SUBSTRING (3)
+    expression: "SUBSTRING('Quadratically', 5)"
+    result: "ratically"
+  - name: SUBSTRING (4)
+    expression: "SUBSTRING('Sakila', -3)"
+    result: "ila"
+  - name: SUBSTRING (5)
+    expression: "SUBSTRING('abcdef', 1, 6)"
+    result: "abcdef"
+  - name: SUBSTRING (6)
+    expression: "SUBSTRING('abcdef', 2, 4)"
+    result: "bcde"
+  - name: SUBSTRING (7)
+    expression: "SUBSTRING('Sakila', -5, 3)"
+    result: "aki"
+  - name: SUBSTRING (8)
+    expression: "SUBSTRING('Quadratically', 0)"
+    result: ""
+  - name: SUBSTRING (9)
+    expression: "SUBSTRING('Quadratically', 0, 1)"
+    result: ""
+  - name: SUBSTRING (10)
+    expression: "SUBSTRING('abcdef', 10)"
+    result: ""
+    error: functionEvaluation
+  - name: SUBSTRING (11)
+    expression: "SUBSTRING('abcdef', -10)"
+    result: ""
+    error: functionEvaluation
+  - name: SUBSTRING (12)
+    expression: "SUBSTRING('abcdef', 10, 10)"
+    result: ""
+    error: functionEvaluation
+  - name: SUBSTRING (13)
+    expression: "SUBSTRING('abcdef', -10, 10)"
+    result: ""
+    error: functionEvaluation

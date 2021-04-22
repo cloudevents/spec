@@ -1,0 +1,20 @@
+name: Not operator
+tests:
+  - name: Not true
+    expression: NOT TRUE
+    result: false
+  - name: Not false
+    expression: NOT FALSE
+    result: true
+
+  - name: Not true with casting
+    expression: NOT 'TRUE'
+    result: false
+  - name: Not false 10 with casting
+    expression: NOT 'FALSE'
+    result: true
+
+  - name: Invalid int cast
+    expression: NOT 10
+    result: true
+    error: cast

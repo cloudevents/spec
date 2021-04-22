@@ -1,0 +1,36 @@
+name: Literals
+tests:
+  - name: TRUE literal
+    expression: TRUE
+    result: true
+  - name: FALSE literal
+    expression: FALSE
+    result: false
+
+  - name: 0 literal
+    expression: 0
+    result: 0
+  - name: 1 literal
+    expression: 1
+    result: 1
+
+  - name: String literal single quoted
+    expression: "'abc'"
+    result: abc
+  - name: String literal double quoted
+    expression: "\"abc\""
+    result: abc
+
+  - name: String literal single quoted with case
+    expression: "'aBc'"
+    result: aBc
+  - name: String literal double quoted with case
+    expression: "\"AbC\""
+    result: AbC
+
+  - name: Escaped string literal (1)
+    expression: "'a\"b\\'c'"
+    result: a"b'c
+  - name: Escaped string literal (2)
+    expression: "\"a'b\\\"c\""
+    result: a'b"c

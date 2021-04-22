@@ -1,0 +1,11 @@
+name: Integer builtin functions
+tests:
+  - name: ABS (1)
+    expression: ABS(10)
+    result: 10
+  - name: ABS (2)
+    expression: ABS(-10)
+    result: 10
+  - name: ABS (3)
+    expression: ABS(0)
+    result: 0

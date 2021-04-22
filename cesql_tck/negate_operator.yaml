@@ -1,0 +1,20 @@
+name: Negate operator
+tests:
+  - name: Minus 10
+    expression: -10
+    result: -10
+  - name: Minus minus 10
+    expression: --10
+    result: 10
+
+  - name: Minus 10 with casting
+    expression: -'10'
+    result: -10
+  - name: Minus minus 10 with casting
+    expression: --'10'
+    result: 10
+
+  - name: Invalid boolean cast
+    expression: -TRUE
+    result: 0
+    error: cast

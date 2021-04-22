@@ -1,0 +1,64 @@
+name: Specification examples
+tests:
+  - name: Case insensitive hops (1)
+    expression: int(hop) < int(ttl) and int(hop) < 1000
+    eventOverrides:
+      hop: '5'
+      ttl: '10'
+    result: true
+  - name: Case insensitive hops (2)
+    expression: INT(hop) < INT(ttl) AND INT(hop) < 1000
+    eventOverrides:
+      hop: '5'
+      ttl: '10'
+    result: true
+  - name: Case insensitive hops (3)
+    expression: hop < ttl
+    eventOverrides:
+      hop: '5'
+      ttl: '10'
+    result: true
+
+  - name: Equals with casting (1)
+    expression: sequence = 5
+    eventOverrides:
+      sequence: '5'
+    result: true
+  - name: Equals with casting (2)
+    expression: sequence = 5
+    eventOverrides:
+      sequence: '6'
+    result: false
+
+  - name: Logic expression (1)
+    expression: firstname = 'Francesco' OR subject = 'Francesco'
+    eventOverrides:
+      subject: Francesco
+      firstname: Doug
+    result: true
+  - name: Logic expression (2)
+    expression: firstname = 'Francesco' OR subject = 'Francesco'
+    eventOverrides:
+      firstname: Francesco
+      subject: Doug
+    result: true
+  - name: Logic expression (3)
+    expression: (firstname = 'Francesco' AND lastname = 'Guardiani') OR subject = 'Francesco Guardiani'
+    eventOverrides:
+      subject: Doug
+      firstname: Francesco
+      lastname: Guardiani
+    result: true
+  - name: Logic expression (4)
+    expression: (firstname = 'Francesco' AND lastname = 'Guardiani') OR subject = 'Francesco Guardiani'
+    eventOverrides:
+      subject: Francesco Guardiani
+      firstname: Doug
+      lastname: Davis
+    result: true
+
+  - name: Subject exists
+    expression: EXISTS subject
+    eventOverrides:
+      subject: Francesco Guardiani
+    result: true
