@@ -25,6 +25,12 @@ tests:
   - name: Percentage operator (6)
     expression: "'' LIKE 'abc'"
     result: false
+  - name: Percentage operator (7)
+    expression: "'.ab.cde.' LIKE '.%.%.'"
+    result: true
+  - name: Percentage operator (8)
+    expression: "'ab.cde' LIKE '.%.%.'"
+    result: false
 
   - name: Underscore operator (1)
     expression: "'abc' LIKE 'a_b_c'"
@@ -41,6 +47,12 @@ tests:
   - name: Underscore operator (5)
     expression: "'azbzc' LIKE 'a_b_c'"
     result: true
+  - name: Underscore operator (6)
+    expression: "'.a.b.' LIKE '._._.'"
+    result: true
+  - name: Underscore operator (7)
+    expression: "'abcd.' LIKE '._._.'"
+    result: false
 
   - name: Escaped underscore wildcards (1)
     expression: "'a_b_c' LIKE 'a\\_b\\_c'"
