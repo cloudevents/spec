@@ -8,6 +8,7 @@ servers:
 paths:
   /services:
     get:
+      operationId: getServices
       parameters:
        - in: query
          name: matching
@@ -26,6 +27,7 @@ paths:
                   $ref: '#/components/schemas/service'
   /services/{name}:
     get:
+      operationId: getService
       parameters:
        - in: path
          name: name
