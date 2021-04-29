@@ -213,16 +213,75 @@ and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
 printable characters from the US-ASCII character set, and are terminated by a
 CRLF sequence with OPTIONAL whitespace around the header value.
 
-String values MUST be percent-encoded as described in [RFC3986, section
-2.4][rfc3986-section-2-4] before applying the header encoding rules described in
-[RFC7230, section 3.2.6][rfc7230-section-3-2-6].
+When encoding a CloudEvent as an HTTP message, string values
+represented as HTTP header values MUST be percent-encoded as
+described below. This is compatible with [RFC3986, section
+2.1][rfc3986-section-2-1] but is more specific about what needs
+encoding. The resulting string SHOULD NOT be further encoded.
+(Rationale: quoted string escaping is unnecessary when every space
+and double-quote character is already percent-encoded.)
 
-When decoding an HTTP message into a CloudEvent, these rules MUST be applied in
-reverse -- [RFC7230, section 3.2.6][rfc7230-section-3-2-6] decoding to an ASCII
-string, and then a **single round** of percent-decoding as described in
-[RFC3986, section 2.4][rfc3986-section-2-4] to produce a valid UTF-8 String.
-(Note that applying percent-decoding an incorrect number of times can result in
-message corruption or security issues.)
+When decoding an HTTP message into a CloudEvent, any HTTP header
+value MUST first be unescaped with respect to double-quoted strings,
+as described in [RFC7230, section 3.2.6][rfc7230-section-3-2-6]. A single
+round of percent-decoding MUST then be performed as described
+below. HTTP headers for CloudEvent attribute values do not support
+parenthetical comments, so the initial unescaping only needs to handle
+double-quoted values, including processing backslash escapes within
+double-quoted values. Header values produced via the
+percent-encoding described here will never include double-quoted
+values, but they MUST be supported when receiving events, for
+compatibility with older versions of this specification which did
+not require double-quote and space characters to be percent-encoded.
+
+Percent encoding is performed by considering each Unicode character
+within the attribute's canonical string representation. Any
+character represented in memory as a [Unicode surrogate
+pair][surrogate-pair] MUST be treated as a single Unicode character.
+The following characters MUST be percent-encoded:
+
+- Space (U+0020)
+- Double-quote (U+0022)
+- Percent (U+0025)
+- Any characters outside the printable ASCII range of U+0021-U+007E
+  inclusive
+
+Attribute values are already constrained to prohibit characters in
+the range U+0000-U+001F inclusive and U+007F-U+009F inclusive;
+however for simplicity and to account for potential future changes,
+it is RECOMMENDED that any HTTP header encoding implementation treats
+such characters as requiring percent-encoding.
+
+Space and double-quote are encoded to avoid requiring any further
+quoting. Percent is encoded to avoid ambiguity with percent-encoding
+itself.
+
+Steps to encode a Unicode character:
+
+- Encode the character using UTF-8, to obtain a byte sequence.
+- Encode each byte within the sequence as `%xy` where `x` is a
+  hexadecimal representation of the most significant 4 bits of the byte,
+  and `y` is a hexadecimal representation of the least significant 4
+  bits of the byte.
+
+Percent-encoding SHOULD be performed using upper-case for values A-F,
+but decoding MUST accept lower-case values.
+
+When performing percent-decoding (when decoding an HTTP message to a
+CloudEvent), values that have been unncessarily percent-encoded MUST be
+accepted, but encoded byte sequences which are invalid in UTF-8 MUST be
+rejected. (For example, "%C0%A0" is an overlong encoding of U+0020, and
+MUST be rejected.)
+
+Example: a header value of "Euro &#x20AC; &#x1F600;" SHOULD be encoded as follows:
+
+- The characters, 'E', 'u', 'r', 'o' do not require encoding
+- Space, the Euro symbol, and the grinning face emoji require encoding.
+  They are characters U+0020, U+20AC and U+1F600 respectively.
+- The encoded HTTP header value is therefore "Euro%20%E2%82%AC%20%F0%9F%98%80"
+  where "%20" is the encoded form of space, "%E2%82%AC" is the encoded form
+  of the Euro symbol, and "%F0%9F%98%80" is the encoded form of the
+  grinning face emoji.
 
 #### 3.1.4. Examples
 
@@ -475,7 +534,7 @@ Content-Length: nnnn
 [rfc2818]: https://tools.ietf.org/html/rfc2818
 [rfc3629]: https://tools.ietf.org/html/rfc3629
 [rfc3986]: https://tools.ietf.org/html/rfc3986
-[rfc3986-section-2-4]: https://tools.ietf.org/html/rfc3986#section-2.4
+[rfc3986-section-2-1]: https://tools.ietf.org/html/rfc3986#section-2.1
 [rfc4627]: https://tools.ietf.org/html/rfc4627
 [rfc4648]: https://tools.ietf.org/html/rfc4648
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
@@ -487,3 +546,4 @@ Content-Length: nnnn
 [rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7231-section-4]: https://tools.ietf.org/html/rfc7231#section-4
 [rfc7540]: https://tools.ietf.org/html/rfc7540
+[surrogate-pair]: http://unicode.org/glossary/#surrogate_pair
