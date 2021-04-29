@@ -1,7 +1,10 @@
 name: Like expression
 tests:
-  - name: Exact match
+  - name: Exact match (1)
     expression: "'abc' LIKE 'abc'"
+    result: true
+  - name: Exact match (2)
+    expression: "'ab\\c' LIKE 'ab\\c'"
     result: true
   - name: Exact match (negate)
     expression: "'abc' NOT LIKE 'abc'"
