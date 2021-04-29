@@ -355,10 +355,6 @@ The following tables show the built-in functions that MUST be supported by a CES
 Operators MUST be evaluated in order, where the parenthesized expressions have the highest priority over all the other
 operators.
 
-A CESQL expression, when evaluated, MUST return a value which type is included in the [type system](#31-type-system).
-
-An evaluation might return an error together with the return value, which the evaluator MUST notify to the user.
-
 #### 3.7. Type casting
 
 CESQL supports both implicit and explicit type casting among the _primitive_ types. Users can perform explicit type
