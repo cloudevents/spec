@@ -168,15 +168,7 @@ components:
           items:
             type: string
         filter:
-          oneOf:
-            - $ref: "#/components/schemas/Filter"
-            - $ref: "#/components/schemas/AllFilter"
-            - $ref: "#/components/schemas/AnyFilter"
-            - $ref: "#/components/schemas/NotFilter"
-            - $ref: "#/components/schemas/ExactFilter"
-            - $ref: "#/components/schemas/PrefixFilter"
-            - $ref: "#/components/schemas/SuffixFilter"
-            - $ref: "#/components/schemas/DialectFilter"
+          $ref: "#/components/schemas/Filter"
         config:
           description: OPTIONAL. Implementation-specific configuration parameters needed by the subscription manager for acquiring events.
           type: object
@@ -209,150 +201,106 @@ components:
       title: "Filter"
       description: "A filter from a selection of multiple filter types and dialects"
       type: object
-      additionalProperties: false
+      minProperties: 1 # At least one filter dialect must be used
+      allOf: # Known dialects
+        - $ref: "#/components/schemas/AllFilter"
+        - $ref: "#/components/schemas/AnyFilter"
+        - $ref: "#/components/schemas/NotFilter"
+        - $ref: "#/components/schemas/ExactFilter"
+        - $ref: "#/components/schemas/PrefixFilter"
+        - $ref: "#/components/schemas/SuffixFilter"
+      additionalProperties: # All the additional properties are custom dialects
+        $ref: "#/components/schemas/CustomDialectFilter"
     AllFilter:
-      allOf:
-        - $ref: "#/components/schemas/Filter"
-        - type: object
-          description: "all filter" 
-          properties:
-            all:
-              description: "This filter evaluates to 'true' if all contained filters are 'true'"
-              type: array
-              minItems: 1
-              items:
-                title: "Filter entry"
-                oneOf:
-                - $ref: "#/components/schemas/Filter"
-                - $ref: "#/components/schemas/AllFilter"
-                - $ref: "#/components/schemas/AnyFilter"
-                - $ref: "#/components/schemas/NotFilter"
-                - $ref: "#/components/schemas/ExactFilter"
-                - $ref: "#/components/schemas/PrefixFilter"
-                - $ref: "#/components/schemas/SuffixFilter"
-                - $ref: "#/components/schemas/DialectFilter"
-          additionalProperties: false
+      type: object
+      description: "all filter"
+      properties:
+        all:
+          description: "This filter evaluates to 'true' if all contained filters are 'true'"
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Filter"
     AnyFilter:
-      allOf:
-        - $ref: "#/components/schemas/Filter"
-        - type: object
-          description: "any filter" 
-          properties:
-            any:
-              description: "This filter evaluates to 'true' if any contained filters are 'true'"
-              type: array
-              minItems: 1
-              items:
-                title: "Filter entry"
-                oneOf:
-                  - $ref: "#/components/schemas/Filter"
-                  - $ref: "#/components/schemas/AllFilter"
-                  - $ref: "#/components/schemas/AnyFilter"
-                  - $ref: "#/components/schemas/NotFilter"
-                  - $ref: "#/components/schemas/ExactFilter"
-                  - $ref: "#/components/schemas/PrefixFilter"
-                  - $ref: "#/components/schemas/SuffixFilter"
-                  - $ref: "#/components/schemas/DialectFilter"
-          additionalProperties: false
+      type: object
+      description: "any filter"
+      properties:
+        any:
+          description: "This filter evaluates to 'true' if any contained filters are 'true'"
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/Filter"
     NotFilter:
-      allOf:
-        - $ref: "#/components/schemas/Filter"
-        - type: object
-          description: "not filter" 
-          properties:
-            not:
-              type: object
-              properties:
-                filter:
-                  title: "Filter entry"
-                  oneOf:
-                    - $ref: "#/components/schemas/Filter"
-                    - $ref: "#/components/schemas/AllFilter"
-                    - $ref: "#/components/schemas/AnyFilter"
-                    - $ref: "#/components/schemas/NotFilter"
-                    - $ref: "#/components/schemas/ExactFilter"
-                    - $ref: "#/components/schemas/PrefixFilter"
-                    - $ref: "#/components/schemas/SuffixFilter"
-                    - $ref: "#/components/schemas/DialectFilter"
-          additionalProperties: false
+      type: object
+      description: "not filter"
+      properties:
+        not:
+          $ref: "#/components/schemas/Filter"
     ExactFilter:
-      allOf:
-        - $ref: "#/components/schemas/Filter"
-        - type: object
-          description: "all filter" 
+      type: object
+      description: "exact filter"
+      properties:
+        exact:
+          title: "exact filter"
+          description: "This filter evaluates to 'true' if the 'value' exactly matches the value of the indicated CloudEvents context attribute"
+          required:
+            - attribute
+            - value
           properties:
-            exact:
-              title: "exact filter"
-              description: "This filter evaluates to 'true' if the 'value' exactly matches the value of the indicated CloudEvents context attribute"
-              required:
-                - attribute
-                - value
-              properties:
-                attribute:
-                  type: string
-                  description: attribute name
-                value:
-                  type: string
-                  description: value
-          additionalProperties: false
+            attribute:
+              type: string
+              description: attribute name
+            value:
+              type: string
+              description: value
     PrefixFilter:
-      allOf:
-        - $ref: "#/components/schemas/Filter"
-        - type: object
-          description: "all filter" 
+      type: object
+      description: "prefix filter"
+      properties:
+        prefix:
+          title: "prefix filter"
+          description: "This filter evaluates to 'true' if the 'value' is a prefix of the value of the indicated CloudEvents context attribute"
+          required:
+            - attribute
+            - value
           properties:
-            prefix:
-              title: "prefix filter"
-              description: "This filter evaluates to 'true' if the 'value' is a prefix of the value of the indicated CloudEvents context attribute"
-              required:
-                - attribute
-                - value
-              properties:
-                attribute:
-                  type: string
-                  description: attribute name
-                value:
-                  type: string
-                  description: value
-              additionalProperties: false
+            attribute:
+              type: string
+              description: attribute name
+            value:
+              type: string
+              description: value
     SuffixFilter:
-      allOf:
-        - $ref: "#/components/schemas/Filter"
-        - type: object
-          description: "all filter" 
+      type: object
+      description: "suffix filter"
+      properties:
+        suffix:
+          title: "suffix filter"
+          description: "This filter evaluates to 'true' if the 'value' is a suffix of the value of the indicated CloudEvents context attribute"
+          required:
+            - attribute
+            - value
           properties:
-            suffix:
-              title: "suffix filter"
-              description: "This filter evaluates to 'true' if the 'value' is a suffix of the value of the indicated CloudEvents context attribute"
-              required:
-                - attribute
-                - value
-              properties:
-                attribute:
-                  type: string
-                  description: attribute name
-                value:
-                  type: string
-                  description: value
-              additionalProperties: false
-    DialectFilter:
-      allOf:
-        - $ref: "#/components/schemas/Filter"
-        - type: object
-          minProperties: 1
-          maxProperties: 1
-          additionalProperties:
-            title: "dialect filter"
-            description: "This filter evaluates to 'true' based on the rules of specific dialect indicated by the key of the filter"
-            required:
-              - expression
-            properties:
-              attribute:
-                type: string
-                description: attribute name
-              expression:
-                type: string
-                description: value
+            attribute:
+              type: string
+              description: attribute name
+            value:
+              type: string
+              description: value
+    CustomDialectFilter:
+      title: "dialect filter"
+      type: object
+      description: "This filter evaluates to 'true' based on the rules of specific dialect indicated by the key of the filter"
+      required:
+        - expression
+      properties:
+        attribute:
+          type: string
+          description: attribute name
+        expression:
+          type: string
+          description: value
     ProtocolSettings:
       type: object
       additionalProperties: false
@@ -400,8 +348,8 @@ components:
               enum: ["settled", "unsettled"]
             linkProperties:
               type: object
-              additionalProperties: 
-                 type: string
+              additionalProperties:
+                type: string
     ApacheKafkaSettings:
       type: object
       allOf:
