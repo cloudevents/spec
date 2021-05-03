@@ -693,8 +693,7 @@ For example:
 
 Use of this MUST include a nested array of filter expressions, where all
 nested filter expressions MUST evaluate to true in order for the `all`
-filter expression to be true. The order in which the nested expressions are
-are listed is the order in which they MUST be evaluated.
+filter expression to be true.
 
 Note: there MUST be at least one filter expression in the array.
 
@@ -712,9 +711,7 @@ For example:
 
 Use of this MUST include one nested array of filter expressions, where at least
 one nested filter expressions MUST evaluate to true in order for the `any`
-filter expression to be true. The order in which the nested expressions are
-are listed is the order in which they MUST be evaluated, and processing MUST
-stop on the first successful match.
+filter expression to be true.
 
 Note: there MUST be at least one filter expression in the array.
 
