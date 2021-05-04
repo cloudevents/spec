@@ -277,9 +277,9 @@ Subscription:
     "[key]": [subscription manager specific value], *
   },
 
-  "filter": { ?
-    "[dialect name]": [dialect specific object] ?
-  },
+  "filters": [ ?
+    { "[dialect name]": [dialect specific object] } +
+  ],
 
   "sink": "[URI to where events are delivered]",
   "protocol": "[delivery protocol]",
@@ -353,12 +353,11 @@ Each subscription is represented by an object that has the following properties:
 - Examples:
   - `{ "interval": 5 }`
 
-##### filter
-- Type: `Object`
-- Description: A filter expression that evaluates to true or false and that
-  determines whether an instance of a CloudEvent will be delivered to the
-  subscription's sink. If a filter expression evaluates to false, the event
-  MUST NOT be sent to the sink. If the expression evaluates to ttue, the event
+##### filters
+- Type: `Array of Objects`
+- Description: An array of filter expressions that evaluates to true or false. 
+  If a filter expression in the array evaluates to false, the event
+  MUST NOT be sent to the sink. If all the filter expressions in the array evaluates to true, the event
   MUST be attempted to be delivered. Absence of a filter implies a value
   of true.
 
@@ -373,6 +372,7 @@ Each subscription is represented by an object that has the following properties:
 
 - Constraints:
   - OPTIONAL for both subscription managers and subscribers to support
+  - If present, the array MUST have at least one filter expression
 - Examples:
   - "prefix": [ "type": "com.github.issue" ]
 
@@ -453,11 +453,9 @@ Below is an example JSON serialization of a subscription resource:
     "interval": 5
   },
 
-  "filter": {
-    "prefix": {
-      "type": "com.example."
-    }
-  },
+  "filters": [
+    { "prefix": { "type": "com.example." } }
+  ],
 
   "protocol": "HTTP",
   "protocolsettings": {
@@ -610,11 +608,11 @@ settings. All other settings SHOULD be supported.
 
 Filters allow for subscriptions to specify that only a subset of events
 are to be delivered to the sink based on a set of criteria. The `filter`
-property in a subscription is a filter expressions that evaluates to either
+property in a subscription is a set of filter expressions, where each expression evaluates to either
 true or false for each event generated.
 
-If any of the filter expressions evaluate to false, the event MUST NOT be
-sent to the sink. If the filter expression evaluates to true, the event MUST be
+If any of the filter expressions in the set evaluate to false, the event MUST NOT be
+sent to the sink. If all the filter expressions in the set evaluate to true, the event MUST be
 attempted to be delivered.
 
 Each filter expression includes the specification of a `dialect` that
