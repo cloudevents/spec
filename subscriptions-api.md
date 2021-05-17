@@ -356,7 +356,7 @@ Each subscription is represented by an object that has the following properties:
 ##### filters
 - Type: `Array of Objects`
 - Description: An array of filter expressions that evaluates to true or false. 
-  If a filter expression in the array evaluates to false, the event
+  If any filter expression in the array evaluates to false, the event
   MUST NOT be sent to the sink. If all the filter expressions in the array evaluates to true, the event
   MUST be attempted to be delivered. Absence of a filter implies a value
   of true.
