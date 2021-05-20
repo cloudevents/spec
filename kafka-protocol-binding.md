@@ -134,9 +134,6 @@ CloudEvents attributes as headers then it's probably a CloudEvent. However, as
 with all CloudEvent messages, if it does not adhere to all of the normative
 language of this specification then it is not a valid CloudEvent.
 
-If the `content-type` header is not present then the receiver uses
-_structured_ mode with the JSON event format.
-
 ### 3.1. Key Mapping
 
 The 'key' of the Kafka message is populated by a "Key Mapper" function, which
