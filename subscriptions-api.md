@@ -358,7 +358,7 @@ Each subscription is represented by an object that has the following properties:
 - Description: An array of filter expressions that evaluates to true or false. 
   If any filter expression in the array evaluates to false, the event
   MUST NOT be sent to the sink. If all the filter expressions in the array evaluates to true, the event
-  MUST be attempted to be delivered. Absence of a filter implies a value
+  MUST be attempted to be delivered. Absence of a filter or empty array implies a value
   of true.
 
   Each filter dialect MUST have a name that is unique within the scope of the
@@ -372,7 +372,6 @@ Each subscription is represented by an object that has the following properties:
 
 - Constraints:
   - OPTIONAL for both subscription managers and subscribers to support
-  - If present, the array MUST have at least one filter expression
 - Examples:
   - "prefix": [ "type": "com.github.issue" ]
 
