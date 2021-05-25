@@ -33,7 +33,7 @@ This document is a working draft.
 - 3.6. [Evaluation of the expression](#36-evaluation-of-the-expression)
 - 3.7. [Type casting](#37-type-casting)
 
-4. [Suggestions](#4-suggestions)
+4. [Implementation suggestions](#4-implementation-suggestions)
 
 - 4.1. [Error handling](#41-error-handling)
 
@@ -415,7 +415,7 @@ sequence = 10
 `Integer x Integer`. Because the right parameter of the operator is an _Integer_ and there is only one `=` definition
 which uses the type _Integer_ as right parameter, `sequence` is casted to _Integer_.
 
-## 4. Suggestions
+## 4. Implementation suggestions
 
 This section is meant to provide some suggestions while implementing and adopting the CloudEvents Expression Language.
 It's non-normative, hence none of the below text is mandatory.
