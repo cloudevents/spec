@@ -33,8 +33,12 @@ This document is a working draft.
 - 3.6. [Evaluation of the expression](#36-evaluation-of-the-expression)
 - 3.7. [Type casting](#37-type-casting)
 
-4. [Examples](#4-examples)
-5. [References](#5-references)
+4. [Implementation suggestions](#4-implementation-suggestions)
+
+- 4.1. [Error handling](#41-error-handling)
+
+5. [Examples](#5-examples)
+6. [References](#6-references)
 
 ## 1. Introduction
 
@@ -413,7 +417,23 @@ sequence = 10
 `Integer x Integer`. Because the right parameter of the operator is an _Integer_ and there is only one `=` definition
 which uses the type _Integer_ as right parameter, `sequence` is casted to _Integer_.
 
-## 4. Examples
+## 4. Implementation suggestions
+
+This section is meant to provide some suggestions while implementing and adopting the CloudEvents Expression Language.
+It's non-normative, hence none of the below text is mandatory.
+
+### 4.1. Error handling
+
+Because CESQL expressions are total, they always define a return value, included in the [type system](#31-type-system), even after an error occurs.
+
+When evaluating an expression, the evaluator can operate in two _modes_, in relation to error handling:
+
+* Fail fast mode: When an error is triggered, the evaluation is interrupted and returns the error, without any result.
+* Complete evaluation mode: When an error is triggered, the evaluation is continued, and the evaluation of the expression returns both the result and the error(s).
+
+Choosing which evaluation mode to adopt and implement depends on the use case.
+
+## 5. Examples
 
 _CloudEvent including a subject_
 
@@ -452,7 +472,7 @@ _CloudEvent including the extension 'hop' and 'ttl', where 'hop' is smaller than
 hop < ttl
 ```
 
-## 5. References
+## 6. References
 
 - [RFC2119][rfc2119] Key words for use in RFCs to Indicate Requirement Levels
 
