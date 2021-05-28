@@ -163,8 +163,8 @@ prior schema versions are retained. This specification does not mandate a
 retention policy, but implementations MAY retire and remove outdated schema
 versions.
 
-The latest available schema is always the default version that is retrieved when
-the URI to the schema is used without the version having been specified.
+The latest available schema MUST always the default version that is retrieved
+when the URI to the schema is used without the version having been specified.
 
 ### 2.2.1 Schema authority
 
@@ -173,8 +173,8 @@ is a person or group of people or system that controls the schema. For the most
 common cases, the authority is whoever manages the schemas in a registry.
 
 For the [replication model](#4-replication-model-and-state-change-events), the
-authority information is used to disambiguate schemas from different origins
-that need to be consolidated in central schema registries or in caches.
+authority information MUST be used to disambiguate schemas from different
+origins that need to be consolidated in central schema registries or in caches.
 
 In complex business systems, the authority might be centralized and schemas are
 explicitly designed, reviewed and approved for use. In simpler scenarios, the
@@ -216,7 +216,7 @@ address, as permitted for the authority URI in the previous section.
 
 In those scenarios, an event consumer SHOULD be configured with a fixed schema
 registry endpoint for it to use, and obtain schemas identified, for example, in
-the [dataschema](../spec.md#dataschema) attruibute, using the
+the [dataschema](../spec.md#dataschema) attribute, using the
 ["getSchemaVersionByURI"](#342-get-a-specific-schema-version) API operation on
 that endpoint, rather than trying to resolve the URI directly.
 
@@ -500,10 +500,16 @@ The HEAD method SHOULD also be implemented.
 
 #### 3.4.3. Get a specific schema version by schema version URI
 
-Each schema version has a URI, as defined in [2.2.2](#222-schema-version-uri).
+Each schema version has a URI as a unique identifier, as defined in
+[2.2.2](#222-schema-version-uri). This URI can be used as a lookup key on any
+schema registry that holds a copy of that schema version.
 
-This operation is a GET on `/schema?uri={uri}`, with the required parameter
-being the schema version URI.
+As discussed in 2.2.2, the URI might not be network resolvable or the network
+location may not be reachable from everywhere. That is a key motivation for
+replication.
+
+The operation to obtain a schema version is a GET on `/schema?uri={uri}`, with
+the required parameter being the schema version URI.
 
 The returned payload is the schema document. Further attributes such as the
 `description` and the `format` indicator are returned as HTTP headers.
@@ -521,8 +527,8 @@ quite common that event producers and event consumers do not share the same
 network scope.
 
 In complex systems made up of subsystems owned by different organizations, the
-subsystem owners might also want to decouple the systems such that one or not
-dependent on the other system's availability whereever possible, and therefore
+subsystem owners might also want to decouple the systems such that they are not
+dependent on the other system's availability wherever possible, and therefore
 introduce redundant footprint for metadata stores such as a schema registry.
 
 We therefore cannot assume that an event consumer has access to the same
@@ -593,11 +599,20 @@ This replication model uses the registry API as defined above on the target
 registry and the configuration of what aspects of the registry are pushed are
 implementation specific.
 
+The names of the schema groups and of the schemas MAY mirror those from the
+source registry, but they MAY also differ. Each schema version is always
+accessible under both [its local path a given
+registry](#342-get-a-specific-schema-version) and under its globally unique
+[schema version URI](#343-get-a-specific-schema-version-by-schema-version-uri).
+
 ### 4.4 Pull replication
 
 In an imperative "pull" replication model, a target registry will once or periodically
 traverse the source registry contents and apply differences between the source
 state and its own state.
+
+The names of the schema groups and of the schemas MAY mirror those from the
+source registry, but they MAY also differ.
 
 The pulling registry might be configured to copy changes of the full registry, of
 a specific schema group, or just of a specific schema.
