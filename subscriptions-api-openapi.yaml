@@ -167,16 +167,20 @@ components:
           type: array
           items:
             type: string
-        filter:
-          oneOf:
-            - $ref: "#/components/schemas/Filter"
-            - $ref: "#/components/schemas/AllFilter"
-            - $ref: "#/components/schemas/AnyFilter"
-            - $ref: "#/components/schemas/NotFilter"
-            - $ref: "#/components/schemas/ExactFilter"
-            - $ref: "#/components/schemas/PrefixFilter"
-            - $ref: "#/components/schemas/SuffixFilter"
-            - $ref: "#/components/schemas/DialectFilter"
+        filters:
+          description: "This filter evaluates to 'true' if all contained filters are 'true'"
+          type: array
+          items:
+            title: "Filter entry"
+            oneOf:
+              - $ref: "#/components/schemas/Filter"
+              - $ref: "#/components/schemas/AllFilter"
+              - $ref: "#/components/schemas/AnyFilter"
+              - $ref: "#/components/schemas/NotFilter"
+              - $ref: "#/components/schemas/ExactFilter"
+              - $ref: "#/components/schemas/PrefixFilter"
+              - $ref: "#/components/schemas/SuffixFilter"
+              - $ref: "#/components/schemas/DialectFilter"
         config:
           description: OPTIONAL. Implementation-specific configuration parameters needed by the subscription manager for acquiring events.
           type: object
@@ -214,7 +218,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/Filter"
         - type: object
-          description: "all filter" 
+          description: "all filter"
           properties:
             all:
               description: "This filter evaluates to 'true' if all contained filters are 'true'"
@@ -236,7 +240,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/Filter"
         - type: object
-          description: "any filter" 
+          description: "any filter"
           properties:
             any:
               description: "This filter evaluates to 'true' if any contained filters are 'true'"
@@ -258,7 +262,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/Filter"
         - type: object
-          description: "not filter" 
+          description: "not filter"
           properties:
             not:
               type: object
@@ -279,7 +283,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/Filter"
         - type: object
-          description: "all filter" 
+          description: "all filter"
           properties:
             exact:
               title: "exact filter"
@@ -299,7 +303,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/Filter"
         - type: object
-          description: "all filter" 
+          description: "all filter"
           properties:
             prefix:
               title: "prefix filter"
@@ -319,7 +323,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/Filter"
         - type: object
-          description: "all filter" 
+          description: "all filter"
           properties:
             suffix:
               title: "suffix filter"
@@ -400,7 +404,7 @@ components:
               enum: ["settled", "unsettled"]
             linkProperties:
               type: object
-              additionalProperties: 
+              additionalProperties:
                  type: string
     ApacheKafkaSettings:
       type: object
