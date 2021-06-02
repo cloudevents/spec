@@ -1,8 +1,24 @@
 openapi: 3.0.0
 info:
   title: Cloud Native Data Schema Registry
-  version: "0.1"
+  version: "0.2"
 paths:
+  /schema:
+    get:
+      description: 'Direct access to a particular schema document providing its Schema Version URI'
+      operationId: getSchemaVersionByURI
+      parameters:
+          - in: query
+            name: uri
+            required: true
+            schema:
+              type: string
+            description: 'Schema version URI (requires percent-encoding).'
+      responses:
+        '200':
+          $ref: '#/components/responses/SchemaBytePayloadResponse'
+        '404':
+          description: 'Specified schema not found'
   /schemagroups:
     get:
       summary: 'Get list of schema groups'
