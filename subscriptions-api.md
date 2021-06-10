@@ -635,7 +635,7 @@ When encoded in JSON, a filter is encoded as follows:
 { "dialect URI-Reference" : { <dialect-specific-properties> } }
 ```
 
-This specification defines the following 6 filter dialects that all
+This specification defines the following 7 filter dialects that all
 implementations MUST support:
 
 ###### `exact` filter dialect
@@ -734,6 +734,20 @@ For example:
 {
   "not": { "exact": { "type": "com.github.push" } }
 }
+```
+
+###### `sql` filter dialect
+
+Use of this MUST have a string value, representing a [CloudEvents SQL Expression](./expression-language.md).
+The filter result MUST be true if the result value of the expression, coerced to boolean, equals to the `TRUE` boolean value,
+otherwise MUST be false if an error occurred while evaluating the expression or if the result value, 
+coerced to boolean, equals to the `FALSE` boolean value.
+
+Implementations SHOULD reject subscriptions with invalid CloudEvents SQL expressions.
+
+For example:
+```json
+{ "sql": "source LIKE '%cloudevents%'" }
 ```
 
 #### 3.2.4. API Operations
