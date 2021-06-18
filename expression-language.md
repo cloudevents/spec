@@ -206,7 +206,7 @@ When addressed an attribute not included in the input event, an empty _String_ M
 
 ### 3.3. Errors
 
-Because every operator and function is total, an expression evalution flow is defined statically and cannot be modified
+Because every operator and function is total, an expression evaluation flow is defined statically and cannot be modified
 by expected or unexpected errors. Nevertheless CESQL includes the concept of errors: when an expression is evaluated, in
 case an error arise, the evaluator collects a list of errors, referred in this spec as _error list_, which is then
 returned together with the evaluated value of the CESQL expression.
@@ -311,12 +311,12 @@ An overload on a variadic function is allowed only if the number of initial fixe
 For example, the following definitions are valid:
 
 * `ABC(x): String -> Integer`: Unary function (arity 1). 
-* `ABC(x, y): String x String -> Integer`: Brinary function (arity 2).
-* `ABC(x, y, z, ...): String x String x String x String^n -> Integer`: n-ary funcion (variable arity), but the initial fixed arguments are at least 3.
+* `ABC(x, y): String x String -> Integer`: Binary function (arity 2).
+* `ABC(x, y, z, ...): String x String x String x String^n -> Integer`: n-ary function (variable arity), but the initial fixed arguments are at least 3.
 
 But the followings are invalid, so the engine MUST reject them:
 
-* `ABC(x...): String^n -> Integer`: n-ary funcion (variable arity), but there are no initial fixed arguments.
+* `ABC(x...): String^n -> Integer`: n-ary function (variable arity), but there are no initial fixed arguments.
 * `ABC(x, y, z): String x String x String -> Integer`: Ternary function (arity 3).
 
 When a function invocation cannot be dispatched, the return value is undefined.
