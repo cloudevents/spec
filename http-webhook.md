@@ -310,7 +310,7 @@ WebHook-Allowed-Origin: eventemitter.example.com
 or
 
 ```text
-WebHook-Request-Origin: *
+WebHook-Allowed-Origin: *
 ```
 
 #### 4.2.2. WebHook-Allowed-Rate
