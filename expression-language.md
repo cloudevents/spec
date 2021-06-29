@@ -1,4 +1,4 @@
-# CloudEvents SQL Expression Language
+# CloudEvents SQL Expression Language - Version 0.1-wip
 
 ## Abstract
 
@@ -57,7 +57,7 @@ manipulation.
 The language is not constrained to a particular execution environment, which means it might run in a source, in a
 producer, in an intermediary, and it can be implemented using any technology stack.
 
-The CloudEvents Expression Language assumes the input always includes, but it's not limited to, a single valid and type
+The CloudEvents Expression Language assumes the input always includes but is not limited to a single valid and type
 checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of the
 other input values. The evaluation of an expression observes the concept of [referential
 transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a _boolean_, an _integer_ or a _string_, and it might include an error.
@@ -129,7 +129,7 @@ string-literal ::= ( "'" ( [^'] | "\'" )* "'" ) | ( '"' ( [^"] | '\"' )* '"')
 literal ::= number-literal | boolean-literal | string-literal
 ```
 
-Because string literals can be either `''` or `""` delimited, in the former case, the `"` has to be escaped, while in
+Because string literals can be either `''` or `""` delimited, in the former case, the `'` has to be escaped, while in
 the latter the `"` has to be escaped.
 
 ### 2.3. Operators
@@ -164,7 +164,7 @@ in-operation ::= expression not-operator? in-operator set-expression
 
 ### 2.4. Functions invocation
 
-CESQL supports N arity function invocation:
+CESQL supports n-ary function invocation:
 
 ```ebnf
 char ::= [A-Z] | [a-z]
@@ -196,7 +196,7 @@ be used in the `IN` operator.
 ### 3.2. CloudEvent context identifiers and types
 
 Each CloudEvent context attribute and extension MUST be addressable from an expression using its identifier, as defined
-by the spec. For example, using `id` in an expression will address to the CloudEvent [id attribute][ce-id-attribute].
+by the spec. For example, using `id` in an expression will address the CloudEvent [id attribute][ce-id-attribute].
 
 Unless otherwise specified, every attribute and extension MUST be represented by the _String_ type as its initial type.
 Through explicit and implicit type casting, the user can convert the addressed value instances to _Integer_ and
@@ -206,7 +206,7 @@ When addressed an attribute not included in the input event, an empty _String_ M
 
 ### 3.3. Errors
 
-Because every operator and function is total, an expression evalution flow is defined statically and cannot be modified
+Because every operator and function is total, an expression evaluation flow is defined statically and cannot be modified
 by expected or unexpected errors. Nevertheless CESQL includes the concept of errors: when an expression is evaluated, in
 case an error arise, the evaluator collects a list of errors, referred in this spec as _error list_, which is then
 returned together with the evaluated value of the CESQL expression.
@@ -310,14 +310,14 @@ An overload on a variadic function is allowed only if the number of initial fixe
 
 For example, the following definitions are valid:
 
-* `ABC(x): String -> Integer`: Arity is equal to one
-* `ABC(x, y): String x String x String -> Integer`: Arity is equal to three
-* `ABC(x, y, z, ...): String x String x String x String^n -> Integer`: Arity is variable, but the initial fixed arguments are at least 3
+* `ABC(x): String -> Integer`: Unary function (arity 1). 
+* `ABC(x, y): String x String -> Integer`: Binary function (arity 2).
+* `ABC(x, y, z, ...): String x String x String x String^n -> Integer`: n-ary function (variable arity), but the initial fixed arguments are at least 3.
 
 But the followings are invalid, so the engine MUST reject them:
 
-* `ABC(x...): String x String x String -> Integer`: Arity is variable, but there are no initial fixed arguments
-* `ABC(x, y, z): String x String x String -> Integer`: Arity is equal to three
+* `ABC(x...): String^n -> Integer`: n-ary function (variable arity), but there are no initial fixed arguments.
+* `ABC(x, y, z): String x String x String -> Integer`: Ternary function (arity 3).
 
 When a function invocation cannot be dispatched, the return value is undefined.
 
@@ -327,26 +327,26 @@ The following tables show the built-in functions that MUST be supported by a CES
 
 | Definition                      | Semantics                                                                                                                        |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `INT(x): Any -> Integer`     | If `x` is a _String_, returns `x` converted to _Integer_. If `x` is a _Integer_, returns `x`. Otherwise, returns `0` and raise an error.                                       |
-| `BOOL(x): Any -> Boolean`    | If `x` is a _String_, returns `true` if `x` is case insensitive equals to `"true"`, `false` if `x` is case insensitive equals to `"false"`. If `x` is a _Boolean_, returns `x`. Otherwise, returns `false` and raise an error |
-| `STRING(x): Any -> String`  | If `x` is a _String_, returns `x`. If `x` is an _Integer_, returns the base 10 decimal representation of `x`. If `x` is a _Boolean_ equal to `true`, returns `"true"`, if is a _Boolean_ equal to `false`, returns `"false"`.                                                                                             |
-| `IS_BOOL(x): Any -> Boolean` | Returns `true` if `x` is a _String_ and can be converted to _Boolean_ without raising an error, returns `true` if `x` is _Boolean_, returns `false` otherwise                                  |
-| `IS_INT(x): Any -> Boolean`  | Returns `true` if `x` is a _String_ and can be converted to _Integer_ without raising an error, returns `true` if `x` is _Integer_, `false` otherwise                                  |
+| `INT(x): Any -> Integer`     | If `x` is a _String_, returns `x` converted to _Integer_. If `x` is a _Integer_, returns `x`. Otherwise, returns `0` and raises an error.                                       |
+| `BOOL(x): Any -> Boolean`    | If `x` is a _String_, returns `true` if `x` is case insensitive equal to `"true"`, `false` if `x` is case insensitive equal to `"false"`. If `x` is a _Boolean_, returns `x`. Otherwise, returns `false` and raises an error. |
+| `STRING(x): Any -> String`  | If `x` is a _String_, returns `x`. If `x` is an _Integer_, returns the base 10 decimal representation of `x`. If `x` is a _Boolean_ equal to `true`, returns `"true"`, if it is a _Boolean_ equal to `false`, returns `"false"`.                                                                                             |
+| `IS_BOOL(x): Any -> Boolean` | If `x` is a _String_ and can be converted to _Boolean_ without raising an error, returns `true`. If `x` is a _Boolean_, returns `true`. Otherwise returns `false`.                                  |
+| `IS_INT(x): Any -> Boolean`  | If `x` is a _String_ and can be converted to _Integer_ without raising an error, returns `true`. If `x` is _Integer_, returns `true`. Otherwise, returns `false`.                                  |
 
 #### 3.5.2. Built-in String manipulation
 
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `LENGTH(x): String -> Integer`                             | Returns the character length of the String `x`                                                                                                                                                                             |
-| `CONCAT(x1, x2, ...): String^n -> String`                  | Returns the concatenation of `x1` up to `xN`                                                                                                                                                                               |
-| `CONCAT_WS(delimiter, x1, x2, ...): String x String^n -> String`                  | Returns the concatenation of `x1` up to `xN`, using the `delimiter`                                                                                                                                                                               |
-| `LOWER(x): String -> String`                               | Returns `x` in lowercase                                                                                                                                                                                                   |
-| `UPPER(x): String -> String`                               | Returns `x` in uppercase                                                                                                                                                                                                   |
-| `TRIM(x): String -> String`                                | Returns `x` with leading and trailing trimmed whitespaces                                                                                                                                                                  |
-| `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raise an error                                                                                   |
-| `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raise an error                                                                                     |
-| `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and raise an error if `pos > LENGTH(x) OR pos < -LENGTH(x)` |
-| `SUBSTRING(x, pos, len): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `pos` (included) of length `len`. Characters index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. If `len` is greater than the maximum substring starting at `pos`, then return the maximum substring. Returns the empty string and raise an error if `pos > LENGTH(x) OR pos < -LENGTH(x)` |
+| `LENGTH(x): String -> Integer`                             | Returns the character length of the String `x`.                                                                                                                                                                             |
+| `CONCAT(x1, x2, ...): String^n -> String`                  | Returns the concatenation of `x1` up to `xN`.                                                                                                                                                                               |
+| `CONCAT_WS(delimiter, x1, x2, ...): String x String^n -> String`                  | Returns the concatenation of `x1` up to `xN`, using the `delimiter`.                                                                                                                                                                               |
+| `LOWER(x): String -> String`                               | Returns `x` in lowercase.                                                                                                                                                                                                   |
+| `UPPER(x): String -> String`                               | Returns `x` in uppercase.                                                                                                                                                                                                   |
+| `TRIM(x): String -> String`                                | Returns `x` with leading and trailing trimmed whitespaces.                                                                                                                                                                  |
+| `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                   |
+| `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                     |
+| `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)`. |
+| `SUBSTRING(x, pos, len): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `pos` (included) of length `len`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. If `len` is greater than the maximum substring starting at `pos`, then return the maximum substring. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)` or if `len` is negative. |
 
 #### 3.5.3. Built-in Math functions
 
@@ -364,7 +364,7 @@ operators.
 CESQL supports both implicit and explicit type casting among the _primitive_ types. Users can perform explicit type
 casting through the functions defined in the [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
 
-When input parameters types of operator/function doesn't match the signatures, the CESQL engine MUST try to perform an
+When input parameters' types of operator/function don't match the signatures, the CESQL engine MUST try to perform an
 implicit cast.
 
 Implicit casts must follow the same semantics of their equivalent explicit cast functions, as defined in
@@ -376,22 +376,22 @@ operator/function definition with same symbol/name and arity but different param
 A CESQL engine MUST apply the following implicit casting rules in order:
 
 1. If the operator/function is unary (input parameter `x`):
-   1. If it's not ambiguous, cast `x` to the target type
-   1. If it's ambiguous, raise an error and the cast result is undefined
+   1. If it's not ambiguous, cast `x` to the target type.
+   1. If it's ambiguous, raise an error and the cast result is undefined.
 1. If the operator is binary (left parameter `x` and right parameter `y`):
-   1. If it's not ambiguous, cast `x` and `y` to the target types
+   1. If it's not ambiguous, cast `x` and `y` to the target types.
    1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator
       using the `y` type as the right parameter type:
-      1. If such operator definition exists and is unique, cast `x` to the type of the left parameter
-      2. Otherwise, raise an error and the cast results are undefined
+      1. If such operator definition exists and is unique, cast `x` to the type of the left parameter.
+      2. Otherwise, raise an error and the cast results are undefined.
 1. If the function is n-ary with `n > 1`:
-   1. If it's not ambiguous, cast all the parameters to the target type
-   1. If it's ambiguous, raise an error and the cast results are undefined
+   1. If it's not ambiguous, cast all the parameters to the target type.
+   1. If it's ambiguous, raise an error and the cast results are undefined.
 1. If the operator is n-ary with `n > 2`:
-   1. If it's not ambiguous, cast all the parameters to the target type
-   1. If it's ambiguous, raise an error and the cast results are undefined
+   1. If it's not ambiguous, cast all the parameters to the target type.
+   1. If it's ambiguous, raise an error and the cast results are undefined.
 
-for the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
+For the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
 
 For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a
 _Boolean_, this expression:
@@ -402,9 +402,9 @@ MY_STRING_PREDICATE(sequence + 10)
 
 MUST be evaluated as follows:
 
-1. `sequence` is casted to _Integer_ using the same semantics of `INT`
-2. `sequence + 10` is executed
-3. `sequence + 10` result is casted to _String_ using the same semantics of `STRING`
+1. `sequence` is casted to _Integer_ using the same semantics of `INT`.
+2. `sequence + 10` is executed.
+3. `sequence + 10` result is casted to _String_ using the same semantics of `STRING`.
 4. `MY_STRING_PREDICATE` is invoked with the result of the previous point as input.
 
 Another example, in this expression `sequence` is casted to _Integer_:
