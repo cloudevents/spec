@@ -12,77 +12,11 @@ paths:
       description: Get an optionally filtered collection of the Services known by this discovery end point
       parameters:
        - in: query
-         name: id
-         description: The id of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/id'
-       - in: query
-         name: epoch
-         description: The epoch of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/epoch'
-       - in: query
          name: name
          description: The name of the service to be returned
          required: false
          schema:
            $ref: '#/components/schemas/service/properties/name'
-       - in: query
-         name: url
-         description: The url of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/url'
-       - in: query
-         name: description
-         description: The description of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/description'
-       - in: query
-         name: docsurl
-         description: The docsurl of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/docsurl'
-       - in: query
-         name: specversions
-         description: The specversions of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/specversions'
-       - in: query
-         name: subscriptionurl
-         description: The subscriptionurl of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/subscriptionurl'
-       - in: query
-         name: subscriptionconfig
-         description: The subscriptionconfig of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/subscriptionconfig'
-       - in: query
-         name: subscriptiondialects
-         description: The subscriptiondialects of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/subscriptiondialects'
-       - in: query
-         name: authscope
-         description: The authscope of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/authscope'
-       - in: query
-         name: protocols
-         description: The protocols of the service to be returned
-         required: false
-         schema:
-           $ref: '#/components/schemas/service/properties/protocols'
       responses:
         '200':
           description: A list of services (optionally matching the query parameter)

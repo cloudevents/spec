@@ -543,6 +543,11 @@ The collection of services MAY be filtered by supplying an attribute as a query
 parameter.  Doing so will cause only Services with an exact match for that
 attribute to be included in the result.
 
+Discovery endpoints MUST support filtering with the following attributes and
+MAY ignore other filters.
+
+- `name`
+
 In the case of `200 OK`, the response format MUST adhere to the following:
 
 ```
