@@ -306,7 +306,7 @@ content type understood by that tooling.
 
 When a CloudEvent's data changes in a backwardly-compatible way, the
 value of the `dataschema` attribute should generally change to
-reflect that. An alternative approproach is for the URI to stay the
+reflect that. An alternative approach is for the URI to stay the
 same, but for the content served from that URI to change to reflect
 the updated schema. The latter approach may be simpler for event
 producers to implement, but is less convenient for consumers who may
