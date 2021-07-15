@@ -523,10 +523,10 @@ as if that Service does not exist. For example, it would be excluded from
 any array of Services returned and it would result in a `404 Not Found`
 error for a request to that Service directly.
 
-All APIs MUST support JSON encoding, which means that an HTTP requests
+All APIs MUST support JSON encoding, which means that HTTP requests
 including an HTTP `Content-Type` Header of `application/json` and body in that
 format MUST be supported.  Likewise requests with `Accept` header of
-`application\json` MUST be supported.
+`application/json` MUST be supported.
 
 ### Discovery APIs
 
@@ -535,16 +535,17 @@ compliant Discovery Endpoint implementations.
 
 #### `GET /services`
 
-This MUST return an array of zero or more Services. The array MUST contain all
-Services available via this Discovery Enpoint. Any Service previously returned
-to a client that does not appear in this result can be assumed to be deleted.
+This MUST return an array of zero or more Services. The array MUST contain the
+latest version of all Services available via this Discovery Enpoint. Any
+Service previously returned to a client that does not appear in this result can
+be assumed to be deleted.
 
 The collection of services MAY be filtered by supplying an attribute as a query
 parameter.  Doing so will cause only Services with an exact match for that
 attribute to be included in the result.
 
 Discovery endpoints MUST support filtering with the following attributes and
-MAY ignore other filters.
+MUST reject any unsupported filters.
 
 - `name`
 
@@ -572,7 +573,8 @@ prepared to support paginated responses.
 
 #### `GET /services/{id}`
 
-This MUST return the Service if it exists.
+This MUST return the latest version of the Service with the given `{id}` if it
+exists.
 
 The following responses are defined by this specification:
 - `200 OK` and the Service representation in the HTTP Response Body.
@@ -641,7 +643,7 @@ in the request will be completely replaced by the Service definition in the
 request.  The body of the request message MUST contain an array of zero or more
 Service entries.
 
-The `id` and `epoch` attributes of the Services MAY be omited. In such cases
+The `id` and `epoch` attributes of the Services MAY be omitted. In such cases
 the discovery endpoint MUST assign an appropriate value to the omitted
 field(s).  An appropriate `id` MUST be globally unique.  An appropriate `epoch`
 MUST be greater than the any existing `epoch` for a service with the same `id`.
@@ -775,7 +777,7 @@ request exists it MUST be completely replaced by the Service definition in the
 request.  The body of the request message MUST contain a Service with an `id`
 attribute matching the `{id}` in the path.
 
-The `epoch` attribute of the Service MAY be omited. In such cases the
+The `epoch` attribute of the Service MAY be omitted. In such cases the
 discovery endpoint MUST assign an appropriate value to the `epoch`.  An
 appropriate `epoch` MUST be greater than the any existing `epoch` for a service
 with the same `id`.  If an `epoch` is given in the request it MUST be greater
@@ -786,8 +788,8 @@ The follow responses are defined by this specification:
 - `200 OK` if Service collection was updated.
   - The HTTP Response Body MUST include the `id` and `epoch` of the updated
     Service.
-- `400 Bad Request` if the `id` in the path and body are not the same or some
-  other constraint failure is found
+- `400 Bad Request` if the `id` in the path and body are not the same, an
+  unsupported filter is given, or some other constraint failure is found
 - `404 Not Found` if there is no Service with the specified `id`
 - `409 Conflict` if the given epoch was less than or equal to the existing
   epoch of the Service with the given `id`
