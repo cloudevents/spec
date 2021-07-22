@@ -710,7 +710,8 @@ Content-Type: application/json
 [
   {
     id: "{id}",
-    epoch: "{epoch}"
+    epoch: "{epoch}",
+    ... remainder of Service attributes ...
   },
   ...
 ]
@@ -821,6 +822,7 @@ Content-Type: application/json
 {
   "id": "{id}",
   "epoch": "{id}",
+  ... remainder of Service attributes ...
 }
 ```
 
