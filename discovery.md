@@ -538,7 +538,7 @@ compliant Discovery Endpoint implementations.
 This MUST return an array of zero or more Services. The array MUST contain the
 latest version of all Services available via this Discovery Enpoint. Any
 Service previously returned to a client that does not appear in this result can
-be assumed to be deleted.
+be assumed to be no longer available.
 
 The collection of services MAY be filtered by supplying one or more
 [service attributes](#service-attributes) as a query parameter.  Doing so MUST
