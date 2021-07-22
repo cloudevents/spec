@@ -9,81 +9,230 @@ paths:
   /services:
     get:
       operationId: getServices
+      description: Get an optionally filtered collection of the Services known by this discovery end point
       parameters:
        - in: query
-         name: matching
-         description: The search term.
+         name: name
+         description: The name of the service to be returned
          required: false
          schema:
-           type: string
+           $ref: '#/components/schemas/service/properties/name'
       responses:
         '200':
-          description: A list of services (optionally matching the query parameter).
+          description: A list of services (optionally matching the query parameter)
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/service'
-  /services/{name}:
+                $ref: '#/components/schemas/services'
+    post:
+      operationId: postServices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/services'
+      responses:
+        '200':
+          description: A list of the resulting Service values resulting from processing the request, in the same order as in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/services'
+        '400':
+          description: Bad Request - constraint failure
+        '409':
+          description: Conflict - epoch not greater
+    delete:
+      operationId: deleteServices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/serviceinstances'
+      responses:
+        '200':
+          description: A list of the Services that were deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/services'
+        '400':
+          description: Bad Request - constraint failure
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict - epoch not greater
+  /services/{id}:
     get:
       operationId: getService
       parameters:
        - in: path
-         name: name
-         description: The name of the service to be returned.
+         name: id
+         description: The id of the service to be returned
          required: true
          schema:
-           type: string
+           $ref: '#/components/schemas/service/properties/id'
       responses:
         '200':
-          description: The corresponding service.
+          description: The corresponding service
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/service'
+                $ref: '#/components/schemas/service'
+        '404':
+          description: Not Found
+    post:
+      operationId: postService
+      parameters:
+       - in: path
+         name: id
+         description: The id of the service to be returned
+         required: true
+         schema:
+           $ref: '#/components/schemas/service/properties/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/service'
+      responses:
+        '200':
+          description: A Service Instance referencing the updated Service
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service'
+        '400':
+          description: Bad Request - constraint failure
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict - epoch not greater
+    delete:
+      operationId: deleteService
+      parameters:
+       - in: path
+         name: id
+         description: The id of the service to be returned
+         required: true
+         schema:
+           $ref: '#/components/schemas/service/properties/id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/serviceinstance'
+      responses:
+        '200':
+          description: The Service that was deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service'
+        '400':
+          description: Bad Request - constraint failure
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict - epoch not greater
 components:
   schemas:
-    service:
+    eventtype:
+      type: object
+      properties:
+        type:
+          type: string
+          description: CloudEvents type attribute
+          example: com.github.pull.create, com.example.object.delete.v2
+        description:
+          type: string
+          description: Human readable description
+        dataschema:
+          type: string
+          description: CloudEvents datacontenttype attribute. Indicating how the data attribute of subscribed events will be encoded
+        dataschematype:
+          type: string
+          description: If using dataschemacontent for inline schema storage, the dataschematype indicates the type of schema represented there
+        dataschemacontent:
+          type: string
+          description: An inline representation of the schema of the data attribute encoding mechanism. This is an alternative to using the dataschema attribute
+        sourcetemplate:
+          type: string
+          description: A URI Template according to RFC 6570 that defines how the source attribute will be generated
+          example: "http://blob.store/{bucket}"
+        extensions:
+          type: array
+          description: An array or CloudEvents Extension Context Attributes that are used for this event type
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: The CloudEvents context attribute name used by this extension
+              type:
+                type: string
+                description: The data type of the extension attribute
+              specurl:
+                type: string
+                description: An attribute pointing to the specification that defines the extension
+          example: '{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/extensions/dataref.md" }'
+    eventtypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/eventtype'
+    serviceinstance:
       type: object
       properties:
         id:
           type: string
-          description: A unique identifier for this Service. This value MUST be globally unique.
+          description: A unique identifier for this Service. This value MUST be globally unique
           format: uuid
           example: bf5ff5cc-d059-4c79-a89a-2513e45a1340
         epoch:
           type: integer
-          description: The Discovery Endpoint's epoch value for this Service Entry.
+          description: The Discovery Endpoint's epoch value for this Service Entry
           format: int64
           example: 42
+    serviceinstances:
+      type: array
+      items:
+        $ref: '#/components/schemas/serviceinstance'
+    service:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/serviceinstance/properties/id'
+        epoch:
+          $ref: '#/components/schemas/serviceinstance/properties/epoch'
         name:
           type: string
-          description: A unique identifier for this Service.
+          description: A unique identifier for this Service
           example: my storage service
         url:
           type: string
-          description: A URL that references this Service. This value MUST be usable in subsequent requests, by authorized clients, to retrieve this Service entity.
+          description: A URL that references this Service. This value MUST be usable in subsequent requests, by authorized clients, to retrieve this Service entity
           example: http://example.com/services/bf5ff5cc-d059-4c79-a89a-2513e45a1340
         description:
           type: string
-          description: Human readable description.
+          description: Human readable description
         docsurl:
           type: string
-          description: Absolute URL that provides a link to additional documentation about the service. This is intended for a developer to use in order to learn more about this service's events produced.
+          description: Absolute URL that provides a link to additional documentation about the service. This is intended for a developer to use in order to learn more about this service's events produced
           example: http://cloud.example.com/docs/blobstorage
         specversions:
           type: array
-          description: CloudEvents specversions that can be used for events published for this service.
+          description: CloudEvents specversions that can be used for events published for this service
           items:
             type: string
             description: version
           example: '[ "1.0" ]'
         subscriptionurl:
           type: string
-          description: An absolute URL indicating where CloudSubscriptions subscribe API calls MUST be sent to.
+          description: An absolute URL indicating where CloudSubscriptions subscribe API calls MUST be sent to
           format: url
         subscriptionconfig:
           type: object
@@ -92,63 +241,25 @@ components:
             type: string
         subscriptiondialects:
           type: array
-          description: Filter dialects that can be used in subscriptions for this service.
+          description: Filter dialects that can be used in subscriptions for this service
           items:
             type: string
             description: filter dialect
           example: '[ "basic" ]'
         authscope:
           type: string
-          description: Authorization scope needed for creating subscriptions. The actual meaning of this field is determined on a per-service basis.
+          description: Authorization scope needed for creating subscriptions. The actual meaning of this field is determined on a per-service basis
           example: storage.read
         protocols:
           type: array
-          description: This field describes the different values that might be passed in the protocol field of the CloudSubscriptions API. The protocols with existing CloudEvents bindings are identified as AMQP, MQTT3, MQTT5, HTTP, KAFKA, and NATS. An implementation MAY add support for further protocols. All services MUST support at least one delivery protocol, and MAY support additional protocols.
+          description: This field describes the different values that might be passed in the protocol field of the CloudSubscriptions API. The protocols with existing CloudEvents bindings are identified as AMQP, MQTT3, MQTT5, HTTP, KAFKA, and NATS. An implementation MAY add support for further protocols. All services MUST support at least one delivery protocol, and MAY support additional protocols
           items:
             type: string
             description: protocol
           example: '[ "HTTP", "AMQP", "KAFKA" ]'
         events:
-          type: array
-          description: List of EventType objects that specify the CloudEvent types available from this service.
-          items:
-            $ref: '#/components/schemas/eventtype'
-    eventtype:
-      type: object
-      properties:
-        type:
-          type: string
-          description: CloudEvents type attribute.
-          example: com.github.pull.create, com.example.object.delete.v2
-        description:
-          type: string
-          description: Human readable description.
-        dataschema:
-          type: string
-          description: CloudEvents datacontenttype attribute. Indicating how the data attribute of subscribed events will be encoded.
-        dataschematype:
-          type: string
-          description: If using dataschemacontent for inline schema storage, the dataschematype indicates the type of schema represented there.
-        dataschemacontent:
-          type: string
-          description: An inline representation of the schema of the data attribute encoding mechanism. This is an alternative to using the dataschema attribute.
-        sourcetemplate:
-          type: string
-          description: A URI Template according to RFC 6570 that defines how the source attribute will be generated.
-          example: "http://blob.store/{bucket}"
-        extensions:
-          type: array
-          description: An array or CloudEvents Extension Context Attributes that are used for this event type.
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: The CloudEvents context attribute name used by this extension.
-              type:
-                type: string
-                description: The data type of the extension attribute.
-              specurl:
-                type: string
-                description: An attribute pointing to the specification that defines the extension.
-          example: '{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/extensions/dataref.md" }'
+          $ref: '#/components/schemas/eventtypes'
+    services:
+      type: array
+      items:
+        $ref: '#/components/schemas/service'
