@@ -720,8 +720,7 @@ Content-Type: application/json
 This MUST delete all of the Services in the Discovery Endpoint that are
 contained in the request.  If any of those Services cannot be deleted for any
 reason (e.g. an `id` is not given or a Service with the given `id` does not
-exist) then the entire request MUST fail with no effect.  The deletion MAY be a
-soft deletion and MAY have a defined time to live (a.k.a. `ttl`).
+exist) then the entire request MUST fail with no effect.
 
 If an `id` is not specified in any of the Services the entire request MUST
 fail.  If no Service can be found that corresponds to a specified `id`, the
@@ -827,8 +826,7 @@ Content-Type: application/json
 
 #### `DELETE /services/{id}`
 
-This MUST delete the Service at the referenced URL.  The deletion MAY be a soft
-deletion and MAY have a defined time to live (a.k.a. `ttl`).
+This MUST delete the Service at the referenced URL.
 
 The request MAY include a body.  Any such body MUST be an object containing an
 `id` matching the `{id}` in the path.  That object MAY include an `epoch`
