@@ -540,12 +540,14 @@ latest version of all Services available via this Discovery Enpoint. Any
 Service previously returned to a client that does not appear in this result can
 be assumed to be deleted.
 
-The collection of services MAY be filtered by supplying an attribute as a query
-parameter.  Doing so will cause only Services with an exact match for that
-attribute to be included in the result.
+The collection of services MAY be filtered by supplying one or more
+[service attributes](#service-attributes) as a query parameter.  Doing so MUST
+cause only Services with at least an exact value match for those filters to be
+included in the result.  Parameter names and values are case sensitive.
 
 Discovery endpoints MUST support filtering with the following attributes and
-MUST reject any unsupported filters.
+MUST reject any unsupported filters.  Endpoints MAY add additional query
+parameters or filter processing to improve upon this minimum provision.
 
 - `name`
 
@@ -792,11 +794,11 @@ The follow responses are defined by this specification:
   - The HTTP Response Body MUST include the Service values resulting from the
     successful processing of the request.  The response MAY include attributes
     and values which were added by the Discovery Endpoint.
-- `400 Bad Request` if the `id` in the path and body are not the same, an
-  unsupported filter is given, or some other constraint failure is found
+- `400 Bad Request` if the `id` in the path and body are not the same or some
+  other constraint failure is found
 - `404 Not Found` if there is no Service with the specified `id`
-- `409 Conflict` if the given epoch was less than or equal to the existing
-  epoch of the Service with the given `id`
+- `409 Conflict` if the given `epoch` was less than or equal to the existing
+  `epoch` of the Service with the given `id`
 
 Other responses are allowed, but not defined by this specification.
 
