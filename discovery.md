@@ -833,7 +833,7 @@ The request MAY include a body.  Any such body MUST be an object containing an
 value.  If the Service corresponding with the specified `id` has a higher
 recorded `epoch` value than given, the request MUST fail.
 
-If other service attributes are included in the request, those SHOULD be
+If other service attributes are included in the request, those MUST be
 ignored for the purposes of processing the request.
 
 The follow responses are defined by this specification:
