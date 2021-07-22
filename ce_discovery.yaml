@@ -34,11 +34,11 @@ paths:
               $ref: '#/components/schemas/services'
       responses:
         '200':
-          description: A list of Service Instances that reference the updated Services
+          description: A list of the resulting Service values resulting from processing the request, in the same order as in the request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/serviceinstances'
+                $ref: '#/components/schemas/services'
         '400':
           description: Bad Request - constraint failure
         '409':
@@ -104,7 +104,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/serviceinstance'
+                $ref: '#/components/schemas/service'
         '400':
           description: Bad Request - constraint failure
         '404':

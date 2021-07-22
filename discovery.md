@@ -675,8 +675,11 @@ than once within a request.
 
 The follow responses are defined by this specification:
 - `200 OK` if all the specified Services were processed successfully
-  - The HTTP Response Body MUST include an array of `id` and `epoch` values
-    whose order and values MUST match the list of Services in the request
+  - The HTTP Response Body MUST include an array of the Service values
+    resulting from the successful processing of the request.  The order of
+    those values MUST match the order of the Services in the request. The
+    response MAY include attributes and values which were added by the
+    Discovery Endpoint.
 - `400 Bad Request` if the first error encountered is a constraint failure
 - `409 Conflict` if the first error encountered is that a given epoch was less
   than or equal to the existing epoch of the Service with a given `id`
@@ -786,8 +789,9 @@ fail.
 
 The follow responses are defined by this specification:
 - `200 OK` if Service collection was updated.
-  - The HTTP Response Body MUST include the `id` and `epoch` of the updated
-    Service.
+  - The HTTP Response Body MUST include the Service values resulting from the
+    successful processing of the request.  The response MAY include attributes
+    and values which were added by the Discovery Endpoint.
 - `400 Bad Request` if the `id` in the path and body are not the same, an
   unsupported filter is given, or some other constraint failure is found
 - `404 Not Found` if there is no Service with the specified `id`
