@@ -74,7 +74,7 @@ by multiple companies or providers.
 
 Events can be delivered through various industry standard protocols (e.g. HTTP,
 AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor
-specific protocols (AWS Kinesis, Azure Event Grid).
+specific protocols (AWS Kinesis, Azure Event Grid, Google Pub/Sub).
 
 An action processes an event defining a behavior or effect which was triggered
 by a specific _occurrence_ from a specific _source_. While outside of the scope
