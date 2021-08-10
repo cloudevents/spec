@@ -196,7 +196,7 @@ Example event with `Binary`-valued data
     "specversion" : "1.0",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
-    "id" : "B234-1234-1234",
+    "id" : "A234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleothervalue" : 5,
@@ -213,7 +213,7 @@ type containing a serialized XML document.
     "specversion" : "1.0",
     "type" : "com.example.someevent",
     "source" : "/mycontext",
-    "id" : "A234-1234-1234",
+    "id" : "B234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleothervalue" : 5,
@@ -229,7 +229,7 @@ The above example encoded using [HTTP Binary Content Mode][http-binary]:
 CE-Specversion: 1.0
 CE-Type: com.example.someevent
 CE-Source: /mycontext
-CE-Id: C234-1234-1234
+CE-Id: B234-1234-1234
 CE-Time: 2018-04-05T17:31:00Z
 CE-Comexampleextension1: value
 CE-Comexampleothervalue: 5
@@ -288,7 +288,7 @@ of `application/json`. The data is a literal JSON string:
     "type" : "com.example.someevent",
     "source" : "/mycontext",
     "subject": null,
-    "id" : "C234-1234-1234",
+    "id" : "D234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleothervalue" : 5,
@@ -302,7 +302,7 @@ The above example encoded using [HTTP Binary Content Mode][http-binary]:
 CE-Specversion: 1.0
 CE-Type: com.example.someevent
 CE-Source: /mycontext
-CE-Id: C234-1234-1234
+CE-Id: D234-1234-1234
 CE-Time: 2018-04-05T17:31:00Z
 CE-Comexampleextension1: value
 CE-Comexampleothervalue: 5
