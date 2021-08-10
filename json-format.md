@@ -311,7 +311,7 @@ Content-Type: application/json
 "I'm just a string"
 ```
 
-Note that the `Content-Type` header in that last example is required in HTTP
+Note that the `Content-Type` header in that last example is REQUIRED in HTTP
 Binary format, even though it is implicit and omitted in JSON format. Note also
 that the content MUST be quoted to indicate that it is a literal JSON string. If
 the quotes were missing, this would have been an invalid event because the
