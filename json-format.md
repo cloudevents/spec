@@ -141,37 +141,53 @@ For any other type, the implementation MUST translate the data value into a
 [JSON value][json-value], and use the member name `data` to store it inside the
 JSON object.
 
+If the implementation determines that the type of data is NOT `Binary`, it MUST
+next determine whether the `datacontenttype` attribute, if present, indicates a
+JSON-oriented content type. A JSON-oriented content type is one whose subtype
+is `json` or has a JSON format; that is, a MIME type of the form `*/json` or
+`*/*+json`. If the `datacontenttype` attribute is absent, it is treated as if it
+were set to `application/json`, which is a JSON-oriented content type.
+
+If the implementation determines that the `datacontenttype` of an event with
+non-`Binary` data is JSON-oriented, it MUST translate the data value directly to
+a [JSON value][json-value], and use the member name `data` to store it inside
+the JSON object. It MUST store the JSON value directly; it MUST NOT serialize it
+and store it as a serialized JSON document. Note that the stored value could be
+a string if the original JSON value was itself a string.
+
+Otherwise, if the implementation determines that the `datacontenttype` of an
+event with non-`Binary` data is NOT JSON-oriented, it MUST encode the data value
+as a string, and use the member name `data` to store the encoded string inside
+the JSON object.
+
 Out of this follows that use of the `data` and `data_base64` members is mutually
 exclusive in a JSON serialized CloudEvent.
+
+Furthermore, unlike attributes, for which value types are restricted to strings
+per the [type-system mapping](#22-type-system-mapping), the `data` member
+[JSON value][json-value] is unrestricted, and MAY contain any valid JSON if the
+`datacontenttype` is JSON-oriented.
 
 When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
 member clearly indicates that the value is a Base64 encoded binary data, which
 the serializer MUST decode into a binary runtime data type. When a `data` member
-is present, it is decoded using the default JSON type mapping for the used
-runtime.
+is present, the decoding behavior is dependent on the value of the
+`datacontenttype` attribute.
 
-Unlike attributes, for which value types are restricted to strings per the
-[type-system mapping](#22-type-system-mapping), the resulting `data` member
-[JSON value][json-value] is unrestricted, and MAY contain any valid JSON.
+If a `data` member is present, and the `datacontenttype` is JSON-oriented (that
+is, its subtype is `json` or has a `+json` format), then the `data` member
+SHOULD be treated directly as a [JSON value][json-value] and decoded using the
+default JSON type mapping for the used runtime. Note that, if the `data` member
+is a string, it MUST be interpreted as a JSON string value; it MUST NOT be
+interpreted as a serialized JSON document and deserialized. If the
+`datacontenttype` is absent, it is treated as if it were set to
+`application/json`, which is a JSON-oriented content type.
+
+If a `data` member is present, and the `datacontenttype` is NOT JSON-oriented,
+then the `data` member SHOULD be treated as an encoded content string, and
+decoded using the runtime's content decoder.
 
 ### 3.2. Examples
-
-Example event with `String`-valued `data`:
-
-```JSON
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext",
-    "id" : "A234-1234-1234",
-    "time" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleothervalue" : 5,
-    "unsetextension": null,
-    "datacontenttype" : "text/xml",
-    "data" : "<much wow=\"xml\"/>"
-}
-```
 
 Example event with `Binary`-valued data
 
@@ -189,8 +205,41 @@ Example event with `Binary`-valued data
 }
 ```
 
-Example event with JSON data for the "data" member, either derived from a `Map`
-or [JSON data](#31-handling-of-data) data:
+Example event with non-`Binary`-valued `data` and a non-JSON-oriented content
+type containing a serialized XML document.
+
+```JSON
+{
+    "specversion" : "1.0",
+    "type" : "com.example.someevent",
+    "source" : "/mycontext",
+    "id" : "A234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
+    "comexampleextension1" : "value",
+    "comexampleothervalue" : 5,
+    "unsetextension": null,
+    "datacontenttype" : "application/xml",
+    "data" : "<much wow=\"xml\"/>"
+}
+```
+
+The above example encoded using [HTTP Binary Content Mode][http-binary]:
+
+```
+CE-Specversion: 1.0
+CE-Type: com.example.someevent
+CE-Source: /mycontext
+CE-Id: C234-1234-1234
+CE-Time: 2018-04-05T17:31:00Z
+CE-Comexampleextension1: value
+CE-Comexampleothervalue: 5
+Content-Type: application/xml
+
+<much wow="xml"/>
+```
+
+Example event with non-`Binary`-valued `data` and a JSON-oriented content type
+containing a JSON object:
 
 ```JSON
 {
@@ -210,6 +259,63 @@ or [JSON data](#31-handling-of-data) data:
     }
 }
 ```
+
+The above example encoded using [HTTP Binary Content Mode][http-binary]:
+
+```
+CE-Specversion: 1.0
+CE-Type: com.example.someevent
+CE-Source: /mycontext
+CE-Id: C234-1234-1234
+CE-Time: 2018-04-05T17:31:00Z
+CE-Comexampleextension1: value
+CE-Comexampleothervalue: 5
+Content-Type: application/json
+
+{
+  "appinfoA" : "abc",
+  "appinfoB" : 123,
+  "appinfoC" : true
+}
+```
+
+Example event with non-`Binary`-valued `data` and an implicit `datacontenttype`
+of `application/json`. The data is a literal JSON string:
+
+```JSON
+{
+    "specversion" : "1.0",
+    "type" : "com.example.someevent",
+    "source" : "/mycontext",
+    "subject": null,
+    "id" : "C234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
+    "comexampleextension1" : "value",
+    "comexampleothervalue" : 5,
+    "data" : "I'm just a string"
+}
+```
+
+The above example encoded using [HTTP Binary Content Mode][http-binary]:
+
+```
+CE-Specversion: 1.0
+CE-Type: com.example.someevent
+CE-Source: /mycontext
+CE-Id: C234-1234-1234
+CE-Time: 2018-04-05T17:31:00Z
+CE-Comexampleextension1: value
+CE-Comexampleothervalue: 5
+Content-Type: application/json
+
+"I'm just a string"
+```
+
+Note that the `Content-Type` header in that last example is required in HTTP
+Binary format, even though it is implicit and omitted in JSON format. Note also
+that the content MUST be quoted to indicate that it is a literal JSON string. If
+the quotes were missing, this would have been an invalid event because the
+content could not be decoded as `application/json`.
 
 ## 4. JSON Batch Format
 
@@ -294,6 +400,7 @@ also valid in a request):
 [ce]: ./spec.md
 [ce-types]: ./spec.md#type-system
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
+[http-binary]: ./http-protocol-binding.md#31-binary-content-mode
 [json-format]: ./json-format.md
 [json-geoseq]:https://www.iana.org/assignments/media-types/application/geo+json-seq
 [json-object]: https://tools.ietf.org/html/rfc7159#section-4
