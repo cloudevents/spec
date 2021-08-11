@@ -29,3 +29,12 @@ For example: `2018-02-27-MyCoolIdea.pdf`
 - 2018-11-14 KubeCon/CloudNativeCon China Nov 2018:
   [CloudEvent/Serverless Intro and Deep-Dive sessions](https://docs.google.com/presentation/d/1-Nq_HrJPFvFz_etbKGCo4_RZnhA3OuzwLl0EMFnafxw/edit)
   & [pdf](2018-11-14-KubeCon-Intro-DeepDive.pdf)
+
+- 2021-06-24 Klaus Deissner:
+  [Discovery Spec Overview](2021-06-24-DiscoveryOverview.pdf)
+
+- 2021-07-08 Doug Davis:
+  [Pagination Spec Overview](2021-07-08-CE-Pagination.pptx)
+
+- 2021-07-22 Clemens Vasters:
+  [Subscription and Schema Registry Specs Overview](2021-07-22-CloudEvents-Services-Federation-and-Integration.pptx)
