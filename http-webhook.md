@@ -70,10 +70,10 @@ This specification does not further constrain the content of the notification,
 and it also does not prescribe the [HTTP target resource][rfc7230-section-5-1]
 that is used for delivery.
 
-If the delivery target supports and requires
-[Abuse Protection](#4-abuse-protection), the delivery request MUST include the
-`Origin` header. The `Origin` header value is a DNS name expression that
-identifies the sending system.
+If the delivery target supports and requires [Abuse
+Protection](#4-abuse-protection), the delivery request MUST include the
+`WebHook-Request-Origin` header. The `WebHook-Request-Origin` header value is a
+DNS name expression that identifies the sending system.
 
 ### 2.2. Delivery response
 
@@ -225,7 +225,7 @@ instances that act on the behalf of a certain system, and not an individual
 host.
 
 After the handshake and if permission has been granted, the sender MUST use the
-`Origin` request header for each delivery request, with the value matching that
+`WebHook-Request-Origin` request header for each delivery request, with the value matching that
 of this header.
 
 Example:
