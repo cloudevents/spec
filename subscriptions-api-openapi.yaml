@@ -152,7 +152,7 @@ components:
           format: url
           description: REQUIRED. The address to which events shall be delivered using the selected protocol.
           example: "https://endpoint.example.com/webhook"
-        sinkCredentials:
+        sinkCredential:
           oneOf:
             - $ref: "#/components/schemas/SinkCredential"
             - $ref: "#/components/schemas/AccessTokenCredential"
@@ -446,6 +446,11 @@ components:
             - subject
     SinkCredential:
       type: object
+      properties:
+         credentialType:
+            type: string
+            enum: ["PLAIN", "ACCESSTOKEN", "REFRESHTOKEN"]
+            description: "The type of the credential."
       additionalProperties: false
     PlainCredential:
       type: object
@@ -468,17 +473,17 @@ components:
             accessToken:
               description: REQUIRED. An access token is a previously acquired token granting access to the target resource.
               type: string
-            expiresUtc:
+            accessTokenExpiresUtc:
               type: string
               format: date-time
               description: RECOMMENDED. An absolute UTC instant at which the token shall be considered expired.
-            type:
-              description: OPTIONAL. Type of the access token (See https://tools.ietf.org/html/rfc6749#section-7.1).
+            accessTokenType:
+              description: OPTIONAL. )Type of the access token (See https://tools.ietf.org/html/rfc6749#section-7.1).
               type: string
               default: bearer
           required:
             - accessToken
-            - expiresUtc
+            - accessTokenExpiresUtc
     RefreshTokenCredential:
       type: object
       description: An access token credential with a refresh token.
@@ -489,10 +494,10 @@ components:
             refreshToken:
               description: REQUIRED. An refresh token credential used to acquire access tokens.
               type: string
-            tokenEndpoint:
+            refreshTokenEndpoint:
               type: string
               format: uri
               description: REQUIRED. A URL at which the refresh token can be traded for an access token.
       required:
         - refreshToken
-        - tokenEndpoint
+        - refreshTokenEndpoint
