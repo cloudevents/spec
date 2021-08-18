@@ -230,7 +230,7 @@ The following sections define the attributes that appear in a Service entity.
 
 ##### epoch
 
-- Type: `Integer`
+- Type: `Unsigned 32-bit Integer`
 - Description: The Discovery Endpoint's epoch value for this Service Entry.
   This specification does not mandate any particular semantic meaning to
   the value used. For example, implementations are free to use a value that
@@ -242,6 +242,7 @@ The following sections define the attributes that appear in a Service entity.
 
 - Constraints:
   - REQUIRED in responses from the Discovery Endpoint.
+  - MUST be an unsigned 32-bit integer
 - Examples:
   - `42`
   - `915148800`
@@ -254,6 +255,7 @@ The following sections define the attributes that appear in a Service entity.
   Note, this differs from the `id` attribute which is globally unique.
 - Constraints:
   - REQUIRED
+  - MUST be a non-empty string
 - Examples:
   - `my storage service`
   - `cool git offering`
@@ -442,7 +444,7 @@ The following sections define the attributes that appear in EventType definition
   - OPTIONAL
   - If present, MUST be a non-empty string containing a schema compatible with
     the `datacontenttype`.
-  - If `dataschama` is present, this field MUST NOT be present.
+  - If `dataschema` is present, this field MUST NOT be present.
 
 ###### sourcetemplate
 
@@ -536,9 +538,7 @@ compliant Discovery Endpoint implementations.
 #### `GET /services`
 
 This MUST return an array of zero or more Services. The array MUST contain the
-latest version of all Services available via this Discovery Enpoint. Any
-Service previously returned to a client that does not appear in this result can
-be assumed to be no longer available.
+latest version of all Services available via this Discovery Enpoint.
 
 The collection of services MAY be filtered by supplying one or more
 [service attributes](#service-attributes) as a query parameter.  Doing so MUST
@@ -550,6 +550,13 @@ MUST reject any unsupported filters.  Endpoints MAY add additional query
 parameters or filter processing to improve upon this minimum provision.
 
 - `name`
+
+Any Service previously returned to a client that does not appear in this
+result can be assumed to be no longer available in the scope of the query
+specified. In the unfiltered query case this means the Service has been
+deleted. In the filtered case it is not possible to know if the Service has
+been deleted or if the filters no longer apply to that Service, and therefore
+it can not be assumed to be deleted.
 
 In the case of `200 OK`, the response format MUST adhere to the following:
 
