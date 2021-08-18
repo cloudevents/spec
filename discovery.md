@@ -913,6 +913,38 @@ Any Discovery Endpoint Service entities MUST adhere to the following:
 }
 ```
 
+#### `GET /changes`
+
+The discovery service MAY offer a partial or complete history of changes to its
+collection of services.
+
+The changes listed by this endpoint are the same changes as those discoverable
+events that the "self" service entity offers.  As such, this endpoint offers
+requestors the ability to request copies of change events occurring prior to
+the request.  Discovery Endpoints that offer this historical listing MAY use a
+limited retention period.
+
+In the case of `200 OK`, the response format MUST adhere to the following:
+
+```
+200 OK
+Content-Type: application/json
+
+[
+  {
+    "operation": "{operation}", // POST|DELETE
+    "path": "{path}",           // /services[/{id}]
+    "request": {request},       // as per path specification
+    "response": {response}      // as per path specification
+  },
+  ...
+]
+```
+
+Implementations MAY use the [pagination](pagination.md) specification
+if the number of changes returned is large. Clients SHOULD be
+prepared to support paginated responses.
+
 ### OpenAPI
 
 See [Discovery Endpoint OpenAPI Specification](ce_discovery.yaml).
