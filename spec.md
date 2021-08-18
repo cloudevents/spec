@@ -357,7 +357,7 @@ on the definition of OPTIONAL.
   For some binary mode protocol bindings, this field is directly mapped to the
   respective protocol's content-type metadata property. Normative rules for the
   binary mode and the content-type metadata mapping can be found in the
-  respective protocol
+  respective protocol.
 
   In some event formats the `datacontenttype` attribute MAY be omitted. For
   example, if a JSON format event has no `datacontenttype` attribute, then it is
