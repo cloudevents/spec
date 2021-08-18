@@ -27,18 +27,10 @@ paths:
     post:
       operationId: postServices
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/services'
+        $ref: '#/components/requestBodies/servicespostrequest'
       responses:
         '200':
-          description: A list of the resulting Service values resulting from processing the request, in the same order as in the request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/services'
+          $ref: '#/components/responses/servicespostresponse'
         '400':
           description: Bad Request - constraint failure
         '409':
@@ -46,18 +38,10 @@ paths:
     delete:
       operationId: deleteServices
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/serviceinstances'
+        $ref: '#/components/requestBodies/servicesdeleterequest'
       responses:
         '200':
-          description: A list of the Services that were deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/services'
+          $ref: '#/components/responses/servicesdeleteresponse'
         '400':
           description: Bad Request - constraint failure
         '404':
@@ -93,18 +77,10 @@ paths:
          schema:
            $ref: '#/components/schemas/service/properties/id'
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/service'
+        $ref: '#/components/requestBodies/servicepostrequest'
       responses:
         '200':
-          description: A Service Instance referencing the updated Service
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/service'
+          $ref: '#/components/responses/servicepostresponse'
         '400':
           description: Bad Request - constraint failure
         '404':
@@ -121,18 +97,10 @@ paths:
          schema:
            $ref: '#/components/schemas/service/properties/id'
       requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/serviceinstance'
+        $ref: '#/components/requestBodies/servicedeleterequest'
       responses:
         '200':
-          description: The Service that was deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/service'
+          $ref: '#/components/responses/servicedeleteresponse'
         '400':
           description: Bad Request - constraint failure
         '404':
@@ -140,6 +108,60 @@ paths:
         '409':
           description: Conflict - epoch not greater
 components:
+  requestBodies:
+    servicespostrequest:
+      description: A request to create or update the discovery endpoint's collection of services with the given services
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/services'
+    servicesdeleterequest:
+      description: A request to remove the given services from the discovery endpoint's collection of services
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/serviceinstances'
+    servicepostrequest:
+      description: A request to create or update the discovery endpoint's collection of services with the given service
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/service'
+    servicedeleterequest:
+      description: A request to remove the given service from the discovery endpoint's collection of services
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/serviceinstance'
+  responses:
+    servicespostresponse:
+      description: A list of the resulting Service values resulting from processing the request, in the same order as in the request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/services'
+    servicesdeleteresponse:
+      description: A list of the Services that were deleted
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/services'
+    servicepostresponse:
+      description: A Service Instance referencing the updated Service
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/service'
+    servicedeleteresponse:
+      description: The Service that was deleted
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/service'
   schemas:
     eventtype:
       type: object
@@ -263,3 +285,72 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/service'
+    change:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/changeservicespost'
+        - $ref: '#/components/schemas/changeservicepost'
+        - $ref: '#/components/schemas/changeservicesdelete'
+        - $ref: '#/components/schemas/changeservicedelete'
+    changepost:
+      type: string
+      enum:
+        - POST
+    changedelete:
+      type: string
+      enum:
+        - DELETE
+    changeservicespath:
+      type: string
+      pattern: ^\/services(\/){0,1}$
+    changeservicepath:
+      type: string
+      pattern: ^\/services(\/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}){0,1}$
+    changeservicespost:
+      type: object
+      properties:
+        operation:
+          $ref: '#/components/schemas/changepost'
+        path:
+          $ref: '#/components/schemas/changeservicespath'
+        request:
+          $ref: '#/components/requestBodies/servicespostrequest'
+        response:
+          $ref: '#/components/responses/servicespostresponse'
+      required: [operation, path, request, response]
+    changeservicesdelete:
+      type: object
+      properties:
+        operation:
+          $ref: '#/components/schemas/changedelete'
+        path:
+          $ref: '#/components/schemas/changeservicespath'
+        request:
+          $ref: '#/components/requestBodies/servicesdeleterequest'
+        response:
+          $ref: '#/components/responses/servicesdeleteresponse'
+      required: [operation, path, request, response]
+    changeservicepost:
+      type: object
+      properties:
+        operation:
+          $ref: '#/components/schemas/changepost'
+        path:
+          $ref: '#/components/schemas/changeservicepath'
+        request:
+          $ref: '#/components/requestBodies/servicepostrequest'
+        response:
+          $ref: '#/components/responses/servicepostresponse'
+      required: [operation, path, request, response]
+    changeservicedelete:
+      type: object
+      properties:
+        operation:
+          $ref: '#/components/schemas/changedelete'
+        path:
+          $ref: '#/components/schemas/changeservicepath'
+        request:
+          $ref: '#/components/requestBodies/servicedeleterequest'
+        response:
+          $ref: '#/components/responses/servicedeleteresponse'
+      required: [operation, path, request, response]
