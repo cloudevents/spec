@@ -141,30 +141,28 @@ type of the `data` content.
 If the implementation determines that the type of data is `Binary`, the value
 MUST be represented as a [JSON string][json-string] expression containing the
 [Base64][base64] encoded binary value, and use the member name `data_base64` to
-store it inside the JSON representation. The `datacontenttype` SHOULD reflect
-the format of the original binary data.
+store it inside the JSON representation. If present, the `datacontenttype` MUST
+reflect the format of the original binary data.
 
-If the type of data is NOT `Binary`, the implementation MUST next determine
+If the type of data is not `Binary`, the implementation will next determine
 whether the value of the `datacontenttype` attribute is _JSON-oriented_. A
 JSON-oriented content type is one whose subtype is `json` or has a `+json`
 format extension—that is, if it has the form `*/json` or `*/*+json`.
 
 If the `datacontenttype` is JSON-oriented, a JSON serializer MUST translate the
 data value to a [JSON value][json-value], and use the member name `data` to
-store it inside the JSON representation. Note: this translation SHOULD NOT
-perform a JSON serialization step on the data value. For example, data whose
-runtime type corresponds to a [JSON Object][json-object] (such as a "map" or
-"object" type in the runtime) SHOULD be stored directly as a JSON Object, rather
-than as a JSON-formatted string. An implementation MAY fail to serialize the
-event if it is unable to translate the runtime value to a JSON value.
+store it inside the JSON representation. The data value MUST be stored directly
+as a JSON value, rather than as an encoded JSON document stored in a string. An
+implementation MAY fail to serialize the event if it is unable to translate the
+runtime value to a JSON value.
 
-Otherwise, if the `datacontenttype` is NOT JSON-oriented, a JSON serializer
+Otherwise, if the `datacontenttype` is not JSON-oriented, a JSON serializer
 MUST use the member name `data` to store a string representation of the data
 value, properly encoded according to the `datacontenttype`, in the JSON
 representation. An implementation MAY fail to serialize the event if it is
 unable to represent the runtime value as a properly encoded string.
 
-Out of this follows that presence of the `data` and `data_base64` members is
+Out of this follows that the presence of the `data` and `data_base64` members is
 mutually exclusive in a JSON serialized CloudEvent.
 
 Furthermore, unlike attributes, for which value types are restricted to strings
@@ -185,22 +183,24 @@ When a `data` member is present, the decoding behavior is dependent on the value
 of the `datacontenttype` attribute. If the `datacontenttype` is JSON-oriented
 (that is, its subtype is `json` or has a `+json` format extension), then the
 `data` member MUST be treated directly as a [JSON value][json-value] and decoded
-using the default JSON type mapping for the runtime. Note: if the `data` member
-is a string, a JSON deserializer SHOULD interpret it as a [JSON
-String][json-string] value; it SHOULD NOT further deserialize the string as a
+using an appropriate JSON type mapping for the runtime. Note: if the `data`
+member is a string, a JSON deserializer MUST interpret it directly as a [JSON
+String][json-string] value; it MUST NOT further deserialize the string as a
 JSON document.
 
-If the `datacontenttype` is NOT JSON-oriented, then the `data` member SHOULD be
+If the `datacontenttype` is not JSON-oriented, then the `data` member SHOULD be
 treated as an encoded content string. An implementation MAY fail to deserialize
 the event if the `data` member is not a string, or if it is unable to interpret
 the `data` with the `datacontenttype`.
 
-If the `datacontenttype` attribute is absent, a JSON deserializer SHOULD proceed
-as if it were set to `application/json`, a JSON-oriented content type.
-Furthermore, when translating an event message with no `datacontenttype`
-attribute from JSON format to a different format or protocol binding, the target
-`datacontenttype` SHOULD be set explicitly to the implied `application/json`
-content type.
+When a `data` member is present, if the `datacontenttype` attribute is absent, a
+JSON deserializer SHOULD proceed as if it were set to `application/json`, a
+JSON-oriented content type, and treat the `data` member directly as a [JSON
+value][json-value]. Furthermore, if a JSON-formatted event with no
+`datacontenttype` is deserialized and then re-serialized using a different
+format or protocol binding, the `datacontenttype` in the re-serialized event
+SHOULD be set explicitly to the implied `application/json` content type to
+preserve the semantics of the event.
 
 ### 3.2. Examples
 
