@@ -530,6 +530,8 @@ including an HTTP `Content-Type` Header of `application/json` and body in that
 format MUST be supported.  Likewise requests with `Accept` header of
 `application/json` MUST be supported.
 
+Unknown query parameters on the APIs MUST be ignored.
+
 ### Discovery APIs
 
 All of the API endpoints specified in this section MUST be supported by
@@ -541,18 +543,32 @@ This MUST return an array of zero or more Services. The array MUST contain the
 latest version of all Services available via this Discovery Enpoint.
 
 The collection of services MAY be filtered by supplying one or more
-[service attributes](#service-attributes) as a query parameter.  Doing so MUST
-cause only Services with at least an exact value match for those filters to be
-included in the result.  Parameter names and values are case sensitive.
+[service attributes](#service-attributes) under the `filter` query parameter.
+The format for the `filter` query parameter MUST be:
 
-Discovery endpoints MUST support filtering with the following attributes and
-MUST reject any unsupported filters.  Endpoints MAY add additional query
-parameters or filter processing to improve upon this minimum provision.
+```
+?filter=ATTRIBUTE[=VALUE]
+```
+
+The `=VALUE` portion is OPTIONAL and if not present then the implied meaning
+is that the specified attribute in the Service has a non-empty value.
+
+Multiple attribute/value combinations MAY be specified as separate `filter`
+query parameters. When there are multiple filters, the resulting set of
+Services MUST only include ones that match all of the filters specified.
+Matching of attribute names and values MUST be case sensitive.
+
+Discovery endpoints MUST support filtering by the following attributes:
 
 - `name`
 
 Note: an empty result set is not an error and a zero sized array MUST be
 returned in those cases.
+
+Requests with unsupported filter attributes, MUST be rejected with a
+`400 Bad Request` response. Endpoints SHOULD return an error message that
+indicates which filter attributes were not supported. Endpoints MAY support
+additional filter attributes.
 
 Any Service previously returned to a client that does not appear in this
 result can be assumed to be no longer available in the scope of the query
