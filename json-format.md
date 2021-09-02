@@ -167,8 +167,8 @@ unable to represent the runtime value as a properly encoded string.
 Out of this follows that the presence of the `data` and `data_base64` members is
 mutually exclusive in a JSON serialized CloudEvent.
 
-Furthermore, unlike attributes, for which value types are restricted to strings
-per the [type-system mapping](#22-type-system-mapping), the `data` member
+Furthermore, unlike attributes, for which value types are restricted by the
+[type-system mapping](#22-type-system-mapping), the `data` member
 [JSON value][json-value] is unrestricted, and MAY contain any valid JSON if the
 `datacontenttype` declares the data to be JSON-formatted. In particular, the
 `data` member MAY have a value of `null`, representing an explicit `null`
