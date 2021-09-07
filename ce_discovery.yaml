@@ -92,16 +92,6 @@ paths:
           description: Not Found
         '409':
           description: Conflict - epoch not greater
-  /changes:
-    get:
-      operationId: getChanges
-      responses:
-        '200':
-          description: The historical service changes requested to this discovery endpoint
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/changes'
 components:
   parameters:
     id:
@@ -288,6 +278,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/service'
+    # This schema is returned as the `dataschemacontent` when discovery endpoints offer themselves as Service entities
     change:
       type: object
       oneOf:
