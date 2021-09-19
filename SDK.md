@@ -14,6 +14,7 @@ following SDKs:
 - [Python SDK](https://github.com/cloudevents/sdk-python)
 - [Ruby SDK](https://github.com/cloudevents/sdk-ruby)
 - [Rust SDK](https://github.com/cloudevents/sdk-rust)
+- [PowerShell](https://github.com/cloudevents/sdk-powershell)
 
 This is intended to provide guidance and requirements for SDK authors. This
 document is intended to be kept up to date with the CloudEvents spec.

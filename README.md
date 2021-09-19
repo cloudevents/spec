@@ -70,6 +70,7 @@ In addition to the documentation mentioned above, there is also an
 - [Python](https://github.com/cloudevents/sdk-python)
 - [Ruby](https://github.com/cloudevents/sdk-ruby)
 - [Rust](https://github.com/cloudevents/sdk-rust)
+- [PowerShell](https://github.com/cloudevents/sdk-powershell)
 
 ## Community
 
