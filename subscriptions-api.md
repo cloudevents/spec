@@ -373,7 +373,7 @@ Each subscription is represented by an object that has the following properties:
 - Constraints:
   - OPTIONAL for both subscription managers and subscribers to support
 - Examples:
-  - "prefix": [ "type": "com.github.issue" ]
+  - [ {"prefix": { "type": "com.github.issue" } } ]
 
 ##### sink
 - Type: `URI`
