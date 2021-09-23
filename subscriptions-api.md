@@ -363,7 +363,7 @@ Each subscription is represented by an object that has the following properties:
 
   Each filter dialect MUST have a name that is unique within the scope of the
   subscription manager. Each dialect will define the semantics and syntax of
-  the filter expression language. See the [Filters](#323-filters) section for
+  the filter expression language. See the [Filters](#324-filters) section for
   more information.
 
   If a subscription manager does not support filters, or the filter dialect
@@ -387,6 +387,21 @@ Each subscription is represented by an object that has the following properties:
 - Examples:
   - `https://example.com/event-processor`
 
+##### sinkCredential
+- Type: Map of attributes
+- Description: A set of settings carrying credential information that 
+  is enabling the entity delivering events to the subscription target to 
+  be authorized for delivery at the `sink` endpoint. The well-known 
+  attribute values are defined in [section 3.2.3](#323-sink-credentials).
+
+  Implementations SHOULD NOT include secrets contained in this map when 
+  the subscription object is enumerated or retrieved. Secrets SHOULD be
+  write-only. Tokens, passphrases, and passwords are such secrets and
+  account identifiers might be considered secrets as well.
+
+- Constraints:
+  - OPTIONAL
+
 ##### protocol
 - Type: `String`
 - Description: Identifier of a delivery protocol. Because of WebSocket
@@ -402,7 +417,7 @@ Each subscription is represented by an object that has the following properties:
   - `HTTP`
 
 ##### protocolsettings
-- Type: Map of protocol specific properties
+- Type: Map of protocol specific attributes
 - Description: A set of settings specific to the selected delivery protocol
   provider. Options for these settings are listed in the following subsection.
   An subscription manager MAY offer more options. See the [Protocol
@@ -602,13 +617,90 @@ settings. All other settings SHOULD be supported.
 - Constraints:
   - REQUIRED
 
+#### 3.2.3 Sink Credentials
 
-#### 3.2.3 Filters
+A sink credential provides authentication or authorization information necessary
+to enable delivery of events to a target. 
 
-Filters allow for subscriptions to specify that only a subset of events
-are to be delivered to the sink based on a set of criteria. The `filter`
-property in a subscription is a set of filter expressions, where each expression evaluates to either
-true or false for each event generated.
+##### credentialType
+- Type: `String`
+- Description: Identifier of a credential type. The predefined types are "PLAIN",
+  "ACCESSTOKEN", and "REFRESHTOKEN", with attributes enumerated below providing
+  credential information. Applications MAY implement further credential types.
+
+- Constraints:
+  - REQUIRED
+- Examples:
+  - `PLAIN`
+
+##### identifier
+- Type: String
+- Description: The identifier of a plain credential might be an account or
+  username.
+
+- Constraints: 
+  - REQUIRED for credentialType="PLAIN"
+
+##### secret
+- Type: String 
+- Description: The secret of a plain credential might be a password or
+  passphrase or key.
+
+- Constraints: 
+  - REQUIRED for credentialType="PLAIN"
+  - SHOULD NOT be returned during enumeration or retrieval
+
+##### accessToken
+- Type: String
+- Description: An access token is a previously acquired token granting access to
+  the target resource.
+
+- Constraints:
+  - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
+  - SHOULD NOT be returned during enumeration or retrieval
+
+##### accessTokenExpiresUtc
+- Type: Timestamp
+- Description: An absolute UTC instant at which the token SHALL be considered
+  expired.
+
+- Constraints:
+  - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
+
+##### accessTokenType
+- Type: String
+- Description: Type of the access token (See [OAuth 2.0](
+  https://tools.ietf.org/html/rfc6749#section-7.1)).
+
+- Constraints:
+  - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
+
+##### refreshToken
+- Type: String
+- Description: A refresh token credential used to acquire access tokens.
+
+- Constraints:
+  - REQUIRED for credentialType="REFRESHTOKEN"
+
+##### refreshTokenEndpoint
+- Type: String
+- Description: A URL at which the refresh token can be traded for an access
+  token.
+
+  Not that in some setups, accessing the refresh token endpoint uses an extra
+  security layer, whereby the requestor passing the refresh token to the
+  endpoint MUST be authorized. The credentials for this authorization
+  relationship, which exists between the delivery service managed by the
+  subscription API and the refresh endpoint, are out of scope for this
+  specification. The sinkCredentials represent the authorization relationship
+  between the subscriber and the delivery target it points the subscription to.
+
+#### 3.2.4 Filters
+
+Filters allow for subscriptions to specify that only a subset of events are to
+be delivered to the sink based on a set of criteria. The `filter` property in a
+subscription is a set of filter expressions, where each expression evaluates to
+either true or false for each event generated.
 
 If any of the filter expressions in the set evaluate to false, the event MUST NOT be
 sent to the sink. If all the filter expressions in the set evaluate to true, the event MUST be
@@ -620,7 +712,7 @@ allowed within the filter expression. If a filter dialect is specified in a
 subscription that is unsupported by the subscription manager, creation or
 update of the subscription MUST be rejected with an error.
 
-##### 3.2.3.1 Filter Dialects
+##### 3.2.4.1 Filter Dialects
 
 The filter expression language supported by an event producer is indicated by
 its dialect. This is intended to allow for flexibility, extensibility and to
@@ -750,7 +842,7 @@ For example:
 { "sql": "source LIKE '%cloudevents%'" }
 ```
 
-#### 3.2.4. API Operations
+#### 3.2.5. API Operations
 
 This section enumerates the abstract operations that are defined for
 subscription managers. The following sections define bindings of these abstract
@@ -764,7 +856,7 @@ OPTIONAL.
 Protocol bindings SHOULD provide a discovery mechanism for which operations are
 supported.
 
-#### 3.2.4.1. Creating a subscription
+#### 3.2.5.1. Creating a subscription
 
 The **Create** operation SHOULD be supported by compliant Event Producers. It
 creates a new Subscription. The client proposes a subscription object which MUST
@@ -790,7 +882,7 @@ Errors:
 Protocol bindings MAY map the Create operation such that the proposed _id_ is
 ignored and the subscription manager assigns one instead.
 
-#### 3.2.4.2. Retrieving a Subscription
+#### 3.2.5.2. Retrieving a Subscription
 
 The **Retrieve** operation MUST be supported by compliant Event Producers. It
 returns the specification of the identified subscription.
@@ -808,7 +900,7 @@ Errors:
 - **ok** - the operation succeeded
 - **notfound** - a subscription with the given _id_ already exists
 
-#### 3.2.4.3. Querying for a list of Subscriptions
+#### 3.2.5.3. Querying for a list of Subscriptions
 
 The **Query** operation SHOULD be supported by compliant Event Producers. It
 allows to query the list of subscriptions on the subscription manager associated
@@ -833,7 +925,7 @@ constraints and pagination arguments as parameters. A request without filtering
 constraints SHOULD return all available subscriptions associated with or
 otherwise visible to the party making the request.
 
-#### 3.2.4.4. Updating a Subscription
+#### 3.2.5.4. Updating a Subscription
 
 The Update operation MAY be supported by compliant Event Producers. To request
 the update of a Subscription, the client submits a proposed subscription object
@@ -855,7 +947,7 @@ Protocol bindings MAY map the Update and the Create operation into a composite
 does not exist. In this case, the operation is \*_Create_ and follows that
 operation's rules.
 
-#### 3.2.8. Deleting a Subscription
+#### 3.2.5.5. Deleting a Subscription
 
 The **Delete** operation SHOULD be supported by compliant Event Producers. It
 returns the specification of the identified subscription.
