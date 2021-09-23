@@ -199,7 +199,7 @@ Each CloudEvent context attribute and extension MUST be addressable from an expr
 by the spec. For example, using `id` in an expression will address the CloudEvent [id attribute][ce-id-attribute].
 
 Unless otherwise specified, every attribute and extension MUST be represented by the _String_ type as its initial type.
-Through explicit and implicit type casting, the user can convert the addressed value instances to _Integer_ and
+Through implicit type casting, the user can convert the addressed value instances to _Integer_ and
 _Boolean_.
 
 When addressed an attribute not included in the input event, an empty _String_ MUST be assumed as value
@@ -323,17 +323,7 @@ When a function invocation cannot be dispatched, the return value is undefined.
 
 The following tables show the built-in functions that MUST be supported by a CESQL evaluator.
 
-#### 3.5.1. Casting and type checking
-
-| Definition                      | Semantics                                                                                                                        |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `INT(x): Any -> Integer`     | If `x` is a _String_, returns `x` converted to _Integer_. If `x` is a _Integer_, returns `x`. Otherwise, returns `0` and raises an error.                                       |
-| `BOOL(x): Any -> Boolean`    | If `x` is a _String_, returns `true` if `x` is case insensitive equal to `"true"`, `false` if `x` is case insensitive equal to `"false"`. If `x` is a _Boolean_, returns `x`. Otherwise, returns `false` and raises an error. |
-| `STRING(x): Any -> String`  | If `x` is a _String_, returns `x`. If `x` is an _Integer_, returns the base 10 decimal representation of `x`. If `x` is a _Boolean_ equal to `true`, returns `"true"`, if it is a _Boolean_ equal to `false`, returns `"false"`.                                                                                             |
-| `IS_BOOL(x): Any -> Boolean` | If `x` is a _String_ and can be converted to _Boolean_ without raising an error, returns `true`. If `x` is a _Boolean_, returns `true`. Otherwise returns `false`.                                  |
-| `IS_INT(x): Any -> Boolean`  | If `x` is a _String_ and can be converted to _Integer_ without raising an error, returns `true`. If `x` is _Integer_, returns `true`. Otherwise, returns `false`.                                  |
-
-#### 3.5.2. Built-in String manipulation
+#### 3.5.1. Built-in String manipulation
 
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -348,7 +338,7 @@ The following tables show the built-in functions that MUST be supported by a CES
 | `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)`. |
 | `SUBSTRING(x, pos, len): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `pos` (included) of length `len`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. If `len` is greater than the maximum substring starting at `pos`, then return the maximum substring. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)` or if `len` is negative. |
 
-#### 3.5.3. Built-in Math functions
+#### 3.5.2. Built-in Math functions
 
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -361,14 +351,7 @@ operators.
 
 #### 3.7. Type casting
 
-CESQL supports both implicit and explicit type casting among the _primitive_ types. Users can perform explicit type
-casting through the functions defined in the [Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
-
-When input parameters' types of operator/function don't match the signatures, the CESQL engine MUST try to perform an
-implicit cast.
-
-Implicit casts must follow the same semantics of their equivalent explicit cast functions, as defined in
-[Casting and type checking](#351-casting-and-type-checking) sub-paragraph.
+When input parameters' types of operator/function don't match the signatures, the CESQL engine MUST try to perform an implicit cast.
 
 We refer in this paragraph to **ambiguous** operator/function as an operator/function that is overloaded with another
 operator/function definition with same symbol/name and arity but different parameter types.
