@@ -289,14 +289,14 @@ The following attributes are REQUIRED to be present in all CloudEvents:
   - An absolute URI is RECOMMENDED
 - Examples
   - Internet-wide unique URI with a DNS authority.
-    - https://github.com/cloudevents
-    - mailto:cncf-wg-serverless@lists.cncf.io
+    - `https://github.com/cloudevents`
+    - `mailto:cncf-wg-serverless@lists.cncf.io`
   - Universally-unique URN with a UUID:
-    - urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66
+    - `urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66`
   - Application-specific identifiers
-    - /cloudevents/spec/pull/123
-    - /sensors/tn-1234567/alerts
-    - 1-555-123-4567
+    - `/cloudevents/spec/pull/123`
+    - `/sensors/tn-1234567/alerts`
+    - `1-555-123-4567`
 
 #### specversion
 
@@ -414,8 +414,8 @@ on the definition of OPTIONAL.
     created" event, and the `id` uniquely identifies the event instance to
     distinguish separate occurrences of a same-named blob having been created;
     the name of the newly created blob is carried in `subject`:
-    - `source`: https://example.com/storage/tenant/container
-    - `subject`: mynewfile.jpg
+    - `source`: `https://example.com/storage/tenant/container`
+    - `subject`: `mynewfile.jpg`
 
 #### time
 
