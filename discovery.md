@@ -195,11 +195,40 @@ the wire format/API defined by this specification.
 #### Service Attributes
 
 The following sections define the attributes that appear in a Service entity.
+##### id
 
-#### `authority` (service authority)
+- Type: `String`
+- Description: A unique identifier for this Service. This value MUST be unique.
+  While other metadata about this Service MAY change, this value MUST
+  NOT so that clients can use this attribute to know whether a Service returned
+  by a query is the same Service returned by a previous query.
+
+  Whether a change to a Service would result in changing of the Service's
+  metadata (except `id`) and thus be just an update of an existing Service, or
+  whether the change would result in a brand new Service (with a new `id`) is
+  not defined by this specification.
+
+  For example, if a Service's implementation is upgraded to a new version then
+  whether this would result in a new Service (and `id`) or is an update to the
+  existing Service's metadata, is an implementation choice. Likewise, this
+  specification makes no statement, or guarantees, as to the forwards or
+  backwards compatibility of a Service as it changes over time.
+
+  See the Primer for more information.
+
+- Constraints:
+  - REQUIRED in responses from the Discovery Endpoint.
+  - MUST be a non-empty string
+  - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax.
+- Examples:
+  - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+  - `com.example.myservice.v1`
+
+#### authority (service authority)
 
 - Type: `URI`
 - Description: Identifies the authority for this service. Similar to schemas authority.
+  Note, the pair `authority` and `id` are globally unique
 - Constraints:
   - OPTIONAL. If the attribute is absent or empty, its implied default value is the base
     URI of the API endpoint.
@@ -235,7 +264,6 @@ The following sections define the attributes that appear in a Service entity.
 - Type: `String`
 - Description: A unique human readable identifier for this Service. This value
   MUST be unique (case insensitive) within the scope of this Discovery Endpoint.
-  Note, the couple `authority` and `name` are unique globally.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
