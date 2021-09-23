@@ -551,6 +551,9 @@ parameters or filter processing to improve upon this minimum provision.
 
 - `name`
 
+Note: an empty result set is not an error and a zero sized array MUST be
+returned in those cases.
+
 Any Service previously returned to a client that does not appear in this
 result can be assumed to be no longer available in the scope of the query
 specified. In the unfiltered query case this means the Service has been
