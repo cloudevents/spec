@@ -619,7 +619,7 @@ settings. All other settings SHOULD be supported.
 
 #### 3.2.3 Sink Credentials
 
-A sink credential provides authentication or authorization information required
+A sink credential provides authentication or authorization information necessary
 to enable delivery of events to a target. 
 
 ##### credentialType
@@ -661,7 +661,7 @@ to enable delivery of events to a target.
 
 ##### accessTokenExpiresUtc
 - Type: Timestamp
-- Description: An absolute UTC instant at which the token shall be considered
+- Description: An absolute UTC instant at which the token SHALL be considered
   expired.
 
 - Constraints:
@@ -689,7 +689,7 @@ to enable delivery of events to a target.
 
   Not that in some setups, accessing the refresh token endpoint uses an extra
   security layer, whereby the requestor passing the refresh token to the
-  endpoint must be authorized. The credentials for this authorization
+  endpoint MUST be authorized. The credentials for this authorization
   relationship, which exists between the delivery service managed by the
   subscription API and the refresh endpoint, are out of scope for this
   specification. The sinkCredentials represent the authorization relationship
