@@ -150,6 +150,8 @@ contain JSON-formatted content. Such a content type is defined as one having a
 [media subtype][rfc2045-sec5] equal to `json` or ending with a `+json` format
 extension. That is, a `datacontenttype` declares JSON-formatted content if its
 media type, when stripped of parameters, has the form `*/json` or `*/*+json`.
+If the `datacontenttype` is unspecified, processing SHOULD proceed as if the
+`datacontenttype` had been specified explicitly as `application/json`.
 
 If the `datacontenttype` declares the data to contain JSON-formatted content, a
 JSON serializer MUST translate the data value to a [JSON value][json-value], and
