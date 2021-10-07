@@ -198,10 +198,10 @@ The following sections define the attributes that appear in a Service entity.
 ##### id
 
 - Type: `String`
-- Description: A unique identifier for this Service. This value MUST be unique.
-  While other metadata about this Service MAY change, this value MUST
-  NOT so that clients can use this attribute to know whether a Service returned
-  by a query is the same Service returned by a previous query.
+- Description: A unique identifier for this Service. This value MUST be unique
+  within the authority. While other metadata about this Service MAY change,
+  this value MUST NOT so that clients can use this attribute to know whether a Service 
+  returned by a query is the same Service returned by a previous query.
 
   Whether a change to a Service would result in changing of the Service's
   metadata (except `id`) and thus be just an update of an existing Service, or
@@ -219,7 +219,7 @@ The following sections define the attributes that appear in a Service entity.
 - Constraints:
   - REQUIRED in responses from the Discovery Endpoint.
   - MUST be a non-empty string
-  - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax.
+  - MUST conform with [RFC3986/3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3) `segment-nz-nc` syntax.
 - Examples:
   - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
   - `com.example.myservice.v1`
@@ -228,7 +228,7 @@ The following sections define the attributes that appear in a Service entity.
 
 - Type: `URI`
 - Description: Identifies the authority for this service. Similar to schemas authority.
-  Note, the pair `authority` and `id` are globally unique
+  When `authority` and `id` are combined they MUST be globally unique.
 - Constraints:
   - OPTIONAL. If the attribute is absent or empty, its implied default value is the base
     URI of the API endpoint.
