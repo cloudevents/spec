@@ -876,7 +876,7 @@ Content-Type: application/json
 ]
 ```
 
-### History
+### Discovery Endpoint Service Change Events
 
 The discovery service MAY include itself as a Service entity that is
 discoverable.
