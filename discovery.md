@@ -888,7 +888,7 @@ and the response that was given.
 
 Receiving the complete set of these will allow a downstream mirror to exactly
 materialize a consistent Service collection.  A downstream mirror MAY alter
-records as appropriate for its cirucmstances.
+records as appropriate for its circumstances.
 
 Any Discovery Endpoint Service entities MUST adhere to the following:
 ```json
