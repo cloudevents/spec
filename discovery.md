@@ -130,7 +130,8 @@ Service:
 
 ```
 {
-  "id": "[a globally unique UUID]",
+  "id": "[a unique URI segment within the authority]",
+  "authority": "[URI reference to the authority providing the service]", ?
   "epoch": "[discovery entry epoch value]",
   "name": "[unique name for this services]",
   "url": "[unique URL to this service]",
@@ -170,6 +171,7 @@ An example:
 ```json
 {
   "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
+  "authority": "https://example.com",
   "epoch": 1,
   "name": "widgets",
   "url": "https://example.com/services/widgetService",
@@ -237,8 +239,8 @@ The following sections define the attributes that appear in a Service entity.
     attribute is REQUIRED to be not empty. If the value is empty or absent
     during import, it MUST be explicitly set to its implied default value.
 - Examples:
-  - `urn:com-example-schemas`
-  - `https://schemas.example.com`
+  - `urn:com-example`
+  - `https://example.com`
 
 ##### epoch
 
