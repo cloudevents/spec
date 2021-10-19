@@ -31,11 +31,6 @@ CloudEvents, please include in the list below.
   supports CloudEvents.
 - [cloudevents-python](https://github.com/williamhogman/cloudevents-python): A
   CloudEvents library for python.
-- [CloudEvents.live](https://cloudevents.live/): A real-time debugger/request
-  bin for the CloudEvents webhook format. Submit events to the bin and
-  immediately see them in the web UI (Sources:
-  [Backend](https://github.com/klira/cloudevents-bin)
-  [Frontend](https://github.com/klira/cloudevents-debugger))
 - [Argo-Events](https://github.com/argoproj/argo-events): An event-based
   dependency manager for Kubernetes which uses sensors to act on CloudEvents.
 - [cloudevent.js](https://github.com/smartiniOnGitHub/cloudevent.js): A
