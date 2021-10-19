@@ -130,7 +130,8 @@ Service:
 
 ```
 {
-  "id": "[a globally unique UUID]",
+  "id": "[a unique URI segment within the authority]",
+  "authority": "[URI reference to the authority providing the service]", ?
   "epoch": "[discovery entry epoch value]",
   "name": "[unique name for this services]",
   "url": "[unique URL to this service]",
@@ -170,6 +171,7 @@ An example:
 ```json
 {
   "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
+  "authority": "https://example.com",
   "epoch": 1,
   "name": "widgets",
   "url": "https://example.com/services/widgetService",
@@ -195,14 +197,13 @@ the wire format/API defined by this specification.
 #### Service Attributes
 
 The following sections define the attributes that appear in a Service entity.
-
 ##### id
 
 - Type: `String`
-- Description: A unique identifier for this Service. This value MUST be globally
-  unique. While other metadata about this Service MAY change, this value MUST
-  NOT so that clients can use this attribute to know whether a Service returned
-  by a query is the same Service returned by a previous query.
+- Description: A unique identifier for this Service. This value MUST be unique
+  within the authority. While other metadata about this Service MAY change,
+  this value MUST NOT so that clients can use this attribute to know whether a Service 
+  returned by a query is the same Service returned by a previous query.
 
   Whether a change to a Service would result in changing of the Service's
   metadata (except `id`) and thus be just an update of an existing Service, or
@@ -215,18 +216,31 @@ The following sections define the attributes that appear in a Service entity.
   specification makes no statement, or guarantees, as to the forwards or
   backwards compatibility of a Service as it changes over time.
 
-  Note, unlike the `name` attribute which only needs to be unique within the
-  scope of a single Discovery Endpoint, the global uniqueness aspect of this
-  attribute allows for the discovery of the same Service across multiple
-  Discovery Endpoints.
-
   See the Primer for more information.
 
 - Constraints:
   - REQUIRED in responses from the Discovery Endpoint.
-  - MUST be a valid UUID per RFC4122.
+  - MUST be a non-empty string
+  - MUST conform with [RFC3986/3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3) `segment-nz-nc` syntax.
 - Examples:
   - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
+  - `com.example.myservice.v1`
+
+#### authority (service authority)
+
+- Type: `URI`
+- Description: Identifies the authority for this service. Similar to schemas authority.
+  When `authority` and `id` are combined they MUST be globally unique.
+- Constraints:
+  - OPTIONAL. If the attribute is absent or empty, its implied default value is the base
+    URI of the API endpoint.
+  - MUST be a valid URI.
+  - For services imported from other discovery endpoints in replication scenarios, the
+    attribute is REQUIRED to be not empty. If the value is empty or absent
+    during import, it MUST be explicitly set to its implied default value.
+- Examples:
+  - `urn:com-example`
+  - `https://example.com`
 
 ##### epoch
 
@@ -252,7 +266,6 @@ The following sections define the attributes that appear in a Service entity.
 - Type: `String`
 - Description: A unique human readable identifier for this Service. This value
   MUST be unique (case insensitive) within the scope of this Discovery Endpoint.
-  Note, this differs from the `id` attribute which is globally unique.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string

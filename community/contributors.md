@@ -74,3 +74,5 @@ Contributions do not constitute an official endorsement.
   - Lee Calcote - [@leecalcote](https://github.com/leecalcote)
 - **VMWare**
   - Mark Peek - [@markpeek](https://github.com/markpeek)
+- **Individuals**
+  - Rémi Cattiau - [@loopingz](https://github.com/loopingz)
