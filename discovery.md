@@ -904,6 +904,43 @@ Content-Type: application/json
 ]
 ```
 
+### Discovery Endpoint Service Change Events
+
+The discovery service MAY include itself as a Service entity that is
+discoverable.
+
+The events produced by this "self" Service describe the management requests
+made to the discovery service. The events produced MUST include the operation
+and path to which the management request was made as well as the request body
+and the response that was given.
+
+Receiving the complete set of these will allow a downstream mirror to exactly
+materialize a consistent Service collection.  A downstream mirror MAY alter
+records as appropriate for its circumstances.
+
+Any Discovery Endpoint Service entities MUST adhere to the following:
+```json
+{
+  "id": "{id}",
+  ... other service attributes ...
+  "events": [
+    {
+      "specversions": ["1.x-wip"],
+      "type" : "io.cloudevents.discovery.change",
+      "dataschemacontent": { // see ce_discovery.yaml#/components/schemas/change
+        "type": "object",
+        "properties": {
+          "operation": "{operation}", // POST|DELETE
+          "path": "{path}",           // /services[/{id}]
+          "request": {request},       // as per path specification
+          "response": {response}      // as per path specification
+        }
+      }
+    }
+  ]
+}
+```
+
 ### OpenAPI
 
 See [Discovery Endpoint OpenAPI Specification](ce_discovery.yaml).
