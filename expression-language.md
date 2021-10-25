@@ -75,7 +75,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to filter on the input values.
 
-When used as a filter predicate, the expression output value is always casted to a boolean value.
+When used as a filter predicate, the expression output value is always cast to a boolean value.
 
 <!-- TODO -->
 
@@ -168,12 +168,12 @@ CESQL supports n-ary function invocation:
 
 ```ebnf
 char ::= [A-Z] | [a-z]
-parameter ::= expression
+argument ::= expression
 
 function-identifier ::= char ( "_" | char )*
 
-parameter-list ::= parameter ("," parameter)*
-function-invocation ::= function-identifier "(" parameter-list? ")"
+argument-list ::= argument ("," argument)*
+function-invocation ::= function-identifier "(" argument-list? ")"
 ```
 
 ## 3. Language semantics
@@ -351,27 +351,27 @@ operators.
 
 #### 3.7. Type casting
 
-When input parameters' types of operator/function don't match the signatures, the CESQL engine MUST try to perform an implicit cast.
+When the argument types of an operator/function invocation don't match the signature of the operator/function being invoked, the CESQL engine MUST try to perform an implicit cast.
 
 We refer in this paragraph to **ambiguous** operator/function as an operator/function that is overloaded with another
 operator/function definition with same symbol/name and arity but different parameter types.
 
 A CESQL engine MUST apply the following implicit casting rules in order:
 
-1. If the operator/function is unary (input parameter `x`):
-   1. If it's not ambiguous, cast `x` to the target type.
+1. If the operator/function is unary (argument `x`):
+   1. If it's not ambiguous, cast `x` to the parameter type.
    1. If it's ambiguous, raise an error and the cast result is undefined.
-1. If the operator is binary (left parameter `x` and right parameter `y`):
-   1. If it's not ambiguous, cast `x` and `y` to the target types.
+1. If the operator is binary (left operand `x` and right operand `y`):
+   1. If it's not ambiguous, cast `x` and `y` to the corresponding parameter types.
    1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator
-      using the `y` type as the right parameter type:
-      1. If such operator definition exists and is unique, cast `x` to the type of the left parameter.
+      which has the type of `y` as the right parameter type:
+      1. If such operator definition exists and is unique, cast `x` to the left parameter type.
       2. Otherwise, raise an error and the cast results are undefined.
 1. If the function is n-ary with `n > 1`:
-   1. If it's not ambiguous, cast all the parameters to the target type.
+   1. If it's not ambiguous, cast all the arguments to the corresponding parameter types.
    1. If it's ambiguous, raise an error and the cast results are undefined.
 1. If the operator is n-ary with `n > 2`:
-   1. If it's not ambiguous, cast all the parameters to the target type.
+   1. If it's not ambiguous, cast all the operands to the target type.
    1. If it's ambiguous, raise an error and the cast results are undefined.
 
 For the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
@@ -385,20 +385,20 @@ MY_STRING_PREDICATE(sequence + 10)
 
 MUST be evaluated as follows:
 
-1. `sequence` is casted to _Integer_ using the same semantics of `INT`.
+1. `sequence` is cast to _Integer_ using the same semantics of `INT`.
 2. `sequence + 10` is executed.
-3. `sequence + 10` result is casted to _String_ using the same semantics of `STRING`.
+3. `sequence + 10` result is cast to _String_ using the same semantics of `STRING`.
 4. `MY_STRING_PREDICATE` is invoked with the result of the previous point as input.
 
-Another example, in this expression `sequence` is casted to _Integer_:
+Another example, in this expression `sequence` is cast to _Integer_:
 
 ```
 sequence = 10
 ```
 
 `=` is arity 2 ambiguous operator, because it's defined for `String x String`, `Boolean x Boolean` and
-`Integer x Integer`. Because the right parameter of the operator is an _Integer_ and there is only one `=` definition
-which uses the type _Integer_ as right parameter, `sequence` is casted to _Integer_.
+`Integer x Integer`. Because the right operand of the operator is an _Integer_ and there is only one `=` definition
+which uses the type _Integer_ for the right parameter, `sequence` is cast to _Integer_.
 
 ## 4. Implementation suggestions
 
