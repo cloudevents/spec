@@ -142,7 +142,7 @@ Service:
   "subscriptionconfig": { ?
     "[key]": "[type]", *
   },
-  "subscrioptiondialects": [ "[dialect]" ], ?
+  "subscriptiondialects": [ "[dialect]" ], ?
   "authscope": "[string]", ?
   "protocols": [ "[string]" + ],
   "events": [ ?
@@ -516,9 +516,39 @@ The following sections define the attributes that appear in EventType definition
 }
 ```
 
+### Endpoint Features
+
+Each Discovery Endpoint will have its own customizations. For example,
+the list of filter attributes can vary between implementations. The following
+describes the "features" of the endpoint such that clients can determine
+which set of capabilities are available. Additional properties MAY be specified,
+however, care SHOULD be taken to avoid potential overlap with future
+specification defined properties. For example, a company specific prefix
+of `bigcompany` might be used.
+
+#### `servicefilterattributes`
+
+This is an array of attributes names that the Discovery Endpoint supports
+for the purpose of filtering the query of available Services. For nested
+attributes a dot(.) notation MUST be used.
+
+Sample attribute names:
+- `name`
+- `specversions`
+- `events.type`
+
+Note: this property MUST NOT be empty, or missing, since all implementations
+MUST support filtering by `name`.
+
+#### `pagination`
+
+This is a boolean value indicating support for the [Pagination](pagination.md)
+specification. If not specified, the default value is `false`.
+
 ## API Specification
 
 The endpoints defined by this specification are broken into two categories:
+- Features APIs - used to obtains the features of the Discovery Endpoint
 - Discovery APIs - used to find Services
 - Management APIs - used to manage the Services within a Discovery Endpoint
 
@@ -544,6 +574,23 @@ format MUST be supported.  Likewise requests with `Accept` header of
 `application/json` MUST be supported.
 
 Unknown query parameters on the APIs MUST be ignored.
+
+### Features APIs
+
+All of the API endpoints specified in this section MUST be supported by
+compliant Discovery Endpoint implementations.
+
+#### `GET /features`
+
+This MUST return the set of fearures supported by the implementation.
+
+The result MUST be a JSON object of the following form:
+```
+{
+  "servicefilterattributes": [ "name", ... ],
+  "pagination": "true"
+}
+```
 
 ### Discovery APIs
 
@@ -964,3 +1011,8 @@ The CloudDiscovery API does not place restrictions on implementation's choice of
 an authentication and authorization mechanism. While the list of entities
 returned from each query MAY differ, the format of the output MUST adhere to
 this specification.
+
+Additionally, implementations MAY choose different authentication schemes for
+each of the APIs defined in this specifications. For example, a valid choice
+might be to allow the "features" APIs to not mandate any authentication at all,
+while the "discovery" APIs might be restricted to authorized users.
