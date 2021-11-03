@@ -129,6 +129,8 @@ Please see the
 for the latest information on how to join the calls.
 
 Recording from our calls are available
+[here](https://www.youtube.com/channel/UC70hQml92GsoNgnB-CKNEXg/videos), and
+older ones are
 [here](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt).
 
 Periodically, the group may have in-person meetings that coincide with a major
