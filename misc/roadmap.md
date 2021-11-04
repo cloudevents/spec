@@ -29,9 +29,9 @@ _0.1_ - Completed - 2018/04/20
 1. Have at least 2 implementations of the specification that can demonstrate
    interoperability.
 1. Include a specification for mapping the CloudEvents specification to
-   [HTTP](http-protocol-binding.md).
+   [HTTP](../cloudevents/bindings/http-protocol-binding.md).
 1. Include a specification for mapping the CloudEvents specification to
-   [JSON](json-format.md).
+   [JSON](../cloudevents/formats/json-format.md).
 1. Changes to the spec to facilitate adoption.
 1. Publicize at conferences
    ([CloudNativeCon Europe](https://events.linuxfoundation.org/events/kubecon-cloudnativecon-north-america-2018/)).

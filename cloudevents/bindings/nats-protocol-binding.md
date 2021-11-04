@@ -156,7 +156,7 @@ Subject: mySubject
   Format
 
 [ce]: ./spec.md
-[json-format]: ./json-format.md
+[json-format]: ./formats/json-format.md
 [nats]: https://nats.io
 [nats-pub-proto]: https://nats.io/documentation/internals/nats-protocol/#PUB
 [nats-msg-proto]: https://nats.io/documentation/internals/nats-protocol/#MSG

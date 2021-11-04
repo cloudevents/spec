@@ -321,7 +321,7 @@ Topic Name: mytopic
 
 [ce]: ./spec.md
 [ce-types]: ./spec.md#type-system
-[json-format]: ./json-format.md
+[json-format]: ./formats/json-format.md
 [oasis-mqtt-3.1.1]: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
 [oasis-mqtt-5]: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
 [5-content-type]: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html#_Toc502667341

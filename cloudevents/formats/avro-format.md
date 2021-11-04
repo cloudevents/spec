@@ -75,7 +75,7 @@ Example:
 ### 2.4 Definition
 
 Users of Avro MUST use a message whose binary encoding is identical to the one
-described by the [CloudEvent Avro Schema](./spec.avsc):
+described by the [CloudEvent Avro Schema](../cloudevents.avsc):
 
 ```json
 {

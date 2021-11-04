@@ -475,7 +475,7 @@ Below is an example JSON serialization of a subscription resource:
   "protocolsettings": {
     "method": "POST"
   },
-  "sink": "http://example.com/event-processor",
+  "sink": "http://example.com/event-processor"
 }
 ```
 
@@ -830,7 +830,7 @@ For example:
 
 ###### `sql` filter dialect
 
-Use of this MUST have a string value, representing a [CloudEvents SQL Expression](./expression-language.md).
+Use of this MUST have a string value, representing a [CloudEvents SQL Expression](../cesql/spec.md).
 The filter result MUST be true if the result value of the expression, coerced to boolean, equals to the `TRUE` boolean value,
 otherwise MUST be false if an error occurred while evaluating the expression or if the result value, 
 coerced to boolean, equals to the `FALSE` boolean value.

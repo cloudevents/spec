@@ -314,7 +314,7 @@ content-type: application/cloudevents+json; charset=utf-8
   (AMQP) Version 1.0
 
 [ce]: ./spec.md
-[json-format]: ./json-format.md
+[json-format]: ./formats/json-format.md
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046

@@ -47,8 +47,8 @@ approved the CloudEvents work as a new stand-alone CNCF sandbox project.
 ## CloudEvents Concepts
 
 An [event](spec.md#event) includes context and data about an
-[occurrence](spec.md#occurrence). Each _occurrence_ is uniquely identified by
-the data of the _event_.
+[occurrence](spec.md#occurrence). Each _occurrence_ is uniquely
+identified by the data of the _event_.
 
 _Events_ represent facts and therefore do not include a destination, whereas
 messages convey intent, transporting data from a source to a given destination.
@@ -161,9 +161,9 @@ by those new to the concepts of CloudEvents. After much deliberation, the
 working group has come to the conclusion that routing is unnecessary in the
 spec: any protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
 defines semantics for routing. For example, the CloudEvents
-[HTTP binding](http-protocol-binding.md) dictates headers and request body
-contents. CloudEvents don't need to include a destination URL in the spec to be
-HTTP compatible; the HTTP spec already includes one in the
+[HTTP binding](bindings/http-protocol-binding.md) dictates headers and request
+body contents. CloudEvents don't need to include a destination URL in the spec
+to be HTTP compatible; the HTTP spec already includes one in the
 [Request-Line](https://tools.ietf.org/html/rfc2616#section-5.1).
 
 Routing information is not just redundant, it detracts. CloudEvents should
@@ -206,17 +206,18 @@ CloudEvent specification.
 The CloudEvents specification set defines four different kinds of protocol
 elements that form a layered architecture model.
 
-1. The [base specification](spec.md) defines an abstract information model made
-   up of attributes (key-value pairs) and associated rules for what constitutes
-   a CloudEvent.
+1. The [base specification](spec.md) defines an abstract information
+   model made up of attributes (key-value pairs) and associated rules for what
+   constitutes a CloudEvent.
 2. The [extensions](./spec.md#extension-context-attributes) add use-case
    specific and potentially overlapping sets of extension attributes and
    associated rules, e.g. to support different tracing standards.
-3. The event format encodings, e.g. [JSON](json-format.md), define how the
-   information model of the base specification together with the chosen
+3. The event format encodings, e.g. [JSON](formats/json-format.md), define how
+   the information model of the base specification together with the chosen
    extensions is encoded for mapping it to header and payload elements of an
    application protocol.
-4. The protocol bindings, e.g. [HTTP](http-protocol-binding.md), defines how
+4. The protocol bindings, e.g. [HTTP](bindings/http-protocol-binding.md),
+   defines how
    the CloudEvent is bound to an application protocol's transport frame, in the
    case of HTTP to the HTTP message. The protocol binding does not constrain
    how the transport frame is used, meaning that the HTTP binding can be used
@@ -234,8 +235,8 @@ specification elsewhere makes it necessary for CloudEvents to define it.
 As stated in the [Design Goals](#design-goals) section, interoperability is
 a key objective of the specification. Therefore, there are places in the
 specification where restrictions are recommended. For example, in the
-[Size Limits](./spec.md#size-limits) section it hints that event sizes should
-not exceed 64KB. It is important to note that constraints such as these,
+[Size Limits](./spec.md#size-limits) section it hints that event sizes
+should not exceed 64KB. It is important to note that constraints such as these,
 where they are not mandated via a "MUST", are recommendations to increase
 the likelihood of interoperability between multiple implementations and
 deployments. Specific uses of the specification are free to ignore these
@@ -387,7 +388,8 @@ Extension attributes should be kept minimal to ensure the CloudEvent can be
 properly serialized and transported. For example, the Event producers should
 consider the technical limitations that might be encountered when adding
 extensions to a CloudEvent. For example, the
-[HTTP Binary Mode](http-protocol-binding.md#31-binary-content-mode) uses HTTP
+[HTTP Binary Mode](bindings/http-protocol-binding.md#31-binary-content-mode)
+uses HTTP
 headers to transport metadata; most HTTP servers will reject requests with
 excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
 size and number of extension attributes should be kept minimal.
@@ -399,8 +401,10 @@ formally adding them to the specification.
 
 ### JSON Extensions
 
-As mentioned in the [Attributes](json-format.md#2-attributes) section of the
-[JSON Event Format for CloudEvents](json-format.md) specification, CloudEvent
+As mentioned in the [Attributes](formats/json-format.md#2-attributes) section
+of the
+[JSON Event Format for CloudEvents](formats/json-format.md) specification,
+CloudEvent
 extension attributes are serialized as siblings to the specification defined
 attributes - meaning, at the top-level of the JSON object. The authors of the
 specification spent a long time considering all options and decided that this
@@ -493,11 +497,11 @@ the incoming CloudEvent.
 There might exist special cases in which it is necessary to create a CloudEvent
 that contains another CloudEvent. Although the specification does not define
 nesting explicitly, it is possible. While the inner event will always be encoded
-in a [stand-alone event format](spec.md#event-format), the outer event can be
-either binary or structured mode. The `datacontenttype` attribute of the outer
-event must not be set to `application/cloudevents+json` or any other media type
-that is used to denote the usage of structured mode. A correct example of event
-nesting would be:
+in a [stand-alone event format](spec.md#event-format), the outer event
+can be either binary or structured mode. The `datacontenttype` attribute of
+the outer event must not be set to `application/cloudevents+json` or any other
+media type that is used to denote the usage of structured mode. A correct
+example of event nesting would be:
 
 ```
 Content-Type: application/json
@@ -705,10 +709,10 @@ including being both a producer and a consumer of events.
    delegation choice of the producer.
 
    In practice, middleware can take on the role of a
-   [Producer](spec.md#producer) when it changes the semantic meaning of an
-   event, a [Consumer](spec.md#consumer) when it takes action based on an event,
-   or [Intermediary](spec.md#intermediary) when it routes events without making
-   semantic changes.
+   [Producer](spec.md#producer) when it changes the semantic meaning of
+   an event, a [Consumer](spec.md#consumer) when it takes action based
+   on an event, or [Intermediary](spec.md#intermediary) when it routes
+   events without making semantic changes.
 
 4. Frameworks and other abstractions make interactions with the event platform
    infrastructure simpler, and often expose common API surface areas for

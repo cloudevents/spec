@@ -147,7 +147,7 @@ The specifications produced will adhere to the following:
   will eventually result in an official "patch" release (e.g. `1.0.2`)
 
 Note that these rules do not apply to the
-[documented extensions](../documented-extensions.md).
+[documented extensions](../cloudevents/documented-extensions.md).
 
 To create a new release:
 
