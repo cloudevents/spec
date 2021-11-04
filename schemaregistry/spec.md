@@ -194,7 +194,7 @@ reflecting the governing entity, like `https://schemas.corp.example.com`.
 
 ### 2.2.2. Schema version URI
 
-For use with the [dataschema](../spec.md#dataschema) attribute in CloudEvents,
+For use with the [dataschema](../cloudevents/spec.md#dataschema) attribute in CloudEvents,
 and with any other use case where we need to refer to a specific schema
 document, unambiguous references to specific [schema
 versions](#22-schema-and-schema-version) are needed. These references can be
@@ -216,7 +216,7 @@ address, as permitted for the authority URI in the previous section.
 
 In those scenarios, an event consumer SHOULD be configured with a fixed schema
 registry endpoint for it to use, and obtain schemas identified, for example, in
-the [dataschema](../spec.md#dataschema) attribute, using the
+the [dataschema](../cloudevents/spec.md#dataschema) attribute, using the
 ["getSchemaVersionByURI"](#342-get-a-specific-schema-version) API operation on
 that endpoint, rather than trying to resolve the URI directly.
 
@@ -627,12 +627,12 @@ Event-driven replication uses CloudEvents to notify interested parties of
 changes in the source registry such that those parties can
 [pull](#44-pull-replication) changes immediately and as they become available.
 
-Each registry SHOULD offer a [Subscription API](../subscriptions-api.md)
+Each registry SHOULD offer a [Subscription API](../subscriptions/spec.md)
 endpoint, either directly or using some middleware, to allow interested parties
 to subscribe to these change events.
 
 The subscription's `source` MUST be the root of the schema registry. A [prefix
-filter](../subscriptions-api.md#prefix-filter-dialect) on the `subject`
+filter](../subscriptions/spec.md#prefix-filter-dialect) on the `subject`
 attribute MAY be used to scope the subscription to a particular schema group or
 schema.
 

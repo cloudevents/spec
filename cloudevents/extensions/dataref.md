@@ -24,15 +24,15 @@ attribute by using the `dataref` attribute.
   Known as the "Claim Check Pattern", this attribute MAY be used for a variety
   of purposes, including:
 
-  - If the [Data](../spec.md#data) is too large to be included in the message,
-    the `data` is not present, and the consumer can retrieve it using
+  - If the [Data](../spec.md#data) is too large to be included in the
+    message, the `data` is not present, and the consumer can retrieve it using
     this attribute.
-  - If the consumer wants to verify that the [Data](../spec.md#data) has not
-    been tampered with, it can retrieve it from a trusted source using this
-    attribute.
-  - If the [Data](../spec.md#data) MUST only be viewed by trusted consumers
-    (e.g. personally identifiable information), only a trusted consumer can
-    retrieve it using this attribute and a pre-shared secret.
+  - If the consumer wants to verify that the [Data](../spec.md#data)
+    has not been tampered with, it can retrieve it from a trusted source using
+	this attribute.
+  - If the [Data](../spec.md#data) MUST only be viewed by trusted
+    consumers (e.g. personally identifiable information), only a trusted
+	consumer can retrieve it using this attribute and a pre-shared secret.
 
   If this attribute is used, the information SHOULD be accessible long enough
   for all consumers to retrieve it, but MAY not be stored for an extended period

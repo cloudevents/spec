@@ -62,7 +62,7 @@ interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 ### Terminology
 
-Note: some of the terms defined below are taken from the [CloudEvents](spec.md)
+Note: some of the terms defined below are taken from the [CloudEvents](../cloudevents/spec.md)
 specification, and are marked with a reference to the original definition. Any
 difference between the definitions is accidental and the CloudEvents version
 takes precedence.
@@ -84,27 +84,27 @@ responsible for the generation of events.
 For example, an Object Store service might have a set of event sources where
 each event source maps to a bucket.
 
-#### Source [[CE](./spec.md#source)]
+#### Source [[CE](../cloudevents/spec.md#source)]
 
 The "source" is the context in which the occurrence happened. In a distributed
 system it might consist of multiple Producers. If a source is not aware of
 CloudEvents, an external producer creates the CloudEvent on behalf of the
 source.
 
-#### Producer [[CE](./spec.md#producer)]
+#### Producer [[CE](../cloudevents/spec.md#producer)]
 
 The "producer" is a specific instance, process or device that creates the data
 structure describing the CloudEvent.
 
-#### Intermediary [[CE](./spec.md#intermediary)]
+#### Intermediary [[CE](../cloudevents/spec.md#intermediary)]
 
 An "intermediary" receives a message containing an event for the purpose of
 forwarding it to the next receiver, which might be another intermediary or a
 [Consumer](#consumer-ce). A typical task for an intermediary is to route the
 event to receivers based on the information in the event
-[Context](./spec.md#context).
+[Context](../cloudevents/spec.md#context).
 
-#### Consumer [[CE](./spec.md#consumer)]
+#### Consumer [[CE](../cloudevents/spec.md#consumer)]
 
 A "consumer" receives the event and acts upon it. It uses the context and data
 to execute some logic, which might lead to the occurrence of new events.
@@ -313,7 +313,7 @@ The following sections define the attributes that appear in a Service entity.
 
 - Type: Array of `String` values
 - Description: CloudEvents
-  [`specversions`](https://github.com/cloudevents/spec/blob/master/spec.md#specversion)
+  [`specversions`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#specversion)
   that can be used for events published for this service.
 - Constraints:
   - REQUIRED
@@ -334,7 +334,7 @@ The following sections define the attributes that appear in a Service entity.
   the CloudSubscriptions subscribe() API call. Keys are the name of keys in the
   allowed config map, the values indicate the type of that parameter, conforming
   to the CloudEvents
-  [type system](https://github.com/cloudevents/spec/blob/master/spec.md#type-system).
+  [type system](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#type-system).
   TODO: Needs resolution with CloudSubscriptions API
 - Constraints:
   - OPTIONAL
@@ -394,7 +394,7 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `String`
 - Description: CloudEvents
-  [`type`](https://github.com/cloudevents/spec/blob/master/spec.md#type)
+  [`type`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#type)
   attribute.
 - Constraints:
   - REQUIRED
@@ -416,7 +416,7 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `String`
 - Description: CloudEvents
-  [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/spec.md#datacontenttype)
+  [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#datacontenttype)
   attribute. Indicating how the `data` attribute of subscribed events will be
   encoded.
 - Constraints:
@@ -428,7 +428,7 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `URI`
 - Description: CloudEvents
-  [`dataschema`](https://github.com/cloudevents/spec/blob/master/spec.md#dataschema)
+  [`dataschema`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#dataschema)
   attribute. This identifies the canonical storage location of the schema of the
   `data` attribute of subscribed events.
 - Constraints:
@@ -476,13 +476,13 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `Array` of structures
 - Description: An array or CloudEvents
-  [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/spec.md#extension-context-attributes)
+  [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#extension-context-attributes)
   that are used for this event `type`. The structure contains the following
   attributes:
   - `name` - the CloudEvents context attribute name used by this extension. It
     MUST adhere to the CloudEvents context attribute naming rules
   - `type` - the data type of the extension attribute. It MUST adhere to the
-    CloudEvents [type system](./spec.md#type-system)
+    CloudEvents [type system](../cloudevents/spec.md#type-system)
   - `specurl` - an attribute pointing to the specification that defines the
     extension
 - Constraints:
@@ -491,7 +491,7 @@ The following sections define the attributes that appear in EventType definition
   - if present, the `type` attribute in the structure is REQUIRED
   - if present, the `specurl` attribute in the structure is OPTIONAL
 - Examples:
-  - `{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/extensions/dataref.md" }`
+  - `{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/cloudevents/extensions/dataref.md" }`
 
 #### Service Examples
 
@@ -542,7 +542,7 @@ MUST support filtering by `name`.
 
 #### `pagination`
 
-This is a boolean value indicating support for the [Pagination](pagination.md)
+This is a boolean value indicating support for the [Pagination](../pagination/spec.md)
 specification. If not specified, the default value is `false`.
 
 ## API Specification
@@ -655,7 +655,7 @@ Content-Type: application/json
 ]
 ```
 
-Implementations MAY use the [pagination](pagination.md) specification
+Implementations MAY use the [pagination](../pagination/spec.md) specification
 if the number of Services returned is large. Clients SHOULD be
 prepared to support paginated responses.
 
@@ -987,7 +987,7 @@ Any Discovery Endpoint Service entities MUST adhere to the following:
     {
       "specversions": ["1.x-wip"],
       "type" : "io.cloudevents.discovery.change",
-      "dataschemacontent": { // see ce_discovery.yaml#/components/schemas/change
+      "dataschemacontent": { // see ../discovery/discovery.yaml#/components/schemas/change
         "type": "object",
         "properties": {
           "operation": "{operation}", // POST|DELETE
@@ -1003,7 +1003,7 @@ Any Discovery Endpoint Service entities MUST adhere to the following:
 
 ### OpenAPI
 
-See [Discovery Endpoint OpenAPI Specification](ce_discovery.yaml).
+See [Discovery Endpoint OpenAPI Specification](../discovery/discovery.yaml).
 
 ## Privacy and Security
 

@@ -524,8 +524,8 @@ Content-Length: nnnn
 [ce]: ./spec.md
 [ce-message]: ./spec.md#message
 [ce-types]: ./spec.md#type-system
-[json-format]: ./json-format.md
-[json-batch-format]: ./json-format.md#4-json-batch-format
+[json-format]: ./formats/json-format.md
+[json-batch-format]: ./formats/json-format.md#4-json-batch-format
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [json-array]: https://tools.ietf.org/html/rfc7159#section-5
