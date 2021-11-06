@@ -1,35 +1,37 @@
-# CloudEvents
+# CloudEvents Chinese Manual
 
 ![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
 
-Events are everywhere. However, event producers tend to describe events
-differently.
+Declaration： This manual aims to provide a fast and brief introduction of CloudEvents 
+in Chinese for people who are new to CloudEvents. 
+Most of the content is translated from the original English version. 
+It is strongly recommended to read the English version if you find anything lost in translation.
 
-The lack of a common way of describing events means developers must constantly
-re-learn how to consume events. This also limits the potential for libraries,
-tooling and infrastructure to aide the delivery of event data across
-environments, like SDKs, event routers or tracing systems. The portability and
-productivity we can achieve from event data is hindered overall.
+声明：这份中文手册旨在帮助初次接触CloudEvents的人快速建立起CloudEvents的相关认知。
+手册中的大部分内容翻译自英文版的CloudEvents标准，当你遇到令你困惑的内容时，请对照英文版理解。
 
-CloudEvents is a specification for describing event data in common formats to
-provide interoperability across services, platforms and systems.
+事件(Events)在现代系统中无处不在。但不同的事件生产者往往用不同的规范来描述自己的事件。
 
-CloudEvents has received a large amount of industry interest, ranging from major
-cloud providers to popular SaaS companies. CloudEvents is hosted by the
-[Cloud Native Computing Foundation](https://cncf.io) (CNCF) and was approved as
-a Cloud Native sandbox level project on
-[May 15, 2018](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41).
+对事件的统一描述的匮乏意味着开发者必须不断重新学习如何消费不同定义的事件。它同样限制了那些用来帮助事件数据完成
+跨环境传输的库(如SDKs)，工具(如事件路由器)和基础设施(如事件追踪系统)的发展。总体来看，这种匮乏严重阻碍了事件数据的
+可移植性和生产力。
 
-## CloudEvents Documents
+CloudEvents是一个以通用格式来描述事件数据的标准。它提供了事件在服务、平台和系统中的互操作性。
 
-The following documents are available:
+CloudEvents 收获了从主流云厂商到SaaS公司的广泛关注。CloudEvents被[云原生计算基金会](https://cncf.io) (CNCF)持有，
+在[2018/05/15](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41)
+被选为云原生沙盒级项目。
 
-|                               |                                 Latest Release                                 |                                    Working Draft                                    |
+## CloudEvents 文件
+
+现有文件如下:
+
+|                               |                                 最新版本                                 |                                    工作草稿                                    |
 | :---------------------------- | :----------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
-| **Core Specification:**       |
+| **核心标准:**       |
 | CloudEvents                   |         [v1.0](https://github.com/cloudevents/spec/blob/v1.0/spec.md)          |          [master](https://github.com/cloudevents/spec/blob/master/spec.md)          |
 |                               |
-| **Optional Specifications:**  |
+| **可选标准:**  |
 | AMQP Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/amqp-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/amqp-protocol-binding.md)  |
 | AVRO Event Format             | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/avro-format.md)           | [master](https://github.com/cloudevents/spec/blob/master/avro-format.md)            |
 | HTTP Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/http-protocol-binding.md)  |
@@ -39,26 +41,22 @@ The following documents are available:
 | NATS Protocol Binding         | [v1.0](https://github.com/cloudevents/spec/blob/v1.0/nats-protocol-binding.md) | [master](https://github.com/cloudevents/spec/blob/master/nats-protocol-binding.md)  |
 | Web hook                      |     [v1.0](https://github.com/cloudevents/spec/blob/v1.0/http-webhook.md)      |      [master](https://github.com/cloudevents/spec/blob/master/http-webhook.md)      |
 |                               |
-| **Additional Documentation:** |
+| **附加文件:** |
 | CloudEvents Adapters          |                                       -                                        |        [master](https://github.com/cloudevents/spec/blob/master/adapters.md)        |
 | CloudEvents SDK Requirements  |                                       -                                        |          [master](https://github.com/cloudevents/spec/blob/master/SDK.md)           |
 | Documented Extensions         |                                       -                                        | [master](https://github.com/cloudevents/spec/blob/master/documented-extensions.md)  |
 | Primer                        |        [v1.0](https://github.com/cloudevents/spec/blob/v1.0/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
 | Proprietary Specifications    |                                       -                                        |   [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)    |
 
-If you are new to CloudEvents, it is recommended that you start by reading the
-[Primer](primer.md) for an overview of the specification's goals and design
-decisions, and then move on to the [core specification](spec.md).
+对于初次接触CloudEvents的同学，建议通过阅读[入门文档](primer.md)增加对CloudEvents规范的目标和设计理念
+的总体理解，然后再继续阅读[核心规范](spec.md)。
 
-Since not all event producers generate CloudEvents by default, there is
-documentation describing the recommended process for adapting some popular
-events into CloudEvents, see
-[CloudEvents Adapters](https://github.com/cloudevents/spec/blob/master/adapters.md).
+由于并非所有事件生产者都默认生产符合CloudEvents规范的事件，因此可以用[CloudEvents适配器](https://github.com/cloudevents/spec/blob/master/adapters.md)
+来将现有的事件与CloudEvents做适配。
 
 ## SDKs
 
-In addition to the documentation mentioned above, there are also an
-[SDK proposal](SDK.md) and a set of SDKs being developed:
+除了上述文档，我们还提供了[SDK 提议](SDK.md)以及一些编程语言的SDK：
 
 - [CSharp](https://github.com/cloudevents/sdk-csharp)
 - [Go](https://github.com/cloudevents/sdk-go)
@@ -66,79 +64,71 @@ In addition to the documentation mentioned above, there are also an
 - [Javascript](https://github.com/cloudevents/sdk-javascript)
 - [Python](https://github.com/cloudevents/sdk-python)
 
-## Community
+## 社区
 
-Learn more about the people and organizations who are creating a dynamic cloud
-native ecosystem by making our systems interoperable with CloudEvents.
+在社区里，你可以了解到更多致力于搭建一个动态、云原生的生态系统的成员和组织。
+他们不断尝试提升现有系统和CloudEvents间的互操作性和兼容性。
 
-- [Contributors](community/contributors.md): people and organizations who helped
-  us get started or are actively working on the CloudEvents specification.
-- Coming soon: [demos & open source](community/README.md) -- if you have
-  something to share about your use of CloudEvents, please submit a PR!
+- [贡献者](community/contributors.md): 
+  是指那些帮助我们制定规范或是积极活跃在CloudEvents规范相关工作的成员和组织。
+- 即将推出: [demos & open source](community/README.md) -- 
+  如果你希望向我们分享关于你对CloudEvents的使用，请通过提交PR让我们看到。
 
-## Process
+## 步骤
 
-The CloudEvents project is working to formalize the [specification](spec.md)
-based on [design goals](primer.md#design-goals) which focus on interoperability
-between systems which generate and respond to events.
+CloudEvents项目 [旨在](primer.md#design-goals)制定一个能够提升不同事件系统(如生产者和消费者)之间互操作性和兼容性
+的[标准](spec.md)。
 
-In order to achieve these goals, the project must describe:
+为了完成这个目标，这个项目必须描述：
 
-- Common attributes of an _event_ that facilitate interoperability
-- One or more common architectures that are in active use today or planned to be
-  built by its members
-- How events are transported from producer to consumer via at least one protocol
-- Identify and resolve whatever else is needed for interoperability
+- 一系列能够提升互操作性的用来描述事件的属性
+- 一个或多个通用架构，这些架构必须是当下活跃的或是正在计划被完成的
+- 事件是如何在一种或多种协议下从生产者传输到消费者的
+- 识别并解决任何能提升互操作性的问题
+## 联系方式
 
-## Communications
+邮件联系方式如下:
 
-The mailing list for e-mail communications:
+- 发送EMail至: [cncf-cloudevents](mailto:cncf-cloudevents@lists.cncf.io)
+- 订阅地址: https://lists.cncf.io/g/cncf-cloudevents
+- 存档地址: https://lists.cncf.io/g/cncf-cloudevents/topics
 
-- Send emails to: [cncf-cloudevents](mailto:cncf-cloudevents@lists.cncf.io)
-- To subscribe see: https://lists.cncf.io/g/cncf-cloudevents
-- Archives are at: https://lists.cncf.io/g/cncf-cloudevents/topics
+## 会议时间
 
-And a #cloudevents Slack channel under
-[CNCF's Slack workspace](https://slack.cncf.io/).
+会议日期请查看 [CNCF 公开活动日历](https://www.cncf.io/community/calendar/).
+CloudEvents规范由
+[CNCF Serverless 工作组](https://github.com/cncf/wg-serverless)开发完成。
+这个工作组每周四的上午9点(美国-太平洋时间)通过Zoom开展视频会议。 
+通过 PC, Mac, Linux, iOS or Android来参加活动: https://zoom.us/my/cncfserverlesswg
 
-## Meeting Time
-
-See the [CNCF public events calendar](https://www.cncf.io/community/calendar/).
-This specification is being developed by the
-[CNCF Serverless Working Group](https://github.com/cncf/wg-serverless). This
-working group meets every Thursday at 9AM PT (USA Pacific):
-
-Join from PC, Mac, Linux, iOS or Android: https://zoom.us/my/cncfserverlesswg
-
-Or iPhone one-tap :
+或者通过 iPhone one-tap :
 
     US: +16465588656,,3361029682#  or +16699006833,,3361029682#
 
-Or Telephone:
+或者电话接入:
 
     Dial:
         US: +1 646 558 8656 (US Toll) or +1 669 900 6833 (US Toll)
         or +1 855 880 1246 (Toll Free) or +1 877 369 0926 (Toll Free)
 
-Meeting ID: 336 102 9682
+会议 ID: 336 102 9682
 
-International numbers available:
+国际号码接入:
 https://zoom.us/zoomconference?m=QpOqQYfTzY_Gbj9_8jPtsplp1pnVUKDr
 
-NOTE: Please use \*6 to mute/un-mute your phone during the call.
-
-World Time Zone Converter:
+世界时区转化器:
 http://www.thetimezoneconverter.com/?t=9:00%20am&tz=San%20Francisco&
 
-## Meeting Minutes
+## 会议记录
 
-The minutes from our calls are available
-[here](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#).
+历史会议记录在
+[这里](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
+查看。
 
-Recording from our calls are available
-[here](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt).
+历史会议录像在
+[这里](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt)
+查看。
 
-Periodically, the group may have in-person meetings that coincide with a major
-conference. Please see the
-[meeting minutes](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
-for any future plans.
+工作组会定期举办与主流会议一致的线下会议。查看[这里](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#) 
+了解更多未来计划。
+
