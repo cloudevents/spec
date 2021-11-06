@@ -26,103 +26,74 @@
 ## 历史
 
 [CNCF Serverless 工作组](https://github.com/cncf/wg-serverless)是由 CNCF的
-[技术监管委员会](https://github.com/cncf/toc) to investigate
-Serverless Technology and to recommend some possible next steps for some CNCF
-related activities in this space. One of the recommendations was to investigate
-the creation of a common event format to aid in the portability of functions
-between Cloud providers and the interoperability of processing of event streams.
-As a result, the CloudEvents specification was created.
+[技术监管委员会](https://github.com/cncf/toc) 成立，用于研究
+Serverless相关技术并为CNCF推荐相关领域的未来发展计划。其中一项建议就是研究创建一种通用事件格式，
+用于提升不同云厂商间函数的可移植性和事件流处理的互操作性。就此，CloudEvents应运而生。
 
-While initially the work on CloudEvents was done as part of the Serverless
-Working group, once the specification reached its v0.1 milestone, the TOC
-approved the CloudEvents work as a new stand-alone CNCF sandbox project.
+尽管CloudEvents起初是作为Serverless工作组的项目进行的，但随着CloudEvents规范完成它v0.1版本的里程碑，
+技术监管委员会批准了CloudEvents工作作为一个新的独立的CNCF沙箱级项目。
 
-## CloudEvents Concepts
+## CloudEvents 概念
 
-An [event](spec.md#event) includes context and data about an
-[occurrence](spec.md#occurrence). Each _occurrence_ is uniquely identified by
-the data of the _event_.
+一个[事件](spec.md#event)包含了[事件发生](spec.md#occurrence)的上下文和相关数据。
+事件的相关数据可以用来唯一标识一件事件的发生。
 
-_Events_ represent facts and therefore do not include a destination, whereas
-messages convey intent, transporting data from a source to a given destination.
+事件代表了已发生的事实，因此它并不包含任何目的地相关信息，但消息能够传达事件内容，从而将事件数据
+从源头传输到指定的目的地。
 
-### Eventing
+### 事件使用
 
-Events are commonly used in server-side code to connect disparate systems where
-the change of state in one system causes code to execute in another. For
-example, a source may generate an event when it receives an external signal
-(e.g. HTTP or RPC) or observes a changing value (e.g. an IoT sensor or period of
-inactivity).
+事件通常在服务器端代码中使用来连接不同的系统，其中一个系统中的状态变化会导致代码在另一个系统中执行。
+比如，一个事件源，可能会在收到某个外部信号(如HTTP或RPC)或观察到状态变化(如IoT传感器数据变化或不活跃)
+时，生产一个事件。
 
-To illustrate how a system uses CloudEvents, the simplified diagram below shows
-how an event from a [source](spec.md#source) triggers an action.
+为了更好地解释一个系统如何使用CloudEvents，下图展示了一个从事件源生产的事件是如何触发一个行为的。
 
 ![alt text](source-event-action.png "A box representing the source with
 arrow pointing to a box representing the action. The arrow is annotated with
 'e' for event and 'protocol'.")
 
-The source generates a message where the event is encapsulated in a protocol.
-The event arrives to a destination, triggering an action which is provided with
-the event data.
+事件源生产了一条封装了基于某种协议的事件数据的消息。
+当载有事件的消息到达目的地时，会触发一个使用了事件数据的行为函数。
 
-A _source_ is a specific instance of a source-type which allows for staging and
-test instances. Open source software of a specific _source-type_ may be deployed
-by multiple companies or providers.
+一个事件源是那些允许暂存和测试实例的源类型的特定实例。
+某个特定源类型的开源软件可能由多个公司或提供商部署。
 
-Events can be delivered through various industry standard protocols (e.g. HTTP,
-AMQP, MQTT, SMTP), open-source protocols (e.g. Kafka, NATS), or platform/vendor
-specific protocols (AWS Kinesis, Azure Event Grid).
+事件可以通过各种行业标准协议（如HTTP、AMQP、MQTT、SMTP）、开源协议（例如 Kafka、NATS）或
+平台/供应商专有协议（AWS Kinesis、Azure Event Grid）传输。
 
-An action processes an event defining a behavior or effect which was triggered
-by a specific _occurrence_ from a specific _source_. While outside of the scope
-of the specification, the purpose of generating an _event_ is typically to allow
-other systems to easily react to changes in a source that they do not control.
-The _source_ and action are typically built by different developers. Often the
-_source_ is a managed service and the _action_ is custom code in a serverless
-Function (such as AWS Lambda or Google Cloud Functions).
+一个操作函数能够处理那些定义了行为或影响的事件，这些行为和效果由来自特定来源的特定事件触发而来。
+虽然超出了规范的范围，但生成事件的目的通常是让其他系统能够轻松地对它们无法控制的源中的更改做出反应。
+源和操作通常由不同的开发人员构建。 
+通常，源是托管服务，而操作是serverless函数（如 AWS Lambda 或 Google Cloud Functions）中
+的自定义代码。
 
-## Design Goals
+## 设计目标
 
-CloudEvents are typically used in a distributed system to allow for services to
-be loosely coupled during development, deployed independently, and later can be
-connected to create new applications.
+CloudEvents 通常用于分布式系统，以允许服务在开发过程中松耦合，独立部署，之后可以连接以创建新的应用程序。
 
-The goal of the CloudEvents specification is to define interoperability of event
-systems that allow services to produce or consume events, where the producer and
-consumer can be developed and deployed independently. A producer can generate
-events before a consumer is listening, and a consumer can express an interest in
-an event or class of events that is not yet being produced. Note that the
-specifications produced by this effort are focused on interoperability of the
-event format and how it appears while being sent on various protocols, such as
-HTTP. The specifications will not focus on the processing model of either the
-event producer or event consumer.
+CloudEvents 规范的目标是定义允许服务生产或消费事件的事件系统的互操作性，
+其中生产者和消费者可以独立开发和部署。 生产者可以在没有消费者监听时就生成事件，
+消费者也可以表达对尚未生成的事件或事件类的兴趣。值得注意的是，这项工作产生的规范侧重于事件格式的互操作性
+以及它在通过各种协议（例如 HTTP）发送时的显示方式。我们不关注事件生产者或事件消费者的处理模型。
 
-CloudEvents, at its core, defines a set of metadata, called attributes, about
-the event being transferred between systems, and how those pieces of metadata
-should appear in that message. This metadata is meant to be the minimal set of
-information needed to route the request to the proper component and to
-facilitate proper processing of the event by that component. So, while this
-might mean that some of the application data of the event itself might be
-duplicated as part of the CloudEvent's set of attributes, this is to be done
-solely for the purpose of proper delivery, and processing, of the message. Data
-that is not intended for that purpose should instead be placed within the event
-(`data`) itself.
+CloudEvents的核心规范中定义了一组称之为属性的元数据，
+它们描述了在系统之间传输的事件以及这些元数据片段应如何显示在该消息中。 
+这些元数据是，将请求路由到适当组件并帮助该组件正确处理事件，所需的最小信息集。 
+因此，某些事件本身的数据可能会作为 CloudEvent 属性集的一部分而被复制，
+但这样做仅是为了能够正确传递和处理消息。那些不用于该目的的数据应放置在事件（数据）本身中。
 
-Additionally, it is assumed that the metadata needed by the protocol layer to
-deliver the message to the target system is handled entirely by the protocol
-and therefore is not included within the CloudEvents attributes. See the
-[Non-Goals](#non-goals) section for more details.
+此外，本规范中假设协议层所需，用来将消息传递到目标系统的元数据应完全由协议处理，
+因此不包含在 CloudEvents 属性中。 有关更多详细信息，请参阅非目标部分。
 
-Along with the definition of these attributes, there will also be specifications
-of how to serialize the event in different formats (e.g. JSON) and protocols
-(e.g. HTTP, AMQP, Kafka).
+除了这些属性的定义之外，规范还描述了关于如何序列化
+不同格式（例如 JSON）和协议（例如 HTTP、AMQP、Kafka）事件。
 
-Batching of multiple events into a single API call is natively supported by some
-protocols. To aid interoperability, it is left up to the protocols if and how
-batching is implemented. Details may be found in the protocol binding or in the
-protocol specification. A batch of CloudEvents carries no semantic meaning and
-is not ordered. An [Intermediary](spec.md#intermediary) can add or remove
-batching as well as assign events to different batches.
+一些协议本身支持将多个事件批处理到单个 API 调用中。 
+为了提升系统间的互操作性，是否以及如何实现批处理将由协议自己决定。 
+相关详细信息可以在协议绑定或协议规范中找到。 
+成批的CloudEvents并没有语义，也没有排序。
+[中间人](spec.md#intermediary)可以添加或删除批处理以及将事件分配给不同的批处理。
 
 ### Non-Goals
 
