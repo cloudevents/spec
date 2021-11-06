@@ -1,35 +1,32 @@
-# CloudEvents Primer - Version 1.0
+# CloudEvents 入门文档 -  1.0 版本
 
-## Abstract
+## 摘要
 
-This non-normative document provides an overview of the CloudEvents
-specification. It is meant to complement the CloudEvent specification to provide
-additional background and insight into the history and design decisions made
-during the development of the specification. This allows the specification
-itself to focus on the normative technical details.
+这份非技术规范文档用来为你提供关于CloudEvents规范的总体概览。它补充了CloudEvents规范的相关背景以及在制定
+本规范时的历史和设计理念。这样，CloudEvents规范就只需要关注Events规范的技术细节，而不用过多地关心
+背景相关内容。
 
-## Table of Contents
+## 目录
 
-- [History](#history)
-- [CloudEvents Concepts](#cloudevents-concepts)
-- [Design Goals](#design-goals)
-- [Architecture](#architecture)
-- [Versioning of Attributes](#versioning-of-attributes)
-- [CloudEvent Attributes](#cloudevent-attributes)
-- [CloudEvent Attribute Extensions](#cloudevent-attribute-extensions)
-- [Creating CloudEvents](#creating-cloudevents)
-- [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
-- [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
+- [历史](#history)
+- [CloudEvents 概念](#cloudevents-concepts)
+- [设计目标](#design-goals)
+- [架构](#architecture)
+- [属性版本](#versioning-of-attributes)
+- [CloudEvent 属性](#cloudevent-attributes)
+- [CloudEvent 属性扩展](#cloudevent-attribute-extensions)
+- [生产 CloudEvents](#creating-cloudevents)
+- [Qualifying 协议和编码](#qualifying-protocols-and-encodings)
+- [Proprietary 协议和编码](#proprietary-protocols-and-encodings)
 - [Prior Art](#prior-art)
 - [Roles](#roles)
 - [Value Proposition](#value-proposition)
 - [Existing Event Formats](#existing-event-formats)
 
-## History
+## 历史
 
-The [CNCF Serverless Working group](https://github.com/cncf/wg-serverless) was
-originally created by the CNCF's
-[Technical Oversight Committee](https://github.com/cncf/toc) to investigate
+[CNCF Serverless 工作组](https://github.com/cncf/wg-serverless)是由 CNCF的
+[技术监管委员会](https://github.com/cncf/toc) to investigate
 Serverless Technology and to recommend some possible next steps for some CNCF
 related activities in this space. One of the recommendations was to investigate
 the creation of a common event format to aid in the portability of functions
