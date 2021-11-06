@@ -7,9 +7,6 @@ in Chinese for people who are new to CloudEvents.
 Most of the content is translated from the original English version. 
 It is strongly recommended to read the English version if you find anything lost in translation.
 
-声明：这份中文手册旨在帮助初次接触CloudEvents的人快速建立起CloudEvents的相关认知。
-手册中的大部分内容翻译自英文版的CloudEvents标准，当你遇到令你困惑的内容时，请对照英文版理解。
-
 事件(Events)在现代系统中无处不在。但不同的事件生产者往往用不同的规范来描述自己的事件。
 
 对事件的统一描述的匮乏意味着开发者必须不断重新学习如何消费不同定义的事件。它同样限制了那些用来帮助事件数据完成
@@ -20,7 +17,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 CloudEvents 收获了从主流云厂商到SaaS公司的广泛关注。CloudEvents被[云原生计算基金会](https://cncf.io) (CNCF)持有，
 在[2018/05/15](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41)
-被选为云原生沙盒级项目。
+被选为云原生沙箱级项目。
 
 ## CloudEvents 文件
 
