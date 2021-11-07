@@ -95,132 +95,102 @@ CloudEvents的核心规范中定义了一组称之为属性的元数据，
 成批的CloudEvents并没有语义，也没有排序。
 [中间人](spec.md#intermediary)可以添加或删除批处理以及将事件分配给不同的批处理。
 
-### Non-Goals
+### 非目标
 
-The following are considered beyond the scope of the specification:
+以下内容不在本规范的范围之内：
 
-- Function build and invocation process
-- Language-specific runtime APIs
-- Selecting a single identity/access control system
-- Inclusion of protocol-level routing information
-- Event persistence processes
+- 函数的构建和调用过程
+- 特定语言的运行时 APIs
+- 选择单一身份认证或访问控制的系统
+- 包含协议级路由信息
+- 事件持久化过程
 
-The CloudEvents spec will not include protocol-level routing information (e.g.
-a destination URL to which the event is being sent). This is a common suggestion
-by those new to the concepts of CloudEvents. After much deliberation, the
-working group has come to the conclusion that routing is unnecessary in the
-spec: any protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
-defines semantics for routing. For example, the CloudEvents
-[HTTP binding](http-protocol-binding.md) dictates headers and request body
-contents. CloudEvents don't need to include a destination URL in the spec to be
-HTTP compatible; the HTTP spec already includes one in the
-[Request-Line](https://tools.ietf.org/html/rfc2616#section-5.1).
+就连那些刚接触 CloudEvents 概念的人都普遍建议
+CloudEvents 规范不应包括协议级路由信息（例如，将事件发送到的目标的URL）。
+经过深思熟虑，工作组得出的结论是，CloudEvents规范中不需要路由信息：
+因为任何现有的协议（例如 HTTP、MQTT、XMPP 或 Pub/Sub 总线）都已经定义了路由语义。
+例如，CloudEvents [HTTP 绑定](http-protocol-binding.md) 规定了头部和请求正文内容。 
+CloudEvents 不需要在规范中包含目标 URL 即可与 HTTP 兼容；HTTP 规范已经在
+[请求行](https://tools.ietf.org/html/rfc2616#section-5.1) 中包含了所需的目标URL。
 
-Routing information is not just redundant, it detracts. CloudEvents should
-increase interoperability and decouple the producer and consumer of events.
-Prohibiting routing information from the events format allows CloudEvents to be
-redelivered to new actions, or to be delivered over complex relays that include
-multiple channels. For example, a CloudEvent that was intended for a webhook
-should be deliverable to a dead-letter queue if the webhook address is
-unavailable. That dead-letter queue should be able to feed events to new actions
-that the original event emitter never imagined.
+路由信息不仅是多余的，而且是有害的。 
+CloudEvents 应该增加互操作性并解耦事件的生产者和消费者。 
+禁止来自事件格式的路由信息允许将 CloudEvents 重新传送到新操作，或通过包含多个通道的复杂中继传送。
+例如，如果 Webhook 地址不可用，则用于 Webhook 的 CloudEvent 应可传送到死信队列。
+死信队列应该能够将事件提供给原始事件发射器从未想象过的新操作。
 
-The CloudEvents that are produced and consumed within and across systems trigger
-behaviors that derive value. As such, archiving and/or replaying events can be
-valuable for debugging or replication purposes. However, persisting an event
-removes the contextual information available during transmission such as the
-identity and rights of the producer, fidelity validation mechanisms, or
-confidentiality protections. Additionally, persistence can add complexity and
-challenge to meeting user's requirements. For example, the repeated use of a
-private key for encryption or signing purposes increases the information
-available to attackers and thereby reduces security. It is expected that
-attributes may be defined that facilitate meeting persistence requirements but
-it is expected that these will continuously evolve along with industry best
-practices and advancements.
+在系统内和跨系统生产和消费的 CloudEvent能够触发产生价值的行为。 
+因此，对于调试或复制的目的而言，存档和或重放事件可能很有价值。 
+但是，持久化事件会删除传输期间可用的上下文信息，例如生产者的身份和权利、保真验证机制或机密性保护。 
+此外，持久化会增加满足用户需求的复杂性和挑战。 
+例如，出于加密或签名目的重复使用私钥会增加攻击者可用的信息，从而降低安全性。 
+因此我们推测，可以定义有助于满足持久性要求的属性，但这些属性可能随着行业最佳实践和进步而不断发展。
 
 ## Architecture
+CloudEvents 规范集定义了四种有助于形成分层架构模型的不同类型的协议元素。
+基本规范定义了一个抽象信息模型，该模型由属性（键值对）和构成 CloudEvent 的相关规则组成。
 
-The CloudEvents specification set defines four different kinds of protocol
-elements that form a layered architecture model.
+1. [基本规范](spec.md) 定义了一个抽象信息模型，
+   该模型由属性（键值对）和构成 CloudEvent 的相关规则组成。
+2. [扩展](./spec.md#extension-context-attributes) 
+   添加了特定于用例且可能重叠的扩展属性集和相关规则，如支持不同的追踪标准的规则。
+3. 事件格式编码,如 [JSON](json-format.md), 定义了基本规范的信息模型与所选扩展的编码方式，
+   以将其映射到应用程序协议的头部和负载元素。
+4. 协议绑定, 如. [HTTP协议绑定](http-protocol-binding.md), 
+   在HTTP to HTTP的情况下，
+   定义了 CloudEvent 如何绑定到应用程序协议的传输层 。
+   协议绑定不限制传输层的使用方式，这意味着 HTTP绑定可用于任何 HTTP方法以及请求和响应消息。
 
-1. The [base specification](spec.md) defines an abstract information model made
-   up of attributes (key-value pairs) and associated rules for what constitutes
-   a CloudEvent.
-2. The [extensions](./spec.md#extension-context-attributes) add use-case
-   specific and potentially overlapping sets of extension attributes and
-   associated rules, e.g. to support different tracing standards.
-3. The event format encodings, e.g. [JSON](json-format.md), define how the
-   information model of the base specification together with the chosen
-   extensions is encoded for mapping it to header and payload elements of an
-   application protocol.
-4. The protocol bindings, e.g. [HTTP](http-protocol-binding.md), defines how
-   the CloudEvent is bound to an application protocol's transport frame, in the
-   case of HTTP to the HTTP message. The protocol binding does not constrain
-   how the transport frame is used, meaning that the HTTP binding can be used
-   with any HTTP method and with request and response messages.
+为了确保更广泛的互操作性，CloudEvents规范集为使用专有应用协议的事件传输提供了特定约束。
+[HTTP Webhook](http-webhook.md)规范并非特定于 CloudEvents，
+而是可用于将任何类型的单向事件和通知发布到符合标准的 HTTP 端点。
+但是，由于其他地方缺乏此类规范，因此 CloudEvents 需要对其进行定义。
 
-If required to assure broader interoperability, the CloudEvents specification
-set provides specific constraints for event delivery using a particular
-application protocol. The [HTTP Webhook](http-webhook.md) specification is not
-specific to CloudEvents and can be used to post any kind of one-way event and
-notifications to a conformant HTTP endpoint. However, the lack of such a
-specification elsewhere makes it necessary for CloudEvents to define it.
+### 协议错误处理
 
-### Protocol Error Handling
+CloudEvents 规范在很大程度上并未规定与 CloudEvents 的创建或处理相关联的处理模型。
+因此，如果在处理 CloudEvent 过程中出现错误，
+请使用正常的协议级错误处理机制进行处理。
 
-The CloudEvents specification, for the most part, does not dictate a processing
-model associated with the creation or processing of CloudEvents. As such, if
-there are errors during the processing of a CloudEvent, the software
-encountering the error is encouraged to use the normal protocol-level error
-reporting to report them.
+## 属性版本
 
-## Versioning of Attributes
+对于某些 CloudEvents 属性，由其值引用的实体或数据模型可能会随时间变化。 
+例如，`dataschema`可能引用模式文档的一个特定版本。 
+通常，这些属性值会通过将一些特定于版本的字符串作为其值的一部分来区分每个变体。 
+例如，可能会加入版本号 (v1, v2) 或日期 (2018-01-01)来区分。
 
-For certain CloudEvents attributes, the entity or data model referenced by its
-value might change over time. For example, `dataschema` might reference one
-particular version of a schema document. Often these attribute values will then
-distinguish each variant by including some version-specific string as part of
-its value. For example, a version number (`v1`, `v2`), or a date (`2018-01-01`)
-might be used.
+CloudEvents 规范不强制要求使用任何特定模式，甚至根本不强制使用版本字符串。
+是否使用完全取决于每个事件生产者。
+但是，当使用特定版本的字符串时，每当其值发生变化时都应注意，
+因为事件消费者可能依赖于现有值，因此更改可能被解释为“破坏性更改”。
+应该在生产者和消费者之间建立某种形式的通信，以确保事件消费者知道能使用哪些可能的值。 
+通常，这也适用于所有 CloudEvents 属性。
 
-The CloudEvents specification does not mandate any particular pattern to be
-used, or even the use of version strings at all. This decision is up to each
-event producer. However, when a version-specific string is included, care should
-be taken whenever its value changes as event consumers might be reliant on the
-existing value and thus a change could be interpreted as a "breaking change".
-Some form of communication between producers and consumers should be established
-to ensure the event consumers know what possible values might be used. In
-general, this is true for all CloudEvents attributes as well.
+## CloudEvent 属性
 
-## CloudEvent Attributes
-
-This section provides additional background and design points related to some of
-the CloudEvent attributes.
+本节介绍了与CloudEvent 属性相关的其他背景和设计要点。
 
 ### id
 
-The `id` attribute is meant to be a value that is unique across all events
-related to one event source (where each event source is uniquely identified by
-its CloudEvents `source` attribute value). While the exact value used is
-producer defined, receivers of CloudEvents from a single event source can be
-assured that no two events will share the same `id` value. The only exception to
-this is if some replay of the event is supported, and in those cases, the `id`
-can then be used to detect this.
+`id` 属性是一个在同一事件源下所有事件中用来标识事件唯一的值
+（其中每个事件源由其 CloudEvents `source`属性唯一标识）。
+虽然`id`使用的确切值是生产者定义的，
+但可以确保来自单个事件源的 CloudEvents 消费者不会有两个事件共享相同的 id 值。
+唯一的例外是如果支持事件的重播，在这些情况下，可以使用 id 来检测这一点。
 
-Since a single occurrence may result in the generation of more than one event,
-in the cases where all of those events are from the same event source, each
-CloudEvent constructed will have a unique `id`. Take the example of the creation
-of a DB entry, this one occurrence might generate a CloudEvent with a type of
-`create` and a CloudEvent with a type of `write`. Each of those CloudEvents
-would have a unique `id`. If there is the desire for some correlation between
-those two CloudEvents to indicate they are both related to the same occurrence,
-then some additional data within the CloudEvent would be used for that purpose.
+由于一次事件的发生可能导致生成多个cloud event，
+在所有这些事件都来自同一事件源的情况下，
+生成的每个 CloudEvent 将具有唯一的 `id`。 
+以创建数据库条目为例，这一事件的发生可能会生成一个类型为 create 的 CloudEvent 
+和一个类型为 write 的 CloudEvent。 
+这两个 CloudEvents 各自都有一个唯一的 ID。 
+如果需要在这两个 CloudEvent 之间建立某种关联以表明它们都与同一事件相关，
+那么可以使用 CloudEvent 中的一些附加数据来实现该目的。
 
-In this respect, while the exact value chosen by the event producer might be
-some random string, or a string that has some semantic meaning in some other
-context, for the purposes of this CloudEvent attribute those meanings are not
-relevant and therefore using `id` for some other purpose beyond uniqueness
-checking is out of scope of the specification and not recommended.
+从这方面来看，虽然事件生产者对`id`的使用可能是某个随机字符串，
+或者在其他上下文中具有某种语义的字符串，
+但对于此 CloudEvent 属性而言，这些含义并不成立，
+因此本规范不建议将 `id` 用于除了唯一性检查之外的其他目的。
 
 ## CloudEvent Attribute Extensions
 
