@@ -9,18 +9,18 @@
 ## 目录
 
 - [历史](#历史)
-- [CloudEvents 概念](#cloudevents-concepts)
-- [设计目标](#design-goals)
-- [架构](#architecture)
-- [属性版本](#versioning-of-attributes)
-- [CloudEvent 属性](#cloudevent-attributes)
-- [CloudEvent 属性扩展](#cloudevent-attribute-extensions)
-- [生产 CloudEvents](#creating-cloudevents)
-- [合格的协议与编码](#qualifying-protocols-and-encodings)
-- [Proprietary 协议和编码](#proprietary-protocols-and-encodings)
-- [Prior Art](#prior-art)
-- [Roles](#roles)
-- [Value Proposition](#value-proposition)
+- [CloudEvents 概念](#CloudEvents-概念)
+- [设计目标](#设计目标)
+- [架构](#架构)
+- [属性版本](#属性版本)
+- [CloudEvent 属性](#CloudEvent-属性)
+- [CloudEvent 属性扩展](#CloudEvent-属性扩展)
+- [生产 CloudEvents](#生产CloudEvents)
+- [合格的协议与编码](#合格的协议与编码)
+- [Proprietary 协议和编码](#专有的协议与编码)
+- [Prior Art](#现有技术)
+- [Roles](#角色)
+- [Value Proposition](#价值主张)
 - [Existing Event Formats](#existing-event-formats)
 
 ## 历史
@@ -33,7 +33,7 @@ Serverless相关技术并为CNCF推荐相关领域的未来发展计划。其中
 尽管CloudEvents起初是作为Serverless工作组的项目进行的，但随着CloudEvents规范完成它v0.1版本的里程碑，
 技术监管委员会批准了CloudEvents工作作为一个新的独立的CNCF沙箱级项目。
 
-## CloudEvents 概念
+## CloudEvents-概念
 
 一个[事件](spec.md#event)包含了[事件发生](spec.md#occurrence)的上下文和相关数据。
 事件的相关数据可以用来唯一标识一件事件的发生。
@@ -126,7 +126,7 @@ CloudEvents 应该增加互操作性并解耦事件的生产者和消费者。
 例如，出于加密或签名目的重复使用私钥会增加攻击者可用的信息，从而降低安全性。 
 因此我们推测，可以定义有助于满足持久性要求的属性，但这些属性可能随着行业最佳实践和进步而不断发展。
 
-## Architecture
+## 架构
 CloudEvents 规范集定义了四种有助于形成分层架构模型的不同类型的协议元素。
 基本规范定义了一个抽象信息模型，该模型由属性（键值对）和构成 CloudEvent 的相关规则组成。
 
@@ -166,7 +166,7 @@ CloudEvents 规范不强制要求使用任何特定模式，甚至根本不强�
 应该在生产者和消费者之间建立某种形式的通信，以确保事件消费者知道能使用哪些可能的值。 
 通常，这也适用于所有 CloudEvents 属性。
 
-## CloudEvent 属性
+## CloudEvent-属性
 
 本节介绍了与CloudEvent 属性相关的其他背景和设计要点。
 
@@ -192,7 +192,7 @@ CloudEvents 规范不强制要求使用任何特定模式，甚至根本不强�
 但对于此 CloudEvent 属性而言，这些含义并不成立，
 因此本规范不建议将 `id` 用于除了唯一性检查之外的其它目的。
 
-## CloudEvent 属性扩展
+## CloudEvent-属性扩展
 
 为了实现规范的设计目标，
 规范作者将尝试限制他们在 CloudEvents 中定义的元数据属性的数量。 
@@ -262,7 +262,7 @@ CloudEvent的作者花了很长时间考虑所有选项，并认为这是最好�
 但作者认为一个避免这些问题的更好的办法是在序列化中只有一个位置来放置未知的甚至是新的属性。
 作者还注意到 HTTP 规范现在遵循类似的模式，不再建议扩展 HTTP 头部以 X- 为前缀。
 
-## 生产 CloudEvents
+## 生产CloudEvents
 
 CloudEvents 规范有意避免将CloudEvents 的创建方式设计的过于死板。
 例如，它不假定原始事件源必须是该事件构造关联 CloudEvent 的同一实体。 
@@ -336,277 +336,200 @@ CloudEvents的努力不应成为认可或推广项目或产品专有协议的工
 
 ## 专有的协议与编码
 
-To encourage adoption of CloudEvents, this repository will collect CloudEvent
-specs for proprietary protocols and encodings without endorsement. Repository
-maintainers are not responsible for creating, maintaining, or notifying
-maintainers of proprietary specs of drift from the CloudEvents spec.
+为了鼓励更多人采用 CloudEvents，本仓库将自动收集专有协议和编码。
+本仓库的维护人员不负责创建、维护或通知专有规范的维护人员有关专有规范和CloudEvents规范间的偏差。
 
-Proprietary specs will be hosted in their own repository or documentation site,
-and collected in the [proprietary-specs](proprietary-specs.md) file. Proprietary
-specs should follow the same format as the other specs for core protocols and
-encodings.
+专有规范将托管在他们自己的仓库或文档站点中，并收集在[专有规范](proprietary-specs.md)
+文件中。 专有规范应遵循与核心协议和编码相关的其他规范相同的格式。
 
-Proprietary specs will receive less scrutiny than a core spec, and as the
-CloudEvents spec evolves, it is the responsibility of the maintainers of the
-respective protocols and encodings to keep specs in sync with the CloudEvents
-spec. If a proprietary spec falls too far out of date, CloudEvents may mark the
-link to that spec as deprecated or remove it.
+专有规范将比核心规范受到更少的审查，并且随着 CloudEvents 规范的发展，
+相应协议和编码的维护者有责任使规范与 CloudEvents 规范保持同步。 
+如果专有规范过时太多，CloudEvents 可能会将指向该规范的链接标记为已弃用或将其删除。
 
-In the case that multiple, incompatible specs are created for the same protocol,
-the repository maintainers will be agnostic about which spec is correct and list
-links to all specs.
+如果为同一个协议创建了多个不兼容的规范，存储库维护者将不知道哪个规范是正确的，并列出所有规范的链接。
 
-## Prior Art
+## 现有技术
 
-This section describes some of the input material used by the group during the
-development of the CloudEvent specification.
+本节介绍了工作组在 CloudEvent 规范开发过程中使用的一些输入材料。
 
-### Roles
+### 角色
 
-The list below enumerates the various participants, and scenarios, that might be
-involved in the producing, managing or consuming of events.
+下面列举了可能涉及事件的产生、管理或消费的各种参与者和场景。
 
-In these the roles of event producer and event consumer are kept distinct. A
-single application context can always take on multiple roles concurrently,
-including being both a producer and a consumer of events.
+在这些中，事件生产者和事件消费者的角色是不同的。
+单个应用程序上下文始终可以同时承担多个角色，包括既是事件的生产者又是事件的消费者。
 
-1. Applications produce events for consumption by other parties, for instance
-   for providing consumers with insights about end-user activities, state
-   changes or environment observations, or for allowing complementing the
-   application's capabilities with event-driven extensions.
+1. 应用程序生成供他人使用的事件，
+   如为消费者提供有关终端用户活动、状态变化或环境观察的见解，
+   或允许通过事件驱动的扩展来补充应用程序的功能。
 
-   Events are typically produced related to a context or a producer-chosen
-   classification. For example, a temperature sensor in a room might be
-   context-qualified by mount position, room, floor, and building. A sports
-   result might be classified by league and team.
+   生产的事件通常与上下文或生产者选择的分类相关。 
+   例如，房间中的温度传感器可能被安装位置、房间、楼层和建筑物等上下文限定。 
+   运动结果可以按联赛和球队分类。
 
-   The producer application could run anywhere, such as on a server or a device.
+   生产者应用程序可以在任何地方运行，例如在服务器或设备上。
 
-   The produced events might be rendered and emitted directly by the producer or
-   by an intermediary; as example for the latter, consider event data
-   transmitted by a device over payload-size-constrained networks such as
-   LoRaWAN or ModBus, and where events compliant to this specification will be
-   rendered by a network gateway on behalf of the producer.
+   生产的事件可能由生产者或中间人直接提供和发出； 
+   作为后者的示例，请考虑设备通过负载大小受限的网络（如 LoRaWAN 或 ModBus）传输的事件数据，
+   并且符合此规范的事件将由网络网关代表生产者提供。
 
-   For example, a weather station transmits a 12-byte, proprietary event payload
-   indicating weather conditions once every 5 minutes over LoRaWAN. A LoRaWAN
-   gateway is then used to publish the event to an Internet destination in the
-   CloudEvents format. The LoRaWAN gateway is the event producer, publishing on
-   behalf of the weather station, and will set event metadata appropriately to
-   reflect the source of the event.
+   例如，气象站每 5 分钟通过 LoRaWAN 传输一次 12 字节的专有事件有效载荷用于指示天气状况。 
+   然后使用 LoRaWAN 网关以 CloudEvents 格式将事件发布到 Internet 目标。 
+   LoRaWAN 网关是事件生产者，代表气象站发布事件，并将设置一定的元数据以反映事件的来源(气象站)。
 
-2. Applications consume events for the purposes such as display, archival,
-   analytics, workflow processing, monitoring the condition and/or providing
-   transparency into the operation of a business solution and its foundational
-   building blocks.
+2. 应用程序可能以以下目的：
+   如显示、存档、分析、工作流处理、监控状态或提供业务解决方案及其基本构建模块的透明化
+   来消费事件。
 
-   The consumer application could run anywhere, such as on a server or a device.
+   消费者应用程序可以在任何地方运行，例如在服务器或设备上。
 
-   A consuming application will typically be interested in:
+   消费应用程序通常对以下内容感兴趣：
 
-   - distinguishing events such that the exact same event is not processed
-     twice.
-   - identifying and selecting the origin context or the producer-assigned
-     classification.
-   - identifying the temporal order of the events relative to the originating
-     context and/or relative to a wall-clock.
-   - understanding the context-related detail information carried in the event.
-   - correlating event instances from multiple event producers and send them to
-     the same consumer context.
+   - 区分事件，使得完全相同的事件不会被处理两次。
+   - 识别和选择源上下文或生产者指定的分类。
+   - 确定事件相对于原始上下文或相对于时钟的时间顺序。
+   - 了解事件中携带的上下文相关的详细信息。
+   - 关联来自多个事件生产者的事件实例并将它们发送到相同的消费者上下文。
 
-   In some cases, the consuming application might be interested in:
+   在某些情况下，消费应用程序可能对以下内容感兴趣：
 
-   - obtaining further details about the event's subject from the originating
-     context, like obtaining detail information about a changed object that
-     requires privileged access authorization. For example, a HR solution might
-     only publish very limited information in events for privacy reasons, and
-     any event consumer needing more data will have to obtain details related to
-     the event from the HR system under their own authorization context.
-   - interact with the event's subject at the originating context, for instance
-     reading a storage blob after having been informed that this blob has just
-     been created.
+   - 从原始上下文中获取有关事件主题的更多详细信息，例如获取有关需要特权访问授权的已更改对象的详细信息。
+     例如，出于隐私原因，HR 解决方案可能仅在事件中发布非常有限的信息，
+     任何需要更多数据的事件消费者都必须在其自己的授权上下文下从 HR 系统获取与事件相关的详细信息
+   - 在原始上下文中与事件的主题进行交互，例如在被告知该数据块刚刚创建后读取存储该数据块。
 
-   Consumer interests motivate requirements for which information producers
-   ought to include an event.
+   消费者的兴趣激发了信息生产者应该包括事件的需求。
 
-3. Middleware routes events from producers to consumers, or onwards to other
-   middleware. Applications producing events might delegate certain tasks
-   arising from their consumers' requirements to middleware:
+3. 中间件将事件从生产者路由到消费者，或转发到其他中间件。 
+   产生事件的应用程序可能会将消费者需求产生的某些任务委托给中间件：
 
    - Management of many concurrent interested consumers for one of multiple
      classes or originating contexts of events
-   - Processing of filter conditions over a class or originating context of
-     events on behalf of consumers.
-   - Transcoding, like encoding in MsgPack after decoding from JSON
-   - Transformation that changes the event's structure, like mapping from a
-     proprietary format to CloudEvents, while preserving the identity and
-     semantic integrity of the event.
-   - Instant "push-style" delivery to interested consumers.
-   - Storing events for eventual delivery, either for pick-up initiated by the
-     consumer ("pull") or initiated by the middleware ("push") after a delay.
-   - Observing event content or event flow for monitoring or diagnostics
-     purposes.
+   - 代表消费者在类或事件的原始上下文上处理过滤条件。
+   - 转码，比如从 JSON 解码后在 MsgPack 中编码
+   - 更改事件结构的转换，例如从专有格式映射到 CloudEvents，同时保留事件的身份和语义完整性。
+   - 即时“推送式”传输给感兴趣的消费者。
+   - 存储最终传输的事件，用于由消费者发起的“拉”请求，或延迟后由中间件发起“推”请求。
+   - 观察事件内容或事件流以进行监控或诊断。
 
-   To satisfy these needs, middleware will be interested in:
+   为了满足这些需求，中间件将对以下方面感兴趣：
 
-   - A metadata discriminator usable for classification or contextualization of
-     events so that consumers can express interest in one or multiple such
-     classes or contexts. For instance, a consumer might be interested in all
-     events related to a specific directory inside a file storage account.
-   - A metadata discriminator that allows distinguishing the subject of a
-     particular event of that class or context. For instance, a consumer might
-     want to filter out all events related to new files ending with ".jpg" (the
-     file name being the "new file" event's subject) for the context describing
-     specific directory inside a file storage account that it has registered
-     interest on.
-   - An indicator for the encoding of the event and its data.
-   - An indicator for the structural layout (schema) for the event and its data.
+   - 一种元数据鉴别器，可用于事件的分类或上下文化，以便消费者可以表达对一个或多个类或上下文的兴趣。
+     例如，消费者可能对文件存储帐户内的特定目录相关的所有事件感兴趣。
+   - 一种元数据鉴别器，允许区分该类或上下文的特定事件的主题。例如，消费者可能希望过滤掉与以“.jpg”结尾的
+     新文件相关的所有事件（文件名是“新文件”事件的主题），
+     用于描述其已注册的文件存储帐户内的特定目录的上下文兴趣。
+   - 一个事件及其数据编码的指示器。
+   - 一个事件及其数据的结构布局（模式）的指示器。
 
-   Whether its events are available for consumption via a middleware is a
-   delegation choice of the producer.
+   事件是否可通过中间件消费取决于生产者的选择。
 
-   In practice, middleware can take on the role of a
-   [Producer](spec.md#producer) when it changes the semantic meaning of an
-   event, a [Consumer](spec.md#consumer) when it takes action based on an event,
-   or [Intermediary](spec.md#intermediary) when it routes events without making
-   semantic changes.
+   在实践中，当中间件改变事件的语义时可以扮演[生产者](spec.md#producer)的角色，
+   当它根据事件采取行动时可以扮演[消费者](spec.md#consumer)的角色，
+   或者当它路由事件而不进行语义改变时可以扮演[中间人](spec.md#intermediary)的角色。
+  
+4. 框架和其他抽象使与事件平台基础设施的交互更简单，
+   并且通常为多个事件平台基础设施提供公共 API 区域。
 
-4. Frameworks and other abstractions make interactions with event platform
-   infrastructure simpler, and often provide common API surface areas for
-   multiple event platform infrastructures.
+   框架通常用于将事件转换为对象图，并将事件分派给某些特定的处理用户代码或用户规则，
+   这些用户代码或用户规则允许消费应用程序对原始上下文和特定主题中的特定类型的事件做出反应。
 
-   Frameworks are often used for turning events into an object graph, and to
-   dispatch the event to some specific handling user-code or user-rule that
-   permits the consuming application to react to a particular kind of occurrence
-   in the originating context and on a particular subject.
+   框架最感兴趣的是跨它们抽象的平台的语义元数据通用性，以便可以统一处理类似的活动。
 
-   Frameworks are most interested in semantic metadata commonality across the
-   platforms they abstract, so that similar activities can be handled uniformly.
+   对于体育应用程序，使用该框架的开发人员可能对联盟中一支球队今天的比赛（主题）
+   的所有事件感兴趣，但希望以不同于“换人”事件的方式处理“得分”事件。 
+   为此，框架将需要一个合适的元数据鉴别器，使其不必了解事件细节。
 
-   For a sports application, a developer using the framework might be interested
-   in all events from today's game (subject) of a team in a league (topic of
-   interest) but wanting to handle reports of "goal" differently than reports of
-   "substitution". For this, the framework will need a suitable metadata
-   discriminator that frees it from having to understand the event details.
+### 价值主张
 
-### Value Proposition
+本节介绍了一些能够展示 CloudEvents 价值主张的用例。
 
-This section describes some of the use-cases that explain the value of
-CloudEvents.
+#### 跨服务和平台规范化事件
 
-#### Normalizing Events Across Services & Platforms
+主要事件发布者（例如 AWS、Microsoft、Google 等）都在各自的平台上以不同的格式发布事件。 
+甚至在少数情况下，同一提供商的服务以不同格式（例如 AWS）发布事件。
+这迫使事件消费者实现自定义逻辑以跨平台读取或处理事件数据，有时甚至需要跨单个平台的多个服务处理。
 
-Major event publishers (e.g. AWS, Microsoft, Google, etc.) all publish events in
-different formats on their respective platforms. There are even a few cases
-where services on the same provider publish events in different formats (e.g.
-AWS). This forces event consumers to implement custom logic to read or munge
-event data across platforms and occasionally across services on a single
-platform.
+CloudEvents 可以为那些跨平台和服务处理事件的使用者提供单一体验。
 
-CloudEvents can offer a single experience for authoring consumers that handle
-events across all platforms and services.
+#### 促进跨服务和平台的集成
 
-#### Facilitating Integrations Across Services & Platforms
+跨环境传输的事件数据越来越普遍。
+然而，如果没有描述事件的通用方式，跨环境的事件传递就会受到阻碍。
+CloudEvents之前没有单一的方法可以确定事件的来源和可能的去向。 
+这对研究成功传输事件事件工具和消费者知道如何处理事件数据形成了巨大阻碍。
 
-Event data being transported across environments is increasingly common.
-However, without a common way of describing events, delivery of events across
-environments is hindered. There is no single way of determining where an event
-came from and where it might be going. This prevents tooling to facilitate
-successful event delivery and consumers from knowing what to do with event data.
+CloudEvents 提供有用的元数据，中间件和消费者可以依赖这些元数据来促进事件路由、日志记录、传输和接收。
 
-CloudEvents offers useful metadata which middleware and consumers can rely upon
-to facilitate event routing, logging, delivery and receipt.
+#### 提高功能即服务的可移植性
 
-#### Increasing Portability of Functions-as-a-Service
+功能即服务（也称为serverless计算）是 IT 中增长最快的趋势之一，它主要是由事件驱动的。
+然而，FaaS 的一个主要问题是供应商锁定。 
+这种锁定部分是由函数 API 和供应商之间签名的差异引起的，
+锁定同样也是由函数内接收的事件数据格式的差异引起的。
 
-Functions-as-a-Service (also known as serverless computing) is one of the
-fastest growing trends in IT and it is largely event-driven. However, a primary
-concern of FaaS is vendor lock-in. This lock-in is partially caused by
-differences in function APIs and signatures across providers, but the lock-in is
-also caused by differences in the format of event data received within
-functions.
+CloudEvents提供描述事件数据的通用方式提高了功能即服务的可移植性。
 
-CloudEvents' common way of describing event data increases the portability of
-Functions-as-a-Service.
+#### 改进事件驱动/serverless架构的开发和测试
 
-#### Improving Development & Testing of Event-Driven/Serverless Architectures
+缺乏通用事件格式使事件驱动和serverless架构的开发和测试变得复杂。 
+没有简单的方法可以准确地为开发和测试目的模拟事件，并帮助在开发环境中模拟事件驱动的工作流。
 
-The lack of a common event format complicates development and testing of
-event-driven and serverless architectures. There is no easy way to mock events
-accurately for development and testing purposes, and help emulate event-driven
-workflows in a development environment.
+CloudEvents 可以提供更好的开发工具来构建、测试和处理事件驱动和无服务器架构的端到端生命周期。
 
-CloudEvents can enable better developer tools for building, testing and handling
-the end-to-end lifecycle of event-driven and serverless architectures.
+#### 事件数据发展
 
-#### Event Data Evolution
+大多数平台和服务对其事件的数据模型进行不同的版本控制（如果他们这样做的话）。 
+随着这些数据模型的发展，这会为发布和使用事件的数据模型带来不一致的体验。
 
-Most platforms and services version the data model of their events differently
-(if they do this at all). This creates an inconsistent experience for publishing
-and consuming the data model of events as those data models evolve.
+CloudEvents 可以提供一种通用的方式来版本化和发展事件数据。 
+这将帮助事件发布者根据最佳实践安全地对其数据模型进行版本控制，
+并且这有助于事件消费者随着事件数据的发展安全地使用它。
 
-CloudEvents can offer a common way to version and evolve event data. This will
-help event publishers safely version their data models based on best practices,
-and this help event consumers safely work with event data as it evolves.
+#### 规范化 Webhook
 
-#### Normalizing Webhooks
+Webhooks 是一种不使用通用格式的来发布事件的模式。
+Webhook 的使用者没有一致的方式来开发、测试、识别、验证和整体处理通过 Webhook 传输的事件数据。
 
-Webhooks is a style of event publishing which does not use a common format.
-Consumers of webhooks don’t have a consistent way to develop, test, identify,
-validate, and overall process event data delivered via webhooks.
+CloudEvents 可以提供 Webhook 发布和消费事件的一致性。
 
-CloudEvents can offer consistency in webhook publishing and consumption.
+#### 安全策略
 
-#### Policy Enforcement
+出于安全和策略考虑，可能需要过滤、转换或阻止系统之间的事件传输。 
+比如可能需要防止事件的进入或退出，如包含敏感信息的事件数据或想要禁止发送方和接收方之间的信息流。
 
-The transiting of events between systems may need to be filtered, transformed,
-or blocked due to security and policy concerns. Examples may be to prevent
-ingress or egress of the events such as event data containing sensitive
-information or wanting to disallow the information flow between the sender and
-receiver.
+通用事件格式将允许更容易地推理正在传输的数据，并提供更好的数据自查。
 
-A common event format would allow easier reasoning about the data being
-transited and allow for better introspection of the data.
+#### 事件追踪
 
-#### Event Tracing
-
-An event sent from a source may result in a sequence of additional events sent
-from various middleware devices such as event brokers and gateways. CloudEvents
-includes metadata in events to associate these events as being part of an event
-sequence for the purpose of event tracing and troubleshooting.
+从源发送的事件可能会出现在一系列附加事件之间，
+这些附加事件从各种中间件设备（例如事件代理和网关）发出的。 
+CloudEvents 在事件中包含元数据以将这些事件关联为事件序列的一部分，以便进行事件跟踪和故障排除。
 
 #### IoT
 
-IoT devices send and receive events related to their functionality. For example,
-a connected thermostat will send telemetry on the current temperature and could
-receive events to change temperatures. These devices typically have a
-constrained operating environment (cpu, memory) requiring a well-defined event
-message format. In a lot of cases these messages are binary encoded instead of
-textual. Whether directly from the device or transformed via a gateway,
-CloudEvents would allow for a better description of the origin of the message
-and the format of the data contained within the message.
+物联网设备会发送和接收与其功能相关的事件。
+例如，连接的恒温器将发送有关当前温度的遥测数据，
+并可以接收改变温度的事件。
+这些设备通常具有受限的操作环境（cpu、内存），需要明确定义的事件消息格式。 
+在很多情况下，这些消息是二进制编码的，而不是文本的。 
+无论是直接来自设备还是通过网关转换，CloudEvents 都可以更好地描述消息的来源和消息中包含的数据格式。
 
-#### Event Correlation
+#### 事件关联
 
-A serverless application/workflow could be associated with multiple events from
-different event sources/producers. For example, a burglary detection
-application/workflow could involve both a motion event and a door/window open
-event. A serverless platform could receive many instances of each type of
-events, e.g. it could receive motion events and window open events from
-different houses.
+一个serverless应用或工作流可能与来自不同事件源或事件生产者的多个事件相关联。 
+例如，盗窃检测应用程序/工作流可能涉及运动事件和门/窗打开事件。 
+一个serverless平台可能接收每种类型事件的许多实例，例如 它可以接收来自不同房屋的运动事件和开窗事件。
 
-The serverless platform needs to correlate one type of event instance correctly
-with other types of event instances and map a received event instance to the
-correct application/workflow instance. CloudEvents will provide a standard way
-for any event consumer (e.g. the serverless platform) to locate the event
-correlation information/token in the event data and map a received event
-instance to the correct application/workflow instance.
+serverless平台需要将一种类型的事件实例与其他类型的事件实例正确关联，
+并将接收到的事件实例映射到正确的应用/工作流实例。 
+CloudEvents 将为任何事件使用者（例如serverless平台）提供一种标准方式，
+以在事件数据中定位事件关联信息/令牌并将接收到的事件实例映射到正确的应用/工作流实例。
 
-### Existing Event Formats
+### 现有的数据格式
 
-As with the previous section, the examination (and understanding) of the current
-state of the world was very important to the group. To that end, a sampling of
-existing current event formats that are used in practice today was gathered.
+与上一节一样，对当前现状的调查（和理解）对CloudEvents 小组来说非常重要。 
+为此，下面列出了在实践中被广泛使用的当前事件格式的样本。
 
 #### Microsoft - Event Grid
 
@@ -661,8 +584,7 @@ existing current event formats that are used in practice today was gathered.
 
 #### AWS - CloudWatch Events
 
-A high proportion of event-processing systems on AWS are converging on the use
-of this format.
+AWS 上的很大一部分事件处理系统都在使用这种格式。
 
 ```
 {
