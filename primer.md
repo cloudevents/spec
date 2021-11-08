@@ -8,7 +8,7 @@
 
 ## 目录
 
-- [历史](#history)
+- [历史](#历史)
 - [CloudEvents 概念](#cloudevents-concepts)
 - [设计目标](#design-goals)
 - [架构](#architecture)
@@ -16,7 +16,7 @@
 - [CloudEvent 属性](#cloudevent-attributes)
 - [CloudEvent 属性扩展](#cloudevent-attribute-extensions)
 - [生产 CloudEvents](#creating-cloudevents)
-- [Qualifying 协议和编码](#qualifying-protocols-and-encodings)
+- [合格的协议与编码](#qualifying-protocols-and-encodings)
 - [Proprietary 协议和编码](#proprietary-protocols-and-encodings)
 - [Prior Art](#prior-art)
 - [Roles](#roles)
@@ -188,210 +188,153 @@ CloudEvents 规范不强制要求使用任何特定模式，甚至根本不强�
 那么可以使用 CloudEvent 中的一些附加数据来实现该目的。
 
 从这方面来看，虽然事件生产者对`id`的使用可能是某个随机字符串，
-或者在其他上下文中具有某种语义的字符串，
+或者在其它上下文中具有某种语义的字符串，
 但对于此 CloudEvent 属性而言，这些含义并不成立，
-因此本规范不建议将 `id` 用于除了唯一性检查之外的其他目的。
+因此本规范不建议将 `id` 用于除了唯一性检查之外的其它目的。
 
-## CloudEvent Attribute Extensions
+## CloudEvent 属性扩展
 
-In order to achieve the stated goals, the specification authors will attempt to
-constrain the number of metadata attributes they define in CloudEvents. To that
-end, attributes defined by this project will fall into three categories:
+为了实现规范的设计目标，
+规范作者将尝试限制他们在 CloudEvents 中定义的元数据属性的数量。 
+为此，该项目定义的属性将分为以下三类：
 
-- required
-- optional
-- extensions
+- 必要属性
+- 可选属性
+- 扩展属性
 
-As the category names imply, "required" attributes will be the ones that the
-group considers vital to all events in all use cases, while "optional" ones will
-be used in a majority of the cases. Both of the attributes in these cases will
-be defined within the specification itself.
+正如类别名称所暗示的那样，
+“必要”属性是工作组认为在任何情况下，对所有事件都至关重要的属性，
+而“可选”属性将在大多数情况下使用。 这些情况下的两个属性都在本规范中定义了出来。
 
-When the group determines that an attribute is not common enough to fall into
-those two categories but would still benefit from the level of interoperability
-that comes from being well-defined, then they will be placed into the
-"extensions" category and put into
-[documented extensions](documented-extensions.md). The specification defines how
-these extension attributes will appear within a CloudEvent.
+当工作组考虑到某些属性不够常见而不能归入上述两个类别，
+但此类属性的良好定义仍会使系统间的互操作性级别受益，
+则将这些属性放入了“扩展”类别并记录在[扩展文档](documented-extensions.md)中，
+本规范定义了这些扩展属性在 CloudEvent 中的显示方式。
 
-In determining which category a proposed attribute belongs, or even if it will
-be included at all, the group uses use-cases and user-stories to explain the
-rationale and need for them. This supporting information will be added to the
-[Prior Art](#prior-art) section of this document.
+在确定提议的属性属于哪个类别时，
+工作组使用现有的用例和用户故事来解释它们的基本原理和需求。 
+相关信息将添加到本文档的[现有技术](#prior-art)部分。
 
-Extension attributes to the CloudEvent specification are meant to be additional
-metadata that needs to be included to help ensure proper routing and processing
-of the CloudEvent. Additional metadata for other purposes, that is related to
-the event itself and not needed in the transportation or processing of the
-CloudEvent, should instead be placed within the proper extensibility points of
-the event (`data`) itself.
+CloudEvent 规范的扩展属性是需要包含的附加元数据，它们能确保合适的路由和正确处理CloudEvent。
+用于其它目的的附加元数据，
+即那些与事件本身相但在 CloudEvent 的传输或处理中不需要的元数据，
+应改为放置在事件 (`data`)的扩展点内。
 
-Extension attributes should be kept minimal to ensure the CloudEvent can be
-properly serialized and transported. For example, the Event producers should
-consider the technical limitations that might be encountered when adding
-extensions to a CloudEvent. For example, the
-[HTTP Binary Mode](http-protocol-binding.md#31-binary-content-mode) uses HTTP
-headers to transport metadata; most HTTP servers will reject requests with
-excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
-size and number of extension attributes should be kept minimal.
+扩展属性应保持最少，以确保 CloudEvent 可以正确序列化和传输。 
+事件生产者应该考虑在向 CloudEvent 添加扩展时可能遇到的技术限制。 
+例如，[HTTP Binary Mode](http-protocol-binding.md#31-binary-content-mode)
+使用 HTTP 头来传输元数据； 
+大多数 HTTP 服务器会拒绝包含过多 HTTP 头部数据的请求，要求限制其低至 8kb。
+因此，扩展属性的大小和数量应保持最小。
 
-If an extension becomes popular then the specification authors might consider
-moving it into the specification as a core attribute. This means that the
-extension mechanism/process can be used as a way to vet new attributes prior to
-formally adding them to the specification.
+如果扩展变得流行，那么规范作者可能会考虑将其作为核心属性移入规范。 
+这意味着在正式将新属性添加到规范之前，扩展机制/过程可用作审查新属性的一种方式。
 
-### JSON Extensions
+### JSON 扩展
 
-As mentioned in the [Attributes](json-format.md#2-attributes) section of the
-[JSON Event Format for CloudEvents](json-format.md) specification, CloudEvent
-extension attributes are serialized as siblings to the specification defined
-attributes - meaning, at the top-level of the JSON object. The authors of the
-specification spent a long time considering all options and decided that this
-was the best choice. Some of the rationale follows.
+如 [CloudEvents JSON 事件格式](json-format.md)中
+[属性](json-format.md#2-attributes)部分所述，
+CloudEvent 扩展属性与已定义属性(必要属性、可选属性)在序列化时处于同一等级 - 
+也就是说，它们都是 JSON 对象的顶层属性。
+CloudEvent的作者花了很长时间考虑所有选项，并认为这是最好的选择。 
+理由如下：
 
-Since the specifications follow [semver](https://semver.org/), this means that
-new properties can be defined by future versions of the core specification
-without requiring a major version number change - as long as these properties
-are optional. In those cases, consider what an existing consumer would do with a
-new (unknown) top-level property. While it would be free to ignore it, since it
-is optional, in most cases it is believed that these properties would still want
-to be exposed to the application receiving those events. This would allow those
-applications to support these properties even if the infrastructure doesn't.
-This means that unknown top-level properties (regardless of who defined them -
-future versions of the spec or the event producer) are probably not going to be
-ignored. So, while some other specifications define a specific property under
-which extensions are placed (e.g. a top-level `extensions` property), the
-authors decided that having two different locations within an incoming event for
-unknown properties could lead to interoperability issues and confusion for
-developers.
+由于CloudEvents规范遵循 [semver](https://semver.org/)，
+这意味着只要新属性是可选属性，它们可以由核心规范的未来版本定义，而无需更改主要版本。
+在这些情况下，请考虑现有消费者将如何使用新的（未知）顶级属性。
+虽然消费者可以随意忽略它，因为它是可选的，
+但在大多数情况下，这些属性仍然希望向接收这些事件的应用公开。
+这将允许这些应用程序支持这些属性，即使基础设施不支持。
+这意味着未知的顶级属性（无论是谁定义的——规范的未来版本或事件生产者）可能不会被忽略。
+因此，虽然其它一些规范定义了放置扩展的特定属性（例如顶级`extensions`属性），
+但作者认为在传入事件中具有两个不同位置的未知属性可能会导致互操作性问题和开发人员的混淆。
 
-Often extensions are used to test new potential properties of specifications
-prior to them being formally adopted. If there were an `extensions` type of
-property, in which this new property was serialized, then if that property were
-to ever be adopted by the core specification it would be promoted (from a
-serialization perspective) from the `extensions` property to be a top-level
-property. If we assume that this new property will be optional, then as it is
-adopted by the core specification it will be just a minor version increment, and
-all existing consumers should still continue to work. However, consumers will
-not know where this property will appear - in the `extensions` property or as a
-top-level property. This means they might need to look in both places. What if
-the property appears in both place but with different values? Will producers
-need to place it in both places since they could have old and new consumers?
-While it might be possible to define clear rules for how to solve each of the
-potential problems that arise, the authors decided that it would be better to
-simply avoid all of them in the first place by only having one location in the
-serialization for unknown, or even new, properties. It was also noted that the
-HTTP specification is now following a similar pattern by no longer suggesting
-that extension HTTP headers be prefixed with `X-`.
+扩展属性通常用于测试那些被规范正式采用之前的潜在属性。
+如果有一个`extensions`类型的属性，这个新属性已经被序列化，
+那么如果该属性被核心规范采用，它将从`extensions`属性提升（从序列化的角度）为顶级属性。
+如果我们假设这个新属性是可选的，那么当它被核心规范采用时，
+它只是一个小版本增量，所有现有的消费者仍然会继续工作。
+但是，消费者将不知道此属性将出现在何处 - 在扩展属性中或是作为顶级属性。
+这意味着他们可能需要同时查看两个地方。
+如果属性出现在两个地方但具有不同的值怎么办？
+生产者是否需要将它放在两个地方，因为他们可能有新老消费者？
+虽然有可能为如何解决出现的每个潜在问题定义明确的规则，
+但作者认为一个避免这些问题的更好的办法是在序列化中只有一个位置来放置未知的甚至是新的属性。
+作者还注意到 HTTP 规范现在遵循类似的模式，不再建议扩展 HTTP 头部以 X- 为前缀。
 
-## Creating CloudEvents
+## 生产 CloudEvents
 
-The CloudEvents specification purposely avoids being too prescriptive about how
-CloudEvents are created. For example, it does not assume that the original event
-source is the same entity that is constructing the associated CloudEvent for
-that occurrence. This allows for a wide variety of implementation choices.
-However, it can be useful for implementors of the specification to understand
-the expectations that the specification authors had in mind as this might help
-ensure interoperability and consistency.
+CloudEvents 规范有意避免将CloudEvents 的创建方式设计的过于死板。
+例如，它不假定原始事件源必须是该事件构造关联 CloudEvent 的同一实体。 
+这允许多种实现方式。
+但是，对于规范的实现者来说，理解规范作者心中的期望是很有用的，因为这将有助于确保互操作性和一致性。
 
-As mentioned above, whether the entity that generated the initial event is the
-same entity that creates the corresponding CloudEvent is an implementation
-choice. However, when the entity that is constructing/populating the CloudEvents
-attributes is acting on behalf of the event source, the values of those
-attributes are meant to describe the event or the event source and not the
-entity calculating the CloudEvent attribute values. In other words, when the
-split between the event source and the CloudEvents producer are not materially
-significant to the event consumers, the spec defined attributes would typically
-not include any values to indicate this split of responsibilities.
+如上所述，生成初始事件的实体是否与创建相应 CloudEvent 的实体相同是由实现决定的。
+但是，当构建/填充 CloudEvents 属性的实体代表事件源进行操作时，这些属性的值是用来描述事件或事件源，
+而不是计算 CloudEvent 属性值的实体的。
+换句话说，当事件源和 CloudEvents 生产者之间的分离对事件使用者没有实质性意义时，
+规范定义的属性通常不会包含任何值来指示这种职责分离。
 
-This isn't to suggest that the CloudEvents producer couldn't add some additional
-attributes to the CloudEvent, but those are outside the scope of the
-interoperability defined attributes of the spec. This is similar to how an HTTP
-proxy would typically minimize changes to the well-defined HTTP headers of an
-incoming message, but it might add some additional headers that include
-proxy-specific metadata.
+这并不是说 CloudEvents 生产者不能向 CloudEvent 添加一些额外的属性，
+但这些属性超出了规范的互操作性定义属性的范围。
+这类似于 HTTP 代理通常如何最大限度地减少对传入消息的明确定义的 HTTP 头部的更改，
+但它可能会添加一些额外的头部，其中包括一些特定代理的元数据。
 
-It is also worth noting that this separation between original event source and
-CloudEvents producer could be small or large. Meaning, even if the CloudEvent
-producer were not part of the original event source's ecosystem, if it is acting
-on behalf of the event source, and its presence in the flow of the event is not
-meaningful to event consumers, then the above guidance would still apply.
+还值得注意的是，原始事件源和 CloudEvents 生产者之间的这种分离可大可小。 
+意思是，即使 CloudEvent 生产者不是原始事件源生态系统的一部分，
+如果它代表事件源行事，并且它在事件流中的存在对事件消费者没有意义，那么上述指导仍然适用。
 
-When an entity is acting as both a receiver and sender of CloudEvents for the
-purposes of forwarding, or transforming, the incoming event, the degree to which
-the outbound CloudEvent matches the inbound CloudEvent will vary based on the
-processing semantics of this entity. In cases where it is acting as proxy, where
-it is simply forwarding CloudEvents to another event consumer, then the outbound
-CloudEvent will typically look identical to the inbound CloudEvent with respect
-to the spec defined attributes - see previous paragraph concerning adding
-additional attributes.
+当实体同时充当 CloudEvents 的接收者和发送者以转发或转换传入事件时，
+出站 CloudEvent 与入站 CloudEvent 匹配的程度将根据该实体的处理语义而有所不同。 
+在它充当代理的情况下，它只是将 CloudEvents 转发给另一个事件消费者，
+那么出站 CloudEvent 通常看起来与入站 CloudEvent 就规范定义的属性相同 
+- 请参阅上一段有关添加其他属性的内容。
 
-However, if this entity is performing some type of semantic processing of the
-CloudEvent, typically resulting in a change to the value of the `data`
-attribute, then it may need to be considered a distinct "event source" from the
-original event source. And as such, it is expected that CloudEvents attributes
-related to the event producer (such as `source` and `id`) would be changed from
-the incoming CloudEvent.
+但是，如果此实体正在执行 CloudEvent 的某种类型的语义处理，
+通常会导致`data`属性值发生更改，
+则可能需要将其视为与原始事件源不同的“事件源”。 
+因此，预计与事件生产者相关的 CloudEvents 属性（例如`source` and `id`）
+将从传入的 CloudEvent 中更改。  
 
-## Qualifying Protocols and Encodings
+## 合格的协议与编码
 
-The explicit goal of the CloudEvents effort, as expressed in the specification,
-is "describing event data in a common way" and "to define interoperability of
-event systems that allow services to produce or consume events, where the
-producer and consumer can be developed and deployed independently".
+正如规范中所表达的，CloudEvents 工作的明确目标是
+“以通用方式描述事件数据”且
+“定义允许服务产生或消费事件的事件系统的互操作性，其中生产者和消费者可以被独立开发和部署”。
 
-The foundations for such interoperability are open data formats and open
-protocols, with CloudEvents aiming to provide such an open data format and
-projections of its data format onto commonly used protocols and with commonly
-used encodings.
+这种互操作性的基础是开放的数据格式和协议，
+CloudEvents 旨在提供这种开放的数据格式，并将其数据格式映射到常用协议和常用编码上。
 
-While each software or service product and project can obviously make its own
-choices about which form of communication it prefers, its unquestionable that a
-proprietary protocol that is private to such a product or project does not
-further the goal of broad interoperability across producers and consumers of
-events.
+虽然每个软件或服务产品和项目都可以自己选择自己喜欢的通信形式，
+但毫无疑问，这种产品或项目私有的专有协议无法进一步实现跨生产者和消费者的广泛互操作性的目标。
 
-Especially in the area of messaging and eventing, the industry has made
-significant progress in the last decade in developing a robust and broadly
-supported protocol foundation, like HTTP 1.1 and HTTP/2 as well as WebSockets or
-events on the web, or MQTT and AMQP for connection-oriented messaging and
-telemetry transfers.
+特别是在消息传递和事件处理领域，该行业在过去十年中开发出了强大且受到广泛支持的协议
+例如 HTTP 1.1 和 HTTP/2 以及 WebSockets 或 Web 上的事件，或者 MQTT 和 AMQP 
+用于面向连接的消息传递和遥测传输的协议。
 
-Some widely used protocols have become de-facto standards emerging out of strong
-ecosystems of top-level consortia of three or more companies, and some out of
-the strong ecosystems of projects released by a single company, and in either
-case largely in parallel to the evolution of the previously mentioned standards
-stacks.
+一些广泛使用的协议已经成为事实上的标准，这些协议来自三个或更多公司的顶级财团的强大生态系统，
+还有一些来自单个公司发布的强大项目生态系统，在任何一种情况下都与前面提到的标准栈的演变相一致。
 
-The CloudEvents effort shall not become a vehicle to even implicitly endorse or
-promote project- or product-proprietary protocols, because that would be
-counterproductive towards CloudEvents' original goals.
+CloudEvents的努力不应成为认可或推广项目或产品专有协议的工具，
+因为这与CloudEvents 的原始目标背道而驰。
 
-For a protocol or encoding to qualify for a core CloudEvents event format or
-protocol binding, it must belong to either one of the following categories:
+要使协议或编码符合核心 CloudEvents 事件格式或协议绑定的条件，它必须属于以下任一类别：
 
-- The protocol has a formal status as a standard with a widely-recognized
-  multi-vendor protocol standardization body (e.g. W3C, IETF, OASIS, ISO)
-- The protocol has a "de-facto standard" status for its ecosystem category,
-  which means it is used so widely that it is considered a standard for a given
-  application. Practically, we would like to see at least one open source
-  implementation under the umbrella of a vendor-neutral open-source organization
-  (e.g. Apache, Eclipse, CNCF, .NET Foundation) and at least a dozen independent
-  vendors using it in their products/services.
+- 该协议具有广泛认可的多供应商协议标准化机构（例如 W3C、IETF、OASIS、ISO）的正式标准地位
+- 该协议在其生态系统类别中具有“事实上的标准”地位，
+  这意味着它被广泛使用，甚至被认为是给定应用程序的标准。
+  实际上，我们希望在供应商中立的开源组织（例如 Apache、Eclipse、CNCF、.NET 基金会）的保护伞下
+  看到至少一个开源实现，
+  并且至少有十几个独立供应商在他们的产品中使用它的产品或服务。
 
-Aside from formal status, a key criterion for whether a protocol or encoding
-shall qualify for a core CloudEvents event format or protocol binding is
-whether the group agrees that the specification will be of sustained practical
-benefit for any party that is unrelated to the product or project from which the
-protocol or encoding emerged. A base requirement for this is that the protocol
-or encoding is defined in a fashion that allows alternate implementations
-independent of the product or project's code.
+除了正式状态之外，协议或编码是否符合核心 CloudEvents 事件格式或协议绑定的一个关键标准是，
+该组织是否认为协议或编码出现后，该规范对与产品或项目无关的任何一方具有持续的实际利益。
+对此的基本要求是协议或编码的定义方式允许独立于产品或项目代码的替代实现。
 
-All other protocol and encoding formats for CloudEvents are welcome to be
-included in a list pointing to the CloudEvents binding information in the
-respective project's own public repository or site.
+欢迎将 CloudEvents 的所有其他协议和编码格式
+包含在指向相应项目自己的公共存储库或站点中的 CloudEvents binding信息的列表中。
 
-## Proprietary Protocols and Encodings
+## 专有的协议与编码
 
 To encourage adoption of CloudEvents, this repository will collect CloudEvent
 specs for proprietary protocols and encodings without endorsement. Repository
