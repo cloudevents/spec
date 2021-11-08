@@ -12,16 +12,16 @@
 - [CloudEvents 概念](#CloudEvents-概念)
 - [设计目标](#设计目标)
 - [架构](#架构)
-- [属性版本](#属性版本)
+- [属性版本控制](#属性版本控制)
 - [CloudEvent 属性](#CloudEvent-属性)
 - [CloudEvent 属性扩展](#CloudEvent-属性扩展)
 - [生产 CloudEvents](#生产CloudEvents)
 - [合格的协议与编码](#合格的协议与编码)
-- [Proprietary 协议和编码](#专有的协议与编码)
-- [Prior Art](#现有技术)
-- [Roles](#角色)
-- [Value Proposition](#价值主张)
-- [Existing Event Formats](#existing-event-formats)
+- [专有的协议和编码](#专有的协议与编码)
+- [现有技术](#现有技术)
+- [角色](#角色)
+- [价值主张](#价值主张)
+- [现有的数据格式](#现有的数据格式)
 
 ## 历史
 
@@ -152,7 +152,7 @@ CloudEvents 规范在很大程度上并未规定与 CloudEvents 的创建或处�
 因此，如果在处理 CloudEvent 过程中出现错误，
 请使用正常的协议级错误处理机制进行处理。
 
-## 属性版本
+## 属性版本控制
 
 对于某些 CloudEvents 属性，由其值引用的实体或数据模型可能会随时间变化。 
 例如，`dataschema`可能引用模式文档的一个特定版本。 
