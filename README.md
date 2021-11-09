@@ -74,7 +74,7 @@ CloudEvents 收获了从主流云厂商到SaaS公司的广泛关注。CloudEvent
 
 ## 步骤
 
-CloudEvents项目 [旨在](primer.md#design-goals)制定一个能够提升不同事件系统(如生产者和消费者)之间互操作性和兼容性
+CloudEvents项目 [旨在](primer.md#设计目标)制定一个能够提升不同事件系统(如生产者和消费者)之间互操作性和兼容性
 的[标准](spec.md)。
 
 为了完成这个目标，这个项目必须描述：
@@ -95,7 +95,7 @@ CloudEvents项目 [旨在](primer.md#design-goals)制定一个能够提升不同
 
 会议日期请查看 [CNCF 公开活动日历](https://www.cncf.io/community/calendar/).
 CloudEvents规范由
-[CNCF Serverless 工作组](https://github.com/cncf/wg-serverless)开发完成。
+[CNCF Serverless 工作组](https://github.com/cncf/wg-serverless) 开发完成。
 这个工作组每周四的上午9点(美国-太平洋时间)通过Zoom开展视频会议。 
 通过 PC, Mac, Linux, iOS or Android来参加活动: https://zoom.us/my/cncfserverlesswg
 
