@@ -1,4 +1,4 @@
-# CloudEvents 中文首层
+# CloudEvents 中文手册
 
 ![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
 
