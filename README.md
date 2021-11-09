@@ -45,8 +45,9 @@ CloudEvents 收获了从主流云厂商到SaaS公司的广泛关注。CloudEvent
 | Primer                        |        [v1.0](https://github.com/cloudevents/spec/blob/v1.0/primer.md)         |         [master](https://github.com/cloudevents/spec/blob/master/primer.md)         |
 | Proprietary Specifications    |                                       -                                        |   [master](https://github.com/cloudevents/spec/blob/master/proprietary-specs.md)    |
 
-对于初次接触CloudEvents的同学，建议通过阅读[入门文档](primer.md)增加对CloudEvents规范的目标和设计理念
-的总体理解，然后再继续阅读[核心规范](spec.md)。
+对于初次接触CloudEvents的同学，可以通过阅读[入门文档](primer.md)增加对CloudEvents规范的目标和设计理念
+的总体理解，
+希望在最短时间内使用CloudEvents 规范的同学，可以直接阅读[核心规范](spec.md)。
 
 由于并非所有事件生产者都默认生产符合CloudEvents规范的事件，因此可以用[CloudEvents适配器](https://github.com/cloudevents/spec/blob/master/adapters.md)
 来将现有的事件与CloudEvents做适配。
