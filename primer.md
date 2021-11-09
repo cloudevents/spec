@@ -1,5 +1,10 @@
 # CloudEvents 入门文档 -  1.0 版本
 
+Declaration： This manual aims to provide a fast and brief introduction of CloudEvents
+in Chinese for people who are new to CloudEvents.
+Most of the content is translated from the original English version.
+It is strongly recommended to read the English version if you find anything lost in translation.
+
 ## 摘要
 
 这份非技术规范文档用来为你提供关于CloudEvents规范的总体概览。它补充了CloudEvents规范的相关背景以及在制定
