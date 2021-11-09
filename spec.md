@@ -1,10 +1,13 @@
 # CloudEvents 核心规范-  1.0 版本
 
+Declaration： This manual aims to provide a fast and brief introduction of CloudEvents
+in Chinese for people who are new to CloudEvents.
+Most of the content is translated from the original English version.
+It is strongly recommended to read the English version if you find anything lost in translation.
+
 ## 摘要
 
 CloudEvents 是一个用于定义事件格式的供应商中立规范。
-CloudEvents is a vendor-neutral specification for defining the format of event
-data.
 
 ## 目录
 
@@ -64,7 +67,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 #### 事件
 
-“事件”是表示"发生"及其上下文的数据记录。
+“事件”是表示一条"发生"及其上下文的数据记录。
 事件从事件生产者（源）路由到对它感兴趣的事件消费者。 
 事件中包含的信息帮助完成路由操作，但事件不会标识特定的路由目的地。 
 事件将包含两种类型的信息：表示"发生"的 [事件数据](#事件数据) 
@@ -89,7 +92,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 一个“中间人”会接收包含事件的消息，
 并将其转发给下一个接收者，但该接收者可能是另一个中间人或事件[消费者](#消费者)。 
-中间人的典型任务就是根据[上下文](#context)环境中的信息将事件路由到接收者。
+中间人的典型任务就是根据[上下文](#上下文)环境中的信息将事件路由到接收者。
 
 #### 上下文
 
@@ -113,7 +116,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 “结构化模式消息”是一种使用独立事件格式对事件进行完全编码并存储在消息体中的消息。
 
-“二进制模式消息”是将事件数据存储在消息体中，并将事件属性作为消息元数据的一部分存储下来。
+“二进制模式消息”会将事件数据存储在消息体中，并将事件属性作为消息元数据的一部分存储下来。
 
 #### 协议
 
@@ -136,7 +139,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 ### 属性命名约定
 
-CloudEvents 规范定义了到各种协议和编码的映射，随附的 CloudEvents SDK 面向各种运行时和语言。
+CloudEvents 规范定义了到各种协议和编码的映射，随附的 CloudEvents SDK 面向各种运行时和编程语言。
 其中一些将元数据元素区分大小写，而另一些则不区分，
 并且单个 CloudEvent 可能通过涉及到协议、编码和运行时混合的多个跃点进行路由。 
 因此，本规范限制了所有属性的可用字符集，以防止区分大小写问题或与通用语言中标识符的合法字符集冲突问题。
