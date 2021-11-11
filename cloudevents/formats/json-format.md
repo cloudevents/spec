@@ -44,7 +44,7 @@ specification defined attributes. This includes their syntax and placement
 within the JSON object. In particular, extensions are placed as top-level JSON
 properties. Extensions MUST be serialized as a top-level JSON property. There
 were many reasons for this design decision and they are covered in more detail
-in the [Primer](primer.md#json-extensions).
+in the [Primer](../primer.md#json-extensions).
 
 ### 2.1. Base Type System
 
@@ -108,7 +108,7 @@ The following table shows exemplary attribute mappings:
 ### 2.4. JSONSchema Validation
 
 The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
-[here](spec.json) and contains the definitions for validating events in JSON.
+[here](../cloudevents.json) and contains the definitions for validating events in JSON.
 
 ## 3. Envelope
 

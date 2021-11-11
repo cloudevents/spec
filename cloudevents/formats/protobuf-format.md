@@ -218,7 +218,7 @@ private static Spec.CloudEvent protoExample() {
 [proto-scalars]: https://developers.google.com/protocol-buffers/docs/proto3#scalar
 [proto-wellknown]: https://developers.google.com/protocol-buffers/docs/reference/google.protobuf
 [proto-timestamp]: https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp
-[proto-schema]: ./spec.proto
+[proto-schema]: ./cloudevents.proto
 [json-format]: ./json-format.md
 [ce]: ./spec.md
 [ce-types]: ./spec.md#type-system

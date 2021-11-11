@@ -32,7 +32,7 @@ provide interoperability across services, platforms and systems.
 Event Formats specify how to serialize a CloudEvent with certain encoding
 formats. Compliant CloudEvents implementations that support those encodings MUST
 adhere to the encoding rules specified in the respective event format. All
-implementations MUST support the [JSON format](json-format.md).
+implementations MUST support the [JSON format](formats/json-format.md).
 
 For more information on the history, development and design rationale behind the
 specification, see the [CloudEvents Primer](primer.md) document.
@@ -118,7 +118,7 @@ information.
 #### Event Format
 
 An Event Format specifies how to serialize a CloudEvent as a sequence of bytes.
-Stand-alone event formats, such as the [JSON format](json-format.md), specify
+Stand-alone event formats, such as the [JSON format](formats/json-format.md), specify
 serialization independent of any protocol or storage medium. Protocol Bindings
 MAY define formats that are dependent on the protocol.
 
@@ -342,12 +342,12 @@ on the definition of OPTIONAL.
 - Description: Content type of `data` value. This attribute enables `data` to
   carry any type of content, whereby format and encoding might differ from that
   of the chosen event format. For example, an event rendered using the
-  [JSON envelope](./json-format.md#3-envelope) format might carry an XML payload
+  [JSON envelope](formats/json-format.md#3-envelope) format might carry an XML payload
   in `data`, and the consumer is informed by this attribute being set to
   "application/xml". The rules for how `data` content is rendered for different
   `datacontenttype` values are defined in the event format specifications; for
   example, the JSON event format defines the relationship in
-  [section 3.1](./json-format.md#31-handling-of-data).
+  [section 3.1](formats/json-format.md#31-handling-of-data).
 
   For some binary mode protocol bindings, this field is directly mapped to the
   respective protocol's content-type metadata property. Normative rules for the

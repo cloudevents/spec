@@ -145,7 +145,7 @@ The shape and configuration of the "Key Mapper" function is implementation
 specific.
 
 Every implementation SHOULD provide a default "Key Mapper" implementation that
-maps the [Partitioning](extensions/partitioning.md) `partitionkey` attribute
+maps the [Partitioning](../extensions/partitioning.md) `partitionkey` attribute
 value to the 'key' of the Kafka message as-is, if present. 
 
 A mapping function MUST NOT modify the CloudEvent. This means that the
@@ -172,7 +172,7 @@ message.
 #### 3.2.3. Metadata Headers
 
 All [CloudEvents][ce] attributes and
-[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
+[CloudEvent Attributes Extensions](../primer.md#cloudevent-attribute-extensions)
 with exception of `data` MUST be individually mapped to and from the Header
 fields in the Kafka message. Both header keys and header values MUST be encoded
 as UTF-8 strings.

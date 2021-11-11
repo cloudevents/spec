@@ -144,7 +144,7 @@ by those new to the concepts of CloudEvents. After much deliberation, the
 working group has come to the conclusion that routing is unnecessary in the
 spec: any protocol (e.g. HTTP, MQTT, XMPP, or a Pub/Sub bus) already
 defines semantics for routing. For example, the CloudEvents
-[HTTP binding](http-protocol-binding.md) dictates headers and request body
+[HTTP binding](bindings/http-protocol-binding.md) dictates headers and request body
 contents. CloudEvents don't need to include a destination URL in the spec to be
 HTTP compatible; the HTTP spec already includes one in the
 [Request-Line](https://tools.ietf.org/html/rfc2616#section-5.1).
@@ -195,11 +195,11 @@ elements that form a layered architecture model.
 2. The [extensions](./spec.md#extension-context-attributes) add use-case
    specific and potentially overlapping sets of extension attributes and
    associated rules, e.g. to support different tracing standards.
-3. The event format encodings, e.g. [JSON](json-format.md), define how the
+3. The event format encodings, e.g. [JSON](formats/json-format.md), define how the
    information model of the base specification together with the chosen
    extensions is encoded for mapping it to header and payload elements of an
    application protocol.
-4. The protocol bindings, e.g. [HTTP](http-protocol-binding.md), defines how
+4. The protocol bindings, e.g. [HTTP](bindings/http-protocol-binding.md), defines how
    the CloudEvent is bound to an application protocol's transport frame, in the
    case of HTTP to the HTTP message. The protocol binding does not constrain
    how the transport frame is used, meaning that the HTTP binding can be used
@@ -370,7 +370,7 @@ Extension attributes should be kept minimal to ensure the CloudEvent can be
 properly serialized and transported. For example, the Event producers should
 consider the technical limitations that might be encountered when adding
 extensions to a CloudEvent. For example, the
-[HTTP Binary Mode](http-protocol-binding.md#31-binary-content-mode) uses HTTP
+[HTTP Binary Mode](bindings/http-protocol-binding.md#31-binary-content-mode) uses HTTP
 headers to transport metadata; most HTTP servers will reject requests with
 excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
 size and number of extension attributes should be kept minimal.
@@ -382,8 +382,8 @@ formally adding them to the specification.
 
 ### JSON Extensions
 
-As mentioned in the [Attributes](json-format.md#2-attributes) section of the
-[JSON Event Format for CloudEvents](json-format.md) specification, CloudEvent
+As mentioned in the [Attributes](formats/json-format.md#2-attributes) section of the
+[JSON Event Format for CloudEvents](formats/json-format.md) specification, CloudEvent
 extension attributes are serialized as siblings to the specification defined
 attributes - meaning, at the top-level of the JSON object. The authors of the
 specification spent a long time considering all options and decided that this
