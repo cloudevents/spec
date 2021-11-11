@@ -121,7 +121,7 @@ _structured_ mode with the JSON event format.
 The 'key' attribute is populated by a partitionKeyExtractor function. The
 partitionKeyExtractor is a protocol specific function that contains bespoke
 logic to extract and populate the value. A default implementation of the
-extractor will use the [Partitioning](extensions/partitioning.md) extension
+extractor will use the [Partitioning](../extensions/partitioning.md) extension
 value.
 
 ### 3.2. Binary Content Mode
@@ -142,7 +142,7 @@ message.
 #### 3.2.3. Metadata Headers
 
 All [CloudEvents][ce] attributes and
-[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
+[CloudEvent Attributes Extensions](../primer.md#cloudevent-attribute-extensions)
 with exception of `data` MUST be individually mapped to and from the Header
 fields in the Kafka message.
 
