@@ -45,7 +45,7 @@ There are three categories of project membership:
    administrative actions on behalf of the group. For example, manage the
    website, github repos and moderate the meetings. Their actions should be done
    with the knowledge and consent of the group. They also have the ability to
-   merge/close PRs, but only per the group's approval. See the [OWNERS](OWNERS)
+   merge/close PRs, but only per the group's approval. See the [OWNERS](../OWNERS)
    file for the current list of Admins.
 
 ## PRs
@@ -73,7 +73,7 @@ If a vote is taken during a meeting, the follow rules will be followed:
   meeting, not during.
 - A "primary" or "alternate" member may request a leave-of-absence via an
   e-mail to the mailing list, or a message to the
-  [public slack channel](README.md#communications), prior to the absence.
+  [public slack channel](../README.md#communications), prior to the absence.
   An acceptable absence would include situations where the person is not
   officially working at all, such as being on vacation, taking a sabbatical or
   there is a public holiday. However, situations such as a scheduling conflict
@@ -107,22 +107,22 @@ The specifications produced will adhere to the following:
   during the release cycle.
 
 Note that these rules do not apply to the
-[documented extensions](documented-extensions.md).
+[documented extensions](../cloudevents/documented-extensions.md).
 
 To create a new release:
 
-- Create a PR that modifies the [README](README.md), and all specifications (ie.
+- Create a PR that modifies the [README](../README.md), and all specifications (ie.
   \*.md files) that include a version string, to the new release version string.
   Make sure to remove `-wip` from all of the version strings.
 - Merge the PR.
 - Create a [new release](https://github.com/cloudevents/spec/releases/new):
   - Choose a "Tag version" of the form: `vX.Y`, e.g. `v0.1`
-  - Target should be `master`, the default value
+  - Target should be `main`, the default value
   - Release title should be the same as the Tag - `vX.Y`
   - Add some descriptive text, or the list of PRs that have been merged since
     the previous release. The git query to get the list commits since the last
     release is:
-    `git log --pretty=format:%s master...v0.1 | grep -v "Merge pull"`.
+    `git log --pretty=format:%s main...v0.1 | grep -v "Merge pull"`.
     Just replace "v0.1" with the name of the previous release.
   - Press `Publish release` button
 - Create a PR that modifies the version string in all of the files
