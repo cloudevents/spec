@@ -112,7 +112,7 @@ The following table shows exemplary attribute mappings:
 ### 2.4. JSONSchema Validation
 
 The CloudEvents [JSONSchema](http://json-schema.org) for the spec is located
-[here](../cloudevents.json) and contains the definitions for validating events in
+[here](cloudevents.json) and contains the definitions for validating events in
 JSON.
 
 ## 3. Envelope
