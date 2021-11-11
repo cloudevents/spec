@@ -8,7 +8,7 @@ your code. Thanks for getting involved! :rocket:
 * [Getting Started](#getting-started)
 * [Branches](#branches)
 * [Commit Messages](#commit-messages)
-* [Staying current with master](#staying-current-with-master)
+* [Staying current with main](#staying-current-with-main)
 * [Submitting and Updating a Pull Request](#submitting-and-updating-your-pull-request)
 * [Congratulations!](#congratulations)
 
@@ -34,7 +34,7 @@ you might create a branch named `48-fix-http-agent-error`.
 
 ```console
 git fetch upstream
-git reset --hard upstream/master
+git reset --hard upstream/main
 git checkout FETCH_HEAD
 git checkout -b 48-fix-http-agent-error
 ```
@@ -89,19 +89,19 @@ Date:   Thu Feb 2 11:41:15 2018 -0800
 Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will
 be rejected by the automated DCO check.
 
-## Staying Current with `master`
+## Staying Current with `main`
 
-As you are working on your branch, changes may happen on `master`. Before
+As you are working on your branch, changes may happen on `main`. Before
 submitting your pull request, be sure that your branch has been updated
 with the latest commits.
 
 ```console
 git fetch upstream
-git rebase upstream/master
+git rebase upstream/main
 ```
 
 This may cause conflicts if the files you are changing on your branch are
-also changed on master. Error messages from `git` will indicate if conflicts
+also changed on main. Error messages from `git` will indicate if conflicts
 exist and what files need attention. Resolve the conflicts in each file, then
 continue with the rebase with `git rebase --continue`.
 
@@ -117,15 +117,15 @@ git push -f origin 48-fix-http-agent-error
 Before submitting a pull request, you should make sure that all of the tests
 successfully pass.
 
-Once you have sent your pull request, `master` may continue to evolve
-before your pull request has landed. If there are any commits on `master`
+Once you have sent your pull request, `main` may continue to evolve
+before your pull request has landed. If there are any commits on `main`
 that conflict with your changes, you may need to update your branch with
 these changes before the pull request can land. Resolve conflicts the same
 way as before.
 
 ```console
 git fetch upstream
-git rebase upstream/master
+git rebase upstream/main
 # fix any potential conflicts
 git push -f origin 48-fix-http-agent-error
 ```
@@ -142,7 +142,7 @@ for details.
 
 ```console
 git commit -m "fixup: fix typo"
-git rebase -i upstream/master # follow git instructions
+git rebase -i upstream/main # follow git instructions
 ```
 
 Once you have rebased your commits, you can force push to your fork as before.
