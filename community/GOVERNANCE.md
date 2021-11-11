@@ -157,12 +157,12 @@ To create a new release:
 - Merge the PR.
 - Create a [new release](https://github.com/cloudevents/spec/releases/new):
   - Choose a "Tag version" of the form: `vX.Y`, e.g. `v0.1`
-  - Target should be `master`, the default value
+  - Target should be `main`, the default value
   - Release title should be the same as the Tag - `vX.Y`
   - Add some descriptive text, or the list of PRs that have been merged since
     the previous release. The git query to get the list commits since the last
     release is:
-    `git log --pretty=format:%s master...v0.1 | grep -v "Merge pull"`.
+    `git log --pretty=format:%s main...v0.1 | grep -v "Merge pull"`.
     Just replace "v0.1" with the name of the previous release.
   - Press `Publish release` button
 - Create a PR that modifies the version string in all of the files

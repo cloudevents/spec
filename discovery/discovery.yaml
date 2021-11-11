@@ -1,7 +1,7 @@
 openapi: '3.0.2'
 info:
   title: CloudEvents discovery API
-  description: CloudEvents discovery API specification according to [Discovery - Version 0.1-wip](https://github.com/cloudevents/spec/blob/master/discovery/spec.md#service).
+  description: CloudEvents discovery API specification according to [Discovery - Version 0.1-wip](https://github.com/cloudevents/spec/blob/main/discovery/spec.md#service).
   version: '0.1-WIP'
 servers:
   - url: https://api.cloudevents.io/test/v0.1
@@ -194,7 +194,7 @@ components:
               specurl:
                 type: string
                 description: An attribute pointing to the specification that defines the extension
-          example: '{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/extensions/dataref.md" }'
+          example: '{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/main/extensions/dataref.md" }'
     eventtypes:
       type: array
       items:

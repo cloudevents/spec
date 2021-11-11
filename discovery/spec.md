@@ -313,7 +313,7 @@ The following sections define the attributes that appear in a Service entity.
 
 - Type: Array of `String` values
 - Description: CloudEvents
-  [`specversions`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#specversion)
+  [`specversions`](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#specversion)
   that can be used for events published for this service.
 - Constraints:
   - REQUIRED
@@ -334,7 +334,7 @@ The following sections define the attributes that appear in a Service entity.
   the CloudSubscriptions subscribe() API call. Keys are the name of keys in the
   allowed config map, the values indicate the type of that parameter, conforming
   to the CloudEvents
-  [type system](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#type-system).
+  [type system](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type-system).
   TODO: Needs resolution with CloudSubscriptions API
 - Constraints:
   - OPTIONAL
@@ -394,7 +394,7 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `String`
 - Description: CloudEvents
-  [`type`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#type)
+  [`type`](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type)
   attribute.
 - Constraints:
   - REQUIRED
@@ -416,7 +416,7 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `String`
 - Description: CloudEvents
-  [`datacontenttype`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#datacontenttype)
+  [`datacontenttype`](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#datacontenttype)
   attribute. Indicating how the `data` attribute of subscribed events will be
   encoded.
 - Constraints:
@@ -428,7 +428,7 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `URI`
 - Description: CloudEvents
-  [`dataschema`](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#dataschema)
+  [`dataschema`](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#dataschema)
   attribute. This identifies the canonical storage location of the schema of the
   `data` attribute of subscribed events.
 - Constraints:
@@ -476,7 +476,7 @@ The following sections define the attributes that appear in EventType definition
 
 - Type: `Array` of structures
 - Description: An array or CloudEvents
-  [Extension Context Attributes](https://github.com/cloudevents/spec/blob/master/cloudevents/spec.md#extension-context-attributes)
+  [Extension Context Attributes](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#extension-context-attributes)
   that are used for this event `type`. The structure contains the following
   attributes:
   - `name` - the CloudEvents context attribute name used by this extension. It
@@ -491,7 +491,7 @@ The following sections define the attributes that appear in EventType definition
   - if present, the `type` attribute in the structure is REQUIRED
   - if present, the `specurl` attribute in the structure is OPTIONAL
 - Examples:
-  - `{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/master/cloudevents/extensions/dataref.md" }`
+  - `{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/main/cloudevents/extensions/dataref.md" }`
 
 #### Service Examples
 
