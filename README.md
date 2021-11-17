@@ -65,7 +65,7 @@ In addition to the documentation mentioned above, there is also an
 - [CSharp](https://github.com/cloudevents/sdk-csharp)
 - [Go](https://github.com/cloudevents/sdk-go)
 - [Java](https://github.com/cloudevents/sdk-java)
-- [Javascript](https://github.com/cloudevents/sdk-javascript)
+- [Javascript/TypeScript](https://github.com/cloudevents/sdk-javascript)
 - [PHP](https://github.com/cloudevents/sdk-php)
 - [Python](https://github.com/cloudevents/sdk-python)
 - [Ruby](https://github.com/cloudevents/sdk-ruby)
