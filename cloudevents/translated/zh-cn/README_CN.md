@@ -88,7 +88,7 @@ CloudEvents 收获了从主流云厂商到SaaS公司的广泛关注。CloudEvent
 
 ## 步骤
 
-CloudEvents项目 [旨在](primer_CN.md#设计目标)制定一个能够提升不同事件系统(如生产者和消费者)之间互操作性和兼容性
+CloudEvents项目 [旨在](primer_CN.md#design-goals)制定一个能够提升不同事件系统(如生产者和消费者)之间互操作性和兼容性
 的[标准](spec_CN.md)。
 
 为了完成这个目标，这个项目必须描述：
