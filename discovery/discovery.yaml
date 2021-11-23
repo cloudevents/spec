@@ -234,34 +234,34 @@ components:
         description:
           type: string
           description: Human readable description
-        docsurl:
+        docsUrl:
           type: string
           description: Absolute URL that provides a link to additional documentation about the service. This is intended for a developer to use in order to learn more about this service's events produced
           example: http://cloud.example.com/docs/blobstorage
-        specversions:
+        specVersions:
           type: array
-          description: CloudEvents specversions that can be used for events published for this service
+          description: CloudEvents specversion values that can be used for events published for this service
           items:
             type: string
             description: version
           example: '[ "1.0" ]'
-        subscriptionurl:
+        subscriptionUrl:
           type: string
           description: An absolute URL indicating where CloudSubscriptions subscribe API calls MUST be sent to
           format: url
-        subscriptionconfig:
+        subscriptionConfig:
           type: object
           description: "A map indicating supported options for the config parameter for the CloudSubscriptions subscribe() API call. Keys are the name of keys in the allowed config map, the values indicate the type of that parameter, confirming to the CloudEvents type system. TODO: Needs resolution with CloudSubscriptions API"
           additionalProperties:
             type: string
-        subscriptiondialects:
+        subscriptionDialects:
           type: array
           description: Filter dialects that can be used in subscriptions for this service
           items:
             type: string
             description: filter dialect
           example: '[ "basic" ]'
-        authscope:
+        authScope:
           type: string
           description: Authorization scope needed for creating subscriptions. The actual meaning of this field is determined on a per-service basis
           example: storage.read

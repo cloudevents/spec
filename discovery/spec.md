@@ -136,14 +136,14 @@ Service:
   "name": "[unique name for this services]",
   "url": "[unique URL to this service]",
   "description": "[human string]", ?
-  "docsurl": "[URL reference for human documentation]", ?
-  "specversions": [ "[ce-specversion value]" + ],
-  "subscriptionurl": "[URL to which the Subscribe request will be sent]",
-  "subscriptionconfig": { ?
+  "docsUrl": "[URL reference for human documentation]", ?
+  "specVersions": [ "[ce-specversion value]" + ],
+  "subscriptionUrl": "[URL to which the Subscribe request will be sent]",
+  "subscriptionConfig": { ?
     "[key]": "[type]", *
   },
-  "subscriptiondialects": [ "[dialect]" ], ?
-  "authscope": "[string]", ?
+  "subscriptionDialects": [ "[dialect]" ], ?
+  "authScope": "[string]", ?
   "protocols": [ "[string]" + ],
   "events": [ ?
     { *
@@ -175,9 +175,9 @@ An example:
   "epoch": 1,
   "name": "widgets",
   "url": "https://example.com/services/widgetService",
-  "specversions": ["1.0"],
-  "subscriptionurl": "https://events.example.com",
-  "subscriptiondialects": [ "basic" ],
+  "specVersions": ["1.0"],
+  "subscriptionUrl": "https://events.example.com",
+  "subscriptionDialects": [ "basic" ],
   "protocols": ["HTTP"],
   "events": [
     {
@@ -297,7 +297,7 @@ The following sections define the attributes that appear in a Service entity.
   - OPTIONAL
   - If present, MUST be a non-empty string
 
-##### docsurl
+##### docsUrl
 
 - Type: `URL`
 - Description: Absolute URL that provides a link to additional documentation
@@ -309,7 +309,7 @@ The following sections define the attributes that appear in a Service entity.
 - Examples:
   - `http://cloud.example.com/docs/blobstorage`
 
-##### specversions
+##### specVersions
 
 - Type: Array of `String` values
 - Description: CloudEvents
@@ -319,7 +319,7 @@ The following sections define the attributes that appear in a Service entity.
   - REQUIRED
   - MUST be a non-empty array of non-empty strings
 
-##### subscriptionurl
+##### subscriptionUrl
 
 - Type: `URL`
 - Description: An absolute URL indicating where CloudSubscriptions `subscribe`
@@ -327,7 +327,7 @@ The following sections define the attributes that appear in a Service entity.
 - Constraints:
   - REQUIRED
 
-##### subscriptionconfig
+##### subscriptionConfig
 
 - Type: `Map` of `String` to `String`
 - Description: A map indicating supported options for the `config` parameter for
@@ -341,7 +341,7 @@ The following sections define the attributes that appear in a Service entity.
 - Examples:
   - ??
 
-##### subscriptiondialects
+##### subscriptionDialects
 
 - Type: List of `String` values
 - Description: An array of filter dialects that MAY be used in the
@@ -351,7 +351,7 @@ The following sections define the attributes that appear in a Service entity.
 - Examples:
   - `basic`
 
-##### authscope
+##### authScope
 
 - Type: `String`
 - Description: Authorization scope needed for creating subscriptions. The actual
@@ -389,6 +389,9 @@ The following sections define the attributes that appear in a Service entity.
 #### EventType Attributes
 
 The following sections define the attributes that appear in EventType definitions of a Service object.
+
+*Note:* while attributes elsewhere are camelCased, the attributes within `EventType` are all lower-case,
+as they correspond directly to CloudEvent attributes (with the exception of `extensions`).
 
 ##### type
 
@@ -526,7 +529,7 @@ however, care SHOULD be taken to avoid potential overlap with future
 specification defined properties. For example, a company specific prefix
 of `bigcompany` might be used.
 
-#### `servicefilterattributes`
+#### `serviceFilterAttributes`
 
 This is an array of attributes names that the Discovery Endpoint supports
 for the purpose of filtering the query of available Services. For nested
@@ -534,7 +537,7 @@ attributes a dot(.) notation MUST be used.
 
 Sample attribute names:
 - `name`
-- `specversions`
+- `specVersions`
 - `events.type`
 
 Note: this property MUST NOT be empty, or missing, since all implementations
@@ -587,7 +590,7 @@ This MUST return the set of fearures supported by the implementation.
 The result MUST be a JSON object of the following form:
 ```
 {
-  "servicefilterattributes": [ "name", ... ],
+  "serviceFilterAttributes": [ "name", ... ],
   "pagination": "true"
 }
 ```

@@ -150,7 +150,7 @@ Response:
 ```
 - services:
   - service: Github
-    subscriptionuri: https://api.github.com/subscribe
+    subscriptionUri: https://api.github.com/subscribe
     protocols:
     - protocol: HTTP
     types:
