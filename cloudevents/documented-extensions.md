@@ -1,7 +1,7 @@
 # CloudEvents Extension Attributes
 
 The [CloudEvents specification](spec.md) defines a set of metadata
-attributes than can be used when transforming a generic event into a
+attributes that can be used when transforming a generic event into a
 CloudEvent. The list of attributes specified in that document represent the
 minimal set that the specification authors deemed most likely to be used in a
 majority of situations.

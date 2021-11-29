@@ -9,27 +9,23 @@ in Chinese for people who are new to CloudEvents.
 Most of the content is translated from the original English version.
 It is strongly recommended to read the English version if you find anything lost in translation.
 
-这份中文规范是为了让更多刚接触CloudEvents的中国开发者，能在最短时间内对CloudEvents有一个全局的认识。
-本文档中的大多内容翻译自英文版的CloudEvents规范，如果你在阅读中发现一些难以理解的翻译，请参阅英文版文档。
+这份中文规范是为了让更多刚接触CloudEvents的中国开发者，能在最短时间内对CloudEvents有一个全局的认识。本文档中的大多内容翻译自英文版的CloudEvents规范，如果你在阅读中发现一些难以理解的翻译，请参阅英文版文档。
 
 ## CloudEvents
 
 事件(Events)在现代系统中无处不在。但不同的事件生产者往往用不同的规范来描述自己的事件。
 
-对事件的统一描述的匮乏意味着开发者必须不断重新学习如何消费不同定义的事件。它同样限制了那些用来帮助事件数据完成
-跨环境传输的库(如SDKs)，工具(如事件路由器)和基础设施(如事件追踪系统)的发展。总体来看，这种匮乏严重阻碍了事件数据的可移植性和生产力。
+对事件的统一描述的匮乏意味着开发者必须不断重新学习如何消费不同定义的事件。它同样限制了那些用来帮助事件数据完成跨环境传输的库(如SDKs)、工具(如事件路由器)和基础设施(如事件追踪系统)的发展。总体来看，这种匮乏严重阻碍了事件数据的可移植性和生产力。
 
 CloudEvents是一个以通用格式来描述事件数据的标准。它提供了事件在服务、平台和系统中的互操作性。
 
-CloudEvents 收获了从主流云厂商到SaaS公司的广泛关注。CloudEvents被[云原生计算基金会](https://cncf.io) (CNCF)持有，
-在[2018/05/15](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41)
-被选为云原生沙箱级项目。
+从主流云厂商到SaaS公司，工业界对CloudEvents兴趣浓烈。CloudEvents项目由[云原生计算基金会](https://cncf.io)托管，于[2018/05/15](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41) 成为云原生沙箱级项目。
 
 ## CloudEvents 文件
 
 现有文件如下:
 
-|                               |                                 最新版本                                 |                                      工作草稿                                       |
+|                               |                                 最新版本                                 |                                      工作草案                                      |
 | :---------------------------- | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
 | **核心标准:**       |
 | CloudEvents                   |          [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/spec.md)          |            [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md)             |
@@ -53,9 +49,7 @@ CloudEvents 收获了从主流云厂商到SaaS公司的广泛关注。CloudEvent
 | Primer                        |         [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/primer.md)         |           [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/primer.md)            |
 | Proprietary Specifications    |                                        -                                        |      [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/proprietary-specs.md)      |
 
-对于初次接触CloudEvents的同学，可以通过阅读[入门文档](primer_CN.md)增加对CloudEvents规范的目标和设计理念
-的总体理解，
-希望在最短时间内使用CloudEvents 规范的同学，可以直接阅读[核心规范](spec_CN.md)。
+推荐先行阅读[入门文档](primer_CN.md)了解CloudEvents规范的目标和设计理念，再阅读[核心规范](spec_CN.md)。
 
 由于并非所有事件生产者都默认生产符合CloudEvents规范的事件，因此可以用[CloudEvents适配器](https://github.com/cloudevents/spec/blob/main/cloudevents/adapters.md)
 来将现有的事件与CloudEvents做适配。

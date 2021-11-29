@@ -2,13 +2,11 @@
 
 ## 摘要
 
-这份非技术规范文档用来为你提供关于CloudEvents规范的总体概览。它补充了CloudEvents规范的相关背景
-以及在制定 本规范时的历史和设计理念。这样，CloudEvents的核心规范就只需要关注Events规范的技术细节，
-而不用过多地关心背景相关内容。
+这份非技术规范文档用来为你提供关于CloudEvents规范的总体概览。它补充了CloudEvents规范的相关背景以及在制定本规范时的历史和设计理念。这样，CloudEvents的核心规范就只需要关注Events规范的技术细节，而不用过多地关心背景相关内容。
 
 ## 文档状态
 
-这份文档是一份仍在制作中的工作草稿。
+这份文档是一份仍在制作中的工作草案。
 
 ## 目录
 
@@ -29,13 +27,9 @@
 
 ## History/历史
 
-[CNCF Serverless 工作组](https://github.com/cncf/wg-serverless) 是由 CNCF的
-[技术监管委员会](https://github.com/cncf/toc) 成立，用于研究
-Serverless相关技术并为CNCF推荐相关领域的未来发展计划的。工作组其中一项建议就是研究创建一种通用事件格式，
-用于提升不同云厂商间函数的可移植性和事件流处理的互操作性。就此，CloudEvents应运而生。
+[CNCF Serverless 工作组](https://github.com/cncf/wg-serverless) 是由 CNCF的[技术监管委员会](https://github.com/cncf/toc) 成立，用于研究Serverless相关技术并为CNCF推荐相关领域的未来发展计划的工作组。工作组其中一项建议就是研究创建一种通用事件格式，用于提升不同云厂商间函数的可移植性和事件流处理的互操作性。就此，CloudEvents应运而生。
 
-尽管CloudEvents起初是作为Serverless工作组的项目进行的，但随着CloudEvents规范完成它v0.1版本的里程碑，
-技术监管委员会批准了CloudEvents作为一个新的独立的CNCF沙箱级项目。
+尽管CloudEvents起初是作为Serverless工作组的项目进行的，但随着CloudEvents规范完成它v0.1版本的里程碑，技术监管委员会批准了CloudEvents作为一个新的独立的CNCF沙箱级项目。
 
 ## Cloudevents Concepts/概念
 
