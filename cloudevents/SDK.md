@@ -46,7 +46,7 @@ Each SDK MUST meet these requirements:
 - Idiomatic usage of the programming language.
   - Using current language version(s).
 - Supports HTTP transport renderings in both `structured` and `binary`
-  encodings.
+  content mode.
 
 ### Object Model Structure Guidelines
 
