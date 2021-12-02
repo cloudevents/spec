@@ -437,7 +437,7 @@ also valid in a request):
 [ce-types]: ./spec.md#type-system
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [datacontenttype]: ./spec.md#datacontenttype
-[http-binary]: ./bindings/http-protocol-binding.md#31-binary-content-mode
+[http-binary]: ../bindings/http-protocol-binding.md#31-binary-content-mode
 [json-format]: ./formats/json-format.md
 [json-geoseq]:https://www.iana.org/assignments/media-types/application/geo+json-seq
 [json-object]: https://tools.ietf.org/html/rfc7159#section-4
