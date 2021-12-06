@@ -582,15 +582,23 @@ compliant Discovery Endpoint implementations.
 
 #### `GET /features`
 
-This MUST return the set of fearures supported by the implementation.
+This MUST return the set of features supported by the implementation.
 
 The result MUST be a JSON object of the following form:
 ```
 {
   "servicefilterattributes": [ "name", ... ],
-  "pagination": "true"
+  "pagination": true
 }
 ```
+
+The following additional constraints apply:
+- The feature names are case sensitive.
+- The `servicefilterattributes` property MUST be present, and MUST have at
+  least the `name` attribute in its list. The filter attribute names are case
+  sensitive.
+- The `pagination` attribute is OPTIONAL with an implied default value of
+  `false`.
 
 ### Discovery APIs
 
