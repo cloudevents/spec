@@ -11,7 +11,7 @@ the responsibility of the respective project maintainers.
 
 - Create a spec that follows the structure of an existing binding specification (e.g. [http](bindings/http-protocol-binding.md) or [amqp](bindings/amqp-protocol-binding.md)) - this will help SDK development.
   - **NOTES:**
-    - The spec must be publically accessible and managed by the proposing organization.
+    - The spec must be publicly accessible and managed by the proposing organization.
     - The spec must clearly state the version(s) of CloudEvents supported.
 - Open a pull request against this file.
 - Respond to any comments on the pull request and potentially join one of the regularly scheduled working group sessions.
