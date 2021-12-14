@@ -465,6 +465,6 @@ hop < ttl
 [ce-attribute-naming-convention]: ./spec.md#attribute-naming-convention
 [ce-type-system]: ./spec.md#type-system
 [ce-id-attribute]: ./spec.md#id
-[subscriptions-filter-dialect]: ./subscriptions-api.md#3231-filter-dialects
+[subscriptions-filter-dialect]: /subscriptions/spec.md#3241-filter-dialects
 [ebnf-xml-spec]: https://www.w3.org/TR/REC-xml/#sec-notation
 [modulo-operation-wiki]: https://en.wikipedia.org/wiki/Modulo_operation
