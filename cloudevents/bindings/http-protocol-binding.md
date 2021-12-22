@@ -99,7 +99,7 @@ can be used with the _batched_ content mode.
 
 This specification does not introduce any new security features for HTTP, or
 mandate specific existing features to be used. This specification applies
-identically to [HTTP over TLS]([RFC2818][RFC2818]).
+identically to [HTTP over TLS][rfc2818].
 
 ## 2. Use of CloudEvents Attributes
 
@@ -521,11 +521,11 @@ Content-Length: nnnn
   Content
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
-[ce]: ./spec.md
-[ce-message]: ./spec.md#message
-[ce-types]: ./spec.md#type-system
-[json-format]: ./formats/json-format.md
-[json-batch-format]: ./formats/json-format.md#4-json-batch-format
+[ce]: ../spec.md
+[ce-message]: ../spec.md#message
+[ce-types]: ../spec.md#type-system
+[json-format]: ../formats/json-format.md
+[json-batch-format]: ../formats/json-format.md#4-json-batch-format
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [json-array]: https://tools.ietf.org/html/rfc7159#section-5
