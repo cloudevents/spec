@@ -570,7 +570,7 @@ error for a request to that Service directly.
 
 All APIs MUST support JSON encoding, which means that HTTP requests
 including an HTTP `Content-Type` Header of `application/json` and body in that
-format MUST be supported.  Likewise requests with `Accept` header of
+format MUST be supported. Likewise requests with `Accept` header of
 `application/json` MUST be supported.
 
 Unknown query parameters on the APIs MUST be ignored.
@@ -734,14 +734,14 @@ upon return of the `202 Accepted` from the original request.
 #### `POST /services`
 
 This MUST update the collection of Services in the Discovery Endpoint to
-contain all Services in the request or fail.  Any existing Service identified
+contain all Services in the request or fail. Any existing Service identified
 in the request will be completely replaced by the Service definition in the
-request.  The body of the request message MUST contain an array of zero or more
+request. The body of the request message MUST contain an array of zero or more
 Service entries.
 
 The `id` and `epoch` attributes of the Services MAY be omitted. In such cases
 the discovery endpoint MUST assign an appropriate value to the omitted
-field(s).  An appropriate `id` MUST be globally unique.  An appropriate `epoch`
+field(s). An appropriate `id` MUST be globally unique. An appropriate `epoch`
 MUST be greater than the any existing `epoch` for a service with the same `id`.
 Whether an `id` is given or supplied, any existing Service definition with that
 `id` MUST be replaced by the Service definition in the request and any assigned
@@ -772,7 +772,7 @@ than once within a request.
 The follow responses are defined by this specification:
 - `200 OK` if all the specified Services were processed successfully
   - The HTTP Response Body MUST include an array of the Service values
-    resulting from the successful processing of the request.  The order of
+    resulting from the successful processing of the request. The order of
     those values MUST match the order of the Services in the request. The
     response MAY include attributes and values which were added by the
     Discovery Endpoint.
@@ -813,13 +813,13 @@ Content-Type: application/json
 #### `DELETE /services`
 
 This MUST delete all of the Services in the Discovery Endpoint that are
-contained in the request.  If any of those Services cannot be deleted for any
+contained in the request. If any of those Services cannot be deleted for any
 reason (e.g. an `id` is not given or a Service with the given `id` does not
 exist) then the entire request MUST fail with no effect.
 
 If an `id` is not specified in any of the Services the entire request MUST
-fail.  If no Service can be found that corresponds to a specified `id`, the
-entire request MUST fail.  An `epoch` value MAY be omitted.  If a Service
+fail. If no Service can be found that corresponds to a specified `id`, the
+entire request MUST fail. An `epoch` value MAY be omitted. If a Service
 corresponding to a specified `id` has a higher recorded `epoch` value than the
 one given the entire request MUST fail.
 
@@ -832,7 +832,7 @@ if a Service is specified multiple times the entire request MUST fail.
 The follow responses are defined by this specification:
 - `200 OK` if all the specified Services were deleted successfully.
   - The HTTP Response Body MUST include an array of the Service values at the
-    time of deletion.  The order of those values MUST match that of the
+    time of deletion. The order of those values MUST match that of the
     Services in the request.
 - `400 Bad Request` if the first error encountered is a missing `id`
 - `404 Not Found` if the first error encountered is that there is no Service
@@ -868,25 +868,27 @@ Content-Type: application/json
 ]
 ```
 
-#### `POST /services/{id}`
+#### `PUT /services/{id}`
 
 This MUST update the collection of Services in the Discovery Endpoint to
-contain the Service in the request or fail.  If the Service identified in the
+contain the Service in the request. If the Service identified in the
 request exists it MUST be completely replaced by the Service definition in the
-request.  The body of the request message MUST contain a Service with an `id`
+request. If the Service does not exist then a new Service MUST be created.
+
+The body of the request message MUST contain a Service with an `id`
 attribute matching the `{id}` in the path.
 
 The `epoch` attribute of the Service MAY be omitted. In such cases the
-discovery endpoint MUST assign an appropriate value to the `epoch`.  An
+discovery endpoint MUST assign an appropriate value to the `epoch`. An
 appropriate `epoch` MUST be greater than the any existing `epoch` for a service
-with the same `id`.  If an `epoch` is given in the request it MUST be greater
+with the same `id`. If an `epoch` is given in the request it MUST be greater
 than the `epoch` of any existing Service of the same `id` or the request MUST
 fail.
 
 The follow responses are defined by this specification:
 - `200 OK` if Service collection was updated.
   - The HTTP Response Body MUST include the Service values resulting from the
-    successful processing of the request.  The response MAY include attributes
+    successful processing of the request. The response MAY include attributes
     and values which were added by the Discovery Endpoint.
 - `400 Bad Request` if the `id` in the path and body are not the same or some
   other constraint failure is found
@@ -924,9 +926,9 @@ Content-Type: application/json
 
 This MUST delete the Service at the referenced URL.
 
-The request MAY include a body.  Any such body MUST be an object containing an
-`id` matching the `{id}` in the path.  That object MAY include an `epoch`
-value.  If the Service corresponding with the specified `id` has a higher
+The request MAY include a body. Any such body MUST be an object containing an
+`id` matching the `{id}` in the path. That object MAY include an `epoch`
+value. If the Service corresponding with the specified `id` has a higher
 recorded `epoch` value than given, the request MUST fail.
 
 If other service attributes are included in the request, those MUST be
@@ -983,7 +985,7 @@ and path to which the management request was made as well as the request body
 and the response that was given.
 
 Receiving the complete set of these will allow a downstream mirror to exactly
-materialize a consistent Service collection.  A downstream mirror MAY alter
+materialize a consistent Service collection. A downstream mirror MAY alter
 records as appropriate for its circumstances.
 
 Any Discovery Endpoint Service entities MUST adhere to the following:
