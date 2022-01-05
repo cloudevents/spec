@@ -748,6 +748,10 @@ Whether an `id` is given or supplied, any existing Service definition with that
 values. If an `epoch` is given in the request it MUST be greater than the
 `epoch` of any existing Service of the same `id` or the request MUST fail.
 
+Aside from `id` and `epoch`, unless there is an out of band agreement, all
+mandatory attributes MUST be present in the request, and a Discovery Endpoint
+MUST reject requests that are missing such attributes.
+
 If the Discovery Endpoint is unable to successully add every Service in the
 incoming request then an error MUST be generated and none of the specified
 Services are to be added or updated in the Discovery Endpoint.
