@@ -867,8 +867,8 @@ exist) then the entire request MUST fail with no effect.
 If an `id` is not specified in any of the Services the entire request MUST
 fail. If no Service can be found that corresponds to a specified `id`, the
 entire request MUST fail. An `epoch` value MAY be omitted. If a Service
-corresponding to a specified `id` has a higher recorded `epoch` value than the
-one given the entire request MUST fail.
+corresponding to a specified `id` has a different recorded `epoch` value than
+the one given the entire request MUST fail.
 
 If other service attributes are included in the request, those SHOULD be
 ignored for the purposes of processing the request.
@@ -877,15 +877,13 @@ Service deletions MUST be processed in the order in which they are given. Thus,
 if a Service is specified multiple times the entire request MUST fail.
 
 The follow responses are defined by this specification:
-- `200 OK` if all the specified Services were deleted successfully.
+- `200 OK` if none of the specified Services remain in the Discovery Endpoint.
   - The HTTP Response Body MUST include an array of the Service values at the
     time of deletion. The order of those values MUST match that of the
     Services in the request.
 - `400 Bad Request` if the first error encountered is a missing `id`
-- `404 Not Found` if the first error encountered is that there is no Service
-  with a given `id`
-- `409 Conflict` if the first error encountered is that a given epoch was less
-  than or equal to the existing epoch of the Service with a given `id`
+- `409 Conflict` if the first error encountered is that a given epoch was not
+  equal to the recorded epoch of the Service with a given `id`
 
 The format of the HTTP Request MUST adhere to the following:
 ```
@@ -973,52 +971,29 @@ Content-Type: application/json
 
 This MUST delete the Service at the referenced URL.
 
-The request MAY include a body. Any such body MUST be an object containing an
-`id` matching the `{id}` in the path. That object MAY include an `epoch`
-value. If the Service corresponding with the specified `id` has a higher
-recorded `epoch` value than given, the request MUST fail.
-
-If other service attributes are included in the request, those MUST be
-ignored for the purposes of processing the request.
+The request URL MAY include an OPTIONAL `epoch` query parameter, and if
+present, the Discovery Endpoint MUST reject the request if the corresponding
+Service has a different recorded `epoch` value than the query parameter.
 
 The follow responses are defined by this specification:
-- `200 OK` if the new Service was deleted.
+- `200 OK` if the Service was deleted or does not exist.
   - The HTTP Response Body MUST include the Service values at the time of
     deletion.
-- `400 Bad Request` if `id` is in the body and does not match the `{id}` in the
-  path
-- `404 Not Found` if there is no Service with the specified `id`
-- `409 Conflict` if the given epoch was less than or equal to the existing
-  epoch of the Service with the given `id`
+- `409 Conflict` if the given epoch was not equal to the existing epoch of the
+  Service with the given `id`
 
 Other responses are allowed, but not defined by this specification.
-
-The format of the OPTIONAL HTTP Request body MUST adhere to the following:
-```
-Content-Type: application/json
-
-[
-  {
-    id: "{id}",      // REQUIRED
-    epoch: "{epoch}" // OPTIONAL
-  },
-  ...
-]
-```
 
 The format of the `200 OK` HTTP Response MUST adhere to the following:
 ```
 200 OK
 Content-Type: application/json
 
-[
-  {
-    "url": "{url}",
-    "name": "{name}",
-    ... remainder of Service attributes ...
-  }
-  ...
-]
+{
+  "url": "{url}",
+  "name": "{name}",
+  ... remainder of Service attributes ...
+}
 ```
 
 ### Discovery Endpoint Service Change Events
