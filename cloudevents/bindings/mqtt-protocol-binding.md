@@ -319,12 +319,14 @@ Topic Name: mytopic
 - [RFC7159][rfc7159] The JavaScript Object Notation (JSON) Data Interchange
   Format
 
-[ce]: ./spec.md
-[ce-types]: ./spec.md#type-system
-[json-format]: ./formats/json-format.md
+[ce]: ../spec.md
+[ce-types]: ../spec.md#type-system
+[json-format]: ../formats/json-format.md
 [oasis-mqtt-3.1.1]: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html
 [oasis-mqtt-5]: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
+[3-publish]: http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180850
 [5-content-type]: http://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html#_Toc502667341
+[5-publish]: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901100
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119

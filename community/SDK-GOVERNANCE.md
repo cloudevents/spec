@@ -1,5 +1,7 @@
 ## SDK Community
 
+<!-- no verify-specs -->
+
 The community is organized as follows:
 
 - Every SDK has its own

@@ -26,7 +26,8 @@ Comments:
 - While the "eventSource" value will always be static (`aws:s3`) when
   the event is coming from S3, if some other cloud provider is supporting
   the S3 event format it is expected that this value will not be
-  `aws:s3` for them - it should be something specific to their environment.
+  `aws:s3` for them - it is expected to be something specific to their
+  environment.
 - Consumers of these events will therefore be able to know if the event
   is an S3 type of event (regardless of whether it is coming from S3 or
   an S3-compatible provider) by detecting the `com.amazonaws.s3` prefix

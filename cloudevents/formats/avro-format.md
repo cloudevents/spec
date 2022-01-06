@@ -177,7 +177,7 @@ The following table shows exemplary mappings:
 [avro-primitives]: http://avro.apache.org/docs/1.9.0/spec.html#schema_primitive
 [avro-logical-types]: http://avro.apache.org/docs/1.9.0/spec.html#Logical+Types
 [avro-unions]: http://avro.apache.org/docs/1.9.0/spec.html#Unions
-[ce]: ./spec.md
+[ce]: ../spec.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3986-section41]: https://tools.ietf.org/html/rfc3986#section-4.1
 [rfc3986-section43]: https://tools.ietf.org/html/rfc3986#section-4.3

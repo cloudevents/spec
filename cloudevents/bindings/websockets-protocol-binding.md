@@ -154,15 +154,17 @@ format specification and the resulting data becomes the payload.
 - [RFC2119][rfc2119] Key words for use in RFCs to Indicate Requirement Levels
 - [RFC6455][rfc6455] The WebSocket Protocol
 
-[ce]: ./spec.md
-[ce-message]: ./spec.md#message
-[ce-event-format]: ./spec.md#event-format
-[json-format]: ./formats/json-format.md
-[json-batch-format]: ./formats/json-format.md#4-json-batch-format
-[avro-format]: ./formats/avro-format.md
-[proto-format]: ./formats/protobuf-format.md
+[ce]: ../spec.md
+[ce-message]: ../spec.md#message
+[ce-event-format]: ../spec.md#event-format
+[json-format]: ../formats/json-format.md
+[json-batch-format]: ../formats/json-format.md#4-json-batch-format
+[avro-format]: ../formats/avro-format.md
+[proto-format]: ../formats/protobuf-format.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc6455]: https://tools.ietf.org/html/rfc6455
 [rfc6455-section-1-3]: https://tools.ietf.org/html/rfc6455#section-1.3
 [rfc6455-section-4]: https://tools.ietf.org/html/rfc6455#section-4
 [rfc6455-section-1-9]: https://tools.ietf.org/html/rfc6455#section-1.9
+[rfc7230-section-5-1]: https://datatracker.ietf.org/doc/html/rfc7230#section-5.1
+[rfc6455-section-5-1]: https://datatracker.ietf.org/doc/html/rfc6455#section-5.1

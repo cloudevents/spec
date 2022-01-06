@@ -325,8 +325,8 @@ content-type: application/cloudevents+json; charset=UTF-8
 - [RFC7159][rfc7159] The JavaScript Object Notation (JSON) Data Interchange
   Format
 
-[ce]: ./spec.md
-[json-format]: ./formats/json-format.md
+[ce]: ../spec.md
+[json-format]: ../formats/json-format.md
 [kafka]: https://kafka.apache.org
 [kafka-message-format]: https://kafka.apache.org/documentation/#messageformat
 [kafka-message-header]: https://kafka.apache.org/documentation/#recordheader

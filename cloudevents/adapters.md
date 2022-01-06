@@ -1,5 +1,7 @@
 # CloudEvents Adapters
 
+<!-- no verify-specs -->
+
 Not all event producers will produce CloudEvents natively. As a result,
 some "adapter" might be needed to convert these events into CloudEvents.
 This will typically mean extracting metadata from the events to be used as
