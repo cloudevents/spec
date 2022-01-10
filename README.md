@@ -41,7 +41,7 @@ The following documents are available:
 | NATS Protocol Binding         | [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/nats-protocol-binding.md)  |    [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/nats-protocol-binding.md)    |
 | WebSockets Protocol Binding   |                                        -                                        | [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/websockets-protocol-binding.md) |
 | Protobuf Event Format         |                                                                                 | [v1.0-rc1](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/protobuf-format.md) |
-| XML Event Format              | - | [WIP][xml-format-working |]
+| XML Event Format              | - | [WIP][xml-format-working] |
 | Web hook                      |      [v1.0.1](https://github.com/cloudevents/spec/blob/v1.0.1/http-webhook.md)      |        [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/http-webhook.md)         |
 |                               |
 | **Additional Documentation:** |

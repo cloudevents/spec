@@ -20,7 +20,7 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[CloudEvents][ce] is a standardized and protocol-agnostic definition of the
+[CloudEvents][ce-spec] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how
 elements defined in the CloudEvents specification are to be represented using
 [Extensible Markup Language (XML)](xml-spec) documents.
@@ -35,7 +35,7 @@ CloudEvent.
 attributes and an associated media type.
 
 * The [Batch](#5-xml-batch-format) section describes how multiple CloudEvents
-may be packaged into a single XML document.
+can be packaged into a single XML document.
 
 ### 1.1. Conformance
 
@@ -58,8 +58,8 @@ structure.
 
 The CloudEvents type system is mapped to the XML schema types as follows :
 
-| CloudEvents   |  XML Schema Type| Notes |
-| :-------------| :---------------------------------------------------------- |
+| CloudEvents   |  XML Schema Type | Notes |
+| :-------------| :--------------- | :---- |
 | Boolean       | [xs:boolean][xml-primitives] | |
 | Integer       | [xs:int][xml-primitives] | |
 | String        | [xs:string][xml-primitives] | |
@@ -68,15 +68,15 @@ The CloudEvents type system is mapped to the XML schema types as follows :
 | URI-reference | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986] | |
 | Timestamp     | [xs:dateTime][xml-primitives] following [RFC 3339][rfc3339] | |
 
-Each context attribute is represented as an XML element whose name exactly matches that of
-a required or optional CloudEvent attribute, extension attribute names `MUST` adhere and
-align with the conventions in defined in the [cloud event specification][ce-spec].
+Each context attribute is represented as an XML element whose name MUST exactly match
+that of a REQUIRED or OPTIONAL CloudEvent attribute, extension attribute names MUST
+adhere to, and align with, the conventions in defined in the [cloud event specification][ce-spec].
 
 See the [envelope](#4-envelope) for special handing of the `specversion` context attribute.
 
-Extension attributes `SHOULD` be expressed with the appropriate `xsi:type` to allow them
+Extension attributes SHOULD be expressed with the appropriate `xsi:type` to allow them
 to be exchanged without loss of type information. Extension attributes with no `xsi:type`
-discriminator `SHOULD` be interpreted with an implied type of `xs:string`
+discriminator SHOULD be interpreted with an implied type of `xs:string`
 
 ``` xml
     ...
@@ -91,12 +91,12 @@ discriminator `SHOULD` be interpreted with an implied type of `xs:string`
 ## 3. Data
 
 The `Data` portion of a CloudEvent follows a similar model to that employed by
-the [JSON Format specification][json-format]. The elmenent names used are capitalized to avoid
-collision with CloudEvent attribute names.
+the [JSON Format specification][json-format]. The element names MUST be capitalized to avoid
+collision with curent or future CloudEvent attribute names.
 
 ### 3.1 Binary Data
 
-Carried in an element with an defined type of `xs:base64Binary`
+MUST be carried in an element with an defined type of `xs:base64Binary`
 
 ``` xml
 <Data xsi:type="xs:base64Binary">.........</Data>
@@ -104,7 +104,7 @@ Carried in an element with an defined type of `xs:base64Binary`
 
 ### 3.2 Text Data
 
-Carried in an element with an defined type of `xs:string`
+MUST be carried in an element with an defined type of `xs:string`
 
 ``` xml
 <Data xsi:type="xs:string">This is text</Data>
@@ -112,7 +112,7 @@ Carried in an element with an defined type of `xs:string`
 
 ### 3.3 XML Data
 
-XML data is carried in an explicit element:
+XML data MUST be carried in an explicit element `<DataXml>`:
 
 ``` xml
 <DataXml>
@@ -125,7 +125,7 @@ XML data is carried in an explicit element:
 ## 4. Envelope
 
 Each CloudEvent is wholly represented as an XML element, the root xml
-document element is `<CloudEvent>`. This element carries the `speversion`
+document element MUST be `<CloudEvent>`. This element carries the `specversion`
 as an XML attribute value.
 
 Such a representation MUST use the media type `application/cloudevents+xml`.
@@ -145,7 +145,7 @@ eg (Namespace definitions omitted for brevity):
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
     <myboolean xsi:type="xs:boolean">false</myboolean>
-    <Data xsi:type="xs_string">Now is the winter of our discount tents...</Data
+    <Data xsi:type="xs_string">Now is the winter of our discount tents...</Data>
 </CloudEvent>
 ```
 
@@ -166,7 +166,7 @@ Example:
 
 ``` xml
 <CloudEventBatch>
-    <CloudEvent specverison="1.0">
+    <CloudEvent specversion="1.0">
        ....
     </CloudEvent>
     <CloudEvent specversion="1.0">
