@@ -756,9 +756,9 @@ The `id` and `epoch` attributes of the Services MAY be omitted. In such cases
 the discovery endpoint MUST assign an appropriate value to the omitted
 field(s).  An appropriate `id` MUST be globally unique.  An appropriate `epoch`
 MUST be greater than the any existing `epoch` for a service with the same `id`.
-Whether an `id` is given or supplied, any existing Service definition with that
-`id` MUST be replaced by the Service definition in the request and any assigned
-values. If an `epoch` is given in the request it MUST be greater than the
+When an `id` is provided any existing Service definition with that
+`id` MUST be completely replaced by the Service definition in the request.
+If an `epoch` is given in the request it MUST be greater than the
 `epoch` of any existing Service of the same `id` or the request MUST fail.
 
 If the Discovery Endpoint is unable to successully add every Service in the
@@ -775,10 +775,9 @@ specified Services in the incoming request were already successfully processed.
 
 For example, if a Discovery Endpoint has a Service called `MyService`, it is
 possible to rename that Service to `YourService` and then to add, or update,
-another Service to use `MyService` as its `name`. But this is only true if
-the rename of the first Service happens first the request message.
+another Service to use `MyService` as its `name`.
 
-Likewise, while it might be less than optimal, it is technically possible for
+Likewise, while it might be less than optimal, it is possible for
 a request to update a Service multiple times if the same `id` is used more
 than once within a request.
 
