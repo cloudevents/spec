@@ -145,7 +145,7 @@ eg (Namespace definitions omitted for brevity):
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
     <myboolean xsi:type="xs:boolean">false</myboolean>
-    <Data xsi:type="xs_string">Now is the winter of our discount tents...</Data>
+    <Data xsi:type="xs:string">Now is the winter of our discount tents...</Data>
 </CloudEvent>
 ```
 
