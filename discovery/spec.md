@@ -542,8 +542,17 @@ MUST support filtering by `name`.
 
 #### `pagination`
 
-This is a boolean value indicating support for the [Pagination](../pagination/spec.md)
-specification. If not specified, the default value is `false`.
+This is a boolean value indicating support for the
+[Pagination](../pagination/spec.md) specification. If not specified, the
+default value is `false`.
+
+#### `updates`
+
+This is a booleam value indicating support for updates to the Services within
+the Discovery endpoint. This can be used to determine whether support, in
+general, is supported and a value of `true` does not guarantee that all
+users have access or that all update operations will succeed. If not specified,
+the default value is `false`..
 
 ## API Specification
 
@@ -583,12 +592,15 @@ compliant Discovery Endpoint implementations.
 #### `GET /features`
 
 This MUST return the set of features supported by the implementation.
+The result of this query SHOULD take into account the specific user issuing
+the query, if an authentication scheme is being used.
 
 The result MUST be a JSON object of the following form:
 ```
 {
   "servicefilterattributes": [ "name", ... ],
-  "pagination": true
+  "pagination": true,
+  "update": true
 }
 ```
 
@@ -599,6 +611,7 @@ The following additional constraints apply:
   sensitive.
 - The `pagination` attribute is OPTIONAL with an implied default value of
   `false`.
+- The `update` attribute it OPTIONAL with an implied default value of `false`.
 
 ### Discovery APIs
 
