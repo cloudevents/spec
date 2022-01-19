@@ -42,19 +42,19 @@ and depends on the particular message information model. For example, for CNCF
 CloudEvents message definitions, the "type" attribute is required as fixed
 information for each entry.
 
-- Message definition Group: A named collection of message definitions. Each
+- Message definition group: A named collection of message definitions. Each
   group holds a logically related set of message definitions, typically managed
   by a single entity, belonging to a particular application and/or having a
   shared access control management scope.
 
-- Message definition: A document describing fixed metadata and definition
-  references for messages and events.
+- Message definition: A document describing the metadata and structure of
+  messages and events. 
 
-- Message definition Version: A specific version of a definition. All documents
+- Message definition version: A specific version of such a definition. All documents
   that are stored and retrieved through the API are such versions. The
   identifying criteria of a definition MUST be identical across versions.
 
-A message definition MAY refer to a CNCF Message Catalog endpoint for describing
+A message definition MAY refer to a CNCF Schema Registry endpoint for describing
 structured message payloads and/or the structure of complex metadata fields
 where required.
 
@@ -70,7 +70,7 @@ All data types used in this section are defined in the CNCF CloudEvents
 specification and MUST follow the respective formatting and syntax rules unless
 specified otherwise.
 
-### 2.1. Message definition Group
+### 2.1. Message definition group
 
 Since message definitions are often used across several applications and in
 conjunction with related message definitions like commands and command replies,
@@ -97,7 +97,7 @@ The data model for a message definition group consists of these attributes:
 - Type: `String`
 - Description: Identifies the message definition group.
 - Constraints:
-  - REQUIRED
+  - REQUIRED. IMMUTABLE.
   - MUST be a non-empty string
   - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax. This allows for "dot
     notation", e.g. `org.example.myapp.module` for logical organization of
@@ -117,7 +117,7 @@ The data model for a message definition group consists of these attributes:
   specification (CloudEvents, NATS, AMQP, MQTT) or a custom format. All
   definitions in this group MUST conform with the rules of the chosen format.
 - Constraints:
-  - REQUIRED.
+  - REQUIRED. IMMUTABLE.
   - MUST NOT be modified if at least one definition exists in the group.
   - "CloudEvents", "NATS", "AMQP", "MQTT" for the definition formats defined in
     this specification, or another format defined elsewhere. If one of the names
@@ -131,11 +131,39 @@ The data model for a message definition group consists of these attributes:
 #### `description` (message definition group)
 
 - Type: `String`
-- Description: Explains the purpose of the message definition group.
+- Description: Concisely explains the purpose of the message definition group.
 - Constraints:
   - OPTIONAL
 - Examples:
   - "This group holds Message definitions for the fabulous example app."
+
+#### `documentation` (message definition group)
+
+- Type: `String`
+- Description: Documents the purpose of the message definition group in greater
+  detail than the `description`. The text MAY have rich formatting in a format
+  indicated by the `documentationformat` parameter.
+- Constraints:
+  - OPTIONAL
+
+#### `documentationformat` (message definition group)
+
+- Type: `String`
+- Description: Indicates the format of the `documentation` content.  Well-known
+  values are `HTML` and `Markdown` as well as `URL` if the documentation
+  attribute contains a URL pointing to external content.
+- Constraints:
+  - OPTIONAL
+
+#### `tags` (message definition group)
+
+- Type: `String`
+- Description: A single string containing a comma-separated list of tags
+  describing the message definition group for search indexing.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - "exampleapp,examplecorp"
 
 #### `createdtimeutc` (message definition group)
 
@@ -159,10 +187,18 @@ The data model for a message definition group consists of these attributes:
 A message definition is a description of a message data structure constrained by
 a format rule. A message definition MAY have multiple versions.
 
-In this specification, it is the "message definition version" that is the
-concrete definition object. The "message definition" is the management bracket
-for those documents and helps enforcing consistency across versions, including
-compatibility policies.
+In this specification, the "message definition" is an abstract collection object
+that helps enforcing consistency across versions and the "message definition
+version" is the concrete object handled by the API. A "message definition"
+cannot exist without at least one "message definition version". All versions
+share the common properties of the message definition and the immutable
+properties of the definition, specifically `id` and `format`, cannot be
+overridden by versions added later.
+
+The API is designed such that a message definition can only be created by
+posting an initial version and that the message definition can only be changed
+by posting a new version. Existing versions can be individually retrieved and
+deleted but not modified.
 
 A newer message definition version might introduce breaking changes or it might
 only introduce careful changes that preserve compatibility. These strategies are
@@ -252,7 +288,7 @@ An implementation MAY add further attributes.
 - Type: `String`
 - Description: Identifies the message definition.
 - Constraints:
-  - REQUIRED
+  - REQUIRED. IMMUTABLE.
   - MUST be a non-empty string
   - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax
   - MUST be unique within the scope of the message definition group
@@ -266,7 +302,7 @@ An implementation MAY add further attributes.
 - Description: Identifies the authority for this message definition. See
   [Section 4.1](#41-producer-authority-or-central-authority).
 - Constraints:
-  - OPTIONAL. If the attribute is absent or empty, its implied default value is
+  - OPTIONAL. IMMUTABLE. If the attribute is absent or empty, its implied default value is
     the base URI of the API endpoint.
   - MUST be a valid URI.
   - For Message definitions imported from other catalogs in replication
@@ -283,7 +319,7 @@ An implementation MAY add further attributes.
 - Description: Reflects the message definition group format. If set by a client,
   the value MUST match the message definition group format.
 - Constraints:
-  - REQUIRED to be returned by the server. OPTIONAL for clients.
+  - REQUIRED to be returned by the server. OPTIONAL for clients. IMMUTABLE.
   - MUST be a non-empty string, if present.
 - For examples refer to the format attribute of the message definition group.
 
@@ -295,6 +331,34 @@ An implementation MAY add further attributes.
   - OPTIONAL
 - Examples:
   - "Food order"
+
+#### `tags` (message definition group)
+
+- Type: `String`
+- Description: A single string containing a comma-separated list of tags
+  describing the message definition group for search indexing.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - "exampleapp,examplecorp"
+
+#### `documentation` (message definition group)
+
+- Type: `String`
+- Description: Documents the purpose of the message definition group in greater
+  detail than the `description`. The text MAY have rich formatting in a format
+  indicated by the `documentationformat` parameter.
+- Constraints:
+  - OPTIONAL
+
+#### `documentationformat` (message definition group)
+
+- Type: `String`
+- Description: Indicates the format of the `documentation` content.  Well-known
+  values are `HTML` and `Markdown` as well as `URL` if the documentation
+  attribute contains a URL pointing to external content.
+- Constraints:
+  - OPTIONAL
 
 #### `createdtimeutc` (message definition)
 
@@ -315,8 +379,8 @@ An implementation MAY add further attributes.
 ### 2.2.5 Message definition version
 
 A message definition version is an object that defines the concrete shape of a
-message in said version. The attributes defined here are common to all message
-formats.
+message in said version. The message definition version inherits all attributes
+of the containing message definition object.
 
 #### `version` (message definition version)
 
@@ -331,48 +395,6 @@ formats.
 - Examples:
   - 1
   - 2
-
-#### `id` (message definition version)
-
-- Type: `URI-reference`
-- Description: Identifies the message definition document uniquely, within the
-  scope of this catalog, without requiring other qualifiers.
-- Constraints:
-  - OPTIONAL. If the attribute is absent or empty, its implied default value is
-    constructed as a relative URI based on the
-    [path hierarchy](#31-path-hierarchy) for the
-    ["getMessage definitionVersion"](#342-get-a-specific-schema-version) API
-    operation.
-  - MUST be a valid URI-reference.
-  - MUST be unique within the scope of the catalog.
-  - For Message definition versions imported from other catalogs in
-    [replication scenarios](#4-replication-model-and-state-change-events), this
-    attribute is REQUIRED to be not empty. It MUST be set to the absolute
-    [Message definition version URI](#222-schema-version-uri) of the imported
-    Message definition version.
-- Examples:
-  - `123`
-  - `https://example.org/456`
-  - `/messagecatalog/mygroup/messagedefinitions/2/version/3`
-
-#### `format` (message definition version)
-
-- Type: `String`
-- Description: Reflects the message definition group format. If set by a client,
-  the value MUST match the message definition group format.
-- Constraints:
-  - REQUIRED to be returned by the server. OPTIONAL for clients.
-  - MUST be a non-empty string, if present.
-- For examples refer to the format attribute of the message definition group.
-
-#### `description` (message definition version)
-
-- Type: `String`
-- Description: Explains details of the message definition version.
-- Constraints:
-  - OPTIONAL
-- Examples:
-  - "This version adds support for different types of Pizza crust."
 
 #### `createdtimeutc` (message definition version)
 
@@ -565,9 +587,9 @@ document and an indicator for how the data is encoded in the message.
 
 ## 4. HTTP ("REST") API
 
-This section informally describes the HTTP API binding of this Message Catalog.
-The formal definition is the
-[OpenAPI document](https://microsoft-my.sharepoint.com/personal/clemensv_microsoft_com/Documents/schemaregistry.yaml)
+This section informally describes the HTTP API binding of this message catalog.
+The formal definition is the [OpenAPI
+document](messagecatalog.yaml)
 that is part of this specification.
 
 This section is therefore non-normative.
@@ -658,8 +680,8 @@ update the Message definition by assigning a new version to the given document
 and storing it.
 
 The payload of the request is the Message definition document. All further
-attributes such as the `description` or the `format` indicator are passed either
-via the query string or as HTTP headers.
+attributes such as the `format` indicator are passed either via the query string
+or as HTTP headers.
 
 The ´Content-Type´ for the payload MUST be preserved by the catalog and returned
 when the Message definition is requested, independent of the format identifier.
