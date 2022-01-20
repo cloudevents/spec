@@ -48,10 +48,10 @@ information for each entry.
   shared access control management scope.
 
 - Message definition: A document describing the metadata and structure of
-  messages and events. 
+  messages and events.
 
-- Message definition version: A specific version of such a definition. All documents
-  that are stored and retrieved through the API are such versions. The
+- Message definition version: A specific version of such a definition. All
+  documents that are stored and retrieved through the API are such versions. The
   identifying criteria of a definition MUST be identical across versions.
 
 A message definition MAY refer to a CNCF Schema Registry endpoint for describing
@@ -149,7 +149,7 @@ The data model for a message definition group consists of these attributes:
 #### `documentationformat` (message definition group)
 
 - Type: `String`
-- Description: Indicates the format of the `documentation` content.  Well-known
+- Description: Indicates the format of the `documentation` content. Well-known
   values are `HTML` and `Markdown` as well as `URL` if the documentation
   attribute contains a URL pointing to external content.
 - Constraints:
@@ -195,9 +195,9 @@ share the common properties of the message definition and the immutable
 properties of the definition, specifically `id` and `format`, cannot be
 overridden by versions added later.
 
-The API is created such that a message definition can only be created by
-posting an initial version and that the message definition can only be changed
-by posting a new version. Existing versions can be individually retrieved and
+The API is created such that a message definition can only be created by posting
+an initial version and that the message definition can only be changed by
+posting a new version. Existing versions can be individually retrieved and
 deleted, but not modified.
 
 A newer message definition version might introduce breaking changes or it might
@@ -302,8 +302,8 @@ An implementation MAY add further attributes.
 - Description: Identifies the authority for this message definition. See
   [Section 4.1](#41-producer-authority-or-central-authority).
 - Constraints:
-  - OPTIONAL. IMMUTABLE. If the attribute is absent or empty, its implied default value is
-    the base URI of the API endpoint.
+  - OPTIONAL. IMMUTABLE. If the attribute is absent or empty, its implied
+    default value is the base URI of the API endpoint.
   - MUST be a valid URI.
   - For Message definitions imported from other catalogs in replication
     scenarios, the attribute is REQUIRED to be not empty. If the value is empty
@@ -354,7 +354,7 @@ An implementation MAY add further attributes.
 #### `documentationformat` (message definition group)
 
 - Type: `String`
-- Description: Indicates the format of the `documentation` content.  Well-known
+- Description: Indicates the format of the `documentation` content. Well-known
   values are `HTML` and `Markdown` as well as `URL` if the documentation
   attribute contains a URL pointing to external content.
 - Constraints:
@@ -425,8 +425,8 @@ to the metadata field/attribute/property not being listed.
 
 #### 3.1.1. 'attributes' object
 
-The `attributes` object MAY contain any number of uniquely named attribute fields,
-whereby any name MUST conform with CloudEvents naming rules.
+The `attributes` object MAY contain any number of uniquely named attribute
+fields, whereby any name MUST conform with CloudEvents naming rules.
 
 Whenever the name of an attribute field matches that of a well-known CloudEvents
 attribute, its value or the constraints for the value expressed with the regular
@@ -448,7 +448,7 @@ expression MUST match the constraint rules of the CloudEvents attribute.
 
 Message catalog object deleted event:
 
-```
+``` JSON
 {
     "id" : "io.cloudevents.messagecatalog.deleted.v1",
     "description" : "Raised when an object has been deleted from the catalog",
@@ -456,8 +456,12 @@ Message catalog object deleted event:
     "version" : 1,
     "definition" : {
       "attributes" : {
-        "specversion" : "1.0",
-        "type" : "io.cloudevents.messagecatalog.deleted.v1",
+        "specversion" : : {
+          "value" :"1.0"
+        },
+        "type" : : {
+          "value" : "io.cloudevents.messagecatalog.deleted.v1"
+        }
       }
     }
 }
@@ -465,7 +469,7 @@ Message catalog object deleted event:
 
 Fictitious storage service "storage object created" event:
 
-```
+``` JSON
 {
     "id" : "com.example.storage.object.created",
     "description" : "Raised when an object has been created",
@@ -473,11 +477,21 @@ Fictitious storage service "storage object created" event:
     "version" : 1,
     "definition": {
       "attributes" : {
-        "specversion" : "1.0",
-        "type" : "com.example.storage.object.created",
-        "subject" : "/{container}/{filepath}",
-        "dataschema" : "http://schemas.example.com/schemagroups/storage/schema/objectcreated/version/1"
-        "datacontenttype" : "application/json"
+        "specversion" : {
+          "value" : "1.0"
+        },
+        "type" : : {
+          "value" : "com.example.storage.object.created"
+        },
+        "subject" : : {
+          "value" : "/{container}/{filepath}"
+        },
+        "dataschema" : : {
+          "value" : "http://schemas.example.com/schemagroups/storage/schema/objectcreated/version/1"
+        },
+        "datacontenttype" : : {
+          "value" :"application/json"
+        }
       }
     }
 }
@@ -558,7 +572,7 @@ whereby any name MUST conform with AMQP `symbol` type rules.
 ### 3.3. OASIS MQTT
 
 The MQTT metaschema describes the content of a MQTT 3.1.1. or MQTT 5.0 PUBLISH
-packet. 
+packet.
 
 #### 3.3.1. `publish` object
 
@@ -583,12 +597,11 @@ The `userproperty` object MAY contain any number of uniquely named
 
 #### 3.3.3 `payload` object
 
-The `payload` object complements the `payloadformat` and `contenttype`
-fields of the `publish` object with an optional reference to a schema
-document and an indicator for how the data is encoded in the message.
+The `payload` object complements the `payloadformat` and `contenttype` fields of
+the `publish` object with an optional reference to a schema document and an
+indicator for how the data is encoded in the message.
 
 - `dataschema` : optional URI reference to a schema object
-
 
 ### 3.4. CNCF NATS
 
@@ -597,11 +610,12 @@ The NATS metaschema describes the content of a NATS PUB message.
 #### 3.3.1. `pub` object
 
 The `pub` object has a set of well-known fields defined by the NATS client
-specification that are not extensible. For detailed descriptions refer to
-the NATS protocol documentation.
+specification that are not extensible. For detailed descriptions refer to the
+NATS protocol documentation.
 
 - `subject` : String
 - `replyto` : String
+
 #### 3.3.2 `payload` object
 
 Optional reference to a schema document and an indicator for how the data is
@@ -612,9 +626,8 @@ encoded in the message.
 ## 4. HTTP ("REST") API
 
 This section informally describes the HTTP API binding of this message catalog.
-The formal definition is the [OpenAPI
-document](messagecatalog.yaml)
-that is part of this specification.
+The formal definition is the [OpenAPI document](messagecatalog.yaml) that is
+part of this specification.
 
 This section is therefore non-normative.
 
@@ -698,9 +711,9 @@ the version collection with a POST on the message definition collection
 `/messagecatalog/mygroup/messagedefinitions/`.
 
 This operation will either create a new message definition and store the
-document under the version identifier assigned by the server or will
-update the message definition by assigning a new version to the given document
-and storing it.
+document under the version identifier assigned by the server or will update the
+message definition by assigning a new version to the given document and storing
+it.
 
 The payload of the request is the message definition version object.
 
@@ -754,7 +767,7 @@ The operation to obtain a Message definition version is a GET on
 `/messagedefinition?uri={uri}`, with the required parameter being the Message
 definition version URI.
 
-The returned payload is the Message definition document. 
+The returned payload is the Message definition document.
 
 The HEAD method SHOULD also be implemented.
 
@@ -784,8 +797,7 @@ those Message definitions shall be added.
 The synchronization is accomplished by a combination of two mechanisms:
 
 1. The Message Catalog API explained in [section 3](#3-http-rest-api) and
-   formally defined in the
-   [OpenAPI spec](../schemaregistry/schemaregistry.yaml)
+   formally defined in the [OpenAPI spec](../schemaregistry/schemaregistry.yaml)
    allows for Message definition information to be read from a source and
    written imperatively to a target: A target can pull changes or a source can
    push changes.
@@ -846,8 +858,8 @@ implementation specific.
 The names of the message definition groups and of the Message definitions MAY
 mirror those from the source catalog, but they MAY also differ. Each Message
 definition version is always accessible under both
-[its local path a given catalog](#442-get-a-specific-message-definition-version) and under
-its globally unique
+[its local path a given catalog](#442-get-a-specific-message-definition-version)
+and under its globally unique
 [Message definition version URI](#443-get-a-specific-message-definition-version-by-message-definition-version-uri).
 
 ### 4.4 Pull replication
@@ -876,8 +888,8 @@ Each catalog SHOULD offer a [Subscription API](../subscriptions/spec.md)
 endpoint, either directly or using some middleware, to allow interested parties
 to subscribe to these change events.
 
-The subscription's `source` MUST be the root of the Message Catalog. A [prefix
-filter](../subscriptions/spec.md#prefix-filter-dialect) on the `subject`
+The subscription's `source` MUST be the root of the Message Catalog. A
+[prefix filter](../subscriptions/spec.md#prefix-filter-dialect) on the `subject`
 attribute MAY be used to scope the subscription to a particular message
 definition group or Message definition.
 
@@ -920,7 +932,7 @@ but requires the consumer to fetch the indicated change from the catalog.
 `id` MUST be set to a unique value relative to the scope formed by the `source`,
 `type`, and `subject` attributes. The event `data` MUST be empty.
 
-```
+```JSON
 {
     "specversion" : "1.0",
     "type" : "io.cloudevents.messagecatalog.updated.v1",
@@ -931,12 +943,47 @@ but requires the consumer to fetch the indicated change from the catalog.
 }
 ```
 
+This definition expressed as a CloudEvents message definition:
+
+```JSON
+{
+  "id": "io.cloudevents.messagecatalog.updated.v1",
+  "version" : 1,
+  "description": "This event notifies the subscriber of an element of the catalog having been created or updated.",
+  "documentation" : "Because Message definition documents might be very large, and because Message definition information might be subject to special authorization since it might disclose trade secrets, the event carries no data, but requires the consumer to fetch the indicated change from the catalog. `id` MUST be set to a unique value relative to the scope formed by the `source`, `type`, and `subject` attributes. The event `data` MUST be empty.",
+  "documentationformat" : "Markdown",
+  "format" : "CloudEvents",
+  "definition" : {
+    "attributes" : {
+      "specversion" : {
+        "value" : "1.0",
+        "description" : "CloudEvents 1.0"
+      },
+      "type" : {
+        "value" : "io.cloudevents.messagecatalog.updated.v1"
+      },
+      "source" : {
+        "description" : "Base URI of the Message Catalog"
+      },
+      "subject" : {
+        "value" : "/messagecatalog/{group-id}/messagedefinitions/{messagedefinition-id}/version/{version-id}",
+        "description" : "API path of the object that has been created or updated"
+      },
+      "time" : {
+        "description" : "Time of the change, exactly as recorded in `updatedtimeutc` (or
+  `createdtimeutc`for Message definition versions)"
+      }
+    }
+  }
+}
+```
+
 #### io.cloudevents.messagecatalog.deleted.v1
 
 This event notifies the subscriber of an element of the catalog having been
 deleted.
 
-- **source**: Base URI of the Message Catalog
+- **source**: Base URI of the message catalog
 
 - **type**: `io.cloudevents.messagecatalog.deleted.v1`
 
@@ -956,5 +1003,40 @@ deleted.
     "subject" : "/messagecatalog/5/messagedefinitions/78",
     "id" : "A234-1234-1234",
     "time" : "2020-10-30T17:31:00Z"
+}
+```
+
+This definition expressed as a CloudEvents message definition:
+
+```JSON
+{
+  "id": "io.cloudevents.messagecatalog.deleted.v1",
+  "version" : 1,
+  "description": "This event notifies the subscriber of an element of the catalog having been deleted.",
+  "documentation" : "`id` MUST be set to a unique value relative to the scope formed by by the
+`source`, `type`, and `subject` attributes. The event `data` MUST be empty.",
+  "documentationformat" : "Markdown",
+  "format" : "CloudEvents",
+  "definition" : {
+    "attributes" : {
+      "specversion" : {
+        "value" : "1.0",
+        "description" : "CloudEvents 1.0"
+      },
+      "type" : {
+        "value" : "io.cloudevents.messagecatalog.deleted.v1"
+      },
+      "source" : {
+        "description" : "Base URI of the Message Catalog"
+      },
+      "subject" : {
+        "value" : "/messagecatalog/{group-id}/messagedefinitions/{messagedefinition-id}/version/{version-id}",
+        "description" : "API path of the object that has been deleted"
+      },
+      "time" : {
+        "description" : "Time of the deletion"
+      }
+    }
+  }
 }
 ```

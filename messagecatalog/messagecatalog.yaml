@@ -316,86 +316,157 @@ components:
           format: date-time
         definition:
           oneOf:
-            - $ref: "#/components/schemas/CloudEventsMetaSchema"
-            - $ref: "#/components/schemas/AMQPMetaSchema"
-            - $ref: "#/components/schemas/MQTTMetaSchema"
-            - $ref: "#/components/schemas/NATSMetaSchema"
+            - $ref: "#/components/schemas/CloudEventsMetaschema"
+            - $ref: "#/components/schemas/AMQPMetaschema"
+            - $ref: "#/components/schemas/MQTTMetaschema"
+            - $ref: "#/components/schemas/NATSMetaschema"
             - type: object
-              description: "Allows for any other metaschema object"
-    CloudEventsMetaSchema:
+              description: "Allows for any other Metaschema object"
+    PropertyValueTemplate:
+      type: object
+      properties:
+        description:
+          type: string
+        required:
+          type: boolean
+          default: false
+    StringPropertyValueTemplate:
+      allOf:
+        - $ref: '#/components/schemas/PropertyValueTemplate'
+        - type: object
+          properties:
+            value: 
+              type: string
+    TimestampPropertyValueTemplate:
+      allOf:
+        - $ref: '#/components/schemas/PropertyValueTemplate'
+        - type: object
+          properties:
+            value: 
+              type: string
+    IntegerPropertyValueTemplate:
+      allOf:
+        - $ref: '#/components/schemas/PropertyValueTemplate'
+        - type: object
+          properties:
+            value: 
+              type: number
+    BooleanPropertyValueTemplate:
+      allOf:
+        - $ref: '#/components/schemas/PropertyValueTemplate'
+        - type: object
+          properties:
+            value: 
+              type: boolean
+    UriReferencePropertyValueTemplate:
+      allOf:
+        - $ref: '#/components/schemas/PropertyValueTemplate'
+        - type: object
+          properties:
+            value: 
+              type: string
+    UriPropertyValueTemplate:
+      allOf:
+        - $ref: '#/components/schemas/PropertyValueTemplate'
+        - type: object
+          properties:
+            value: 
+              type: string
+              format: uri
+    DataSchemaPropertyValueTemplate:
+      allOf:
+        - $ref: '#/components/schemas/PropertyValueTemplate'
+        - type: object
+          properties:
+            value: 
+              type: string
+              format: uri
+    AnyPropertyValueTemplate:
+      oneOf:
+        - $ref: '#/components/schemas/StringPropertyValueTemplate'
+        - $ref: '#/components/schemas/BooleanPropertyValueTemplate'
+        - $ref: '#/components/schemas/IntegerPropertyValueTemplate'
+        - $ref: '#/components/schemas/TimestampPropertyValueTemplate'
+        - $ref: '#/components/schemas/UriPropertyValueTemplate'
+        - $ref: '#/components/schemas/UriReferencePropertyValueTemplate'
+    CloudEventsMetaschema:
       type: object
       properties:
         attributes:
           type: object
           properties:
             specversion:
-              type: string
-              default: "1.0"
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             id:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             source:
-              type: string
+              $ref: '#/components/schemas/UriReferencePropertyValueTemplate'
             subject:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             type:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             datacontenttype:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             dataschema:
-              type: string
+              $ref: '#/components/schemas/DataSchemaPropertyValueTemplate'
+            time:
+              $ref: '#/components/schemas/TimestampPropertyValueTemplate'
           required:
             - "type"
-    AMQPMetaSchema:
+    AMQPMetaschema:
       type: object
       properties:
         header:
           type: object
           properties:
             durable:
-              type: boolean
+              $ref: '#/components/schemas/BooleanPropertyValueTemplate'
             priority:
-              type: number
+              $ref: '#/components/schemas/IntegerPropertyValueTemplate'
             ttl:
-              type: number
+              $ref: '#/components/schemas/IntegerPropertyValueTemplate'
         deliveryannotations:
           type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AnyPropertyValueTemplate'
         messageannotations:
           type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AnyPropertyValueTemplate'
         properties:
           type: object
           properties:
             messageid:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             userid:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             to:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             subject:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             replyto:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             correlationid:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             contenttype:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             contentencoding:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             absoluteexpirytime:
-              type: string
+              $ref: '#/components/schemas/TimestampPropertyValueTemplate'
             creationtime:
-              type: string
+              $ref: '#/components/schemas/TimestampPropertyValueTemplate'
             groupid:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             groupsequence:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
             replytogroupid:
-              type: string
+              $ref: '#/components/schemas/StringPropertyValueTemplate'
         applicationdata:
           type: object
           properties:
             dataschema:
-              type: string
-              format: uri
+              $ref: '#/components/schemas/DataSchemaPropertyValueTemplate'
               description: "reference to a schema object"
             amqpencoding:
               type: string
@@ -405,56 +476,59 @@ components:
                 - "Sequence"
         applicationproperties:
           type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AnyPropertyValueTemplate'
         footer:
           type: object
-    MQTTMetaSchema:
+          additionalProperties:
+            $ref: '#/components/schemas/AnyPropertyValueTemplate'
+    MQTTMetaschema:
       type: object
       properties:
         publish:
           type: object
           properties:
             mqttversion:
-              type: string
-              default: "5.0"
+              $ref: "#/components/schemas/StringPropertyValueTemplate"
             qos:
-              type: number
+              $ref: "#/components/schemas/IntegerPropertyValueTemplate"
             retain:
-              type: boolean
+              $ref: "#/components/schemas/BooleanPropertyValueTemplate"
             topicname:
-              type: string
+              $ref: "#/components/schemas/StringPropertyValueTemplate"
             payloadformat:
-              type: number
+              $ref: "#/components/schemas/IntegerPropertyValueTemplate"
             expiryinterval:
-              type: number
+              $ref: "#/components/schemas/IntegerPropertyValueTemplate"
             responsetopic:
-              type: string
+              $ref: "#/components/schemas/StringPropertyValueTemplate"
             correlationdata:
-              type: string
+              $ref: "#/components/schemas/StringPropertyValueTemplate"
             contenttype:
-              type: string
+              $ref: "#/components/schemas/StringPropertyValueTemplate"
         userproperty:
           type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AnyPropertyValueTemplate'
         payload:
           type: object
           properties:
             dataschema:
-              type: string
-              format: uri
+              $ref: "#/components/schemas/DataSchemaPropertyValueTemplate"
               description: "reference to a schema object"
-    NATSMetaSchema:
+    NATSMetaschema:
       type: object
       properties:
         pub:
           type: object
           properties:
             subject:
-              type: string
+              $ref: "#/components/schemas/StringPropertyValueTemplate"
             replyto:
-              type: string
+              $ref: "#/components/schemas/StringPropertyValueTemplate"
         payload:
           type: object
           properties:
             dataschema:
-              type: string
-              format: uri
+              $ref: "#/components/schemas/DataSchemaPropertyValueTemplate"
               description: "reference to a schema object"
