@@ -1,5 +1,7 @@
 # SDK Maintainer's Guide
 
+<!-- no verify-specs -->
+
 This guide is meant to provide SDK maintainers with some recommended common
 practices. New and existing SDK maintainers are encouraged to copy this file
 to their repositories and adopt these guidelines so that contributors may

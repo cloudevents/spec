@@ -1,5 +1,7 @@
 # CloudEvents 中文规范
 
+<!-- no verify-specs -->
+
 ![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
 
 ## Purpose/规范目的

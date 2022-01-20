@@ -161,11 +161,32 @@ for file in ${mdFiles}; do
     sed 's/)/)\
 /g' | \
     sed "s/^/ /g" | \
-    grep "[^\\]\[.*\](.*)" > ${tmp}1 || continue
+    grep "[^\\]\[.*\](.*)" > ${tmp}1 || true
 
   # This sed will extract the href portion of the [..](..) - meaning
   # the stuff in the parens.
-  sed "s/.*\[*\]\([^()]*\)/\1/" < ${tmp}1 > ${tmp}2  || continue
+  sed "s/.*\[*\]\([^()]*\)/\1/" < ${tmp}1 > ${tmp}2 || true
+
+  # Look for bookmark URLs
+  cat $file | sed -n "s/^ *\[.*\]: //p" > ${tmp}2 || true
+
+  cat $file | sed -n "s/^ *\[.*\]: .*/&/p" > ${tmp}bks || true
+
+  # Look for bookmarks
+  cat $file | \
+    tr '\n' ' ' | \
+    sed -e 's/\[[^][]*\]\[[^][]*\]/&\
+/g' | \
+    sed -n -e 's/^.*\[.*\[\(.*\)\]$/\1/p' > "${tmp}links" || true
+
+  cat ${tmp}links | while read bk ; do
+    grep -q "^ *\\[${bk}\\]: " ${tmp}bks ||
+      echo "$file: Can't find bookmark '[$bk]'" | \
+        tee -a ${tmp}3
+  done
+
+  # Skip file if there are no matches
+  [ ! -s ${tmp}2 ] && continue
 
   cat ${tmp}2 | while read line ; do
     # Strip off the leading and trailing parens

@@ -1,3 +1,5 @@
+<!-- no verify-specs -->
+
 If you have a demo of CloudEvents in action, please add a link here. If there
 isn't an associated blog or github repo, feel free to add descriptive text as a
 markdown file in `community/demos/`.

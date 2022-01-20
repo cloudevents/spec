@@ -1,5 +1,7 @@
 # Contributing to CloudEvents
 
+<!-- no verify-specs -->
+
 This page contains information about reporting issues, how to suggest changes as
 well as the guidelines we follow for how our documents are formatted.
 

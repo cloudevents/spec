@@ -1,5 +1,7 @@
 # CloudEvents SDK Requirements
 
+<!-- no verify-specs -->
+
 The intent of this document to describe a minimum set of requirements for new
 Software Development Kits (SDKs) for CloudEvents. These SDKs are designed and
 implemented to enhance and speed up CloudEvents integration. As part of

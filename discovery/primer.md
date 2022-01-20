@@ -1,5 +1,7 @@
 # Discovery and Subscription Primer - WIP
 
+<!-- no verify-specs -->
+
 ## Abstract
 
 This non-normative document provides an overview of the Discovery and

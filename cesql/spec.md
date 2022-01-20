@@ -284,7 +284,7 @@ Both `%` and `_` can be escaped with `\`, in order to be matched literally. For 
 | ----------------------------------- | --------------------------------------------------------------------------- |
 | `EXISTS identifier: Any -> Boolean` | Returns `true` if the attribute `identifier` exists in the input CloudEvent |
 
-Note: `EXISTS` MUST always return `true` for the required context attributes because the input CloudEvent is always
+Note: `EXISTS` MUST always return `true` for the REQUIRED context attributes because the input CloudEvent is always
 assumed valid, e.g. `EXISTS id` MUST always return `true`.
 
 #### 3.4.5. In operator
@@ -461,9 +461,9 @@ hop < ttl
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [total-programming-language-wiki]: https://en.wikipedia.org/wiki/Total_functional_programming
 [referential-transparency-wiki]: https://en.wikipedia.org/wiki/Referential_transparency
-[ce-attribute-naming-convention]: ./spec.md#attribute-naming-convention
-[ce-type-system]: ./spec.md#type-system
-[ce-id-attribute]: ./spec.md#id
-[subscriptions-filter-dialect]: /subscriptions/spec.md#3241-filter-dialects
+[ce-attribute-naming-convention]: ../cloudevents/spec.md#attribute-naming-convention
+[ce-type-system]: ../cloudevents/spec.md#type-system
+[ce-id-attribute]: ../cloudevents/spec.md#id
+[subscriptions-filter-dialect]: ../subscriptions/spec.md#3241-filter-dialects
 [ebnf-xml-spec]: https://www.w3.org/TR/REC-xml/#sec-notation
 [modulo-operation-wiki]: https://en.wikipedia.org/wiki/Modulo_operation

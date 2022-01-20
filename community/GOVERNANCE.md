@@ -1,5 +1,7 @@
 # Governance
 
+<!-- no verify-specs -->
+
 This document describes the governance process under which the CloudEvents
 project will manage this repository.
 

@@ -155,11 +155,11 @@ Subject: mySubject
 - [RFC7159][rfc7159] The JavaScript Object Notation (JSON) Data Interchange
   Format
 
-[ce]: ./spec.md
-[json-format]: ./formats/json-format.md
+[ce]: ../spec.md
+[json-format]: ../formats/json-format.md
 [nats]: https://nats.io
-[nats-pub-proto]: https://nats.io/documentation/internals/nats-protocol/#PUB
-[nats-msg-proto]: https://nats.io/documentation/internals/nats-protocol/#MSG
+[nats-pub-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#pub
+[nats-msg-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#protocol-messages
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119

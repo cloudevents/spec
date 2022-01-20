@@ -1,5 +1,7 @@
 # CloudEvents Primer - Version 1.0.2-wip
 
+<!-- no verify-specs -->
+
 ## Abstract
 
 This non-normative document provides an overview of the CloudEvents

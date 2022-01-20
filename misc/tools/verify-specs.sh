@@ -103,8 +103,19 @@ function checkFile {
     fi
   done
 
+  for phrase in "${bannedPhrases[@]}"; do
+    words=( ${phrase[@]} )
+    if (( ${#words[@]} > $maxWords )); then
+      maxWords=${#words[@]}
+    fi
+  done
+
   lines=( "" )
   words=( "" )
+
+  if grep -i "<!-- *no verify-specs" $1 > /dev/null 2>&1 ; then
+    return
+  fi
 
   # Prepend each line of the file with its line number
   cat -n $1 | while read num line ; do
@@ -156,12 +167,11 @@ function checkFile {
 
     # For each of our "casePhrases" check to see if its in "words" with
     # the wrong case
-    upperWords=$(echo ${words[@]} | tr "[a-z]" "[A-Z]")
+    upperWords="${words[@]^^}"
     for phrase in "${casePhrases[@]}"; do
-      upperPhrase=$(echo ${phrase} | tr "[a-z]" "[A-Z]")
       # echo upperWords:${upperWords}
       # echo upperPhrase:${upperPhrase}
-      if [[ "${upperWords} " == "${upperPhrase} "* && \
+      if [[ "${upperWords} " == "${phrase^^} "* && \
             "${words[@]} " != "${phrase} "* ]]; then
         ll=${words[*]}
         echo line ${lines[0]}: \'${ll:0:${#phrase}}\' should be \'${phrase}\'
@@ -171,8 +181,7 @@ function checkFile {
     # For each of our "bannedPhrases" check to see if its in "words". Note
     # that the case of the phrase does not matter.
     [ -z "${bannedPhrases}" ] || for phrase in "${bannedPhrases[@]}"; do
-      upperPhrase=$(echo ${phrase} | tr "[a-z]" "[A-Z]")
-      if [[ "${upperWords} " == "${upperPhrase} "* ]]; then
+      if [[ "${upperWords} " == "${phrase^^} "* ]]; then
         ll=${words[*]}
         echo line ${lines[0]}: \'${ll:0:${#phrase}}\' is banned
       fi

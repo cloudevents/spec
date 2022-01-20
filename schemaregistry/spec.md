@@ -26,7 +26,7 @@ deserialize the event or message payload need access to the schema used to
 publish it.
 
 For formats that do not depend on external schemas for serialization, schemas
-might still be required in some scenarios to allow for consumers or inspecting
+might still be needed in some scenarios to allow for consumers or inspecting
 intermediaries to validate the data structure's compliance with a set of rules.
 
 This specification defines a very simple API focused on storing, organizing, and
@@ -63,7 +63,7 @@ subject matter context.
 Implementations of this specification MAY associate access control rules with
 schema groups. For instance, a user or a group of users might be given write
 access only to a particular schema group that their organization owns. If trade
-secret protection is required for an application or parts of it and the schema
+secret protection is needed for an application or parts of it and the schema
 structure would give some of those away, read access to a group of schemas might
 likewise be restricted.
 
@@ -317,7 +317,7 @@ document or binary stream. An implementation SHOULD validate whether a
 schema version is valid according to the rules of its format, for instance
 whether it is a valid Avro schema document when the format is Apache Avro.
 
-The schema version MAY also have an additional, optional unique identifier
+The schema version MAY also have an additional, OPTIONAL unique identifier
 within the scope of the registry.
 
 #### `version` (schema version)
@@ -382,7 +382,7 @@ This section is therefore non-normative.
 ### 3.1. Path hierarchy
 
 Schema groups contain schemas and those contain schema versions, which are the
-documents required for serialization or validation.
+documents needed for serialization or validation.
 
 These dependencies are reflected in the path structure:
 
@@ -505,11 +505,11 @@ Each schema version has a URI as a unique identifier, as defined in
 schema registry that holds a copy of that schema version.
 
 As discussed in 2.2.2, the URI might not be network resolvable or the network
-location may not be reachable from everywhere. That is a key motivation for
+location might not be reachable from everywhere. That is a key motivation for
 replication.
 
 The operation to obtain a schema version is a GET on `/schema?uri={uri}`, with
-the required parameter being the schema version URI.
+the REQUIRED parameter being the schema version URI.
 
 The returned payload is the schema document. Further attributes such as the
 `description` and the `format` indicator are returned as HTTP headers.
@@ -539,7 +539,7 @@ between these distinct registries, parallel to the event flow.
 
 For the discussion in this section, we will use the term "source" for a registry
 from which schemas originate and "target" for a registry into which those
-schemas shall be added.
+schemas will be added.
 
 The synchronization is accomplished by a combination of two mechanisms:
 

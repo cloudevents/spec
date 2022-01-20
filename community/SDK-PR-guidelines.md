@@ -1,5 +1,7 @@
 # Pull Request Guidelines
 
+<!-- no verify-specs -->
+
 Here you will find step by step guidance for creating, submitting and updating
 a pull request for an SDK repository. We hope it will help you have an easy time
 managing your work and a positive, satisfying experience when contributing

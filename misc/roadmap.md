@@ -1,5 +1,7 @@
 ## Roadmap
 
+<!-- no verify-specs -->
+
 The CloudEvents Roadmap.
 
 _Note: The ordered lists for each milestone provide a way to reference each

@@ -240,15 +240,15 @@ private static Spec.CloudEvent protoExample() {
 * [Protocol Buffer 3 Specification][proto-3]
 * [CloudEvents Protocol Buffers format schema][proto-schema]
 
-[Proto-3]: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
+[proto-3]: https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
 [proto-home]: https://developers.google.com/protocol-buffers
 [proto-scalars]: https://developers.google.com/protocol-buffers/docs/proto3#scalar
 [proto-wellknown]: https://developers.google.com/protocol-buffers/docs/reference/google.protobuf
 [proto-timestamp]: https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp
 [proto-schema]: ./cloudevents.proto
 [json-format]: ./json-format.md
-[ce]: ./spec.md
-[ce-types]: ./spec.md#type-system
+[ce]: ../spec.md
+[ce-types]: ../spec.md#type-system
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3986-section41]: https://tools.ietf.org/html/rfc3986#section-4.1
 [rfc3986-section43]: https://tools.ietf.org/html/rfc3986#section-4.3
