@@ -5,36 +5,58 @@ info:
 paths:
   /messagedefinition:
     get:
-      description: 'Direct access to a particular message definition document providing a version URI'
+      description: "Direct access to a particular message definition document providing a version URI"
       operationId: getMessageDefinitionVersionByURI
       parameters:
-          - in: query
-            name: uri
-            required: true
-            schema:
-              type: string
-            description: 'Message definition version URI (requires percent-encoding).'
+        - in: query
+          name: uri
+          required: true
+          schema:
+            type: string
+          description: "Message definition version URI (requires percent-encoding)."
       responses:
-        '200':
-          $ref: '#/components/schemas/MessageDefinitionVersion'
-        '404':
-          description: 'Specified message definition version not found'
+        "200":
+          $ref: "#/components/schemas/MessageDefinitionVersion"
+        "404":
+          description: "Specified message definition version not found"
   /messagecatalog:
     get:
-      summary: 'Get list of message definition groups'
-      description: 'Get all message definition groups in namespace.'
+      summary: "Get list of message definition groups"
+      description: "Get all message definition groups in namespace."
       operationId: getGroups
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
-                items: 
-                   $ref: '#/components/schemas/MessageDefinitionGroup'
+                items:
+                  $ref: "#/components/schemas/MessageDefinitionGroup"
       tags:
-      -  'groups'
+        - "groups"
+    post:
+      summary: Create message definition group
+      description: Create message definition group with specified format in catalog.
+      operationId: createGroup
+      requestBody:
+        description: message definition group description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageDefinitionGroup"
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+        "409":
+          description: MessageDefinition group already exists
+      tags:
+        - "groups"
   /messagecatalog/{group-id}:
     parameters:
       - name: group-id
@@ -48,85 +70,97 @@ paths:
       description: Get message definition group description in catalog.
       operationId: getGroup
       responses:
-        '200': 
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageDefinitionGroup'
-        '404':
+                $ref: "#/components/schemas/MessageDefinitionGroup"
+        "404":
           description: Specified group not found
       tags:
-      - 'groups'
+        - "groups"
+
     put:
-      summary: Create message definition group
-      description: Create message definition group with specified format in catalog.
-      operationId: createGroup 
+      summary: Create or update message definition group
+      description: Create or update message definition group with specified format in catalog.
+      operationId: createGroup
       requestBody:
         description: message definition group description
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MessageDefinitionGroup'
+              $ref: "#/components/schemas/MessageDefinitionGroup"
       responses:
-        '201':
-          description: Created
+        "200":
+          description: Ok when created or updated
           headers:
             Location:
               schema:
                 type: string
-        '409':
+        "409":
           description: MessageDefinition group already exists
       tags:
-      -  'groups'
+        - "groups"
     delete:
       summary: Delete message definition group
-      description: Delete message definition group from catalog.
+      description: Delete message definition group from catalog. This also deletes all content of the group.
       operationId: deleteGroup
       responses:
-        '204':
+        "204":
           description: OK no content
-        '404':
+        "404":
           description: Specified group not found
       tags:
-      -  'groups'
+        - "groups"
   /messagecatalog/{group-id}/messagedefinitions:
     parameters:
-    - name: group-id
-      in: path
-      description: message definition group
-      required: true
-      schema:
-        type: string
+      - name: group-id
+        in: path
+        description: message definition group
+        required: true
+        schema:
+          type: string
     get:
       tags:
-      - 'groups'
-      summary: List message definitions for group id
+        - "groups"
+      summary: List message definitions for this message definition group
       description: Returns message definitions by group id.
       operationId: getMessageDefinitionsByGroup
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
-                items: 
-                  type: string
-        '404':
+                items:
+                  $ref: "#/components/schemas/MessageDefinitionVersion"
+        "404":
           description: Group not found
-    delete:
-      tags:
-      - 'groups'
-      summary: Deletes all  message definitions in group
-      description: Deletes all  message definitions under specified group id.
-      operationId: deleteMessageDefinitionsByGroup
+    post:
+      summary: Register message definition
+      description: >
+        Register message definition.
+        If message definition of specified name does not exist in specified group, message definition is created at version 1.
+        If message definition of specified name exists already in specified group, message definition is created at latest version + 1.
+        If message definition with identical content already exists, existing message definition's ID is returned.
+      operationId: createMessageDefinition
+      requestBody:
+        description: message definition content
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageDefinitionVersion"
       responses:
-        '204':
-          description: OK no content
-        '404':
-          description: Group not found
+        "200":
+          $ref: "#/components/schemas/MessageDefinitionVersion"
+        "400":
+          description: Invalid request
+      tags:
+        - "registration"
   /messagecatalog/{group-id}/messagedefinitions/{messagedefinition-id}:
     parameters:
       - name: group-id
@@ -141,47 +175,25 @@ paths:
         required: true
         schema:
           type: string
-    post: 
-      summary: Register message definition
-      description: >
-        Register message definition.
-        If message definition of specified name does not exist in specified group, message definition is created at version 1.
-        If message definition of specified name exists already in specified group, message definition is created at latest version + 1.
-        If message definition with identical content already exists, existing message definition's ID is returned. 
-      operationId: createMessageDefinition
-      requestBody:
-        description: message definition content
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MessageDefinitionVersion'
-      responses:
-        '200':
-          $ref: '#/components/schemas/MessageDefinitionVersion'
-        '400': 
-          description: Invalid request
-      tags:
-        - 'registration'
     get:
       summary: Get latest version of message definition
-      description: Get latest version of message definition. 
+      description: Get latest version of message definition.
       operationId: getLatestMessageDefinition
-      responses: 
-        '200':
-          $ref: '#/components/schemas/MessageDefinitionVersion'
+      responses:
+        "200":
+          $ref: "#/components/schemas/MessageDefinitionVersion"
       tags:
-        - 'message definitions'
+        - "message definitions"
     delete:
-      summary: Delete message definition
+      summary: Delete message definition.
       operationId: deleteMessageDefinition
       responses:
-        '204':
+        "204":
           description: OK no content
-        '404':
+        "404":
           description: Matching message definition not found
       tags:
-        - 'message definitions'
+        - "message definitions"
   /messagecatalog/{group-id}/messagedefinitions/{messagedefinition-id}/versions:
     parameters:
       - name: group-id
@@ -201,18 +213,18 @@ paths:
       description: Get list of versions for specified message definition
       operationId: getMessageDefinitionVersions
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: array
-                items: 
-                  type: integer
+                items:
+                  $ref: "#/components/schemas/MessageDefinitionVersion"
       tags:
-        - 'versions'
-  /messagecatalog/{group-id}/messagedefinitions/{messagedefinition-id}/versions/{version-number}:
-    parameters:
+        - "versions"
+  ? /messagecatalog/{group-id}/messagedefinitions/{messagedefinition-id}/versions/{version-number}
+  : parameters:
       - name: group-id
         in: path
         description: message definition group
@@ -235,22 +247,21 @@ paths:
       summary: Get specified version of message definition
       operationId: getMessageDefinitionVersion
       responses:
-        '200':
-          $ref: '#/components/schemas/MessageDefinitionVersion'
-        '404':
+        "200":
+          $ref: "#/components/schemas/MessageDefinitionVersion"
+        "404":
           description: Specified message definition not found
       tags:
-        - 'versions'
+        - "versions"
     delete:
       summary: Delete specified version of message definition
       operationId: deleteMessageDefinitionVersion
       responses:
-        '204':
+        "204":
           description: OK no content
       tags:
-        - 'versions'
-
-components: 
+        - "versions"
+components:
   schemas:
     MessageDefinitionGroup:
       type: object
@@ -282,6 +293,8 @@ components:
       properties:
         id:
           type: string
+        version:
+          type: string
         authority:
           type: string
         format:
@@ -301,4 +314,147 @@ components:
         updatedtimeutc:
           type: string
           format: date-time
- 
+        definition:
+          oneOf:
+            - $ref: "#/components/schemas/CloudEventsMetaSchema"
+            - $ref: "#/components/schemas/AMQPMetaSchema"
+            - $ref: "#/components/schemas/MQTTMetaSchema"
+            - $ref: "#/components/schemas/NATSMetaSchema"
+            - type: object
+              description: "Allows for any other metaschema object"
+    CloudEventsMetaSchema:
+      type: object
+      properties:
+        attributes:
+          type: object
+          properties:
+            specversion:
+              type: string
+              default: "1.0"
+            id:
+              type: string
+            source:
+              type: string
+            subject:
+              type: string
+            type:
+              type: string
+            datacontenttype:
+              type: string
+            dataschema:
+              type: string
+          required:
+            - "type"
+    AMQPMetaSchema:
+      type: object
+      properties:
+        header:
+          type: object
+          properties:
+            durable:
+              type: boolean
+            priority:
+              type: number
+            ttl:
+              type: number
+        deliveryannotations:
+          type: object
+        messageannotations:
+          type: object
+        properties:
+          type: object
+          properties:
+            messageid:
+              type: string
+            userid:
+              type: string
+            to:
+              type: string
+            subject:
+              type: string
+            replyto:
+              type: string
+            correlationid:
+              type: string
+            contenttype:
+              type: string
+            contentencoding:
+              type: string
+            absoluteexpirytime:
+              type: string
+            creationtime:
+              type: string
+            groupid:
+              type: string
+            groupsequence:
+              type: string
+            replytogroupid:
+              type: string
+        applicationdata:
+          type: object
+          properties:
+            dataschema:
+              type: string
+              format: uri
+              description: "reference to a schema object"
+            amqpencoding:
+              type: string
+              enum:
+                - "Data"
+                - "Value"
+                - "Sequence"
+        applicationproperties:
+          type: object
+        footer:
+          type: object
+    MQTTMetaSchema:
+      type: object
+      properties:
+        publish:
+          type: object
+          properties:
+            mqttversion:
+              type: string
+              default: "5.0"
+            qos:
+              type: number
+            retain:
+              type: boolean
+            topicname:
+              type: string
+            payloadformat:
+              type: number
+            expiryinterval:
+              type: number
+            responsetopic:
+              type: string
+            correlationdata:
+              type: string
+            contenttype:
+              type: string
+        userproperty:
+          type: object
+        payload:
+          type: object
+          properties:
+            dataschema:
+              type: string
+              format: uri
+              description: "reference to a schema object"
+    NATSMetaSchema:
+      type: object
+      properties:
+        pub:
+          type: object
+          properties:
+            subject:
+              type: string
+            replyto:
+              type: string
+        payload:
+          type: object
+          properties:
+            dataschema:
+              type: string
+              format: uri
+              description: "reference to a schema object"

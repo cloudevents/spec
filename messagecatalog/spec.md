@@ -195,10 +195,10 @@ share the common properties of the message definition and the immutable
 properties of the definition, specifically `id` and `format`, cannot be
 overridden by versions added later.
 
-The API is designed such that a message definition can only be created by
+The API is created such that a message definition can only be created by
 posting an initial version and that the message definition can only be changed
 by posting a new version. Existing versions can be individually retrieved and
-deleted but not modified.
+deleted, but not modified.
 
 A newer message definition version might introduce breaking changes or it might
 only introduce careful changes that preserve compatibility. These strategies are
@@ -454,9 +454,11 @@ Message catalog object deleted event:
     "description" : "Raised when an object has been deleted from the catalog",
     "format" : "CloudEvents",
     "version" : 1,
-    "attributes" : {
-      "specversion" : "1.0",
-      "type" : "io.cloudevents.messagecatalog.deleted.v1",
+    "definition" : {
+      "attributes" : {
+        "specversion" : "1.0",
+        "type" : "io.cloudevents.messagecatalog.deleted.v1",
+      }
     }
 }
 ```
@@ -469,12 +471,14 @@ Fictitious storage service "storage object created" event:
     "description" : "Raised when an object has been created",
     "format" : "CloudEvents",
     "version" : 1,
-    "attributes" : {
-      "specversion" : "1.0",
-      "type" : "com.example.storage.object.created",
-      "subject" : "/{container}/{filepath}",
-      "dataschema" : "http://schemas.example.com/schemagroups/storage/schema/objectcreated/version/1"
-      "datacontenttype" : "application/json"
+    "definition": {
+      "attributes" : {
+        "specversion" : "1.0",
+        "type" : "com.example.storage.object.created",
+        "subject" : "/{container}/{filepath}",
+        "dataschema" : "http://schemas.example.com/schemagroups/storage/schema/objectcreated/version/1"
+        "datacontenttype" : "application/json"
+      }
     }
 }
 ```
@@ -585,6 +589,26 @@ document and an indicator for how the data is encoded in the message.
 
 - `dataschema` : optional URI reference to a schema object
 
+
+### 3.4. CNCF NATS
+
+The NATS metaschema describes the content of a NATS PUB message.
+
+#### 3.3.1. `pub` object
+
+The `pub` object has a set of well-known fields defined by the NATS client
+specification that are not extensible. For detailed descriptions refer to
+the NATS protocol documentation.
+
+- `subject` : String
+- `replyto` : String
+#### 3.3.2 `payload` object
+
+Optional reference to a schema document and an indicator for how the data is
+encoded in the message.
+
+- `dataschema` : optional URI reference to a schema object
+
 ## 4. HTTP ("REST") API
 
 This section informally describes the HTTP API binding of this message catalog.
@@ -670,33 +694,23 @@ All message definitions of a group can be deleted DELETE on the
 #### 4.3.3. Add a new message definition version
 
 A new Message definition or a new version of a Message definition is added to
-the version collection with a POST on the desired Message definition's path in
-the Message definitions collection, for instance
-`/messagecatalog/mygroup/messagedefinitions/myMessage definition`.
+the version collection with a POST on the message definition collection
+`/messagecatalog/mygroup/messagedefinitions/`.
 
-This operation will either create a new Message definition and store the
-document under the first version identifier assigned by the server or will
-update the Message definition by assigning a new version to the given document
+This operation will either create a new message definition and store the
+document under the version identifier assigned by the server or will
+update the message definition by assigning a new version to the given document
 and storing it.
 
-The payload of the request is the Message definition document. All further
-attributes such as the `format` indicator are passed either via the query string
-or as HTTP headers.
-
-The ´Content-Type´ for the payload MUST be preserved by the catalog and returned
-when the Message definition is requested, independent of the format identifier.
+The payload of the request is the message definition version object.
 
 #### 4.3.4. Get the latest version of a Message definition
 
 The latest version of a Message definition is retrieved via a GET on Message
 definition's path in the Message definitions collection, for instance
-`/messagecatalog/mygroup/messagedefinitions/myMessage definition`.
+`/messagecatalog/myGroup/messagedefinitions/myMessageDefinition`.
 
-The returned payload is the Message definition document. Further attributes such
-as the `description` and the `format` indicator are returned as HTTP headers.
-
-The returned ´Content-Type´ is the same that was passed when the Message
-definition version was registered.
+The returned payload is the Message definition version object.
 
 The HEAD method SHOULD also be implemented.
 
@@ -704,7 +718,7 @@ The HEAD method SHOULD also be implemented.
 
 A Message definition including all its versions is deleted with a DELETE on
 Message definition's path in the Message definitions collection, for instance
-`/messagecatalog/mygroup/messagedefinitions/myMessage definition`
+`/messagecatalog/mygroup/messagedefinitions/myMessageDefinition`
 
 ### 4.4 Operations at the `versions` level
 
@@ -713,7 +727,7 @@ Message definition's path in the Message definitions collection, for instance
 Versions of a message definition within a message definition group are
 enumerated with a GET on the `versions` collection of the Message definition,
 for instance
-`/messagecatalog/mygroup/messagedefinitions/myMessage definitions/versions`.
+`/messagecatalog/mygroup/messagedefinitions/myMessageDefinition/versions`.
 
 The result is a JSON encoded array of integers enumerating the `version` values
 of the Message definitions within the group.
@@ -722,13 +736,7 @@ of the Message definitions within the group.
 
 A specific version of a message definition is retrieved via a GET on Message
 definition version's path in the `versions` collection, for instance
-`/messagecatalog/mygroup/messagedefinitions/myMessage definition/versions/myversion`.
-
-The returned payload is the Message definition document. Further attributes such
-as the `description` and the `format` indicator are returned as HTTP headers.
-
-The returned ´Content-Type´ is the same that was passed when the Message
-definition version was registered.
+`/messagecatalog/mygroup/messagedefinitions/myMessageDefinition/versions/myversion`.
 
 The HEAD method SHOULD also be implemented.
 
@@ -743,20 +751,14 @@ location may not be reachable from everywhere. That is a key motivation for
 replication.
 
 The operation to obtain a Message definition version is a GET on
-`/Message definition?uri={uri}`, with the required parameter being the Message
+`/messagedefinition?uri={uri}`, with the required parameter being the Message
 definition version URI.
 
-The returned payload is the Message definition document. Further attributes such
-as the `description` and the `format` indicator are returned as HTTP headers.
-
-The returned ´Content-Type´ is the same that was passed when the Message
-definition version was registered.
+The returned payload is the Message definition document. 
 
 The HEAD method SHOULD also be implemented.
 
-4. Replication Model and State Change Events
-
----
+## 4. Replication Model and State Change Events
 
 Many eventing scenarios require that events cross from private networks into
 public networks (and possibly back into a different private network) and it is
@@ -783,7 +785,7 @@ The synchronization is accomplished by a combination of two mechanisms:
 
 1. The Message Catalog API explained in [section 3](#3-http-rest-api) and
    formally defined in the
-   [OpenAPI spec](https://microsoft-my.sharepoint.com/personal/clemensv_microsoft_com/Documents/schemaregistry.yaml)
+   [OpenAPI spec](../schemaregistry/schemaregistry.yaml)
    allows for Message definition information to be read from a source and
    written imperatively to a target: A target can pull changes or a source can
    push changes.
@@ -844,9 +846,9 @@ implementation specific.
 The names of the message definition groups and of the Message definitions MAY
 mirror those from the source catalog, but they MAY also differ. Each Message
 definition version is always accessible under both
-[its local path a given catalog](#342-get-a-specific-schema-version) and under
+[its local path a given catalog](#442-get-a-specific-message-definition-version) and under
 its globally unique
-[Message definition version URI](#343-get-a-specific-schema-version-by-schema-version-uri).
+[Message definition version URI](#443-get-a-specific-message-definition-version-by-message-definition-version-uri).
 
 ### 4.4 Pull replication
 
@@ -870,15 +872,14 @@ Event-driven replication uses CloudEvents to notify interested parties of
 changes in the source catalog such that those parties can
 [pull](#44-pull-replication) changes immediately and as they become available.
 
-Each catalog SHOULD offer a
-[Subscription API](https://microsoft-my.sharepoint.com/personal/clemensv_microsoft_com/subscriptions/spec.md)
+Each catalog SHOULD offer a [Subscription API](../subscriptions/spec.md)
 endpoint, either directly or using some middleware, to allow interested parties
 to subscribe to these change events.
 
-The subscription's `source` MUST be the root of the Message Catalog. A
-[prefix filter](https://microsoft-my.sharepoint.com/personal/clemensv_microsoft_com/subscriptions/spec.md#prefix-filter-dialect)
-on the `subject` attribute MAY be used to scope the subscription to a particular
-message definition group or Message definition.
+The subscription's `source` MUST be the root of the Message Catalog. A [prefix
+filter](../subscriptions/spec.md#prefix-filter-dialect) on the `subject`
+attribute MAY be used to scope the subscription to a particular message
+definition group or Message definition.
 
 The subscribing party registers a notification sink of its choosing.
 
