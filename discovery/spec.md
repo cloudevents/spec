@@ -608,7 +608,8 @@ The following additional constraints apply:
 - The feature names are case sensitive.
 - The `servicefilterattributes` property MUST be present, and MUST have at
   least the `name` attribute in its list. The filter attribute names are case
-  sensitive.
+  sensitive. See the [`/services` API](#get-services) for more information
+  about the format of nested attribute names.
 - The `pagination` attribute is OPTIONAL with an implied default value of
   `false`.
 - The `update` attribute it OPTIONAL with an implied default value of `false`.
@@ -631,25 +632,55 @@ The format for the `filter` query parameter MUST be:
 ?filter=ATTRIBUTE[=VALUE]
 ```
 
-The `=VALUE` portion is OPTIONAL and if not present then the implied meaning
-is that the specified attribute in the Service has a non-empty value.
+Nested attribute names MUST be specified by using a dot (`.`) as the
+nesting operator. For example: `events.type` references the `type`
+attribute under the `events` attribute.
 
-Multiple attribute/value combinations MAY be specified as separate `filter`
-query parameters. When there are multiple filters, the resulting set of
-Services MUST only include ones that match all of the filters specified.
-Matching of attribute names and values MUST be case sensitive.
+
+The following rules constrain the filter processing:
+- The `=VALUE` portion is OPTIONAL and if not present then the implied
+  meaning is that the filter MUST only match Services that contain the
+  specified attribute with a non-empty-string value.
+- a `VALUE` of "" (empty string) is valid and a filter expression of
+  `?filter=ATTRIBUTE=` MUST only match Services that contain the specified
+  attribute with an empty string value. Note that an attribute with no
+  value (or `null` depending on the data store used) MUST be treated the
+  same as an attribute with an empty string (`""`) for the purpose of this
+  filter feature.
+- when `VALUE` is a non-empty string, then the filter expression MUST only
+  match Services that contain the specified attribute with `VALUE` in any
+  part of its value.
+- Matching of attribute names MUST be case sensitive.
+- Matching of attribute values MUST be case insensitive.
+- If there are mulitple filter expressions, they MUST be specified as separate
+  `filter` query parameters. When there are multiple filters, the resulting
+  set of Services MUST only include ones that match all of the filters
+  specified. When multiple nested attribute names are used, each nested
+  attribute MUST be treated independently and the nested attributes do not
+  need to be present in the same nested scope. See the sample filters below.
+- Requests with unsupported filter attributes, MUST be rejected with a
+  `400 Bad Request` response. Endpoints SHOULD return an error message that
+  indicates which filter attributes were not supported.
 
 Discovery endpoints MUST support filtering by the following attributes:
 
 - `name`
 
-Note: an empty result set is not an error and a zero sized array MUST be
-returned in those cases.
+Other attribute MAY be supported and SHOULD be included in the Features API
+output.
 
-Requests with unsupported filter attributes, MUST be rejected with a
-`400 Bad Request` response. Endpoints SHOULD return an error message that
-indicates which filter attributes were not supported. Endpoints MAY support
-additional filter attributes.
+Note: an empty result set is not an error and a `200 OK` with a zero sized
+array MUST be returned in those cases.
+
+Some sample filter expressions:
+| Expression | Results |
+| :--- | :--- |
+| ?filter=description | All Services that have a non-empty string value for `description` |
+| ?filter=description= | All Services that have no value for `description`. Note: either `null` or `""` is a match |
+| ?filter=description=test&filter=name=mine | All Services that have a `description` containing the string `test` (in any case), and a `name` containing the string `mine` (in any case) |
+| ?filter=description=test,name=mine | All Services that have a `description` with the string `test,name=mine` (in any case) as part of its value |
+| ?filter=events.type=abc&filter=events.description=mine | All Services that have an `events.type` containing the string `abc` (in any case) and an `events.description` containing `mine` (in any case) but these two attribute do not need to be part of the same `event` definition |
+
 
 Any Service previously returned to a client that does not appear in this
 result can be assumed to be no longer available in the scope of the query
@@ -658,7 +689,8 @@ deleted. In the filtered case it is not possible to know if the Service has
 been deleted or if the filters no longer apply to that Service, and therefore
 it can not be assumed to be deleted.
 
-In the case of `200 OK`, the response format MUST adhere to the following:
+In the case of `200 OK`, the response format MUST be a JSON array of Services
+that adheres to the following:
 
 ```
 200 OK
@@ -679,6 +711,10 @@ Content-Type: application/json
 Implementations MAY use the [pagination](../pagination/spec.md) specification
 if the number of Services returned is large. Clients SHOULD be
 prepared to support paginated responses.
+
+Implementations MAY choose to support other filter mechanism, in particular
+to support a richer set of queries. Support for those SHOULD be expressed
+via the Features API.
 
 #### `GET /services/{id}`
 
