@@ -36,22 +36,18 @@
           "type": "string"
         }
       },
-      "messagedefinitions" : {
-        "type" : "array",
-        "items" : 
-        {
-            "$ref" : "#MessageDefinitionVersion"
+      "messagedefinitions": {
+        "type": "array",
+        "items": {
+          "$ref": "#MessageDefinition"
         }
       }
     }
   },
-  "MessageDefinitionVersion": {
+  "MessageDefinitionBase": {
     "type": "object",
     "properties": {
       "id": {
-        "type": "string"
-      },
-      "version": {
         "type": "string"
       },
       "authority": {
@@ -80,28 +76,58 @@
       "updatedtimeutc": {
         "type": "string",
         "format": "date-time"
-      },
-      "definition": {
-        "oneOf": [
-          {
-            "$ref": "#CloudEventsMetaschema"
-          },
-          {
-            "$ref": "#AMQPMetaschema"
-          },
-          {
-            "$ref": "#MQTTMetaschema"
-          },
-          {
-            "$ref": "#NATSMetaschema"
-          },
-          {
-            "type": "object",
-            "description": "Allows for any other Metaschema object"
-          }
-        ]
       }
     }
+  },
+  "MessageDefinition": {
+    "allOf": [
+      {
+        "$ref": "#MessageDefinitionBase"
+      },
+      {
+        "type": "object",
+        "schema": {
+          "versions": {
+            "$ref": "#MessageDefinitionVersion"
+          }
+        }
+      }
+    ]
+  },
+  "MessageDefinitionVersion": {
+    "allOf": [
+      {
+        "$ref": "#MessageDefinitionBase"
+      },
+      {
+        "type": "object",
+        "schema": {
+          "version": {
+            "type": "string"
+          },
+          "definition": {
+            "oneOf": [
+              {
+                "$ref": "#CloudEventsMetaschema"
+              },
+              {
+                "$ref": "#AMQPMetaschema"
+              },
+              {
+                "$ref": "#MQTTMetaschema"
+              },
+              {
+                "$ref": "#NATSMetaschema"
+              },
+              {
+                "type": "object",
+                "description": "Allows for any other Metaschema object"
+              }
+            ]
+          }
+        }
+      }
+    ]
   },
   "PropertyValueTemplate": {
     "type": "object",
@@ -206,7 +232,7 @@
       }
     ]
   },
-  "DataSchemaPropertyValueTemplate": {
+  "DataSchemaPropertyValueReference": {
     "allOf": [
       {
         "$ref": "#PropertyValueTemplate"
