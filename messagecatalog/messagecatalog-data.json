@@ -1,0 +1,465 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://cloudevents.io/schemas/messagecatalog.json",
+  "MessageDefinitionGroup": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "format": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "documentation": {
+        "type": "string"
+      },
+      "documentationformat": {
+        "type": "string"
+      },
+      "tags": {
+        "type": "string"
+      },
+      "createdtimeutc": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedtimeutc": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "groupProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "messagedefinitions" : {
+        "type" : "array",
+        "items" : 
+        {
+            "$ref" : "#MessageDefinitionVersion"
+        }
+      }
+    }
+  },
+  "MessageDefinitionVersion": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      },
+      "authority": {
+        "type": "string"
+      },
+      "format": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": {
+        "type": "string"
+      },
+      "tags": {
+        "type": "string"
+      },
+      "documentation": {
+        "type": "string"
+      },
+      "documentationformat": {
+        "type": "string"
+      },
+      "createdtimeutc": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedtimeutc": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "definition": {
+        "oneOf": [
+          {
+            "$ref": "#CloudEventsMetaschema"
+          },
+          {
+            "$ref": "#AMQPMetaschema"
+          },
+          {
+            "$ref": "#MQTTMetaschema"
+          },
+          {
+            "$ref": "#NATSMetaschema"
+          },
+          {
+            "type": "object",
+            "description": "Allows for any other Metaschema object"
+          }
+        ]
+      }
+    }
+  },
+  "PropertyValueTemplate": {
+    "type": "object",
+    "properties": {
+      "description": {
+        "type": "string"
+      },
+      "required": {
+        "type": "boolean",
+        "default": false
+      }
+    }
+  },
+  "StringPropertyValueTemplate": {
+    "allOf": [
+      {
+        "$ref": "#PropertyValueTemplate"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "TimestampPropertyValueTemplate": {
+    "allOf": [
+      {
+        "$ref": "#PropertyValueTemplate"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "IntegerPropertyValueTemplate": {
+    "allOf": [
+      {
+        "$ref": "#PropertyValueTemplate"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          }
+        }
+      }
+    ]
+  },
+  "BooleanPropertyValueTemplate": {
+    "allOf": [
+      {
+        "$ref": "#PropertyValueTemplate"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "boolean"
+          }
+        }
+      }
+    ]
+  },
+  "UriReferencePropertyValueTemplate": {
+    "allOf": [
+      {
+        "$ref": "#PropertyValueTemplate"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "UriPropertyValueTemplate": {
+    "allOf": [
+      {
+        "$ref": "#PropertyValueTemplate"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    ]
+  },
+  "DataSchemaPropertyValueTemplate": {
+    "allOf": [
+      {
+        "$ref": "#PropertyValueTemplate"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    ]
+  },
+  "AnyPropertyValueTemplate": {
+    "oneOf": [
+      {
+        "$ref": "#StringPropertyValueTemplate"
+      },
+      {
+        "$ref": "#BooleanPropertyValueTemplate"
+      },
+      {
+        "$ref": "#IntegerPropertyValueTemplate"
+      },
+      {
+        "$ref": "#TimestampPropertyValueTemplate"
+      },
+      {
+        "$ref": "#UriPropertyValueTemplate"
+      },
+      {
+        "$ref": "#UriReferencePropertyValueTemplate"
+      }
+    ]
+  },
+  "CloudEventsMetaschema": {
+    "type": "object",
+    "properties": {
+      "attributes": {
+        "type": "object",
+        "properties": {
+          "specversion": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "id": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "source": {
+            "$ref": "#UriReferencePropertyValueTemplate"
+          },
+          "subject": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "type": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "datacontenttype": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "dataschema": {
+            "$ref": "#DataSchemaPropertyValueTemplate"
+          },
+          "time": {
+            "$ref": "#TimestampPropertyValueTemplate"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    }
+  },
+  "AMQPMetaschema": {
+    "type": "object",
+    "properties": {
+      "header": {
+        "type": "object",
+        "properties": {
+          "durable": {
+            "$ref": "#BooleanPropertyValueTemplate"
+          },
+          "priority": {
+            "$ref": "#IntegerPropertyValueTemplate"
+          },
+          "ttl": {
+            "$ref": "#IntegerPropertyValueTemplate"
+          }
+        }
+      },
+      "deliveryannotations": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#AnyPropertyValueTemplate"
+        }
+      },
+      "messageannotations": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#AnyPropertyValueTemplate"
+        }
+      },
+      "properties": {
+        "type": "object",
+        "properties": {
+          "messageid": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "userid": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "to": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "subject": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "replyto": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "correlationid": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "contenttype": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "contentencoding": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "absoluteexpirytime": {
+            "$ref": "#TimestampPropertyValueTemplate"
+          },
+          "creationtime": {
+            "$ref": "#TimestampPropertyValueTemplate"
+          },
+          "groupid": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "groupsequence": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "replytogroupid": {
+            "$ref": "#StringPropertyValueTemplate"
+          }
+        }
+      },
+      "applicationdata": {
+        "type": "object",
+        "properties": {
+          "dataschema": {
+            "$ref": "#DataSchemaPropertyValueTemplate",
+            "description": "reference to a schema object"
+          },
+          "amqpencoding": {
+            "type": "string",
+            "enum": [
+              "Data",
+              "Value",
+              "Sequence"
+            ]
+          }
+        }
+      },
+      "applicationproperties": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#AnyPropertyValueTemplate"
+        }
+      },
+      "footer": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#AnyPropertyValueTemplate"
+        }
+      }
+    }
+  },
+  "MQTTMetaschema": {
+    "type": "object",
+    "properties": {
+      "publish": {
+        "type": "object",
+        "properties": {
+          "mqttversion": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "qos": {
+            "$ref": "#IntegerPropertyValueTemplate"
+          },
+          "retain": {
+            "$ref": "#BooleanPropertyValueTemplate"
+          },
+          "topicname": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "payloadformat": {
+            "$ref": "#IntegerPropertyValueTemplate"
+          },
+          "expiryinterval": {
+            "$ref": "#IntegerPropertyValueTemplate"
+          },
+          "responsetopic": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "correlationdata": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "contenttype": {
+            "$ref": "#StringPropertyValueTemplate"
+          }
+        }
+      },
+      "userproperty": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#AnyPropertyValueTemplate"
+        }
+      },
+      "payload": {
+        "type": "object",
+        "properties": {
+          "dataschema": {
+            "$ref": "#DataSchemaPropertyValueTemplate",
+            "description": "reference to a schema object"
+          }
+        }
+      }
+    }
+  },
+  "NATSMetaschema": {
+    "type": "object",
+    "properties": {
+      "pub": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "$ref": "#StringPropertyValueTemplate"
+          },
+          "replyto": {
+            "$ref": "#StringPropertyValueTemplate"
+          }
+        }
+      },
+      "payload": {
+        "type": "object",
+        "properties": {
+          "dataschema": {
+            "$ref": "#DataSchemaPropertyValueTemplate",
+            "description": "reference to a schema object"
+          }
+        }
+      }
+    }
+  }
+}

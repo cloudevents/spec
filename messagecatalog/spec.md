@@ -2,10 +2,11 @@
 
 ## Abstract
 
-This specification defines a simple API for storing, organizing, and accessing
-catalogs of message definitions for use with event and messaging infrastructures
-using common, standardized event and message information models like those of
-CNCF CloudEvents, CNCF NATS, OASIS AMQP, OASIS MQTT and others.
+This specification defines a data model, document format, and API for
+storing, organizing, and accessing catalogs of message definitions for use with
+event and messaging infrastructures using common, standardized event and message
+information models like those of CNCF CloudEvents, CNCF NATS, OASIS AMQP, OASIS
+MQTT and others.
 
 ## Status of this document
 
@@ -36,6 +37,14 @@ message definitions belonging to the group describe messages that the
 producer(s) might send. The catalog can store multiple versions of a message
 definition.
 
+When a defined message is meant to carry a payload, this specification allows
+fro references to an external schema document or to embed such a document. The
+external reference MAY refer to a CNCF Schema Registry endpoint.
+
+Structurally and functionally, this message catalog API is very similar to the
+CNCF Schema Registry API, and it is reasonable and desirable for those APIs to
+be collocated in the same service and on the same endpoint.
+
 The message definition entries in the catalog contain some fixed metadata
 information. That fixed information MUST uniquely identify the type of message
 and depends on the particular message information model. For example, for CNCF
@@ -54,13 +63,15 @@ information for each entry.
   documents that are stored and retrieved through the API are such versions. The
   identifying criteria of a definition MUST be identical across versions.
 
-A message definition MAY refer to a CNCF Schema Registry endpoint for describing
-structured message payloads and/or the structure of complex metadata fields
-where required.
+A message definition group, including all definitions and its versions, can be
+stored and shared in a single document. A folder in a git repository containing
+such documents is also a catalog in the sense of this specification. 
 
-Structurally and functionally, this message catalog API is very similar to the
-CNCF Schema Registry API, and it is reasonable and desirable for those APIs to
-be collocated in the same service and on the same endpoint.
+For interoperability and sharing design-time definitions across system
+boundaries, conformance to a common data model and document format is most
+important and it is assumes that the authoritative source for many definitions
+will into be a document under source control that is then shared at runtime via
+the common API defined here.
 
 ## 2. Message Catalog Elements
 
@@ -69,6 +80,11 @@ This section further describes the elements enumerated in the introduction.
 All data types used in this section are defined in the CNCF CloudEvents
 specification and MUST follow the respective formatting and syntax rules unless
 specified otherwise.
+
+These type constraints permit for the message catalog definitions to be
+consistently mapped into the data encodings supported by CloudEvents,
+specifically also into Apache Avro, JSON, Protobuf, and AMQP. All examples in
+this document use JSON notation.
 
 ### 2.1. Message definition group
 
@@ -404,6 +420,7 @@ of the containing message definition object.
 - Constraints:
   - OPTIONAL
   - Assigned by the server.
+
 
 ## 3. Message definition formats
 
