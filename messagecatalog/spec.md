@@ -2,9 +2,9 @@
 
 ## Abstract
 
-This specification defines a data model, document format, and API for
-storing, organizing, and accessing catalogs of message definitions for use with
-event and messaging infrastructures using common, standardized event and message
+This specification defines a data model, document format, and API for storing,
+organizing, and accessing catalogs of message definitions for use with event and
+messaging infrastructures using common, standardized event and message
 information models like those of CNCF CloudEvents, CNCF NATS, OASIS AMQP, OASIS
 MQTT and others.
 
@@ -25,7 +25,7 @@ destination for such subscriptions and handles the delivered information.
 ## 1. Introduction
 
 Message and event catalogs are useful tools at design and development time
-because they allow explorative discovery of the kinds of messages that are
+because they allow interactive discovery of the kinds of messages that are
 available for subscription from a system and to find out, for instance, which
 event sources raise them. A chosen message definition catalog entry can serve as
 the basis for generating strongly typed representations of the message or other
@@ -38,12 +38,26 @@ producer(s) might send. The catalog can store multiple versions of a message
 definition.
 
 When a defined message is meant to carry a payload, this specification allows
-fro references to an external schema document or to embed such a document. The
+for references to an external schema document or to embed such a document. The
 external reference MAY refer to a CNCF Schema Registry endpoint.
 
 Structurally and functionally, this message catalog API is very similar to the
 CNCF Schema Registry API, and it is reasonable and desirable for those APIs to
 be collocated in the same service and on the same endpoint.
+
+The Message Catalog and Schema Registry data formats and APIs exist in parallel
+because they serve different purposes. The Schema Registry is a general purpose
+store for serialization and validation schemas documents for structured data
+that is useful for describing message and event payloads, but also in all other
+scenarios where structured data is handled. For instance, a data structure may
+be sent to a system inside of a message but may subsequently be stored inside a
+data lake without the message envelope. The Message Catalog is more constrained
+and focused on message definitions, which covers both payload and metadata of
+the message. In environments where data structures are shared across multiple
+services and applications, the Schema Registry and the Message Catalog might be
+managed separately, with Message Catalog entries always referring to data type
+definitions held in the Schema Registry. In simple applications, all data type
+definitions for payloads may be held inline inside the Message Catalog.
 
 The message definition entries in the catalog contain some fixed metadata
 information. That fixed information MUST uniquely identify the type of message
@@ -65,7 +79,7 @@ information for each entry.
 
 A message definition group, including all definitions and its versions, can be
 stored and shared in a single document. A folder in a git repository containing
-such documents is also a catalog in the sense of this specification. 
+such documents is also a catalog in the sense of this specification.
 
 For interoperability and sharing design-time definitions across system
 boundaries, conformance to a common data model and document format is most
@@ -75,7 +89,7 @@ the common API defined here.
 
 ## 2. Message Catalog Elements
 
-This section further describes the elements enumerated in the introduction.
+This section describes the elements enumerated in the introduction.
 
 All data types used in this section are defined in the CNCF CloudEvents
 specification and MUST follow the respective formatting and syntax rules unless
@@ -97,7 +111,7 @@ related either by ownership or by a shared subject matter context.
 Implementations of this specification MAY associate access control rules with
 message definition groups. For instance, a user or a group of users might be
 given write access only to a particular message definition group that their
-organization owns. If trade secret protection is required for an application or
+organization owns. If trade secret protection is necessary for an application or
 parts of it and the definition structure would give some of those away, read
 access to a group of definitions might likewise be restricted.
 
@@ -249,11 +263,11 @@ scenarios, the authority might simply lay with any producer of events, and
 message definitions might be inferred from code artifacts without developers
 being aware.
 
-The [authority](#authority-definition-authority) attribute of the message
+The [authority](#authority-message-definition) attribute of the message
 definition object reflects the controlling entity. The
-[authority](#authority-definition-authority) attribute MAY be set to any URI.
-The URI does not have to correspond to a resolvable network endpoint, even if a
-URI scheme like "http" is used in order to borrow its generally well-understood
+[authority](#authority-message-definition) attribute MAY be set to any URI. The
+URI does not have to correspond to a resolvable network endpoint, even if a URI
+scheme like "http" is used in order to borrow its generally well-understood
 structure. If the URI does not correspond to an active network endpoint,
 ownership rights of corresponding DNS domain name owners SHOULD nevertheless be
 respected.
@@ -264,35 +278,37 @@ reflecting the governing entity, like `https://messagecatalog.corp.example.com`.
 ### 2.2.2. Message definition version URI
 
 To refer to a specific message definition object, unambiguous references to
-specific [definition versions](#22-schema-and-schema-version) are needed. These
-references can be resolved into definition documents with the help of a catalog.
+specific
+[definition versions](#22-message-definition-and-message-definition-version) are
+needed. These references can be resolved into definition documents with the help
+of a catalog.
 
 The message definition version URI is composed from the
-[authority](#authority-definition-authority) (as the base URI) and the
-[message definition version id](#id-definition-version-id).
+[authority](#authority-message-definition) (as the base URI) and the
+[message definition version id](#version-message-definition-version).
 
 In the default case, this URI corresponds directly to the URI of the
-["getMessage definitionVersion"](#342-get-a-specific-schema-version) API
-operation, which is convenient for simple usage scenarios.
+["getMessage definitionVersion"](#442-get-a-specific-message-definition-version)
+API operation, which is convenient for simple usage scenarios.
 
-In [replication scenarios](#4-replication-model-and-state-change-events), the
-URI might not correspond to a resolvable network address, as permitted for the
-authority URI in the previous section. A consumer SHOULD then be configured with
-a fixed message catalog endpoint for it to use, and obtain definitions
-identified by a URI using the
+In [replication scenarios](#45-event-driven-replication), the URI might not
+correspond to a resolvable network address, as permitted for the authority URI
+in the previous section. A consumer SHOULD then be configured with a fixed
+message catalog endpoint for it to use, and obtain definitions identified by a
+URI using the
 ["getMessage definitionVersionByURI"](#342-get-a-specific-schema-version) API
 operation on that endpoint, rather than trying to resolve the URI directly.
 
 The following table shows some examples for a catalog hosted at
 `https://example.com/messagecatalog`:
 
-| [authority](#authority-definition-authority) | [id](#id-definition-version-id)                               | Message definition URI                                                                         |
-| -------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| (empty, therefore implied)                   | `342`                                                         | <https://example.com/messagecatalog/342>                                                       |
-| <https://example.com/messagecatalog>         | `342`                                                         | `https://example.com/messagecatelog/342`                                                       |
-| `http://messagecatalog.example.com/`         | `/mygroup/messagedefinitions/myMessage definition/versions/2` | <http://messagecatalog.example.com/mygroup/messagedefinitions/myMessage definition/versions/2> |
-| `http://messagecatalog.example.org/`         | `http://messagedefinitions.example.org/41751`                 | <http://messagecatalog.example.org/41751>                                                      |
-| `urn:example:messagecatalog`                 | `a1b2c3d4`                                                    | `urn:example:messagecatalog:a1b2c3d4`                                                          |
+| [authority](#authority-message-definition) | [id](#id-message-definition)                                  | Message definition URI                                                                         |
+| ------------------------------------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| (empty, therefore implied)                 | `342`                                                         | <https://example.com/messagecatalog/342>                                                       |
+| <https://example.com/messagecatalog>       | `342`                                                         | `https://example.com/messagecatelog/342`                                                       |
+| `http://messagecatalog.example.com/`       | `/mygroup/messagedefinitions/myMessage definition/versions/2` | <http://messagecatalog.example.com/mygroup/messagedefinitions/myMessage definition/versions/2> |
+| `http://messagecatalog.example.org/`       | `http://messagedefinitions.example.org/41751`                 | <http://messagecatalog.example.org/41751>                                                      |
+| `urn:example:messagecatalog`               | `a1b2c3d4`                                                    | `urn:example:messagecatalog:a1b2c3d4`                                                          |
 
 ### 2.2.4. Message definition attributes
 
@@ -421,7 +437,6 @@ of the containing message definition object.
   - OPTIONAL
   - Assigned by the server.
 
-
 ## 3. Message definition formats
 
 This section defines metaschemas for several well-known message and event
@@ -432,15 +447,98 @@ A metaschema is a JSON document containing an object with an object-typed
 property for each logical section of the event/message to be described. For
 instance, for CNCF CloudEvents, there is only an "attributes" section. The AMQP
 metaschema reflects the various sections of the AMQP data model.
+### 3.1. Common data types
 
-The metaschemas use the RFC6570 URI template expression language to indicate
-whether and what content is expected for metadata field/attribute/property
-values. An empty string value permits any content. A 'null' value is equivalent
-to the metadata field/attribute/property not being listed.
 
-### 3.1. CNCF CloudEvents
+#### 3.1.1 Attribute Value Template type
 
-#### 3.1.1. 'attributes' object
+The attribute value template type defines and describes possible values and
+constraints for a metadata attribute.
+
+##### `value` (attribute value template)
+
+- Type: String
+- Description: Metaschemas use the RFC6570 URI template expression language to
+  indicate whether and what content is expected for metadata
+  field/attribute/property values. An empty string value permits any content. A
+  'null' value is equivalent to the metadata field/attribute/property not being
+  listed.
+- Constraints:
+  - REQUIRED.
+  - MUST conform to RFC6570 URI template expression syntax even if not
+    describing a URI.
+
+##### `required` (attribute value template)
+
+- Type: Boolean
+- Description: Indicates whether the property value MUST be set to a non-null value.
+- Constraints:  
+   - OPTIONAL.
+
+#### `description` (attribute value template)
+
+- Type: String
+- Description: Description of the property and value
+- Constraints:
+   - OPTIONAL.
+
+#### 3.1.2. Data Schema type
+A common data structure used by all definition formats is the `dataschema`
+object, which has the following attributes:
+
+##### `value` (dataschema)
+
+- Type: `URI`
+- Description: Reference to an external schema document. The type of the schema
+  document MAY be indicated by the `schematype` attribute or inferred from the
+  URI or document content. The reference is an identifier and MAY be network
+  resolvable, but it MAY also be an identifier that can be used for lookup in a
+  schema registry endpoint as defined in [Schema Registry, section
+  3.4.3.](../schemaregistry/spec.md#343-get-a-specific-schema-version-by-schema-version-uri)
+- Constraints:
+  - OPTIONAL
+
+##### `schematype` (dataschema)
+
+- Type: `String` 
+- Description: This is a hint for interpreting the schema content found via the
+  reference held in `dataschema` or embedded in the `schema` attribute. The
+  attribute can take on any value and can therefore be used for any schema
+  format. A set of well-known values is defined below.
+- Constraints:
+  - OPTIONAL
+  - The following values SHOULD be used and interpreted as follows:
+    - `Avro`: An Apache Avro schema document. If used, the `schema` value or the
+      document referred to by `dataschema` is a JSON object conforming to the
+      [Avro schema
+      format](https://avro.apache.org/docs/current/spec.html#schemas).
+    - `JSON`: A JSON Schema document. If used, the `schema` value or the
+      document referred to by `dataschema` is a JSON object conforming to the
+      [JSON schema format](https://json-schema.org/specification.html). The
+      schema format version is embedded in the schema.
+    - `Protobuf`: A Protobuf Schema (proto3) document. If used, the `schema`
+      value is a string containing a [`.proto`
+      definition](https://developers.google.com/protocol-buffers/docs/overview).
+      A document referred to by `dataschema` would also be a `.proto` file. The
+      schema format version is embedded in the schema.
+
+##### `schema` (dataschema)
+
+- Type: `String` or JSON object
+- Description: This attribute holds an embedded schema definition.  
+- Constraints:
+  - OPTIONAL. 
+  - If this attribute is encoded in JSON, it MAY hold a JSON object if the
+    schema definition is a schema document expressed in JSON, as it is the case
+    with Avro or JSON Schema.
+  - Otherwise, if used, the attribute MUST hold a string containing a schema
+    document. Special characters MUST be escaped using "C" (JavaScript, Java,
+    C#, JSON) [escape sequence
+    conventions](https://en.wikipedia.org/wiki/Escape_sequences_in_C).
+  
+### 3.2. CNCF CloudEvents
+
+#### 3.2.1. 'attributes' object
 
 The `attributes` object MAY contain any number of uniquely named attribute
 fields, whereby any name MUST conform with CloudEvents naming rules.
@@ -461,11 +559,11 @@ expression MUST match the constraint rules of the CloudEvents attribute.
   RECOMMENDED and its value MUST, if present, follow all constraints of the
   `dataschema` attribute of CloudEvents.
 
-#### 3.1.3. Examples
+#### 3.2.3. Examples
 
 Message catalog object deleted event:
 
-``` JSON
+```JSON
 {
     "id" : "io.cloudevents.messagecatalog.deleted.v1",
     "description" : "Raised when an object has been deleted from the catalog",
@@ -473,10 +571,10 @@ Message catalog object deleted event:
     "version" : 1,
     "definition" : {
       "attributes" : {
-        "specversion" : : {
+        "specversion" : {
           "value" :"1.0"
         },
-        "type" : : {
+        "type" : {
           "value" : "io.cloudevents.messagecatalog.deleted.v1"
         }
       }
@@ -486,7 +584,7 @@ Message catalog object deleted event:
 
 Fictitious storage service "storage object created" event:
 
-``` JSON
+```JSON
 {
     "id" : "com.example.storage.object.created",
     "description" : "Raised when an object has been created",
@@ -497,16 +595,16 @@ Fictitious storage service "storage object created" event:
         "specversion" : {
           "value" : "1.0"
         },
-        "type" : : {
+        "type" : {
           "value" : "com.example.storage.object.created"
         },
-        "subject" : : {
+        "subject" : {
           "value" : "/{container}/{filepath}"
         },
-        "dataschema" : : {
+        "dataschema" : {
           "value" : "http://schemas.example.com/schemagroups/storage/schema/objectcreated/version/1"
         },
-        "datacontenttype" : : {
+        "datacontenttype" : {
           "value" :"application/json"
         }
       }
@@ -514,11 +612,59 @@ Fictitious storage service "storage object created" event:
 }
 ```
 
-### 3.2. OASIS AMQP
+The same as above, but with an inlined JSON Schema describing the payload:
+
+```JSON
+{
+    "id" : "com.example.storage.object.created",
+    "description" : "Raised when an object has been created",
+    "format" : "CloudEvents",
+    "version" : 1,
+    "definition": {
+      "attributes" : {
+        "specversion" : {
+          "value" : "1.0"
+        },
+        "type" : {
+          "value" : "com.example.storage.object.created"
+        },
+        "subject" : {
+          "value" : "/{container}/{filepath}"
+        },
+        "dataschema" : {
+          "schematype" : "JSON",
+          "schema" : {
+            {
+              "$schema": "http://json-schema.org/draft-07/schema",
+              "StorageObjectCreated": {
+                "type": "object",
+                "properties": {
+                  "container": {
+                    "type": "string"
+                  },
+                  "filepath": {
+                    "type": "string"
+                  },
+                  "filesize": {
+                    "type": "number"
+                  }
+                }
+              }
+          }
+        },
+        "datacontenttype" : {
+          "value" :"application/json"
+        }
+      }
+    }
+}
+```
+
+### 3.3. OASIS AMQP
 
 The AMQP metaschema describes the content of an AMQP message.
 
-#### 3.2.1. `header` object
+#### 3.3.1. `header` object
 
 The `header` object has a set of well-known fields defined by the AMQP 1.0
 specification that are not extensible. For detailed descriptions refer to
@@ -530,23 +676,27 @@ depend on runtime state of the AMQP node.
 - `priority` : Integer
 - `ttl` : Integer
 
-#### 3.2.2. `deliveryannotations` object
+#### 3.3.2. `deliveryannotations` object
 
 The `deliveryannotations` object MAY contain any number of uniquely named
 `delivery-annotation` fields, whereby any name MUST conform with AMQP `symbol`
 type rules.
 
-#### 3.2.3. `messageannotations` object
+#### 3.3.3. `messageannotations` object
 
 The `deliveryannotations` object MAY contain any number of uniquely named
 `message-annotation` fields, whereby any name MUST conform with AMQP `symbol`
 type rules.
 
-#### 3.2.4. `properties` object
+#### 3.3.4. `properties` object
 
 The `properties` object has a set of well-known fields defined by the AMQP 1.0
 specification that are not extensible. For detailed descriptions refer to
 section 3.2.4. in the AMQP 1.0 specification.
+
+Each of these fields is specified with an [Attribute Value
+Template](#311-attribute-value-template-type#) object, with the `value` further
+constrained to the listed type.
 
 - `messageid` : String
 - `userid` : Binary
@@ -562,36 +712,37 @@ section 3.2.4. in the AMQP 1.0 specification.
 - `groupsequence` : String
 - `replytogroupid` : String
 
-#### 3.2.5. `applicationproperties` object
+#### 3.3.5. `applicationproperties` object
 
 The `applicationproperties` object MAY contain any number of uniquely named
 `application-properties` fields, whereby any name MUST conform with AMQP
-`symbol` type rules.
+`symbol` type rules. The value of the fields are [Attribute Value
+Template](#311-attribute-value-template-type#) objects.
 
-#### 3.2.7. `applicationdata` object
+#### 3.3.6. `applicationdata` object
 
 The `applicationdata` object complements the `contentencoding` and `contenttype`
-fields of the `properties` object with an optional reference to a schema
+fields of the `properties` object with an OPTIONAL reference to a schema
 document and an indicator for how the data is encoded in the message.
 
-- `dataschema` : optional URI reference to a schema object
+- `dataschema` : OPTIONAL. [Data Schema](#312-data-schema-type)
 - `amqpencoding` : "Data", "Value", "Sequence" (defaults to "Data")
 
-#### 3.2.7. `footer` object
+#### 3.3.7. `footer` object
 
 The `footer` object MAY contain any number of uniquely named `footer` fields,
 whereby any name MUST conform with AMQP `symbol` type rules.
 
-#### 3.2.8. Examples
+#### 3.3.8. Examples
 
 (TBD)
 
-### 3.3. OASIS MQTT
+### 3.4. OASIS MQTT
 
 The MQTT metaschema describes the content of a MQTT 3.1.1. or MQTT 5.0 PUBLISH
 packet.
 
-#### 3.3.1. `publish` object
+#### 3.4.1. `publish` object
 
 The `publish` object has a set of well-known fields defined by the MQTT 3.1.1
 and MQTT 5.0 specifications that are not extensible. For detailed descriptions
@@ -607,24 +758,24 @@ refer to section 3.3.2.3. in the MQTT 5.0 specification.
 - `correlationdata` : Binary (MQTT 5.0 only)
 - `contenttype` : String (MQTT 5.0 only)
 
-#### 3.3.2 `userproperty` object
+#### 3.4.2 `userproperty` object
 
 The `userproperty` object MAY contain any number of uniquely named
 `userproperty` fields, whereby any name MUST conform with MQTT naming rules.
 
-#### 3.3.3 `payload` object
+#### 3.4.3 `payload` object
 
 The `payload` object complements the `payloadformat` and `contenttype` fields of
-the `publish` object with an optional reference to a schema document and an
+the `publish` object with an OPTIONAL reference to a schema document and an
 indicator for how the data is encoded in the message.
 
-- `dataschema` : optional URI reference to a schema object
+- `dataschema` : OPTIONAL. [Data Schema](#312-data-schema-type)
 
-### 3.4. CNCF NATS
+### 3.5. CNCF NATS
 
 The NATS metaschema describes the content of a NATS PUB message.
 
-#### 3.3.1. `pub` object
+#### 3.5.1. `pub` object
 
 The `pub` object has a set of well-known fields defined by the NATS client
 specification that are not extensible. For detailed descriptions refer to the
@@ -633,25 +784,25 @@ NATS protocol documentation.
 - `subject` : String
 - `replyto` : String
 
-#### 3.3.2 `payload` object
+#### 3.5.2 `payload` object
 
 Optional reference to a schema document and an indicator for how the data is
 encoded in the message.
 
-- `dataschema` : optional URI reference to a schema object
+- `dataschema` : OPTIONAL. [Data Schema](#312-data-schema-type)
 
 ## 4. HTTP ("REST") API
 
 This section informally describes the HTTP API binding of this message catalog.
-The formal definition is the [OpenAPI document](messagecatalog.yaml) that is
-part of this specification.
+The formal definition is the [OpenAPI document](./messagecatalog-api.yaml) that
+is part of this specification.
 
 This section is therefore non-normative.
 
 ### 4.1. Path hierarchy
 
 Message definition groups contain message definitions and those contain message
-definition versions, which are the documents required for serialization or
+definition versions, which are the documents needed for serialization or
 validation.
 
 These dependencies are reflected in the path structure:
@@ -659,13 +810,13 @@ These dependencies are reflected in the path structure:
 `/messagecatalog/{group-id}/messagedefinitions/{Message definition-id}/versions/{version}`
 
 - `{group-id}` corresponds to the message definition group's
-  [id attribute](#id-message-definition-group-id)
+  [id attribute](#id-message-definition-group)
 
 - `{Message definition-id}` corresponds to the message definition's
-  [id attribute](#id-definition-id)
+  [id attribute](#id-message-definition)
 
 - `{version}` corresponds to the message definition version's
-  [version attribute](#version-definition-version)
+  [version attribute](#version-message-definition-version)
 
 ### 4.2. Operations at the `messagecatalog` level
 
@@ -773,8 +924,8 @@ The HEAD method SHOULD also be implemented.
 #### 4.4.3. Get a specific message definition version by message definition version URI
 
 Each Message definition version has a URI as a unique identifier, as defined in
-[2.2.2](#222-schema-version-uri). This URI can be used as a lookup key on any
-Message Catalog that holds a copy of that Message definition version.
+[2.2.2](#222-message-definition-version-uri) This URI can be used as a lookup
+key on any Message Catalog that holds a copy of that Message definition version.
 
 As discussed in 2.2.2, the URI might not be network resolvable or the network
 location may not be reachable from everywhere. That is a key motivation for
@@ -788,7 +939,7 @@ The returned payload is the Message definition document.
 
 The HEAD method SHOULD also be implemented.
 
-## 4. Replication Model and State Change Events
+## 5. Replication Model and State Change Events
 
 Many eventing scenarios require that events cross from private networks into
 public networks (and possibly back into a different private network) and it is
@@ -813,20 +964,20 @@ those Message definitions shall be added.
 
 The synchronization is accomplished by a combination of two mechanisms:
 
-1. The Message Catalog API explained in [section 3](#3-http-rest-api) and
-   formally defined in the [OpenAPI spec](../schemaregistry/schemaregistry.yaml)
-   allows for Message definition information to be read from a source and
-   written imperatively to a target: A target can pull changes or a source can
-   push changes.
+1. The Message Catalog HTTP API explained in [section 4](#4-http-rest-api) and
+   formally defined in the [OpenAPI spec](./messagecatalog-api.yaml) allows for
+   Message definition information to be read from a source and written
+   imperatively to a target: A target can pull changes or a source can push
+   changes.
 
 2. A set of change events, defined in this section, can be emitted by the source
    whenever any aspect of its state changes, and the target can update the
    replica of said state by subscribing to these events.
 
-### 4.1 Producer authority or central authority
+### 5.1 Producer authority or central authority
 
-[Section 2.2.1](#221-schema-authority) discusses the concept of authorities. For
-the replication model, authority matters because it influences the shape of the
+[Section 2.2.1](#221-authority) discusses the concept of authorities. For the
+replication model, authority matters because it influences the shape of the
 replication topology.
 
 In scenarios where catalogs are just a tool to share Message definitions between
@@ -843,7 +994,7 @@ data that is used throughout a greater system might stem from a centrally
 managed catalog and event data Message definitions that are local to a subsystem
 might be controlled by the respective producers.
 
-### 4.2 Replication topologies
+### 5.2 Replication topologies
 
 A peer-to-peer replication topology copies Message definitions between a source
 and target catalog directly. For a mutual synchronization of Message definitions
@@ -859,7 +1010,7 @@ A star replication topology uses hubs central hubs into which all sources
 contribute Message definitions and to which all targets subscribe. If the hub is
 a centrally governed catalog, it might not accept inbound replications.
 
-### 4.3 Push replication
+### 5.3 Push replication
 
 In an imperative "push" replication model, a catalog might push any updates of
 its state to one of more configured target catalog by forwarding all changes to
@@ -879,7 +1030,7 @@ definition version is always accessible under both
 and under its globally unique
 [Message definition version URI](#443-get-a-specific-message-definition-version-by-message-definition-version-uri).
 
-### 4.4 Pull replication
+### 5.4 Pull replication
 
 In an imperative "pull" replication model, a target catalog will once or
 periodically traverse the source catalog contents and apply differences between
@@ -895,7 +1046,7 @@ This replication model uses the catalog API as defined above on the source
 catalog and the configuration of what aspects of the catalog are pulled are
 implementation specific.
 
-### 4.5. Event-driven replication
+### 5.5. Event-driven replication
 
 Event-driven replication uses CloudEvents to notify interested parties of
 changes in the source catalog such that those parties can
