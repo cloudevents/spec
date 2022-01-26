@@ -453,16 +453,18 @@ metaschema reflects the various sections of the AMQP data model.
 #### 3.1.1 Attribute Value Template type
 
 The attribute value template type defines and describes possible values and
-constraints for a metadata attribute.
+constraints for all metadata attributes.
 
 ##### `value` (attribute value template)
 
 - Type: String
-- Description: Metaschemas use the RFC6570 URI template expression language to
-  indicate whether and what content is expected for metadata
-  field/attribute/property values. An empty string value permits any content. A
-  'null' value is equivalent to the metadata field/attribute/property not being
-  listed.
+- Description: Metaschemas use the
+  [RFC6570](https://datatracker.ietf.org/doc/html/rfc6570) URI template
+  expression language to indicate whether and what content is expected for
+  metadata field/attribute/property values. An empty string value permits any
+  content. A 'null' value is equivalent to the metadata field/attribute/property
+  not being listed. The `description` attribute text SHOULD refer to and explain
+  the expansion variables contained in the templates.
 - Constraints:
   - REQUIRED.
   - MUST conform to RFC6570 URI template expression syntax even if not
@@ -478,7 +480,8 @@ constraints for a metadata attribute.
 #### `description` (attribute value template)
 
 - Type: String
-- Description: Description of the property and value
+- Description: Description of the property and value. If the value expression
+  contains expansion variables, this description SHOULD document their purpose.
 - Constraints:
    - OPTIONAL.
 
@@ -527,7 +530,7 @@ object, which has the following attributes:
 - Type: `String` or JSON object
 - Description: This attribute holds an embedded schema definition.  
 - Constraints:
-  - OPTIONAL. 
+  - OPTIONAL.
   - If this attribute is encoded in JSON, it MAY hold a JSON object if the
     schema definition is a schema document expressed in JSON, as it is the case
     with Avro or JSON Schema.
@@ -559,6 +562,9 @@ expression MUST match the constraint rules of the CloudEvents attribute.
   RECOMMENDED and its value MUST, if present, follow all constraints of the
   `dataschema` attribute of CloudEvents.
 
+The constraints for the value of each attribute are defined using an [Attribute
+Value Template](#311-attribute-value-template-type#) object.
+
 #### 3.2.3. Examples
 
 Message catalog object deleted event:
@@ -572,10 +578,14 @@ Message catalog object deleted event:
     "definition" : {
       "attributes" : {
         "specversion" : {
-          "value" :"1.0"
+          "value" :"1.0",
+          "required" : true,
+          "description" : "CloudEvents specification version"
         },
         "type" : {
-          "value" : "io.cloudevents.messagecatalog.deleted.v1"
+          "value" : "io.cloudevents.messagecatalog.deleted.v1",
+          "required" : true,
+          "description" : "type of this event"
         }
       }
     }
@@ -593,19 +603,26 @@ Fictitious storage service "storage object created" event:
     "definition": {
       "attributes" : {
         "specversion" : {
-          "value" : "1.0"
+          "value" : "1.0",
+          "required" : true,
+          "description" : "CloudEvents specification version"
         },
         "type" : {
-          "value" : "com.example.storage.object.created"
+          "value" : "com.example.storage.object.created",
+          "required" : true,
+          "description" : "type of this event"
         },
         "subject" : {
-          "value" : "/{container}/{filepath}"
+          "value" : "/{container}/{filepath}",
+          "required" : true,
+          "description" : "The file that is being created, with {container} holding the name of the storage container and {filepath} the relative path and name of the file.",
         },
         "dataschema" : {
           "value" : "http://schemas.example.com/schemagroups/storage/schema/objectcreated/version/1"
         },
         "datacontenttype" : {
           "value" :"application/json"
+          "required" : true
         }
       }
     }
@@ -623,13 +640,19 @@ The same as above, but with an inlined JSON Schema describing the payload:
     "definition": {
       "attributes" : {
         "specversion" : {
-          "value" : "1.0"
+          "value" : "1.0",
+          "required" : true,
+          "description" : "CloudEvents specification version"
         },
         "type" : {
-          "value" : "com.example.storage.object.created"
+          "value" : "com.example.storage.object.created",
+          "required" : true,
+          "description" : "type of this event"
         },
         "subject" : {
-          "value" : "/{container}/{filepath}"
+          "value" : "/{container}/{filepath}",
+          "required" : true,
+          "description" : "The file that is being created, with {container} holding the name of the storage container and {filepath} the relative path and name of the file.",
         },
         "dataschema" : {
           "schematype" : "JSON",
@@ -653,7 +676,8 @@ The same as above, but with an inlined JSON Schema describing the payload:
           }
         },
         "datacontenttype" : {
-          "value" :"application/json"
+          "value" :"application/json",
+          "required" : true,
         }
       }
     }
@@ -662,7 +686,10 @@ The same as above, but with an inlined JSON Schema describing the payload:
 
 ### 3.3. OASIS AMQP
 
-The AMQP metaschema describes the content of an AMQP message.
+The AMQP metaschema describes the content of an AMQP message. 
+
+The content rules for all properties and fields are defined using [Attribute
+Value Template](#311-attribute-value-template-type#) objects.
 
 #### 3.3.1. `header` object
 
@@ -671,6 +698,10 @@ specification that are not extensible. For detailed descriptions refer to
 section 3.2.1. in the AMQP 1.0 specification. The fields `first-acquirer` and
 `delivery-count`of the AMQP header and not supported for definitions since they
 depend on runtime state of the AMQP node.
+
+Each of these fields is specified with an [Attribute Value
+Template](#311-attribute-value-template-type) object, with the `value` further
+constrained to the listed type.
 
 - `durable` : Boolean
 - `priority` : Integer
@@ -695,7 +726,7 @@ specification that are not extensible. For detailed descriptions refer to
 section 3.2.4. in the AMQP 1.0 specification.
 
 Each of these fields is specified with an [Attribute Value
-Template](#311-attribute-value-template-type#) object, with the `value` further
+Template](#311-attribute-value-template-type) object, with the `value` further
 constrained to the listed type.
 
 - `messageid` : String
@@ -716,8 +747,7 @@ constrained to the listed type.
 
 The `applicationproperties` object MAY contain any number of uniquely named
 `application-properties` fields, whereby any name MUST conform with AMQP
-`symbol` type rules. The value of the fields are [Attribute Value
-Template](#311-attribute-value-template-type#) objects.
+`symbol` type rules. 
 
 #### 3.3.6. `applicationdata` object
 
