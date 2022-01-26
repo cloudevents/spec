@@ -791,7 +791,7 @@ Service entries.
 The `id` and `epoch` attributes of the Services MAY be omitted. In such cases
 the discovery endpoint MUST assign an appropriate value to the omitted
 field(s). An appropriate `id` MUST be globally unique. An appropriate `epoch`
-MUST be greater than the any existing `epoch` for a service with the same `id`.
+MUST be greater than the existing `epoch` for a service with the same `id`.
 When an `id` is provided any existing Service definition with that
 `id` MUST be completely replaced by the Service definition in the request.
 If an `epoch` is given in the request it MUST be greater than the
