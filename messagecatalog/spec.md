@@ -49,20 +49,20 @@ The Message Catalog and Schema Registry data formats and APIs exist in parallel
 because they serve different purposes. The Schema Registry is a general purpose
 store for serialization and validation schemas documents for structured data
 that is useful for describing message and event payloads, but also in all other
-scenarios where structured data is handled. For instance, a data structure may
-be sent to a system inside of a message but may subsequently be stored inside a
+scenarios where structured data is handled. For instance, a data structure might
+be sent to a system inside of a message but might subsequently be stored inside a
 data lake without the message envelope. The Message Catalog is more constrained
 and focused on message definitions, which covers both payload and metadata of
 the message. In environments where data structures are shared across multiple
 services and applications, the Schema Registry and the Message Catalog might be
 managed separately, with Message Catalog entries always referring to data type
 definitions held in the Schema Registry. In simple applications, all data type
-definitions for payloads may be held inline inside the Message Catalog.
+definitions for payloads MAY be held inline inside the Message Catalog.
 
 The message definition entries in the catalog contain some fixed metadata
 information. That fixed information MUST uniquely identify the type of message
 and depends on the particular message information model. For example, for CNCF
-CloudEvents message definitions, the "type" attribute is required as fixed
+CloudEvents message definitions, the "type" attribute is REQUIRED as fixed
 information for each entry.
 
 - Message definition group: A named collection of message definitions. Each
@@ -408,6 +408,61 @@ An implementation MAY add further attributes.
   - OPTIONAL
 - Assigned by the server.
 
+#### `relatedto` (message definition)
+
+- Type: `String`
+- Description: Declares that this message is related to another message definition.
+- Constraints:
+  - OPTIONAL. 
+  - MUST refer to an existing `id` within the same message definition group
+  - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax
+- Examples:
+  - myMessageDefinition
+  - my-MessageDefinition
+
+#### `relatedvia` (message definition)
+
+- Type: `String`
+- Description: Indicates how the relationship to an instance of the other
+  message definition is identified. The content of this attribute depends on the
+  message definition format and is respectively discussed in [section
+  3](#3-message-definition-formats).
+- Constraints:
+  - OPTIONAL. 
+  - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax
+- Examples:
+  - properties.correlationid (AMQP)
+  - id (CloudEvents)
+
+#### `relation` (message definition)
+
+- Type: `String`
+- Description: Qualifies the relationship expressed by `relatedto`. The
+  attribute can take on any value and can therefore be used for any
+  relationship. A set of well-known values is defined below.
+- Constraints:
+  - OPTIONAL. SHOULD be set when `relatedto` is set.
+  - The following values SHOULD be used and interpreted as follows:
+    - `reply`: This message is a potential reply to the message identified by
+      `relatedto`. The relationship is not exclusive. Multiple message
+      definitions may have such a relationship with one other message definition
+      and a single message sent might have one reply (request-reply) or multiple
+      of the same or different replies (scatter-gather).
+    - `followup`: A followup is a message that follows and is related to a prior
+      message. A transmission that consists of multiple messages consists of a
+      lead message (which may itself be related to another message) and one or
+      more followups.
+    - `end`: An end message is a `followup` that marks the end of a transmission
+      if that end cannot be otherwise expressed in the followup content.
+    - `report`: This message is a potential report related to the message
+      identified by `relatedto`. A report makes an infrastructure-level
+      statement about the acceptance or delivery of a message and is typically
+      not exposed to the application code.
+- Examples:
+  - reply
+  - end
+
+
 ### 2.2.5 Message definition version
 
 A message definition version is an object that defines the concrete shape of a
@@ -447,8 +502,8 @@ A metaschema is a JSON document containing an object with an object-typed
 property for each logical section of the event/message to be described. For
 instance, for CNCF CloudEvents, there is only an "attributes" section. The AMQP
 metaschema reflects the various sections of the AMQP data model.
-### 3.1. Common data types
 
+### 3.1. Common data types
 
 #### 3.1.1 Attribute Value Template type
 
@@ -541,7 +596,7 @@ object, which has the following attributes:
   
 ### 3.2. CNCF CloudEvents
 
-#### 3.2.1. 'attributes' object
+#### 3.2.1. `attributes` object
 
 The `attributes` object MAY contain any number of uniquely named attribute
 fields, whereby any name MUST conform with CloudEvents naming rules.
@@ -564,6 +619,13 @@ expression MUST match the constraint rules of the CloudEvents attribute.
 
 The constraints for the value of each attribute are defined using an [Attribute
 Value Template](#311-attribute-value-template-type#) object.
+
+#### 3.2.2. `relatedvia` attribute
+
+When used, the [`relatedvia`](#relatedvia-message-definition) attribute MUST
+refer to one attribute of the defined CloudEvent which MUST match the related
+CloudEvent's `id` attribute to establish the relationship. The attribute will
+commonly be an extension attribute.
 
 #### 3.2.3. Examples
 
@@ -763,7 +825,17 @@ document and an indicator for how the data is encoded in the message.
 The `footer` object MAY contain any number of uniquely named `footer` fields,
 whereby any name MUST conform with AMQP `symbol` type rules.
 
-#### 3.3.8. Examples
+#### 3.3.8. `relatedvia` attribute
+
+When used, the [`relatedvia`](#relatedvia-message-definition) attribute MUST
+refer to `properties.correlationid` or `properties.groupid`or to the name of a
+field from the `applicationproperties` object with the notation
+`applicationproperties.{fieldname}`. The value of the referred field/property
+MUST match the related message's `messageid` field value, except in the case of
+`properties.groupid` where it MUST match the related message's
+`properties.groupid`.
+
+#### 3.3.9. Examples
 
 (TBD)
 
@@ -800,6 +872,14 @@ the `publish` object with an OPTIONAL reference to a schema document and an
 indicator for how the data is encoded in the message.
 
 - `dataschema` : OPTIONAL. [Data Schema](#312-data-schema-type)
+
+#### 3.4.4. `relatedvia` attribute
+
+When used, the [`relatedvia`](#relatedvia-message-definition) attribute MUST
+either refer to `publish.correlationdata` or to the name of a field from the
+`userproperty` object with the notation `userproperty.{fieldname}`. The value of
+the referred field/property MUST match the related message's `correlationdata`
+field value. This is MUST only be used with MQTT 5.0.
 
 ### 3.5. CNCF NATS
 
@@ -958,11 +1038,11 @@ Each Message definition version has a URI as a unique identifier, as defined in
 key on any Message Catalog that holds a copy of that Message definition version.
 
 As discussed in 2.2.2, the URI might not be network resolvable or the network
-location may not be reachable from everywhere. That is a key motivation for
+location MAY not be reachable from everywhere. That is a key motivation for
 replication.
 
 The operation to obtain a Message definition version is a GET on
-`/messagedefinition?uri={uri}`, with the required parameter being the Message
+`/messagedefinition?uri={uri}`, with the REQUIRED parameter being the Message
 definition version URI.
 
 The returned payload is the Message definition document.
