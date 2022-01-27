@@ -7,10 +7,10 @@
 - [Java SDK](https://github.com/cloudevents/sdk-java)
 - [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
 - [PHP SDK](https://github.com/cloudevents/sdk-php)
+- [PowerShell](https://github.com/cloudevents/sdk-powershell)
 - [Python SDK](https://github.com/cloudevents/sdk-python)
 - [Ruby SDK](https://github.com/cloudevents/sdk-ruby)
 - [Rust SDK](https://github.com/cloudevents/sdk-rust)
-- [PowerShell](https://github.com/cloudevents/sdk-powershell)
 
 本文档为CloudEvents 的SDK开发者提供了指导和要求。它将伴随着ClodEvents核心规范不断更新下去。
 

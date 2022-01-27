@@ -65,10 +65,10 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 - [Java](https://github.com/cloudevents/sdk-java)
 - [Javascript](https://github.com/cloudevents/sdk-javascript)
 - [PHP](https://github.com/cloudevents/sdk-php)
+- [PowerShell](https://github.com/cloudevents/sdk-powershell)
 - [Python](https://github.com/cloudevents/sdk-python)
 - [Ruby](https://github.com/cloudevents/sdk-ruby)
 - [Rust](https://github.com/cloudevents/sdk-rust)
-- [PowerShell](https://github.com/cloudevents/sdk-powershell)
 
 ## 社区
 
