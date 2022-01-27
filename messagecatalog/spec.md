@@ -50,14 +50,15 @@ because they serve different purposes. The Schema Registry is a general purpose
 store for serialization and validation schemas documents for structured data
 that is useful for describing message and event payloads, but also in all other
 scenarios where structured data is handled. For instance, a data structure might
-be sent to a system inside of a message but might subsequently be stored inside a
-data lake without the message envelope. The Message Catalog is more constrained
-and focused on message definitions, which covers both payload and metadata of
-the message. In environments where data structures are shared across multiple
-services and applications, the Schema Registry and the Message Catalog might be
-managed separately, with Message Catalog entries always referring to data type
-definitions held in the Schema Registry. In simple applications, all data type
-definitions for payloads MAY be held inline inside the Message Catalog.
+be sent to a system inside of a message but might subsequently be stored inside
+a data lake without the message envelope. The Message Catalog is more
+constrained and focused on message definitions, which covers both payload and
+metadata of the message. In environments where data structures are shared across
+multiple services and applications, the Schema Registry and the Message Catalog
+might be managed separately, with Message Catalog entries always referring to
+data type definitions held in the Schema Registry. In simple applications, all
+data type definitions for payloads MAY be held inline inside the Message
+Catalog.
 
 The message definition entries in the catalog contain some fixed metadata
 information. That fixed information MUST uniquely identify the type of message
@@ -217,13 +218,68 @@ The data model for a message definition group consists of these attributes:
 A message definition is a description of a message data structure constrained by
 a format rule. A message definition MAY have multiple versions.
 
-In this specification, the "message definition" is an abstract collection object
-that helps enforcing consistency across versions and the "message definition
-version" is the concrete object handled by the API. A "message definition"
-cannot exist without at least one "message definition version". All versions
-share the common properties of the message definition and the immutable
-properties of the definition, specifically `id` and `format`, cannot be
-overridden by versions added later.
+In this specification, the "message definition" is a collection object that is
+used in documents and helps enforcing consistency across versions. A "message
+definition version" is the concrete object handled by the API. A "message
+definition" MUST NOT exist without at least one "message definition version".
+All versions share the common properties of the message definition and the
+immutable properties of the definition, specifically `id` and `format`, cannot
+be overridden by versions added later.
+
+When a message definition version is retrieved or stored singly, the attributes
+of the message definition become part of its representation as if it were a
+derived class. When a message definition document is retrieved or stored with
+some or all of its versions, the versions are held in an array named `versions`
+and all common properties are represented in the containing object.
+
+```JSON
+{
+    "id" : "io.cloudevents.messagecatalog.deleted",
+    "authority" : "cloudevents.io",
+    "description" : "Raised when an object has been deleted from the catalog",
+    "format" : "CloudEvents",
+    "versions" : [
+      {
+        "version" : 1,
+        "definition" : {
+          "attributes" : {
+            "specversion" : {
+              "value" :"1.0",
+              "required" : true,
+              "description" : "CloudEvents specification version"
+            },
+            "type" : {
+              "value" : "io.cloudevents.messagecatalog.deleted",
+              "required" : true,
+              "description" : "type of this event"
+            }
+          }
+        }
+    },
+    {
+        "version" : 2,
+        "definition" : {
+          "attributes" : {
+            "specversion" : {
+              "value" :"1.0",
+              "required" : true,
+              "description" : "CloudEvents specification version"
+            },
+            "type" : {
+              "value" : "io.cloudevents.messagecatalog.deleted",
+              "required" : true,
+              "description" : "type of this event"
+            },
+            "subject" : {
+              "required" : true,
+              "description" : "id of the deleted event definition"
+            }
+          }
+        }
+    }
+  ]
+}
+```
 
 The API is created such that a message definition can only be created by posting
 an initial version and that the message definition can only be changed by
@@ -411,9 +467,10 @@ An implementation MAY add further attributes.
 #### `relatedto` (message definition)
 
 - Type: `String`
-- Description: Declares that this message is related to another message definition.
+- Description: Declares that this message is related to another message
+  definition.
 - Constraints:
-  - OPTIONAL. 
+  - OPTIONAL.
   - MUST refer to an existing `id` within the same message definition group
   - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax
 - Examples:
@@ -425,10 +482,10 @@ An implementation MAY add further attributes.
 - Type: `String`
 - Description: Indicates how the relationship to an instance of the other
   message definition is identified. The content of this attribute depends on the
-  message definition format and is respectively discussed in [section
-  3](#3-message-definition-formats).
+  message definition format and is respectively discussed in
+  [section 3](#3-message-definition-formats).
 - Constraints:
-  - OPTIONAL. 
+  - OPTIONAL.
   - MUST conform with RFC3986/3.3 `segment-nz-nc` syntax
 - Examples:
   - properties.correlationid (AMQP)
@@ -461,7 +518,6 @@ An implementation MAY add further attributes.
 - Examples:
   - reply
   - end
-
 
 ### 2.2.5 Message definition version
 
@@ -528,9 +584,10 @@ constraints for all metadata attributes.
 ##### `required` (attribute value template)
 
 - Type: Boolean
-- Description: Indicates whether the property value MUST be set to a non-null value.
-- Constraints:  
-   - OPTIONAL.
+- Description: Indicates whether the property value MUST be set to a non-null
+  value.
+- Constraints:
+  - OPTIONAL.
 
 #### `description` (attribute value template)
 
@@ -538,9 +595,10 @@ constraints for all metadata attributes.
 - Description: Description of the property and value. If the value expression
   contains expansion variables, this description SHOULD document their purpose.
 - Constraints:
-   - OPTIONAL.
+  - OPTIONAL.
 
 #### 3.1.2. Data Schema type
+
 A common data structure used by all definition formats is the `dataschema`
 object, which has the following attributes:
 
@@ -551,14 +609,14 @@ object, which has the following attributes:
   document MAY be indicated by the `schematype` attribute or inferred from the
   URI or document content. The reference is an identifier and MAY be network
   resolvable, but it MAY also be an identifier that can be used for lookup in a
-  schema registry endpoint as defined in [Schema Registry, section
-  3.4.3.](../schemaregistry/spec.md#343-get-a-specific-schema-version-by-schema-version-uri)
+  schema registry endpoint as defined in
+  [Schema Registry, section 3.4.3.](../schemaregistry/spec.md#343-get-a-specific-schema-version-by-schema-version-uri)
 - Constraints:
   - OPTIONAL
 
 ##### `schematype` (dataschema)
 
-- Type: `String` 
+- Type: `String`
 - Description: This is a hint for interpreting the schema content found via the
   reference held in `dataschema` or embedded in the `schema` attribute. The
   attribute can take on any value and can therefore be used for any schema
@@ -568,22 +626,21 @@ object, which has the following attributes:
   - The following values SHOULD be used and interpreted as follows:
     - `Avro`: An Apache Avro schema document. If used, the `schema` value or the
       document referred to by `dataschema` is a JSON object conforming to the
-      [Avro schema
-      format](https://avro.apache.org/docs/current/spec.html#schemas).
+      [Avro schema format](https://avro.apache.org/docs/current/spec.html#schemas).
     - `JSON`: A JSON Schema document. If used, the `schema` value or the
       document referred to by `dataschema` is a JSON object conforming to the
       [JSON schema format](https://json-schema.org/specification.html). The
       schema format version is embedded in the schema.
     - `Protobuf`: A Protobuf Schema (proto3) document. If used, the `schema`
-      value is a string containing a [`.proto`
-      definition](https://developers.google.com/protocol-buffers/docs/overview).
+      value is a string containing a
+      [`.proto` definition](https://developers.google.com/protocol-buffers/docs/overview).
       A document referred to by `dataschema` would also be a `.proto` file. The
       schema format version is embedded in the schema.
 
 ##### `schema` (dataschema)
 
 - Type: `String` or JSON object
-- Description: This attribute holds an embedded schema definition.  
+- Description: This attribute holds an embedded schema definition.
 - Constraints:
   - OPTIONAL.
   - If this attribute is encoded in JSON, it MAY hold a JSON object if the
@@ -591,9 +648,9 @@ object, which has the following attributes:
     with Avro or JSON Schema.
   - Otherwise, if used, the attribute MUST hold a string containing a schema
     document. Special characters MUST be escaped using "C" (JavaScript, Java,
-    C#, JSON) [escape sequence
-    conventions](https://en.wikipedia.org/wiki/Escape_sequences_in_C).
-  
+    C#, JSON)
+    [escape sequence conventions](https://en.wikipedia.org/wiki/Escape_sequences_in_C).
+
 ### 3.2. CNCF CloudEvents
 
 #### 3.2.1. `attributes` object
@@ -617,8 +674,8 @@ expression MUST match the constraint rules of the CloudEvents attribute.
   RECOMMENDED and its value MUST, if present, follow all constraints of the
   `dataschema` attribute of CloudEvents.
 
-The constraints for the value of each attribute are defined using an [Attribute
-Value Template](#311-attribute-value-template-type#) object.
+The constraints for the value of each attribute are defined using an
+[Attribute Value Template](#311-attribute-value-template-type#) object.
 
 #### 3.2.2. `relatedvia` attribute
 
@@ -748,10 +805,10 @@ The same as above, but with an inlined JSON Schema describing the payload:
 
 ### 3.3. OASIS AMQP
 
-The AMQP metaschema describes the content of an AMQP message. 
+The AMQP metaschema describes the content of an AMQP message.
 
-The content rules for all properties and fields are defined using [Attribute
-Value Template](#311-attribute-value-template-type#) objects.
+The content rules for all properties and fields are defined using
+[Attribute Value Template](#311-attribute-value-template-type#) objects.
 
 #### 3.3.1. `header` object
 
@@ -761,9 +818,9 @@ section 3.2.1. in the AMQP 1.0 specification. The fields `first-acquirer` and
 `delivery-count`of the AMQP header and not supported for definitions since they
 depend on runtime state of the AMQP node.
 
-Each of these fields is specified with an [Attribute Value
-Template](#311-attribute-value-template-type) object, with the `value` further
-constrained to the listed type.
+Each of these fields is specified with an
+[Attribute Value Template](#311-attribute-value-template-type) object, with the
+`value` further constrained to the listed type.
 
 - `durable` : Boolean
 - `priority` : Integer
@@ -787,9 +844,9 @@ The `properties` object has a set of well-known fields defined by the AMQP 1.0
 specification that are not extensible. For detailed descriptions refer to
 section 3.2.4. in the AMQP 1.0 specification.
 
-Each of these fields is specified with an [Attribute Value
-Template](#311-attribute-value-template-type) object, with the `value` further
-constrained to the listed type.
+Each of these fields is specified with an
+[Attribute Value Template](#311-attribute-value-template-type) object, with the
+`value` further constrained to the listed type.
 
 - `messageid` : String
 - `userid` : Binary
@@ -809,7 +866,7 @@ constrained to the listed type.
 
 The `applicationproperties` object MAY contain any number of uniquely named
 `application-properties` fields, whereby any name MUST conform with AMQP
-`symbol` type rules. 
+`symbol` type rules.
 
 #### 3.3.6. `applicationdata` object
 
