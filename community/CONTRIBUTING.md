@@ -1,13 +1,19 @@
 # Contributing to CloudEvents
 
+<!-- no verify-specs -->
+
 This page contains information about reporting issues, how to suggest changes as
 well as the guidelines we follow for how our documents are formatted.
 
 ## Table of Contents
 
-- [Reporting an Issue](#reporting-an-issue)
-- [Suggesting a Change](#suggesting-a-change)
-- [Spec Formatting Conventions](#spec-formatting-conventions)
+- [Contributing to CloudEvents](#contributing-to-cloudevents)
+  - [Table of Contents](#table-of-contents)
+  - [Reporting an Issue](#reporting-an-issue)
+  - [Suggesting a Change](#suggesting-a-change)
+    - [Assigning and Owning work](#assigning-and-owning-work)
+    - [Sign your work](#sign-your-work)
+  - [Spec Formatting Conventions](#spec-formatting-conventions)
 
 ## Reporting an Issue
 
@@ -24,6 +30,9 @@ To suggest a change to this repository, submit a
 set of changes you'd like to see. See the
 [Spec Formatting Conventions](#spec-formatting-conventions) section for the
 guidelines we follow for how documents are formatted.
+
+Please use [conventional commits](https://conventionalcommits.org) when writing
+commit messages.
 
 Each PR must be signed per the following section.
 

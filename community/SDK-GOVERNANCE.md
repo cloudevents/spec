@@ -1,5 +1,7 @@
 ## SDK Community
 
+<!-- no verify-specs -->
+
 The community is organized as follows:
 
 - Every SDK has its own
@@ -7,6 +9,29 @@ The community is organized as follows:
   `sdk-go-maintainers` is the group of mantainers for
   [cloudevents/sdk-go project](https://github.com/cloudevents/sdk-go)
 - The union of all the `sdk-*-maintainers` assembles the _sdk maintainers_ group
+
+## New SDKs
+
+To propose a new SDK for the community, a PR should be opened in the `spec`
+repository with the documentation changes necessary to point to the new repo.
+For example, changes to the `README.md` and `SDK.md` files. The first comment
+in the PR should include:
+- desired repo name (e.g. `SDK-...`)
+- list of initial maintainers (github IDs)
+
+Ideally, the new SDK should integrate with a technology stack that the existing
+SDKs do not already have support for.
+
+The community will proceed with a vote using the
+[Asynchronous voting process](#asynchronous-voting-process). The voting
+criteria are:
+
+- 1 week to vote
+- At least 2/3 of the votes cast agree to the proposal
+- All _sdk maintainers_ are entitled to vote
+
+If approved, the PR will be merged and a new repo and corresponding
+github teams will be created.
 
 ## New maintainers
 
@@ -64,7 +89,7 @@ We define an SDK project _healthy_ if:
 2. It supports the latest versions of the integrated libraries/frameworks
 3. It receives security patches regularly
 4. It supports the last N-1 major versions of CloudEvents spec, as defined in
-   [Contribution Acceptance](../SDK.md#contribution-acceptance)
+   [Contribution Acceptance](../cloudevents/SDK.md#contribution-acceptance)
 5. Issues and PRs are triaged (labeled, commented, reviewed, etc) regularly
 
 We define a project `cloudevents/sdk-x` _not actively maintained_ if:

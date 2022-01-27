@@ -1,3 +1,5 @@
+<!-- no verify-specs -->
+
 # Pull Request Guidelines
 
 Here you will find step by step guidance for creating, submitting and updating

@@ -1,5 +1,7 @@
 # Governance
 
+<!-- no verify-specs -->
+
 This document describes the governance process under which the CloudEvents
 project will manage this repository.
 
@@ -139,9 +141,15 @@ The specifications produced will adhere to the following:
   apply and the "major" version number will change. The net effect of this is
   that the "minor" version number will always be zero and the `specversion`
   string will always be of the form `X.0`.
+- Additionally, the working group has decided that "patch" changes that are
+  trivial in nature (e.g. typos) can be merged directly into the latest
+  release without a version number change and without creating a new formal
+  "patch" branch/release. Non-trivial "patch" changes will necessitate the
+  creation of a new "patch" branch (e.g. `1.0.2-wip`) and release cycle that
+  will eventually result in an official "patch" release (e.g. `1.0.2`)
 
 Note that these rules do not apply to the
-[documented extensions](../documented-extensions.md).
+[documented extensions](../cloudevents/documented-extensions.md).
 
 To create a new release:
 
@@ -167,7 +175,7 @@ To create a new release:
   any potential noteworthy activities of the group:
   - Send it to the mailing list
   - Announce the release on our
-    [twitter account](https://twitter.com/cloudeventsio)
+    [twitter account](http://twitter.com/cloudeventsio)
   - Add it to the "announcement" section of our
     [website](https://cloudevents.io/)
 
