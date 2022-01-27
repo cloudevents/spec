@@ -62,15 +62,15 @@ paths:
                 $ref: '#/components/schemas/service'
         '404':
           description: Not Found
-    post:
-      operationId: postService
+    put:
+      operationId: putService
       parameters:
         - $ref: '#/components/parameters/id'
       requestBody:
-        $ref: '#/components/requestBodies/servicepostrequest'
+        $ref: '#/components/requestBodies/serviceputrequest'
       responses:
         '200':
-          $ref: '#/components/responses/servicepostresponse'
+          $ref: '#/components/responses/serviceputresponse'
         '400':
           description: Bad Request - constraint failure
         '404':
@@ -116,7 +116,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/serviceinstances'
-    servicepostrequest:
+    serviceputrequest:
       description: A request to create or update the discovery endpoint's collection of services with the given service
       required: true
       content:
@@ -143,7 +143,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/services'
-    servicepostresponse:
+    serviceputresponse:
       description: A Service Instance referencing the updated Service
       content:
         application/json:
@@ -283,7 +283,7 @@ components:
       type: object
       oneOf:
         - $ref: '#/components/schemas/changeservicespost'
-        - $ref: '#/components/schemas/changeservicepost'
+        - $ref: '#/components/schemas/changeserviceput'
         - $ref: '#/components/schemas/changeservicesdelete'
         - $ref: '#/components/schemas/changeservicedelete'
     changes:
@@ -294,6 +294,10 @@ components:
       type: string
       enum:
         - POST
+    changeput:
+      type: string
+      enum:
+        - PUT
     changedelete:
       type: string
       enum:
@@ -328,17 +332,17 @@ components:
         response:
           $ref: '#/components/responses/servicesdeleteresponse'
       required: [operation, path, request, response]
-    changeservicepost:
+    changeserviceput:
       type: object
       properties:
         operation:
-          $ref: '#/components/schemas/changepost'
+          $ref: '#/components/schemas/changeput'
         path:
           $ref: '#/components/schemas/changeservicepath'
         request:
-          $ref: '#/components/requestBodies/servicepostrequest'
+          $ref: '#/components/requestBodies/serviceputrequest'
         response:
-          $ref: '#/components/responses/servicepostresponse'
+          $ref: '#/components/responses/serviceputresponse'
       required: [operation, path, request, response]
     changeservicedelete:
       type: object
