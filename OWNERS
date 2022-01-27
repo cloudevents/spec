@@ -1,9 +1,10 @@
 # See the GOVERNANCE.md document for the definition of the roles and
 # responsibilities
 admins:
+  - deissnerk
   - duglin
-  - markpeek
   - kenowens12
+  - markpeek
 approvers:
   # Approvers are "Voting Members" as defined in the GOVERNANCE.md document.
   # See the "Voting Rights?" column in:
