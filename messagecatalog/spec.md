@@ -140,6 +140,14 @@ The data model for a message definition group consists of these attributes:
   - org.example.myapp.module
   - events\@example.com
 
+#### `specversion` (message definition group)
+
+- Type: `String`
+- Description: Version of this specification that this document complies with.
+- Constraints:
+  - REQUIRED.
+  - MUST be "0.1" for this version of the specification.
+
 #### `format` (message definition group)
 
 - Type: `String`
@@ -172,17 +180,7 @@ The data model for a message definition group consists of these attributes:
 
 - Type: `String`
 - Description: Documents the purpose of the message definition group in greater
-  detail than the `description`. The text MAY have rich formatting in a format
-  indicated by the `documentationformat` parameter.
-- Constraints:
-  - OPTIONAL
-
-#### `documentationformat` (message definition group)
-
-- Type: `String`
-- Description: Indicates the format of the `documentation` content. Well-known
-  values are `HTML` and `Markdown` as well as `URL` if the documentation
-  attribute contains a URL pointing to external content.
+  detail than the `description`. The text MAY use [CommonMark](https://commonmark.org/) markdown formatting.
 - Constraints:
   - OPTIONAL
 
@@ -213,24 +211,37 @@ The data model for a message definition group consists of these attributes:
   - OPTIONAL
 - Assigned by the server.
 
+#### `definitions' (message definition group)
+
+- Type: List of [message definitions](#22-message-definition-and-message-definition-version)
+- Description: List of message definitions belonging to this group
+
 ## 2.2. Message definition and message definition version
 
-A message definition is a description of a message data structure constrained by
-a format rule. A message definition MAY have multiple versions.
+A message definition is a description of a message or event data structure of a
+certain message format. This specification provides message formats for
+[CloudEvents](#32-cncf-cloudevents), [AMQP](#33-oasis-amqp),
+[MQTT](#34-oasis-mqtt), and [NATS](#35-cncf-nats). Extension formats are
+permitted. A message definition MAY have multiple versions.
 
-In this specification, the "message definition" is a collection object that is
-used in documents and helps enforcing consistency across versions. A "message
-definition version" is the concrete object handled by the API. A "message
-definition" MUST NOT exist without at least one "message definition version".
-All versions share the common properties of the message definition and the
-immutable properties of the definition, specifically `id` and `format`, cannot
-be overridden by versions added later.
+The "message definition" object contains all information that MUST be identical
+or is common across all versions of such a definition. Specifically `id` and
+`format` MUST NOT be overridden by versions added later. The `documentation`
+field is common and expected to cover all versions including explanation of
+differences and changes between versions.
 
-When a message definition version is retrieved or stored singly, the attributes
-of the message definition become part of its representation as if it were a
-derived class. When a message definition document is retrieved or stored with
-some or all of its versions, the versions are held in an array named `versions`
-and all common properties are represented in the containing object.
+Each "message definition version" inherits those attribute values and adds elements
+that MAY vary across versions. Each "message definition" MUST have at least one
+"message definition version".
+
+When a _message definition version_ document is retrieved or posted singly, the
+attributes of the message definition become part of its representation as if it
+were a single object. When a _message definition_ document is retrieved or
+posted with some or all of its versions, the versions are held in an array named
+`versions` and all common attributes are held in the containing object.
+
+The example below, illustrating a CloudEvent without payload for brevity, shows an
+example of a _message definition version_ document:
 
 ```JSON
 {
@@ -281,10 +292,41 @@ and all common properties are represented in the containing object.
 }
 ```
 
-The API is created such that a message definition can only be created by posting
-an initial version and that the message definition can only be changed by
-posting a new version. Existing versions can be individually retrieved and
-deleted, but not modified.
+For version "2" of the above definition, this is the standalone _message
+definition version_ document:
+
+``` JSON
+{
+  "id" : "io.cloudevents.messagecatalog.deleted",
+  "authority" : "cloudevents.io",
+  "description" : "Raised when an object has been deleted from the catalog",
+  "format" : "CloudEvents",
+  "version" : 2,
+  "definition" : {
+    "attributes" : {
+      "specversion" : {
+        "value" :"1.0",
+        "required" : true,
+        "description" : "CloudEvents specification version"
+      },
+      "type" : {
+        "value" : "io.cloudevents.messagecatalog.deleted",
+        "required" : true,
+        "description" : "type of this event"
+      },
+      "subject" : {
+        "required" : true,
+        "description" : "id of the deleted event definition"
+      }
+    }
+  }
+}
+```
+
+The API is created such that a message definition MUST be created by posting an
+initial version and that the message definition (including any common parts like
+the documentation) MUST only be changed by posting a new version. Existing
+versions can be individually retrieved and deleted, but not modified.
 
 A newer message definition version might introduce breaking changes or it might
 only introduce careful changes that preserve compatibility. These strategies are
@@ -384,6 +426,18 @@ An implementation MAY add further attributes.
   - myMessage definition
   - my-Message definition
 
+#### `specversion` (message definition)
+
+- Type: `String`
+- Description: Version of this specification that this document complies with.
+- Constraints:
+  - REQUIRED if the message definition is NOT embedded into a message definition
+    group document.
+  - OPTIONAL and SHOULD be omitted if the message definition is embedded in a
+    message definition group document. If present in this case, it MUST be the
+    same version as that of the message definition group.
+  - MUST be "0.1" for this version of the specification.
+
 #### `authority` (message definition)
 
 - Type: `URI`
@@ -420,7 +474,7 @@ An implementation MAY add further attributes.
 - Examples:
   - "Food order"
 
-#### `tags` (message definition group)
+#### `tags` (message definition)
 
 - Type: `String`
 - Description: A single string containing a comma-separated list of tags
@@ -430,39 +484,13 @@ An implementation MAY add further attributes.
 - Examples:
   - "exampleapp,examplecorp"
 
-#### `documentation` (message definition group)
+#### `documentation` (message definition)
 
 - Type: `String`
-- Description: Documents the purpose of the message definition group in greater
-  detail than the `description`. The text MAY have rich formatting in a format
-  indicated by the `documentationformat` parameter.
+- Description: Documents the purpose of the message definition in greater
+  detail than the `description`. The text MAY use [CommonMark](https://commonmark.org/) markdown formatting.
 - Constraints:
   - OPTIONAL
-
-#### `documentationformat` (message definition group)
-
-- Type: `String`
-- Description: Indicates the format of the `documentation` content. Well-known
-  values are `HTML` and `Markdown` as well as `URL` if the documentation
-  attribute contains a URL pointing to external content.
-- Constraints:
-  - OPTIONAL
-
-#### `createdtimeutc` (message definition)
-
-- Type: `Timestamp`
-- Description: Instant when the Message definition was added to the catalog.
-- Constraints:
-  - OPTIONAL
-  - Assigned by the server.
-
-#### `updatedtimeutc` (message definition)
-
-- Type: `Timestamp`
-- Description: Instant when the Message definition was last updated
-- Constraints:
-  - OPTIONAL
-- Assigned by the server.
 
 #### `relatedto` (message definition)
 
@@ -547,6 +575,15 @@ of the containing message definition object.
 - Constraints:
   - OPTIONAL
   - Assigned by the server.
+
+#### `definition' (message definition version)
+
+- Type: Object 
+- Description: The object defines a [message definition
+  format](#format-message-definition) metaschema using one of the definitions
+  provided in the following section or a custom metaschema.
+- Constraints:
+  - REQUIRED.
 
 ## 3. Message definition formats
 
@@ -987,15 +1024,70 @@ These dependencies are reflected in the path structure:
 
 ### 4.2. Operations at the `messagecatalog` level
 
-#### 4.2.1. List message definition groups
+#### 4.2.1 Get features - OPTIONS
+
+The OPTIONS request at the messagecatalog level MUST return a payload indicating
+the set of features supported by the implementation. The result of this query
+SHOULD take into account the specific user issuing the query, if an
+authentication scheme is being used.
+
+The result MUST be a JSON object of the following form:
+```
+{
+  "filterattributes": [ "id", ... ],
+  "pagination": true,
+  "update": true
+}
+```
+
+The following additional constraints apply:
+- The feature names are case sensitive.
+- The `filterattributes` property MUST be present, and MUST have at
+  least the `id` attribute in its list. The filter attribute names are case
+  sensitive.
+- The `pagination` attribute is OPTIONAL with an implied default value of
+  `false`.
+- The `update` attribute it OPTIONAL with an implied default value of `false`.
+
+##### `filterattributes`
+
+This is an array of attributes names that the catalog supports for the purpose
+of filtering the query of available entries. For nested attributes a dot(.)
+notation MUST be used.
+
+Sample attribute names:
+- `name`
+- `specversions`
+- `events.type`
+
+Note: this property MUST NOT be empty, or missing, since all implementations
+MUST support filtering by `id`.
+
+#### `pagination`
+
+This is a boolean value indicating support for the
+[Pagination](../pagination/spec.md) specification. If not specified, the default
+value is `false`.
+
+#### `updates`
+
+This is a booleam value indicating support for updates to the catalog content.
+Catalog enmdpoints MAY be read-only. If not specified, the default value is
+`false`.
+
+#### 4.2.2. List message definition groups
 
 Message definition groups are enumerated with a GET on the root of the catalog
-hierarchy, in the exemplary structure above identified as `/messagecatalog`.
+hierarchy.
 
-The result is a JSON encoded array of strings enumerating the `id` values of the
-message definition groups.
+Implementations MAY use a filter (filter specification TBD) to constrain
+the returned groups.
 
-#### 4.2.2. Get message definition group
+Implementations MAY use the [pagination](../pagination/spec.md) specification
+if the number of services returned is large. Clients SHOULD be
+prepared to support paginated responses.
+
+#### 4.2.3. Get message definition group
 
 The details of a message definition group are retrieved with a GET on the
 group's path in the message definition groups collection, for instance
@@ -1004,7 +1096,7 @@ group's path in the message definition groups collection, for instance
 The result is a JSON object that contains the attributes of the Message
 definition group.
 
-#### 4.2.3. Create message definition group
+#### 4.2.4. Create message definition group
 
 A message definition group is created with a PUT on the desired group's path in
 the message definition groups collection, for instance
@@ -1016,7 +1108,7 @@ definition group.
 The operation returns the effective attributes as a JSON object when the Message
 definition group has been created or updated.
 
-#### 4.2.4. Delete message definition group
+#### 4.2.5. Delete message definition group
 
 A message definition group is deleted with a DELETE on the desired group's path
 in the message definition groups collection, for instance
@@ -1030,8 +1122,12 @@ Message definitions within a group are enumerated with a GET on the
 `messagedefinitions` collection of the group, for instance
 `/messagecatalog/mygroup/messagedefinitions`.
 
-The result is a JSON encoded array of strings enumerating the `id` values of the
-Message definitions within the group.
+Implementations MAY use a filter (filter specification TBD) to constrain
+the returned groups.
+
+Implementations MAY use the [pagination](../pagination/spec.md) specification
+if the number of Services returned is large. Clients SHOULD be
+prepared to support paginated responses.
 
 #### 4.3.2. Delete all message definitions from the group
 
@@ -1077,8 +1173,12 @@ enumerated with a GET on the `versions` collection of the Message definition,
 for instance
 `/messagecatalog/mygroup/messagedefinitions/myMessageDefinition/versions`.
 
-The result is a JSON encoded array of integers enumerating the `version` values
-of the Message definitions within the group.
+Implementations MAY use a filter (filter specification TBD) to constrain
+the returned groups.
+
+Implementations MAY use the [pagination](../pagination/spec.md) specification
+if the number of Services returned is large. Clients SHOULD be
+prepared to support paginated responses.
 
 #### 4.4.2. Get a specific message definition version
 
@@ -1286,7 +1386,6 @@ This definition expressed as a CloudEvents message definition:
   "version" : 1,
   "description": "This event notifies the subscriber of an element of the catalog having been created or updated.",
   "documentation" : "Because Message definition documents might be very large, and because Message definition information might be subject to special authorization since it might disclose trade secrets, the event carries no data, but requires the consumer to fetch the indicated change from the catalog. `id` MUST be set to a unique value relative to the scope formed by the `source`, `type`, and `subject` attributes. The event `data` MUST be empty.",
-  "documentationformat" : "Markdown",
   "format" : "CloudEvents",
   "definition" : {
     "attributes" : {
@@ -1350,7 +1449,6 @@ This definition expressed as a CloudEvents message definition:
   "description": "This event notifies the subscriber of an element of the catalog having been deleted.",
   "documentation" : "`id` MUST be set to a unique value relative to the scope formed by by the
 `source`, `type`, and `subject` attributes. The event `data` MUST be empty.",
-  "documentationformat" : "Markdown",
   "format" : "CloudEvents",
   "definition" : {
     "attributes" : {
