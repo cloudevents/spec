@@ -168,8 +168,6 @@ for file in ${mdFiles}; do
   sed "s/.*\[*\]\([^()]*\)/\1/" < ${tmp}1 > ${tmp}2 || true
 
   # Look for bookmark URLs
-  cat $file | sed -n "s/^ *\[.*\]: //p" > ${tmp}2 || true
-
   cat $file | sed -n "s/^ *\[.*\]: .*/&/p" > ${tmp}bks || true
 
   # Look for bookmarks
