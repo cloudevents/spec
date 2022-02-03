@@ -1,6 +1,20 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "http://cloudevents.io/schemas/messagecatalog.json",
+  "root": {
+    "type": "object",
+    "properties": {
+      "specversion": {
+        "type": "string"
+      },
+      "groups": {
+        "type": "array",
+        "items": {
+          "$ref": "#MessageDefinitionGroup"
+        }
+      }
+    }
+  },
   "MessageDefinitionGroup": {
     "type": "object",
     "properties": {
@@ -36,7 +50,7 @@
           "type": "string"
         }
       },
-      "messagedefinitions": {
+      "definitions": {
         "type": "array",
         "items": {
           "$ref": "#MessageDefinition"
@@ -232,7 +246,7 @@
       }
     ]
   },
-  "DataSchemaPropertyValueReference": {
+  "DataSchemaAttributeValueTemplate": {
     "allOf": [
       {
         "$ref": "#AttributeValueTemplate"
