@@ -1,4 +1,4 @@
 # See the README.md for the definition of the roles and responsibilities
-| Languages   |   Maintainer    |     
+| Languages   |   Reviewers    |     
 | :---------: | :-------------: | 
 | **Chinese** |   JieDing       |     
