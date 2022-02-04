@@ -10,7 +10,7 @@
       "groups": {
         "type": "array",
         "items": {
-          "$ref": "#MessageDefinitionGroup"
+          "$ref": "#/MessageDefinitionGroup"
         }
       }
     }
@@ -28,9 +28,6 @@
         "type": "string"
       },
       "documentation": {
-        "type": "string"
-      },
-      "documentationformat": {
         "type": "string"
       },
       "tags": {
@@ -53,7 +50,7 @@
       "definitions": {
         "type": "array",
         "items": {
-          "$ref": "#MessageDefinition"
+          "$ref": "#/MessageDefinition"
         }
       }
     }
@@ -80,9 +77,6 @@
       "documentation": {
         "type": "string"
       },
-      "documentationformat": {
-        "type": "string"
-      },
       "createdtimeutc": {
         "type": "string",
         "format": "date-time"
@@ -96,13 +90,13 @@
   "MessageDefinition": {
     "allOf": [
       {
-        "$ref": "#MessageDefinitionBase"
+        "$ref": "#/MessageDefinitionBase"
       },
       {
         "type": "object",
         "schema": {
           "versions": {
-            "$ref": "#MessageDefinitionVersion"
+            "$ref": "#/MessageDefinitionVersion"
           }
         }
       }
@@ -111,7 +105,7 @@
   "MessageDefinitionVersion": {
     "allOf": [
       {
-        "$ref": "#MessageDefinitionBase"
+        "$ref": "#/MessageDefinitionBase"
       },
       {
         "type": "object",
@@ -122,16 +116,16 @@
           "definition": {
             "oneOf": [
               {
-                "$ref": "#CloudEventsMetaschema"
+                "$ref": "#/CloudEventsMetaschema"
               },
               {
-                "$ref": "#AMQPMetaschema"
+                "$ref": "#/AMQPMetaschema"
               },
               {
-                "$ref": "#MQTTMetaschema"
+                "$ref": "#/MQTTMetaschema"
               },
               {
-                "$ref": "#NATSMetaschema"
+                "$ref": "#/NATSMetaschema"
               },
               {
                 "type": "object",
@@ -158,7 +152,7 @@
   "StringAttributeValueTemplate": {
     "allOf": [
       {
-        "$ref": "#AttributeValueTemplate"
+        "$ref": "#/AttributeValueTemplate"
       },
       {
         "type": "object",
@@ -173,7 +167,7 @@
   "TimestampAttributeValueTemplate": {
     "allOf": [
       {
-        "$ref": "#AttributeValueTemplate"
+        "$ref": "#/AttributeValueTemplate"
       },
       {
         "type": "object",
@@ -188,7 +182,7 @@
   "IntegerAttributeValueTemplate": {
     "allOf": [
       {
-        "$ref": "#AttributeValueTemplate"
+        "$ref": "#/AttributeValueTemplate"
       },
       {
         "type": "object",
@@ -203,7 +197,7 @@
   "BooleanAttributeValueTemplate": {
     "allOf": [
       {
-        "$ref": "#AttributeValueTemplate"
+        "$ref": "#/AttributeValueTemplate"
       },
       {
         "type": "object",
@@ -218,7 +212,7 @@
   "UriReferenceAttributeValueTemplate": {
     "allOf": [
       {
-        "$ref": "#AttributeValueTemplate"
+        "$ref": "#/AttributeValueTemplate"
       },
       {
         "type": "object",
@@ -233,7 +227,7 @@
   "UriAttributeValueTemplate": {
     "allOf": [
       {
-        "$ref": "#AttributeValueTemplate"
+        "$ref": "#/AttributeValueTemplate"
       },
       {
         "type": "object",
@@ -249,7 +243,7 @@
   "DataSchemaAttributeValueTemplate": {
     "allOf": [
       {
-        "$ref": "#AttributeValueTemplate"
+        "$ref": "#/AttributeValueTemplate"
       },
       {
         "type": "object",
@@ -265,22 +259,22 @@
   "AnyAttributeValueTemplate": {
     "oneOf": [
       {
-        "$ref": "#StringAttributeValueTemplate"
+        "$ref": "#/StringAttributeValueTemplate"
       },
       {
-        "$ref": "#BooleanAttributeValueTemplate"
+        "$ref": "#/BooleanAttributeValueTemplate"
       },
       {
-        "$ref": "#IntegerAttributeValueTemplate"
+        "$ref": "#/IntegerAttributeValueTemplate"
       },
       {
-        "$ref": "#TimestampAttributeValueTemplate"
+        "$ref": "#/TimestampAttributeValueTemplate"
       },
       {
-        "$ref": "#UriAttributeValueTemplate"
+        "$ref": "#/UriAttributeValueTemplate"
       },
       {
-        "$ref": "#UriReferenceAttributeValueTemplate"
+        "$ref": "#/UriReferenceAttributeValueTemplate"
       }
     ]
   },
@@ -291,28 +285,28 @@
         "type": "object",
         "properties": {
           "specversion": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "id": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "source": {
-            "$ref": "#UriReferenceAttributeValueTemplate"
+            "$ref": "#/UriReferenceAttributeValueTemplate"
           },
           "subject": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "type": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "datacontenttype": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "dataschema": {
-            "$ref": "#DataSchemaAttributeValueTemplate"
+            "$ref": "#/DataSchemaAttributeValueTemplate"
           },
           "time": {
-            "$ref": "#TimestampAttributeValueTemplate"
+            "$ref": "#/TimestampAttributeValueTemplate"
           }
         },
         "required": [
@@ -328,69 +322,69 @@
         "type": "object",
         "properties": {
           "durable": {
-            "$ref": "#BooleanAttributeValueTemplate"
+            "$ref": "#/BooleanAttributeValueTemplate"
           },
           "priority": {
-            "$ref": "#IntegerAttributeValueTemplate"
+            "$ref": "#/IntegerAttributeValueTemplate"
           },
           "ttl": {
-            "$ref": "#IntegerAttributeValueTemplate"
+            "$ref": "#/IntegerAttributeValueTemplate"
           }
         }
       },
       "deliveryannotations": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#AnyAttributeValueTemplate"
+          "$ref": "#/AnyAttributeValueTemplate"
         }
       },
       "messageannotations": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#AnyAttributeValueTemplate"
+          "$ref": "#/AnyAttributeValueTemplate"
         }
       },
       "properties": {
         "type": "object",
         "properties": {
           "messageid": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "userid": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "to": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "subject": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "replyto": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "correlationid": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "contenttype": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "contentencoding": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "absoluteexpirytime": {
-            "$ref": "#TimestampAttributeValueTemplate"
+            "$ref": "#/TimestampAttributeValueTemplate"
           },
           "creationtime": {
-            "$ref": "#TimestampAttributeValueTemplate"
+            "$ref": "#/TimestampAttributeValueTemplate"
           },
           "groupid": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "groupsequence": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "replytogroupid": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           }
         }
       },
@@ -398,7 +392,7 @@
         "type": "object",
         "properties": {
           "dataschema": {
-            "$ref": "#DataSchemaAttributeValueTemplate",
+            "$ref": "#/DataSchemaAttributeValueTemplate",
             "description": "reference to a schema object"
           },
           "amqpencoding": {
@@ -414,13 +408,13 @@
       "applicationproperties": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#AnyAttributeValueTemplate"
+          "$ref": "#/AnyAttributeValueTemplate"
         }
       },
       "footer": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#AnyAttributeValueTemplate"
+          "$ref": "#/AnyAttributeValueTemplate"
         }
       }
     }
@@ -432,45 +426,45 @@
         "type": "object",
         "properties": {
           "mqttversion": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "qos": {
-            "$ref": "#IntegerAttributeValueTemplate"
+            "$ref": "#/IntegerAttributeValueTemplate"
           },
           "retain": {
-            "$ref": "#BooleanAttributeValueTemplate"
+            "$ref": "#/BooleanAttributeValueTemplate"
           },
           "topicname": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "payloadformat": {
-            "$ref": "#IntegerAttributeValueTemplate"
+            "$ref": "#/IntegerAttributeValueTemplate"
           },
           "expiryinterval": {
-            "$ref": "#IntegerAttributeValueTemplate"
+            "$ref": "#/IntegerAttributeValueTemplate"
           },
           "responsetopic": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "correlationdata": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "contenttype": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           }
         }
       },
       "userproperty": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "#AnyAttributeValueTemplate"
+          "$ref": "#/AnyAttributeValueTemplate"
         }
       },
       "payload": {
         "type": "object",
         "properties": {
           "dataschema": {
-            "$ref": "#DataSchemaAttributeValueTemplate",
+            "$ref": "#/DataSchemaAttributeValueTemplate",
             "description": "reference to a schema object"
           }
         }
@@ -484,10 +478,10 @@
         "type": "object",
         "properties": {
           "subject": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           },
           "replyto": {
-            "$ref": "#StringAttributeValueTemplate"
+            "$ref": "#/StringAttributeValueTemplate"
           }
         }
       },
@@ -495,7 +489,7 @@
         "type": "object",
         "properties": {
           "dataschema": {
-            "$ref": "#DataSchemaAttributeValueTemplate",
+            "$ref": "#/DataSchemaAttributeValueTemplate",
             "description": "reference to a schema object"
           }
         }
