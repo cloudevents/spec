@@ -8,10 +8,6 @@ producers on behalf of event sources. The software entity handling these
 subscriptions and responsible for distributing events is abstractly referred to
 as a "subscription manager".
 
-## Status of this document
-
-This document is a working draft.
-
 ## 1. Introduction
 
 A subscription manager responsible for a specific set of events can reside

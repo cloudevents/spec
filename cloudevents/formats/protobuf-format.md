@@ -1,4 +1,4 @@
-# Protobuf Event Format for CloudEvents - Version 1.0-rc1
+# Protobuf Event Format for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
@@ -8,10 +8,6 @@ of that specification.
 
 In this document the terms *Protocol Buffers*, *protobuf*, and *proto* are used
 interchangeably.
-
-## Status of this document
-
-This document is a working draft.
 
 ## Table of Contents
 
