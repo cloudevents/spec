@@ -734,9 +734,9 @@ be delivered to the sink based on a set of criteria. The `filter` property in a
 subscription is a set of filter expressions, where each expression evaluates to
 either true or false for each event generated.
 
-If any of the filter expressions in the set evaluate to false, the event MUST NOT be
-sent to the sink. If all the filter expressions in the set evaluate to true, the event MUST be
-attempted to be delivered.
+If any of the filter expressions in the set evaluate to false, the event MUST
+NOT be sent to the sink. If all the filter expressions in the set evaluate to
+true, the event MUST be attempted to be delivered.
 
 Each filter expression includes the specification of a `dialect` that
 defines the type of filter and the set of additional properties that are
