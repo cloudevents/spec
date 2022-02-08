@@ -38,8 +38,8 @@ and reviewers should follow.
 There are two categories of roles:
 
 1. **Translator.** This is anyone who participates in the translation of any 
-   CloudEvents documents. One becomes a formal translator once a Pull Request(PR) 
-   of his/her translation is merged.
+   CloudEvents documents. One becomes a formal translator once a Pull Request (PR) 
+   of their translation is merged.
 
 2. **Reviewer.** A reviewer is responsible for checking new translation, ensuring 
    translation up to date as English version changed and answering related issues.
@@ -48,9 +48,8 @@ There are two categories of roles:
 
 ### Translators
 
-A Translator can start translate following [how to translate](#how-to-translate).
-
-A translator should follow [translation style guide](#translation-style-guide).
+A translator can start translating by following [the translation instructions](#how-to-translate).
+Translators should follow the [translation style guide](#translation-style-guide).
 
 ### Reviewers
 
@@ -68,15 +67,14 @@ The following rules govern adding and removing reviewers:
 
 ### Step 1. Check the Languages.md
 First, fork [cloudevents/spec](https://github.com/cloudevents/spec/tree/main) 
-to your Github repo. Then check the[languages.md](languages.md)to see if the language 
+to your Github repo. Then check the [language list](languages.md) to see if the language 
 you'd like to translate into already exists. If it exists, add new translation under 
-`languages/$(your-language-code)/$(corresponding-position)`. 
-For example:
-```
-cloudevents/spec.md should be translated as languages/zh-cn/cloudevents/spec.md
-cloudevents/adapters/github.md should be translated as languages/zh-cn/cloudevents/adapters/github.md
+`languages/$(your-language-code)/$(corresponding-filename)`. 
+
+Examples:
+- The translation of `cloudevents/spec.md` into `zh-cn` should be in `languages/zh-cn/cloudevents/spec.md`
+- The translation of `cloudevents/adapters/github.md` into `zh-cn` should be in `languages/zh-cn/cloudevents/adapters/github.md`
 *****NOTE: documents under languages directory should not be translated ***** 
-```
 If your language doesn't exist, add a new item to the [languages.md](languages.md) file, 
 which links to a newly-created directory named after the corresponding language code within 
 [language codes](https://en.wikipedia.org/wiki/Language_localisation#Language_tags_and_codes). 
@@ -120,7 +118,7 @@ A translator must submit translation via submitting a Pull Request. See details 
 [submit a Pull Request](../community/CONTRIBUTING.md#suggesting-a-change).
 
 ## Translation style guide
-- Only translate textual documents(generally md files). Other format documents(.json, .yaml, .g4) 
+- Only translate textual documents (generally Markdown files with a .md extension). Other document formats (.json, .yaml, .g4) 
   will not be translated.
 - Always start translate from `finished` documents since `working draft` might be changed anytime.
 - Code blocks within md documents are not translated.
