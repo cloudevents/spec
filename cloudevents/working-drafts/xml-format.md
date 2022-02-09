@@ -31,7 +31,7 @@ data type mappings for CloudEvents context attributes.
 * The [Data](#3-data) section defines the container for the data portion of a
 CloudEvent.
 
-* The [Envelope](#4-envelope) section defines an XML container for CloudEvents
+* The [Envelope](#4-envelope) section defines an XML element for CloudEvents
 attributes and an associated media type.
 
 * The [Batch](#5-xml-batch-format) section describes how multiple CloudEvents
@@ -45,14 +45,16 @@ interpreted as described in [RFC2119][rfc2119].
 
 ### 1.2 Approach
 
-This specification is deliberately verbose in favor of readability and
-deterministic processing.
+This XML representation used is deliberately verbose in favor of readability
+and deterministic processing.
 
-Preservation of attribute value type information is supported allowing
-custom extensions to be communicated without value type loss.
+Preservation of type information for CloudEvent attributes is supported allowing
+custom extensions to be communicated without type loss.
 
 A schema-less approach has been taken favoring convention over rigid document
 structure.
+
+The namespace `http://cloudevents.io/xmlformat/v1` SHOULD be used.
 
 ## 2. Attributes
 
@@ -82,7 +84,7 @@ discriminator SHOULD be interpreted with an implied type of `xs:string`
     ...
     <id>AAABBBCCCNNN0000</id>
     ..
-    <time>2021-08-14T-08:00</time>
+    <time>2021-08-14T14:30:22-08:00</time>
     ..
     <myextension xsi:type="xs:string">my extension value</myextension>
     <myboolean xsi:type="xs:boolean">false</myboolean>
@@ -91,15 +93,15 @@ discriminator SHOULD be interpreted with an implied type of `xs:string`
 ## 3. Data
 
 The `Data` portion of a CloudEvent follows a similar model to that employed by
-the [JSON Format specification][json-format]. The element names MUST be capitalized to avoid
-collision with curent or future CloudEvent attribute names.
+the [JSON Format specification][json-format]. The element names are capitalized
+to avoid collision with curent or future CloudEvent attribute names.
 
 ### 3.1 Binary Data
 
 MUST be carried in an element with an defined type of `xs:base64Binary`
 
 ``` xml
-<Data xsi:type="xs:base64Binary">.........</Data>
+<data xsi:type="xs:base64Binary">.........</data>
 ```
 
 ### 3.2 Text Data
@@ -107,19 +109,21 @@ MUST be carried in an element with an defined type of `xs:base64Binary`
 MUST be carried in an element with an defined type of `xs:string`
 
 ``` xml
-<Data xsi:type="xs:string">This is text</Data>
+<data xsi:type="xs:string">This is text</data>
 ```
 
 ### 3.3 XML Data
 
-XML data MUST be carried in an explicit element `<DataXml>`:
+XML data MUST be carried in an element with a defined type of `xs:any`
+allowing a single XML element (with any required namespace definitions)
+to be represented.
 
 ``` xml
-<DataXml>
-        <myData>
-            ....
-        </myData>  
-</DataXml>
+<data xsi:type="xs:any">
+    <myData>
+        ....
+    </myData>  
+</data>
 ```
 
 ## 4. Envelope
@@ -132,8 +136,8 @@ Such a representation MUST use the media type `application/cloudevents+xml`.
 
 The enveloping element contains:
 
-* A set of context attributre elements.
-* Optionally: Either `<Data>` or `<DataXml>`
+* A set of context attribute elements.
+* An optional `data` element.
 
 eg (Namespace definitions omitted for brevity):
 
@@ -145,7 +149,7 @@ eg (Namespace definitions omitted for brevity):
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
     <myboolean xsi:type="xs:boolean">false</myboolean>
-    <Data xsi:type="xs:string">Now is the winter of our discount tents...</Data>
+    <data xsi:type="xs:string">Now is the winter of our discount tents...</data>
 </CloudEvent>
 ```
 
@@ -188,13 +192,13 @@ An example of an empty batch of CloudEvents (typically used in a response, but a
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<CloudEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+<CloudEvent xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>image/png</datacontenttype>
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
-    <Data xsi:type="xs:base64Binary">... Base64 encoded data...</Data>
+    <data xsi:type="xs:base64Binary">... Base64 encoded data...</data>
 </CloudEvent>
 ```
 
@@ -202,13 +206,13 @@ An example of an empty batch of CloudEvents (typically used in a response, but a
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<CloudEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+<CloudEvent xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>application/json</datacontenttype>
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
-    <Data xsi:type="xs:string">{ "salutation" : "Good Morning", "text" : "hello world" }</Data>
+    <data xsi:type="xs:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
 </CloudEvent>
 ```
 
@@ -216,18 +220,18 @@ An example of an empty batch of CloudEvents (typically used in a response, but a
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<CloudEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+<CloudEvent xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>application/xml</datacontenttype>
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
-    <DataXml>
+    <data xsi:type="xs:any">
         <Location>
             <Latitude>51.509865</Latitude>
             <Longitude>-0.118092</Longitude>
         </Location>
-    </DataXml>
+    </data>
 </CloudEvent>
 ```
 
