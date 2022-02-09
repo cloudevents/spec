@@ -240,7 +240,7 @@ The following sections define the attributes that appear in a Service entity.
 ##### epoch
 
 - Type: `Unsigned 32-bit Integer`
-- Description: The Discovery Endpoint's epoch value for this Service Entry.
+- Description: The Discovery Endpoint's `epoch` value for this Service Entry.
   This specification does not mandate any particular semantic meaning to
   the value used. For example, implementations are free to use a value that
   represents a timestamp or could choose to simply use a monotonically
@@ -778,54 +778,47 @@ upon return of the `202 Accepted` from the original request.
 #### `POST /services`
 
 This MUST update the collection of Services in the Discovery Endpoint to
-contain all Services in the request or fail. Any existing Service identified
-in the request will be completely replaced by the Service definition in the
-request. The body of the request message MUST contain an array of zero or more
-Service entries.
+contain all Services in the request or fail. The body of the request message
+MUST contain an array of zero or more Service entries.
 
-The `id` and `epoch` attributes of the Services MAY be omitted. In such cases
-the discovery endpoint MUST assign an appropriate value to the omitted
-field(s). An appropriate `id` MUST be globally unique. An appropriate `epoch`
-MUST be greater than the existing `epoch` for a service with the same `id`.
-When an `id` is provided any existing Service definition with that
-`id` MUST be completely replaced by the Service definition in the request.
-If an `epoch` is given in the request it MUST be greater than the
-`epoch` of any existing Service of the same `id` or the request MUST fail.
+The following rules apply to processing the Services specified in the request:
+- any error processing the request MUST result in the entire operation failing
+  and no updates to the Discovery Endpoint are to happen.
+- the Services MUST be processed in the order in which they appear in the
+  request.
+- a Service (as identified by its `id`) MUST NOT appear more than once in the
+  request.
+- any existing Service (as identified by its `id`) MUST be completely
+  replaced by the Service definition in the request.
+  - if the incoming Service has an `epoch` value then the request MUST fail if
+    that values does not equal the current Service's `epoch` value.
+  - if the incoming Service does not have an `epoch` value then the Discovery
+    Endpoint MUST assign an appropriate value. The value MUST be greater than
+	the existing Service's value.
+- if the incoming Service contains an `id` but no Service with that `id` exists
+  then the request MUST fail.
+- if the incoming Service does not contain an `id` then the Discovery Endpoint
+  MUST assign an appropriate value. The value MUST be globally unique.
+- aside from `id` and `epoch`, unless there is an out of band agreement, all
+  mandatory attributes MUST be present in the request, and a Discovery Endpoint
+  MUST reject requests that are missing such attributes.
 
-Aside from `id` and `epoch`, unless there is an out of band agreement, all
-mandatory attributes MUST be present in the request, and a Discovery Endpoint
-MUST reject requests that are missing such attributes.
-
-If the Discovery Endpoint is unable to successully add every Service in the
-incoming request then an error MUST be generated and none of the specified
-Services are to be added or updated in the Discovery Endpoint.
-
-The Services in the request MUST be processed in the order in which they are
-given. While any error during the update MUST cause the rollback of any effect
-of the request, the processing of each Service in the request MUST be
-applied as if all previous Services in the request were already completed.
-This means that attribute uniqueness checking, such as on the `name`
-attribute, MUST be done on the new state of all Services as if all previously
-specified Services in the incoming request were already successfully processed.
-
-For example, if a Discovery Endpoint has a Service called `MyService`, it is
-possible to rename that Service to `YourService` and then to add, or update,
-another Service to use `MyService` as its `name`.
-
-Likewise, while it might be less than optimal, it is possible for
-a request to update a Service multiple times if the same `id` is used more
-than once within a request.
+There is no requirement that the incoming Services be processed in the
+order in which they appear. However, any constraint/consistency checks
+(e.g. `name` uniqueness checking) MUST only be performed after all of the
+incoming Services have been processed.
 
 The follow responses are defined by this specification:
-- `200 OK` if all the specified Services were processed successfully
-  - The HTTP Response Body MUST include an array of the Service values
-    resulting from the successful processing of the request. The order of
-    those values MUST match the order of the Services in the request. The
-    response MAY include attributes and values which were added by the
-    Discovery Endpoint.
+- `200 OK` if all the specified Services were processed successfully.
+  - The HTTP Response Body MUST include an array of the Services that were
+    created, or updated, as a result of processing the request. The order
+	of the array MUST match the order of the incoming Service array.
+	Each Service in the response SHOULD include the current value for all
+	attributes, even if the Discovery Endpoint added or modified some values
+	during the time of processing of the request.
 - `400 Bad Request` if the first error encountered is a constraint failure
-- `409 Conflict` if the first error encountered is that a given epoch was less
-  than or equal to the existing epoch of the Service with a given `id`
+- `409 Conflict` if the first error encountered is that a given `epoch` was not
+  equal to the existing `epoch` value.
 
 Other responses are allowed, but not defined by this specification.
 
@@ -835,7 +828,6 @@ Content-Type: application/json
 
 [
   {
-    "url": "{url}",
     "name": "{name}",
     ... remainder of Service attributes ...
   }
@@ -850,96 +842,48 @@ Content-Type: application/json
 
 [
   {
-    id: "{id}",
-    epoch: "{epoch}",
+    "id": "{id}",
+    "epoch": "{epoch}",
+	"name": "{name},
     ... remainder of Service attributes ...
   },
-  ...
-]
-```
-#### `DELETE /services`
-
-This MUST delete all of the Services in the Discovery Endpoint that are
-contained in the request. If any of those Services cannot be deleted for any
-reason (e.g. an `id` is not given or a Service with the given `id` does not
-exist) then the entire request MUST fail with no effect.
-
-If an `id` is not specified in any of the Services the entire request MUST
-fail. If no Service can be found that corresponds to a specified `id`, the
-entire request MUST fail. An `epoch` value MAY be omitted. If a Service
-corresponding to a specified `id` has a different recorded `epoch` value than
-the one given the entire request MUST fail.
-
-If other service attributes are included in the request, those SHOULD be
-ignored for the purposes of processing the request.
-
-Service deletions MUST be processed in the order in which they are given. Thus,
-if a Service is specified multiple times the entire request MUST fail.
-
-The follow responses are defined by this specification:
-- `200 OK` if none of the specified Services remain in the Discovery Endpoint.
-  - The HTTP Response Body MUST include an array of the Service values at the
-    time of deletion. The order of those values MUST match that of the
-    Services in the request.
-- `400 Bad Request` if the first error encountered is a missing `id`
-- `409 Conflict` if the first error encountered is that a given epoch was not
-  equal to the recorded epoch of the Service with a given `id`
-
-The format of the HTTP Request MUST adhere to the following:
-```
-Content-Type: application/json
-
-[
-  {
-    id: "{id}",      // REQUIRED
-    epoch: "{epoch}" // OPTIONAL
-  },
-  ...
-]
-```
-
-The format of the `200 OK` HTTP Response MUST adhere to the following:
-```
-200 OK
-Content-Type: application/json
-
-[
-  {
-    "url": "{url}",
-    "name": "{name}",
-    ... remainder of Service attributes ...
-  }
   ...
 ]
 ```
 
 #### `PUT /services/{id}`
 
-This MUST update the collection of Services in the Discovery Endpoint to
-contain the Service in the request. If the Service identified in the
-request exists it MUST be completely replaced by the Service definition in the
-request. If the Service does not exist then a new Service MUST be created.
+This MUST update the Service referenced by the specified URL.
+If the Service identified by the specified URL does not exist then the
+request MUST fail. Upon successful processing of the request, the existing
+Service MUST be completely replaced by the Service definition.
 
 The body of the request message MUST contain a Service with an `id`
 attribute matching the `{id}` in the path.
 
 The `epoch` attribute of the Service MAY be omitted. In such cases the
-discovery endpoint MUST assign an appropriate value to the `epoch`. An
-appropriate `epoch` MUST be greater than the any existing `epoch` for a service
-with the same `id`. If an `epoch` is given in the request it MUST be greater
-than the `epoch` of any existing Service of the same `id` or the request MUST
-fail.
+discovery endpoint MUST assign a value that is greater than the existing
+`epoch` value for the Service.
+
+If an `epoch` is given in the request it MUST be equal to the `epoch` of
+the existing Service, otherwise the request MUST fail.
+
+Aside from `id` and `epoch`, unless there is an out of band agreement, all
+mandatory attributes MUST be present in the request, and a Discovery Endpoint
+MUST reject requests that are missing such attributes.
 
 The follow responses are defined by this specification:
-- `200 OK` if Service collection was updated.
+- `200 OK` if specified Service was updated.
   - The HTTP Response Body MUST include the Service values resulting from the
-    successful processing of the request. The response MAY include attributes
-    and values which were added by the Discovery Endpoint.
+    successful processing of the request.
+	The response SHOULD include the current value for all
+	attributes, even if the Discovery Endpoint added or modified some values
+	during the time of processing of the request.
 - `400 Bad Request` if the `id` in the path and body are not the same or some
-  other constraint failure is found
-- `404 Not Found` if there is no Service with the specified `id`
-- `409 Conflict` if the given `epoch` was less than or equal to the existing
-  `epoch` of the Service with the given `id`
+  other constraint failure is found.
+- `404 Not Found` if there is no Service with the specified `id`.
+- `409 Conflict` if the given `epoch` was not equal to the existing `epoch`
+   value of the Service being updated.
 
 Other responses are allowed, but not defined by this specification.
 
@@ -967,20 +911,23 @@ Content-Type: application/json
 }
 ```
 
-#### `DELETE /services/{id}`
+#### `DELETE /services/{id}[?epoch={epoch}]`
 
 This MUST delete the Service at the referenced URL.
 
 The request URL MAY include an OPTIONAL `epoch` query parameter, and if
 present, the Discovery Endpoint MUST reject the request if the corresponding
-Service has a different recorded `epoch` value than the query parameter.
+Service has a different `epoch` value than the query parameter.
 
 The follow responses are defined by this specification:
 - `200 OK` if the Service was deleted or does not exist.
-  - The HTTP Response Body MUST include the Service values at the time of
-    deletion.
-- `409 Conflict` if the given epoch was not equal to the existing epoch of the
-  Service with the given `id`
+  - The HTTP Response Body MUST include a Service definition with at least
+    its `id` attribute. It SHOULD include the remaining Service attributes
+	as they existed at the time of processing the request if possible.
+	Note that if the Service was deleted prior to processing of this request
+	the Service values might not be available to be returned.
+- `409 Conflict` if the given `epoch` was not equal to the existing `epoch` of
+   the Service.
 
 Other responses are allowed, but not defined by this specification.
 
@@ -994,6 +941,67 @@ Content-Type: application/json
   "name": "{name}",
   ... remainder of Service attributes ...
 }
+```
+
+#### `DELETE /services`
+
+This MUST delete all of the Services in the Discovery Endpoint that are
+contained in the request. If any of those Services cannot be deleted for any
+reason then the entire request MUST fail with no effect.
+
+If an `id` is not specified in any of the Services the entire request MUST
+fail. If no Service can be found that corresponds to a specified `id`, the
+processing MUST ignore that Service and not fail as a result of the Service
+already being deleted. An `epoch` value MAY be omitted in the incoming Service.
+If present, and does not match the Service's current `epoch` value, then the
+request MUST fail.
+
+If other service attributes are included in the request, those SHOULD be
+ignored for the purposes of processing the request.
+
+There is no requirement that the Services in the request are processed in
+the order in which they appear.
+
+The follow responses are defined by this specification:
+- `200 OK` if none of the specified Services remain in the Discovery Endpoint.
+  - The HTTP Response Body MUST include an array of Services that match
+    the order of the array of Services specified in the request.
+	The Services in the response MUST include at least the `id` attributes
+	and SHOULD include the remaining Service attributes as they existed
+	at the time of the request processing if possible.
+	Note that if the Service was deleted prior to processing of this request
+	the Service values might not be available to be returned.
+- `409 Conflict` if the first error encountered is that a given `epoch` was not
+  equal to the recorded `epoch` of the Service. The Response Body SHOULD
+  include information about which Service caused the error.
+
+The format of the HTTP Request MUST adhere to the following:
+```
+Content-Type: application/json
+
+[
+  {
+    id: "{id}",      // REQUIRED
+    epoch: "{epoch}" // OPTIONAL
+  },
+  ...
+]
+```
+
+The format of the `200 OK` HTTP Response MUST adhere to the following:
+```
+200 OK
+Content-Type: application/json
+
+[
+  {
+    "id": "{id}",
+    "url": "{url}",
+    "name": "{name}",
+    ... remainder of Service attributes ...
+  }
+  ...
+]
 ```
 
 ### Discovery Endpoint Service Change Events
