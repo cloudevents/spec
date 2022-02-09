@@ -128,9 +128,8 @@ to be represented.
 
 ## 4. Envelope
 
-Each CloudEvent is wholly represented as an XML element, the root xml
-document element MUST be `<CloudEvent>`. This element carries the `specversion`
-as an XML attribute value.
+Each CloudEvent is wholly represented as an XML element `<CloudEvent>` that
+carries the `specversion`as an XML attribute value.
 
 Such a representation MUST use the media type `application/cloudevents+xml`.
 
