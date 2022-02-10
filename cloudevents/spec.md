@@ -178,6 +178,12 @@ CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
 digits ('0' to '9') from the ASCII character set. Attribute names SHOULD be
 descriptive and terse and SHOULD NOT exceed 20 characters in length.
 
+#### Reserved Names
+
+The following attribute names are reserved and MAY NOT be used:
+
+- `data`
+
 ### Type System
 
 The following abstract data types are available for use in attributes. Each of
