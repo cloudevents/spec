@@ -34,7 +34,7 @@ paths:
         '400':
           description: Bad Request - constraint failure
         '409':
-          description: Conflict - epoch not greater
+          description: Conflict - epoch does not match
     delete:
       operationId: deleteServices
       requestBody:
@@ -42,12 +42,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/servicesdeleteresponse'
-        '400':
-          description: Bad Request - constraint failure
-        '404':
-          description: Not Found
         '409':
-          description: Conflict - epoch not greater
+          description: Conflict - epoch does not match
   /services/{id}:
     get:
       operationId: getService
@@ -76,9 +72,16 @@ paths:
         '404':
           description: Not Found
         '409':
-          description: Conflict - epoch not greater
+          description: Conflict - epoch does not match
     delete:
       operationId: deleteService
+      parameters:
+       - in: query
+         name: epoch
+         description: The epoch of the service to be deleted
+         required: false
+         schema:
+           $ref: '#/components/schemas/service/properties/epoch'
       parameters:
         - $ref: '#/components/parameters/id'
       requestBody:
@@ -86,12 +89,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/servicedeleteresponse'
-        '400':
-          description: Bad Request - constraint failure
-        '404':
-          description: Not Found
         '409':
-          description: Conflict - epoch not greater
+          description: Conflict - epoch does not match
 components:
   parameters:
     id:
