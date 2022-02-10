@@ -54,7 +54,11 @@ custom extensions to be communicated without type loss.
 A schema-less approach has been taken favoring convention over rigid document
 structure.
 
-The namespace `http://cloudevents.io/xmlformat/v1` SHOULD be used.
+The namespace `http://cloudevents.io/xmlformat/v1` SHOULD be used, when
+namespace prefixes are used a prefix of `ce` is preferred but MUST NOT be expected
+from an XML document processing perspective.
+
+An XML document preamble SHOULD be included to ensure deterministic processing.
 
 ## 2. Attributes
 
@@ -128,8 +132,8 @@ to be represented.
 
 ## 4. Envelope
 
-Each CloudEvent is wholly represented as an XML element `<CloudEvent>` that
-carries the `specversion`as an XML attribute value.
+Each CloudEvent is wholly represented as an XML element `<Event>` that
+carries the `specversion` as an XML attribute value.
 
 Such a representation MUST use the media type `application/cloudevents+xml`.
 
@@ -138,10 +142,10 @@ The enveloping element contains:
 * A set of context attribute elements.
 * An optional `data` element.
 
-eg (Namespace definitions omitted for brevity):
+eg _(XML preamble and namespace definitions omitted for brevity)_:
 
 ``` xml
-<CloudEvent specversion="1.0">
+<Event specversion="1.0">
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>text/plain</datacontenttype>
     <id>000-1111-2222</id>
@@ -149,7 +153,7 @@ eg (Namespace definitions omitted for brevity):
     <type>SOME.EVENT.TYPE</type>
     <myboolean xsi:type="xs:boolean">false</myboolean>
     <data xsi:type="xs:string">Now is the winter of our discount tents...</data>
-</CloudEvent>
+</Event>
 ```
 
 ## 5. XML Batch Format
@@ -165,24 +169,24 @@ support for the _XML Format_ is indicated.
 An XML Batch of CloudEvents MUST use the media type
 `application/cloudevents-batch+xml`.
 
-Example:
+Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 ``` xml
-<CloudEventBatch>
-    <CloudEvent specversion="1.0">
+<Batch>
+    <Event specversion="1.0">
        ....
-    </CloudEvent>
-    <CloudEvent specversion="1.0">
+    </Event>
+    <Event specversion="1.0">
        ....
-    </CloudEvent>
+    </Event>
     ....
-</CloudEventBatch>
+</Batch>
 ```
 
 An example of an empty batch of CloudEvents (typically used in a response, but also valid in a request):
 
 ```xml
-<CloudEventBatch />
+<Batch />
 ```
 
 ## 6. Examples
@@ -191,47 +195,73 @@ An example of an empty batch of CloudEvents (typically used in a response, but a
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<CloudEvent xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+<Event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>image/png</datacontenttype>
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
     <data xsi:type="xs:base64Binary">... Base64 encoded data...</data>
-</CloudEvent>
+</Event>
 ```
 
 ### 6.2 CloudEvent with JSON event data
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<CloudEvent xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+<Event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>application/json</datacontenttype>
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
     <data xsi:type="xs:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
-</CloudEvent>
+</Event>
 ```
 
 ### 6.3 CloudEvent with XML event data
 
+#### 6.3.1 Locally namespaced event data
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<CloudEvent xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+<Event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>application/xml</datacontenttype>
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
     <data xsi:type="xs:any">
-        <Location>
-            <Latitude>51.509865</Latitude>
-            <Longitude>-0.118092</Longitude>
-        </Location>
+        <geo:Location xmlns:geo="http://someauthority.example/">
+            <geo:Latitude>51.509865</geo:Latitude>
+            <geo:Longitude>-0.118092</geo:Longitude>
+        </geo:Location>
     </data>
-</CloudEvent>
+</Event>
+```
+
+#### 6.3.2 Explicit namespacing
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ce:Event xmlns:ce="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:geo="http://someauthority.example/"
+          specversion="1.0" >
+    <ce:time>2020-03-19T12:54:00-07:00</ce:time>
+    <ce:datacontenttype>application/xml</ce:datacontenttype>
+    <ce:id>000-1111-2222</ce:id>
+    <ce:source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</ce:source>
+    <ce:type>SOME.EVENT.TYPE</ce:type>
+    <ce:data xsi:type="xs:any">
+        <geo:Location>
+            <geo:Latitude>51.509865</geo:Latitude>
+            <geo:Longitude>-0.118092</geo:Longitude>
+        </geo:Location>
+    </ce:data>
+</ce:Event>
 ```
 
 [ce-spec]: ../spec.md
