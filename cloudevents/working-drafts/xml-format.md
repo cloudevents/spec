@@ -97,8 +97,9 @@ discriminator SHOULD be interpreted with an implied type of `xs:string`
 ## 3. Data
 
 The `Data` portion of a CloudEvent follows a similar model to that employed by
-the [JSON Format specification][json-format]. The element names are capitalized
-to avoid collision with curent or future CloudEvent attribute names.
+the [JSON Format specification][json-format]. A `data` element is used to
+encapsulate the payload and an `xsi:type` used to discrimate the payload
+type.
 
 ### 3.1 Binary Data
 
