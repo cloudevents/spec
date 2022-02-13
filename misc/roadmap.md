@@ -87,6 +87,11 @@ _1.0.1_ - Completed - 2020/12/10
 1. See [V1.0.1 Release](https://github.com/cloudevents/spec/releases/tag/v1.0.1)
    for details.
 
+_1.0.2_ - Completed - 2022/02/03
+
+1. See [V1.0.2 Release](https://github.com/cloudevents/spec/releases/tag/v1.0.2)
+   for details.
+
 _Future_
 
 - All remaining issues and PRs will be examined.

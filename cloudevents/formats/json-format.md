@@ -1,13 +1,9 @@
-# JSON Event Format for CloudEvents - Version 1.0.2-wip
+# JSON Event Format for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
 The JSON Format for CloudEvents defines how events are expressed in JavaScript
 Object Notation (JSON) Data Interchange Format ([RFC8259][rfc8259]).
-
-## Status of this document
-
-This document is a working draft.
 
 ## Table of Contents
 

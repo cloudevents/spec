@@ -1,13 +1,9 @@
-# Kafka Protocol Binding for CloudEvents - Version 1.0.2-wip
+# Kafka Protocol Binding for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
 The [Kafka][kafka] Protocol Binding for CloudEvents defines how events are
 mapped to [Kafka messages][kafka-message-format].
-
-## Status of this document
-
-This document is a working draft.
 
 ## Table of Contents
 
