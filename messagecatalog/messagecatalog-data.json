@@ -8,18 +8,20 @@
         "type": "string"
       },
       "groups": {
-        "type": "array",
-        "items": {
+        "type": "object",
+        "description" : "A table of message definition groups. The property names (keys) of this table are synonyms for the `id` properties in the value objects.",
+        "additionalProperties": {
           "$ref": "#/MessageDefinitionGroup"
         }
       }
     }
   },
-  "MessageDefinitionGroup": {
+  "MessageDefinitionGroup": {   
     "type": "object",
     "properties": {
       "id": {
-        "type": "string"
+        "type": "string", 
+        "description" : "Identifier of this message definition group. If "
       },
       "format": {
         "type": "string"
@@ -48,8 +50,8 @@
         }
       },
       "definitions": {
-        "type": "array",
-        "items": {
+        "type": "object",
+        "additionalProperties": {
           "$ref": "#/MessageDefinition"
         }
       }
@@ -76,6 +78,22 @@
       },
       "documentation": {
         "type": "string"
+      },
+      "relatedto": {
+        "type": "string",
+        "format": "uri"
+      },
+      "relatedvia": {
+        "type": "string"
+      },
+      "relation": {
+        "type": "string",
+        "enum": [
+          "reply",
+          "followup",
+          "end",
+          "report"
+        ]
       },
       "createdtimeutc": {
         "type": "string",
