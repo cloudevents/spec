@@ -163,7 +163,7 @@ These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
 inspected at the destination without having to deserialize the event data.
 
-### Attribute Naming Convention
+### Naming
 
 The CloudEvents specifications define mappings to various protocols and
 encodings, and the accompanying CloudEvents SDK targets various runtimes and
@@ -178,11 +178,8 @@ CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or
 digits ('0' to '9') from the ASCII character set. Attribute names SHOULD be
 descriptive and terse and SHOULD NOT exceed 20 characters in length.
 
-#### Reserved Names
-
-The following attribute names are reserved and MAY NOT be used:
-
-- `data`
+CloudEvent attributes MUST NOT have the name `data`; this name is reserved as it
+is used in some event formats.
 
 ### Type System
 
@@ -499,7 +496,7 @@ encapsulated within `data`.
 - Constraints:
   - OPTIONAL
 
-# Size Limits
+## Size Limits
 
 In many scenarios, CloudEvents will be forwarded through one or more generic
 intermediaries, each of which might impose limits on the size of forwarded
@@ -534,7 +531,7 @@ event-related details through resolving links allows for differentiated access
 control and selective disclosure, rather than having sensitive details embedded
 in the event directly.
 
-# Privacy and Security
+## Privacy and Security
 
 Interoperability is the primary driver behind this specification, enabling such
 behavior requires some information to be made available _in the clear_ resulting
@@ -563,7 +560,7 @@ Consider the following to prevent inadvertent leakage especially when leveraging
   Protocol level security SHOULD be employed to ensure the trusted and secure
   exchange of CloudEvents.
 
-# Example
+## Example
 
 The following example shows a CloudEvent serialized as JSON:
 
