@@ -1,0 +1,78 @@
+name: In expression
+tests:
+  - name: int in int set
+    expression: 123 IN (1, 2, 3, 12, 13, 23, 123)
+    result: true
+  - name: int not in int set
+    expression: 123 NOT IN (1, 2, 3, 12, 13, 23, 123)
+    result: false
+
+  - name: string in string set
+    expression: "'abc' IN ('abc', \"bcd\")"
+    result: true
+  - name: string not in string set
+    expression: "'aaa' IN ('abc', \"bcd\")"
+    result: false
+
+  - name: bool in bool set
+    expression: TRUE IN (TRUE, FALSE)
+    result: true
+  - name: bool not in bool set
+    expression: TRUE IN (FALSE)
+    result: false
+
+  - name: mix literals and identifiers (1)
+    expression: source IN (myext, 'abc')
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+      myext: "http://localhost/source"
+    result: true
+  - name: mix literals and identifiers (2)
+    expression: source IN (source)
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+      myext: "http://localhost/source"
+    result: true
+  - name: mix literals and identifiers (3)
+    expression: "source IN (id, \"http://localhost/source\")"
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+      myext: "http://localhost/source"
+    result: true
+  - name: mix literals and identifiers (4)
+    expression: source IN (id, 'xyz')
+    event:
+      specversion: "1.0"
+      id: myId
+      source: "http://localhost/source"
+      type: myType
+    result: false
+
+  - name: type coercion with booleans (1)
+    expression: "'true' IN (TRUE, 'false')"
+    result: true
+  - name: type coercion with booleans (2)
+    expression: "'true' IN ('TRUE', 'false')"
+    result: false
+  - name: type coercion with booleans (3)
+    expression: TRUE IN ('true', 'false')
+    result: true
+  - name: type coercion with booleans (4)
+    expression: "'TRUE' IN (TRUE, 'false')"
+    result: false
+
+  - name: type coercion with int (1)
+    expression: "1 IN ('1', '2')"
+    result: true
+  - name: type coercion with int (2)
+    expression: "'1' IN (1, 2)"
+    result: true

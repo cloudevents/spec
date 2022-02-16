@@ -14,24 +14,11 @@ This is a working draft. Changes could be made anytime.
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [Roles](#roles)
 - [How to translate](#how-to-translate)
+- [How to add a new language](#how-to-add-a-new-language)
+- [How to publish translation tasks](#how-to-publish-translation-tasks)  
 - [Translation style guide](#translation-style-guide)
-
-## Overview
-
-We welcome you to join us and contribute to the CloudEvents spec!
-
-CloudEvents is a specification for describing event data in common formats to 
-provide interoperability across services, platforms and systems. An increasing 
-number of developers are becoming interested in CloudEvents. We encourage you 
-to translate the spec into a specific language since the language barrier might 
-hinder the spread of CloudEvents.
-
-This page contains information about how to translate a document from scratch, 
-definition of roles and responsibilities as well as guidelines that translators 
-and reviewers should follow.
 
 ## Roles
 
@@ -41,10 +28,10 @@ There are two categories of roles:
    CloudEvents documents. One becomes a formal translator once a Pull Request (PR) 
    of their translation is merged.
 
-2. **Reviewer.** A reviewer is responsible for checking new translation, ensuring 
-   translation up to date as English version changed and answering related issues.
-   A translation will not be merged until reviewers give their LGTM.
-   Check current reviewers [here](reviewers.md).
+2. **Reviewer.** A reviewer is responsible for checking new translations 
+   and answering related issues.
+   Typically, reviewers of each language are members of a Github team which is named 
+   after the language code(i.e., zh-CN reviewers).
 
 ### Translators
 
@@ -53,74 +40,126 @@ Translators should follow the [translation style guide](#translation-style-guide
 
 ### Reviewers
 
+Anyone, who builds [a new language structure](#how-to-add-a-new-language), will be the first reviewer
+of that language.
+
+Reviewers should track translation state of each document by editing 
+`languages/{language-code}/translations.md` file.
+
+There are 4 types of status:
+- Ready to start: any document is ready to be translated stay in this state.
+- Started: indicating someone is translating this document
+- PR reviewing: a translator finished the translation, and the work is being reviewed.
+- PR merged: the translation is successfully merged into the spec.
+
+Initially, the last edit time will be the time when the translation is merged.
+Reviewers should ensure translations are up-to-date with the English version as it changes, meanwhile 
+update the last edit time as well. 
+
 The following rules govern adding and removing reviewers:
 
-- New reviewers can be proposed via a PR to edit the [reviewers](reviewers.md) file.
-  Only probationary reviewers can be assigned as a formal reviewer. 
-  A translator who completes at least 6 translation documents becomes a probationary 
-  reviewer automatically.
-- Reviewers can be removed via a PR to edit the [reviewers](reviewers.md) file. 
-  That happens when a reviewer explicitly give up the role or has not performed 
-  reviewer duties over 2 weeks.
+- Reviewers can be proposed via a PR to edit the `languages/{language-code}/reviewer.md` file.
+
+- Reviewers can be removed via a PR to edit the `languages/{language-code}/reviewer.md` file.
+
+## How to add a new language 
+
+This section is mainly for anyone who needs to build a new language structure.
+
+Fork [cloudevents/spec](https://github.com/cloudevents/spec/tree/main)
+to your Github repo. 
+
+Then check the [language list](languages.md) to see if the language
+you'd like to translate into already exists. If it doesn't exist, you can start to add a new one.
+
+### Step 1. build the structure
+
+Create a directory under `languages` directory, named after the specific 
+[language code](http://www.lingoes.net/en/translator/langcode.htm).
+
+Add a new item to the [language list](languages.md), which linking to the directory 
+you just created. 
+
+### Step 2. copy documents to right location
+
+Copy all original documents except `languages` directory to `languages/{language-code}`.
+There is no need to copy project-related files(i.e.,LICENSE, OWNERS).
+
+For example:
+```
+copy cloudevents/spec.md to languages/zh-CN/cloudevents/spec.md
+copy README.md to languages/zh-CN/README.md
+```
+
+Clear content of copied documents to indicate that the document is ready to be translated.
+
+Then copy the [reviewer list](zh-CN/reviewers.md) and the [translation list](zh-CN/translations.md)
+to `languages/{language-code}`.
+
+Check example structure [here](zh-CN).
+
+## How to publish translation tasks
+
+### Step 1. open a single issue referring to an untranslated document
+
+Create an issue with label "{language-code}-translation" to publish a translation assignment.
+
+Examples:
+```
+Issue tile:        docs: translate cloudevents/spec.md to zh-CN
+Issue content:   
+                   original document: 
+                   https://github.com/cloudevents/spec/blob/main/README.md
+                   target document: 
+                   https://github.com/cloudevents/spec/blob/main/languages/zh-CN/README.md
+```
+
+A reviewer can assign the issue to anyone who comments to do the translation.
+
+### Step 2. open an overall issue to list and track all tasks
+
+Examples:
+```
+Issue tile:         docs: translation list to zh-CN
+Issue content:   
+                    cloudevents: 
+                    Issue url: docs: translate cloudevents/spec.md to zh-CN
+                    Issue url: docs: translate cloudevents/SDK.md to zh-CN
+                    Issue url: docs: translate cloudevents/primer.md to zh-CN
+     
+                    cesql: 
+                    Issue url: docs: translate cesql/spec.md to zh-CN
+                    Issue url: docs: translate cesql/cesql_tck/README.md to zh-CN
+                    ......
+```
 
 ## How to translate
 
-### Step 1. Check the Languages.md
-First, fork [cloudevents/spec](https://github.com/cloudevents/spec/tree/main) 
-to your Github repo. Then check the [language list](languages.md) to see if the language 
-you'd like to translate into already exists. If it exists, add new translation under 
-`languages/$(your-language-code)/$(corresponding-filename)`. 
+### Step 1. Choose a document to translate 
 
-Examples:
-- The translation of `cloudevents/spec.md` into `zh-cn` should be in `languages/zh-cn/cloudevents/spec.md`
-- The translation of `cloudevents/adapters/github.md` into `zh-cn` should be in `languages/zh-cn/cloudevents/adapters/github.md`
-*****NOTE: documents under languages directory should not be translated ***** 
-If your language doesn't exist, add a new item to the [languages.md](languages.md) file, 
-which links to a newly-created directory named after the corresponding language code within 
-[language codes](https://en.wikipedia.org/wiki/Language_localisation#Language_tags_and_codes). 
-Then, add new translation to right position as described above.
+A translator can find a document to translate by filtering issues based on 
+`{language-code}-translation` label.
 
-### Step 2. choose which document you'd like to translate
-A translator can know about which documents are not translated yet by reading a 
-"CE translation list".
+Comment the issue to ask reviewers to assign the task to you.
 
-The list looks like this:
+You're expected to finish translation within one week. The task can be assigned to
+others after one week.
 
-![CloudEvents translation list](CE_translation_list.png)
+### Step 2. submit your translation
 
-- version: choose from {`finished`, `working draft`}; a translator should always 
-  start translate from `finished` documents since `working draft` might be changed anytime.
-- status: choose from {`Ready to start`, `Started`, `PR reviewing`, `PR merged`}
-    - Ready to start: any document is ready to be translated stay in this state. 
-      A translator set status as `Started` once he/she decides to translate it.
-    - Started: indicating someone is translating this document. Translator and reviewer fields 
-      should be filled in once status is `Started`.
-    - PR reviewing: a translator finished the translation, and the work is being reviewed. 
-      The PR link field should be filled in once status is `PR reviewing`.
-    - PR merged: the translation is successfully merged in the spec. 
-      
-The file `languages/$(your-language-code)/translate.md` will hold the link of the 
-"CE translation list".
-
-If the file `languages/$(your-language-code)/translate.md` doesn't exist, 
-then you should:
-
-- Copy [translate-sample.md](translate-sample.md) to `languages/$(your-language-code)/translate.md`
-- Copy the "CE translation sample list" and create a new one for you. Then replace the sample sheet 
-  link with the new sheet link you just created.
-- Change the access right to "Anyone on the internet with this link can edit" so that every potential 
-  translator could directly choose a document to translate.
-- It doesn't matter which language you're using to write `languages/$(your-language-code)/translate.md`. 
-  However, it must contain the link of the "CE translation list" with access right as "everyone can edit".
-
-### Step 3. submit your translation
-A translator must submit translation via submitting a Pull Request. See details in how to 
+A translator must submit translation via a Pull Request(PR). See details in how to 
 [submit a Pull Request](../community/CONTRIBUTING.md#suggesting-a-change).
 
+### Step 3. edit your translation
+
+A reviewer might give their suggestions in your PR. 
+Translators can discuss with the reviewer about translation details.
+
+However, a translation will not be merged until reviewers give their LGTM.
+
 ## Translation style guide
-- Only translate textual documents (generally Markdown files with a .md extension). Other document formats (.json, .yaml, .g4) 
-  will not be translated.
-- Always start translate from `finished` documents since `working draft` might be changed anytime.
+- Only translate textual documents (generally Markdown files with a .md extension).
+  Other document formats (.json, .yaml, .g4) will not be translated.
 - Code blocks within md documents are not translated.
 - Well-known technical terms ("JSON", "HTTP", "SDK", "Kafka", etc) are not translated.
 - Always add a space between an English word and other language word.

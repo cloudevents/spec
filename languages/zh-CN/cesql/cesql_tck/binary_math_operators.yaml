@@ -1,0 +1,60 @@
+name: Binary math operations
+tests:
+  - name: Operator precedence without parenthesis
+    expression: 4 * 2 + 4 / 2
+    result: 10
+  - name: Operator precedence with parenthesis
+    expression: 4 * (2 + 4) / 2
+    result: 12
+
+  - name: Truncated division
+    expression: 5 / 3
+    result: 1
+  - name: Division by zero returns 0 and fail
+    expression: 5 / 0
+    result: 0
+    error: math
+  - name: Module
+    expression: 5 % 2
+    result: 1
+  - name: Module by zero returns 0 and fail
+    expression: 5 % 0
+    result: 0
+    error: math
+
+  - name: Positive plus positive number
+    expression: 4 + 1
+    result: 5
+  - name: Negative plus positive number
+    expression: -4 + 1
+    result: -3
+  - name: Negative plus Negative number
+    expression: -4 + -1
+    result: -5
+  - name: Positive plus negative number
+    expression: 4 + -1
+    result: 3
+  - name: Positive minus positive number
+    expression: 4 - 1
+    result: 3
+  - name: Negative minus positive number
+    expression: -4 - 1
+    result: -5
+
+  - name: Implicit casting, with left value string
+    expression: "'5' + 3"
+    result: 8
+  - name: Implicit casting, with right value string
+    expression: "5 + '3'"
+    result: 8
+  - name: Implicit casting, with both values string
+    expression: "'5' + '3'"
+    result: 8
+  - name: Implicit casting, with invalid boolean value
+    expression: "5 + TRUE"
+    result: 5
+    error: cast
+  - name: Implicit casting, with invalid string value
+    expression: "'5avc4' + 10"
+    result: 10
+    error: cast

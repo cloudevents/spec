@@ -1,0 +1,40 @@
+name: Binary logical operations
+tests:
+  - name: False and false
+    expression: FALSE AND FALSE
+    result: false
+  - name: False and true
+    expression: FALSE AND TRUE
+    result: false
+  - name: True and false
+    expression: TRUE AND FALSE
+    result: false
+  - name: True and true
+    expression: TRUE AND TRUE
+    result: true
+
+  - name: False or false
+    expression: FALSE OR FALSE
+    result: false
+  - name: False or true
+    expression: FALSE OR TRUE
+    result: true
+  - name: True or false
+    expression: TRUE OR FALSE
+    result: true
+  - name: True or true
+    expression: TRUE OR TRUE
+    result: true
+
+  - name: False xor false
+    expression: FALSE XOR FALSE
+    result: false
+  - name: False xor true
+    expression: FALSE XOR TRUE
+    result: true
+  - name: True xor false
+    expression: TRUE XOR FALSE
+    result: true
+  - name: True xor true
+    expression: TRUE XOR TRUE
+    result: false
