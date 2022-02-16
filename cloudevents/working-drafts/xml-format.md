@@ -75,15 +75,18 @@ The CloudEvents type system is mapped to the XML schema types as follows :
 | URI-reference | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986] | |
 | Timestamp     | [xs:dateTime][xml-primitives] following [RFC 3339][rfc3339] | |
 
-Each context attribute is represented as an XML element whose name MUST exactly match
-that of a REQUIRED or OPTIONAL CloudEvent attribute, extension attribute names MUST
-adhere to, and align with, the conventions in defined in the [cloud event specification][ce-spec].
+Each CloudEvent context attribute is represented as an XML element whose local
+name exactly matches that of the attribute.
 
 See the [envelope](#4-envelope) for special handing of the `specversion` context attribute.
 
-Extension attributes SHOULD be expressed with the appropriate `xsi:type` to allow them
-to be exchanged without loss of type information. Extension attributes with no `xsi:type`
-discriminator SHOULD be interpreted with an implied type of `xs:string`
+Extension attributes MUST be decorated with the appropriate `xsi:type` to allow them
+to be exchanged without loss of type information.
+
+REQUIRED and OPTIONAL context attributes SHOULD NOT be decorated with an `xsi:type`.
+
+No other XML element attributes are expected, if present they MUST be ignored during
+processing.
 
 ``` xml
     ...
@@ -98,13 +101,18 @@ discriminator SHOULD be interpreted with an implied type of `xs:string`
 ## 3. Data
 
 The data portion of a CloudEvent follows a similar model to that employed by
-the [JSON Format specification][json-format]. A `data` element is used to
-encapsulate the payload and an `xsi:type` used to discrimate the payload
-type.
+the [JSON Format specification][json-format]. A `data` element MUST be used to
+encapsulate the payload.
+
+An `xsi:type` is used to discrimate the payload type and MUST be present.
+
+The following data representations are supported:
 
 ### 3.1 Binary Data
 
-MUST be carried in an element with an defined type of `xs:base64Binary`
+Binary data MUST be carried in an element with an defined type of `xs:base64Binary`.
+
+Example:
 
 ``` xml
 <data xsi:type="xs:base64Binary">.........</data>
@@ -112,7 +120,9 @@ MUST be carried in an element with an defined type of `xs:base64Binary`
 
 ### 3.2 Text Data
 
-MUST be carried in an element with an defined type of `xs:string`
+Text MUST be carried in an element with an defined type of `xs:string`.
+
+Example:
 
 ``` xml
 <data xsi:type="xs:string">This is text</data>
@@ -121,8 +131,10 @@ MUST be carried in an element with an defined type of `xs:string`
 ### 3.3 XML Data
 
 XML data MUST be carried in an element with a defined type of `xs:any`
-allowing a single XML element (with any required namespace definitions)
+allowing a single child XML element (with any required namespace definitions)
 to be represented.
+
+Example:
 
 ``` xml
 <data xsi:type="xs:any">
@@ -135,16 +147,16 @@ to be represented.
 ## 4. Envelope
 
 Each CloudEvent is wholly represented as an XML element `<event>` that
-carries the `specversion` as an XML attribute value.
+MUST carry the `specversion` as an XML attribute value.
 
 Such a representation MUST use the media type `application/cloudevents+xml`.
 
 The enveloping element contains:
 
-* A set of context attribute elements.
-* An optional `data` element.
+* A set of CloudEvent context attribute XML elements.
+* An OPTIONAL `data` XML element.
 
-eg _(XML preamble and namespace definitions omitted for brevity)_:
+Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 ``` xml
 <event specversion="1.0">

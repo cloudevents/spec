@@ -1,13 +1,9 @@
-# WebSockets Protocol Binding for CloudEvents - Version 1.0.2-wip
+# WebSockets Protocol Binding for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
 The WebSockets Protocol Binding for CloudEvents defines how to establish and use
 full-duplex CloudEvents streams using [WebSockets][rfc6455].
-
-## Status of this document
-
-This document is a working draft.
 
 ## Table of Contents
 

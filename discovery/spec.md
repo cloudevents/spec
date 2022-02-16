@@ -6,11 +6,6 @@ CloudSubscriptions Discovery API is a vendor-neutral API specification for
 determining what events are available from a particular service, as well as how
 to subscribe to those events.
 
-## Status of this document
-
-This is a working draft. Breaking changes could be made in the next minor
-version.
-
 ## Table of Contents
 
 - [Overview](#overview)

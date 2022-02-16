@@ -1,13 +1,9 @@
-# NATS Protocol Binding for CloudEvents - Version 1.0.2-wip
+# NATS Protocol Binding for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
 The [NATS][nats] Protocol Binding for CloudEvents defines how events are mapped
 to [NATS messages][nats-msg-proto].
-
-## Status of this document
-
-This document is a working draft.
 
 ## Table of Contents
 

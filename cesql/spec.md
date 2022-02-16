@@ -5,10 +5,6 @@
 The goal of this specification is to define a SQL-like expression language which can be used to express predicates on
 CloudEvent instances.
 
-## Status of this document
-
-This document is a working draft.
-
 ## Table of Contents
 
 1. [Introduction](#1-introduction)

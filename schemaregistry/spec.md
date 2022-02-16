@@ -9,10 +9,6 @@ as Apache Avro and JSON Schema.
 It also defines a set of CloudEvent event type definitions and topology models
 for synchronizing schemas across different schema registries.
 
-## Status of this document
-
-This document is a working draft.
-
 ## 1. Introduction
 
 Schema-dependent serialization formats and related frameworks such as Apache
