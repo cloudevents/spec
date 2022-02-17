@@ -8,10 +8,6 @@ producers on behalf of event sources. The software entity handling these
 subscriptions and responsible for distributing events is abstractly referred to
 as a "subscription manager".
 
-## Status of this document
-
-This document is a working draft.
-
 ## 1. Introduction
 
 A subscription manager responsible for a specific set of events can reside
@@ -262,7 +258,7 @@ A subscription manager manages a collection of subscriptions. The upper limit on
 how many subscriptions are supported is implementation specific.
 
 To help explain the subscription resource, the following non-normative pseudo
- json shows its basic structure:
+json shows its basic structure:
 
 (`*` means zero or more, `+` means one or more, `?` means optional)
 
@@ -289,10 +285,10 @@ Subscription:
 }
 ```
 
-
 Each subscription is represented by an object that has the following properties:
 
 ##### id
+
 - Type: `String`
 - Description: The unique identifier of the subscription in the scope of the
   subscription manager. This value MUST be unique within the scope of the
@@ -306,6 +302,7 @@ Each subscription is represented by an object that has the following properties:
   - `bigco-subscription-1234`
 
 ##### source
+
 - Type: `URI-reference` - a CloudEvents `source` value
 - Description: Indicates the source to which the subscription is related.
   When present on a subscribe request, all events generated due to this
@@ -323,6 +320,7 @@ Each subscription is represented by an object that has the following properties:
   - `/sensors/tn-1234567/alerts`
 
 ##### types
+
 - Type: `Array of Strings` - array of CloudEvents `type` values
 - Description: Indicates which types of events the subscriber is interested
   in receiving. When present on a subscribe request, all events generated
@@ -337,13 +335,14 @@ Each subscription is represented by an object that has the following properties:
   - `com.example.object.deleted`
 
 ##### config
+
 - Type: `Map` of subscription manager defined types
 - Description: A set of key/value pairs that modify the configuration of
   of the subscription related to the event generation process. While this
   specification places no constraints on the data type of the map values.
   When there is a Discovery Enpoint Service definition defined for the
   subscription manager, then the `key` MUST be one of the `subscriptionconfig`
-  keys specified in the Discovery Endpoint Service definition.  The `value`
+  keys specified in the Discovery Endpoint Service definition. The `value`
   MUST conform to the data type specified by the value in the
   `subscriptionconfig` entry for the `key`
 
@@ -354,8 +353,9 @@ Each subscription is represented by an object that has the following properties:
   - `{ "interval": 5 }`
 
 ##### filters
+
 - Type: `Array of Objects`
-- Description: An array of filter expressions that evaluates to true or false. 
+- Description: An array of filter expressions that evaluates to true or false.
   If any filter expression in the array evaluates to false, the event
   MUST NOT be sent to the sink. If all the filter expressions in the array evaluates to true, the event
   MUST be attempted to be delivered. Absence of a filter or empty array implies a value
@@ -376,6 +376,7 @@ Each subscription is represented by an object that has the following properties:
   - [ {"prefix": { "type": "com.github.issue" } } ]
 
 ##### sink
+
 - Type: `URI`
 - Description: The address to which events MUST be sent. The format of the
   address MUST be valid for the protocol specified in the `protocol`
@@ -388,13 +389,14 @@ Each subscription is represented by an object that has the following properties:
   - `https://example.com/event-processor`
 
 ##### sinkCredential
+
 - Type: Map of attributes
-- Description: A set of settings carrying credential information that 
-  is enabling the entity delivering events to the subscription target to 
-  be authorized for delivery at the `sink` endpoint. The well-known 
+- Description: A set of settings carrying credential information that
+  is enabling the entity delivering events to the subscription target to
+  be authorized for delivery at the `sink` endpoint. The well-known
   attribute values are defined in [section 3.2.3](#323-sink-credentials).
 
-  Implementations SHOULD NOT include secrets contained in this map when 
+  Implementations SHOULD NOT include secrets contained in this map when
   the subscription object is enumerated or retrieved. Secrets SHOULD be
   write-only. Tokens, passphrases, and passwords are such secrets and
   account identifiers might be considered secrets as well.
@@ -403,6 +405,7 @@ Each subscription is represented by an object that has the following properties:
   - OPTIONAL
 
 ##### protocol
+
 - Type: `String`
 - Description: Identifier of a delivery protocol. Because of WebSocket
   tunneling options for AMQP, MQTT and other protocols, the URI scheme is not
@@ -417,6 +420,7 @@ Each subscription is represented by an object that has the following properties:
   - `HTTP`
 
 ##### protocolsettings
+
 - Type: Map of protocol specific attributes
 - Description: A set of settings specific to the selected delivery protocol
   provider. Options for these settings are listed in the following subsection.
@@ -432,6 +436,7 @@ Each subscription is represented by an object that has the following properties:
 
 In general the intent of this specification is to consider the processing of
 events to have 3 conceptual phases:
+
 - event generation. This phase creates the events and is typically controlled
   by the `config`, `source` and `types` properties. This might include settings
   that influence how often events are generated, or the scope of the event
@@ -446,7 +451,7 @@ events to have 3 conceptual phases:
 - event transmission. This phase controls how the events are sent to the sink.
   Typically, by this step in the processing the set of events to be sent are
   already known and the only variable is the exact mechanism that will be used
-  to send them.  The **protocol** and **protocolsettings** properties will
+  to send them. The **protocol** and **protocolsettings** properties will
   control this phase.
 
 Additionally, it might be possible for one Subscription property to have
@@ -490,6 +495,7 @@ For HTTP, the following settings properties SHOULD be supported by all
 implementations.
 
 ###### headers
+
 - Type: `Map`
 - Description: A set of key/value pairs that is copied into the HTTP request
   as custom headers.
@@ -497,6 +503,7 @@ implementations.
   - OPTIONAL
 
 ###### method
+
 - Type: `String`
 - Description: The HTTP method to use for sending the message. This defaults
   to POST if not set.
@@ -511,12 +518,14 @@ All other settings SHOULD be supported.
 - **topicname** (string) – REQUIRED. The name of the MQTT topic to publish to.
 
 ###### topicname
+
 - Type: `String`
 - Description: The name of the MQTT topic to publish to.
 - Constraints:
   - REQUIRED
 
 ###### qos
+
 - Type: `Integer`
 - Description: MQTT quality of service (QoS) level: 0 (at most once), 1 (at
   least once), or 2 (exactly once). This defaults to 1 if not set.
@@ -524,20 +533,23 @@ All other settings SHOULD be supported.
   - OPTIONAL
 
 ###### retain
+
 - Type: `Boolean`
 - Description: MQTT retain flag: true/false. This defaults to false if not set.
 - Constraints:
   - OPTIONAL
 
 ###### expiry
+
 - Type: `Integer`
 - Description: MQTT expiry interval, in seconds. This value has no default
-  value and the message will not expire if the setting is absent.  This
+  value and the message will not expire if the setting is absent. This
   setting only applies to MQTT 5.0.
 - Constraints:
   - OPTIONAL
 
 ###### userproperties
+
 - Type: `Map`
 - Description: A set of key/value pairs that are copied into the MQTT PUBLISH
   packet's user property section. This setting only applies to MQTT 5.0.
@@ -550,6 +562,7 @@ For AMQP, the address property MUST be supported by all implementations and
 other settings properties SHOULD be supported by all implementations.
 
 ###### address
+
 - Type: `String`
 - Description: The link target node in the AMQP container identified by the
   sink URI, if not expressed in the sink URI's path portion.
@@ -557,6 +570,7 @@ other settings properties SHOULD be supported by all implementations.
   - OPTIONAL
 
 ###### linkname
+
 - Type: `String`
 - Description: Name to use for the AMQP link. If not set, a random link name
   is used.
@@ -564,6 +578,7 @@ other settings properties SHOULD be supported by all implementations.
   - OPTIONAL
 
 ###### sendersettlementmode
+
 - Type: `String`
 - Description: Allows to control the sender's settlement mode, which
   determines whether transfers are performed "settled" (without
@@ -573,6 +588,7 @@ other settings properties SHOULD be supported by all implementations.
   - OPTIONAL
 
 ###### linkproperties
+
 - Type: `Map`
 - Description: A set of key/value pairs that are copied into link properties
   for the send link.
@@ -585,12 +601,14 @@ All implementations that support Apache Kafka MUST support the _topicname_
 settings. All other settings SHOULD be supported.
 
 ###### topicname
+
 - Type: `String`
 - Description: The name of the Kafka topic to publish to.
 - Constraints:
   - OPTIONAL
 
 ###### partitionkeyextractor
+
 - Type: `String`
 - Description: A partition key extractor expression per the CloudEvents Kafka
   transport binding specification.
@@ -598,12 +616,14 @@ settings. All other settings SHOULD be supported.
   - OPTIONAL
 
 ###### clientid
+
 - Type: `String`
 - Description:
 - Constraints:
   - OPTIONAL
 
 ###### acks
+
 - Type: `String`
 - Description:
 - Constraints:
@@ -612,6 +632,7 @@ settings. All other settings SHOULD be supported.
 ##### 3.2.2.5. NATS
 
 ###### subject
+
 - Type: `String`
 - Description: The name of the NATS subject to publish to.
 - Constraints:
@@ -620,9 +641,10 @@ settings. All other settings SHOULD be supported.
 #### 3.2.3 Sink Credentials
 
 A sink credential provides authentication or authorization information necessary
-to enable delivery of events to a target. 
+to enable delivery of events to a target.
 
 ##### credentialType
+
 - Type: `String`
 - Description: Identifier of a credential type. The predefined types are "PLAIN",
   "ACCESSTOKEN", and "REFRESHTOKEN", with attributes enumerated below providing
@@ -634,23 +656,26 @@ to enable delivery of events to a target.
   - `PLAIN`
 
 ##### identifier
+
 - Type: String
 - Description: The identifier of a plain credential might be an account or
   username.
 
-- Constraints: 
+- Constraints:
   - REQUIRED for credentialType="PLAIN"
 
 ##### secret
-- Type: String 
+
+- Type: String
 - Description: The secret of a plain credential might be a password or
   passphrase or key.
 
-- Constraints: 
+- Constraints:
   - REQUIRED for credentialType="PLAIN"
   - SHOULD NOT be returned during enumeration or retrieval
 
 ##### accessToken
+
 - Type: String
 - Description: An access token is a previously acquired token granting access to
   the target resource.
@@ -660,6 +685,7 @@ to enable delivery of events to a target.
   - SHOULD NOT be returned during enumeration or retrieval
 
 ##### accessTokenExpiresUtc
+
 - Type: Timestamp
 - Description: An absolute UTC instant at which the token SHALL be considered
   expired.
@@ -668,14 +694,15 @@ to enable delivery of events to a target.
   - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
 
 ##### accessTokenType
+
 - Type: String
-- Description: Type of the access token (See [OAuth 2.0](
-  https://tools.ietf.org/html/rfc6749#section-7.1)).
+- Description: Type of the access token (See [OAuth 2.0](https://tools.ietf.org/html/rfc6749#section-7.1)).
 
 - Constraints:
   - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
 
 ##### refreshToken
+
 - Type: String
 - Description: A refresh token credential used to acquire access tokens.
 
@@ -683,6 +710,7 @@ to enable delivery of events to a target.
   - REQUIRED for credentialType="REFRESHTOKEN"
 
 ##### refreshTokenEndpoint
+
 - Type: String
 - Description: A URL at which the refresh token can be traded for an access
   token.
@@ -702,9 +730,9 @@ be delivered to the sink based on a set of criteria. The `filter` property in a
 subscription is a set of filter expressions, where each expression evaluates to
 either true or false for each event generated.
 
-If any of the filter expressions in the set evaluate to false, the event MUST NOT be
-sent to the sink. If all the filter expressions in the set evaluate to true, the event MUST be
-attempted to be delivered.
+If any of the filter expressions in the set evaluate to false, the event MUST
+NOT be sent to the sink. If all the filter expressions in the set evaluate to
+true, the event MUST be attempted to be delivered.
 
 Each filter expression includes the specification of a `dialect` that
 defines the type of filter and the set of additional properties that are
@@ -723,6 +751,7 @@ future.
 Filter dialects are identified by a unique `URI-Reference`.
 
 When encoded in JSON, a filter is encoded as follows:
+
 ```
 { "dialect URI-Reference" : { <dialect-specific-properties> } }
 ```
@@ -742,6 +771,7 @@ The attribute name and value specified in the filter express MUST NOT be
 empty strings.
 
 For example:
+
 ```json
 { "exact": { "type": "com.github.push" } }
 ```
@@ -758,6 +788,7 @@ The attribute name and value specified in the filter express MUST NOT be
 empty strings.
 
 For example:
+
 ```json
 { "prefix": { "type": "com.github." } }
 ```
@@ -774,6 +805,7 @@ The attribute name and value specified in the filter express MUST NOT be
 empty strings.
 
 For example:
+
 ```json
 { "suffix": { "type": ".created" } }
 ```
@@ -787,6 +819,7 @@ filter expression to be true.
 Note: there MUST be at least one filter expression in the array.
 
 For example:
+
 ```json
 {
   "all": [
@@ -805,6 +838,7 @@ filter expression to be true.
 Note: there MUST be at least one filter expression in the array.
 
 For example:
+
 ```json
 {
   "any": [
@@ -822,6 +856,7 @@ In other words, if the nested expression evaluated to true, then the `not`
 filter expression's result is false.
 
 For example:
+
 ```json
 {
   "not": { "exact": { "type": "com.github.push" } }
@@ -832,12 +867,13 @@ For example:
 
 Use of this MUST have a string value, representing a [CloudEvents SQL Expression](../cesql/spec.md).
 The filter result MUST be true if the result value of the expression, coerced to boolean, equals to the `TRUE` boolean value,
-otherwise MUST be false if an error occurred while evaluating the expression or if the result value, 
+otherwise MUST be false if an error occurred while evaluating the expression or if the result value,
 coerced to boolean, equals to the `FALSE` boolean value.
 
 Implementations SHOULD reject subscriptions with invalid CloudEvents SQL expressions.
 
 For example:
+
 ```json
 { "sql": "source LIKE '%cloudevents%'" }
 ```
@@ -971,6 +1007,7 @@ Errors:
 HTTP CRUD API using PUT, POST, GET, DELETE, and OPTIONS.
 
 Placeholders:
+
 ```
 Create:
 POST /subscriptions

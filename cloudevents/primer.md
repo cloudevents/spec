@@ -1,4 +1,4 @@
-# CloudEvents Primer - Version 1.0.2-wip
+# CloudEvents Primer - Version 1.0.3-wip
 
 <!-- no verify-specs -->
 
@@ -9,10 +9,6 @@ specification. It is meant to complement the CloudEvent specification to provide
 additional background and insight into the history and design decisions made
 during the development of the specification. This allows the specification
 itself to focus on the normative technical details.
-
-## Status of this document
-
-This document is a working draft.
 
 ## Table of Contents
 

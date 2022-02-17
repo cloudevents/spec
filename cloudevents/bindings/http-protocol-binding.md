@@ -1,13 +1,9 @@
-# HTTP Protocol Binding for CloudEvents - Version 1.0.2-wip
+# HTTP Protocol Binding for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
 The HTTP Protocol Binding for CloudEvents defines how events are mapped to HTTP
 1.1 request and response messages.
-
-## Status of this document
-
-This document is a working draft.
 
 ## Table of Contents
 
