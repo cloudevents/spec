@@ -761,11 +761,10 @@ implementations MUST support:
 
 ###### `exact` filter dialect
 
-Use of this MUST include exactly one nested property, where the key is the
-name of the CloudEvents attribute to be matched, and its value is the String
-value to use in the comparison. To evaluate to true the value of the
-matching CloudEvents attribute MUST exactly match the value String specified
-(case sensitive).
+The keys are the names of the CloudEvents attributes to be matched,
+and their values are the String values to use in the comparison.
+To evaluate to true the values of the matching CloudEvents attributes MUST
+all exactly match with the associated value String specified (case sensitive).
 
 The attribute name and value specified in the filter express MUST NOT be
 empty strings.
@@ -773,16 +772,15 @@ empty strings.
 For example:
 
 ```json
-{ "exact": { "type": "com.github.push" } }
+{ "exact": { "type": "com.github.push", "subject": "https://github.com/cloudevents/spec" } }
 ```
 
 ###### `prefix` filter dialect
 
-Use of this MUST include exactly one nested property, where the key is the
-name of the CloudEvents attribute to be matched, and its value is the String
-value to use in the comparison. To evaluate to true the value of the
-matching CloudEvents attribute MUST start with the value String specified
-(case sensitive).
+The keys are the names of the CloudEvents attributes to be matched,
+and their values are the String values to use in the comparison.
+To evaluate to true the values of the matching CloudEvents attributes MUST
+all start with the associated value String specified (case sensitive).
 
 The attribute name and value specified in the filter express MUST NOT be
 empty strings.
@@ -790,16 +788,15 @@ empty strings.
 For example:
 
 ```json
-{ "prefix": { "type": "com.github." } }
+{ "prefix": { "type": "com.github.", "subject": "https://github.com/cloudevents" } }
 ```
 
 ###### `suffix` filter dialect
 
-Use of this MUST include exactly one nested property, where the key is the
-name of the CloudEvents attribute to be matched, and its value is the String
-value to use in the comparison. To evaluate to true the value of the
-matching CloudEvents attribute MUST end with the value String specified
-(case sensitive).
+The keys are the names of the CloudEvents attributes to be matched,
+and their values are the String values to use in the comparison.
+To evaluate to true the values of the matching CloudEvents attributes MUST
+all end with the associated value String specified (case sensitive).
 
 The attribute name and value specified in the filter express MUST NOT be
 empty strings.
@@ -807,7 +804,7 @@ empty strings.
 For example:
 
 ```json
-{ "suffix": { "type": ".created" } }
+{ "suffix": { "type": ".created", "subject": "/cloudevents/spec" } }
 ```
 
 ###### `all` filter dialect
