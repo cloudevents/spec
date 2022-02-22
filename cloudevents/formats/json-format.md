@@ -143,8 +143,10 @@ If the implementation determines that the type of data is `Binary`, the value
 MUST be represented as a [JSON string][json-string] expression containing the
 [Base64][base64] encoded binary value, and use the member name `data_base64` to
 store it inside the JSON representation. If present, the `datacontenttype` MUST
-reflect the format of the original binary data. If the `datacontenttype` is
-unspecified, processing MUST NOT assume a default of `application/json`.
+reflect the format of the original binary data. If a `datacontenttype` value is
+not provided, no assumptions can be made as to the format of the data and
+therefore the `datacontenttype` attribute MUST not be present in the resulting
+CloudEvent.
 
 If the type of data is not `Binary`, the implementation will next determine
 whether the value of the `datacontenttype` attribute declares the `data` to
@@ -184,7 +186,7 @@ When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
 member clearly indicates that the value is a Base64 encoded binary data, which
 the deserializer MUST decode into a binary runtime data type. The deserializer
 MAY further interpret this binary data according to the `datacontenttype`. If
-the `datacontenttype` attribute is absent, the decoding should MUST NOT make an
+the `datacontenttype` attribute is absent, the decoding MUST NOT make an
 assumption of JSON-formatted data (as described below for the `data` member).
 
 When a `data` member is present, the decoding behavior is dependent on the value
@@ -387,6 +389,32 @@ ce-comexampleothervalue: 5
 content-type: application/json
 
 "I'm just a string"
+```
+
+Example event with a `Binary`-valued `data_base64` but no `datacontenttype`.
+Even though the data happens to be a valid JSON document when interpreted as
+text, no content type is inferred.
+
+```JSON
+{
+    "specversion" : "1.0",
+    "type" : "com.example.someevent",
+    "source" : "/mycontext",
+    "id" : "D234-1234-1234",
+    "data_base64" : "eyAieHl6IjogMTIzIH0="
+}
+```
+
+The above example re-encoded using [HTTP Binary Content Mode][http-binary].
+Note that there is no `content-type` header present.
+
+```
+ce-specversion: 1.0
+ce-type: com.example.someevent
+ce-source: /mycontext
+ce-id: D234-1234-1234
+
+{ "xyz": 123 }
 ```
 
 ## 4. JSON Batch Format
