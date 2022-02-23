@@ -45,7 +45,7 @@ interpreted as described in [RFC2119][rfc2119].
 
 ### 1.2 Approach
 
-This XML representation used is deliberately verbose in favor of readability
+The XML representation used is deliberately verbose in favor of readability
 and deterministic processing.
 
 Preservation of type information for CloudEvent attributes is supported allowing
@@ -130,15 +130,17 @@ Example:
 
 ### 3.3 XML Data
 
-XML data MUST be carried in an element with a defined type of `xs:any`
-allowing a single child XML element (with any required namespace definitions)
-to be represented.
+XML data MUST be carried in an element with a defined type of `xs:any` with
+a single child XML element (with any required namespace definitions).
+
+The child business data XML elements MUST NOT reside in the CloudEvent namespace,
+an empty namespace MAY be used as appropriate.
 
 Example:
 
 ``` xml
 <data xsi:type="xs:any">
-    <myData>
+    <myData xmlns="http://my.org/namespace">
         ....
     </myData>  
 </data>
@@ -185,7 +187,7 @@ An XML Batch of CloudEvents MUST use the media type
 
 Example _(XML preamble and namespace definitions omitted for brevity)_:
 
-``` xml
+```xml
 <batch>
     <event specversion="1.0">
        ....
@@ -278,9 +280,81 @@ An example of an empty batch of CloudEvents (typically used in a response, but a
 </ce:event>
 ```
 
+#### 6.3.3 ISO 20022 Usage Example
+
+[ISO 20022][iso-20022] is an XML based messaging standard used in the financial industry; this is a
+non-normative example.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+    <time>2022-02-22T15:12:00-08:00</time>
+    <datacontenttype>application/xml</datacontenttype>
+    <id>000-1111-2222</id>
+    <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
+    <type>com.mybank.pain.001.001.03</type>
+    <data xsi:type="xs:any">
+        <Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03">
+            <CstmrCdtTrfInitn>
+            <GrpHdr>
+                <MsgId>ABC/060928/CCT001</MsgId>
+                <CreDtTm>2022-02-22T14:07:00</CreDtTm>
+                <NbOfTxs>3</NbOfTxs>
+                <CtrlSum>2400.56</CtrlSum>
+                <InitgPty>
+                    <Nm>Cobelfac</Nm>
+                    <Id>
+                        <OrgId>
+                            <Othr>
+                                <Id>0468651441</Id>
+                                <Issr>KBO-BCE</Issr>
+                            </Othr>
+                        </OrgId>
+                    </Id>
+                </InitgPty>
+            </GrpHdr>
+            <PmtInf>
+                <PmtInfId> ABC/4560/2008-09-25</PmtInfId>
+                <PmtMtd>TRF</PmtMtd>
+                <BtchBookg>false</BtchBookg>
+
+            <!-- Content ommited for brevity -->
+
+            </PmtInf>
+        </Document>
+    </data>
+</event>
+```
+
+#### 6.3.4 Batch Example
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<batch xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <event specversion="1.0" >
+        <time>2020-03-19T12:54:00-07:00</time>
+        <datacontenttype>image/png</datacontenttype>
+        <id>000-1111-2222</id>
+        <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
+        <type>SOME.EVENT.TYPE</type>
+        <data xsi:type="xs:base64Binary">... Base64 encoded data...</data>
+    </event>
+    <event specversion="1.0" >
+        <time>2020-03-19T12:59:00-07:00</time>
+        <datacontenttype>image/png</datacontenttype>
+        <id>000-1111-3333</id>
+        <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
+        <type>SOME.EVENT.TYPE</type>
+        <data xsi:type="xs:base64Binary">... Base64 encoded data...</data>
+    </event>
+    .....
+</batch>
+```
+
 [ce-spec]: ../spec.md
 [ce-types]: ../spec.md#type-system
-[xml-schema]: ./cloudevents.xsd
 [xml-format]: ./xml-format.md
 [json-format]: ../formats/json-format.md
 [xml-spec]: https://www.w3.org/TR/2008/REC-xml-20081126/
@@ -288,3 +362,4 @@ An example of an empty batch of CloudEvents (typically used in a response, but a
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3339]: https://www.ietf.org/rfc/rfc3339.txt
 [rfc3986]: https://tools.ietf.org/html/rfc3986
+[iso-20022]: https://www.iso20022.org
