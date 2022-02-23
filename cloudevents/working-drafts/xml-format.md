@@ -63,25 +63,27 @@ An XML document preamble SHOULD be included to ensure deterministic processing.
 
 ## 2. Attributes
 
-The CloudEvents type system is mapped to the XML schema types as follows :
+The CloudEvents type system is mapped to a set of CloudEvent specific
+type designators as follows :
 
-| CloudEvents   |  XML Schema Type | Notes |
-| :-------------| :--------------- | :---- |
-| Boolean       | [xs:boolean][xml-primitives] | |
-| Integer       | [xs:int][xml-primitives] | |
-| String        | [xs:string][xml-primitives] | |
-| Binary        | [xs:base64Binary][xml-primitives] | |
-| URI           | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986]| |
-| URI-reference | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986] | |
-| Timestamp     | [xs:dateTime][xml-primitives] following [RFC 3339][rfc3339] | |
+| CloudEvents Type  |  XML Format Type | XML Schema Type | Notes |
+| :-----------------| :----------------| :--------------- | :---- |
+| Boolean       | ce:boolean | [xs:boolean][xml-primitives] | `true` or `false` |
+| Integer       | ce:int | [xs:int][xml-primitives] | |
+| String        | ce:string | [xs:string][xml-primitives] | |
+| Binary        | ce:binary | [xs:base64Binary][xml-primitives] |  |
+| URI           | ce:uri | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986]| |
+| URI-reference | ce:uriRef | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986] | |
+| Timestamp     | ce:timestamp | [xs:dateTime][xml-primitives] following [RFC 3339][rfc3339] | |
 
 Each CloudEvent context attribute is represented as an XML element whose local
 name exactly matches that of the attribute.
 
 See the [envelope](#4-envelope) for special handing of the `specversion` context attribute.
 
-Extension attributes MUST be decorated with the appropriate `xsi:type` to allow them
-to be exchanged without loss of type information.
+Extension attributes MUST be decorated with the appropriate CloudEvent format
+designators using using the `xsi:type` XML attribute, this allows them to be exchanged
+without loss of type information.
 
 REQUIRED and OPTIONAL context attributes SHOULD NOT be decorated with an `xsi:type`.
 
@@ -94,8 +96,8 @@ processing.
     ..
     <time>2021-08-14T14:30:22-08:00</time>
     ..
-    <myextension xsi:type="xs:string">my extension value</myextension>
-    <myboolean xsi:type="xs:boolean">false</myboolean>
+    <myextension xsi:type="ce:string">my extension value</myextension>
+    <myboolean xsi:type="ce:boolean">false</myboolean>
 ```
 
 ## 3. Data
@@ -110,22 +112,22 @@ The following data representations are supported:
 
 ### 3.1 Binary Data
 
-Binary data MUST be carried in an element with an defined type of `xs:base64Binary`.
+Binary data MUST be carried in an element with an defined type of `ce:binary`.
 
 Example:
 
 ``` xml
-<data xsi:type="xs:base64Binary">.........</data>
+<data xsi:type="ce:binary">.........</data>
 ```
 
 ### 3.2 Text Data
 
-Text MUST be carried in an element with an defined type of `xs:string`.
+Text MUST be carried in an element with an defined type of `ce:string`.
 
 Example:
 
 ``` xml
-<data xsi:type="xs:string">This is text</data>
+<data xsi:type="ce:string">This is text</data>
 ```
 
 ### 3.3 XML Data
@@ -167,8 +169,8 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
-    <myboolean xsi:type="xs:boolean">false</myboolean>
-    <data xsi:type="xs:string">Now is the winter of our discount tents...</data>
+    <myboolean xsi:type="ce:boolean">false</myboolean>
+    <data xsi:type="ce:string">Now is the winter of our discount tents...</data>
 </event>
 ```
 
@@ -233,7 +235,7 @@ An example of an empty batch of CloudEvents (typically used in a response, but a
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
-    <data xsi:type="xs:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
+    <data xsi:type="ce:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
 </event>
 ```
 
