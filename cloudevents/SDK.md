@@ -131,6 +131,9 @@ Validation MUST be possible on an individual Event. Validation MUST take into
 account the spec version, and all the requirements put in-place by the spec at
 each version.
 
+SDKs SHOULD perform validation on context attribute values provided to it by
+the SDK user. This will help ensure that only valid CloudEvents are generated.
+
 ## Documentation
 
 Each SDK must provide examples using at least HTTP transport of:
