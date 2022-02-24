@@ -69,23 +69,25 @@ type designators as follows :
 | CloudEvents Type  |  XML Format Type | XML Schema Type | Notes |
 | :-----------------| :----------------| :--------------- | :---- |
 | Boolean       | ce:boolean | [xs:boolean][xml-primitives] | `true` or `false` |
-| Integer       | ce:int | [xs:int][xml-primitives] | |
+| Integer       | ce:integer | [xs:int][xml-primitives] | |
 | String        | ce:string | [xs:string][xml-primitives] | |
 | Binary        | ce:binary | [xs:base64Binary][xml-primitives] |  |
 | URI           | ce:uri | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986]| |
 | URI-reference | ce:uriRef | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986] | |
 | Timestamp     | ce:timestamp | [xs:dateTime][xml-primitives] following [RFC 3339][rfc3339] | |
 
-Each CloudEvent context attribute is represented as an XML element whose local
+Each CloudEvent context attribute MUST be represented as an XML element whose local
 name exactly matches that of the attribute.
 
 See the [envelope](#4-envelope) for special handing of the `specversion` context attribute.
 
 Extension attributes MUST be decorated with the appropriate CloudEvent format
-designators using using the `xsi:type` XML attribute, this allows them to be exchanged
+designators using the `xsi:type` XML attribute, this allows them to be exchanged
 without loss of type information.
 
-REQUIRED and OPTIONAL context attributes SHOULD NOT be decorated with an `xsi:type`.
+REQUIRED and OPTIONAL context attributes SHOULD NOT be decorated with an `xsi:type` to
+avoid potential inconsistencies. Implementors MUST process these values according to their
+types as defined by the [CloudEvent type specification][ce-types].
 
 No other XML element attributes are expected, if present they MUST be ignored during
 processing.
@@ -134,9 +136,6 @@ Example:
 
 XML data MUST be carried in an element with a defined type of `xs:any` with
 a single child XML element (with any required namespace definitions).
-
-The child business data XML elements MUST NOT reside in the CloudEvent namespace,
-an empty namespace MAY be used as appropriate.
 
 Example:
 
@@ -199,12 +198,6 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
     </event>
     ....
 </batch>
-```
-
-An example of an empty batch of CloudEvents (typically used in a response, but also valid in a request):
-
-```xml
-<batch />
 ```
 
 ## 6. Examples
