@@ -141,7 +141,7 @@ MUST be represented as a [JSON string][json-string] expression containing the
 store it inside the JSON representation. If present, the `datacontenttype` MUST
 reflect the format of the original binary data. If a `datacontenttype` value is
 not provided, no assumptions can be made as to the format of the data and
-therefore the `datacontenttype` attribute MUST not be present in the resulting
+therefore the `datacontenttype` attribute MUST NOT be present in the resulting
 CloudEvent.
 
 If the type of data is not `Binary`, the implementation will next determine
