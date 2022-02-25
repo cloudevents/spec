@@ -81,13 +81,12 @@ name exactly matches that of the attribute.
 
 See the [envelope](#4-envelope) for special handing of the `specversion` context attribute.
 
-Extension attributes MUST be decorated with the appropriate CloudEvent format
-designators using the `xsi:type` XML attribute, this allows them to be exchanged
+Extension context attributes MUST be decorated with the appropriate CloudEvent type format
+designators using an `xsi:type` XML attribute, this allows them to be exchanged
 without loss of type information.
 
-REQUIRED and OPTIONAL context attributes SHOULD NOT be decorated with an `xsi:type` to
-avoid potential inconsistencies. Implementors MUST process these values according to their
-types as defined by the [CloudEvent type specification][ce-types].
+REQUIRED and OPTIONAL context atrtribute MAY be decorated with `xsi:type`, if present this
+value MUST match that of the type specified by the [CloudEvent type specification][ce-types].
 
 No other XML element attributes are expected, if present they MUST be ignored during
 processing.
@@ -114,22 +113,23 @@ The following data representations are supported:
 
 ### 3.1 Binary Data
 
-Binary data MUST be carried in an element with an defined type of `ce:binary`.
+Binary data MUST be carried in an element with an defined type of `xs:base64Binary`
+and encoded appropriately..
 
 Example:
 
 ``` xml
-<data xsi:type="ce:binary">.........</data>
+<data xsi:type="xs:base64Binary">.........</data>
 ```
 
 ### 3.2 Text Data
 
-Text MUST be carried in an element with an defined type of `ce:string`.
+Text MUST be carried in an element with an defined type of `xs:string`.
 
 Example:
 
 ``` xml
-<data xsi:type="ce:string">This is text</data>
+<data xsi:type="xs:string">This is text</data>
 ```
 
 ### 3.3 XML Data
@@ -169,7 +169,7 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
     <myboolean xsi:type="ce:boolean">false</myboolean>
-    <data xsi:type="ce:string">Now is the winter of our discount tents...</data>
+    <data xsi:type="xs:string">Now is the winter of our discount tents...</data>
 </event>
 ```
 
@@ -228,7 +228,7 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
     <id>000-1111-2222</id>
     <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
     <type>SOME.EVENT.TYPE</type>
-    <data xsi:type="ce:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
+    <data xsi:type="xs:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
 </event>
 ```
 
