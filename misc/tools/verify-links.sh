@@ -26,6 +26,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+# Keeps macs happy
+export LANG=C
+
 REPO_ROOT=$(dirname "${BASH_SOURCE}")/..
 
 verbose=""
