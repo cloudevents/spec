@@ -159,7 +159,7 @@ These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
 inspected at the destination without having to deserialize the event data.
 
-### Naming
+### Naming Conventions
 
 The CloudEvents specifications define mappings to various protocols and
 encodings, and the accompanying CloudEvents SDK targets various runtimes and
@@ -434,7 +434,7 @@ on the definition of OPTIONAL.
 
 A CloudEvent MAY include any number of additional context attributes with
 distinct names, known as "extension attributes". Extension attributes MUST
-follow the same [naming convention](#attribute-naming-convention) and use the
+follow the same [naming convention](#naming-conventions) and use the
 same [type system](#type-system) as standard attributes. Extension attributes
 have no defined meaning in this specification, they allow external systems to
 attach metadata to an event, much like HTTP custom headers.
