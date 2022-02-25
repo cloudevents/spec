@@ -319,54 +319,33 @@ components:
     CloudEventsAttribute:
       type: object
       description: "CloudEvents defined attributes."
-      additionalProperties: false
-      oneOf:
-        - type: object
-          properties:
-            id:
-              type: string
-              description: Identifies the event.
-        - type: object
-          properties:
-            source:
-              type: string
-              description: Identifies the context in which an event happened.
-        - type: object
-          properties:
-            specversion:
-              type: string
-              description: The version of the CloudEvents specification which the event uses.
-        - type: object
-          properties:
-            type:
-              type: string
-              description: Describes the type of event related to the originating occurrence.
-        - type: object
-          properties:
-            datacontenttype:
-              type: string
-              description: Content type of the data value.
-        - type: object
-          properties:
-            dataschema:
-              type: string
-              description: Identifies the schema that data adheres to.
-        - type: object
-          properties:
-            subject:
-              type: string
-              description: Describes the subject of the event in the context of the event producer.
-        - type: object
-          properties:
-            time:
-              type: string
-              description: Timestamp of when the occurrence happened.
-        - $ref: "#/components/schemas/CloudEventAttributeExtenion"
-    CloudEventAttributeExtenion:
-      type: object
-      description: "CloudEvents defined attributes."
-      additionalProperties:
+      additionalProperties: # extension attributes
         type: string
+      properties:
+        id:
+          type: string
+          description: Identifies the event.
+        source:
+          type: string
+          description: Identifies the context in which an event happened.
+        specversion:
+          type: string
+          description: The version of the CloudEvents specification which the event uses.
+        type:
+          type: string
+          description: Describes the type of event related to the originating occurrence.
+        datacontenttype:
+          type: string
+          description: Content type of the data value.
+        dataschema:
+          type: string
+          description: Identifies the schema that data adheres to.
+        subject:
+          type: string
+          description: Describes the subject of the event in the context of the event producer.
+        time:
+          type: string
+          description: Timestamp of when the occurrence happened.
     ProtocolSettings:
       type: object
       additionalProperties: false

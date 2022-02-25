@@ -26,6 +26,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+# Keeps macs happy
+export LANG=C
+
 REPO_ROOT=$(dirname "${BASH_SOURCE}")/..
 
 verbose=""
@@ -145,6 +148,10 @@ for file in ${mdFiles}; do
   dir=$(dirname $file)
 
   [[ -n "$verbose" ]] && echo "> $file"
+
+  if grep -i "<!-- *no verify-links" $file > /dev/null 2>&1 ; then
+    continue
+  fi
 
   # Replace ) with )\n so that each possible href is on its own line.
   # Then only grab lines that have [..](..) in them - put results in tmp file.
