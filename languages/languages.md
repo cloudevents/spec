@@ -1,4 +1,4 @@
-# language list of CloudEvents Specification
+# language list of CloudEvents Specifications
 <!-- no verify-specs -->
 
 Languages available:

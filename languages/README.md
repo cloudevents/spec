@@ -66,72 +66,41 @@ The following rules govern adding and removing reviewers:
 
 This section is mainly for anyone who needs to build a new language structure.
 
-Fork [cloudevents/spec](https://github.com/cloudevents/spec/tree/main)
-to your Github repo. 
+Firstly, check the [language list](languages.md) to see if the language
+you'd like to translate into already exists. If it doesn't exist, 
+and there is not a PR indicating someone is currently working on it,
+then you can start to add a new one.
 
-Then check the [language list](languages.md) to see if the language
-you'd like to translate into already exists. If it doesn't exist, you can start to add a new one.
+### Step 1. Create a PR to edit the languages.md
 
-### Step 1. build the structure
+Before starting doing any actual works, you should create a PR to edit the
+[language list](languages.md), adding a new language item to avoid redundant works from others.
 
-Create a directory under `languages` directory, named after the specific 
+### Step 2. Build the structure locally
+
+After you cloned the repo to your local environment, you should create a directory 
+under `languages` directory, named after the specific 
 [language code](http://www.lingoes.net/en/translator/langcode.htm).
 
-Add a new item to the [language list](languages.md), which linking to the directory 
-you just created. 
+Then, copy all original documents except `languages` directory to `languages/{language-code}`.
 
-### Step 2. copy documents to right location
-
-Copy all original documents except `languages` directory to `languages/{language-code}`.
-There is no need to copy project-related files(i.e.,LICENSE, OWNERS).
+*Note*: there is no need to copy project-related files(i.e.,LICENSE, OWNERS).
 
 For example:
 ```
 copy cloudevents/spec.md to languages/zh-CN/cloudevents/spec.md
 copy README.md to languages/zh-CN/README.md
+......
 ```
+You should also clear English content of copied documents to indicate 
+that the document is ready to be translated.
 
-Clear content of copied documents to indicate that the document is ready to be translated.
+The [reviewer list](zh-CN/reviewers.md) and the [translation list](zh-CN/translations.md)
+should be copied to `languages/{language-code}`.
 
-Then copy the [reviewer list](zh-CN/reviewers.md) and the [translation list](zh-CN/translations.md)
-to `languages/{language-code}`.
+### Step 3. Create a new PR to upload the new structure
 
-Check example structure [here](zh-CN).
-
-## How to publish translation tasks
-
-### Step 1. open a single issue referring to an untranslated document
-
-Create an issue with label "{language-code}-translation" to publish a translation assignment.
-
-Examples:
-```
-Issue tile:        docs: translate cloudevents/spec.md to zh-CN
-Issue content:   
-                   original document: 
-                   https://github.com/cloudevents/spec/blob/main/README.md
-                   target document: 
-                   https://github.com/cloudevents/spec/blob/main/languages/zh-CN/README.md
-```
-
-A reviewer can assign the issue to anyone who comments to do the translation.
-
-### Step 2. open an overall issue to list and track all tasks
-
-Examples:
-```
-Issue tile:         docs: translation list to zh-CN
-Issue content:   
-                    cloudevents: 
-                    Issue url: docs: translate cloudevents/spec.md to zh-CN
-                    Issue url: docs: translate cloudevents/SDK.md to zh-CN
-                    Issue url: docs: translate cloudevents/primer.md to zh-CN
-     
-                    cesql: 
-                    Issue url: docs: translate cesql/spec.md to zh-CN
-                    Issue url: docs: translate cesql/cesql_tck/README.md to zh-CN
-                    ......
-```
+Once you finished build the structure locally, you can create a PR to upload the changes.
 
 ## How to translate
 
@@ -140,22 +109,22 @@ Issue content:
 A translator can find a document to translate by filtering issues based on 
 `{language-code}-translation` label.
 
-Comment the issue to ask reviewers to assign the task to you.
+You can comment in the issue to ask admins to assign the task to you.
 
 You're expected to finish translation within one week. The task can be assigned to
 others after one week.
 
-### Step 2. submit your translation
+### Step 2. Submit your translation
 
 A translator must submit translation via a Pull Request(PR). See details in how to 
 [submit a Pull Request](../community/CONTRIBUTING.md#suggesting-a-change).
 
-### Step 3. edit your translation
+### Step 3. Edit your translation
 
 A reviewer might give their suggestions in your PR. 
 Translators can discuss with the reviewer about translation details.
 
-However, a translation will not be merged until reviewers give their LGTM.
+Remember, a translation will not be merged until reviewers give their LGTM.
 
 ## Translation style guide
 - Only translate textual documents (generally Markdown files with a .md extension).
