@@ -31,11 +31,11 @@ data type mappings for CloudEvents context attributes.
 * The [Data](#3-data) section defines the container for the data portion of a
 CloudEvent.
 
-* The [Envelope](#4-envelope) section defines an XML element for CloudEvents
-attributes and an associated media type.
+* The [Envelope](#4-envelope) section defines an XML element to contain CloudEvent
+context attributes and data.
 
 * The [Batch](#5-xml-batch-format) section describes how multiple CloudEvents
-can be packaged into a single XML document.
+can be packaged into a single XML element.
 
 ### 1.1. Conformance
 
