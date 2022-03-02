@@ -1,5 +1,13 @@
 # CloudEvents translation in Chinese
 
+## reviewers:
+- [Jie](https://github.com/jieding)
+
+## translators:
+- [Jie](https://github.com/jieding)
+
+## translations:
+
 | Documents   |   Status     |  Last edited |   
 | :---------  | :---------: | :---------   |
 | cesql/spec.md |   Ready to start   |       |

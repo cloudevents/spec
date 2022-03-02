@@ -28,10 +28,8 @@ There are two categories of roles:
    CloudEvents documents. One becomes a formal translator once a Pull Request (PR) 
    of their translation is merged.
 
-2. **Reviewer.** A reviewer is responsible for checking new translations 
+2. **Reviewer.** A reviewer is the one who is responsible for reviewing new translations 
    and answering related issues.
-   Typically, reviewers of each language are members of a Github team which is named 
-   after the language code(i.e., zh-CN reviewers).
 
 ### Translators
 
@@ -50,7 +48,7 @@ There are 4 types of status:
 - Ready to start: any document is ready to be translated stay in this state.
 - Started: indicating someone is translating this document
 - PR reviewing: a translator finished the translation, and the work is being reviewed.
-- PR merged: the translation is successfully merged into the spec.
+- PR merged: the translation is successfully merged into the `spec` repository.
 
 Initially, the last edit time will be the time when the translation is merged.
 Reviewers should ensure translations are up-to-date with the English version as it changes, meanwhile 
@@ -73,7 +71,7 @@ then you can start to add a new one.
 
 ### Step 1. Create a PR to edit the languages.md
 
-Before starting doing any actual works, you should create a PR to edit the
+Before starting to do any actual works, you should create a PR to edit the
 [language list](languages.md), adding a new language item to avoid redundant works from others.
 
 ### Step 2. Build the structure locally
@@ -95,8 +93,9 @@ copy README.md to languages/zh-CN/README.md
 You should also clear English content of copied documents to indicate 
 that the document is ready to be translated.
 
-The [reviewer list](zh-CN/reviewers.md) and the [translation list](zh-CN/translations.md)
+The [translation list](zh-CN/translations.md)
 should be copied to `languages/{language-code}`.
+It lists all information(including reviewers, translators and translations) about this languages.
 
 ### Step 3. Create a new PR to upload the new structure
 
@@ -106,7 +105,10 @@ Once you finished build the structure locally, you can create a PR to upload the
 
 ### Step 1. Choose a document to translate 
 
-A translator can find a document to translate by filtering issues based on 
+Admins will open issues to publish translation assignments 
+once the PR of "building a new language structure" is discussed and merged.
+
+A translator then can find a document to translate by filtering issues based on 
 `{language-code}-translation` label.
 
 You can comment in the issue to ask admins to assign the task to you.
