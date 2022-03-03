@@ -60,7 +60,7 @@ that everyone in the community has an opportunity to review and comment on pull
 requests, it's often good to have some time after a pull request has been
 submitted, and before it has landed.
 
-Here are some guidelines arround pull request approvals and timing.
+Here are some guidelines around pull request approvals and timing.
 
 * No pull request may land without passing all automated checks
 * All pull requests require at least one approval from a maintainer before landing

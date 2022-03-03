@@ -139,7 +139,7 @@ Batch format allows for a set of CloudEvents to be represented, no relationship
 between those events is implied.
 
 Although the _protobuf batch format_ builds on the _protobuf format_ it is considered
-seperate, that is to say that support of _protobuf format_ does not indicate support
+separate, that is to say that support of _protobuf format_ does not indicate support
 of the batch representation. The batch format MUST only be used where supported.
 
 ### 5.1 Envelope
