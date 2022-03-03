@@ -16,7 +16,7 @@ CloudEvents 是一个用于定义事件格式的供应商中立规范。
 - [事件数据](#event-data)
 - [大小限制](#size-limits)
 - [隐私与安全](#privacy-and-security)
-- [示例](#exmaple)
+- [示例](#example)
 
 ## Overview/概览
 
@@ -467,7 +467,7 @@ CloudEvents 也可能直接被路由到消费者，如嵌入式设备，
 - 协议绑定
   应该采用协议级别的安全性机制来确保 CloudEvents 完成可信和安全的交换。
 
-# Exmaple/示例
+# Example/示例
 
 
 The following example shows a CloudEvent serialized as JSON:
