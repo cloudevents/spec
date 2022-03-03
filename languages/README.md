@@ -17,7 +17,6 @@ This is a working draft. Changes could be made anytime.
 - [Roles](#roles)
 - [How to translate](#how-to-translate)
 - [How to add a new language](#how-to-add-a-new-language)
-- [How to publish translation tasks](#how-to-publish-translation-tasks)  
 - [Translation style guide](#translation-style-guide)
 
 ## Roles
