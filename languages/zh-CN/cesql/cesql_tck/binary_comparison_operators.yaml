@@ -1,0 +1,90 @@
+name: Binary comparison operations
+tests:
+  - name: True is equal to false
+    expression: TRUE = FALSE
+    result: false
+  - name: False is equal to false
+    expression: FALSE = FALSE
+    result: true
+  - name: 1 is equal to 2
+    expression: 1 = 2
+    result: false
+  - name: 2 is equal to 2
+    expression: 2 = 2
+    result: true
+  - name: abc is equal to 123
+    expression: "'abc' = '123'"
+    result: false
+  - name: abc is equal to abc
+    expression: "'abc' = 'abc'"
+    result: true
+
+  - name: True is not equal to false
+    expression: TRUE != FALSE
+    result: true
+  - name: False is not equal to false
+    expression: FALSE != FALSE
+    result: false
+  - name: 1 is not equal to 2
+    expression: 1 != 2
+    result: true
+  - name: 2 is not equal to 2
+    expression: 2 != 2
+    result: false
+  - name: abc is not equal to 123
+    expression: "'abc' != '123'"
+    result: true
+  - name: abc is not equal to abc
+    expression: "'abc' != 'abc'"
+    result: false
+
+  - name: True is not equal to false (diamond operator)
+    expression: TRUE <> FALSE
+    result: true
+  - name: False is not equal to false (diamond operator)
+    expression: FALSE <> FALSE
+    result: false
+  - name: 1 is not equal to 2 (diamond operator)
+    expression: 1 <> 2
+    result: true
+  - name: 2 is not equal to 2 (diamond operator)
+    expression: 2 <> 2
+    result: false
+  - name: abc is not equal to 123 (diamond operator)
+    expression: "'abc' <> '123'"
+    result: true
+  - name: abc is not equal to abc (diamond operator)
+    expression: "'abc' <> 'abc'"
+    result: false
+
+  - name: 1 is less or equal than 2
+    expression: 2 <= 2
+    result: true
+  - name: 3 is less or equal than 2
+    expression: 3 <= 2
+    result: false
+  - name: 1 is less than 2
+    expression: 1 < 2
+    result: true
+  - name: 2 is less than 2
+    expression: 2 < 2
+    result: false
+  - name: 2 is greater or equal than 2
+    expression: 2 >= 2
+    result: true
+  - name: 2 is greater or equal than 3
+    expression: 2 >= 3
+    result: false
+  - name: 2 is greater than 1
+    expression: 2 > 1
+    result: true
+  - name: 2 is greater than 2
+    expression: 2 > 2
+    result: false
+
+  - name: implicit casting with string as right type
+    expression: "true = 'TRUE'"
+    result: false
+  - name: implicit casting with boolean as right type
+    expression: "'TRUE' = true"
+    result: true

@@ -1,0 +1,89 @@
+name: Casting functions
+tests:
+  - name: Cast '1' to integer
+    expression: INT('1')
+    result: 1
+  - name: Cast '-1' to integer
+    expression: INT('-1')
+    result: -1
+  - name: Cast identity 1
+    expression: INT(1)
+    result: 1
+  - name: Cast identity -1
+    expression: INT(-1)
+    result: -1
+  - name: Invalid cast from boolean to int
+    expression: INT(TRUE)
+    result: 0
+    error: cast
+  - name: Invalid cast from string to int
+    expression: INT('ABC')
+    result: 0
+    error: cast
+
+  - name: Cast 'TRUE' to boolean
+    expression: BOOL('TRUE')
+    result: true
+  - name: Cast "false" to boolean
+    expression: BOOL("false")
+    result: false
+  - name: Cast identity TRUE
+    expression: BOOL(TRUE)
+    result: true
+  - name: Cast identity FALSE
+    expression: BOOL(FALSE)
+    result: FALSE
+  - name: Invalid cast from string to boolean
+    expression: BOOL('ABC')
+    result: false
+    error: cast
+  - name: Invalid cast from int to boolean
+    expression: BOOL(1)
+    result: false
+    error: cast
+
+  - name: Cast TRUE to string
+    expression: STRING(TRUE)
+    result: 'true'
+  - name: Cast FALSE to string
+    expression: STRING(FALSE)
+    result: 'false'
+  - name: Cast 1 to string
+    expression: STRING(1)
+    result: '1'
+  - name: Cast -1 to string
+    expression: STRING(-1)
+    result: '-1'
+  - name: Cast identity "abc"
+    expression: STRING("abc")
+    result: "abc"
+
+  - name: "'true' is a boolean"
+    expression: IS_BOOL('true')
+    result: true
+  - name: "'FALSE' is a boolean"
+    expression: IS_BOOL('FALSE')
+    result: true
+  - name: 1 is not a boolean
+    expression: IS_BOOL(1)
+    result: false
+  - name: "'abc' is not a boolean"
+    expression: IS_BOOL('abc')
+    result: false
+
+  - name: "'-1' is an int"
+    expression: IS_INT('-1')
+    result: true
+  - name: "'1' is an int"
+    expression: IS_INT('1')
+    result: true
+  - name: true is not an int
+    expression: IS_INT(TRUE)
+    result: false
+  - name: "'abc' is not an int"
+    expression: IS_INT('abc')
+    result: false
+
+  - name: IS_STRING does not exists
+    expression: IS_STRING('ABC')
+    error: missingFunction

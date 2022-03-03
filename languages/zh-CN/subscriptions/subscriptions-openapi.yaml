@@ -1,0 +1,503 @@
+openapi: 3.0.0
+info:
+  title: CloudEvents Subscriptions API
+  version: 0.2-WIP
+servers:
+  - url: https://server.example.com/v0.1
+paths:
+  /subscriptions:
+    get:
+      operationId: getSubscriptions
+      description: Retrieve multiple subscriptions
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: a list of subscriptions
+                items:
+                  $ref: "#/components/schemas/Subscription"
+    post:
+      operationId: createSubscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionRequest"
+      responses:
+        "201":
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+          headers:
+            Location:
+              schema:
+                type: string
+                format: url
+        "400":
+          description: Invalid or malformed request
+    options:
+      operationId: getFeatures
+      description: Discover supported features and methods for this endpoint
+      responses:
+        "200":
+          description: OK
+          headers:
+            Allow:
+              schema:
+                type: string
+                default: "GET,POST,OPTIONS"
+  /subscriptions/{id}:
+    get:
+      operationId: getSubscription
+      description: Retrieve a subscription
+      parameters:
+        - in: "path"
+          name: "id"
+          description: identifier of a specific subscription
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "404":
+          description: Subscription not found
+    put:
+      operationId: updateSubscription
+      description: Update a subscription
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          schema:
+            type: string
+          description: The id of an existing subscription
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Subscription"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "400":
+          description: Invalid or malformed request
+        "404":
+          description: Subscription not found
+    delete:
+      operationId: deleteSubscription
+      description: Delete a subscription
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          schema:
+            type: string
+          description: The id of an existing subscription
+      responses:
+        "200":
+          description: Successfully deleted
+        "404":
+          description: Subscription not found
+    options:
+      operationId: getSubscriptionFeatures
+      description: Discover supported features and methods for this endpoint
+      parameters:
+        - in: "path"
+          name: "id"
+          description: identifier of a specific subscription
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          headers:
+            Allow:
+              schema:
+                type: string
+                default: "GET,PUT,DELETE,OPTIONS"
+components:
+  schemas:
+    SubscriptionRequest:
+      properties:
+        protocol:
+          $ref: "#/components/schemas/Protocol"
+        protocolSettings:
+          oneOf:
+            - $ref: "#/components/schemas/ProtocolSettings"
+            - $ref:  "#/components/schemas/AMQPSettings"
+            - $ref:  "#/components/schemas/ApacheKafkaSettings"
+            - $ref:  "#/components/schemas/HTTPSettings"
+            - $ref:  "#/components/schemas/MQTTSettings"
+            - $ref:  "#/components/schemas/NATSSettings"
+        sink:
+          type: string
+          format: url
+          description: REQUIRED. The address to which events shall be delivered using the selected protocol.
+          example: "https://endpoint.example.com/webhook"
+        sinkCredential:
+          oneOf:
+            - $ref: "#/components/schemas/SinkCredential"
+            - $ref: "#/components/schemas/AccessTokenCredential"
+            - $ref: "#/components/schemas/PlainCredential"
+            - $ref: "#/components/schemas/RefreshTokenCredential"
+        source:
+          type: string
+          format: uri-reference
+          description: OPTIONAL. Source to which the subscription applies. May be implied by the request address.
+        types:
+          description: "CloudEvent types eligible to be delivered by this subscription"
+          type: array
+          items:
+            type: string
+        filters:
+          description: "This filter evaluates to 'true' if all contained filters are 'true'"
+          type: array
+          items:
+            title: "Filter entry"
+            oneOf:
+              - $ref: "#/components/schemas/Filter"
+              - $ref: "#/components/schemas/AllFilter"
+              - $ref: "#/components/schemas/AnyFilter"
+              - $ref: "#/components/schemas/NotFilter"
+              - $ref: "#/components/schemas/ExactFilter"
+              - $ref: "#/components/schemas/PrefixFilter"
+              - $ref: "#/components/schemas/SuffixFilter"
+              - $ref: "#/components/schemas/DialectFilter"
+              - $ref: "#/components/schemas/SqlFilter"
+        config:
+          description: OPTIONAL. Implementation-specific configuration parameters needed by the subscription manager for acquiring events.
+          type: object
+          additionalProperties:
+            type: string
+      required:
+        - sink
+        - protocol
+    Subscription:
+      type: object
+      title: "Subscription"
+      allOf:
+        - $ref: "#/components/schemas/SubscriptionRequest"
+        - type: object
+          properties:
+            id:
+              type: string
+              description: REQUIRED. The unique identifier of the subscription in the scope of the subscription manager.
+              example: 1119920371
+      required:
+        - id
+        - sink
+        - protocol
+    Protocol:
+      type: string
+      enum: ["HTTP", "MQTT3", "MQTT5", "AMQP", "NATS", "KAFKA"]
+      description: REQUIRED. Identifier of a delivery protocol.
+      example: "HTTP"
+    Filter:
+      title: "Filter"
+      description: "A filter from a selection of multiple filter types and dialects"
+      type: object
+      additionalProperties: false
+    AllFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          description: "all filter"
+          properties:
+            all:
+              description: "This filter evaluates to 'true' if all contained filters are 'true'"
+              type: array
+              minItems: 1
+              items:
+                title: "Filter entry"
+                oneOf:
+                - $ref: "#/components/schemas/Filter"
+                - $ref: "#/components/schemas/AllFilter"
+                - $ref: "#/components/schemas/AnyFilter"
+                - $ref: "#/components/schemas/NotFilter"
+                - $ref: "#/components/schemas/ExactFilter"
+                - $ref: "#/components/schemas/PrefixFilter"
+                - $ref: "#/components/schemas/SuffixFilter"
+                - $ref: "#/components/schemas/DialectFilter"
+                - $ref: "#/components/schemas/SqlFilter"
+          additionalProperties: false
+    AnyFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          description: "any filter"
+          properties:
+            any:
+              description: "This filter evaluates to 'true' if any contained filters are 'true'"
+              type: array
+              minItems: 1
+              items:
+                title: "Filter entry"
+                oneOf:
+                  - $ref: "#/components/schemas/Filter"
+                  - $ref: "#/components/schemas/AllFilter"
+                  - $ref: "#/components/schemas/AnyFilter"
+                  - $ref: "#/components/schemas/NotFilter"
+                  - $ref: "#/components/schemas/ExactFilter"
+                  - $ref: "#/components/schemas/PrefixFilter"
+                  - $ref: "#/components/schemas/SuffixFilter"
+                  - $ref: "#/components/schemas/DialectFilter"
+                  - $ref: "#/components/schemas/SqlFilter"
+          additionalProperties: false
+    NotFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          description: "not filter"
+          properties:
+            not:
+              type: object
+              properties:
+                filter:
+                  title: "Filter entry"
+                  oneOf:
+                    - $ref: "#/components/schemas/Filter"
+                    - $ref: "#/components/schemas/AllFilter"
+                    - $ref: "#/components/schemas/AnyFilter"
+                    - $ref: "#/components/schemas/NotFilter"
+                    - $ref: "#/components/schemas/ExactFilter"
+                    - $ref: "#/components/schemas/PrefixFilter"
+                    - $ref: "#/components/schemas/SuffixFilter"
+                    - $ref: "#/components/schemas/DialectFilter"
+                    - $ref: "#/components/schemas/SqlFilter"
+          additionalProperties: false
+    ExactFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          description: "all filter"
+          properties:
+            exact:
+              title: "exact filter"
+              description: "This filter evaluates to 'true' if the 'value' exactly matches the value of the indicated CloudEvents context attribute"
+              required:
+                - attribute
+                - value
+              properties:
+                attribute:
+                  type: string
+                  description: attribute name
+                value:
+                  type: string
+                  description: value
+          additionalProperties: false
+    PrefixFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          description: "all filter"
+          properties:
+            prefix:
+              title: "prefix filter"
+              description: "This filter evaluates to 'true' if the 'value' is a prefix of the value of the indicated CloudEvents context attribute"
+              required:
+                - attribute
+                - value
+              properties:
+                attribute:
+                  type: string
+                  description: attribute name
+                value:
+                  type: string
+                  description: value
+              additionalProperties: false
+    SuffixFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          description: "all filter"
+          properties:
+            suffix:
+              title: "suffix filter"
+              description: "This filter evaluates to 'true' if the 'value' is a suffix of the value of the indicated CloudEvents context attribute"
+              required:
+                - attribute
+                - value
+              properties:
+                attribute:
+                  type: string
+                  description: attribute name
+                value:
+                  type: string
+                  description: value
+              additionalProperties: false
+    DialectFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          minProperties: 1
+          maxProperties: 1
+          additionalProperties:
+            title: "dialect filter"
+            description: "This filter evaluates to 'true' based on the rules of specific dialect indicated by the key of the filter"
+            required:
+              - expression
+            properties:
+              attribute:
+                type: string
+                description: attribute name
+              expression:
+                type: string
+                description: value
+    SqlFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          description: "CESQL filter"
+          properties:
+            sql:
+              type: string
+              description: "The CESQL expression"
+          additionalProperties: true
+    ProtocolSettings:
+      type: object
+      additionalProperties: false
+    HTTPSettings:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            headers:
+              type: object
+              additionalProperties:
+                type: string
+            method:
+              type: string
+    MQTTSettings:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            topicName:
+              type: string
+            qos:
+              type: integer
+              format: int32
+            retain:
+              type: boolean
+            expiry:
+              type: integer
+              format: int32
+            userProperties:
+              type: object
+          required:
+            - topicName
+    AMQPSettings:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            address:
+              type: string
+            linkName:
+              type: string
+            senderSettlementMode:
+              type: string
+              enum: ["settled", "unsettled"]
+            linkProperties:
+              type: object
+              additionalProperties:
+                 type: string
+    ApacheKafkaSettings:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            topicName:
+              type: string
+            partitionKeyExtractor:
+              type: string
+            clientId:
+              type: string
+            ackMode:
+              type: integer
+          required:
+            - topicName
+    NATSSettings:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ProtocolSettings"
+        - properties:
+            subject:
+              type: string
+          required:
+            - subject
+    SinkCredential:
+      type: object
+      properties:
+         credentialType:
+            type: string
+            enum: ["PLAIN", "ACCESSTOKEN", "REFRESHTOKEN"]
+            description: "The type of the credential."
+      additionalProperties: false
+    PlainCredential:
+      type: object
+      description: A plain credential as a combination of an identifier and a secret.
+      allOf:
+        - $ref: "#/components/schemas/SinkCredential"
+        - properties:
+            identifier:
+              description: The identifier might be an account or username.
+              type: string
+            secret:
+              description: The secret might be a password or passphrase.
+              type: string
+    AccessTokenCredential:
+      type: object
+      description: An access token credential.
+      allOf:
+        - $ref: "#/components/schemas/SinkCredential"
+        - properties:
+            accessToken:
+              description: REQUIRED. An access token is a previously acquired token granting access to the target resource.
+              type: string
+            accessTokenExpiresUtc:
+              type: string
+              format: date-time
+              description: RECOMMENDED. An absolute UTC instant at which the token shall be considered expired.
+            accessTokenType:
+              description: OPTIONAL. )Type of the access token (See https://tools.ietf.org/html/rfc6749#section-7.1).
+              type: string
+              default: bearer
+          required:
+            - accessToken
+            - accessTokenExpiresUtc
+    RefreshTokenCredential:
+      type: object
+      description: An access token credential with a refresh token.
+      allOf:
+        - $ref: "#/components/schemas/AccessTokenCredential"
+        - type: object
+          properties:
+            refreshToken:
+              description: REQUIRED. An refresh token credential used to acquire access tokens.
+              type: string
+            refreshTokenEndpoint:
+              type: string
+              format: uri
+              description: REQUIRED. A URL at which the refresh token can be traded for an access token.
+      required:
+        - refreshToken
+        - refreshTokenEndpoint
