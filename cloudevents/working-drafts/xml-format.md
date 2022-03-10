@@ -85,8 +85,8 @@ Extension context attributes MUST be decorated with the appropriate CloudEvent t
 designators using an `xsi:type` XML attribute, this allows them to be exchanged
 without loss of type information.
 
-REQUIRED and OPTIONAL context atrtribute MAY be decorated with `xsi:type`, if present this
-value MUST match that of the type specified by the [CloudEvent type specification][ce-types].
+REQUIRED and OPTIONAL context attribute MAY be decorated with an`xsi:type`, if present this
+designator MUST match that of the type specified by the [CloudEvent context attributes][ce-attrs].
 
 No other XML element attributes are expected, if present they MUST be ignored during
 processing.
@@ -350,6 +350,7 @@ non-normative example.
 
 [ce-spec]: ../spec.md
 [ce-types]: ../spec.md#type-system
+[ce-attrs]: ../spec.md#context-attributes
 [xml-format]: ./xml-format.md
 [json-format]: ../formats/json-format.md
 [xml-spec]: https://www.w3.org/TR/2008/REC-xml-20081126/
