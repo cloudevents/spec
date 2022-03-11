@@ -135,7 +135,7 @@ Example:
 ### 3.3 XML Data
 
 XML data MUST be carried in an element with a defined type of `xs:any` with
-a single child XML element (with any required namespace definitions).
+a single child XML element (with any mandatory namespace definitions).
 
 Example:
 
