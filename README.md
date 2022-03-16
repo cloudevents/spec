@@ -24,7 +24,8 @@ a Cloud Native sandbox level project on
 
 ## CloudEvents Documents
 
-The following documents are available ([Release Notes](misc/RELEASE_NOTES.md)):
+The following documents are available
+([Release Notes/Changelog](docs/RELEASE_NOTES.md)):
 
 |                               |                                 Latest Release                                  |                                      Working Draft                                       |
 | :---------------------------- | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
@@ -79,34 +80,27 @@ In addition to the documentation mentioned above, there is also an
 - [Ruby](https://github.com/cloudevents/sdk-ruby)
 - [Rust](https://github.com/cloudevents/sdk-rust)
 
-## Community
+## Community and Docs
 
 Learn more about the people and organizations who are creating a dynamic cloud
 native ecosystem by making our systems interoperable with CloudEvents.
 
-- Our [Governance](community/GOVERNANCE.md) documentation.
-- How to [contribute](community/CONTRIBUTING.md) via issues and pull requests.
-- [Contributors](community/contributors.md): people and organizations who helped
+- Our [Governance](docs/GOVERNANCE.md) documentation.
+- [Contributing](docs/CONTRIBUTING.md) guidance.
+- [Roadmap](docs/ROADMAP.md)
+- [Adopters](https://cloudevents.io/) - See "Integrations".
+- [Contributors](docs/contributors.md): people and organizations who helped
   us get started or are actively working on the CloudEvents specification.
-- [Demos & open source](community/README.md) -- if you have something to share
+- [Demos & open source](docs/README.md) -- if you have something to share
   about your use of CloudEvents, please submit a PR!
+- [Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md)
 
-## Process
+### Security Concerns
 
-The CloudEvents project is working to formalize the
-[specification](cloudevents/spec.md) based on
-[design goals](cloudevents/primer.md#design-goals) which focus on
-interoperability between systems which generate and respond to events.
+If there is a security concern with one of the specifications in this
+repository please [open an issue](https://github.com/cloudevents/spec/issues).
 
-In order to achieve these goals, the project must describe:
-
-- Common attributes of an _event_ that facilitate interoperability
-- One or more common architectures that are in active use today or planned to be
-  built by its members
-- How events are transported from producer to consumer via at least one protocol
-- Identify and resolve whatever else is needed for interoperability
-
-## Communications
+### Communications
 
 The main mailing list for e-mail communications:
 
@@ -124,7 +118,7 @@ For SDK related comments and questions:
 - Archives are at: https://lists.cncf.io/g/cncf-cloudevents-sdk/topics
 - Slack: #cloudeventssdk on [CNCF's Slack workspace](http://slack.cncf.io/)
 
-## Meeting Time
+### Meeting Time
 
 See the [CNCF public events calendar](https://www.cncf.io/community/calendar/).
 This specification is being developed by the

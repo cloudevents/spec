@@ -118,7 +118,7 @@ others after one week.
 ### Step 2. Submit your translation
 
 A translator must submit translation via a Pull Request(PR). See details in how to 
-[submit a Pull Request](../community/CONTRIBUTING.md#suggesting-a-change).
+[submit a Pull Request](../docs/CONTRIBUTING.md#suggesting-a-change).
 
 ### Step 3. Edit your translation
 
