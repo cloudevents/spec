@@ -34,7 +34,7 @@ paths:
         '400':
           description: Bad Request - constraint failure
         '409':
-          description: Conflict - epoch does not match
+          description: Conflict - invalid epoch value
     delete:
       operationId: deleteServices
       requestBody:
@@ -43,7 +43,7 @@ paths:
         '200':
           $ref: '#/components/responses/servicesdeleteresponse'
         '409':
-          description: Conflict - epoch does not match
+          description: Conflict - invalid epoch value
   /services/{id}:
     get:
       operationId: getService
@@ -72,7 +72,7 @@ paths:
         '404':
           description: Not Found
         '409':
-          description: Conflict - epoch does not match
+          description: Conflict - invalid epoch value
     delete:
       operationId: deleteService
       parameters:
@@ -90,7 +90,7 @@ paths:
         '200':
           $ref: '#/components/responses/servicedeleteresponse'
         '409':
-          description: Conflict - epoch does not match
+          description: Conflict - invalid epoch value
 components:
   parameters:
     id:
