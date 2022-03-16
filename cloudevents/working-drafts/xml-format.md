@@ -23,7 +23,7 @@ This document is a working draft.
 [CloudEvents][ce-spec] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how
 elements defined in the CloudEvents specification are to be represented using
-[Extensible Markup Language (XML)](xml-spec) documents.
+[Extensible Markup Language (XML)](xml-spec) elements.
 
 * The [Attributes](#2-attributes) section describes the representation and
 data type mappings for CloudEvents context attributes.
@@ -59,7 +59,8 @@ The namespace `http://cloudevents.io/xmlformat/V1` MUST be used.
 When namespace prefixes are used a prefix of `ce` is preferred but MUST NOT
 be expected from an XML document processing perspective.
 
-An XML document preamble SHOULD be included to ensure deterministic processing.
+Where an event (or batch of events) is represented as a complete XML document,
+an XML document preamble SHOULD be included to ensure deterministic processing.
 
 ## 2. Attributes
 
@@ -85,11 +86,13 @@ Extension context attributes MUST be decorated with the appropriate CloudEvent t
 designators using an `xsi:type` XML attribute, this allows them to be exchanged
 without loss of type information.
 
-REQUIRED and OPTIONAL context attribute MAY be decorated with an`xsi:type`, if present this
-designator MUST match that of the type specified by the [CloudEvent context attributes][ce-attrs].
+An XML element representing a REQUIRED or OPTIONAL context attribute MAY be decorated with
+an `xsi:type` XML attribute. If present, this designator MUST match that of the type specified
+by the [CloudEvent context attributes][ce-attrs].
 
-No other XML element attributes are expected, if present they MUST be ignored during
-processing.
+An XML element representing a CloudEvent attribute MUST NOT contain any XML attributes
+other than `xsi:type` and attributes in the `xmlns` namespace. The XML element MUST NOT
+contain any child elements.
 
 ``` xml
     ...
@@ -109,12 +112,15 @@ encapsulate the payload.
 
 An `xsi:type` is used to discrimate the payload type and MUST be present.
 
+The `data` element MUST NOT contain any XML attributes
+other than `xsi:type` and attributes in the `xmlns` namespace.
+
 The following data representations are supported:
 
 ### 3.1 Binary Data
 
 Binary data MUST be carried in an element with an defined type of `xs:base64Binary`
-and encoded appropriately..
+and encoded appropriately. The element MUST NOT contain any child elements.
 
 Example:
 
@@ -125,6 +131,7 @@ Example:
 ### 3.2 Text Data
 
 Text MUST be carried in an element with an defined type of `xs:string`.
+The element MUST NOT contain any child elements.
 
 Example:
 
@@ -135,7 +142,9 @@ Example:
 ### 3.3 XML Data
 
 XML data MUST be carried in an element with a defined type of `xs:any` with
-a single child XML element (with any mandatory namespace definitions).
+a exactly one child XML element (with any mandatory namespace definitions).
+The XML element MUST NOT contain any direct child text nodes with non-whitespace
+content.
 
 Example:
 
@@ -173,6 +182,13 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 </event>
 ```
 
+The `event` element MUST NOT contain any direct child text nodes with non-whitespace
+content, and it MUST NOT contain any XML attributes other than `specversion` and attributes
+in the `xmlns` namespace.
+
+The `event` element MAY contain child elements which are not in the namespace of
+`http://cloudevents.io/xmlformat/V1`. Any such elements MUST be ignored during processing.
+
 ## 5. XML Batch Format
 
 In the _XML Batch Format_ several CloudEvents are batched into a single XML
@@ -199,6 +215,12 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
     ....
 </batch>
 ```
+
+The `batch` element MUST NOT contain any direct child text nodes with non-whitespace
+content, and it MUST NOT contain any XML attributes other than ones in the `xmlns` namespace.
+
+The `batch` element MAY contain child elements which are not in the namespace of
+`http://cloudevents.io/xmlformat/V1`. Any such elements MUST be ignored during processing.
 
 ## 6. Examples
 
