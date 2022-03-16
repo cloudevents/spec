@@ -146,10 +146,12 @@ Note that these rules do not apply to the
 [documented extensions](../cloudevents/documented-extensions.md).
 
 All versions are tagged from the `main` branch, but the tag only applies to
-the "subject" of the release - the top-level directory containing the information
+the "subject" of the release - the directory containing the information
 covered by that release (e.g. `discovery` or `cloudevents`). The
 [CloudEvents web site](https://cloudevents.io/) takes appropriate content from
-each tagged version.
+each tagged version. (If the directory containing the information covered
+by the release is not in a top-level directory, the subject should be the full path,
+e.g. `top-dir/sub-dir`.)
 
 > Note: should the need arise, additional branches may be created. For example,
 > it is likely that a `core-v2.0` branch will be created to collect changes for
@@ -164,10 +166,10 @@ To create a new release:
   Make sure to remove `-wip` from all of the version strings.
 - Merge the PR.
 - Create a [new release](https://github.com/cloudevents/spec/releases/new):
-  - Choose a "Tag version" of the form: `<subject>-vX.Y.Z`, e.g.
-    `cloudevents-v1.0.4` or `discovery-v1.0.0`
+  - Choose a "Tag version" of the form: `<subject>/vX.Y.Z`, e.g.
+    `cloudevents/v1.0.4` or `discovery/v1.0.0`
   - Target should be `main`, the default value
-  - Release title should be the same as the Tag - `<subject>-vX.Y.Z`
+  - Release title should be the same as the Tag - `<subject>/vX.Y.Z`
   - Add some descriptive text, or the list of PRs that have been merged since
     the previous release. The git query to get the list commits since the last
     release is:
