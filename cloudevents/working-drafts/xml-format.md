@@ -143,8 +143,8 @@ Example:
 
 XML data MUST be carried in an element with a defined type of `xs:any` with
 a exactly one child XML element (with any mandatory namespace definitions).
-The XML element MUST NOT contain any direct child text nodes with non-whitespace
-content.
+The `data` XML element MUST NOT contain any direct child text nodes with non-whitespace
+content. There are no restrictions on the content of the child element.
 
 Example:
 
