@@ -94,6 +94,9 @@ An XML element representing a CloudEvent attribute MUST NOT contain any XML attr
 other than `xsi:type` and attributes in the `xmlns` namespace. The XML element MUST NOT
 contain any child elements.
 
+XML elements representing CloudEvent attributes MUST have distinct names within the same
+CloudEvent representation. This applies to both context attributes and extension attributes.
+
 ``` xml
     ...
     <id>AAABBBCCCNNN0000</id>
@@ -114,6 +117,8 @@ An `xsi:type` is used to discrimate the payload type and MUST be present.
 
 The `data` element MUST NOT contain any XML attributes
 other than `xsi:type` and attributes in the `xmlns` namespace.
+
+The `data` element MUST NOT occur more than once within an `<event>` element.
 
 The following data representations are supported:
 
