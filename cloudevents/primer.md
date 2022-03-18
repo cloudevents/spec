@@ -18,7 +18,7 @@ itself to focus on the normative technical details.
 - [Architecture](#architecture)
 - [Versioning of CloudEvents](#versioning-of-cloudevents)
 - [CloudEvent Attributes](#cloudevent-attributes)
-- [CloudEvent Attribute Extensions](#cloudevent-attribute-extensions)
+- [CloudEvent Extension Attributes](#cloudevent-extension-attributes)
 - [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
@@ -192,12 +192,12 @@ Confidentiality, as the current intention behind this spec is not to define
 Security principles with regards to CloudEvents. Every implementor has a
 different principle for enhancing their security model. We leave it up to the
 implementor of the spec to provide additional details for hardening their
-security model as an extension field, which can be furthermore interpreted by
-the components implemented by the implementor of the specification themselves.
-However, if the community observes a pattern in usage of certain extension
-fields, as a standard way to deal with the topic of data integrity. In that
-case, such extension fields can be declared as official extension to the
-CloudEvent specification.
+security model as an extension attribute, which can be furthermore interpreted
+by the components implemented by the implementor of the specification
+themselves. However, if the community observes a pattern in usage of certain
+extension attributes, as a standard way to deal with the topic of data
+integrity. In that case, such extension attributes can be declared as official
+extensions to the CloudEvent specification.
 
 ## Architecture
 
@@ -348,7 +348,7 @@ context, for the purposes of this CloudEvent attribute those meanings are not
 relevant and therefore using `id` for some other purpose beyond uniqueness
 checking is out of scope of the specification and not recommended.
 
-## CloudEvent Attribute Extensions
+## CloudEvent Extension Attributes
 
 In order to achieve the stated goals, the specification authors will attempt to
 constrain the number of metadata attributes they define in CloudEvents. To that
@@ -612,8 +612,8 @@ single application context can always take on multiple roles concurrently,
 including being both a producer and a consumer of events.
 
 1. Applications produce events for consumption by other parties. Examples of
-   this include: providing consumers with insights about end-user activities, state
-   changes or environment observations, or for allowing complementing the
+   this include: providing consumers with insights about end-user activities,
+   state changes or environment observations, or for allowing complementing the
    application's capabilities with event-driven extensions.
 
    Events are typically produced related to a context or a producer-chosen

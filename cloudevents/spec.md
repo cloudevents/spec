@@ -153,7 +153,9 @@ together into a transport envelope body.
 
 Every CloudEvent conforming to this specification MUST include context
 attributes designated as REQUIRED, MAY include one or more OPTIONAL context
-attributes and MAY include one or more extension attributes.
+attributes and MAY include one or more
+[extension context attributes](#extension-context-attributes). Each
+context attribute MUST only appear at most once in a CloudEvent.
 
 These attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
@@ -451,7 +453,7 @@ messages if the copied values differ from the cloud-event serialized values.
 #### Defining Extensions
 
 See
-[CloudEvent Attributes Extensions](primer.md#cloudevent-attribute-extensions)
+[CloudEvent Attributes Extensions](primer.md#cloudevent-extension-attributes)
 for additional information concerning the use and definition of extensions.
 
 The definition of an extension SHOULD fully define all aspects of the
