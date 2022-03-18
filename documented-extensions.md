@@ -5,7 +5,7 @@ than can be used when transforming a generic event into a CloudEvent. The list
 of attributes specified in that document represent the minimal set that the
 specification authors deemed most likely to be used in a majority of situations.
 
-This document defines some addition attributes that, while not as commonly used
+This document defines some additional attributes that, while not as commonly used
 as the ones specified in the [CloudEvents specification](spec.md), could still
 benefit from being formally specified in the hopes of providing some degree of
 interoperability. This also allows for attributes to be defined in an
