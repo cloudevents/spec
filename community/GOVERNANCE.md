@@ -141,15 +141,23 @@ The specifications produced will adhere to the following:
   apply and the "major" version number will change. The net effect of this is
   that the "minor" version number will always be zero and the `specversion`
   string will always be of the form `X.0`.
-- Additionally, the working group has decided that "patch" changes that are
-  trivial in nature (e.g. typos) can be merged directly into the latest
-  release without a version number change and without creating a new formal
-  "patch" branch/release. Non-trivial "patch" changes will necessitate the
-  creation of a new "patch" branch (e.g. `1.0.2-wip`) and release cycle that
-  will eventually result in an official "patch" release (e.g. `1.0.2`)
 
 Note that these rules do not apply to the
 [documented extensions](../cloudevents/documented-extensions.md).
+
+All versions are tagged from the `main` branch, but the tag only applies to
+the "subject" of the release - the directory containing the information
+covered by that release (e.g. `discovery` or `cloudevents`). The
+[CloudEvents web site](https://cloudevents.io/) takes appropriate content from
+each tagged version. (If the directory containing the information covered
+by the release is not in a top-level directory, the subject should be the full path,
+e.g. `top-dir/sub-dir`.)
+
+> Note: should the need arise, additional branches may be created. For example,
+> it is likely that a `core-v2.0` branch will be created to collect changes for
+> the core specification version 2.0 significantly before those changes are
+> merged into the main branch, to allow for ongoing work on the main branch.
+> Such branches should be deleted once their content is eventually merged.
 
 To create a new release:
 
@@ -158,19 +166,16 @@ To create a new release:
   Make sure to remove `-wip` from all of the version strings.
 - Merge the PR.
 - Create a [new release](https://github.com/cloudevents/spec/releases/new):
-  - Choose a "Tag version" of the form: `vX.Y`, e.g. `v0.1`
+  - Choose a "Tag version" of the form: `<subject>/vX.Y.Z`, e.g.
+    `cloudevents/v1.0.4` or `discovery/v1.0.0`
   - Target should be `main`, the default value
-  - Release title should be the same as the Tag - `vX.Y`
+  - Release title should be the same as the Tag - `<subject>/vX.Y.Z`
   - Add some descriptive text, or the list of PRs that have been merged since
     the previous release. The git query to get the list commits since the last
     release is:
     `git log --pretty=format:%s main...v0.1 | grep -v "Merge pull"`.
     Just replace "v0.1" with the name of the previous release.
   - Press `Publish release` button
-- Create a PR that modifies the version string in all of the files
-  (but not the README.md table) to be the next version number with a `-wip`
-  in it (e.g `v0.4-wip`).
-- Merge the PR.
 - Create an "announcement" highlighting the key features of the new release and
   any potential noteworthy activities of the group:
   - Send it to the mailing list
