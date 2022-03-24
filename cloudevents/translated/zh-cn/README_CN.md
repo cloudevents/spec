@@ -75,11 +75,11 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 在社区里，你可以了解到更多致力于搭建一个动态、云原生的生态系统的成员和组织。
 他们不断尝试提升现有系统和CloudEvents间的互操作性和兼容性。
 
-- 我们的 [管理](../../../community/GOVERNANCE.md) 文档。
-- 如何通过 issues 和 PR 为我们做[贡献](../../../community/CONTRIBUTING.md) 。
-- [贡献者](../../../community/contributors.md):
+- 我们的 [管理](../../../docs/GOVERNANCE.md) 文档。
+- 如何通过 issues 和 PR 为我们做[贡献](../../../docs/CONTRIBUTING.md) 。
+- [贡献者](../../../docs/contributors.md):
   是指那些帮助我们制定规范或是积极活跃在CloudEvents规范相关工作的成员和组织。
-- [Demos & open source](../../../community/README.md)
+- [Demos & open source](../../../docs/README.md)
   -- 如果你希望向我们分享关于你对CloudEvents的使用，请通过提交PR让我们看到。
 
 ## 步骤
