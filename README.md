@@ -24,36 +24,44 @@ a Cloud Native sandbox level project on
 
 ## CloudEvents Documents
 
-The following documents are available
-([Release Notes/Changelog](docs/RELEASE_NOTES.md)):
+The following CloudEvents documents are available:
 
 |                               |                                 Latest Release                                  |                                      Working Draft                                       |
 | :---------------------------- | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
 | **Core Specification:**       |
-| CloudEvents                   |          [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md)          |            [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md)             |
+| CloudEvents                   | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md)   | [WIP](cloudevents/spec.md) |
 |                               |
 | **Optional Specifications:**  |
-| AMQP Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/amqp-protocol-binding.md)  |    [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/amqp-protocol-binding.md)    |
-| AVRO Event Format             |      [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/avro-format.md)       |         [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/avro-format.md)         |
-| HTTP Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/http-protocol-binding.md)  |    [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/http-protocol-binding.md)    |
-| JSON Event Format             |      [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/json-format.md)       |         [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/json-format.md)         |
-| Kafka Protocol Binding        | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/kafka-protocol-binding.md) |   [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/kafka-protocol-binding.md)    |
-| MQTT Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/mqtt-protocol-binding.md)  |    [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/mqtt-protocol-binding.md)    |
-| NATS Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)  |    [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/nats-protocol-binding.md)    |
-| WebSockets Protocol Binding   |                                        -                                        | [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/bindings/websockets-protocol-binding.md) |
-| Protobuf Event Format         |                                                                                 | [v1.0-rc1](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/protobuf-format.md)                                  |
-| XML Event Format              | - | [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/working-drafts/xml-format.md) |
-| Web hook                      |      [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/http-webhook.md)      |        [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/http-webhook.md)         |
+| AMQP Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/amqp-protocol-binding.md)  | [WIP](cloudevents/bindings/amqp-protocol-binding.md)       |
+| AVRO Event Format             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/avro-format.md)             | [WIP](cloudevents/formats/avro-format.md)                  |
+| HTTP Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/http-protocol-binding.md)  | [WIP](cloudevents/bindings/http-protocol-binding.md)       |
+| JSON Event Format             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/json-format.md)             | [WIP](cloudevents/formats/json-format.md)                  |
+| Kafka Protocol Binding        | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/kafka-protocol-binding.md) | [WIP](cloudevents/bindings/kafka-protocol-binding.md)      |
+| MQTT Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/mqtt-protocol-binding.md)  | [WIP](cloudevents/bindings/mqtt-protocol-binding.md)       |
+| NATS Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)  | [WIP](cloudevents/bindings/nats-protocol-binding.md)       |
+| WebSockets Protocol Binding   | -                                                                                                        | [WIP](cloudevents/bindings/websockets-protocol-binding.md) |
+| Protobuf Event Format         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)  | [WIP](cloudevents/formats/protobuf-format.md)              |
+| XML Event Format              | -                                                                                                        | [WIP](cloudevents/working-drafts/xml-format.md)            |
+| Web hook                      | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/http-webhook.md)                    | [WIP](cloudevents/http-webhook.md)                         |
 |                               |
 | **Additional Documentation:** |
-| CloudEvents Adapters          |                                        -                                        |          [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/adapters.md)           |
-| CloudEvents SDK Requirements  |                                        -                                        |             [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/SDK.md)             |
-| Documented Extensions         |                                        -                                        |    [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/documented-extensions.md)    |
-| Primer                        |         [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md)         |           [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/primer.md)            |
-| Proprietary Specifications    |                                        -                                        |      [WIP](https://github.com/cloudevents/spec/blob/main/cloudevents/proprietary-specs.md)      |
+| CloudEvents Primer                                             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md) | [WIP](cloudevents/primer.md)                          |
+| [CloudEvents Adapters](cloudevents/adapters.md)                | -                                                                               | [Not versioned](cloudevents/adapters.md)              |
+| [CloudEvents SDK Requirements](cloudevents/SDK.md)             | -                                                                               | [Not versioned](cloudevents/SDK.md)                   |
+| [Documented Extensions](cloudevents/documented-extensions.md)  | -                                                                               | [Not versioned](cloudevents/documented-extensions.md) |
+| [Proprietary Specifications](cloudevents/proprietary-specs.md) | -                                                                               | [Not versioned](cloudevents/proprietary-specs.md)     |
 
-There might be additional work-in-progress specifications being developed
-in the [`main`](https://github.com/cloudevents/spec/tree/main) branch.
+## Other Specifications
+|                 | Latest Release | Working Draft                 |
+| :-------------- | :------------: | :---------------------------: |
+| CE SQL          |       -        | [WIP](cesql/spec.md)          |
+| Discovery       |       -        | [WIP](discovery/spec.md)      |
+| Pagination      |       -        | [WIP](pagination/spec.md)     |
+| Schema Registry |       -        | [WIP](schemaregistry/spec.md) |
+| Subscriptions   |       -        | [WIP](subscriptions/spec.md)  |
+
+Additional release related information:
+  [Historical releases and changelogs](docs/RELEASES.md)
 
 If you are new to CloudEvents, it is recommended that you start by reading the
 [Primer](cloudevents/primer.md) for an overview of the specification's goals
@@ -63,7 +71,7 @@ and design decisions, and then move on to the
 Since not all event producers generate CloudEvents by default, there is
 documentation describing the recommended process for adapting some popular
 events into CloudEvents, see
-[CloudEvents Adapters](https://github.com/cloudevents/spec/blob/main/cloudevents/adapters.md).
+[CloudEvents Adapters](cloudevents/adapters.md).
 
 ## SDKs
 
