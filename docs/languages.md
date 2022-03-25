@@ -3,7 +3,7 @@
 <!-- no verify-links -->
 
 CloudEvents is a specification for describing event data in common formats.
-As a textual specification, language barriers may slow down the progress of 
+As a textual specification, language barriers MAY slow down the progress of 
 understanding CloudEvents for some people.
 Thus, we welcome anyone to [translate](../languages/languages-spec.md) the CloudEvents 
 specification into different languages.
