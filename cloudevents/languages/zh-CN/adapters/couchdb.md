@@ -1,0 +1,1 @@
+# CouchDB CloudEvents Adapter
