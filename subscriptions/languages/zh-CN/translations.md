@@ -1,5 +1,5 @@
-# Translation list of the spec root dir
+# Translation list of the subscriptions spec 
 
 | Documents   |   Status     |  Last edited |    Version |
 | :---------  | :---------: | :---------   | :---------: |
-| /README.md |   Ready to start   |       |     -      |
+| /subscriptions/spec.md |   Ready to start   |       |           |

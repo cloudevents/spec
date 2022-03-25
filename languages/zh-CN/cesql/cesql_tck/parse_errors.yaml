@@ -1,5 +1,0 @@
-name: Parsing errors
-tests:
-  - name: No closed parenthesis
-    expression: ABC(
-    error: parse

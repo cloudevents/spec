@@ -1,0 +1,1 @@
+# AWS Simple Storage Service CloudEvents Adapter

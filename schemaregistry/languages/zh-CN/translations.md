@@ -1,5 +1,5 @@
-# Translation list of the spec root dir
+# Translation list of the schemaregistry spec 
 
 | Documents   |   Status     |  Last edited |    Version |
 | :---------  | :---------: | :---------   | :---------: |
-| /README.md |   Ready to start   |       |     -      |
+| /schemaregistry/spec.md |   Ready to start   |       |           |
