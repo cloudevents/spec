@@ -20,11 +20,10 @@ CloudEvents has received a large amount of industry interest, ranging from major
 cloud providers to popular SaaS companies. CloudEvents is hosted by the
 [Cloud Native Computing Foundation](https://cncf.io) (CNCF) and was approved as
 a Cloud Native sandbox level project on
-[May 15, 2018](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41).
+[May 15, 2018](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41) and as an
+incubator project on [Oct 24, 2019](https://github.com/cncf/toc/pull/297).
 
 ## CloudEvents Documents
-
-The following CloudEvents documents are available:
 
 |                               |                                 Latest Release                                  |                                      Working Draft                                       |
 | :---------------------------- | :-----------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |

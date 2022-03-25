@@ -1,4 +1,4 @@
-# XML Event Format for CloudEvents
+# XML Event Format for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
