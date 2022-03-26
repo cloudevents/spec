@@ -95,8 +95,10 @@ copy /cloudevents/adapters/github.md to /cloudevents/languages/zh-CN/adapters/gi
 copy /discovery/README.md to /discovery/languages/zh-CN/README.md
 ......
 ```
-You should also clear English content of copied documents to indicate 
-that the document is ready to be translated.
+You should also clear the content of copied documents and leave a message like:
+```
+"This document has not been translated yet. Please read the English document (with its link) for now."
+```
 
 Every `languages/{language-code}` directory MUST have a translations.md file to list
 information of translated documents.
