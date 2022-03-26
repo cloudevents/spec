@@ -10,7 +10,7 @@
 | /docs/GOVERNANCE.md |   Ready to start   |       |    -     |
 | /docs/open-source.md |   Ready to start   |       |      -     |
 | /docs/README.md |   Ready to start   |       |      -   |
-| /docs/RELEASE_NOTES.md |   Ready to start   |       |     -    |
+| /docs/RELEASES.md |   PR reviewing   |    2022-03-26T14:15:08.835Z   |     -    |
 | /docs/SDK-GOVERNANCE.md |   Ready to start   |       |     -    |
 | /docs/SDK-maintainer-guidelines.md |   Ready to start   |       |     -    |
 | /docs/SDK-PR-guidelines.md |   Ready to start   |       |    -     |
