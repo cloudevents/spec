@@ -279,7 +279,7 @@ The following sections define the attributes that appear in a Service entity.
   Note: this value will most likely be Discovery Endpoint defined and therefore
   will most likely be ignored when provided by clients.
 - Constraints:
-  - MUST be read-only, Discovery Endpoint, manageg
+  - MUST be specified by the Discovery Endpoint and otherwise read-only
   - REQUIRED in responses from the Discovery Endpoint.
   - MUST be a non-empty URL
   - MUST end with `fsegments` (per RFC1738) of: `/services/{id}` where `id` is
@@ -813,7 +813,7 @@ The following rules apply to processing the Services specified in the request:
 
 There is no requirement that the incoming Services be processed in the
 order in which they appear. Constraints apply only to the result of the
-entire request. For eaxmple, if a Service with a name of `dog` exists and
+entire request. For example, if a Service with a name of `dog` exists and
 the incoming request is creating a new Service called `dog` as well as
 renaming the existing Service to `cat` then the request is expected to succeed
 even if it would cause two Services to temporarily have the same name.
@@ -870,11 +870,11 @@ This MUST delete all of the Services in the Discovery Endpoint that are
 contained in the request. If any of those Services cannot be deleted for any
 reason then the entire request MUST fail with no effect.
 
-If an `id` is not specified in any of the Services the entire request MUST
-fail. If no Service can be found that corresponds to a specified `id`, the
-endpoint MUST behave as though the Service was deleted. An `epoch` value MAY
-be omitted in the incoming Service.  If present and the request value is not
-greater than existing value, then the request MUST fail.
+If any of the Services in the incoming request are missing an `id` then the
+entire request MUST fail. If no Service can be found that corresponds to a
+specified `id`, the endpoint MUST behave as though the Service was deleted.
+An `epoch` value MAY be omitted in the incoming Service.  If present and the
+request value is not greater than existing value, then the request MUST fail.
 
 If other service attributes are included in the request, those SHOULD be
 ignored for the purposes of processing the request.
@@ -999,7 +999,9 @@ is no Service with the specified `id` then it is considered to have already
 been deleted and the request will have no change to the Discovery Endpoint.
 A missing Service is not considered an error condition.
 
-This specification does not define a Body for the request message.
+This specification does not define a Body for the request message and the
+presence of a Body (even with a Service definition, valid or not) MUST NOT
+result in an error.
 
 The request URL MAY include an OPTIONAL `epoch` query parameter, and if
 present and is not greater than the Service's current `epoch` value, then the
