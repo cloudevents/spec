@@ -14,7 +14,7 @@ CloudEvents 是一个以通用格式来描述事件数据的规范。它提供�
 
 从主流云厂商到SaaS公司，工业界对 CloudEvents 兴趣浓烈。CloudEvents 项目由[云原生计算基金会](https://cncf.io)托管，
 于[2018/05/15](https://docs.google.com/presentation/d/1KNSv70fyTfSqUerCnccV7eEC_ynhLsm9A_kjnlmU_t0/edit#slide=id.g37acf52904_1_41)
-成为云原生沙箱级项目。
+成为 CNCF 沙箱级项目，于[2019/10/24](https://github.com/cncf/toc/pull/297) CNCF 孵化项目。
 
 ## CloudEvents 文件
 
