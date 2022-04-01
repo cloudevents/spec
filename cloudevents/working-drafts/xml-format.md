@@ -23,7 +23,7 @@ This document is a working draft.
 [CloudEvents][ce-spec] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how
 elements defined in the CloudEvents specification are to be represented using
-[Extensible Markup Language (XML)](xml-spec) documents.
+[Extensible Markup Language (XML)](xml-spec) elements.
 
 * The [Attributes](#2-attributes) section describes the representation and
 data type mappings for CloudEvents context attributes.
@@ -59,7 +59,8 @@ The namespace `http://cloudevents.io/xmlformat/V1` MUST be used.
 When namespace prefixes are used a prefix of `ce` is preferred but MUST NOT
 be expected from an XML document processing perspective.
 
-An XML document preamble SHOULD be included to ensure deterministic processing.
+Where an event (or batch of events) is represented as a complete XML document,
+an XML document preamble SHOULD be included to ensure deterministic processing.
 
 ## 2. Attributes
 
@@ -85,8 +86,9 @@ Extension context attributes MUST be decorated with the appropriate CloudEvent t
 designators using an `xsi:type` XML attribute, this allows them to be exchanged
 without loss of type information.
 
-REQUIRED and OPTIONAL context attribute MAY be decorated with an`xsi:type`, if present this
-designator MUST match that of the type specified by the [CloudEvent context attributes][ce-attrs].
+An XML element representing a REQUIRED or OPTIONAL context attribute MAY be decorated with
+an `xsi:type` XML attribute. If present, this designator MUST match that of the type specified
+by the [CloudEvent context attributes][ce-attrs].
 
 No other XML element attributes are expected, if present they MUST be ignored during
 processing.
@@ -104,10 +106,12 @@ processing.
 ## 3. Data
 
 The data portion of a CloudEvent follows a similar model to that employed by
-the [JSON Format specification][json-format]. A `data` element MUST be used to
+the [JSON Format specification][json-format]. A `<data>` element MUST be used to
 encapsulate the payload.
 
 An `xsi:type` is used to discrimate the payload type and MUST be present.
+
+The `<data>` element MUST NOT occur more than once within an `<event>` element.
 
 The following data representations are supported:
 
@@ -124,7 +128,7 @@ Example:
 
 ### 3.2 Text Data
 
-Text MUST be carried in an element with an defined type of `xs:string`.
+Text MUST be carried in an element with a defined type of `xs:string`.
 
 Example:
 
@@ -135,7 +139,7 @@ Example:
 ### 3.3 XML Data
 
 XML data MUST be carried in an element with a defined type of `xs:any` with
-a single child XML element (with any mandatory namespace definitions).
+exactly one child XML element (with any mandatory namespace definitions).
 
 Example:
 
@@ -149,7 +153,7 @@ Example:
 
 ## 4. Envelope
 
-Each CloudEvent is wholly represented as an XML element `<event>` that
+Each CloudEvent is wholly represented as an `<event>` XML element that
 MUST carry the `specversion` as an XML attribute value.
 
 Such a representation MUST use the media type `application/cloudevents+xml`.
@@ -157,7 +161,7 @@ Such a representation MUST use the media type `application/cloudevents+xml`.
 The enveloping element contains:
 
 * A set of CloudEvent context attribute XML elements.
-* An OPTIONAL `data` XML element.
+* An OPTIONAL `<data>` XML element.
 
 Example _(XML preamble and namespace definitions omitted for brevity)_:
 
@@ -176,7 +180,7 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 ## 5. XML Batch Format
 
 In the _XML Batch Format_ several CloudEvents are batched into a single XML
-element. The element comprises a list of elements in the XML Format.
+`<batch>` element. The element comprises a list of elements in the XML Format.
 
 Although the _XML Batch Format_ builds on top of the _XML Format_, it is
 considered as a separate format: a valid implementation of the _XML Format_
