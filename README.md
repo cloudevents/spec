@@ -39,7 +39,7 @@ incubator project on [Oct 24, 2019](https://github.com/cncf/toc/pull/297).
 | MQTT Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/mqtt-protocol-binding.md)  | [WIP](cloudevents/bindings/mqtt-protocol-binding.md)       |
 | NATS Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)  | [WIP](cloudevents/bindings/nats-protocol-binding.md)       |
 | WebSockets Protocol Binding   | -                                                                                                        | [WIP](cloudevents/bindings/websockets-protocol-binding.md) |
-| Protobuf Event Format         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)  | [WIP](cloudevents/formats/protobuf-format.md)              |
+| Protobuf Event Format         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/protobuf-format.md)         | [WIP](cloudevents/formats/protobuf-format.md)              |
 | XML Event Format              | -                                                                                                        | [WIP](cloudevents/working-drafts/xml-format.md)            |
 | Web hook                      | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/http-webhook.md)                    | [WIP](cloudevents/http-webhook.md)                         |
 |                               |
