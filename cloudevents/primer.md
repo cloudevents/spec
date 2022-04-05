@@ -17,7 +17,7 @@ itself to focus on the normative technical details.
 - [Design Goals](#design-goals)
 - [Architecture](#architecture)
 - [Versioning of CloudEvents](#versioning-of-cloudevents)
-- [CloudEvent Attributes](#cloudevent-attributes)
+- [CloudEvent Core Attributes](#cloudevent-core-attributes)
 - [CloudEvent Extension Attributes](#cloudevent-extension-attributes)
 - [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
@@ -102,10 +102,10 @@ event format and how it appears while being sent on various protocols, such as
 HTTP. The specifications will not focus on the processing model of either the
 event producer or event consumer.
 
-CloudEvents, at its core, defines a set of metadata, called attributes, about
-the event being transferred between systems, and how those pieces of metadata
-should appear in that message. This metadata is meant to be the minimal set of
-information needed to route the request to the proper component and to
+CloudEvents, at its core, defines a set of metadata, called "context attributes",
+about the event being transferred between systems, and how those pieces of
+metadata should appear in that message. This metadata is meant to be the minimal
+set of information needed to route the request to the proper component and to
 facilitate proper processing of the event by that component. So, while this
 might mean that some of the application data of the event itself might be
 duplicated as part of the CloudEvent's set of attributes, this is to be done
@@ -205,8 +205,10 @@ The CloudEvents specification set defines four different kinds of protocol
 elements that form a layered architecture model.
 
 1. The [base specification](spec.md) defines an abstract information
-   model made up of attributes (key-value pairs) and associated rules for what
-   constitutes a CloudEvent.
+   model made up of context attributes (key-value pairs) and associated rules
+   for what constitutes a CloudEvent. This includes *core attributes* defined
+   by the specification. Some core attributes are required on all CloudEvents,
+   while others are optional.
 2. The [extensions](./spec.md#extension-context-attributes) add use-case
    specific and potentially overlapping sets of extension attributes and
    associated rules, e.g. to support different tracing standards.
@@ -315,10 +317,10 @@ When a CloudEvent's data changes in a backwardly-incompatible way,
 the value of `dataschema` attribute should generally change,
 along with the `type` attribute as described above.
 
-## CloudEvent Attributes
+## CloudEvent Core Attributes
 
 This section provides additional background and design points related to some of
-the CloudEvent attributes.
+the CloudEvent core attributes.
 
 ### id
 
@@ -352,16 +354,16 @@ checking is out of scope of the specification and not recommended.
 
 In order to achieve the stated goals, the specification authors will attempt to
 constrain the number of metadata attributes they define in CloudEvents. To that
-end, attributes defined by this project will fall into three categories:
+end, context attributes defined by this project will fall into two categories:
 
-- required
-- optional
+- core
 - extensions
 
-As the category names imply, "required" attributes will be the ones that the
-group considers vital to all events in all use cases, while "optional" ones will
-be used in a majority of the cases. Both of the attributes in these cases will
-be defined within the specification itself.
+The core attributes are those defined within the specification itself.
+Core attributes then have subcategories of required or optional. As the category
+names imply, "required" attributes will be the ones that the group considers
+vital to all events in all use cases, while "optional" ones will be used in a
+majority of the cases. 
 
 When the group determines that an attribute is not common enough to fall into
 those two categories but would still benefit from the level of interoperability
