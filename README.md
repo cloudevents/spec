@@ -1,3 +1,10 @@
+# THIS BRANCH HAS BEEN DEPRECATED
+
+This branch has been deprecated and the files should now be accessed via
+the [v1.0.1 tag](https://github.com/cloudevents/spec/tree/v1.0.1) instead.
+
+---
+
 # CloudEvents
 
 ![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
