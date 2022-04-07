@@ -1,3 +1,10 @@
+# THIS BRANCH HAS BEEN DEPRECATED
+
+This branch has been deprecated and the files should now be accessed via
+the [v1.0.2 tag](https://github.com/cloudevents/spec/tree/v1.0.2) instead.
+
+---
+
 # CloudEvents
 
 <!-- no verify-specs -->

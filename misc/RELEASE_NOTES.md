@@ -1,5 +1,7 @@
 # CloudEvents Release Notes
 
+<!-- no verify-specs -->
+
 ## v1.0.2 - 2022/02/03
 
 - Add C# namespace option to proto - #937
