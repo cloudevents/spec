@@ -155,9 +155,11 @@ Every CloudEvent conforming to this specification MUST include context
 attributes designated as REQUIRED, MAY include one or more OPTIONAL context
 attributes and MAY include one or more
 [extension context attributes](#extension-context-attributes). Each
-context attribute MUST only appear at most once in a CloudEvent.
+context attribute MUST only appear at most once in a CloudEvent. The context
+attributes defined within this specification (as opposed to extension context
+attributes) are known as "core context attributes".
 
-These attributes, while descriptive of the event, are designed such that they
+Context attributes, while descriptive of the event, are designed such that they
 can be serialized independent of the event data. This allows for them to be
 inspected at the destination without having to deserialize the event data.
 

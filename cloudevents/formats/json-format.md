@@ -40,7 +40,7 @@ mapping model that applies to all current and future CloudEvents attributes,
 including extensions.
 
 For clarity, extension attributes are serialized using the same rules as
-specification defined attributes. This includes their syntax and placement
+core attributes. This includes their syntax and placement
 within the JSON object. In particular, extensions are placed as top-level JSON
 properties. Extensions MUST be serialized as a top-level JSON property. There
 were many reasons for this design decision and they are covered in more detail
@@ -84,10 +84,10 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.
 
-If required, like when decoding Maps, the CloudEvents type can be determined by
-inference using the rules from the mapping table, whereby the only potentially
-ambiguous JSON data type is `string`. The value is compatible with the
-respective CloudEvents type when the mapping rules are fulfilled.
+If required, the CloudEvents type can be determined by inference using the rules
+from the mapping table, whereby the only potentially ambiguous JSON data type is
+`string`. The value is compatible with the respective CloudEvents type when the
+mapping rules are fulfilled.
 
 ### 2.3. Examples
 
@@ -122,7 +122,7 @@ become members of the JSON object, with the respective JSON object member name
 matching the attribute name, and the member's type and value being mapped using
 the [type system mapping](#22-type-system-mapping).
 
-OPTIONAL not omitted attributes MAY be represeted as a `null` JSON value.
+OPTIONAL not omitted attributes MAY be represented as a `null` JSON value.
 
 ### 3.1. Handling of "data"
 
