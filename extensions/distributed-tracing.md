@@ -1,55 +1,49 @@
 # Distributed Tracing extension
 
 This extension embeds context from
-[Distributed Tracing](https://w3c.github.io/trace-context/) so that distributed
-systems can include traces that span an event-driven system. This extension is
-meant to contain historical data of the parent trace, in order to diagnose
-eventual failures of the system through tracing platforms like Jaeger, Zipkin,
-etc.
+[W3C TraceContext](https://www.w3.org/TR/trace-context/) into a CloudEvent.
+The goal of this extension is to offer means to carry context when instrumenting
+CloudEvents based systems with OpenTelemetry.
 
-## Attributes
+The [OpenTelemetry](https://opentelemetry.io/) project is a collection
+of tools, APIs and SDKs that can be used to instrument, generate, collect,
+and export telemetry data (metrics, logs, and traces) to help you
+analyze your software’s performance and behavior.
 
-#### traceparent
+The OpenTelemetry specification defines both
+[Context](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/context/context.md#overview)
+and
+[Distributed Tracing](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.8.0/specification/overview.md#tracing-signal)
+as:
 
-- Type: `String`
-- Description: Contains a version, trace ID, span ID, and trace options as
-  defined in [section 3.2](https://w3c.github.io/trace-context/#traceparent-header)
-- Constraints
-  - REQUIRED
-
-#### tracestate
-
-- Type: `String`
-- Description: a comma-delimited list of key-value pairs, defined by
-  [section 3.3](https://w3c.github.io/trace-context/#tracestate-header).
-- Constraints
-  - OPTIONAL
+> A `Context` is a propagation mechanism which carries execution-scoped values across
+ API boundaries and between logically associated execution units. Cross-cutting
+ concerns access their data in-process using the same shared `Context` object.
+>
+> A `Distributed Trace` is a set of events, triggered as a result of a single
+ logical operation, consolidated across various components of an application.
+ A distributed trace contains events that cross process, network and security boundaries.
 
 ## Using the Distributed Tracing Extension
 
-The Distributed Tracing Extension is not intended to replace the protocol specific headers for tracing, 
-like the ones described in [W3C Trace Context](https://w3c.github.io/trace-context/) for HTTP.
+The
+[OpenTelemetry Semantic Conventions for CloudEvents](https://github.com/open-telemetry/opentelemetry-specification/blob/v1.9.0/specification/trace/semantic_conventions/cloudevents.md)
+define in which scenarios this extension should be used and how to use it.
 
-Given a single hop event transmission (from sink to source directly), the Distributed Tracing Extension, 
-if used, MUST carry the same trace information contained in protocol specific tracing headers.
+## Attributes
 
-Given a multi hop event transmission, the Distributed Tracing Extension, if used, MUST 
-carry the trace information of the starting trace of the transmission. 
-In other words, it MUST NOT carry trace information of each individual hop, since this information is usually 
-carried using protocol specific headers, understood by tools like [OpenTelemetry](https://opentelemetry.io/).
- 
-Middleware between the source and the sink of the event could eventually add a Distributed Tracing Extension
-if the source didn't include any, in order to provide to the sink the starting trace of the transmission.
+### traceparent
 
-An example with HTTP:
+- Type: `String`
+- Description: Contains a version, trace ID, span ID, and trace options as
+  defined in [section 3.2](https://www.w3.org/TR/trace-context/#traceparent-header)
+- Constraints
+  - REQUIRED
 
-```bash
-CURL -X POST example/webhook.json \
--H 'ce-id: 1' \
--H 'ce-specversion: 1.0' \
--H 'ce-type: example' \
--H 'ce-source: http://localhost' \
--H 'ce-traceparent:  00-0af7651916cd43dd8448eb211c80319c-b9c7c989f97918e1-01' \
--H 'traceparent:  00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01' \
--H 'tracestate: rojo=00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01,congo=lZWRzIHRoNhcm5hbCBwbGVhc3VyZS4`
-```
+### tracestate
+
+- Type: `String`
+- Description: a comma-delimited list of key-value pairs, defined by
+  [section 3.3](https://www.w3.org/TR/trace-context/#tracestate-header).
+- Constraints
+  - OPTIONAL
