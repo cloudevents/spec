@@ -536,7 +536,7 @@ in the event directly.
 ## Privacy and Security
 
 Interoperability is the primary driver behind this specification, enabling such
-behavior requires some information to be made available _in the clear_ resulting
+behavior requires some information to be made available in the clear resulting
 in the potential for information leakage.
 
 Consider the following to prevent inadvertent leakage especially when leveraging
