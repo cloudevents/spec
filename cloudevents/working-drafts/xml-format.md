@@ -62,6 +62,9 @@ be expected from an XML document processing perspective.
 Where an event (or batch of events) is represented as a complete XML document,
 an XML document preamble SHOULD be included to ensure deterministic processing.
 
+XML comments are permitted anywhere within an XML representation of a
+CloudEvent or CloudEvent batch, and MUST be ignored during processing.
+
 ## 2. Attributes
 
 The CloudEvents type system is mapped to a set of CloudEvent specific
@@ -90,6 +93,8 @@ An XML element representing a core context attribute MAY be decorated with
 an `xsi:type` XML attribute. If present, this designator MUST match that of the type specified
 by the [CloudEvent context attributes][ce-attrs].
 
+An XML element representing a context attribute MUST NOT contain any child elements.
+
 No other XML element attributes are expected, if present they MUST be ignored during
 processing.
 
@@ -117,8 +122,8 @@ The following data representations are supported:
 
 ### 3.1 Binary Data
 
-Binary data MUST be carried in an element with an defined type of `xs:base64Binary`
-and encoded appropriately..
+Binary data MUST be carried in an element with a defined type of `xs:base64Binary`
+and encoded appropriately. The element MUST NOT contain any child elements.
 
 Example:
 
@@ -129,6 +134,7 @@ Example:
 ### 3.2 Text Data
 
 Text MUST be carried in an element with a defined type of `xs:string`.
+The element MUST NOT contain any child elements.
 
 Example:
 
@@ -140,6 +146,10 @@ Example:
 
 XML data MUST be carried in an element with a defined type of `xs:any` with
 exactly one child XML element (with any mandatory namespace definitions).
+
+The `<data>` XML element MUST NOT contain any direct child text nodes with
+non-whitespace content. There are no restrictions on the content of the
+child XML element.
 
 Example:
 
@@ -163,6 +173,9 @@ The enveloping element contains:
 * A set of CloudEvent context attribute XML elements.
 * An OPTIONAL `<data>` XML element.
 
+The `<event>` element MUST NOT contain any direct child text nodes with non-whitespace
+content.
+
 Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 ``` xml
@@ -181,6 +194,9 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 In the _XML Batch Format_ several CloudEvents are batched into a single XML
 `<batch>` element. The element comprises a list of elements in the XML Format.
+
+The `<event>` element MUST NOT contain any direct child text nodes with non-whitespace
+content.
 
 Although the _XML Batch Format_ builds on top of the _XML Format_, it is
 considered as a separate format: a valid implementation of the _XML Format_
