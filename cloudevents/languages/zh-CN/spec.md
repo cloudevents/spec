@@ -19,7 +19,7 @@ CloudEvents 是一个用于定义事件格式的供应商中立规范。
 事件(Events)在现代系统中无处不在。但不同的事件生产者往往用不同的规范来描述自己的事件。
 
 对事件的统一描述的匮乏意味着开发者必须不断重新学习如何消费不同定义的事件。
-它同样限制了那些用来帮助事件数据完成跨环境传输的库(如SDKs)，
+它同样限制了那些用来帮助事件数据完成跨环境传输的库(如 SDKs)，
 工具(如事件路由器)和基础设施(如事件追踪系统)的发展。
 总体来看，这种匮乏严重阻碍了事件数据的可移植性和生产力。
 
@@ -37,11 +37,11 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 ### Notational Conventions/符号约定
 
 本文档中的关键词
-"MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
-"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" 需要按照
+"MUST/ 必须", "MUST NOT/ 必须不", "REQUIRED/ 必要", "SHALL\ 即将", "SHALL NOT\ 即将不", "SHOULD\ 应该",
+"SHOULD NOT\ 不应该", "RECOMMENDED\ 建议", "MAY\ 可能", and "OPTIONAL\ 可选" 需要按照
 [RFC 2119](https://tools.ietf.org/html/rfc2119) 中的描述来理解。
 
-为清楚起见，当一个功能被标记为“OPTIONAL”时，这意味着消息的
+为清楚起见，当一个功能被标记为“ OPTIONAL\ 可选"”时，这意味着消息的
 [生产者](#producer)和[消费者](#consumer) 都可以自行选择是否支持该功能。
 换句话说，生产者可以在需要时在消息中包含该功能，消费者也可以在需要时选择支持该功能。
 不支持该功能的消费者将默默地忽略该部分消息。
@@ -52,9 +52,9 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 本规范定义了下列术语。
 
-#### Occurrence/发生
+#### Occurrence/事件发生
 
-“发生”是指在软件系统运行期间对事实状态的捕获。
+“事件发生”是指在软件系统运行期间对事实状态的捕获。
 这可能是由于系统发出了信号或系统观察到信号、状态更改、计时器超时
 或任何其他值得注意的活动而发生的。
 例如，设备可能会因为电池电量低或虚拟机即将执行计划的重启而进入警报状态。
@@ -70,12 +70,12 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 #### Producer/生产者
 
-“生产者”是一种特定的实例、进程或设备，它能够创建用来描述CloudEvent的数据结构。
+“生产者”是一种特定的实例、进程或设备，它能够创建用来描述 CloudEvent 的数据结构。
 
 #### Source/源
 
 "源"是事件发生的上下文环境。在分布式系统中，它可能由多个[生产者](#producer)组成。
-如果一个源无法查看到CloudEvents，那么一定有有外部的生产者在代替源来生产CloudEvent。
+如果一个源无法查看到 CloudEvents，那么一定有有外部的生产者在代替源来生产CloudEvent。
 
 #### Consumer/消费者
 
@@ -94,7 +94,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 #### Data/数据
 
-关于"发生"的特定域信息（即有效负载)。这可能包括有关“发生”的信息、有关已更改数据的详细信息等。
+`Data` 描述的是关于"事件发生"的特定域信息（即有效负载)。这可能包括有关“事件发生”的信息、有关已更改数据的详细信息等。
 有关更多信息，请参阅[事件数据](#event-data)部分。
 
 #### Event Format/事件格式
@@ -114,7 +114,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 消息可以通过各种行业标准协议（例如 HTTP、AMQP、MQTT、SMTP）、开源协议（例如 Kafka、NATS）或平台/供应商
 专有协议（AWS Kinesis、Azure 事件网格）传输。
 
-#### Protocol Binkding/协议绑定
+#### Protocol Binding/协议绑定
 
 协议绑定描述了如何通过给定的协议发送和接收事件。
 
@@ -123,8 +123,9 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 
 ## Context Attributes/上下文属性
 
-每个符合本规范的 CloudEvent 必须包括指定为 REQUIRED 的上下文属性，
-可以包括一个或多个OPTIONAL上下文属性，并且可以包括一个或多个扩展属性(#extension-context-attributes)。每个上下文属性只能在一个CloudEvent出现一次。本规范中定义的上下文属性（对标扩展上下文属性）称为“核心上下文属性”。
+每个符合本规范的 CloudEvent 必须包括指定为 REQUIRED/ 必要 的上下文属性，
+可以包括一个或多个 OPTIONAL /可选的上下文属性，并且可以包括一个或多个扩展属性(#extension-context-attributes)。
+每个上下文属性只能在一个 CloudEvent 出现一次。本规范中定义的上下文属性（对标扩展上下文属性）称为“核心上下文属性”。
 
 这些属性虽然描述了事件，但被设计为可以独立于事件数据进行序列化。
 这允许在不反序列化事件数据的情况下，在目的地检查这些上下文属性。
@@ -138,7 +139,7 @@ CloudEvents 规范定义了到各种协议和编码的映射，随附的 CloudEv
 在跨传输协议和消息格式时，为了最大化互操作性和可移植性，CloudEvents 属性名称必须由来自 ASCII 字符集的小写字母（“a”到“z”）或数字（“0”到“9”）组成。
 属性名称应该是描述性的和简洁的，并且长度不应超过 20 个字符。
 
-CloudEvent 属性不能使用’data‘命名；因为它是为某些事件格式预留的。
+CloudEvent 属性不能使用 `data` 命名；因为它是为某些事件格式预留的。
 
 ### Type System/类型系统
 
@@ -204,8 +205,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 - 类型: `String`
 - 描述: 标识一个事件。 生产者必须确保每个不同事件的 `source` + `id` 是唯一的。
   如果重复的事件被重新发送（例如由于网络错误），它可能具有相同的 `id`。
-  Consumers MAY assume that
-  消费者可以假设具有相同`source` 和 `id`的事件是重复的。
+  消费者可以假设具有相同 `source` 和 `id` 的事件是重复的。
 - 约束条件:
   - 必要的
   - 必须是非空字符串
@@ -222,9 +222,9 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 
   生产者必须确保每个不同事件的 `source` + `id` 是唯一的。
 
-  应用程序可以为每个不同的生产者分配一个唯一的`source`，
+  应用程序可以为每个不同的生产者分配一个唯一的 `source`，
   这使得生成唯一 ID 变得容易，因为没有其他生产者将拥有相同的来源。
-  应用程序可以使用 UUIDs、URNs、DNS权威机构或特定于应用程序的方案来创建唯一的`source` 标识符。
+  应用程序可以使用 UUIDs、URNs、DNS权威机构或特定于应用程序的方案来创建唯一的 `source` 标识符。
 
   一个来源可以包括多个生产者。
   在这种情况下，生产者必须协作以确保每个不同事件的 `source` + `id`都是唯一的。
@@ -261,7 +261,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 
 - 类型: `String`
 - 描述: 该属性包含一个值，描述与原始事件相关的事件类型。
-  该属性通常用于路由、可观察性、策略实施等。其格式是生产者定义的，可能包括诸如 `type`版本之类的信息.
+  该属性通常用于路由、可观察性、策略实施等。其格式是生产者定义的，可能包括诸如 `type` 版本之类的信息。
   -从
   [入门文档-属性版本控制](primer.md#versioning-of-cloudevents) 中获得更多信息。
   
@@ -275,17 +275,17 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 
 ### OPTIONAL Attributes/可选属性
 
-下列属性在 CloudEvents 中是可选的. 在[符号约定](#notational-conventions) 中查看更多 OPTIONAL 定义的信息。
+下列属性在 CloudEvents 中是可选的. 在[符号约定](#notational-conventions) 中查看更多 OPTIONAL /可选 定义的信息。
 
 
 #### datacontenttype/data内容类型
 
 - 类型: `String` [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- 描述: `data`值的内容类型。 此属性使`data`能够承载任何类型的内容，
+- 描述: `data` 值的内容类型。 此属性使`data`能够承载任何类型的内容，
   因此格式和编码可能与所选事件格式的不同。
   例如，使用 [JSON envelope](../../formats/json-format.md#3-envelope)格式呈现的事件可能在数据中携带 XML 的payload，这个属性可以用来通知消费者
   设置"application/xml"。
-  关于`data`内容如何提供不同的`datacontenttype`的值的规则在事件格式规范中定义。
+  关于 `data` 内容如何提供不同的`datacontenttype`的值的规则在事件格式规范中定义。
   例如，JSON 事件格式定义了 [3.1 节](../../formats/json-format.md#31-handling-of-data)中的关系。
 
   对于某些二进制模式协议绑定，此字段直接能映射到相应协议的内容类型的元数据属性上。
@@ -293,7 +293,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 
   在某些事件格式中，可以省略 `datacontenttype` 属性。
   例如，如果 JSON 格式的事件没有 `datacontenttype`  属性，
-  则表示该`data`是符合“application/json”媒体类型的 JSON 值。
+  则表示该 `data` 是符合“application/json”媒体类型的 JSON 值。
   换句话说：一个没有 `datacontenttype`  的 JSON 格式的事件完全等同于
   一个带有 `datacontenttype="application/json"`的事件。
 
@@ -320,22 +320,22 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 #### subject/主题
 
 - 类型: `String`
-- 描述: 这个属性描述了事件生产者 (由`source`标识) 上下文环境中的主题信息。
-  在发布-订阅场景中，订阅者通常会订阅`source`发出的事件，
-  但如果`source` 的上下文环境具有内部子结构，
-  则单独的`source`标识符可能不足以作为任何指定事件的限定符。
+- 描述: 这个属性描述了事件生产者 (由 `source` 标识) 上下文环境中的主题信息。
+  在发布-订阅场景中，订阅者通常会订阅 `source` 发出的事件，
+  但如果 `source` 的上下文环境具有内部子结构，
+  则单独的 `source` 标识符可能不足以作为任何指定事件的限定符。
 
-当中间件无法解释’data‘内容时，在上下文元数据中识别事件的主题（相对于仅仅在’data‘负载中）在通过订阅过滤场景中特别有用。
-在上面的示例中，订阅者可能仅仅对blobs中名字以'.jpg' or '.jpeg'结尾和可以为该事件子集构建一个简单有效的字符串后缀过滤器的’subject‘属性感兴趣。
+当中间件无法解释 `data` 内容时，在上下文元数据中识别事件的主题（相对于仅仅在 `data` 负载中）在通过订阅过滤场景中特别有用。
+在上面的示例中，订阅者可能仅仅对blobs中名字以`.jpg` 或者 `.jpeg` 结尾和可以为该事件子集构建一个简单有效的字符串后缀过滤器的 `subject` 属性感兴趣。
 
 - 约束条件:
   - 可选的
   - 若有必须是非空字符串
 - 示例:
   - 订阅者可能对在blob在blob存储容器中创建的时候感兴趣并订阅。
-    在这个场景下，事件`source`标示出订阅的范围（存储容器），`type` 标识出
+    在这个场景下，事件 `source` 标示出订阅的范围（存储容器），`type` 标识出
     blob 创建" 这个事件，`id` 唯一标识出事件示例，以区分已创建同名blob的事件，
-    而新创建的blob的名字可以放在`subject`属性中：
+    而新创建的blob的名字可以放在`subject` 属性中：
     - `source`: `https://example.com/storage/tenant/container`
     - `subject`: `mynewfile.jpg`
 
@@ -344,7 +344,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 - 类型: `Timestamp`
 - 描述: 事件发生的时间戳。
   如果无法确定发生的时间，则 CloudEvents 生产者可以将此属性设置为其他时间（例如当前时间）。
-  但是在这方面，同一`source`的所有生产者必须保持一致。
+  但是在这方面，同一 `source` 的所有生产者必须保持一致。
   换句话说，要么它们都使用发生的实际时间，要么它们都使用相同的算法来确定所使用的值。
 - 约束条件:
   - 可选的
@@ -353,7 +353,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 
 ### Extension Context Attributes/扩展上下文属性
 
-CloudEvent 可以包含任意数量的具有不同名称的附加上下文属性，被称为"扩展属性"。
+CloudEvent 可以包含任意数量的具有不同名称的附加上下文属性，被称为“扩展属性"。
 扩展属性必须遵循相同的[命名约定](#naming-convention)并使用与标准属性相同的[类型系统](#type-system)。
 扩展属性在本规范中没有定义好的含义，
 它们允许外部系统将元数据附加到事件，就像 HTTP 自定义头部一样。
@@ -388,10 +388,10 @@ CloudEvent 可以包含任意数量的具有不同名称的附加上下文属性
 ## Event Data/事件数据
 
 正如[数据](#data)所定义的那样，CloudEvents 可以包括有关事件的特定域的信息。
-这些信息将被封装在`data`中。
+这些信息将被封装在 `data` 中。
 
 - 描述: 事件负载。 本规范对该信息的类型不作任何限制。
-  它被编码为一种媒体格式，这种格式由`datacontenttype` 属性(如 application/json)指定，当存在这些相应的属性时，遵循`dataschema`格式。
+  它被编码为一种媒体格式，这种格式由 `datacontenttype` 属性(如 application/json)指定，当存在这些相应的属性时，遵循 `dataschema` 格式。
 
 - 约束条件:
   - 可选的
@@ -444,7 +444,7 @@ CloudEvents 也可能直接被路由到消费者，如嵌入式设备，
 # Example/示例
 
 
-The following example shows a CloudEvent serialized as JSON:
+以下示例显示了一个序列化为 JSON 的 CloudEvent：
 
 ```JSON
 {
