@@ -769,7 +769,7 @@ original request. The following responses are defined:
 - `202 Accepted` indicates that the original request is still being processed.
   The response body MAY be empty.
 - `406 Not Acceptable` to indicate that the original request failed to be
-  processed correctly. The HTTP response Body SHOULD include additional
+  processed correctly. The HTTP response body SHOULD include additional
   information as to why it failed.
 
 Other responses are allowed, but not defined by this specification, however
@@ -808,8 +808,6 @@ The following rules apply to processing the Services specified in the request:
 - aside from `id` and `epoch`, unless there is an out of band agreement,
   all mandatory attributes MUST be present in the request, and a Discovery
   Endpoint MUST reject requests that are missing such attributes.
-- the Discovery Endpoint MUST ignore attempts to modify read-only or immutable
-  attributes - such as `id` and `url`.
 
 There is no requirement that the incoming Services be processed in the
 order in which they appear. Constraints apply only to the result of the
@@ -887,7 +885,7 @@ an array of Services that match the order of the array of Services specified
 in the request. The Services in the response MUST include at least the `id`
 attribute and SHOULD include the remaining Service attributes as they existed
 immediately prior to the Service being deleted, if possible. If the Service
-was deleted prior the processing of this request the Service values might not
+was deleted prior the processing of this request the Service might not
 be available to be returned.
 
 If the response Services include `epoch` values then they MUST be the values
@@ -931,7 +929,7 @@ Content-Type: application/json
 
 #### `PUT /services/{id}`
 
-This MUST update, or create, the Service referenced by the specified URL.
+This MUST update, or create, the Service as identified by the `id` in the URL.
 Upon successful processing of the request, any existing Service MUST be
 completely replaced by the Service definition, except where noted below.
 
@@ -953,10 +951,10 @@ all mandatory attributes MUST be present in the request, and a Discovery
 Endpoint MUST reject requests that are missing such attributes.
 
 The Discovery Endpoint MUST ignore attempts to modify read-only or immutable
-attributes - such as `id` and `url`.
+attributes - such as `url`.
 
 Upon successfully processing the request, the HTTP response body MUST be
-the Service values resulting from the successful processing of the request.
+the Service resulting from the successful processing of the request.
 The response SHOULD include the current values for all attributes, even if
 the Discovery Endpoint added or modified some value during the processing
 of the request.
@@ -999,16 +997,13 @@ is no Service with the specified `id` then it is considered to have already
 been deleted and the request will have no change to the Discovery Endpoint.
 A missing Service is not considered an error condition.
 
-This specification does not define a Body for the request message and the
-presence of a Body (even with a Service definition, valid or not) MUST NOT
+This specification does not define a body for the request message and the
+presence of a body (even with a Service definition, valid or not) MUST NOT
 result in an error.
 
 The request URL MAY include an OPTIONAL `epoch` query parameter, and if
 present and is not greater than the Service's current `epoch` value, then the
 request MUST fail.
-
-If other service attributes are included in the request, those SHOULD be
-ignored for the purposes of processing the request.
 
 Upon successfully processing the request, the HTTP response body MUST be
 a Service definition that includes at least the `id` attribute and SHOULD
@@ -1017,7 +1012,7 @@ to the Service being deleted, if possible. If the Service was deleted prior
 to the processing of this request the Service value might not be available
 to be returned.
 
-If the response Services include an `epoch` value then each MUST be greater
+If the response Service include an `epoch` value then it MUST be greater
 than the Service's value prior to the delete operation.
 
 The following responses are defined by this specification:
