@@ -15,9 +15,9 @@
 - [设计目标](#design-goals)
 - [架构](#architecture)
 - [属性版本控制](#versioning-of-cloudevents)
-- [CloudEvent 属性](#cloudevent-attributes)
-- [CloudEvent 属性扩展](#cloudevent-attribute-extensions)
-- [生产 CloudEvents](#creating-cloudevents)
+- [CloudEvent 属性](#cloudevent core-attributes)
+- [CloudEvent 属性扩展](#cloudevent-attribute-extensions) 
+- [生产 CloudEvents](#creating-cloudevents)  
 - [合格的协议与编码](#qualifying-protocols-and-encodings)
 - [专有的协议和编码](#proprietary-protocols-and-encodings)
 - [现有技术](#prior-art)
@@ -610,7 +610,7 @@ serverless 平台需要将一种类型的事件实例与其他类型的事件实
 CloudEvents 将为任何事件使用者（例如 serverless 平台）提供一种标准方式，
 以在事件数据中定位事件关联信息/令牌并将接收到的事件实例映射到正确的应用/工作流实例。
 
-### 现有的数据格式
+### Existing Event Formats/现有的数据格式
 
 与上一节一样，对当前现状的调查（和理解）对 CloudEvents 小组来说非常重要。
 为此，下面列出了在实践中被广泛使用的当前事件格式的样本。
