@@ -65,7 +65,7 @@ an XML document preamble SHOULD be included to ensure deterministic processing.
 XML comments are permitted anywhere within an XML representation of a
 CloudEvent or CloudEvent batch. Comments MUST be ignored during processing, except
 for the child element of a `<data>` element containing [XML data](#33-xml-data),
-where comments MUST be preserved.
+where all nodes MUST be preserved.
 
 ## 2. Attributes
 
@@ -149,8 +149,8 @@ Example:
 XML data MUST be carried in an element with a defined type of `xs:any` with
 exactly one child XML element (with any mandatory namespace definitions).
 
-Unlike other parts of CloudEvent XML message processing, XML comments within
-the child XML element MUST be preserved during processing.
+All XML nodes (including comments) within the child XML element MUST
+be preserved during processing.
 
 The `<data>` XML element MUST NOT contain any direct child text nodes with
 non-whitespace content. There are no restrictions on the content of the
