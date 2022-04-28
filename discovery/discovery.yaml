@@ -44,8 +44,6 @@ paths:
           $ref: '#/components/responses/servicesdeleteresponse'
         '400':
           description: Bad Request - constraint failure
-        '404':
-          description: Not Found
         '409':
           description: Conflict - epoch not greater
   /services/{id}:
@@ -60,6 +58,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/service'
+        '400':
+          description: Bad Request - constraint failure
         '404':
           description: Not Found
     put:
@@ -80,16 +80,19 @@ paths:
     delete:
       operationId: deleteService
       parameters:
+       - in: query
+         name: epoch
+         description: The epoch of the service to be deleted
+         required: false
+         schema:
+           $ref: '#/components/schemas/service/properties/epoch'
+      parameters:
         - $ref: '#/components/parameters/id'
-      requestBody:
-        $ref: '#/components/requestBodies/servicedeleterequest'
       responses:
         '200':
           $ref: '#/components/responses/servicedeleteresponse'
         '400':
           description: Bad Request - constraint failure
-        '404':
-          description: Not Found
         '409':
           description: Conflict - epoch not greater
 components:
@@ -123,13 +126,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/service'
-    servicedeleterequest:
-      description: A request to remove the given service from the discovery endpoint's collection of services
-      required: false
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/serviceinstance'
   responses:
     servicespostresponse:
       description: A list of the resulting Service values resulting from processing the request, in the same order as in the request
@@ -351,8 +347,6 @@ components:
           $ref: '#/components/schemas/changedelete'
         path:
           $ref: '#/components/schemas/changeservicepath'
-        request:
-          $ref: '#/components/requestBodies/servicedeleterequest'
         response:
           $ref: '#/components/responses/servicedeleteresponse'
       required: [operation, path, request, response]
