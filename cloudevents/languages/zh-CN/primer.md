@@ -615,7 +615,7 @@ CloudEvents 将为任何事件使用者（例如 serverless 平台）提供一�
 与上一节一样，对当前现状的调查（和理解）对 CloudEvents 小组来说非常重要。
 为此，下面列出了在实践中被广泛使用的当前事件格式的样本。
 
-#### Microsoft - Event Grid/微软-事件网
+#### Microsoft - Event Grid/微软 - 事件网格
 
 ```json
 {
@@ -641,7 +641,7 @@ CloudEvents 将为任何事件使用者（例如 serverless 平台）提供一�
 
 [Documentation](https://docs.microsoft.com/en-us/azure/event-grid/event-schema)
 
-#### Google - Cloud Functions (potential future)/谷歌-云函数(潜在的未来)
+#### Google - Cloud Functions (potential future)/谷歌 - 云函数 (潜在的未来)
 
 ```json
 {
@@ -666,7 +666,7 @@ CloudEvents 将为任何事件使用者（例如 serverless 平台）提供一�
 }
 ```
 
-#### AWS - CloudWatch Events/亚马逊-CloudWatch 事件
+#### AWS - CloudWatch Events/亚马逊 - CloudWatch 事件
 
 AWS 上的很大一部分事件处理系统都在使用这种格式。
 
@@ -689,7 +689,7 @@ AWS 上的很大一部分事件处理系统都在使用这种格式。
 }
 ```
 
-#### IBM - OpenWhisk - Web Action Event/IBM- OpenWhisk - Web Action事件
+#### IBM - OpenWhisk - Web Action Event/IBM - OpenWhisk - Web Action事件
 
 ```json
 {
