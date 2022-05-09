@@ -234,6 +234,21 @@ components:
           type: string
           description: Absolute URL that provides a link to additional documentation about the service. This is intended for a developer to use in order to learn more about this service's events produced
           example: http://cloud.example.com/docs/blobstorage
+        deprecated:
+          type: object
+          properties:
+            effectivetime:
+              type: string
+              description: The time at which the service will enter a deprecated state
+            removaltime:
+              type: string
+              description: The time at which the service will be removed
+            alternative:
+              type: string
+              description: A URL to an possible alternative service
+            docsurl:
+              type: string
+              description: A URL to additional information concerning the deprecation of this service. Possible information might include rationale behind the action, or discussion of alternatives
         specversions:
           type: array
           description: CloudEvents specversions that can be used for events published for this service
