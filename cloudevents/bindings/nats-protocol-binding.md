@@ -1,4 +1,4 @@
-# NATS Protocol Binding for CloudEvents - Version 1.0.4-wip
+# NATS Protocol Binding for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
@@ -309,14 +309,19 @@ Subject: mySubject
   Format
 
 [ce]: ../spec.md
+[ce-types]: ../spec.md#type-system
 [json-format]: ../formats/json-format.md
-[nats]: https://nats.io
-[nats-pub-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#pub
-[nats-msg-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#protocol-messages
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
+[nats]: https://nats.io
+[nats22]: https://docs.nats.io/release-notes/whats_new/whats_new_22#message-headers
+[nats-message-headers]: https://github.com/nats-io/nats-architecture-and-design/blob/main/adr/ADR-4.md#nats-message-headers
+[nats-msg-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#protocol-messages
+[nats-pub-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#pub
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3629]: https://tools.ietf.org/html/rfc3629
+[rfc3986-section-2-1]: https://tools.ietf.org/html/rfc3986#section-2.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159
-[nats22]: https://docs.nats.io/release-notes/whats_new/whats_new_22#message-headers
-[nats-message-headers]: https://github.com/nats-io/nats-architecture-and-design/blob/main/adr/ADR-4.md#nats-message-headers
+[rfc7230]: https://tools.ietf.org/html/rfc7230
+[rfc7230-section-3-2-6]: https://tools.ietf.org/html/rfc7230#section-3.2.6
+[surrogate-pair]: http://unicode.org/glossary/#surrogate_pair
