@@ -323,5 +323,6 @@ Subject: mySubject
 [rfc3986-section-2-1]: https://tools.ietf.org/html/rfc3986#section-2.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159
 [rfc7230]: https://tools.ietf.org/html/rfc7230
+[rfc7230-section-3]: https://tools.ietf.org/html/rfc7230#section-3
 [rfc7230-section-3-2-6]: https://tools.ietf.org/html/rfc7230#section-3.2.6
 [surrogate-pair]: http://unicode.org/glossary/#surrogate_pair
