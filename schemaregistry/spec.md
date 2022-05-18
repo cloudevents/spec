@@ -159,7 +159,7 @@ prior schema versions are retained. This specification does not mandate a
 retention policy, but implementations MAY retire and remove outdated schema
 versions.
 
-The latest available schema MUST always the default version that is retrieved
+The latest available schema MUST always be the default version that is retrieved
 when the URI to the schema is used without the version having been specified.
 
 ### 2.2.1 Schema authority
