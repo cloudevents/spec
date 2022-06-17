@@ -5,7 +5,7 @@
 AWS S3 事件文档：
 https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html
 
-所有 S3 事件都使用下表中描述的相同模式转换为 CloudEvents：
+所有 S3 事件都通过下表中描述的模式转换为 CloudEvents：
 
 | CloudEvents 属性 | 值                                                        |
 | :-------------------- | :----------------------------------------------------------- |
@@ -20,6 +20,6 @@ https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.h
 | `data`                | S3 event                                                     |
 
 注释：
-- 当事件来自 S3 时，“eventSource”值将始终为静态 (`aws:s3`)，但如果其他云厂商支持 S3 事件格式，则该值可能不会是 `aws:s3` - 而是特定于他们的环境的东西。
+- 当事件来自 S3 时，“eventSource”将始终为固定值 (`aws:s3`)，但如果其他云厂商支持 S3 事件格式，则该值可能不会是 `aws:s3` - 而是特定于他们的环境的东西。
 
 - 因此，这些事件的消费者将能够通过检测 `type` 属性上的 `com.amazonaws.s3` 前缀知道事件是否是 S3 类型的事件（无论它来自 S3 还是 S3 兼容的提供者）。
