@@ -84,8 +84,8 @@ message's [header section][kafka-message-header].
 
 Implementations that use Kafka 0.11.0.0 and above MAY use either _binary_ or
 _structured_ modes. Implementations that use Kafka 0.10.x.x and below MUST only
-use _structured_ mode and encode the event in JSON. This is because older
-versions of Kafka lacked support for message level headers.
+use _structured_ mode. This is because older versions of Kafka lacked
+support for message level headers.
 
 ### 1.4. Event Formats
 
