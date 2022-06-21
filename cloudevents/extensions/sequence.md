@@ -17,10 +17,18 @@ of the attribute.
 
 - Type: `String`
 - Description: Value expressing the relative order of the event. This enables
-  interpretation of data supercedence.
+  interpretation of data supercedence. When `sequencetype` is absent the
+  producer MUST ensure that `sequence` is lexicographically-orderable. In cases
+  where the producer is unaware of which `sequencetype` values the consumers
+  supports it is RECOMMENDED that the `sequence` value be
+  lexicographically-orderable even without interpretation of the `sequencetype`
+  attribute. For example, in the case of `sequence` being an integer, leading
+  zeros might be necessary.
 - Constraints
   - REQUIRED
-  - MUST be a non-empty lexicographically-orderable string
+  - MUST be a non-empty string
+  - Leading and trailing whitespaces MUST NOT be ignored for comparison
+    purposes
   - RECOMMENDED as monotonically increasing and contiguous
 
 ### sequencetype
