@@ -161,6 +161,10 @@ e.g. `top-dir/sub-dir`.)
 
 To create a new release:
 
+- Periodically the group will examine the list of extensions to determine
+  if any action should be taken (e.g. removed due to it being stale). The
+  creation of a new release will be the reminder to do this check. If any
+  changes are needed then PRs will be created and reviewed by the group.
 - Create a PR that modifies the [README](README.md), and all specifications (ie.
   \*.md files) that include a version string, to the new release version string.
   Make sure to remove `-wip` from all of the version strings.
