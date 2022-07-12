@@ -363,7 +363,7 @@ The core attributes are those defined within the specification itself.
 Core attributes then have subcategories of required or optional. As the category
 names imply, "required" attributes will be the ones that the group considers
 vital to all events in all use cases, while "optional" ones will be used in a
-majority of the cases. 
+majority of the cases.
 
 When the group determines that an attribute is not common enough to fall into
 those two categories but would still benefit from the level of interoperability
@@ -496,12 +496,17 @@ the incoming CloudEvent.
 
 There might exist special cases in which it is necessary to create a CloudEvent
 that contains another CloudEvent. Although the specification does not define
-nesting explicitly, it is possible. While the inner event will always be encoded
-in a [stand-alone event format](spec.md#event-format), the outer event
-can be either binary or structured mode. The `datacontenttype` attribute of
-the outer event must not be set to `application/cloudevents+json` or any other
-media type that is used to denote the usage of structured mode. A correct
-example of event nesting would be:
+nesting explicitly, it is possible. When doing so, the inner event will always
+use [structured mode](spec.md#event-format), this is because if the inner event
+was in binary mode then its metadata could be misinterpretted as metadata for
+the outer event. The outer event can use either binary or structured mode,
+however, its `datacontenttype` attribute must not be set to
+`application/cloudevents+json` or any other media type that is used to denote
+the usage of structured mode. This is because it would then be difficult to
+know if the use of `application/cloudevents+json` is due to the outer event
+using structured mode or due to the inner event being a CloudEvent.  One option
+in this case is to use a value of `application/json` instead, as seen in this
+example:
 
 ```
 Content-Type: application/json
@@ -518,6 +523,10 @@ ce-source: example.com
   "data": { ... }
 }
 ```
+
+Note that by doing so the receiver can no longer know the inner event is
+a CloudEvent by examination of the `Content-Type` HTTP header. If this is a
+concern then using structured mode for the outer event might be preferrable.
 
 ## Qualifying Protocols and Encodings
 
