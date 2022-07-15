@@ -766,7 +766,7 @@ and their values are the String values to use in the comparison.
 To evaluate to true the values of the matching CloudEvents attributes MUST
 all exactly match with the associated value String specified (case sensitive).
 
-The attribute name and value specified in the filter express MUST NOT be
+The attribute name and value specified in the filter expression MUST NOT be
 empty strings.
 
 For example:
@@ -782,7 +782,7 @@ and their values are the String values to use in the comparison.
 To evaluate to true the values of the matching CloudEvents attributes MUST
 all start with the associated value String specified (case sensitive).
 
-The attribute name and value specified in the filter express MUST NOT be
+The attribute name and value specified in the filter expression MUST NOT be
 empty strings.
 
 For example:
@@ -798,7 +798,7 @@ and their values are the String values to use in the comparison.
 To evaluate to true the values of the matching CloudEvents attributes MUST
 all end with the associated value String specified (case sensitive).
 
-The attribute name and value specified in the filter express MUST NOT be
+The attribute name and value specified in the filter expression MUST NOT be
 empty strings.
 
 For example:
