@@ -144,6 +144,10 @@ not provided, no assumptions can be made as to the format of the data and
 therefore the `datacontenttype` attribute MUST NOT be present in the resulting
 CloudEvent.
 
+Note: Definition of `data_base64` is a JSON-specific marshaling rule and not
+part of the formal CloudEvents context attributes definition. This means the
+rules governing CloudEvent attributes names do not apply to this JSON member.
+
 If the type of data is not `Binary`, the implementation will next determine
 whether the value of the `datacontenttype` attribute declares the `data` to
 contain JSON-formatted content. Such a content type is defined as one having a
