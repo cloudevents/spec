@@ -130,7 +130,15 @@ A "structured-mode message" is one where the event is fully encoded using
 a stand-alone event format and stored in the message body.
 
 A "binary-mode message" is one where the event data is stored in the message
-body, and event attributes are stored as part of message meta-data.
+body, and event attributes are stored as part of message metadata.
+
+Often, binary mode is used when the producer of the CloudEvent wishes to add
+the CloudEvent's metadata to an existing event without impacting the message's
+body. In most cases a CloudEvent encoded as a binary-mode message will not
+break an existing receiver's processing of the event because the message's
+metadata typically allows for extension attributes. In other words, a binary
+formatted CloudEvent would work for both a CloudEvents enabled receiver as well
+as one that is unaware of CloudEvents.
 
 #### Protocol
 
