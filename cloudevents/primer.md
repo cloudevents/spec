@@ -132,7 +132,7 @@ batching as well as assign events to different batches.
 The purpose, or semantic meaning, of an event is out of scope for the
 CloudEvents specification. As long as the message being sent conforms to the
 specification, then it is a valid CloudEvent. As an example that might not
-be obvious to everyone, errors or exceptions can be tranmitted as CloudEvents.
+be obvious to everyone, errors or exceptions can be transmitted as CloudEvents.
 It would then be up to the event producer to define the CloudEvents attribute
 values that would be used, just like any other event it might generate.
 
