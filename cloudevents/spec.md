@@ -126,8 +126,8 @@ Bindings MAY define formats that are dependent on the protocol.
 
 Events are transported from a source to a destination via messages.
 
-A "structured-mode message" is one where the event is fully encoded using
-a stand-alone event format and stored in the message body.
+A "structured-mode message" is one where the entire event (attributes and data)
+are encoded in the message body.
 
 A "binary-mode message" is one where the event data is stored in the message
 body, and event attributes are stored as part of message metadata.
