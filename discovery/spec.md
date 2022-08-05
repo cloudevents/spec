@@ -1,51 +1,41 @@
-# CloudSubscriptions: Discovery - Version 0.1-wip
+# Discovery Service - Version 0.2-wip
 
 ## Abstract
 
-CloudSubscriptions Discovery API is a vendor-neutral API specification for
-determining what events are available from a particular service, as well as how
-to subscribe to those events.
+The Discovery Service specification allows for the discovery of messaging
+Endpoints and their related metadata such as Message Definitions and the
+mechanisms by which interactions with those Endpoints can be established.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Notations and Terminology](#notations-and-terminology)
 - [Resource Model](#resource-model)
+- [Serializations](#serializations)
+- [Usage Values](#usage-values)
+- [Message Formats](#message-formats)
 - [API Specification](#api-specification)
 - [Privacy & Security](#privacy-and-security)
 
 ## Overview
 
-In order for consumers to receive events from services, they need to first
-subscribe, or ask for, events from those services. To do so, there is often a
-process necessary that involves steps such as discovering which service is of
-interest, what events it generates and how to create the subscription for those
-events.
+Message Endpoints provide a location from which Message producers and consumers
+can share Messages. Endpoints could act as either consumers or producers
+of Messages, and the mechanisms by which those Messages are transferred
+might vary.
 
-This specification defines a set of APIs to allow for consumers to perform these
-queries against a "Discovery Endpoint". A Discovery Endpoint acts as a catalog
-of [Services](#service) (event producers), that consumers can query to find the
-ones of interest. Once found, additional metadata is provided in order to
-consume and subscribe to events. The goal of this API is to be such that tooling
-can be built where all possible services and event types aren't known in
-advance.
+This specification defines a set of APIs, and related documents, that allow
+for the discovery of these Endpoints and their related metadata. This
+information can then be used to perform actions such as:
+- subscribing for Messages
+- pushing or pulling of Messages with the Endpoint
+- generating of Message validation code based on the schema associated with
+  a Message Definition
 
-The deployment relationship of a Discovery Endpoint to the Services and Event
-Producers that it advertises is out of scope of this specification. For example,
-a Discovery Endpoint could choose to be implemented as part of a Service, or
-Event Producer, or it could be acting as an independent aggregator of this
-metadata. This implementation detail will be transparent to consumers.
+While the specification is written in term of "messaging", it applies equally
+to "eventing" since it can be considered as subset of messaging.
 
-The main use-case to consider from the viewpoint of the event consumer is what
-services are available, and what event types do they generate?
-
-The CloudEvent `source` attribute is a potential cause of high fan-out. For
-example, consider a blob storage system where each directory constitutes a
-distinct `source` attribute value. For this reason, the exact CloudEvents
-`source` attribute value that might appear in a CloudEvent will not appear in
-the Discovery API query result. Instead, a higher level classifier (`service`)
-will be used to represent the abstract notion of the generic event producer of
-those events - in the example case, the blob storage service itself.
+** we need more verbage here **
 
 ## Notations and Terminology
 
@@ -55,305 +45,194 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-### Terminology
+In the pseudo JSON format snippets `?` means the preceding property is
+OPTIONAL, `*` means the preceding property MAY appear zero or more times, and
+`+` means the preceding property MUST appear at least once.
 
-Note: some of the terms defined below are taken from the [CloudEvents](../cloudevents/spec.md)
-specification, and are marked with a reference to the original definition. Any
-difference between the definitions is accidental and the CloudEvents version
-takes precedence.
+### Terminology
 
 This specification defines the following terms:
 
-#### Discovery Endpoint
+#### Discovery Service
 
 A compliant implementation of this specification that advertises the set of
-Services, Event Types and other metadata to aid in the creation of an Event
-Subscription.
+Endpoints, Groups, Definitions and other metadata to aid in the programmic
+interactions with the Endpoints.
 
-#### Service
+### Conventions
 
-A "service" represents the entity which manages one or more event
-[sources](#source-ce) and is associated with [producers](#producer-ce) that are
-responsible for the generation of events.
+#### References
 
-For example, an Object Store service might have a set of event sources where
-each event source maps to a bucket.
+Discuss uri vs self properties....
 
-#### Source [[CE](../cloudevents/spec.md#source)]
-
-The "source" is the context in which the occurrence happened. In a distributed
-system it might consist of multiple Producers. If a source is not aware of
-CloudEvents, an external producer creates the CloudEvent on behalf of the
-source.
-
-#### Producer [[CE](../cloudevents/spec.md#producer)]
-
-The "producer" is a specific instance, process or device that creates the data
-structure describing the CloudEvent.
-
-#### Intermediary [[CE](../cloudevents/spec.md#intermediary)]
-
-An "intermediary" receives a message containing an event for the purpose of
-forwarding it to the next receiver, which might be another intermediary or a
-[Consumer](#consumer-ce). A typical task for an intermediary is to route the
-event to receivers based on the information in the event
-[Context](../cloudevents/spec.md#context).
-
-#### Consumer [[CE](../cloudevents/spec.md#consumer)]
-
-A "consumer" receives the event and acts upon it. It uses the context and data
-to execute some logic, which might lead to the occurrence of new events.
-
-#### Subscription
-
-The request for events from a Service.
 
 ## Resource Model
 
-This section defines the resource model of a Discovery Endpoint.
+This section defines the resource model of a Discovery Service.
 
-### Services
+### Endpoint
 
-At the core of the data model is the concept of a [Service](#service). The API
-then exposes multiple ways to query over a list of Services. To help explain the
-Service resource, the following non-normative pseudo json shows its basic
-structure:
+An Endpoint is ...
 
-(`*` means zero or more, `+` means one or more, `?` means optional)
-
-Service:
-
+The following pseudo JSON shows the basic defintion of an Endpoint:
 ```
 {
-  "id": "[a unique URI segment within the authority]",
-  "authority": "[URI reference to the authority providing the service]", ?
-  "epoch": "[discovery entry epoch value]",
-  "name": "[unique name for this services]",
-  "url": "[unique URL to this service]",
-  "description": "[human string]", ?
-  "docsurl": "[URL reference for human documentation]", ?
-  "deprecated": { ?
-	"effectivetime": "[RFC3339 timestamp of when the service will enter a deprecated state]", ?
-    "removaltime": "[RFC3339 timestamp of when service will be removed]", ?
-    "alternative": "[URL to possible alternative service]", ?
-    "docsurl": "[URL reference to additional information]" ?
-  },
-  "specversions": [ "[ce-specversion value]" + ],
-  "subscriptionurl": "[URL to which the Subscribe request will be sent]",
-  "subscriptionconfig": { ?
-    "[key]": "[type]", *
-  },
-  "subscriptiondialects": [ "[dialect]" ], ?
-  "authscope": "[string]", ?
-  "protocols": [ "[string]" + ],
-  "events": [ ?
-    { *
-      "type": "[ce-type value]",
-      "description": "[human string]", ?
-      "datacontenttype": "[ce-datacontenttype value]", ?
-      "dataschema": "[ce-dataschema URI]", ?
-      "dataschematype": "[string per RFC 2046]", ?
-      "dataschemacontent": "[schema]", ?
-      "sourcetemplate": "[URI template per RFC 6570, level 1]", ?
-      "extensions": [ ?
-        { *
-          "name": "[CE context attribute name]",
-          "type": "[CE type string]",
-          "specurl": "[URL to specification defining the extension]" ?
-        }
-      ]
-    }
-  ]
+    "id": "URI-reference",
+    "name": "STRING",
+    "self": "URI",
+    "epoch": UINT,
+    "description": "STRING", ?
+    "tags": { "STRING": "STRING", ... } ?
+    "docsurl": "URL", ?
+    "deprecated": { ... }, ?
+    "channel", "STRING", ?
+    "authscope": "URI", ?
+
+    "usage": "subscriber|consumer|producer",
+    "config": {
+        "protocol": "STRING",
+        "endpoints": "URL" | [ "URL", ... ],
+        "options": { ... }, ?
+        "strict": true|false, ?
+    }, ?
+
+    "groups": [ GROUP, ... ], ?
+    "definitions": [ DEFINITION, ... ] ?
 }
+
 ```
 
-An example:
+The following Endpoint properties are defined:
 
-```json
-{
-  "id": "cbdd62e8-c095-11ea-b3de-0242ac130004",
-  "authority": "https://example.com",
-  "epoch": 1,
-  "name": "widgets",
-  "url": "https://example.com/services/widgetService",
-  "specversions": ["1.0"],
-  "subscriptionurl": "https://events.example.com",
-  "subscriptiondialects": [ "basic" ],
-  "protocols": ["HTTP"],
-  "events": [
-    {
-      "type": "com.example.widget.create"
-    },
-    {
-      "type": "com.example.widget.delete"
-    }
-  ]
-}
-```
+#### id
 
-Note: the above is just a sample and implementations are free to use any
-internal model they wish to store the data as long as they are compliant with
-the wire format/API defined by this specification.
-
-#### Service Attributes
-
-The following sections define the attributes that appear in a Service entity.
-##### id
-
-- Type: `String`
-- Description: A unique identifier for this Service. This value MUST be unique
-  within the authority. While other metadata about this Service MAY change,
-  this value MUST NOT so that clients can use this attribute to know whether a Service 
-  returned by a query is the same Service returned by a previous query.
-
-  Whether a change to a Service would result in changing of the Service's
-  metadata (except `id`) and thus be just an update of an existing Service, or
-  whether the change would result in a brand new Service (with a new `id`) is
-  not defined by this specification.
-
-  For example, if a Service's implementation is upgraded to a new version then
-  whether this would result in a new Service (and `id`) or is an update to the
-  existing Service's metadata, is an implementation choice. Likewise, this
-  specification makes no statement, or guarantees, as to the forwards or
-  backwards compatibility of a Service as it changes over time.
-
-  See the Primer for more information.
-
+- Type: URI Reference
+- Description: A unique identifier for this Endpoint.
 - Constraints:
-  - MUST be immutable
-  - REQUIRED in responses from the Discovery Endpoint.
-  - MUST be a non-empty string
-  - MUST conform with [RFC3986/3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3) `segment-nz-nc` syntax.
+  - REQUIRED
+  - MUST be a non-empty URI reference
+  - MUST be unique across all Endpoints within the authorization scope
+    defined by the `authscope` property. If `authscope` has no value then
+    the `id` MUST be unique within the current Discovery Service.
 - Examples:
-  - `bf5ff5cc-d059-4c79-a89a-2513e45a1340`
-  - `com.example.myservice.v1`
+  - A UUID
+  - `1234`
 
-#### authority (service authority)
+#### name
 
-- Type: `URI`
-- Description: Identifies the authority for this service. Similar to schemas authority.
-  When `authority` and `id` are combined they MUST be globally unique.
-- Constraints:
-  - OPTIONAL. If the attribute is absent or empty, its implied default value is the base
-    URI of the API endpoint.
-  - MUST be a valid URI.
-  - For services imported from other discovery endpoints in replication scenarios, the
-    attribute is REQUIRED to be not empty. If the value is empty or absent
-    during import, it MUST be explicitly set to its implied default value.
-- Examples:
-  - `urn:com-example`
-  - `https://example.com`
-
-##### epoch
-
-- Type: `Unsigned 32-bit Integer`
-- Description: The Discovery Endpoint's `epoch` value for this Service Entry.
-  This specification does not mandate any particular semantic meaning to
-  the value used. For example, implementations are free to use a value that
-  represents a timestamp or could choose to simply use a monotonically
-  increasing number. The only requirement is that the value MUST always
-  increase each time the Service Entry is updated. This allows for a quick
-  integer comparision to determine which version of this Service Entry is the
-  latest - meaning, the one with the largest integer value.
-
-- Constraints:
-  - REQUIRED in responses from the Discovery Endpoint.
-  - MUST be an unsigned 32-bit integer
-- Examples:
-  - `42`
-  - `915148800`
-
-##### name
-
-- Type: `String`
-- Description: A unique human readable identifier for this Service. This value
-  MUST be unique (case insensitive) within the scope of this Discovery Endpoint.
+- Type: String
+- Description: The name of the Endpoint.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty string
 - Examples:
-  - `my storage service`
-  - `cool git offering`
+  - My Queue
 
-##### url
+#### self
 
-- Type: `URL`
-- Description: An absolute URL that references this Service within this
-  Discovery Endpoint. This value MUST be usable in subsequent requests, by
-  authorized clients, to retrieve this Service
-  entity.
-  Note: this value will most likely be Discovery Endpoint defined and therefore
-  will most likely be ignored when provided by clients.
+- Type: URI
+- Description: A unique URI for this Endpoint. If the URI is a URL then an
+  HTTP GET to this URL MUST return the metadata for this Endpoint. The URI
+  MUST be a combination of the base URI of the list of Endpoints for the
+  current Discovery Service concatenated with the `id` of this Endpoint.
 - Constraints:
-  - MUST be specified by the Discovery Endpoint and otherwise read-only
-  - REQUIRED in responses from the Discovery Endpoint.
-  - MUST be a non-empty URL
-  - MUST end with `fsegments` (per RFC1738) of: `/services/{id}` where `id` is
-    the Service's `id` attribute.
+  - REQUIRED
+  - MUST be a non-empty URI
+
 - Examples:
-  - `http://example.com/services/bf5ff5cc-d059-4c79-a89a-2513e45a1340`
-  - `http://discovery.github.com/services/892abefc-0293-9273-bead-92830efaefa0`
+  - `https://example.com/discovery/endpoints/1234`
 
-##### description (Service)
+#### epoch
 
-- Type: `String`
-- Description: Human readable description.
+- Type: Unsigned Integer
+- Description: A number representing the version number of this Endpoint. Each
+  time this Endpoint is modified this property MUST be updated with a new value
+  that is greater than the current one.
+- Constraints:
+  - REQUIRED
+  - MUST be an unsigned integer
+- Examples:
+  - `0`
+  - `1001`
+
+#### description
+
+- Type: String
+- Description: A brief summary of the purpose of the Endpoint.
 - Constraints:
   - OPTIONAL
-  - If present, MUST be a non-empty string
+  - if present, MUST be a non-empty string
+- Examples:
+  - "A queue of the sensor generated messages"
 
-##### docsurl
+#### tags
 
-- Type: `URL`
-- Description: Absolute URL that provides a link to additional documentation
-  about the service. This is intended for a developer to use in order to learn
-  more about this service's events produced.
+- Type: Map of name/value string pairs
+- Description: A mechanism in which additional metadata about the Endpoint can
+  be stored.
+
+  This property MAY be serialized as an empty map or MAY excluded from the
+  serialization entirely if there is no value.
 - Constraints:
   - OPTIONAL
-  - If present, MUST be a non-empty absolute URI
+  - if present, MUST be a map of name/value string pairs
+  - Each name MUST be a non-empty, unique within the scope of this map, string.
+    Values MAY be empty strings
 - Examples:
-  - `http://cloud.example.com/docs/blobstorage`
+  - `{ "owner": "John", "isVerified: "" }`
 
-##### deprecated
+#### docsurl
 
-- Type: Object containing 2 properties:
+- Type: URL
+- Description: A URL to additional documentation about this Endpoint. This
+  specification does not define any constraints on the data returned from this
+  URL.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a non-empty URL
+- Examples:
+  - `https://example.com/docs/myQueue`
+
+#### deprecated
+
+- Type: Object container the following properties:
   - effectivetime<br>
-    An OPTIONAL property indicating the time when the Service entered, or will
-	enter, a deprecated state. The date MAY be in the past or future.
-	If present, this MUST be an [RFC3339][rfc3339] timestamp.
+    An OPTIONAL property indicating the time when the Endpoint entered, or will
+    enter, a deprecated state. The date MAY be in the past or future.
+    If present, this MUST be an [RFC3339][rfc3339] timestamp.
 
   - removaltime<br>
-    An OPTIONAL property indicating the time when the Service MAY be removed.
-    The Service MUST NOT be deleted before this time. If this property is not
-    present then client can not make any assumption as to when the Service
-    might be removed. Note: as with most Service properties, this property
+    An OPTIONAL property indicating the time when the Endpoint MAY be removed.
+    The Endpoint MUST NOT be deleted before this time. If this property is not
+    present then client can not make any assumption as to when the Endpoint
+    might be removed. Note: as with most Endpoint properties, this property
     is mutable. If present, this MUST be an [RFC3339][rfc3339] timestamp.
 
   - alternative<br>
-    An OPTIONAL property specifying the URL to an alternative Service the
-    client can consider as a replacement for this Service. There is no
-    guarantee that the referenced Service is an exact replacement, rather the
-    client is expected to investigate the Service to determine if it is
+    An OPTIONAL property specifying the URL to an alternative Endpoint the
+    client can consider as a replacement for this Endpoint. There is no
+    guarantee that the referenced Endpoint is an exact replacement, rather the
+    client is expected to investigate the Endpoint to determine if it is
     appropriate.
 
   - docsurl<br>
     An OPTIONAL property specifying the URL to additional information about
-	the deprecation of the Service. This specification does not mandate any
-	particular format or information, however some possibilities include:
-	reasons for the deprecation or additional information about likely
-	alternative Services.
+    the deprecation of the Endpoint. This specification does not mandate any
+    particular format or information, however some possibilities include:
+    reasons for the deprecation or additional information about likely
+    alternative Endpoints.
 
 - Description: Presence of this property (even without any nested properties)
-  indicates that the Service is, or will be, deprecated and will be removed at
+  indicates that the Endpoint is, or will be, deprecated and will be removed at
   some point in the future.
 
   This specification makes no statement as to whether any existing subscription
   will still be valid and usable after this date. However, it is expected that
-  new subscription requests after the Service is deleted will likely be
+  new subscription requests after the Endpoint is deleted will likely be
   rejected.
 
-  Note that a Discovery Endpoint is not mandated to use this attribute in
-  advance of removing a Service, but is it RECOMMENDED that they do so.
+  Note that an implementation is not mandated to use this attribute in
+  advance of removing an Endpoint, but is it RECOMMENDED that they do so.
 - Constraints:
   - OPTIONAL
 - Examples:
@@ -365,273 +244,513 @@ The following sections define the attributes that appear in a Service entity.
     }
     ````
 
-##### specversions
+#### channel
 
-- Type: Array of `String` values
-- Description: CloudEvents
-  [`specversions`](../cloudevents/spec.md#specversion)
-  that can be used for events published for this service.
+- Type: String
+- Description: A string that can be used to correlate Endpoints. Any Endpoints
+  within an instance of a Discovery Service that share the same `channel` value
+  MUST have some relationship. This specification does not define that
+  relationship or the specific values used in this property. 
+
+  This property MAY be serialized as an empty string or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a string
+- Examples:
+  - `queue1`
+
+#### authscope
+
+- Type: TBD
+- Description: TBD
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - TBD
+
+#### usage
+
+- Type: String
+- Description: The interaction model supported by this Endpoint. This
+  specification defines a set of possible values (see the
+  [Usage Values](#usage-values) section for more information, however,
+  implementations MAY define new values as extensions. It is RECOMMENDED
+  that extension values be defined with some organizational unique string
+  to reduce the chances of collisions with possible future spec-defined values.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty array of non-empty strings
+  - MUST be a non-empty string
+- Examples:
+  - `consumer`
 
-##### subscriptionurl
+#### config
 
-- Type: `URL`
-- Description: An absolute URL indicating where CloudSubscriptions `subscribe`
-  API calls MUST be sent to.
-- Constraints:
-  - REQUIRED
+- Type: Object
+- Description: Metadata the provides additional information concerning the
+  interactions with this Endpoint. Each `usage` value MUST define the set of
+  `config` properties that are valid.
 
-##### subscriptionconfig
-
-- Type: `Map` of `String` to `String`
-- Description: A map indicating supported options for the `config` parameter for
-  the CloudSubscriptions subscribe() API call. Keys are the name of keys in the
-  allowed config map, the values indicate the type of that parameter, conforming
-  to the CloudEvents
-  [type system](../cloudevents/spec.md#type-system).
-  TODO: Needs resolution with CloudSubscriptions API
+  This property MAY be serialized as an empty object or MAY excluded from the
+  serialization entirely if there is no value.
 - Constraints:
   - OPTIONAL
 - Examples:
-  - ??
+  - `{ "protocol": "kafka" , "endpoint": "https://example.com/queue/1234" }`
 
-##### subscriptiondialects
+#### groups
 
-- Type: List of `String` values
-- Description: An array of filter dialects that MAY be used in the
-  Cloud Subscriptions subscribe() API call.
+- Type: Array
+- Description: A set of Definition Groups supported by this Endpoint. Each
+  Group MAY be a full representation of the Group or MAY be a
+  [reference](#references) to a Group defined elsewhere. If it is a reference
+  then it MAY be to a Group defined outside of the current Discovery Service
+  instance.
+
+  This property MAY be serialized as an empty array or MAY excluded from the
+  serialization entirely if there is no value.
 - Constraints:
   - OPTIONAL
+  - if present, the same Group, as identified by its `id` or `uri`, MUST NOT
+    appear more than once within this property.
 - Examples:
-  - `basic`
+  - `[ { ...group properties... }, { "uri": "https://example.com/discovery/group/987", "name", "John's blob store messages" } ]`
 
-##### authscope
+#### definitions
 
-- Type: `String`
-- Description: Authorization scope needed for creating subscriptions. The actual
-  meaning of this field is determined on a per-service basis.
+- Type: Array
+- Description: A set of Message Definitions supported by this Endpoint. Each
+  Definition MAY be a full representation of the Definition or MAY be a
+  [reference](#references) to a Definition defined elsewhere. If it is a
+  reference then it MAY be to a Definition defined outside of the current
+  Discovery Service instance.
+
+  This property MAY be serialized as an empty array or MAY excluded from the
+  serialization entirely if there is no value.
 - Constraints:
   - OPTIONAL
-- Example:
-  - `storage.read`
-
-##### protocols
-
-- Type: `List` of `String`
-- Description: This field describes the different values that might be passed in
-  the `protocol` field of the CloudSubscriptions API. The protocols with
-  existing CloudEvents bindings are identified as AMQP, MQTT3, MQTT5, HTTP,
-  KAFKA, and NATS. An implementation MAY add support for further protocols. All
-  services MUST support at least one delivery protocol, and MAY support
-  additional protocols.
-- Constraints:
-  - REQUIRED
-  - MUST be non-empty.
+  - if present, the same Definition, as identified by its `id` or `uri`,
+    MUST NOT appear more than once within this property.
 - Examples:
-  - `[ "HTTP" ]`
-  - `[ "HTTP", "AMQP", "KAFKA" ]`
+  - `[ { ...definition properties... }, { "uri", "https://example.com/discovery/defs/8765", "name": "Blob created" } ]`
 
-##### events
 
-- Type: List of `EventType` objects
-- Description: This field contains the EventType definitions available from this service.
-- Constraints:
-  - OPTIONAL
-- Examples:
-  - `[ { "type": "com.example.object.delete.v2" } ]`
+### Definition
 
-#### EventType Attributes
+A Definition is ...
 
-The following sections define the attributes that appear in EventType definitions of a Service object.
+Talk about how each has metadata and data
 
-##### type
-
-- Type: `String`
-- Description: CloudEvents
-  [`type`](../cloudevents/spec.md#type)
-  attribute.
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty string, following the constraints as defined in the
-    CloudEvents spec.
-- Examples:
-  - `com.github.pull.create`
-  - `com.example.object.delete.v2`
-
-###### description (type)
-
-- Type: `String`
-- Description: Human readable description.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty string
-
-###### datacontenttype
-
-- Type: `String`
-- Description: CloudEvents
-  [`datacontenttype`](../cloudevents/spec.md#datacontenttype)
-  attribute. Indicating how the `data` attribute of subscribed events will be
-  encoded.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in
-    [RFC 2046](https://tools.ietf.org/html/rfc2046)
-
-###### dataschema
-
-- Type: `URI`
-- Description: CloudEvents
-  [`dataschema`](../cloudevents/spec.md#dataschema)
-  attribute. This identifies the canonical storage location of the schema of the
-  `data` attribute of subscribed events.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty URI
-
-###### dataschematype
-
-- Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: If using `dataschemacontent` for inline schema storage, the
-  `dataschematype` indicates the type of schema represented there.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST adhere to the format specified in
-    [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Examples:
-  - `application/json`
-
-###### dataschemacontent
-
-- Type: `String`
-- Description: An inline representation of the schema of the `data` attribute
-  encoding mechanism. This is an alternative to using the `dataschema`
-  attribute.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty string containing a schema compatible with
-    the `datacontenttype`.
-  - If `dataschema` is present, this field MUST NOT be present.
-
-###### sourcetemplate
-
-- Type: `URI Template`
-- Description: A URI Template according to
-  [RFC 6570](https://tools.ietf.org/html/rfc6570) that defines how the source
-  attribute will be generated.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a Level 1 template compliant to
-    [RFC 6570](https://tools.ietf.org/html/rfc6570)
-- Examples:
-  - "http://blob.store/{bucket}"
-
-###### extensions
-
-- Type: `Array` of structures
-- Description: An array or CloudEvents
-  [Extension Context Attributes](../cloudevents/spec.md#extension-context-attributes)
-  that are used for this event `type`. The structure contains the following
-  attributes:
-  - `name` - the CloudEvents context attribute name used by this extension. It
-    MUST adhere to the CloudEvents context attribute naming rules
-  - `type` - the data type of the extension attribute. It MUST adhere to the
-    CloudEvents [type system](../cloudevents/spec.md#type-system)
-  - `specurl` - an attribute pointing to the specification that defines the
-    extension
-- Constraints:
-  - OPTIONAL
-  - if present, the `name` attribute in the structure is REQUIRED
-  - if present, the `type` attribute in the structure is REQUIRED
-  - if present, the `specurl` attribute in the structure is OPTIONAL
-- Examples:
-  - `{ "name": "dataref", "type": "URI-reference", "specurl": "https://github.com/cloudevents/spec/blob/main/cloudevents/extensions/dataref.md" }`
-
-#### Service Examples
-
-```json
+```
 {
-  "id": "3db60532-e839-417e-8644-e255f338776a",
-  "epoch": 1,
-  "url": "https://storage.example.com/service/storage",
-  "name": "storage",
-  "description": "Blob storage in the cloud",
-  "protocols": ["HTTP"],
-  "subscriptionurl": "https://cloud.example.com/docs/storage",
-  "events": [
-    {
-      "type": "com.example.storage.object.create",
-      "specversions": ["1.x-wip"],
-      "datacontenttype": "application/json",
-      "dataschema": "http://schemas.example.com/download/com.example.storage.object.create.json",
-      "sourcetemplate": "https://storage.example.com/service/storage/{objectID}"
-    }
-  ]
+    "id", "URI-reference",
+    "name": "STRING",
+    "self": "URI",
+    "epoch": "STRING",
+    "description": "STRING", ?
+    "tags": { "STRING": "STRING", ... } ?
+    "docsurl": "URL", ?
+
+    "format": "STRING",
+    "metadata": {
+        "attributes": {
+            "attributeName": {
+                "required": true|false,
+                "description": "STRING", ?
+                "value": JSON_OBJECT,
+                "type": "string|object|...", ?
+                "specurl": "URL" ?
+            }
+        } *
+    }, ?
+    "schema": { ... }, ?
+    "schemaurl": "URL", ?
+
+    "groups": [
+        {
+            "uri": "URI", ?
+            ... Group properties ... ?
+        }
+    ],
+
+    "endpoints": [ 
+        {
+            "uri": "URI", ?
+            ... Endpoint properties ... ?
+        }
+    ]
+}
+
+```
+
+The following Definition properties are defined:
+
+#### id
+
+- Type: URI Reference
+- Description: A unique identifier for this Definition.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty URI reference
+  - MUST be unique across all Definitions within the current Discovery Service.
+- Examples:
+  - A UUID
+  - `2345`
+
+#### name
+
+- Type: String
+- Description: The name of the Definition.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty string
+- Examples:
+  - Blob created message
+
+#### self
+
+- Type: URI
+- Description: A unique URI for this Definition. If the URI is a URL then an
+  HTTP GET to this URL MUST return the metadata for this Defintion. The URI
+  MUST be a combination of the base URI of the list of Definitions for the
+  current Discovery Service concatenated with the `id` of this Definition.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty URI
+
+- Examples:
+  - `https://example.com/discovery/definitions/2345`
+
+#### epoch
+
+- Type: Unsigned Integer
+- Description: A number representing the version number of this Definition. Each
+  time this Definition is modified this property MUST be updated with a new
+  value that is greater than the current one.
+- Constraints:
+  - REQUIRED
+  - MUST be an unsigned integer
+- Examples:
+  - `0`
+  - `1001`
+
+#### description
+
+- Type: String
+- Description: A brief summary of the purpose of the Definition.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a non-empty string
+- Examples:
+  - "A queue of the sensor generated messages"
+
+#### tags
+
+- Type: Map of name/value string pairs
+- Description: A mechanism in which additional metadata about the Definition can
+  be stored.
+
+  This property MAY be serialized as an empty map or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a map of name/value string pairs
+  - Each name MUST be a non-empty, unique within the scope of this map, string.
+    Values MAY be empty strings
+- Examples:
+  - `{ "owner": "John", "isVerified: "" }`
+
+#### format
+
+- Type: String
+- Description: Specifies the type of message associated with this Definition.
+  This value can be used to definitively identify the type of message without
+  checking the individual attributes listed under the `metadata` property.
+  See the [Message Formats](#message-formats) section for more information.
+
+  This property MAY be serialized as an empty string or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `CloudEvents/1.0`
+  - `AMQP/1.0`
+
+#### metadata
+
+- Type: Object
+- Description: Specifies the message attributes for the Definition that will
+  appear as metadata in the resulting serialized message. Note that this will
+  define the metadata of the message, not the data portion of the message.
+
+  This property MAY be serialized as an empty object or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - TBD
+
+#### schema
+
+- Type: Object
+- Description: An in-line definition of the schema of the message's data.
+
+  This property MAY be serialized as an empty object or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - MUST NOT be present if `schemaurl` is present
+- Examples:
+  - TBD
+
+#### schemaurl
+
+- Type: URL
+- Description: A URL to the schema of the message's data.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a non-empty URL
+  - MUST NOT be present if `schema` is present
+- Examples:
+  - `https://example.com/schema/...`
+
+#### groups
+
+- Type: Array
+- Description: A set of Definition Groups that this Definition is part of.
+  Each Group MAY be a full representation of the Group or MAY be a
+  [reference](#references) to a Group defined elsewhere. If it is a reference
+  then it MAY be to a Group defined outside of the current Discovery Service
+  instance.
+
+  NOTE: do we need to place any restrictions on this list to avoid recursion?
+
+  NOTE: it really feels like this SHOULD either be removed or just a ref
+
+  This property MAY be serialized as an empty array or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - if present, the same Group, as identified by its `id` or `uri`,
+    MUST NOT appear more than once within this property.
+- Examples:
+  - `[ { ...definition properties... }, { "uri", "https://example.com/discovery/defs/8765", "name": "Blob created" } ]`
+
+#### endpoints
+
+- Type: Array
+- Description: A set of Endpoints that this Definition is supported by.
+  Each Endpoint MAY be a full representation of the Endpoint or MAY be a
+  [reference](#references) to a Endpoint defined elsewhere. If it is a reference
+  then it MAY be to a Endpoint defined outside of the current Discovery Service
+  instance.
+
+  NOTE: do we need to place any restrictions on this list to avoid recursion?
+
+  NOTE: it really feels like this SHOULD either be removed or just a ref
+
+  This property MAY be serialized as an empty array or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - if present, the same Endpoint, as identified by its `id` or `uri`,
+    MUST NOT appear more than once within this property.
+- Examples:
+  - TBD
+
+
+### Group
+
+A Group is ...
+
+```
+{
+    "id": "URI-reference",
+    "name": "STRING",
+    "self": "URI",
+    "format": "STRING",
+
+    "definitions": [
+        {
+            "uri": "URI", ?
+            ... Definition properties ... ?
+        } *
+    ],
+
+    "groups": [
+        {
+            "uri": "URI", ?
+            ... Group properties ... ?
+        } *
+    ]
 }
 ```
 
-### Endpoint Features
+The following Definition properties are defined:
 
-Each Discovery Endpoint will have its own customizations. For example,
-the list of filter attributes can vary between implementations. The following
-describes the "features" of the endpoint such that clients can determine
-which set of capabilities are available. Additional properties MAY be specified,
-however, care SHOULD be taken to avoid potential overlap with future
-specification defined properties. For example, a company specific prefix
-of `bigcompany` might be used.
+#### id
 
-#### `servicefilterattributes`
+- Type: URI Reference
+- Description: A unique identifier for this Group.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty URI reference
+  - MUST be unique across all Groups within the current Discovery Service.
+- Examples:
+  - A UUID
+  - `2345`
 
-This is an array of attributes names that the Discovery Endpoint supports
-for the purpose of filtering the query of available Services. For nested
-attributes a dot(.) notation MUST be used.
+#### name
 
-Sample attribute names:
-- `name`
-- `specversions`
-- `events.type`
+- Type: String
+- Description: The name of the Group.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty string
+- Examples:
+  - TBD
 
-Note: this property MUST NOT be empty, or missing, since all implementations
-MUST support filtering by `name`.
+#### self
 
-#### `pagination`
+- Type: URI
+- Description: A unique URI for this Group. If the URI is a URL then an
+  HTTP GET to this URL MUST return the metadata for this Group. The URI
+  MUST be a combination of the base URI of the list of Group for the
+  current Discovery Service concatenated with the `id` of this Group.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty URI
 
-This is a boolean value indicating support for the
-[Pagination](../pagination/spec.md) specification. If not specified, the
-default value is `false`.
+- Examples:
+  - TBD
 
-#### `updates`
+#### epoch
 
-This is a booleam value indicating support for updates to the Services within
-the Discovery endpoint. This can be used to determine whether support, in
-general, is supported and a value of `true` does not guarantee that all
-users have access or that all update operations will succeed. If not specified,
-the default value is `false`..
+- Type: Unsigned Integer
+- Description: A number representing the version number of this Group. Each
+  time this Group is modified this property MUST be updated with a new
+  value that is greater than the current one.
+- Constraints:
+  - REQUIRED
+  - MUST be an unsigned integer
+- Examples:
+  - `0`
+  - `1001`
+
+#### description
+
+- Type: String
+- Description: A brief summary of the purpose of the Group.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a non-empty string
+- Examples:
+  - TBD
+
+#### tags
+
+- Type: Map of name/value string pairs
+- Description: A mechanism in which additional metadata about the Group can
+  be stored.
+
+  This property MAY be serialized as an empty map or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a map of name/value string pairs
+  - Each name MUST be a non-empty, unique within the scope of this map, string.
+    Values MAY be empty strings
+- Examples:
+  - `{ "owner": "John", "isVerified: "" }`
+
+#### format
+
+- Type: String
+- Description: Specifies the `format` value of the Definitions associated with
+  this Group. All Definitions associated with this Group MUST have a `format`
+  value that matches this property's value.
+
+  This property MAY be serialized as an empty string or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `CloudEvents/1.0`
+  - `AMQP/1.0`
+
+#### definitions
+
+- Type: Array
+- Description: A set of Message Definitions supported by this Group. Each
+  Definition MAY be a full representation of the Definition or MAY be a
+  [reference](#references) to a Definition defined elsewhere. If it is a
+  reference then it MAY be to a Definition defined outside of the current
+  Discovery Service instance.
+
+  This property MAY be serialized as an empty array or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - if present, the same Definition, as identified by its `id` or `uri`,
+    MUST NOT appear more than once within this property.
+- Examples:
+  - `[ { ...definition properties... }, { "uri", "https://example.com/discovery/defs/8765", "name": "Blob created" } ]`
+
+#### groups
+
+- Type: Array
+- Description: A set of neted Definition Groups supported by this Group. Each
+  Group MAY be a full representation of the Group or MAY be a
+  [reference](#references) to a Group defined elsewhere. If it is a reference
+  then it MAY be to a Group defined outside of the current Discovery Service
+  instance.
+
+  This property MAY be serialized as an empty array or MAY excluded from the
+  serialization entirely if there is no value.
+- Constraints:
+  - OPTIONAL
+  - if present, the same Group, as identified by its `id` or `uri`, MUST NOT
+    appear more than once within this property.
+- Examples:
+  - `[ { ...group properties... }, { "uri": "https://example.com/discovery/group/987", "name", "John's blob store messages" } ]`
+
+
+## Serializations
+
+Serializations are REQUIRED to talk about whether empty properties MAY
+appear in the serialization or whether they MUST be excluded entirely.
+
+...
+
+## Usage Values
+
+subscriber | consumer | producer
+...
+
+## Message Formats
+
+CloudEvents/1.0
+...
+
 
 ## API Specification
-
-The endpoints defined by this specification are broken into two categories:
-- Features APIs - used to obtains the features of the Discovery Endpoint
-- Discovery APIs - used to find Services
-- Management APIs - used to manage the Services within a Discovery Endpoint
 
 The relative paths specified below are NOT REQUIRED to be at the root of
 the `fpath` (per RFC1738). However, they are REQUIRED to match the end of it.
 For example, the following are valid URLs/paths:
 
 ```
-https://example.com/services
-https://example.com/myAggregator/services
+https://example.com/
+https://example.com/endpoints
+https://example.com/myAggregator/endpoints
 ```
 
-If a Discovery Endpoint can perform authorization checks to determine
-which client can see which Service, and the requesting client is not allowed
-access to a particular Service, then the Discovery Endpoint MUST respond
-as if that Service does not exist. For example, it would be excluded from
-any array of Services returned and it would result in a `404 Not Found`
-error for a request to that Service directly.
+If a Discovery Service can perform authorization checks to determine
+which client can see which resource, and the requesting client is not allowed
+access to a particular resource, then the Discovery Service MUST respond
+as if that resource does not exist. For example, it would be excluded from
+any array of Endpoints returned and it would result in a `404 Not Found`
+error for a request to that Endpoints directly.
 
 All APIs MUST support JSON encoding, which means that HTTP requests
 including an HTTP `Content-Type` Header of `application/json` and body in that
@@ -640,90 +759,59 @@ format MUST be supported. Likewise requests with `Accept` header of
 
 Unknown query parameters on the APIs MUST be ignored.
 
-### Features APIs
+Any resource previously returned to a client that does not appear in a
+subsequent query can be assumed to be no longer available in the scope of the
+query specified. In the unfiltered query case this means the resource has been
+deleted. In the filtered case it is not possible to know if the resource has
+been deleted or if the filters no longer apply to that resource, and therefore
+it can not be assumed to be deleted.
 
-All of the API endpoints specified in this section MUST be supported by
-compliant Discovery Endpoint implementations.
+### Filtering
 
-#### `GET /features`
-
-This MUST return the set of features supported by the implementation.
-The result of this query SHOULD take into account the specific user issuing
-the query, if an authentication scheme is being used.
-
-The result MUST be a JSON object of the following form:
-```
-{
-  "servicefilterattributes": [ "name", ... ],
-  "pagination": true,
-  "update": true
-}
-```
-
-The following additional constraints apply:
-- The feature names are case sensitive.
-- The `servicefilterattributes` property MUST be present, and MUST have at
-  least the `name` attribute in its list. The filter attribute names are case
-  sensitive. See the [`/services` API](#get-services) for more information
-  about the format of nested attribute names.
-- The `pagination` attribute is OPTIONAL with an implied default value of
-  `false`.
-- The `update` attribute it OPTIONAL with an implied default value of `false`.
-
-### Discovery APIs
-
-All of the API endpoints specified in this section MUST be supported by
-compliant Discovery Endpoint implementations.
-
-#### `GET /services`
-
-This MUST return an array of zero or more Services. The array MUST contain the
-latest version of all Services available via this Discovery Enpoint.
-
-The collection of services MAY be filtered by supplying one or more
-[service attributes](#service-attributes) under the `filter` query parameter.
-The format for the `filter` query parameter MUST be:
+In the APIs where an array of resources are returned filtering MAY be used
+to reduce the result set. To specify a filter, the `filter` query parameter
+MUST be used. The format for the `filter` query parameter MUST be:
 
 ```
 ?filter=ATTRIBUTE[=VALUE]
 ```
 
-Nested attribute names MUST be specified by using a dot (`.`) as the
-nesting operator. For example: `events.type` references the `type`
-attribute under the `events` attribute.
-
+Nested attribute names MUST be specified by using a dot (`.`) as the nesting
+operator. For example: `config.protocol` references the `protocol` attribute
+under the top-level `config` attribute.
 
 The following rules constrain the filter processing:
 - The `=VALUE` portion is OPTIONAL and if not present then the implied
-  meaning is that the filter MUST only match Services that contain the
-  specified attribute with a non-empty-string value.
+  meaning is that the filter MUST only match resources that contain the
+  specified attribute with a non-empty value. This means a non-zero length
+  strings or non-zero valued numerics.
 - a `VALUE` of "" (empty string) is valid and a filter expression of
-  `?filter=ATTRIBUTE=` MUST only match Services that contain the specified
+  `?filter=ATTRIBUTE=` MUST only match resources that contain the specified
   attribute with an empty string value. Note that an attribute with no
   value (or `null` depending on the data store used) MUST be treated the
   same as an attribute with an empty string (`""`) for the purpose of this
   filter feature.
 - when `VALUE` is a non-empty string, then the filter expression MUST only
-  match Services that contain the specified attribute with `VALUE` in any
+  match resources that contain the specified attribute with `VALUE` in any
   part of its value.
 - Matching of attribute names MUST be case sensitive.
 - Matching of attribute values MUST be case insensitive.
 - If there are mulitple filter expressions, they MUST be specified as separate
   `filter` query parameters. When there are multiple filters, the resulting
-  set of Services MUST only include ones that match all of the filters
+  set of resources MUST only include ones that match all of the filters
   specified. When multiple nested attribute names are used, each nested
   attribute MUST be treated independently and the nested attributes do not
   need to be present in the same nested scope. See the sample filters below.
 - Requests with unsupported filter attributes, MUST be rejected with a
-  `400 Bad Request` response. Endpoints SHOULD return an error message that
-  indicates which filter attributes were not supported.
+  `400 Bad Request` response. Implementations SHOULD return an error message
+  that indicates which filter attributes were not supported.
 
-Discovery endpoints MUST support filtering by the following attributes:
+Discovery Services MUST support filtering by the following attributes:
 
 - `name`
+- `id`
 
-Other attribute MAY be supported and SHOULD be included in the Features API
-output.
+Other attribute MAY be supported.
 
 Note: an empty result set is not an error and a `200 OK` with a zero sized
 array MUST be returned in those cases.
@@ -731,21 +819,65 @@ array MUST be returned in those cases.
 Some sample filter expressions:
 | Expression | Results |
 | :--- | :--- |
-| ?filter=description | All Services that have a non-empty string value for `description` |
-| ?filter=description= | All Services that have no value for `description`. Note: either `null` or `""` is a match |
-| ?filter=description=test&filter=name=mine | All Services that have a `description` containing the string `test` (in any case), and a `name` containing the string `mine` (in any case) |
-| ?filter=description=test,name=mine | All Services that have a `description` with the string `test,name=mine` (in any case) as part of its value |
-| ?filter=events.type=abc&filter=events.description=mine | All Services that have an `events.type` containing the string `abc` (in any case) and an `events.description` containing `mine` (in any case) but these two attribute do not need to be part of the same `event` definition |
+| ?filter=description | All resources that have a non-empty string value for `description` |
+| ?filter=description= | All resources that have no value for `description`. Note: either `null` or `""` is a match |
+| ?filter=description=test&filter=name=mine | All resources that have a `description` containing the string `test` (in any case), and a `name` containing the string `mine` (in any case) |
+| ?filter=description=test,name=mine | All resources that have a `description` with the string `test,name=mine` (in any case) as part of its value |
+| ?filter=events.type=abc&filter=events.description=mine | All resources that have an `events.type` containing the string `abc` (in any case) and an `events.description` containing `mine` (in any case) but these two attribute do not need to be part of the same `event` definition |
 
 
-Any Service previously returned to a client that does not appear in this
-result can be assumed to be no longer available in the scope of the query
-specified. In the unfiltered query case this means the Service has been
-deleted. In the filtered case it is not possible to know if the Service has
-been deleted or if the filters no longer apply to that Service, and therefore
-it can not be assumed to be deleted.
+### Pagination
 
-In the case of `200 OK`, the response format MUST be a JSON array of Services
+...
+
+### Discovery APIs
+
+All of the following APIs specified below MUST be supported by compliant
+Discovery Service implementations.
+
+#### `GET /`
+
+This MUST return an object that matches the following format:
+```
+{
+    "specversion": "STRING",
+    "endpoints": [ ENDPOINT, ... ] ?
+    "groups": [ GROUP, ... ] ?
+    "definitions": [ DEFINITION, ... ] ?
+}
+```
+
+Where:
+- `specversion` is the version of the Discovery Service specification that
+  is supported.
+- `endpoints` is an array of zero or more Endpoint resources
+- `groups` is an array of zero or more Group resources
+- `definitions` is an array of zero or more Defintion resources
+
+If any of the above arrays are empty then that property MAY be omitted from
+the output.
+
+Each nested resource (e.g. Endpoints, Groups or Definitions) MAY be in-lined
+or MAY be a full representation of the resource.
+
+Without any filtering specified, this MUST return all of the nested resources
+available from the Discovery Service. Any resource that appears under another
+resource MUST also be included as a stand-alone resource in its respective
+array. For example, a Definition that appears within a Group will also appear
+in the `definitions` array.
+
+When filtering is specified then only the resources related to the requested
+resources MUST be returned. For example, a filter that results in just one
+Endpoint being returned would only include Groups and Definitions that are
+related to that Endpoint.
+
+#### `GET /endpoints`
+#### `GET /definitions`
+#### `GET /groups`
+
+This MUST return an array of zero or more instances of the requested resource
+
+In the case of `200 OK`, the response format MUST be a JSON array of resources
 that adheres to the following:
 
 ```
@@ -754,32 +886,25 @@ Content-Type: application/json
 
 [
   {
-    "id": "{id}",
-    "epoch": {int},
-    "url": "{url}",
-    "name": "{name}",
-    ... remainder of Service attributes ...
-  }
-  ...
+    "id": "URI-reference",
+    "name": "STRING", 
+    "self": "URI",
+    "epoch": UINT,
+    ... remainder of resource's attributes ...
+  } *
 ]
 ```
 
-Implementations MAY use the [pagination](../pagination/spec.md) specification
-if the number of Services returned is large. Clients SHOULD be
-prepared to support paginated responses.
+#### `GET /endpoints/{id}`
+#### `GET /definitions/{id}`
+#### `GET /groups/{id}`
 
-Implementations MAY choose to support other filter mechanism, in particular
-to support a richer set of queries. Support for those SHOULD be expressed
-via the Features API.
-
-#### `GET /services/{id}`
-
-This MUST return the latest version of the Service with the given `{id}` if it
-exists.
+This MUST return the latest version of the resource with the given `{id}` if
+it exists.
 
 The following responses are defined by this specification:
-- `200 OK` and the Service representation in the HTTP response body.
-- `404 Not Found` if the Service does not exist.
+- `200 OK` and the resource representation in the HTTP response body.
+- `404 Not Found` if the resource does not exist.
 
 Other responses are allowed, but not defined by this specification.
 
@@ -790,342 +915,14 @@ In the case of `200 OK`, the response format MUST adhere to the following:
 Content-Type: application/json
 
 {
-  "id": "{id}",
-  "epoch": {int},
-  "url": "{url}",
-  "name": "{name}",
-  ... remainder of Service attributes ...
-}
-```
-
-### Management APIs
-
-All of the API endpoints specified in this section MUST be supported by
-compliant Discovery Endpoint implementations that support being managed.
-
-#### Asynchronous Processing
-
-For any of the following API endpoints, if the Discovery Endpoint chooses
-to process the incoming request asynchronous then the following rules apply:
-- A `202 Accepted` MUST be returned to the request. This indicates that the
-  request has been accepted but not processed yet.
-- The `202 Accepted` response MUST include a `Location` HTTP Header that
-  points to a "status endpoint", which can be used to determine the status
-  of the original request. The HTTP response body MAY be empty.
-- The `202 Accepted` response MAY include a `Retry-After` HTTP Header
-  indicating the time, in seconds, that the sender SHOULD wait before
-  querying the status endpoint.
-
-A `GET` MAY be sent to the status endpoint to determine the status of the
-original request. The following responses are defined:
-
-- `200 OK` indicates that the original request was successfully processed.
-  - Unless otherwise noted for a specific operation, the response MUST also
-    include the HTTP Headers and HTTP response body that is defined for the
-    original operation as if the response were sent synchronously.
-- `202 Accepted` indicates that the original request is still being processed.
-  The response body MAY be empty.
-- `406 Not Acceptable` to indicate that the original request failed to be
-  processed correctly. The HTTP response body SHOULD include additional
-  information as to why it failed.
-
-Other responses are allowed, but not defined by this specification, however
-they MUST be related to the `GET` itself and not the original request.
-
-How long a Discovery Endpoint supports requests to the status endpoint
-is an implementation choice, however, it MUST be available immediately
-upon return of the `202 Accepted` from the original request.
-
-#### `POST /services`
-
-This MUST update the collection of Services in the Discovery Endpoint to
-contain all Services in the request or fail. The body of the request message
-MUST contain an array of zero or more Service entries.
-
-The following rules apply to processing the Services specified in the request:
-- any error processing the request MUST result in the request having no
-  effect on the Discovery Endpoint.
-- a Service (as identified by its `id`) MUST NOT appear more than once in the
-  request.
-- any existing Service (as identified by its `id`) MUST be completely
-  replaced by the Service definition in the request, except as noted below.
-  This means that any missing property in the incoming request MUST be
-  treated as a request to delete the property from the existing Service
-  definition.
-- if an incoming Service does not contain an `id` then the Discovery Endpoint
-  MUST assign an appropriate value. The value MUST be globally unique.
-- if there is no existing Service with the given `id` then a new Service MUST
-  be created with that `id`.
-- if an incoming Service has an `epoch` value then the request MUST fail if
-  that value is not greater than the current Service's `epoch` value.
-- if an incoming Service does not have an `epoch` value then the Service's
-  `epoch` value MUST be set to a valid value of the Discovery Endpoint's
-  choosing. This means that if there is an existing Service with the same
-  `id` then the value MUST be set to a value greater than the current value.
-- aside from `id` and `epoch`, unless there is an out of band agreement,
-  all mandatory attributes MUST be present in the request, and a Discovery
-  Endpoint MUST reject requests that are missing such attributes.
-
-There is no requirement that the incoming Services be processed in the
-order in which they appear. Constraints apply only to the result of the
-entire request. For example, if a Service with a name of `dog` exists and
-the incoming request is creating a new Service called `dog` as well as
-renaming the existing Service to `cat` then the request is expected to succeed
-even if it would cause two Services to temporarily have the same name.
-
-Upon successfully processing the request, the HTTP response body MUST be
-an array of the Services that were created or updated as a result of
-processing the request. The order of the array MUST match the order of the
-incoming Service array. Each Service in the response SHOULD include the
-current value for all attributes, even if the Discovery Endpoint added or
-modified some values during processing of the request.
-
-The following responses are defined by this specification:
-- `200 OK` if all the specified Services were processed successfully.
-- `400 Bad Request` if the first error encountered is a constraint failure
-- `409 Conflict` if the first error encountered is that a given `epoch` was
-  invalid. The response body SHOULD include information about which Service
-  caused the error.
-
-Other responses are allowed, but not defined by this specification.
-
-The format of the HTTP request MUST adhere to the following:
-```
-Content-Type: application/json
-
-[
-  {
-    "name": "{name}",
-    ... remainder of Service attributes ...
+    "id": "URI-reference",
+    "name": "STRING", 
+    "self": "URI",
+    "epoch": UINT,
+    ... remainder of resource's attributes ...
   }
-  ...
-]
 ```
 
-The format of the `200 OK` HTTP response MUST adhere to the following:
-```
-200 OK
-Content-Type: application/json
-
-[
-  {
-    "id": "{id}",
-    "epoch": "{epoch}",
-    "url": "{url}",
-    "name": "{name},
-    ... remainder of Service attributes ...
-  },
-  ...
-]
-```
-
-#### `DELETE /services`
-
-This MUST delete all of the Services in the Discovery Endpoint that are
-contained in the request. If any of those Services cannot be deleted for any
-reason then the entire request MUST fail with no effect.
-
-If any of the Services in the incoming request are missing an `id` then the
-entire request MUST fail. If no Service can be found that corresponds to a
-specified `id`, the endpoint MUST behave as though the Service was deleted.
-An `epoch` value MAY be omitted in the incoming Service.  If present and the
-request value is not greater than existing value, then the request MUST fail.
-
-If other service attributes are included in the request, those SHOULD be
-ignored for the purposes of processing the request.
-
-There is no requirement that the Services in the request are processed in
-the order in which they appear.
-
-Upon successfully processing the request, the HTTP response body MUST be
-an array of Services that match the order of the array of Services specified
-in the request. The Services in the response MUST include at least the `id`
-attribute and SHOULD include the remaining Service attributes as they existed
-immediately prior to the Service being deleted, if possible. If the Service
-was deleted prior the processing of this request the Service might not
-be available to be returned.
-
-If the response Services include `epoch` values then they MUST be the values
-present in each Service at the time they were deleted.
-
-The following responses are defined by this specification:
-- `200 OK` if the request was successfully processed.
-- `409 Conflict` if the first error encountered is that a given `epoch` was
-  invalid.  The response body SHOULD include information about which Service
-  caused the error.
-
-The format of the HTTP request MUST adhere to the following:
-```
-Content-Type: application/json
-
-[
-  {
-    "id": "{id}",      // REQUIRED
-    "epoch": "{epoch}" // OPTIONAL
-  },
-  ...
-]
-```
-
-The format of the `200 OK` HTTP response MUST adhere to the following:
-```
-200 OK
-Content-Type: application/json
-
-[
-  {
-    "id": "{id}",
-	"epoch": "{epoch}",
-    "url": "{url}",
-    "name": "{name}",
-    ... remainder of Service attributes ...
-  }
-  ...
-]
-```
-
-#### `PUT /services/{id}`
-
-This MUST update, or create, the Service as identified by the `id` in the URL.
-Upon successful processing of the request, any existing Service MUST be
-completely replaced by the Service definition, except where noted below.
-
-The body of the request message MUST contain a Service with an `id`
-attribute matching the `{id}` in the path.
-
-If there is no existing Service with the given `id` then a new Service MUST
-be created with that `id`.
-
-The `epoch` attribute of the Service MAY be omitted. In such cases the
-discovery endpoint MUST assign a value that is greater than the existing
-`epoch` value for the Service.
-
-If an `epoch` is given in the request and it is not greater than the current
-Service's value, then the request MUST fail.
-
-Aside from `id` and `epoch`, unless there is an out of band agreement,
-all mandatory attributes MUST be present in the request, and a Discovery
-Endpoint MUST reject requests that are missing such attributes.
-
-The Discovery Endpoint MUST ignore attempts to modify read-only or immutable
-attributes - such as `url`.
-
-Upon successfully processing the request, the HTTP response body MUST be
-the Service resulting from the successful processing of the request.
-The response SHOULD include the current values for all attributes, even if
-the Discovery Endpoint added or modified some value during the processing
-of the request.
-
-The following responses are defined by this specification:
-- `200 OK` if specified Service was updated successfullly.
-- `400 Bad Request` if the `id` in the path and body are not the same or some
-  other constraint failure is found.
-- `409 Conflict` if the given `epoch` is not greater than the current value.
-
-Other responses are allowed, but not defined by this specification.
-
-The format of the HTTP request MUST adhere to the following:
-```
-Content-Type: application/json
-
-{
-  "url": "{url}",
-  "name": "{name}",
-  ... remainder of Service attributes ...
-}
-```
-
-The format of the `200 OK` HTTP response MUST adhere to the following:
-```
-200 OK
-Content-Type: application/json
-
-{
-  "id": "{id}",
-  "epoch": "{epoch}",
-  ... remainder of Service attributes ...
-}
-```
-
-#### `DELETE /services/{id}[?epoch={epoch}]`
-
-This MUST delete the Service as identified by the `id` in the URL. If there
-is no Service with the specified `id` then it is considered to have already
-been deleted and the request will have no change to the Discovery Endpoint.
-A missing Service is not considered an error condition.
-
-This specification does not define a body for the request message and the
-presence of a body (even with a Service definition, valid or not) MUST NOT
-result in an error.
-
-The request URL MAY include an OPTIONAL `epoch` query parameter, and if
-present and is not greater than the Service's current `epoch` value, then the
-request MUST fail.
-
-Upon successfully processing the request, the HTTP response body MUST be
-a Service definition that includes at least the `id` attribute and SHOULD
-include the remaining Service attributes as they existed immediately prior
-to the Service being deleted, if possible. If the Service was deleted prior
-to the processing of this request the Service value might not be available
-to be returned.
-
-If the response Service include an `epoch` value then it MUST be greater
-than the Service's value prior to the delete operation.
-
-The following responses are defined by this specification:
-- `200 OK` if the request was successfully processed.
-- `409 Conflict` if the given `epoch` was not greater than the current value.
-
-Other responses are allowed, but not defined by this specification.
-
-The format of the `200 OK` HTTP response MUST adhere to the following:
-```
-200 OK
-Content-Type: application/json
-
-{
-  "url": "{url}",
-  "name": "{name}",
-  ... remainder of Service attributes ...
-}
-```
-
-### Discovery Endpoint Service Change Events
-
-The discovery service MAY include itself as a Service entity that is
-discoverable.
-
-The events produced by this "self" Service describe the management requests
-made to the discovery service. The events produced MUST include the operation
-and path to which the management request was made as well as the request body
-and the response that was given.
-
-Receiving the complete set of these will allow a downstream mirror to exactly
-materialize a consistent Service collection. A downstream mirror MAY alter
-records as appropriate for its circumstances.
-
-Any Discovery Endpoint Service entities MUST adhere to the following:
-```json
-{
-  "id": "{id}",
-  ... other service attributes ...
-  "events": [
-    {
-      "specversions": ["1.x-wip"],
-      "type": "io.cloudevents.discovery.change",
-      "dataschemacontent": { // see ../discovery/discovery.yaml#/components/schemas/change
-        "type": "object",
-        "properties": {
-          "operation": "{operation}", // POST|DELETE
-          "path": "{path}",           // /services[/{id}]
-          "request": {request},       // as per path specification
-          "response": {response}      // as per path specification
-        }
-      }
-    }
-  ]
-}
-```
 
 ### OpenAPI
 
@@ -1133,7 +930,7 @@ See [Discovery Endpoint OpenAPI Specification](../discovery/discovery.yaml).
 
 ## Privacy and Security
 
-The CloudDiscovery API does not place restrictions on implementation's choice of
+This specification does not place restrictions on implementation's choice of
 an authentication and authorization mechanism. While the list of entities
 returned from each query MAY differ, the format of the output MUST adhere to
 this specification.
