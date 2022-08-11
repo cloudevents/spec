@@ -11,6 +11,9 @@ mechanisms by which interactions with those Endpoints can be established.
 - [Overview](#overview)
 - [Notations and Terminology](#notations-and-terminology)
 - [Resource Model](#resource-model)
+  - [Endpoint](#endpoint)
+  - [Definition](#definition)
+  - [Group](#group)
 - [Serializations](#serializations)
 - [Usage Values](#usage-values)
 - [Message Formats](#message-formats)
@@ -27,9 +30,9 @@ might vary.
 This specification defines a set of APIs, and related documents, that allow
 for the discovery of these Endpoints and their related metadata. This
 information can then be used to perform actions such as:
-- subscribing for Messages
-- pushing or pulling of Messages with the Endpoint
-- generating of Message validation code based on the schema associated with
+- Subscribing for Messages
+- Pushing or Pulling of Messages with the Endpoint
+- Generating of Message validation code based on the schema associated with
   a Message Definition
 
 While the specification is written in term of "messaging", it applies equally
@@ -83,7 +86,7 @@ The following pseudo JSON shows the basic defintion of an Endpoint:
     "epoch": UINT,
     "description": "STRING", ?
     "tags": { "STRING": "STRING", ... } ?
-    "docsurl": "URL", ?
+    "docs": "URL", ?
     "deprecated": { ... }, ?
     "channel", "STRING", ?
     "authscope": "URI", ?
@@ -106,11 +109,14 @@ The following Endpoint properties are defined:
 
 #### id
 
-- Type: URI Reference
+- Type: String
 - Description: A unique identifier for this Endpoint.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty URI reference
+  - MUST be a non-empty String
+  - MUST conform with
+    [RFC3986/3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3)
+    `segment-nz-nc` syntax
   - MUST be unique across all Endpoints within the authorization scope
     defined by the `authscope` property. If `authscope` has no value then
     the `id` MUST be unique within the current Discovery Service.
@@ -131,10 +137,9 @@ The following Endpoint properties are defined:
 #### self
 
 - Type: URI
-- Description: A unique URI for this Endpoint. If the URI is a URL then an
-  HTTP GET to this URL MUST return the metadata for this Endpoint. The URI
-  MUST be a combination of the base URI of the list of Endpoints for the
-  current Discovery Service concatenated with the `id` of this Endpoint.
+- Description: A unique URI for this Endpoint.  The URI MUST be a combination
+  of the base URI of the list of Endpoints for the current Discovery Service
+  concatenated with the `id` of this Endpoint.
 - Constraints:
   - REQUIRED
   - MUST be a non-empty URI
@@ -158,7 +163,7 @@ The following Endpoint properties are defined:
 #### description
 
 - Type: String
-- Description: A brief summary of the purpose of the Endpoint.
+- Description: A summary of the purpose of the Endpoint.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a non-empty string
@@ -171,37 +176,38 @@ The following Endpoint properties are defined:
 - Description: A mechanism in which additional metadata about the Endpoint can
   be stored.
 
-  This property MAY be serialized as an empty map or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  map or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a map of name/value string pairs
   - Each name MUST be a non-empty, unique within the scope of this map, string.
     Values MAY be empty strings
 - Examples:
-  - `{ "owner": "John", "isVerified: "" }`
+  - `{ "owner": "John", "verified": "" }`
 
-#### docsurl
+#### docs
 
-- Type: URL
-- Description: A URL to additional documentation about this Endpoint. This
-  specification does not define any constraints on the data returned from this
-  URL.
+- Type: URI-reference
+- Description: A URI-reference to additional documentation about this Endpoint.
+  This specification does not define any constraints on the data returned from
+  this URI-reference.
 - Constraints:
   - OPTIONAL
-  - if present, MUST be a non-empty URL
+  - if present, MUST be a non-empty URI-reference
+  - if present with a schema, it MUST use either `http` or `https`
 - Examples:
   - `https://example.com/docs/myQueue`
 
 #### deprecated
 
 - Type: Object container the following properties:
-  - effectivetime<br>
+  - effective<br>
     An OPTIONAL property indicating the time when the Endpoint entered, or will
     enter, a deprecated state. The date MAY be in the past or future.
     If present, this MUST be an [RFC3339][rfc3339] timestamp.
 
-  - removaltime<br>
+  - removal<br>
     An OPTIONAL property indicating the time when the Endpoint MAY be removed.
     The Endpoint MUST NOT be deleted before this time. If this property is not
     present then client can not make any assumption as to when the Endpoint
@@ -215,7 +221,7 @@ The following Endpoint properties are defined:
     client is expected to investigate the Endpoint to determine if it is
     appropriate.
 
-  - docsurl<br>
+  - docs<br>
     An OPTIONAL property specifying the URL to additional information about
     the deprecation of the Endpoint. This specification does not mandate any
     particular format or information, however some possibilities include:
@@ -252,8 +258,8 @@ The following Endpoint properties are defined:
   MUST have some relationship. This specification does not define that
   relationship or the specific values used in this property. 
 
-  This property MAY be serialized as an empty string or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  string or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a string
@@ -291,8 +297,8 @@ The following Endpoint properties are defined:
   interactions with this Endpoint. Each `usage` value MUST define the set of
   `config` properties that are valid.
 
-  This property MAY be serialized as an empty object or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  object or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
 - Examples:
@@ -307,8 +313,8 @@ The following Endpoint properties are defined:
   then it MAY be to a Group defined outside of the current Discovery Service
   instance.
 
-  This property MAY be serialized as an empty array or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, the same Group, as identified by its `id` or `uri`, MUST NOT
@@ -325,8 +331,8 @@ The following Endpoint properties are defined:
   reference then it MAY be to a Definition defined outside of the current
   Discovery Service instance.
 
-  This property MAY be serialized as an empty array or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, the same Definition, as identified by its `id` or `uri`,
@@ -349,7 +355,7 @@ Talk about how each has metadata and data
     "epoch": "STRING",
     "description": "STRING", ?
     "tags": { "STRING": "STRING", ... } ?
-    "docsurl": "URL", ?
+    "docs": "URL", ?
 
     "format": "STRING",
     "metadata": {
@@ -387,12 +393,15 @@ The following Definition properties are defined:
 
 #### id
 
-- Type: URI Reference
+- Type: String
 - Description: A unique identifier for this Definition.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty URI reference
-  - MUST be unique across all Definitions within the current Discovery Service.
+  - MUST be a non-empty String
+  - MUST conform with
+    [RFC3986/3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3)
+    `segment-nz-nc` syntax
+  - MUST be unique across all Definitions within the current Discovery Service
 - Examples:
   - A UUID
   - `2345`
@@ -437,7 +446,7 @@ The following Definition properties are defined:
 #### description
 
 - Type: String
-- Description: A brief summary of the purpose of the Definition.
+- Description: A summary of the purpose of the Definition.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a non-empty string
@@ -450,15 +459,15 @@ The following Definition properties are defined:
 - Description: A mechanism in which additional metadata about the Definition can
   be stored.
 
-  This property MAY be serialized as an empty map or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  map or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a map of name/value string pairs
   - Each name MUST be a non-empty, unique within the scope of this map, string.
     Values MAY be empty strings
 - Examples:
-  - `{ "owner": "John", "isVerified: "" }`
+  - `{ "owner": "John", "verified": "" }`
 
 #### format
 
@@ -468,8 +477,8 @@ The following Definition properties are defined:
   checking the individual attributes listed under the `metadata` property.
   See the [Message Formats](#message-formats) section for more information.
 
-  This property MAY be serialized as an empty string or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  string or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
 - Examples:
@@ -483,8 +492,8 @@ The following Definition properties are defined:
   appear as metadata in the resulting serialized message. Note that this will
   define the metadata of the message, not the data portion of the message.
 
-  This property MAY be serialized as an empty object or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  object or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
 - Examples:
@@ -495,8 +504,8 @@ The following Definition properties are defined:
 - Type: Object
 - Description: An in-line definition of the schema of the message's data.
 
-  This property MAY be serialized as an empty object or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  object or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - MUST NOT be present if `schemaurl` is present
@@ -527,8 +536,8 @@ The following Definition properties are defined:
 
   NOTE: it really feels like this SHOULD either be removed or just a ref
 
-  This property MAY be serialized as an empty array or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, the same Group, as identified by its `id` or `uri`,
@@ -549,8 +558,8 @@ The following Definition properties are defined:
 
   NOTE: it really feels like this SHOULD either be removed or just a ref
 
-  This property MAY be serialized as an empty array or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, the same Endpoint, as identified by its `id` or `uri`,
@@ -590,12 +599,15 @@ The following Definition properties are defined:
 
 #### id
 
-- Type: URI Reference
+- Type: String
 - Description: A unique identifier for this Group.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty URI reference
-  - MUST be unique across all Groups within the current Discovery Service.
+  - MUST be a non-empty String
+  - MUST conform with
+    [RFC3986/3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3)
+    `segment-nz-nc` syntax
+  - MUST be unique across all Groups within the current Discovery Service
 - Examples:
   - A UUID
   - `2345`
@@ -640,7 +652,7 @@ The following Definition properties are defined:
 #### description
 
 - Type: String
-- Description: A brief summary of the purpose of the Group.
+- Description: A summary of the purpose of the Group.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a non-empty string
@@ -653,15 +665,15 @@ The following Definition properties are defined:
 - Description: A mechanism in which additional metadata about the Group can
   be stored.
 
-  This property MAY be serialized as an empty map or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  map or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a map of name/value string pairs
   - Each name MUST be a non-empty, unique within the scope of this map, string.
     Values MAY be empty strings
 - Examples:
-  - `{ "owner": "John", "isVerified: "" }`
+  - `{ "owner": "John", "verified": "" }`
 
 #### format
 
@@ -670,8 +682,8 @@ The following Definition properties are defined:
   this Group. All Definitions associated with this Group MUST have a `format`
   value that matches this property's value.
 
-  This property MAY be serialized as an empty string or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  string or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
 - Examples:
@@ -687,8 +699,8 @@ The following Definition properties are defined:
   reference then it MAY be to a Definition defined outside of the current
   Discovery Service instance.
 
-  This property MAY be serialized as an empty array or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, the same Definition, as identified by its `id` or `uri`,
@@ -705,8 +717,8 @@ The following Definition properties are defined:
   then it MAY be to a Group defined outside of the current Discovery Service
   instance.
 
-  This property MAY be serialized as an empty array or MAY excluded from the
-  serialization entirely if there is no value.
+  When this property has no value it MUST either be serialized as an empty
+  array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
   - if present, the same Group, as identified by its `id` or `uri`, MUST NOT
