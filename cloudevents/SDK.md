@@ -141,3 +141,64 @@ Each SDK must provide examples using at least HTTP transport of:
 - Composing an Event.
 - Encoding and sending a composed Event.
 - Receiving and decoding an Event.
+
+## Feature Support
+
+Each SDK must update the following "support table" periodically to ensure
+they accurately the status of each SDK's support for the stated features.
+
+<!--
+Do these commands in vi with the cursor after these comments.
+
+Easiest to edit table by first doing this:
+:g/^|/s/ :heavy_check_mark: / :y: /g
+and making the window wide enough that lines don't wrap. Then it should look nice.
+
+Undo it when done:
+:g/^|/s/ :y: / :heavy_check_mark: /g
+-->
+
+| Feature                                                                                                                                       | C#  | Go  | Java | JS  | PHP | PS  | Python | Ruby | Rust |
+| :------                                                                                                                                       | :-: | :-: | :--: | :-: | :-: | :-: | :----: | :--: | :--: |
+| **[v1.0](https://github.com/cloudevents/spec/tree/v1.0)** |
+| [CloudEvents Core](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md)                                                       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:    | :heavy_check_mark:  | :heavy_check_mark:  |
+| Event Formats |
+| [Avro](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/avro-format.md)                                                    | :heavy_check_mark: |     | :x:  | :x: |     |     |        |      | :x:  |
+| [JSON](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/json-format.md)                                                    | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [Protobuf ](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/protobuf-format.md)                                           | :heavy_check_mark: |     | :heavy_check_mark:  | :x: |     |     |        |      | :x:  |
+| Bindings / Content Modes |
+| [AMQP Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/amqp-protocol-binding.md#31-binary-content-mode)           | :heavy_check_mark: |     | :heavy_check_mark:  | :x: |     |     |        |      | :x:  |
+| [AMQP Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/amqp-protocol-binding.md#32-structured-content-mode)   | :heavy_check_mark: |     | :heavy_check_mark:  | :x: |     |     |        |      | :x:  |
+| [HTTP Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/http-protocol-binding.md#31-binary-content-mode)           | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [HTTP Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/http-protocol-binding.md#32-structured-content-mode)   | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [HTTP Batch](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/http-protocol-binding.md#33-batched-content-mode)           | :heavy_check_mark: |     | :x:  | :x: |     |     |        |      | :heavy_check_mark:  |
+| [Kafka Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/kafka-protocol-binding.md#32-binary-content-mode)         | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [Kafka Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/kafka-protocol-binding.md#33-structured-content-mode) | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [MQTT v5 Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/mqtt-protocol-binding.md#31-binary-content-mode)        | :x: |     | :x:  | :heavy_check_mark: |     |     |        |      | :x:  |
+| [MQTT Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/mqtt-protocol-binding.md#32-structured-content-mode)   | :heavy_check_mark: |     | :x:  | :heavy_check_mark: |     |     |        |      | :x:  |
+| [NATS Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)                                  | :x: |     | :x:  | :x: |     |     |        |      | :heavy_check_mark:  |
+| [NATS Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)                              | :x: |     | :x:  | :x: |     |     |        |      | :heavy_check_mark:  |
+| [WebSockets Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                      | :x: |     | :x:  | :heavy_check_mark: |     |     |        |      | :x:  |
+| [WebSockets Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                  | :x: |     | :x:  | :heavy_check_mark: |     |     |        |      | :x:  |
+||
+| **[v0.3](https://github.com/cloudevents/spec/tree/v0.3)** |
+| [CloudEvents Core](https://github.com/cloudevents/spec/blob/v0.3/spec.md)                                                                     | :x: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :x: | :x: | :heavy_check_mark:    | :heavy_check_mark:  | :heavy_check_mark:  |
+| Event Formats |
+| [AMQP](https://github.com/cloudevents/spec/blob/v0.3/amqp-format.md)                                                                          | :x: |     | :x:  | :x: |     |     |        |      | :x:  |
+| [JSON](https://github.com/cloudevents/spec/blob/v0.3/json-format.md)                                                                          | :x: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [Protobuf](https://github.com/cloudevents/spec/blob/v0.3/protobuf-format.md)                                                                  | :x: |     | :heavy_check_mark:  | :x: |     |     |        |      | :x:  |
+| Bindings / Content Modes |
+| [AMQP Binary](https://github.com/cloudevents/spec/blob/v0.3/amqp-transport-binding.md#31-binary-content-mode)                                 | :x: |     | :heavy_check_mark:  | :x: |     |     |        |      | :x:  |
+| [AMQP Structured](https://github.com/cloudevents/spec/blob/v0.3/amqp-transport-binding.md#32-structured-content-mode)                         | :x: |     | :heavy_check_mark:  | :x: |     |     |        |      | :x:  |
+| [HTTP Binary](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md)                                                        | :x: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [HTTP Structured](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md)                                                    | :x: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [HTTP Batch](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md)                                                         | :x: |     | :x:  | :x: |     |     |        |      | :heavy_check_mark:  |
+| [Kafka Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/kafka-protocol-binding.md#32-binary-content-mode)         | :x: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [Kafka Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/kafka-protocol-binding.md#33-structured-content-mode) | :x: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    |      | :heavy_check_mark:  |
+| [MQTT v5 Binary](https://github.com/cloudevents/spec/blob/v0.3/mqtt-transport-binding.md)                                                     | :x: |     | :x:  | :x: |     |     |        |      | :x:  |
+| [MQTT Structured](https://github.com/cloudevents/spec/blob/v0.3/mqtt-transport-binding.md)                                                    | :x: |     | :x:  | :x: |     |     |        |      | :x:  |
+| [NATS Binary](https://github.com/cloudevents/spec/blob/v0.3/nats-transport-binding.md)                                                        | :x: |     | :x:  | :x: |     |     |        |      | :heavy_check_mark:  |
+| [NATS Structured](https://github.com/cloudevents/spec/blob/v0.3/nats-transport-binding.md)                                                    | :x: |     | :x:  | :x: |     |     |        |      | :heavy_check_mark:  |
+| [WebSockets Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                      | :x: |     | :x:  | :heavy_check_mark: |     |     |        |      | :x:  |
+| [WebSockets Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                  | :x: |     | :x:  | :heavy_check_mark: |     |     |        |      | :x:  |
+
