@@ -169,26 +169,24 @@ time of the submission or revision.
 
 ##### 3.1.3.1 AMQP Application Property Names
 
-CloudEvent attributes MUST be prefixed with either "cloudEvents_" or 
+CloudEvent attributes MUST be prefixed with either "cloudEvents_" or
 "cloudEvents:" for use in the application-properties section.
 
-The '\_' separator character SHOULD be preferred in the interest of 
-compatibility with JMS 2.0 clients and JMS message selectors where the
-':' separator is not permitted for property identifiers 
-(see section 3.8.1.1 of [JMS20]).
+The '\_' separator character SHOULD be preferred in the interest of
+compatibility with JMS 2.0 clients and JMS message selectors where the ':'
+separator is not permitted for property identifiers (see section 3.8.1.1 of
+[JMS20]).
 
-CloudEvents AMQP consumers SHOULD understand the "cloudEvents" prefix with both, 
-the '\' and the ':' separators as permitted within the constraints of the client 
-model. JMS 2.0 AMQP consumers MUST understand the '\' separator; they cannot 
-understand the ':' separator as per the cited JMS constraints.
+CloudEvents AMQP consumers SHOULD understand the "cloudEvents" prefix with both,
+the '\_' and the ':' separators as permitted within the constraints of the
+client model. JMS 2.0 AMQP consumers MUST understand the '\_' separator; they
+cannot understand the ':' separator as per the cited JMS constraints.
 
 Examples:
 
-    * `time` maps to `cloudEvents:time`
-    * `id` maps to `cloudEvents:id`
-    * `specversion` maps to `cloudEvents:specversion`
-    
-  
+    * `time` maps to `cloudEvents_time`
+    * `id` maps to `cloudEvents_id`
+    * `specversion` maps to `cloudEvents_specversion`
 
 ##### 3.1.3.2 AMQP Application Property Values
 
