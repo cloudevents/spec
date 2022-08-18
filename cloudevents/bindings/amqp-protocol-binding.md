@@ -169,14 +169,26 @@ time of the submission or revision.
 
 ##### 3.1.3.1 AMQP Application Property Names
 
-CloudEvent attributes are prefixed with "cloudEvents:" for use in the
-[application-properties][app-properties] section.
+CloudEvent attributes MUST be prefixed with either "cloudEvents_" or 
+"cloudEvents:" for use in the application-properties section.
+
+The '\_' separator character SHOULD be preferred in the interest of 
+compatibility with JMS 2.0 clients and JMS message selectors where the
+':' separator is not permitted for property identifiers 
+(see section 3.8.1.1 of [JMS20]).
+
+CloudEvents AMQP consumers SHOULD understand the "cloudEvents" prefix with both, 
+the '\' and the ':' separators as permitted within the constraints of the client 
+model. JMS 2.0 AMQP consumers MUST understand the '\' separator; they cannot 
+understand the ':' separator as per the cited JMS constraints.
 
 Examples:
 
     * `time` maps to `cloudEvents:time`
     * `id` maps to `cloudEvents:id`
     * `specversion` maps to `cloudEvents:specversion`
+    
+  
 
 ##### 3.1.3.2 AMQP Application Property Values
 
@@ -308,6 +320,7 @@ content-type: application/cloudevents+json; charset=utf-8
   Format
 - [OASIS-AMQP-1.0][oasis-amqp-1.0] OASIS Advanced Message Queuing Protocol
   (AMQP) Version 1.0
+ -[JMS20][JMS20] JSR-343 Java Message Service 2.0 
 
 [ce]: ../spec.md
 [json-format]: ../formats/json-format.md
@@ -328,3 +341,4 @@ content-type: application/cloudevents+json; charset=utf-8
 [amqp-binary]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-binary
 [amqp-string]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-string
 [amqp-timestamp]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-types-v1.0-os.html#type-timestamp
+[jms20]: https://jcp.org/aboutJava/communityprocess/final/jsr343/index.html
