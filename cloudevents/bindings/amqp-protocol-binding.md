@@ -175,7 +175,7 @@ CloudEvent attributes MUST be prefixed with either "cloudEvents_" or
 The '\_' separator character SHOULD be preferred in the interest of
 compatibility with JMS 2.0 clients and JMS message selectors where the ':'
 separator is not permitted for property identifiers (see section 3.8.1.1 of
-[JMS20]).
+[JMS2.0][JMS20]).
 
 CloudEvents AMQP consumers SHOULD understand the "cloudEvents" prefix with both,
 the '\_' and the ':' separators as permitted within the constraints of the
@@ -318,7 +318,7 @@ content-type: application/cloudevents+json; charset=utf-8
   Format
 - [OASIS-AMQP-1.0][oasis-amqp-1.0] OASIS Advanced Message Queuing Protocol
   (AMQP) Version 1.0
- -[JMS20][JMS20] JSR-343 Java Message Service 2.0 
+ -[JMS20][JMS20] JSR-343 Java Message Service 2.0
 
 [ce]: ../spec.md
 [json-format]: ../formats/json-format.md
