@@ -242,7 +242,8 @@ log, and call it manually and therewith grant access.
 
 The delivery target grants permission by issuing an HTTPS GET or POST request
 against the given URL. The HTTP GET request can be performed manually using a
-browser client.
+browser client. If the WebHook-Request-Callback header is used, the callback 
+target MUST support both methods.
 
 The delivery target MAY include the `WebHook-Allowed-Rate` response in the
 callback.
