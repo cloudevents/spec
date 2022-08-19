@@ -184,8 +184,9 @@ for file in ${mdFiles}; do
 /g' | \
     sed -n -e 's/^.*\[.*\[\(.*\)\]$/\1/p' > "${tmp}links" || true
 
+  # Assume bookmarks are case insensitive
   cat ${tmp}links | while read bk ; do
-    grep -q "^ *\\[${bk}\\]: " ${tmp}bks ||
+    grep -iq "^ *\\[${bk}\\]: " ${tmp}bks ||
       echo "$file: Can't find bookmark '[$bk]'" | \
         tee -a ${tmp}3
   done
