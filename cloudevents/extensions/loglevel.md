@@ -11,7 +11,9 @@
   - OPTIONAL
   - if present, MUST be a non-empty string
   - SHOULD be lowercase
-  - RECOMMENDED values include `info`, `error`, `warning`, `verbose` and `debug`, but
+  - RECOMMENDED values include `info`, `error`, `warning`, `verbose`, `debug` and
+   `verbose`
+  , but
    others MAY be used
   - SHOULD have a many-to-one relationship with a distinct `loglevelnum` in the scope of
    the `source`
