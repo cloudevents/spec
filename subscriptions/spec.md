@@ -340,7 +340,7 @@ Each subscription is represented by an object that has the following properties:
 - Description: A set of key/value pairs that modify the configuration of
   of the subscription related to the event generation process. While this
   specification places no constraints on the data type of the map values.
-  When there is a Discovery Enpoint Service definition defined for the
+  When there is a Discovery Endpoint Service definition defined for the
   subscription manager, then the `key` MUST be one of the `subscriptionconfig`
   keys specified in the Discovery Endpoint Service definition. The `value`
   MUST conform to the data type specified by the value in the
