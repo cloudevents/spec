@@ -10,20 +10,20 @@
 
 ## 目录
 
-- [历史](#history)
-- [CloudEvents 概念](#cloudevents-concepts)
-- [设计目标](#design-goals)
-- [架构](#architecture)
-- [属性版本控制](#versioning-of-cloudevents)
-- [CloudEvent 属性](#cloudevent-core-attributes)
-- [CloudEvent 属性扩展](#cloudevent-attribute-extensions) 
-- [生产 CloudEvents](#creating-cloudevents-cloudevents)  
-- [合格的协议与编码](#qualifying-protocols-and-encodings)
-- [专有的协议和编码](#proprietary-protocols-and-encodings)
-- [现有技术](#prior-art)
-- [角色](#roles)
-- [价值主张](#value-proposition)
-- [现有的数据格式](#existing-event-formats)
+- [历史](#history历史)
+- [CloudEvents 概念](#cloudevents-concepts概念)
+- [设计目标](#design-goals设计目标)
+- [架构](#architecture架构)
+- [属性版本控制](#versioning-of-cloudevents属性版本控制)
+- [CloudEvent 属性](#cloudevent-core-attributes核心属性)
+- [CloudEvent 属性扩展](#cloudevent-attribute-extensions属性扩展)
+- [生产 CloudEvents](#creating-cloudevents生产-cloudevents)
+- [合格的协议与编码](#qualifying-protocols-and-encodings合理化协议与编码)
+- [专有的协议和编码](#proprietary-protocols-and-encodings专有的协议与编码)
+- [现有技术](#prior-art现有技术)
+- [角色](#roles角色)
+- [价值主张](#value-proposition价值主张)
+- [现有的数据格式](#existing-event-formats现有的数据格式)
 
 ## History/历史
 
@@ -33,7 +33,7 @@
 
 ## Cloudevents Concepts/概念
 
-一个[事件](spec.md#event)包含了[事件发生](spec.md#occurrence)的上下文和相关数据。
+一个[事件](spec.md#event事件)包含了[事件发生](spec.md#occurrence事件发生)的上下文和相关数据。
 事件的相关数据可以用来唯一标识一件事件的发生。
 
 事件代表了已发生的事实，因此它并不包含任何目的地相关信息，但消息能够传达事件内容，从而将事件数据
@@ -82,7 +82,7 @@ CloudEvents 的核心规范中定义了一组称之为属性的元数据，
 但这样做仅是为了能够正确传递和处理消息。那些不用于该目的的数据应放置在事件（数据）本身中。
 
 此外，本规范中假设协议层所需的用来将消息传递到目标系统的元数据应完全由协议处理，
-因此不包含在 CloudEvents 属性中。 有关更多详细信息，请参阅[非目标](#non-goals)部分。
+因此不包含在 CloudEvents 属性中。 有关更多详细信息，请参阅[非目标](#non-goals非目标)部分。
 
 除了这些属性的定义之外，规范还描述了关于如何序列化
 不同格式（例如 JSON）和协议（例如 HTTP、AMQP、Kafka）的事件。
@@ -91,7 +91,7 @@ CloudEvents 的核心规范中定义了一组称之为属性的元数据，
 为了提升系统间的互操作性，是否以及如何实现批处理将由协议自己决定。
 相关详细信息可以在协议绑定或协议规范中找到。
 成批的CloudEvents并没有语义，也没有排序。
-[中间人](spec.md#intermediary)可以添加或删除批处理以及将事件分配给不同的批处理。
+[中间人](spec.md#intermediary中间人)可以添加或删除批处理以及将事件分配给不同的批处理。
 
 事件的目的或语义含义超出了 CloudEvents 规范的范围。
 只要发送的消息符合规范，那么它就是一个有效的 CloudEvent。
@@ -99,8 +99,8 @@ CloudEvents 的核心规范中定义了一组称之为属性的元数据，
 接下来应由事件生产者定义将使用的 CloudEvents 属性值，就像它可能生成的任何其他事件一样。
 
 由于并非所有事件生产者都将其事件以CloudEvents的形式发布，
-因此我们定义了一组 [适配器](../../adapters.md) 
-来展示如何将事件从一些流行的事件生产者映射到 CloudEvents。 
+因此我们定义了一组 [适配器](../../adapters.md)
+来展示如何将事件从一些流行的事件生产者映射到 CloudEvents。
 这些适配器是非规范的，
 但它们是规范作者对 CloudEvents 属性如何在其它生产者本地生成事件并映射到CloudEvents时的最佳猜测。
 
@@ -150,7 +150,7 @@ CloudEvents 规范集定义了四种有助于形成分层架构模型的不同�
 
 1. [基本规范](spec.md) 定义了一个抽象信息模型，
    该模型由属性（键值对）和构成 CloudEvent 的相关规则组成。此规范包含了*核心属性*的定义。有些核心属性必须出现在所有的 CloudEvents 中，有些则是可选的。
-2. [扩展属性](spec.md#extension-context-attributes)
+2. [扩展属性](spec.md#extension-context-attributes扩展上下文属性)
    添加了特定于用例且可能重叠的扩展属性集和相关规则，如支持不同的追踪标准的规则。
 3. 事件格式编码,如 [JSON](../../formats/json-format.md), 定义了基本规范的信息模型与所选扩展的编码方式，
    以将其映射到应用程序协议的头部和负载元素。
@@ -166,9 +166,9 @@ CloudEvents 规范集定义了四种有助于形成分层架构模型的不同�
 
 ### Interoperability Constraints/互操作性约束条件
 
-如 [设计目标](#design-goals) 部分所述，互操作性是本规范的一个关键目标。
+如 [设计目标](#design-goals设计目标) 部分所述，互操作性是本规范的一个关键目标。
 因此，本协议中有地方被建议有所约束条件。
-例如，在[大小限制](spec.md#size-limits) 部分提示事件大小应该不超过 64KB。
+例如，在[大小限制](spec.md#size-limits大小限制) 部分提示事件大小应该不超过 64KB。
 重要的是要注意诸如这些约束，在没有通过“必须”强制执行的情况下，
 是对增加多个实现和部署之间互操作性的可能性的一种建议。
 具体使用规范可以随意忽略这些建议，
@@ -274,7 +274,7 @@ CloudEvents 规范不强制要求要使用的特定模式，甚至不要求必�
 
 在确定提议的属性属于哪个类别时，
 工作组使用现有的用例和用户故事来解释它们的基本原理和需求。
-相关信息将添加到本文档的[现有技术](#prior-art)部分。
+相关信息将添加到本文档的[现有技术](#prior-art现有技术)部分。
 
 CloudEvent 规范的扩展属性是需要包含的附加元数据，它们能确保正确的路由和正确处理CloudEvent。
 用于其它目的的附加元数据，
@@ -359,7 +359,7 @@ CloudEvents 规范有意避免将 CloudEvents 的创建方式设计的过于死�
 
 可能存在需要创建包含另一个 CloudEvent 的 CloudEvent 的特殊情况。
 虽然规范没有明确定义嵌套，但它是可能的。
-虽然内部事件将始终以[独立的事件格式](spec.md#event-format) 编码，
+虽然内部事件将始终以[独立的事件格式](spec.md#event-format事件格式) 编码，
 但外部事件可能是二进制或结构化模式的。
 外部事件的 `datacontenttype` 属性不得设置为 `application/cloudevents+json`
 或任何其它用于表示使用结构化模式的媒体类型。
@@ -507,9 +507,9 @@ CloudEvents 的努力不应成为认可或推广项目或产品专有协议的�
 
    事件是否可通过中间件消费取决于生产者的选择。
 
-   在实践中，当中间件改变事件的语义时可以扮演[生产者](spec.md#producer)的角色，
-   当它根据事件采取行动时可以扮演[消费者](spec.md#consumer)的角色，
-   或者当它路由事件而不进行语义改变时可以扮演[中间人](spec.md#intermediary)的角色。
+   在实践中，当中间件改变事件的语义时可以扮演[生产者](spec.md#producer生产者)的角色，
+   当它根据事件采取行动时可以扮演[消费者](spec.md#consumer消费者)的角色，
+   或者当它路由事件而不进行语义改变时可以扮演[中间人](spec.md#intermediary中间人)的角色。
 
 4. 框架和其他抽象使与事件平台基础设施间的交互更简单，
    并且通常为多个事件平台基础设施提供公共 API 区域。
