@@ -10,8 +10,8 @@
 - Constraints
   - OPTIONAL
   - if present, MUST be a non-empty string
-  - SHOULD be uppercase
-  - RECOMMENDED values include `INFO`, `ERROR`, `WARNING`, `VERBOSE` and `DEBUG`, but
+  - SHOULD be lowercase
+  - RECOMMENDED values include `info`, `error`, `warning`, `verbose` and `debug`, but
    others MAY be used
   - SHOULD have a many-to-one relationship with a distinct `loglevelnum` in the scope of
    the `source`
