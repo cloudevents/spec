@@ -11,10 +11,8 @@
   - OPTIONAL
   - if present, MUST be a non-empty string
   - SHOULD be lowercase
-  - RECOMMENDED values include `info`, `error`, `warning`, `verbose`, `debug` and
-   `verbose`
-  , but
-   others MAY be used
+  - RECOMMENDED values include `critical` ,`error`, `warning`, `info`, `debug`, and
+   `verbose` , but  others MAY be used
   - SHOULD have a many-to-one relationship with a distinct `loglevelnum` in the scope of
    the `source`
 
@@ -36,22 +34,39 @@
 
 ## Example Log Mappings
 
-### Syslog RFC5424
-```text
-  0       Emergency: system is unusable
-  1       Alert: action must be taken immediately
-  2       Critical: critical conditions
-  3       Error: error conditions
-  4       Warning: warning conditions
-  5       Notice: normal but significant condition
-  6       Informational: informational messages
-  7       Debug: debug-level messages
-``` 
+All syslog log records SHOULD assign the severity level to `loglevelnum`. In addition to that
+
+The corresponding `loglevelname`s to each of the `loglevelnums` are:
+
+| `loglevelnum` | `loglevelname` |
+| ------------- | -------------- |
+| 0             | `emergency`    |
+| 1             | `alert`        |
+| 2             | `critical`     |
+| 3             | `error`        |
+| 4             | `warning`      |
+| 5             | `notice`       |
+| 7             | `info`         |
+| 8             | `debug`        |
+
+
 
 ### Windows Event Log
-`Critical`, `Error`, `Warning`, `Information` and `Verbose` 
-Level num is dependent on producer but SHOULD  assumed to be numerically ascending
- from most important (`Critical`) to least important (`Verbose`)
+, `Error`, `Warning`, `Information` and `Verbose` 
+
+Binding SHOULD NOT depend on the internal `Level` integer value of the log record as it defined by the windows event producer. 
+
+Instead cloud event producers SHOULD use the following `loglevelnum`s instead of the winlog values
+
+| `loglevelnum` | `loglevelname` | `Event Log Name` |
+| ------------- | -------------- | ---------------- |
+| 2             | `critical`     | `Critical`       |
+| 3             | `error`        | `Error`          |
+| 4             | `warning`      | `Warning`        |
+| 7             | `info`         | `Information`    |
+| 8             | `verbose`      | `Verbose`        |
+
+
 
 
 ### Serilog (.NET)
