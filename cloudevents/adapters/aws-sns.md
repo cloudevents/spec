@@ -1,7 +1,7 @@
 # Amazon Simple Notification Service CloudEvents Adapter
 
 This document describes how to convert
-[AWS SQS messages][sns-messages]
+[AWS SNS messages][sns-messages]
 into CloudEvents.
 
 Amazon SNS MAY send a subscription confirmation, notification, or unsubscribe confirmation message to your HTTP/HTTPS endpoints.
