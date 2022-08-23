@@ -229,7 +229,7 @@ for file in ${mdFiles}; do
           echo $file: Can\'t load url: ${ref} ${extra} | tee -a ${tmp}3
           break
         fi
-        sleep 1
+        sleep ${try} 
       done
       continue
     fi
@@ -273,17 +273,21 @@ for file in ${mdFiles}; do
 
         # Find all section headers in the file.
         # Remove leading & trailing spaces.
+        # Replace doc links with just the anchor name, remove URL
         # Lower case it.
-        # Convert spaces to "-".
-        # Drop all non alphanumeric chars.
+        # Drop all punct, but keep "-"s
+        # Convert multiple spaces to "-".
         # Twiddle section anchor if we've seen it before.
         grep "^[[:space:]]*#" < ${fullpath} | \
           sed 's/[[:space:]]*##*[[:space:]]*//' | \
           sed 's/[[:space:]]*$//' | \
-          tr '[:upper:]' '[:lower:]' | \
           sed 's/\[\([^\[]*\)\](\([^()]*\))/\1/' | \
-          sed "s/  */-/g" | \
-          sed "s/[^-a-zA-Z0-9]//g" | while read section ; do
+          tr '[:upper:]' '[:lower:]' | \
+          tr '-' 'Z' | \
+          sed "s/[[:punct:]]//g" | \
+          tr 'Z' '-' | \
+          sed "s/[[:space:]][[:space:]]*/-/g" | \
+          while read section ; do
             # If we haven't used this exact anchor before just use it now
             if [[ "${used}" != *" ${section} "* ]]; then
               anchor=${section}

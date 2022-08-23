@@ -10,7 +10,7 @@
 
 任何对扩展属性的支持都不是必要的。当一个扩展属性使用了[RFC 2199](https://www.ietf.org/rfc/rfc2119.txt) 中的关键词（如MUST、SHOULD、MAY等）时，对这些关键词的使用仅适用于使用了这个扩展属性的事件。
 
-扩展属性尽管没有定义在CloudEvents的核心规范中，它们同样必须遵守格式和协议绑定规范中定义的序列化规则。详情请见[扩展上下文属性](spec.md#extension-context-attributes)
+扩展属性尽管没有定义在CloudEvents的核心规范中，它们同样必须遵守格式和协议绑定规范中定义的序列化规则。详情请见[扩展上下文属性](spec.md#extension-context-attributes扩展上下文属性)
 
 ## 现有的扩展
 

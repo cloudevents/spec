@@ -6,15 +6,15 @@
 
 ## 目录
 
-1. [简介](#1-introduction)
+1. [简介](#1-introduction简介)
 
-- 1.1. [一致性](#11-conformance)
-- 1.2. [与HTTP的关系](#12-relation-to-httphttp)
+- 1.1. [一致性](#11-conformance一致性)
+- 1.2. [与HTTP的关系](#12-relation-to-http与http的关系)
 
-2. [传输通知](#2-delivering-notifications)
-3. [认证](#3-authorization)
-4. [滥用保护](#4-abuse-protection)
-5. [引用](#5-references)
+2. [传输通知](#2-delivering-notifications传输通知)
+3. [认证](#3-authorization认证)
+4. [滥用保护](#4-abuse-protection滥用保护机制)
+5. [引用](#5-references引用)
 
 ## 1. Introduction/简介
 
@@ -46,7 +46,7 @@
 
 除上述限制外，本规范不会更多地限制通知的内容，同样不会强制用来传输的[HTTP 目标资源][rfc7230-section-5-1]。
 
-如果传输目标支持并要求[滥用保护](#4-abuse-protection)机制，则传输的请求必须包含`WebHook-Request-Origin`头部。`WebHook-Request-Origin`头部的值是一个能标识出发送者的DNS域名表达形式。
+如果传输目标支持并要求[滥用保护](#4-abuse-protection滥用保护机制)机制，则传输的请求必须包含`WebHook-Request-Origin`头部。`WebHook-Request-Origin`头部的值是一个能标识出发送者的DNS域名表达形式。
 
 ### 2.2. 传输响应
 
