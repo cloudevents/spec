@@ -13,7 +13,7 @@
   - SHOULD be lowercase
   - RECOMMENDED values include   `emergency`, `alert` , `critical` ,`error`, `warning`, `notice`, `info`, `debug`, and
      `verbose` , but  others MAY be used. The recommended 
-  - SHOULD have a many-to-one relationship with a distinct `loglevelnum` in the scope of
+  - SHOULD have a one-to-one relationship with a distinct `loglevelnum` in the scope of
    the `source`
 
 ### loglevelnum 
