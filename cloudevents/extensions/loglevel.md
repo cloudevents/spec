@@ -76,7 +76,7 @@ Instead cloud event producers SHOULD use the following `loglevelnum`s instead of
 | `Information`            | `info`         | 7             |
 | `Verbose`                | `verbose`      | 9             |
 
-### Python Logging
+### Python
 |            | `loglevelname` | `loglevelnum` |
 | ---------- | -------------- | ------------- |
 | `CRITICAL` | `critical`     | 2             |
@@ -88,9 +88,7 @@ Instead cloud event producers SHOULD use the following `loglevelnum`s instead of
 | `DEBUG`    | `debug`        | 8             |
 | `NOTSET`   | `verbose`      | 9             |
 
-### Spring (Java)
-
-Spring supports 5 default log levels, `ERROR`, `WARN`, `INFO`, `DEBUG`, and `TRACE`, with `INFO` being the default log level configuration.
+### Java (Spring)
 
 |         | `loglevelname` | `loglevelnum` |
 | ------- | -------------- | ------------- |
@@ -100,7 +98,7 @@ Spring supports 5 default log levels, `ERROR`, `WARN`, `INFO`, `DEBUG`, and `TRA
 | `DEBUG` | `debug`        | 8             |
 | `TRACE` | `verbose`      | 9             |
 
-### Serilog (.NET)
+### .NET (Serilog)
 
 `Fatal`, `Error`, `Warning`, `Information`, `Debug` and `Verbose` 
 
@@ -113,7 +111,7 @@ Spring supports 5 default log levels, `ERROR`, `WARN`, `INFO`, `DEBUG`, and `TRA
 | `Debug`       | `debug`        | 8             |
 | `Verbose`     | `verbose`      | 9             |
 
-### Winston (Javascript)
+### Javascript (Winston )
 
 | Winston Level Name | `loglevelname` | `loglevelnum` |
 | ------------------ | -------------- | ------------- |
@@ -127,7 +125,7 @@ Spring supports 5 default log levels, `ERROR`, `WARN`, `INFO`, `DEBUG`, and `TRA
 
 
 
-### Spdlog (C++)
+### C++ (Spdlog)
 
 | Spdlog  Level | `loglevelname` | `loglevelnum` |
 | ------------- | -------------- | ------------- |
@@ -140,7 +138,7 @@ Spring supports 5 default log levels, `ERROR`, `WARN`, `INFO`, `DEBUG`, and `TRA
 
 
 
-### Zap (Go)
+### Go (Zap)
 Zap supports seven types of log levels which are  `Debug`, `Info`, `Warning`, `Error`,
  `DPanic`, `Panic`, and `Fatal`
 
