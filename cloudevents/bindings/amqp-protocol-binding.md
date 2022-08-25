@@ -318,7 +318,7 @@ content-type: application/cloudevents+json; charset=utf-8
   Format
 - [OASIS-AMQP-1.0][oasis-amqp-1.0] OASIS Advanced Message Queuing Protocol
   (AMQP) Version 1.0
- -[JMS20][JMS20] JSR-343 Java Message Service 2.0
+- [JMS20][JMS20] JSR-343 Java Message Service 2.0
 
 [ce]: ../spec.md
 [json-format]: ../formats/json-format.md
