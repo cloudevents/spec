@@ -177,7 +177,7 @@ compatibility with JMS 2.0 clients and JMS message selectors where the ':'
 separator is not permitted for property identifiers (see section 3.8.1.1 of
 [JMS2.0][JMS20]).
 
-CloudEvents AMQP consumers SHOULD understand the "cloudEvents" prefix with both,
+CloudEvents AMQP consumers SHOULD understand the "cloudEvents" prefix with both
 the '\_' and the ':' separators as permitted within the constraints of the
 client model. JMS 2.0 AMQP consumers MUST understand the '\_' separator; they
 cannot understand the ':' separator as per the cited JMS constraints.
