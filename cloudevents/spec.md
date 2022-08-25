@@ -56,10 +56,6 @@ However, the RECOMMENDED action is to ignore it. The producer SHOULD be
 prepared for the situation where a consumer ignores that feature. An
 [Intermediary](#intermediary) SHOULD forward OPTIONAL attributes.
 
-```
-
-```
-
 ### Terminology
 
 This specification defines the following terms:
