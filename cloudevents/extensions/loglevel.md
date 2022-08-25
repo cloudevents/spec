@@ -72,8 +72,8 @@ the windows event log record `Level` values.
 | `Critical`          | `critical`     | 2             |
 | `Error`             | `error`        | 3             |
 | `Warning`           | `warning`      | 4             |
-| `Information`       | `info`         | 7             |
-| `Verbose`           | `verbose`      | 9             |
+| `Information`       | `info`         | 6             |
+| `Verbose`           | `verbose`      | 8             |
 
 ### Python
 | Python Log Level | `loglevelname` | `loglevelnum` |
