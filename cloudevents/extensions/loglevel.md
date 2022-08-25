@@ -19,10 +19,11 @@
 ### loglevelnum 
 
 - Type: `Integer`
-
 - Description: A numerical representation of the level of importance of the event. 
-    Conforms to the severity ordering specified by [RFC5424](https://www.rfc-editor.org/rfc/rfc5424.html#section-6.2.1): severity of all levels is
-     assumed to be numerically ascending from most important to least important.
+  Conforms to the severity ordering specified by 
+  [RFC5424](https://www.rfc-editor.org/rfc/rfc5424.html#section-6.2.1): severity of
+  all levels is assumed to be numerically ascending from most important to least
+  important.
   This specification does not define "importance" or meaning of each value other than
   an event with a lower numerical value MUST be of more importance than an event with
   a lower numerical value in the same `source`.
@@ -46,9 +47,8 @@
 
 ### Syslog
 
-All syslog log records SHOULD assign the severity level to `loglevelnum`. In addition to that
-
-The corresponding `loglevelname`s to each of the severity values
+All syslog log records SHOULD assign the severity level to `loglevelnum`. 
+In addition to that The corresponding `loglevelname`s to each of the severity values
 
 | Syslog Severity | `loglevelname` |
 | --------------- | -------------- |
@@ -61,12 +61,12 @@ The corresponding `loglevelname`s to each of the severity values
 | 7               | `info`         |
 | 8               | `debug`        |
 
-
-
 ### Windows Event Log
-Binding SHOULD NOT depend on the internal `Level` integer value of the log record as it defined by the windows event producer. 
+Binding SHOULD NOT depend on the internal `Level` integer value of the log 
+record as it defined by the windows event producer. 
 
-Instead cloud event producers SHOULD use the following `loglevelnum`s instead of the winlog `Level` values
+Instead cloud event producers SHOULD use the following `loglevelnum`s instead of 
+the windows event log record `Level` values.
 
 | Windows Event Level Name | `loglevelname` | `loglevelnum` |
 | ------------------------ | -------------- | ------------- |
@@ -89,7 +89,6 @@ Instead cloud event producers SHOULD use the following `loglevelnum`s instead of
 | `NOTSET`   | `verbose`      | 9             |
 
 ### Java (Spring)
-
 |         | `loglevelname` | `loglevelnum` |
 | ------- | -------------- | ------------- |
 | `ERROR` | `error`        | 3             |
@@ -99,9 +98,6 @@ Instead cloud event producers SHOULD use the following `loglevelnum`s instead of
 | `TRACE` | `verbose`      | 9             |
 
 ### .NET (Serilog)
-
-`Fatal`, `Error`, `Warning`, `Information`, `Debug` and `Verbose` 
-
 |               | `loglevelname` | `loglevelnum` |
 | ------------- | -------------- | ------------- |
 | `Fatal`       | `critical`     | 2             |
@@ -111,8 +107,7 @@ Instead cloud event producers SHOULD use the following `loglevelnum`s instead of
 | `Debug`       | `debug`        | 8             |
 | `Verbose`     | `verbose`      | 9             |
 
-### Javascript (Winston )
-
+### Javascript (Winston)
 | Winston Level Name | `loglevelname` | `loglevelnum` |
 | ------------------ | -------------- | ------------- |
 | `error`            | `error`        | 3             |
@@ -123,10 +118,7 @@ Instead cloud event producers SHOULD use the following `loglevelnum`s instead of
 | `debug`            | `debug`        | 10            |
 | `silly`            | `silly`        | 11            |
 
-
-
 ### C++ (Spdlog)
-
 | Spdlog  Level | `loglevelname` | `loglevelnum` |
 | ------------- | -------------- | ------------- |
 | `critical`    | `critical`     | 2             |
@@ -136,12 +128,7 @@ Instead cloud event producers SHOULD use the following `loglevelnum`s instead of
 | `debug`       | `debug`        | 8             |
 | `trace`       | `verbose`      | 9             |
 
-
-
 ### Go (Zap)
-Zap supports seven types of log levels which are  `Debug`, `Info`, `Warning`, `Error`,
- `DPanic`, `Panic`, and `Fatal`
-
 | Zap Level | `loglevelname` | `loglevelnum` |
 | --------- | -------------- | ------------- |
 | `Fatal`   | `fatal`        | 1             |
