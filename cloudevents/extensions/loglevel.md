@@ -1,5 +1,13 @@
 # Log Level Extension
 
+## Abstract
+This extension defines attributes that MAY be included within a CloudEvent
+to describe the "level" or "importance" of an event in relation to other events
+produced by a unique event source.
+
+Often systems produce events in form of logs, and these types of events usually share
+this "log-level" property. This extension aims to provide a standard way for
+describing this property in a language agnostic form
 
 ## Attributes
 
