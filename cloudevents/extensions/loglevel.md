@@ -11,8 +11,8 @@
   - OPTIONAL
   - if present, MUST be a non-empty string
   - SHOULD be lowercase
-  - RECOMMENDED values include   `emergency`, `alert` , `critical` ,`error`, `warning`, `notice`, `info`, `debug`, and
-     `verbose` , but  others MAY be used. The recommended 
+  - RECOMMENDED values include `emergency`, `alert`, `critical`, `error`, 
+    `warning`, `notice`, `info`, `debug`, and `verbose`, but  others MAY be used.
   - SHOULD have a one-to-one relationship with a distinct `loglevelnum` in the scope of
    the `source`
 
