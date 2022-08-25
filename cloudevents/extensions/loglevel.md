@@ -42,7 +42,6 @@
     - `7` for `debug`
     - `8` for `verbose`
 
-
 ## RECOMMENDED Log Mappings
 
 ### Syslog
