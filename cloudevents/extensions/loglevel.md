@@ -51,14 +51,14 @@ In addition to that The corresponding `loglevelname`s to each of the severity va
 
 | Syslog Severity | `loglevelname` | `loglevelnum` |
 | --------------- | -------------- | ------------- |
-| 0               | `emergency`    | `0`           |
-| 1               | `alert`        | `1`           |
-| 2               | `critical`     | `2`           |
-| 3               | `error`        | `3`           |
-| 4               | `warning`      | `4`           |
-| 5               | `notice`       | `5`           |
-| 6               | `info`         | `6`           |
-| 7               | `debug`        | `7`           |
+| 0               | `emergency`    | 0             |
+| 1               | `alert`        | 1             |
+| 2               | `critical`     | 2             |
+| 3               | `error`        | 3             |
+| 4               | `warning`      | 4             |
+| 5               | `notice`       | 5             |
+| 6               | `info`         | 6             |
+| 7               | `debug`        | 7             |
 
 ### Windows Event Log
 Binding SHOULD NOT depend on the internal `Level` integer value of the log 
