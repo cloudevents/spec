@@ -68,73 +68,73 @@ record as it defined by the windows event producer.
 Instead cloud event producers SHOULD use the following `loglevelnum`s instead of 
 the windows event log record `Level` values.
 
-| Windows Event Level Name | `loglevelname` | `loglevelnum` |
-| ------------------------ | -------------- | ------------- |
-| `Critical`               | `critical`     | 2             |
-| `Error`                  | `error`        | 3             |
-| `Warning`                | `warning`      | 4             |
-| `Information`            | `info`         | 7             |
-| `Verbose`                | `verbose`      | 9             |
+| Windows Event Level | `loglevelname` | `loglevelnum` |
+| ------------------- | -------------- | ------------- |
+| `Critical`          | `critical`     | 2             |
+| `Error`             | `error`        | 3             |
+| `Warning`           | `warning`      | 4             |
+| `Information`       | `info`         | 7             |
+| `Verbose`           | `verbose`      | 9             |
 
 ### Python
-|            | `loglevelname` | `loglevelnum` |
-| ---------- | -------------- | ------------- |
-| `CRITICAL` | `critical`     | 2             |
-| `FATAL`    | `critical`     | 2             |
-| `ERROR`    | `error`        | 3             |
-| `WARN`     | `warning`      | 4             |
-| `WARNING`  | `warning`      | 4             |
-| `INFO`     | `info`         | 7             |
-| `DEBUG`    | `debug`        | 8             |
-| `NOTSET`   | `verbose`      | 9             |
+| Python Log Level | `loglevelname` | `loglevelnum` |
+| ---------------- | -------------- | ------------- |
+| `CRITICAL`       | `critical`     | 2             |
+| `FATAL`          | `critical`     | 2             |
+| `ERROR`          | `error`        | 3             |
+| `WARN`           | `warning`      | 4             |
+| `WARNING`        | `warning`      | 4             |
+| `INFO`           | `info`         | 7             |
+| `DEBUG`          | `debug`        | 8             |
+| `NOTSET`         | `verbose`      | 9             |
 
 ### Java (Spring)
-|         | `loglevelname` | `loglevelnum` |
-| ------- | -------------- | ------------- |
-| `ERROR` | `error`        | 3             |
-| `WARN`  | `warning`      | 4             |
-| `INFO`  | `info`         | 7             |
-| `DEBUG` | `debug`        | 8             |
-| `TRACE` | `verbose`      | 9             |
+| Sprint Log Level | `loglevelname` | `loglevelnum` |
+| ---------------- | -------------- | ------------- |
+| `ERROR`          | `error`        | 3             |
+| `WARN`           | `warning`      | 4             |
+| `INFO`           | `info`         | 7             |
+| `DEBUG`          | `debug`        | 8             |
+| `TRACE`          | `verbose`      | 9             |
 
 ### .NET (Serilog)
-|               | `loglevelname` | `loglevelnum` |
-| ------------- | -------------- | ------------- |
-| `Fatal`       | `critical`     | 2             |
-| `Error`       | `error`        | 3             |
-| `Warning`     | `warning`      | 4             |
-| `Information` | `info`         | 7             |
-| `Debug`       | `debug`        | 8             |
-| `Verbose`     | `verbose`      | 9             |
+| Serilog Log Level | `loglevelname` | `loglevelnum` |
+| ----------------- | -------------- | ------------- |
+| `Fatal`           | `critical`     | 2             |
+| `Error`           | `error`        | 3             |
+| `Warning`         | `warning`      | 4             |
+| `Information`     | `info`         | 7             |
+| `Debug`           | `debug`        | 8             |
+| `Verbose`         | `verbose`      | 9             |
 
 ### Javascript (Winston)
-| Winston Level Name | `loglevelname` | `loglevelnum` |
-| ------------------ | -------------- | ------------- |
-| `error`            | `error`        | 3             |
-| `warn`             | `warning`      | 4             |
-| `info`             | `info`         | 7             |
-| `http`             | `http`         | 8             |
-| `verbose`          | `verbose`      | 9             |
-| `debug`            | `debug`        | 10            |
-| `silly`            | `silly`        | 11            |
+| Winston Log Level | `loglevelname` | `loglevelnum` |
+| ----------------- | -------------- | ------------- |
+| `error`           | `error`        | 3             |
+| `warn`            | `warning`      | 4             |
+| `info`            | `info`         | 7             |
+| `http`            | `http`         | 8             |
+| `verbose`         | `verbose`      | 9             |
+| `debug`           | `debug`        | 10            |
+| `silly`           | `silly`        | 11            |
 
 ### C++ (Spdlog)
-| Spdlog  Level | `loglevelname` | `loglevelnum` |
+| Spdlog Log Level | `loglevelname` | `loglevelnum` |
+| ---------------- | -------------- | ------------- |
+| `critical`       | `critical`     | 2             |
+| `error`          | `error`        | 3             |
+| `warn`           | `warning`      | 4             |
+| `info`           | `info`         | 7             |
+| `debug`          | `debug`        | 8             |
+| `trace`          | `verbose`      | 9             |
+
+### Go (Zap)
+| Zap Log Level | `loglevelname` | `loglevelnum` |
 | ------------- | -------------- | ------------- |
-| `critical`    | `critical`     | 2             |
+| `Fatal`       | `fatal`        | 1             |
+| `Panic`       | `critical`     | 2             |
+| `DPanic`      | `critical`     | 2             |
 | `error`       | `error`        | 3             |
 | `warn`        | `warning`      | 4             |
 | `info`        | `info`         | 7             |
 | `debug`       | `debug`        | 8             |
-| `trace`       | `verbose`      | 9             |
-
-### Go (Zap)
-| Zap Level | `loglevelname` | `loglevelnum` |
-| --------- | -------------- | ------------- |
-| `Fatal`   | `fatal`        | 1             |
-| `Panic`   | `critical`     | 2             |
-| `DPanic`  | `critical`     | 2             |
-| `error`   | `error`        | 3             |
-| `warn`    | `warning`      | 4             |
-| `info`    | `info`         | 7             |
-| `debug`   | `debug`        | 8             |
