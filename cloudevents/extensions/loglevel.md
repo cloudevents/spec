@@ -49,16 +49,16 @@
 All syslog log records SHOULD assign the severity level to `loglevelnum`. 
 In addition to that The corresponding `loglevelname`s to each of the severity values
 
-| Syslog Severity | `loglevelname` |
-| --------------- | -------------- |
-| 0               | `emergency`    |
-| 1               | `alert`        |
-| 2               | `critical`     |
-| 3               | `error`        |
-| 4               | `warning`      |
-| 5               | `notice`       |
-| 7               | `info`         |
-| 8               | `debug`        |
+| Syslog Severity | `loglevelname` | `loglevelnum` |
+| --------------- | -------------- | ------------- |
+| 0               | `emergency`    | `0`           |
+| 1               | `alert`        | `1`           |
+| 2               | `critical`     | `2`           |
+| 3               | `error`        | `3`           |
+| 4               | `warning`      | `4`           |
+| 5               | `notice`       | `5`           |
+| 6               | `info`         | `6`           |
+| 7               | `debug`        | `7`           |
 
 ### Windows Event Log
 Binding SHOULD NOT depend on the internal `Level` integer value of the log 
