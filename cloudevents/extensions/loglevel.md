@@ -26,7 +26,7 @@
   important.
   This specification does not define "importance" or meaning of each value other than
   an event with a lower numerical value MUST be of more importance than an event with
-  a lower numerical value in the same `source`.
+  a higher numerical value in the same `source`.
 
 - Constraints
   - OPTIONAL
