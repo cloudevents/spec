@@ -83,18 +83,18 @@ the windows event log record `Level` values.
 | `ERROR`          | `error`        | 3             |
 | `WARN`           | `warning`      | 4             |
 | `WARNING`        | `warning`      | 4             |
-| `INFO`           | `info`         | 7             |
-| `DEBUG`          | `debug`        | 8             |
-| `NOTSET`         | `verbose`      | 9             |
+| `INFO`           | `info`         | 6             |
+| `DEBUG`          | `debug`        | 7             |
+| `NOTSET`         | `verbose`      | 8             |
 
 ### Java (Spring)
 | Sprint Log Level | `loglevelname` | `loglevelnum` |
 | ---------------- | -------------- | ------------- |
 | `ERROR`          | `error`        | 3             |
 | `WARN`           | `warning`      | 4             |
-| `INFO`           | `info`         | 7             |
-| `DEBUG`          | `debug`        | 8             |
-| `TRACE`          | `verbose`      | 9             |
+| `INFO`           | `info`         | 6             |
+| `DEBUG`          | `debug`        | 7             |
+| `TRACE`          | `verbose`      | 8             |
 
 ### .NET (Serilog)
 | Serilog Log Level | `loglevelname` | `loglevelnum` |
@@ -102,20 +102,20 @@ the windows event log record `Level` values.
 | `Fatal`           | `critical`     | 2             |
 | `Error`           | `error`        | 3             |
 | `Warning`         | `warning`      | 4             |
-| `Information`     | `info`         | 7             |
-| `Debug`           | `debug`        | 8             |
-| `Verbose`         | `verbose`      | 9             |
+| `Information`     | `info`         | 6             |
+| `Debug`           | `debug`        | 7             |
+| `Verbose`         | `verbose`      | 8             |
 
 ### Javascript (Winston)
 | Winston Log Level | `loglevelname` | `loglevelnum` |
 | ----------------- | -------------- | ------------- |
 | `error`           | `error`        | 3             |
 | `warn`            | `warning`      | 4             |
-| `info`            | `info`         | 7             |
-| `http`            | `http`         | 8             |
-| `verbose`         | `verbose`      | 9             |
-| `debug`           | `debug`        | 10            |
-| `silly`           | `silly`        | 11            |
+| `info`            | `info`         | 6             |
+| `http`            | `http`         | 7             |
+| `verbose`         | `verbose`      | 8             |
+| `debug`           | `debug`        | 9             |
+| `silly`           | `silly`        | 10            |
 
 ### C++ (Spdlog)
 | Spdlog Log Level | `loglevelname` | `loglevelnum` |
@@ -123,9 +123,9 @@ the windows event log record `Level` values.
 | `critical`       | `critical`     | 2             |
 | `error`          | `error`        | 3             |
 | `warn`           | `warning`      | 4             |
-| `info`           | `info`         | 7             |
-| `debug`          | `debug`        | 8             |
-| `trace`          | `verbose`      | 9             |
+| `info`           | `info`         | 6             |
+| `debug`          | `debug`        | 7             |
+| `trace`          | `verbose`      | 8             |
 
 ### Go (Zap)
 | Zap Log Level | `loglevelname` | `loglevelnum` |
@@ -135,5 +135,5 @@ the windows event log record `Level` values.
 | `DPanic`      | `critical`     | 2             |
 | `error`       | `error`        | 3             |
 | `warn`        | `warning`      | 4             |
-| `info`        | `info`         | 7             |
-| `debug`       | `debug`        | 8             |
+| `info`        | `info`         | 6             |
+| `debug`       | `debug`        | 7             |
