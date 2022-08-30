@@ -88,7 +88,7 @@ In addition to that The corresponding `loglevelname`s to each of the severity va
 Binding SHOULD NOT depend on the internal `Level` integer value of the log 
 record as it is defined by the windows event producer. 
 
-Instead cloud event producers SHOULD use the following `loglevelnum`s instead of 
+Instead, cloudevent producers SHOULD use the following `loglevelnum`s instead of 
 the windows event log record `Level` values.
 
 | Windows Event Level | `loglevelname` | `loglevelnum` |
