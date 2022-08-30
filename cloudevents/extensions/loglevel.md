@@ -6,11 +6,16 @@ to describe the "level" or "importance" of an event in relation to other events
 produced by a unique event source.
 
 Often systems produce events in form of logs, and these types of events usually share
-a common concept of "log-level". This extension aims to provide a standard way for describing this property in a language agnostic form. 
+a common concept of "log-level". This extension aims to provide a standard way for 
+describing this property in a language agnostic form. 
 
-Sharing a common way to describe importance of events allows for better monitoring systems, tooling and general log consumption.
+Sharing a common way to describe importance of events allows for better monitoring 
+systems, tooling and general log consumption.
 
-In addition to defining the extension attributes, this document defines the concept of [Log Level Bindings](#Log Level Bindings) - a standard way to map well-known log level names from different langaunges and frameworks onto the `loglevelname` and `loglevelnum` values defined in this spec. 
+In addition to defining the extension attributes, this document defines 
+the concept of [Log Level Bindings](#Log Level Bindings) - a standard way to map 
+well-known log level names from different langaunges and frameworks 
+onto the `loglevelname` and `loglevelnum` values defined in this spec. 
 
 ## Attributes
 
@@ -55,11 +60,11 @@ In addition to defining the extension attributes, this document defines the conc
 
 ## Log Level Bindings
 
- A standard way to map well-known log level names from different langaunges and frameworks onto the `loglevelname` and `loglevelnum` values defined in this spec. 
-
-Each binding defines the unique log name and/or log number in a framework and the coresponding RECOMMENDED `loglevelname` and `loglevelnum`.
-
-
+A standard way to map well-known log level names from different langaunges and 
+frameworks onto the `loglevelname` and `loglevelnum` values defined in this spec. 
+ 
+Each binding defines the unique log name and/or log number in a framework and the 
+coresponding RECOMMENDED `loglevelname` and `loglevelnum`.
 
 ### RECOMMENDED Log Bindings
 
