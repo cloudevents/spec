@@ -10,6 +10,8 @@ a common concept of "log-level". This extension aims to provide a standard way f
 
 Sharing a common way to describe importance of events allows for better monitoring systems, tooling and general log consumption.
 
+In addition to defining the extension attributes, this document defines the concept of [Log Level Bindings](#Log Level Bindings) - a standard way to map well-known log level names from different langaunges and frameworks onto the `loglevelname` and `loglevelnum` values defined in this spec. 
+
 ## Attributes
 
 ### loglevelname 
@@ -51,9 +53,17 @@ Sharing a common way to describe importance of events allows for better monitori
     - `7` for `debug`
     - `8` for `verbose`
 
-## RECOMMENDED Log Mappings
+## Log Level Bindings
 
-### Syslog
+ A standard way to map well-known log level names from different langaunges and frameworks onto the `loglevelname` and `loglevelnum` values defined in this spec. 
+
+Each binding defines the unique log name and/or log number in a framework and the coresponding RECOMMENDED `loglevelname` and `loglevelnum`.
+
+
+
+### RECOMMENDED Log Bindings
+
+#### Syslog
 
 All syslog log records SHOULD assign the severity level to `loglevelnum`. 
 In addition to that The corresponding `loglevelname`s to each of the severity values
@@ -69,7 +79,7 @@ In addition to that The corresponding `loglevelname`s to each of the severity va
 | 6               | `info`         | 6             |
 | 7               | `debug`        | 7             |
 
-### Windows Event Log
+#### Windows Event Log
 Binding SHOULD NOT depend on the internal `Level` integer value of the log 
 record as it is defined by the windows event producer. 
 
@@ -84,7 +94,7 @@ the windows event log record `Level` values.
 | `Information`       | `info`         | 6             |
 | `Verbose`           | `verbose`      | 8             |
 
-### Python
+#### Python
 | Python Log Level | `loglevelname` | `loglevelnum` |
 | ---------------- | -------------- | ------------- |
 | `CRITICAL`       | `critical`     | 2             |
@@ -96,7 +106,7 @@ the windows event log record `Level` values.
 | `DEBUG`          | `debug`        | 7             |
 | `NOTSET`         | `verbose`      | 8             |
 
-### Java (Spring)
+#### Java (Spring)
 | Sprint Log Level | `loglevelname` | `loglevelnum` |
 | ---------------- | -------------- | ------------- |
 | `ERROR`          | `error`        | 3             |
@@ -105,7 +115,7 @@ the windows event log record `Level` values.
 | `DEBUG`          | `debug`        | 7             |
 | `TRACE`          | `verbose`      | 8             |
 
-### .NET (Serilog)
+#### .NET (Serilog)
 | Serilog Log Level | `loglevelname` | `loglevelnum` |
 | ----------------- | -------------- | ------------- |
 | `Fatal`           | `critical`     | 2             |
@@ -115,7 +125,7 @@ the windows event log record `Level` values.
 | `Debug`           | `debug`        | 7             |
 | `Verbose`         | `verbose`      | 8             |
 
-### Javascript (Winston)
+#### Javascript (Winston)
 | Winston Log Level | `loglevelname` | `loglevelnum` |
 | ----------------- | -------------- | ------------- |
 | `error`           | `error`        | 3             |
@@ -126,7 +136,7 @@ the windows event log record `Level` values.
 | `debug`           | `debug`        | 9             |
 | `silly`           | `silly`        | 10            |
 
-### C++ (Spdlog)
+#### C++ (Spdlog)
 | Spdlog Log Level | `loglevelname` | `loglevelnum` |
 | ---------------- | -------------- | ------------- |
 | `critical`       | `critical`     | 2             |
@@ -136,7 +146,7 @@ the windows event log record `Level` values.
 | `debug`          | `debug`        | 7             |
 | `trace`          | `verbose`      | 8             |
 
-### Go (Zap)
+#### Go (Zap)
 | Zap Log Level | `loglevelname` | `loglevelnum` |
 | ------------- | -------------- | ------------- |
 | `Fatal`       | `fatal`        | 1             |
