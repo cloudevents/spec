@@ -10,6 +10,8 @@ a common concept of "log-level". This extension aims to provide a standard way f
 
 Sharing a common way to describe importance of events allows for better monitoring systems, tooling and general log consumption.
 
+## Attributes
+
 ### loglevelname 
 
 - Type: `String`
