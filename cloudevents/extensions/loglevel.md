@@ -74,7 +74,8 @@ corresponding RECOMMENDED `loglevelname` and `loglevelnum`.
 #### Syslog
 
 All syslog log records SHOULD assign the severity level to `loglevelnum`. 
-In addition to that The corresponding `loglevelname`s to each of the severity values
+In addition to that, the corresponding `loglevelname`s to each of the severity values 
+SHOULD follow the given table: 
 
 | Syslog Severity | `loglevelname` | `loglevelnum` |
 | --------------- | -------------- | ------------- |
