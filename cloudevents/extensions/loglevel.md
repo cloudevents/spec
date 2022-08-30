@@ -33,7 +33,7 @@ custom extension you MUST use at-least one of these OPTIONAL attributes.
   - RECOMMENDED values include `emergency`, `alert`, `critical`, `error`, 
     `warning`, `notice`, `info`, `debug`, and `verbose`, but  others MAY be used.
   - SHOULD have a one-to-one relationship with a distinct `loglevelnum` in the scope of
-   the `source`
+    the `source`
 
 ### loglevelnum 
 
