@@ -19,6 +19,9 @@ onto the `loglevelname` and `loglevelnum` values defined in this spec.
 
 ## Attributes
 
+All attributes of this extension are OPTIONAL. however, when using this 
+custom extension you MUST use at-least one of these OPTIONAL attributes. 
+
 ### loglevelname 
 
 - Type: `String`
