@@ -16,7 +16,7 @@ based on the specified type of SNS messages.
 | `id`                  | "x-amz-sns-message-id" value |
 | `source`              | "x-amz-sns-topic-arn" value |
 | `specversion`         | `1.0`                                           |
-| `type`                | "x-amz-sns-message-type" value    |
+| `type`                | `com.amazonaws.sns.` + "x-amz-sns-message-type" value    |
 | `datacontenttype`     | `application/json`         |
 | `dataschema`          | Omit                                            |
 | `subject`             | Omit                        |
@@ -30,7 +30,7 @@ based on the specified type of SNS messages.
 | `id`                  | "x-amz-sns-message-id" value |
 | `source`              | "x-amz-sns-subscription-arn" value |
 | `specversion`         | `1.0`                                           |
-| `type`                | "x-amz-sns-message-type" value    |
+| `type`                | `com.amazonaws.sns.` + "x-amz-sns-message-type" value    |
 | `datacontenttype`     | `application/json`         |
 | `dataschema`          | Omit                                            |
 | `subject`             | "Subject" value (if present)                    |
@@ -44,7 +44,7 @@ based on the specified type of SNS messages.
 | `id`                  | "x-amz-sns-message-id" value |
 | `source`              | "x-amz-sns-subscription-arn" value |
 | `specversion`         | `1.0`                                           |
-| `type`                | "x-amz-sns-message-type" value    |
+| `type`                | `com.amazonaws.sns.` + "x-amz-sns-message-type" value    |
 | `datacontenttype`     | `application/json`         |
 | `dataschema`          | Omit                                            |
 | `subject`             | Omit                    |
