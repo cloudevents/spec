@@ -13,7 +13,7 @@ Sharing a common way to describe importance of events allows for better monitori
 systems, tooling and general log consumption.
 
 In addition to defining the extension attributes, this document defines 
-the concept of [Log Level Bindings](#Log Level Bindings) - a standard way to map 
+the concept of [Log Level Bindings](#log-level-bindings) - a standard way to map 
 well-known log level names from different languages and frameworks 
 onto the `loglevelname` and `loglevelnum` values defined in this spec. 
 
@@ -62,7 +62,7 @@ onto the `loglevelname` and `loglevelnum` values defined in this spec.
 
 A standard way to map well-known log level names from different languages and 
 frameworks onto the `loglevelname` and `loglevelnum` values defined in this spec. 
- 
+
 Each binding defines the unique log name and/or log number in a framework and the 
 corresponding RECOMMENDED `loglevelname` and `loglevelnum`.
 
