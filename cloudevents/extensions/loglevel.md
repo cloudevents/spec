@@ -19,8 +19,8 @@ onto the `loglevelname` and `loglevelnum` values defined in this spec.
 
 ## Attributes
 
-All attributes of this extension are OPTIONAL. however, when using this 
-custom extension you MUST use at-least one of these OPTIONAL attributes. 
+All attributes of this extension are OPTIONAL. However, when using this 
+custom extension you MUST use at least one of these OPTIONAL attributes. 
 
 ### loglevelname 
 
@@ -30,8 +30,8 @@ custom extension you MUST use at-least one of these OPTIONAL attributes.
   - OPTIONAL
   - if present, MUST be a non-empty string
   - SHOULD be lowercase
-  - RECOMMENDED values include `emergency`, `alert`, `critical`, `error`, 
-    `warning`, `notice`, `info`, `debug`, and `verbose`, but  others MAY be used.
+  - RECOMMENDED values are `emergency`, `alert`, `critical`, `error`, 
+    `warning`, `notice`, `info`, `debug`, and `verbose`, but others MAY be used.
   - SHOULD have a one-to-one relationship with a distinct `loglevelnum` in the scope of
     the `source`.
 
@@ -52,7 +52,7 @@ custom extension you MUST use at-least one of these OPTIONAL attributes.
 - Constraints
   - OPTIONAL
   - if present, MUST NOT be negative
-  - RECOMMENDED values include
+  - RECOMMENDED values are
     - `0` for `emergency`
     - `1` for `alert`
     - `2` for `critical`
