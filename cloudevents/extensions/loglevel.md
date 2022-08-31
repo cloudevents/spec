@@ -92,7 +92,7 @@ SHOULD follow the given table:
 Binding SHOULD NOT depend on the internal `Level` integer value of the log 
 record as it is defined by the Windows event producer. 
 
-Instead, cloudevent producers SHOULD use the following `loglevelnum`s instead of 
+Instead, CloudEvent producers SHOULD use the following `loglevelnum`s instead of 
 the Windows event log record `Level` values.
 
 | Windows Event Level | `loglevelname` | `loglevelnum` |
