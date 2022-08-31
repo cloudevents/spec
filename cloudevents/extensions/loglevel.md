@@ -39,10 +39,12 @@ custom extension you MUST use at-least one of these OPTIONAL attributes.
 
 - Type: `Integer`
 - Description: A numerical representation of the level of importance of the event. 
+  
   Conforms to the severity ordering specified by 
   [RFC5424](https://www.rfc-editor.org/rfc/rfc5424.html#section-6.2.1): severity of
   all levels is assumed to be numerically ascending from most important to least
   important.
+  
   This specification does not define "importance" or meaning of each value other than
   an event with a lower numerical value MUST be of more importance than an event with
   a higher numerical value in the same `source`.
