@@ -22,6 +22,11 @@ onto the `loglevelname` and `loglevelnum` values defined in this spec.
 All attributes of this extension are OPTIONAL. However, when using this 
 custom extension you MUST use at least one of these OPTIONAL attributes. 
 
+When both attributes are used, all `loglevelname` values which MAY be produced
+in a context of a `source` SHOULD be in a 
+[one-to-one and onto](https://en.wikipedia.org/wiki/Bijection) relationship with all
+`loglevelnum` values which MAY be produced by the same `source`.
+
 ### loglevelname 
 
 - Type: `String`
@@ -32,8 +37,6 @@ custom extension you MUST use at least one of these OPTIONAL attributes.
   - SHOULD be lowercase
   - RECOMMENDED values are `emergency`, `alert`, `critical`, `error`, 
     `warning`, `notice`, `info`, `debug`, and `verbose`, but others MAY be used.
-  - SHOULD have a one-to-one relationship with a distinct `loglevelnum` in the scope of
-    the `source`.
 
 ### loglevelnum 
 
