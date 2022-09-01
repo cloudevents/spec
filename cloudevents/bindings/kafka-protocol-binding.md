@@ -182,6 +182,11 @@ directly to the CloudEvents `datacontenttype` attribute.
 The [`data`](#21-data) byte-sequence MUST be used as the value of the Kafka
 message.
 
+A CloudEvent with no `data` can be represented in a Kafka message in _binary_ mode,
+in which case the message has no value. In a topic with log compaction enabled,
+any such message will represent a _tombstone_ record, as described in the
+[Kafka compaction documentation](https://kafka.apache.org/documentation/#design_compactionbasics).
+
 #### 3.2.3. Metadata Headers
 
 All [CloudEvents][ce] attributes and
