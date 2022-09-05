@@ -188,7 +188,6 @@ semantics of the event.
 [cbor-major-types]: https://www.rfc-editor.org/rfc/rfc8949.html#name-major-types
 [cbor-tagging]: https://www.rfc-editor.org/rfc/rfc8949.html#section-3.4
 [cbor-standard-datetime]: https://www.rfc-editor.org/rfc/rfc8949.html#name-standard-date-time-string
-[cbor-epoch-datetime]: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time
 [cbor-encoded-data-item]: https://www.rfc-editor.org/rfc/rfc8949.html#section-3.4.5.1
 [cddl-spec]: https://www.rfc-editor.org/rfc/rfc8610
 [cbor-encoder]: https://www.rfc-editor.org/rfc/rfc8949.html#name-terminology
