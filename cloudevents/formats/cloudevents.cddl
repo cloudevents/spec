@@ -8,6 +8,7 @@ cloudevent = {
 	? subject: ce_text / null,
 	? "time": tdate / null,
 	? data: ce_bytes / any / null,
+    * text => ce_attribute_type
 }
 
 ce_timestamp = tdate
@@ -18,7 +19,7 @@ ce_bytes = bytes
 ce_bool = bool
 ce_int = int
 
-ce_type = ce_bool
+ce_attribute_type = ce_bool
 	/ ce_int
 	/ ce_bytes
 	/ ce_text
