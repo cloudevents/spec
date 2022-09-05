@@ -7,7 +7,7 @@ cloudevent = {
 	? dataschema: ce_uri / null,
 	? subject: ce_text / null,
 	? "time": tdate / null,
-	? data: ce_bytes / any / null,
+	? data: ce_bytes / ce_text / any / null,
     * text => ce_attribute_type
 }
 
