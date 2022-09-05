@@ -56,7 +56,7 @@ with exceptions noted below.
 | CloudEvents   | CBOR                                                         |
 | ------------- | ------------------------------------------------------------ |
 | Boolean       | [Simple value][cbor-fpnocont] number `20` for `false` and number `21` for `true` |
-| Integer       | [Major type 0][cbor-major-types]                             |
+| Integer       | [Major type 0][cbor-major-types] for positive integers and [Major type 1][cbor-major-types] for negative integers                         |
 | String        | [Major type 3][cbor-major-types]                             |
 | Binary        | [Major type 2][cbor-major-types]                             |
 | URI           | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`)|
