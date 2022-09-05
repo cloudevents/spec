@@ -195,3 +195,4 @@ semantics of the event.
 [ce]: ../spec.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [ce-types]: ../spec.md#type-system
+[datacontenttype]: ../spec.md#datacontenttype
