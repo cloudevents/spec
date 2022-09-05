@@ -9,7 +9,7 @@ the [CBOR Specification][cbor-spec].
 
 1. [Introduction](#1-introduction)
 2. [Attributes](#2-attributes)
-3. [Data](#3-data)
+3. [Envelope](#3-envelope)
 
 ## 1. Introduction
 
