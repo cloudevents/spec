@@ -38,10 +38,10 @@ specification does not explicitly map each attribute, but provides a generic
 mapping model that applies to all current and future CloudEvents attributes,
 including extensions.
 
-For clarity, extension attributes are serialized using the same rules as
+For clarity, extension attributes are encoded using the same rules as
 core attributes. This includes their syntax and placement
 within the CBOR data item. In particular, extensions are placed as top-level CBOR
-key-value pairs of a map. Extensions MUST be serialized as a top-level CBOR key-value pairs.
+key-value pairs of a map. Extensions MUST be encoded as a top-level CBOR key-value pairs.
 
 ### 2.1. Base Type System
 
@@ -110,9 +110,9 @@ The CBOR representation of the event "data" payload is determined by the runtime
 type of the `data` content and the value of the [`datacontenttype`
 attribute][datacontenttype].
 
-#### 3.1.1. Payload Serialization
+#### 3.1.1. Payload Encoding
 
-Before taking action, a CBOR serializer MUST first determine the runtime data
+Before taking action, a [CBOR encoder][cbor-encoder] MUST first determine the runtime data
 type of the `data` content.
 
 If the implementation determines that the type of data is `Binary`, the value
@@ -129,16 +129,16 @@ If the `datacontenttype` is unspecified, processing SHOULD proceed as if the
 `datacontenttype` had been specified explicitly as `application/cbor`.
 
 If the `datacontenttype` declares the data to contain CBOR-formatted content, a
-CBOR serializer MUST translate the data value to a [CBOR date item][cbor-data-item], and
+[CBOR encoder][cbor-encoder] MUST translate the data value to a [CBOR date item][cbor-data-item], and
 use the member name `data` to store it inside the CBOR representation. The data
 value MUST be stored directly as a CBOR data item, rather than as an encoded CBOR
-buffer (tagged or un-tagged). An implementation MAY fail to serialize the
-event if it is unable to translate the runtime value to a CBOR data item.
+buffer (tagged or un-tagged). An implementation MAY fail to encode the
+event if it is unable to translate the runtime value to a [CBOR data item][cbor-data-item].
 
 Otherwise, if the `datacontenttype` does not declare CBOR-formatted data
-content, a CBOR serializer MUST store the data value, properly encoded according 
+content, a [CBOR encoder][cbor-encoder] MUST store the data value, properly encoded according 
 to the `datacontenttype`, in the `data` member of the CBOR representation. 
-An implementation MAY fail to serialize the event if it is unable to represent
+An implementation MAY fail to encode the event if it is unable to represent
 the runtime value as a properly encoded CBOR data item.
 
 Furthermore, unlike attributes, for which value types are restricted by the
@@ -148,7 +148,7 @@ Furthermore, unlike attributes, for which value types are restricted by the
 `data` member MAY have a simple value of `null`, representing an explicit `null`
 payload as distinct from the absence of the `data` member.
 
-#### 3.1.2. Payload Deserialization
+#### 3.1.2. Payload Decoding
 
 When a `data` member is present, the decoding behavior is dependent on the value
 of the `datacontenttype` attribute. If the `datacontenttype` declares the `data`
@@ -156,22 +156,22 @@ to contain CBOR-formatted content (that is, its subtype is `cbor` or has a
 `+cbor` format extension), then the `data` member MUST be treated directly as a
 [CBOR data item][cbor-data-item] and decoded using an appropriate CBOR type mapping for
 the runtime. Note: if the `data` member is a string, 
-bytes or [encoded cbor data item][cbor-encoded-data-item], a CBOR deserializer MUST
+bytes or [encoded cbor data item][cbor-encoded-data-item], a [CBOR decoder][cbor-decoder] MUST
 interpret it directly as a the given value; it MUST NOT further
-deserialize the value as a CBOR data item.
+decode the value as a [CBOR data item][cbor-data-item].
 
 If the `datacontenttype` does not declare CBOR-formatted data content, then the
 `data` member SHOULD be treated as an encoded content string. An implementation
-MAY fail to deserialize the event if the `data` member is not a string or bytes value, or if it
+MAY fail to decode the event if the `data` member is not a string or bytes value, or if it
 is unable to interpret the `data` with the `datacontenttype`.
 
 When a `data` member is present, if the `datacontenttype` attribute is absent, a
-CBOR deserializer SHOULD proceed as if it were set to `application/cbor`, which
+[CBOR decoder][cbor-decoder] SHOULD proceed as if it were set to `application/cbor`, which
 declares the data to contain CBOR-formatted content. Thus, it SHOULD treat the
 `data` member directly as a [CBOR data item][cbor-data-item] as specified above.
 Furthermore, if a CBOR-formatted event with no `datacontenttype` attribute, is
-deserialized and then re-serialized using a different format or protocol
-binding, the `datacontenttype` in the re-serialized event SHOULD be set
+decoded and then re-encoded using a different format or protocol
+binding, the `datacontenttype` in the re-encoded event SHOULD be set
 explicitly to the implied `application/cbor` content type to preserve the
 semantics of the event.
 
@@ -191,6 +191,8 @@ semantics of the event.
 [cbor-epoch-datetime]: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time
 [cbor-encoded-data-item]: https://www.rfc-editor.org/rfc/rfc8949.html#section-3.4.5.1
 [cddl-spec]: https://www.rfc-editor.org/rfc/rfc8610
+[cbor-encoder]: https://www.rfc-editor.org/rfc/rfc8949.html#name-terminology
+[cbor-decoder]: https://www.rfc-editor.org/rfc/rfc8949.html#name-terminology
 [cbor-data-item]: https://www.rfc-editor.org/rfc/rfc8949.html#section-1.2
 [ce]: ../spec.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
