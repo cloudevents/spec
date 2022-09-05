@@ -1,0 +1,12 @@
+cloudevent = {
+    id: text,
+    source: text,
+    specversion: text,
+    type: text,
+    ? datacontenttype: text / null,
+    ? dataschema: uri / null,
+    ? subject: text / null,
+    ? time: tdate / null,
+    ? data: bytes/ any/ null,
+    * text=>any,
+}
