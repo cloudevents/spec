@@ -6,7 +6,7 @@ cloudevent = {
     ? datacontenttype: text / null,
     ? dataschema: uri / null,
     ? subject: text / null,
-    ? time: tdate / null,
+    ? "time": tdate / null,
     ? data: bytes/ any/ null,
     * text=>any,
 }
