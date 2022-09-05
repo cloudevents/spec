@@ -22,7 +22,7 @@ Concise Binary Object Representation (CBOR) Data Interchange Format ([RFC 8949][
 The [Attributes](#2-attributes) section describes the naming conventions and
 data type mappings for CloudEvents attributes.
 
-The [Envelope](#3-envelope) section defines a JSON container for CloudEvents
+The [Envelope](#3-envelope) section defines a CBOR container for CloudEvents
 attributes and an associated media type.
 
 ### 1.1. Conformance
@@ -85,317 +85,95 @@ If required, the CloudEvents type can be determined by inference using the rules
 from the mapping table. The value is compatible with the respective CloudEvents type when the
 mapping rules are fulfilled.
 
-### 2.4. JSONSchema Validation
+### 2.4. CDDL Schema Validation
 
-The CloudEvents [CDDL](http://json-schema.org) for the spec is located
-[here](cloudevents.json) and contains the definitions for validating events in
-JSON.
+The CloudEvents [CDDL][cddl-spec] for the spec is defined under
+[cloudevents.cddl](cloudevents.cddl) and contains the definitions for validating events in
+CBOR.
 
 ## 3. Envelope
 
-Each CloudEvents event can be wholly represented as a JSON object.
+Each CloudEvents event can be wholly represented as a CBOR data item.
 
-Such a representation MUST use the media type `application/cloudevents+json`.
+Such a representation MUST use the media type `application/cloudevents+cbor`.
 
 All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST
-become members of the JSON object, with the respective JSON object member name
+become members of the CBOR data item, with the respective CBOR item member name
 matching the attribute name, and the member's type and value being mapped using
 the [type system mapping](#22-type-system-mapping).
 
-OPTIONAL not omitted attributes MAY be represented as a `null` JSON value.
+OPTIONAL not omitted attributes MAY be represented as a `null` CBOR simple value.
 
 ### 3.1. Handling of "data"
 
-The JSON representation of the event "data" payload is determined by the runtime
+The CBOR representation of the event "data" payload is determined by the runtime
 type of the `data` content and the value of the [`datacontenttype`
 attribute][datacontenttype].
 
 #### 3.1.1. Payload Serialization
 
-Before taking action, a JSON serializer MUST first determine the runtime data
+Before taking action, a CBOR serializer MUST first determine the runtime data
 type of the `data` content.
 
 If the implementation determines that the type of data is `Binary`, the value
-MUST be represented as a [JSON string][json-string] expression containing the
-[Base64][base64] encoded binary value, and use the member name `data_base64` to
-store it inside the JSON representation. If present, the `datacontenttype` MUST
-reflect the format of the original binary data. If a `datacontenttype` value is
-not provided, no assumptions can be made as to the format of the data and
-therefore the `datacontenttype` attribute MUST NOT be present in the resulting
-CloudEvent.
-
-Note: Definition of `data_base64` is a JSON-specific marshaling rule and not
-part of the formal CloudEvents context attributes definition. This means the
-rules governing CloudEvent attributes names do not apply to this JSON member.
+MUST be represented as a [Major type 2][cbor-major-types] value. If present, the `datacontenttype` MUST
+reflect the format of the original binary data.
 
 If the type of data is not `Binary`, the implementation will next determine
 whether the value of the `datacontenttype` attribute declares the `data` to
-contain JSON-formatted content. Such a content type is defined as one having a
-[media subtype][rfc2045-sec5] equal to `json` or ending with a `+json` format
-extension. That is, a `datacontenttype` declares JSON-formatted content if its
-media type, when stripped of parameters, has the form `*/json` or `*/*+json`.
+contain CBOR-formatted content. Such a content type is defined as one having a
+[media subtype][rfc2045-sec5] equal to `cbor` or ending with a `+cbor` format
+extension. That is, a `datacontenttype` declares CBOR-formatted content if its
+media type, when stripped of parameters, has the form `*/cbor` or `*/*+cbor`.
 If the `datacontenttype` is unspecified, processing SHOULD proceed as if the
-`datacontenttype` had been specified explicitly as `application/json`.
+`datacontenttype` had been specified explicitly as `application/cbor`.
 
-If the `datacontenttype` declares the data to contain JSON-formatted content, a
-JSON serializer MUST translate the data value to a [JSON value][json-value], and
-use the member name `data` to store it inside the JSON representation. The data
-value MUST be stored directly as a JSON value, rather than as an encoded JSON
-document represented as a string. An implementation MAY fail to serialize the
-event if it is unable to translate the runtime value to a JSON value.
+If the `datacontenttype` declares the data to contain CBOR-formatted content, a
+CBOR serializer MUST translate the data value to a [CBOR date item][cbor-data-item], and
+use the member name `data` to store it inside the CBOR representation. The data
+value MUST be stored directly as a CBOR data item, rather than as an encoded CBOR
+buffer (tagged or un-tagged). An implementation MAY fail to serialize the
+event if it is unable to translate the runtime value to a CBOR data item.
 
-Otherwise, if the `datacontenttype` does not declare JSON-formatted data
-content, a JSON serializer MUST store a string representation of the data value,
-properly encoded according to the `datacontenttype`, in the `data` member of the
-JSON representation. An implementation MAY fail to serialize the event if it is
-unable to represent the runtime value as a properly encoded string.
-
-Out of this follows that the presence of the `data` and `data_base64` members is
-mutually exclusive in a JSON serialized CloudEvent.
+Otherwise, if the `datacontenttype` does not declare CBOR-formatted data
+content, a CBOR serializer MUST store the data value, properly encoded according 
+to the `datacontenttype`, in the `data` member of the CBOR representation. 
+An implementation MAY fail to serialize the event if it is unable to represent
+the runtime value as a properly encoded CBOR data item.
 
 Furthermore, unlike attributes, for which value types are restricted by the
 [type-system mapping](#22-type-system-mapping), the `data` member
-[JSON value][json-value] is unrestricted, and MAY contain any valid JSON if the
-`datacontenttype` declares the data to be JSON-formatted. In particular, the
-`data` member MAY have a value of `null`, representing an explicit `null`
+[CBOR data item][cbor-data-item] is unrestricted, and MAY contain any valid CBOR if the
+`datacontenttype` declares the data to be CBOR-formatted. In particular, the
+`data` member MAY have a simple value of `null`, representing an explicit `null`
 payload as distinct from the absence of the `data` member.
 
 #### 3.1.2. Payload Deserialization
 
-When a CloudEvents is deserialized from JSON, the presence of the `data_base64`
-member clearly indicates that the value is a Base64 encoded binary data, which
-the deserializer MUST decode into a binary runtime data type. The deserializer
-MAY further interpret this binary data according to the `datacontenttype`. If
-the `datacontenttype` attribute is absent, the decoding MUST NOT make an
-assumption of JSON-formatted data (as described below for the `data` member).
-
 When a `data` member is present, the decoding behavior is dependent on the value
 of the `datacontenttype` attribute. If the `datacontenttype` declares the `data`
-to contain JSON-formatted content (that is, its subtype is `json` or has a
-`+json` format extension), then the `data` member MUST be treated directly as a
-[JSON value][json-value] and decoded using an appropriate JSON type mapping for
-the runtime. Note: if the `data` member is a string, a JSON deserializer MUST
-interpret it directly as a [JSON String][json-string] value; it MUST NOT further
-deserialize the string as a JSON document.
+to contain CBOR-formatted content (that is, its subtype is `cbor` or has a
+`+cbor` format extension), then the `data` member MUST be treated directly as a
+[CBOR data item][cbor-data-item] and decoded using an appropriate CBOR type mapping for
+the runtime. Note: if the `data` member is a string, 
+bytes or [encoded cbor data item][cbor-encoded-data-item], a CBOR deserializer MUST
+interpret it directly as a the given value; it MUST NOT further
+deserialize the value as a CBOR data item.
 
-If the `datacontenttype` does not declare JSON-formatted data content, then the
+If the `datacontenttype` does not declare CBOR-formatted data content, then the
 `data` member SHOULD be treated as an encoded content string. An implementation
-MAY fail to deserialize the event if the `data` member is not a string, or if it
+MAY fail to deserialize the event if the `data` member is not a string or bytes value, or if it
 is unable to interpret the `data` with the `datacontenttype`.
 
 When a `data` member is present, if the `datacontenttype` attribute is absent, a
-JSON deserializer SHOULD proceed as if it were set to `application/json`, which
-declares the data to contain JSON-formatted content. Thus, it SHOULD treat the
-`data` member directly as a [JSON value][json-value] as specified above.
-Furthermore, if a JSON-formatted event with no `datacontenttype` attribute, is
+CBOR deserializer SHOULD proceed as if it were set to `application/cbor`, which
+declares the data to contain CBOR-formatted content. Thus, it SHOULD treat the
+`data` member directly as a [CBOR data item][cbor-data-item] as specified above.
+Furthermore, if a CBOR-formatted event with no `datacontenttype` attribute, is
 deserialized and then re-serialized using a different format or protocol
 binding, the `datacontenttype` in the re-serialized event SHOULD be set
-explicitly to the implied `application/json` content type to preserve the
+explicitly to the implied `application/cbor` content type to preserve the
 semantics of the event.
-
-### 3.2. Examples
-
-Example event with `Binary`-valued data:
-
-```JSON
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext",
-    "id" : "A234-1234-1234",
-    "time" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleothervalue" : 5,
-    "datacontenttype" : "application/vnd.apache.thrift.binary",
-    "data_base64" : "... base64 encoded string ..."
-}
-```
-
-The above example re-encoded using [HTTP Binary Content Mode][http-binary]:
-
-```
-ce-specversion: 1.0
-ce-type: com.example.someevent
-ce-source: /mycontext
-ce-id: A234-1234-1234
-ce-time: 2018-04-05T17:31:00Z
-ce-comexampleextension1: value
-ce-comexampleothervalue: 5
-content-type: application/vnd.apache.thrift.binary
-
-...raw binary bytes...
-```
-
-Example event with a serialized XML document as the `String` (i.e. non-`Binary`)
-valued `data`, and an XML (i.e. non-JSON-formatted) content type:
-
-```JSON
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext",
-    "id" : "B234-1234-1234",
-    "time" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleothervalue" : 5,
-    "unsetextension": null,
-    "datacontenttype" : "application/xml",
-    "data" : "<much wow=\"xml\"/>"
-}
-```
-
-The above example re-encoded using [HTTP Binary Content Mode][http-binary]:
-
-```
-ce-specversion: 1.0
-ce-type: com.example.someevent
-ce-source: /mycontext
-ce-id: B234-1234-1234
-ce-time: 2018-04-05T17:31:00Z
-ce-comexampleextension1: value
-ce-comexampleothervalue: 5
-content-type: application/xml
-
-<much wow="xml"/>
-```
-
-Example event with [JSON Object][json-object]-valued `data` and a content type
-declaring JSON-formatted data:
-
-```JSON
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext",
-    "subject": null,
-    "id" : "C234-1234-1234",
-    "time" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleothervalue" : 5,
-    "datacontenttype" : "application/json",
-    "data" : {
-        "appinfoA" : "abc",
-        "appinfoB" : 123,
-        "appinfoC" : true
-    }
-}
-```
-
-The above example re-encoded using [HTTP Binary Content Mode][http-binary]:
-
-```
-ce-specversion: 1.0
-ce-type: com.example.someevent
-ce-source: /mycontext
-ce-id: C234-1234-1234
-ce-time: 2018-04-05T17:31:00Z
-ce-comexampleextension1: value
-ce-comexampleothervalue: 5
-content-type: application/json
-
-{
-  "appinfoA" : "abc",
-  "appinfoB" : 123,
-  "appinfoC" : true
-}
-```
-
-Example event with [JSON Number][json-number]-valued `data` and a content type
-declaring JSON-formatted data:
-
-```JSON
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext",
-    "subject": null,
-    "id" : "C234-1234-1234",
-    "time" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleothervalue" : 5,
-    "datacontenttype" : "application/json",
-    "data" : 1.5
-}
-```
-
-The above example re-encoded using [HTTP Binary Content Mode][http-binary]:
-
-```
-ce-specversion: 1.0
-ce-type: com.example.someevent
-ce-source: /mycontext
-ce-id: C234-1234-1234
-ce-time: 2018-04-05T17:31:00Z
-ce-comexampleextension1: value
-ce-comexampleothervalue: 5
-content-type: application/json
-
-1.5
-```
-
-Example event with a literal JSON string as the non-`Binary`-valued `data` and
-no `datacontenttype`. The data is implicitly treated as if the `datacontenttype`
-were set to `application/json`:
-
-```JSON
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext",
-    "subject": null,
-    "id" : "D234-1234-1234",
-    "time" : "2018-04-05T17:31:00Z",
-    "comexampleextension1" : "value",
-    "comexampleothervalue" : 5,
-    "data" : "I'm just a string"
-}
-```
-
-The above example re-encoded using [HTTP Binary Content Mode][http-binary].
-Note that the Content Type is explicitly set to the `application/json` value
-that was implicit in JSON format. Note also that the content is quoted to
-indicate that it is a literal JSON string. If the quotes were missing, this
-would have been an invalid event because the content could not be decoded as
-`application/json`:
-
-```
-ce-specversion: 1.0
-ce-type: com.example.someevent
-ce-source: /mycontext
-ce-id: D234-1234-1234
-ce-time: 2018-04-05T17:31:00Z
-ce-comexampleextension1: value
-ce-comexampleothervalue: 5
-content-type: application/json
-
-"I'm just a string"
-```
-
-Example event with a `Binary`-valued `data_base64` but no `datacontenttype`.
-Even though the data happens to be a valid JSON document when interpreted as
-text, no content type is inferred.
-
-```JSON
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext",
-    "id" : "D234-1234-1234",
-    "data_base64" : "eyAieHl6IjogMTIzIH0="
-}
-```
-
-The above example re-encoded using [HTTP Binary Content Mode][http-binary].
-Note that there is no `content-type` header present.
-
-```
-ce-specversion: 1.0
-ce-type: com.example.someevent
-ce-source: /mycontext
-ce-id: D234-1234-1234
-
-{ "xyz": 123 }
-```
 
 ## References
 
@@ -411,12 +189,9 @@ ce-id: D234-1234-1234
 [cbor-tagging]: https://www.rfc-editor.org/rfc/rfc8949.html#section-3.4
 [cbor-standard-datetime]: https://www.rfc-editor.org/rfc/rfc8949.html#name-standard-date-time-string
 [cbor-epoch-datetime]: https://www.rfc-editor.org/rfc/rfc8949.html#name-epoch-based-date-time
+[cbor-encoded-data-item]: https://www.rfc-editor.org/rfc/rfc8949.html#section-3.4.5.1
 [cddl-spec]: https://www.rfc-editor.org/rfc/rfc8610
+[cbor-data-item]: https://www.rfc-editor.org/rfc/rfc8949.html#section-1.2
 [ce]: ../spec.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
-[rfc3986-section41]: https://tools.ietf.org/html/rfc3986#section-4.1
-[rfc3986-section43]: https://tools.ietf.org/html/rfc3986#section-4.3
-[rfc3339]: https://tools.ietf.org/html/rfc3339
-
 [ce-types]: ../spec.md#type-system
-[json-number]: 
