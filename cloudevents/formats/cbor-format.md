@@ -105,7 +105,7 @@ Such a representation MUST use the media type `application/cloudevents+cbor`.
 
 All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST 
 become key-value pairs of the CBOR map, with the respective CBOR item key 
-atching the attribute name and encoded as a CBOR text 
+actings as the attribute name and encoded as a CBOR text 
 ([major type 3][cbor-major-types]), and the items's type and value being mapped 
 using the [type system mapping](#22-type-system-mapping).
 
