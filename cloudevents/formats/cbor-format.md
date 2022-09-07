@@ -81,7 +81,7 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.
 
-If needed, the CloudEvents type can be determined by inference using the rules
+If needed, the CloudEvents attribute type can be determined by inference using the rules
 from the mapping table. The value is compatible with the respective CloudEvents type when the
 mapping rules are fulfilled.
 
