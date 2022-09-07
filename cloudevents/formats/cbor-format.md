@@ -129,7 +129,7 @@ If the `datacontenttype` is unspecified, processing SHOULD proceed as if the
 `datacontenttype` had been specified explicitly as `application/cbor`.
 
 If the `datacontenttype` declares the data to contain CBOR-formatted content, a
-[CBOR encoder][cbor-encoder] MUST translate the data value to a [CBOR date item][cbor-data-item], and
+[CBOR encoder][cbor-encoder] MUST translate the data value to a [CBOR data item][cbor-data-item], and
 use the member name `data` to store it inside the CBOR representation. The data
 value MUST be stored directly as a CBOR data item, rather than as an encoded CBOR
 buffer (tagged or un-tagged). An implementation MAY fail to encode the
