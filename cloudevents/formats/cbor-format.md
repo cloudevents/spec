@@ -93,7 +93,7 @@ CBOR.
 
 ## 3. Envelope
 
-Each CloudEvents event can be wholly represented as a CBOR data item.
+Each CloudEvent event can be wholly represented as a CBOR data item.
 
 Such a representation MUST use the media type `application/cloudevents+cbor`.
 
