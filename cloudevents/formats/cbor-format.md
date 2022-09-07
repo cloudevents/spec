@@ -54,7 +54,7 @@ with exceptions noted below.
 
 | CloudEvents   | CBOR                                                         |
 | ------------- | ------------------------------------------------------------ |
-| Boolean       | [Simple value][cbor-fpnocont] number `20` for `false` and number `21` for `true` |
+| Boolean       | CBOR [simple value][cbor-fpnocont] `true` (21) or CBOR simple value `false` (20) |
 | Integer       | [Major type 0][cbor-major-types] for positive integers and [Major type 1][cbor-major-types] for negative integers                         |
 | String        | [Major type 3][cbor-major-types]                             |
 | Binary        | [Major type 2][cbor-major-types]                             |
@@ -62,7 +62,7 @@ with exceptions noted below.
 | URI-reference | [Major type 3][cbor-major-types] |
 | Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)|
 
-Unset attributes MAY be encoded to the [Simple value][cbor-fpnocont] value `22` (`null`). When decoding
+Unset attributes MAY be encoded to the CBOR [simple value][cbor-fpnocont] `null` (22). When decoding
 attributes and a `null` value is encountered, it MUST be treated as the
 equivalent of unset or omitted.
 
