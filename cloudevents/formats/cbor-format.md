@@ -63,9 +63,9 @@ with exceptions noted below.
 | URI-reference | [Major type 3][cbor-major-types] |
 | Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)|
 
-Unset attributes MAY be encoded to the CBOR [simple value][cbor-simple-value] `null` (22). When decoding
-attributes and a `null` value is encountered, it MUST be treated as the
-equivalent of unset or omitted.
+Unset attributes MAY be encoded to the CBOR [simple value][cbor-simple-value] 
+`null` (22). When decoding attributes and a `null` value is encountered, 
+it MUST be treated as the equivalent of unset or omitted.
 
 The reason [major types][cbor-major-types] 0 and 1 were chosen to represent the 
 `Integer` type is because CBOR does not have a single type for positive and 
