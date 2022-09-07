@@ -2,7 +2,7 @@
 
 ## Abstract
 
-This specifications defines how to serialize Cloud Events in the [Concise Binary Object Representation (CBOR)][cbor-spec] data format.
+This specifications defines how to serialize CloudEvents in the [Concise Binary Object Representation (CBOR)][cbor-spec] data format.
 
 ## Table of Contents
 
