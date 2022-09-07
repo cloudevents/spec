@@ -2,8 +2,7 @@
 
 ## Abstract
 
-The CBOR Format for CloudEvents defines how events attributes are expressed in
-the [CBOR Specification][cbor-spec].
+This specifications defines how to serialize Cloud Events in the [Concise Binary Object Representation (CBOR)][cbor-spec] data format.
 
 ## Table of Contents
 
