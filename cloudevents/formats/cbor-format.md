@@ -53,7 +53,7 @@ with exceptions noted below.
 
 | CloudEvents   | CBOR                                                         |
 | ------------- | ------------------------------------------------------------ |
-| Boolean       | CBOR [simple value][cbor-fpnocont] `true` (21) or CBOR simple value `false` (20) |
+| Boolean       | CBOR [simple value][cbor-simple-value] `true` (21) or CBOR simple value `false` (20) |
 | Integer       | [Major type 0][cbor-major-types] for positive integers and [Major type 1][cbor-major-types] for negative integers                         |
 | String        | [Major type 3][cbor-major-types]                             |
 | Binary        | [Major type 2][cbor-major-types]                             |
@@ -61,7 +61,7 @@ with exceptions noted below.
 | URI-reference | [Major type 3][cbor-major-types] |
 | Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)|
 
-Unset attributes MAY be encoded to the CBOR [simple value][cbor-fpnocont] `null` (22). When decoding
+Unset attributes MAY be encoded to the CBOR [simple value][cbor-simple-value] `null` (22). When decoding
 attributes and a `null` value is encountered, it MUST be treated as the
 equivalent of unset or omitted.
 
@@ -93,16 +93,17 @@ CBOR.
 
 ## 3. Envelope
 
-Each CloudEvent event can be wholly represented as a CBOR data item.
+Each CloudEvent event MAY be wholly represented as a CBOR map ([major type 5][cbor-major-types]).
 
 Such a representation MUST use the media type `application/cloudevents+cbor`.
 
-All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST
-become members of the CBOR data item, with the respective CBOR item member name
-matching the attribute name, and the member's type and value being mapped using
-the [type system mapping](#22-type-system-mapping).
+All REQUIRED and all not omitted OPTIONAL attributes in the given event MUST become 
+key-value pairs of the CBOR map, with the respective CBOR item key matching the attribute 
+name and encoded as a CBOR text ([major type 3][cbor-major-types]), and the items's type 
+and value being mapped using the [type system mapping](#22-type-system-mapping).
 
-OPTIONAL not omitted attributes MAY be represented as a `null` CBOR simple value.
+OPTIONAL not omitted attributes MAY be represented as a CBOR 
+[simple value][cbor-simple-value] `null` (22).
 
 ### 3.1. Handling of "data"
 
@@ -183,8 +184,7 @@ semantics of the event.
 
 
 [cbor-spec]: https://www.rfc-editor.org/rfc/rfc8949.html
-[cbor-fpnocont]: https://www.rfc-editor.org/rfc/rfc8949.html#fpnocont
-[cbor-fpnoconttbl2]: https://www.rfc-editor.org/rfc/rfc8949.html#fpnoconttbl2
+[cbor-simple-value]: https://www.rfc-editor.org/rfc/rfc8949.html#fpnocont
 [cbor-major-types]: https://www.rfc-editor.org/rfc/rfc8949.html#name-major-types
 [cbor-tagging]: https://www.rfc-editor.org/rfc/rfc8949.html#section-3.4
 [cbor-standard-datetime]: https://www.rfc-editor.org/rfc/rfc8949.html#name-standard-date-time-string
