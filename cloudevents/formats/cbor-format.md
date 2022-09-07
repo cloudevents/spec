@@ -65,6 +65,8 @@ Unset attributes MAY be encoded to the CBOR [simple value][cbor-fpnocont] `null`
 attributes and a `null` value is encountered, it MUST be treated as the
 equivalent of unset or omitted.
 
+The reason [major types][cbor-major-types] 0 and 1 were chosen to represent the `Integer` type is because CBOR does not have a single type for positive and negative numbers, but rather a type for positive numbers (0) and a type for negative numbers (1).  
+
 Extension specifications MAY define secondary mapping rules for the values of
 attributes they define, but MUST also include the previously defined primary
 mapping.
