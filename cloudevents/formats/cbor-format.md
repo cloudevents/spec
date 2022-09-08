@@ -59,8 +59,8 @@ with exceptions noted below.
 | Integer       | [Major type 0][cbor-major-types] for positive integers and [Major type 1][cbor-major-types] for negative integers                         |
 | String        | [Major type 3][cbor-major-types]                             |
 | Binary        | [Major type 2][cbor-major-types]                             |
-| URI           | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`)|
-| URI-reference | [Major type 3][cbor-major-types] |
+| URI           | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types] |
+| URI-reference | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types] |
 | Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)|
 
 Unset attributes MAY be encoded to the CBOR [simple value][cbor-simple-value] 

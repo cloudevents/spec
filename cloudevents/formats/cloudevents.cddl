@@ -13,8 +13,8 @@ cloudevent = {
 
 ce_timestamp = tdate
 ce_text = text
-ce_uri = uri
-ce_uri_reference = ce_text
+ce_uri = uri / text
+ce_uri_reference = uri / text
 ce_bytes = bytes
 ce_bool = bool
 ce_int = int
