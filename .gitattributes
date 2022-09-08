@@ -1,0 +1,2 @@
+# Force shell scripts to be LF on checkout to support executing on Windows WSL.
+*.sh text eol=lf
