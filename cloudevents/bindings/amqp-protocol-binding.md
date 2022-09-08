@@ -175,7 +175,9 @@ CloudEvent attributes MUST be prefixed with either "cloudEvents_" or
 The '\_' separator character SHOULD be preferred in the interest of
 compatibility with JMS 2.0 clients and JMS message selectors where the ':'
 separator is not permitted for property identifiers (see section 3.8.1.1 of
-[JMS2.0][JMS20]).
+[JMS2.0][JMS20]). Any single message MUST use the same separator for all
+CloudEvents attributes, but a single queue MAY contain messages which use
+different separators.
 
 CloudEvents AMQP consumers SHOULD understand the "cloudEvents" prefix with both
 the '\_' and the ':' separators as permitted within the constraints of the
