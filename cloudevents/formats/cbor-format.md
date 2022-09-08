@@ -59,9 +59,9 @@ with exceptions noted below.
 | Integer       | [Major type 0][cbor-major-types] for positive integers and [Major type 1][cbor-major-types] for negative integers                         |
 | String        | [Major type 3][cbor-major-types]                             |
 | Binary        | [Major type 2][cbor-major-types]                             |
-| URI           | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types] |
-| URI-reference | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types] |
-| Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)|
+| URI           | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types](string) following [RFC 3986][rfc3986]|
+| URI-reference | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types](string) following [RFC 3986][rfc3986]|
+| Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)  or a [Major type 3][cbor-major-types]following [RFC 3339][rfc3339] (ISO 8601)  |
 
 Unset attributes MAY be encoded to the CBOR [simple value][cbor-simple-value] 
 `null` (22). When decoding attributes and a `null` value is encountered, 
@@ -208,3 +208,5 @@ implied `application/cbor` content type to preserve the semantics of the event.
 [ce-types]: ../spec.md#type-system
 [datacontenttype]: ../spec.md#datacontenttype
 [rfc2045-sec5]: https://tools.ietf.org/html/rfc2045#section-5
+[rfc3339]: https://www.ietf.org/rfc/rfc3339.txt
+[rfc3986]: https://tools.ietf.org/html/rfc3986
