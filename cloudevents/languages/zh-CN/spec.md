@@ -23,14 +23,14 @@ CloudEvents 是一个用于定义事件格式的供应商中立规范。
 工具(如事件路由器)和基础设施(如事件追踪系统)的发展。
 总体来看，这种匮乏严重阻碍了事件数据的可移植性和生产力。
 
-CloudEvents是一个以通用格式来描述事件数据的标准。它提供了事件在服务、平台和系统中的互操作性。
+CloudEvents 是一个以通用格式来描述事件数据的标准。它提供了事件在服务、平台和系统中的互操作性。
 
-事件格式指定如何使用某些编码格式序列化一个CloudEvent。
+事件格式指定如何使用某些编码格式序列化一个 CloudEvent。
 支持那些编码且兼容 CloudEvents 的实现必须遵守相应事件格式中指定的编码规则。
 所有实现都必须支持 [JSON 格式](../../formats/json-format.md)。
 
 有关规范背后的历史、开发和设计原理等更多信息，
-请参阅 CloudEvents  [入门文档](primer.md)。
+请参阅 CloudEvents [入门文档](primer.md)。
 
 ## Notations and Terminology/符号和术语
 
@@ -41,12 +41,11 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 "SHOULD NOT\ 不应该", "RECOMMENDED\ 建议", "MAY\ 可能", and "OPTIONAL\ 可选" 需要按照
 [RFC 2119](https://tools.ietf.org/html/rfc2119) 中的描述来理解。
 
-为清楚起见，当一个功能被标记为“ OPTIONAL\ 可选"”时，这意味着消息的
-[生产者](#producer生产者)和[消费者](#consumer消费者) 都可以自行选择是否支持该功能。
+为清楚起见，当一个功能被标记为“ OPTIONAL\ 可选"”时，这意味着消息的[生产者](#producer生产者)和[消费者](#consumer消费者)都可以自行选择是否支持该功能。
 换句话说，生产者可以在需要时在消息中包含该功能，消费者也可以在需要时选择支持该功能。
 不支持该功能的消费者将默默地忽略该部分消息。
 生产者需要做好消费者并没有启用该功能的准备。
-[中间人](#intermediary中间人) 应当转发OPTIONAL属性。
+[中间人](#intermediary中间人) 应当转发 OPTIONAL\ 可选属性。
 
 ### 术语
 
@@ -64,8 +63,8 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 “事件”是表示一条"发生"及其上下文的数据记录。
 事件从事件生产者（源）路由到对它感兴趣的事件消费者。
 事件中包含的信息帮助完成路由操作，但事件不会标识特定的路由目的地。
-事件将包含两种类型的信息：表示"发生"的 [事件数据](#event-data事件数据)
-和提供有关事件的环境信息的[上下文](#context上下文) 元数据。
+事件将包含两种类型的信息：表示"发生"的[事件数据](#event-data事件数据)
+和提供有关事件的环境信息的[上下文](#context上下文)元数据。
 一次"发生"可能导致多个事件的产生。
 
 #### Producer/生产者
@@ -124,7 +123,7 @@ CloudEvents是一个以通用格式来描述事件数据的标准。它提供了
 ## Context Attributes/上下文属性
 
 每个符合本规范的 CloudEvent 必须包括指定为 REQUIRED/ 必要 的上下文属性，
-可以包括一个或多个 OPTIONAL /可选的上下文属性，并且可以包括一个或多个[扩展属性](#extension-context-attributes扩展上下文属性)。
+可以包括一个或多个 OPTIONAL\ 可选的上下文属性，并且可以包括一个或多个[扩展属性](#extension-context-attributes扩展上下文属性)。
 每个上下文属性只能在一个 CloudEvent 出现一次。本规范中定义的上下文属性（对标扩展上下文属性）称为“核心上下文属性”。
 
 这些属性虽然描述了事件，但被设计为可以独立于事件数据进行序列化。
@@ -157,7 +156,7 @@ CloudEvent 属性不能使用 `data` 命名；因为它是为某些事件格式�
     JSON 数字的整数部分
 - `String` - 允许的 Unicode 字符序列。 不允许使用以下字符：
   - 范围 U+0000-U+001F 和 U+007F-U+009F（包含首尾）中的“控制字符”，
-    因为大多数没有商定的含义，还有一些，例如 U+000A（换行符）， 在如 HTTP 头部之类的上下文中不可用。
+    因为大多数没有商定的含义，还有一些，例如 U+000A（换行符）， 在如 HTTP 请求头之类的上下文中不可用。
     -[被 Unicode 标识为非字符的](http://www.unicode.org/faq/private_use.html#noncharacters)
     代码点。
   - 被 Unicode 标识为代理项的代码点, 范围 U+D800-U+DBFF 和 U+DC00-U+DFFF（包含首尾）
@@ -275,7 +274,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 
 ### OPTIONAL Attributes/可选属性
 
-下列属性在 CloudEvents 中是可选的。在[符号约定](#notational-conventions符号约定) 中查看更多 OPTIONAL /可选 定义的信息。
+下列属性在 CloudEvents 中是可选的。在[符号约定](#notational-conventions符号约定) 中查看更多 OPTIONAL\ 可选定义的信息。
 
 
 #### datacontenttype/data内容类型
@@ -283,7 +282,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 - 类型: `String` [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - 描述: `data` 值的内容类型。 此属性使 `data` 能够承载任何类型的内容，
   因此格式和编码可能与所选事件格式的不同。
-  例如，使用 [JSON envelope](../../formats/json-format.md#3-envelope)格式呈现的事件可能在数据中携带 XML 的 payload，这个属性可以用来通知消费者
+  例如，使用 [JSON envelope](../../formats/json-format.md#3-envelope)格式呈现的事件可能在数据中携带 XML 的有效负载，这个属性可以用来通知消费者
   设置"application/xml"。
   关于 `data` 内容如何提供不同的 `datacontenttype` 的值的规则在事件格式规范中定义。
   例如，JSON 事件格式定义了 [3.1 节](../../formats/json-format.md#31-handling-of-data)中的关系。
@@ -356,7 +355,7 @@ CloudEvents 协议绑定或事件格式实现同样必须能够在规范字符�
 CloudEvent 可以包含任意数量的具有不同名称的附加上下文属性，被称为“扩展属性"。
 扩展属性必须遵循相同的[命名约定](#naming-convention命名约定)并使用与标准属性相同的[类型系统](#type-system类型系统)。
 扩展属性在本规范中没有定义好的含义，
-它们允许外部系统将元数据附加到事件，就像 HTTP 自定义头部一样。
+它们允许外部系统将元数据附加到事件，就像 HTTP 自定义请求头一样。
 
 扩展属性总是如标准属性一样，根据绑定规则进行序列化。
 然而，该规范不阻止扩展将事件属性值复制到消息的其他部分，
@@ -372,7 +371,7 @@ CloudEvent 可以包含任意数量的具有不同名称的附加上下文属性
 新的扩展定义应该使用一个足够描述性的名称来减少与其他扩展的名称冲突的机会。
 特别是，扩展作者应该检查[扩展文件](documented-extensions.md)中已知的扩展集——不仅是可能的名称冲突，还有相同目的冲突的扩展。
 
-许多协议为发送者提供了包含额外元数据的能力，例如作为 HTTP 头部。
+许多协议为发送者提供了包含额外元数据的能力，例如作为 HTTP 请求头。
 虽然没有强制要求 CloudEvents 接受者处理和传递它们，
 但建议接受者通过某种机制进行处理，以明确它们是非 CloudEvents 的元数据。
 
