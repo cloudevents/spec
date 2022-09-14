@@ -1,2 +1,3 @@
 markdown
 bs4 
+tenacity
