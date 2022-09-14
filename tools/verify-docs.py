@@ -16,6 +16,8 @@ _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
     r")",
     flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
 )
+
+
 _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
 _NEWLINE_PATTERN = re.compile(r"\n")
 
@@ -61,6 +63,42 @@ def _text_issues(text: str) -> Iterable[Issue]:
                 )
 
 
+def test_text_issues():
+    assert (
+        set(
+            _text_issues(
+                """
+                Hello World this MUST be a test
+                SHOULD NOT be something
+                should be CloudEvents 
+                CloudEvent
+                Cloud
+                Event
+                Cloud Events 
+                Cloud
+                Events 
+                must
+                MAY
+                MUST
+                ShOULD        nOt
+                mAy
+                Optionally
+                "required"
+                """
+            )
+        )
+        == {
+            "line 6: 'Cloud\\n                Event' is banned",
+            "line 8: 'Cloud Events' is banned",
+            "line 9: 'Cloud\\n                Events' is banned",
+            "line 4: 'should' MUST be capitalized ('SHOULD')",
+            "line 11: 'must' MUST be capitalized ('MUST')",
+            "line 14: 'ShOULD        nOt' MUST be capitalized ('SHOULD        NOT')",
+            "line 15: 'mAy' MUST be capitalized ('MAY')",
+        }
+    )
+
+
 def _print_issue(tagged_issue: TaggedIssue) -> None:
     path, issue = tagged_issue
     print(f"{path}:{issue}")
@@ -90,6 +128,7 @@ parser = ArgumentParser()
 parser.add_argument("root")
 parser.add_argument("-v", dest="verbose", action="store_true")
 args = parser.parse_args()
+test_text_issues()
 
 issues = list(_query_issues(Path(args.root), verbose=args.verbose))
 if issues:
