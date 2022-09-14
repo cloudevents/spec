@@ -8,8 +8,13 @@ import re
 import sys
 
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
-    '(MUST|MUST\s+NOT|REQUIRED(?!")|(?<!mar)SHALL|SHALL\s+NOT|SHOULD'
-    "|SHOULD\s+NOT|RECOMMENDED|MAY|OPTIONAL(?!LY))",
+    r"(MUST|MUST\s+NOT|"
+    # catch the "required" in the jsonschema of the json-format.md
+    r'(?<!")REQUIRED(?!")|'
+    r"(?<!mar)SHALL|"  # catch the word "marshall"
+    r"SHALL\s+NOT|SHOULD|SHOULD\s+NOT|RECOMMENDED|MAY|"
+    r"OPTIONAL(?!LY)"  # catch the word "optionally"
+    r")",
     flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
 )
 _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
