@@ -1,11 +1,8 @@
 #!python
 from argparse import ArgumentParser
-from ast import Yield
-from genericpath import exists
 from pathlib import Path
-from typing import Dict, Iterable, List, NewType, Sequence, Set, Tuple
+from typing import Iterable, NewType, Sequence, Set, Tuple
 import re
-import sys
 
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
     r"(MUST|MUST\s+NOT|"
