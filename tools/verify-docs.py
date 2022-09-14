@@ -9,7 +9,7 @@ import sys
 
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
     "(MUST|MUST\s+NOT|REQUIRED|(?<!mar)SHALL|SHALL\s+NOT|SHOULD"
-    "|SHOULD\s+NOT|RECOMMENDED|MAY|OPTIONAL)",
+    "|SHOULD\s+NOT|RECOMMENDED|MAY|OPTIONAL(?!LY))",
     flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
 )
 _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
