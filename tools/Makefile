@@ -7,4 +7,4 @@ verify:
 	@echo Running the spec phrase checker:
 	@tools/verify-specs.sh -v .
 	@echo Running the doc phrase checker:
-	@tools/verify-docs.sh -v .
+	@python tools/verify-docs.py -v .
