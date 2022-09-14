@@ -8,3 +8,5 @@ verify:
 	@tools/verify-specs.sh -v .
 	@echo Running the doc phrase checker:
 	@tools/verify-docs.sh -v .
+	@echo Running the languages phrase checker:
+	@python tools/verify-languages.py -v .
