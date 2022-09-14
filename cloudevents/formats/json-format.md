@@ -84,7 +84,7 @@ any revision of such a specification, MUST also define explicit mapping rules
 for all other event formats that are part of the CloudEvents core at the time of
 the submission or revision.
 
-If required, the CloudEvents type can be determined by inference using the rules
+If necessary, the CloudEvents type can be determined by inference using the rules
 from the mapping table, whereby the only potentially ambiguous JSON data type is
 `string`. The value is compatible with the respective CloudEvents type when the
 mapping rules are fulfilled.
