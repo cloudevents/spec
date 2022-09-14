@@ -59,9 +59,9 @@ with exceptions noted below.
 | Integer       | [Major type 0][cbor-major-types] for positive integers and [Major type 1][cbor-major-types] for negative integers                         |
 | String        | [Major type 3][cbor-major-types]                             |
 | Binary        | [Major type 2][cbor-major-types]                             |
-| URI           | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types](string) following [RFC 3986][rfc3986]|
-| URI-reference | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types](string) following [RFC 3986][rfc3986]|
-| Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)  or a [Major type 3][cbor-major-types]following [RFC 3339][rfc3339] (ISO 8601)  |
+| URI           | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types] (string) following [RFC 3986][rfc3986]|
+| URI-reference | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a URI (tag number `32`) or a [Major type 3][cbor-major-types] (string) following [RFC 3986][rfc3986]|
+| Timestamp     | [Major type 6][cbor-major-types] [tagged][cbor-tagging] as a [Standard Date/Time String][cbor-standard-datetime] (tag number `0`)  or a [Major type 3][cbor-major-types] following [RFC 3339][rfc3339] (ISO 8601)  |
 
 Unset attributes MAY be encoded to the CBOR [simple value][cbor-simple-value] 
 `null` (22). When decoding attributes and a `null` value is encountered, 
