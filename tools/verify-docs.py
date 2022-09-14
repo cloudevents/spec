@@ -8,7 +8,7 @@ import re
 import sys
 
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
-    "(MUST|MUST\s+NOT|REQUIRED|SHALL|SHALL\s+NOT|SHOULD"
+    "(MUST|MUST\s+NOT|REQUIRED|(?<!mar)SHALL|SHALL\s+NOT|SHOULD"
     "|SHOULD\s+NOT|RECOMMENDED|MAY|OPTIONAL)",
     flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
 )
