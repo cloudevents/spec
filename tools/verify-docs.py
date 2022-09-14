@@ -71,22 +71,23 @@ def _print_issues(tagged_issues: Sequence[TaggedIssue]):
     )
 
 
+def _query_issues(directory: Path, verbose: bool) -> Iterable[TaggedIssue]:
+    for path in sorted(_query_all_docs(directory)):
+        if verbose:
+            print(f"> {path}")
+        for issue in _text_issues(path.read_text()):
+            tagged_issue = (path, issue)
+            if verbose:
+                _print_issue(tagged_issue)
+            yield tagged_issue
+
+
 parser = ArgumentParser()
 parser.add_argument("root")
 parser.add_argument("-v", dest="verbose", action="store_true")
 args = parser.parse_args()
-root_directory = Path(args.root)
-issues: List[TaggedIssue] = []
 
-for path in sorted(_query_all_docs(root_directory)):
-    if args.verbose:
-        print(f"> {path}")
-    for issue in _text_issues(path.read_text()):
-        tagged_issue = (path, issue)
-        if args.verbose:
-            _print_issue(tagged_issue)
-        issues.append(tagged_issue)
-
+issues = list(_query_issues(Path(args.root), verbose=args.verbose))
 if issues:
     _print_issues(issues)
     exit(1)
