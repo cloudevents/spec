@@ -75,12 +75,13 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
                             case HTTPStatus.TOO_MANY_REQUESTS:
                                 await asyncio.sleep(
                                     random.randint(20, 30)
-                                )  # we sleep so after retry we will not have rate limiting
+                                )  # sleep so after retry we will not have rate limiting
                                 raise RuntimeError("Rate limited")
                             case _:
                                 result.append(
                                     Issue(
-                                        f"GET {repr(uri)} returned status code {response.status}"
+                                        f"GET {repr(uri)} returned "
+                                        f"status code {response.status}"
                                     )
                                 )
     except Exception:  # noqa
