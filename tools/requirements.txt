@@ -1,3 +1,4 @@
 markdown
 bs4 
 tenacity
+aiohttp
