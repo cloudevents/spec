@@ -157,10 +157,6 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
         return [Issue(f"Could Not access {repr(uri)}")]
 
 
-async def _http_uri_issue(uri: HttpUri) -> Sequence[Issue]:
-    return await _uri_availability_issues(uri)
-
-
 def _does_html_contains_id(html: str, id: str) -> bool:
     return _html_parser(html).find(id=id) is not None
 
@@ -200,7 +196,7 @@ async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
     schema = uri.split(":")[0]
     match schema:
         case "http" | "https":
-            return await _http_uri_issue(HttpUri(uri))
+            return await _uri_availability_issues(HttpUri(uri))
         case "mailto":
             return []
         case _:
