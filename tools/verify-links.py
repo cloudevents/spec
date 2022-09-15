@@ -60,7 +60,6 @@ def _is_mail_uri(uri: Uri) -> bool:
 
 
 async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
-    result: List[Issue] = []
     try:
         for attempt in Retrying(stop=stop_after_attempt(_HTTP_MAX_GET_ATTEMPTS)):
             with attempt:
@@ -71,22 +70,21 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
                     ) as response:
                         match response.status:
                             case HTTPStatus.OK | HTTPStatus.FORBIDDEN:
-                                pass
+                                return []  # no issues
                             case HTTPStatus.TOO_MANY_REQUESTS:
                                 await asyncio.sleep(
                                     random.randint(20, 30)
                                 )  # sleep so after retry we will not have rate limiting
                                 raise RuntimeError("Rate limited")
                             case _:
-                                result.append(
+                                return [
                                     Issue(
                                         f"GET {repr(uri)} returned "
                                         f"status code {response.status}"
                                     )
-                                )
+                                ]
     except Exception:  # noqa
-        result.append(Issue(f"Could Not access {repr(uri)}"))
-    return result
+        return [Issue(f"Could Not access {repr(uri)}")]
 
 
 async def _http_uri_issue(uri: HttpUri) -> Sequence[Issue]:
