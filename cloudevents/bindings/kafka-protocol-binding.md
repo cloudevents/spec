@@ -182,6 +182,11 @@ directly to the CloudEvents `datacontenttype` attribute.
 The [`data`](#21-data) byte-sequence MUST be used as the value of the Kafka
 message.
 
+In binary mode, the Kafka representation of a CloudEvent with no `data` is a
+Kafka message with no value. In a topic with log compaction enabled, any such
+message will represent a _tombstone_ record, as described in the
+[Kafka compaction documentation][kafka-log-compaction].
+
 #### 3.2.3. Metadata Headers
 
 All [CloudEvents][ce] attributes and
@@ -268,6 +273,11 @@ The event metadata and data are then rendered in accordance with the
 [event format](#14-event-formats) specification and the resulting data becomes
 the Kafka application [data](#21-data) section.
 
+In structured mode, the Kafka representation of a CloudEvent with no `data`
+is a Kafka message which still has a data section (containing the attributes
+of the CloudEvent). Such a message does _not_ represent a tombstone record in
+a topic with log compaction enabled, unlike the representation in binary mode.
+
 #### 3.3.3. Metadata Headers
 
 Implementations MAY include the same Kafka headers as defined for the
@@ -326,6 +336,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 [kafka]: https://kafka.apache.org
 [kafka-message-format]: https://kafka.apache.org/documentation/#messageformat
 [kafka-message-header]: https://kafka.apache.org/documentation/#recordheader
+[kafka-log-compaction]: https://kafka.apache.org/documentation/#design_compactionbasics
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
