@@ -56,7 +56,7 @@ def _is_http_uri(uri: Uri) -> bool:
 
 
 def _is_mail_uri(uri: Uri) -> bool:
-    return uri.startswith("mailto")
+    return uri.startswith("mailto:")
 
 
 async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
