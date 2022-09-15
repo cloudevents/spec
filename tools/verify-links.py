@@ -66,8 +66,8 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
                         uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False
                     )
                     response.close()
-    except Exception as e:
-        result.append(Issue(f"Could Not access {repr(uri)}: due to {e.__class__}({e})"))
+    except Exception:  # noqa
+        result.append(Issue(f"Could Not access {repr(uri)}"))
     return result
 
 
