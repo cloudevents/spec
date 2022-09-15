@@ -64,7 +64,6 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
         for attempt in Retrying(stop=stop_after_attempt(_HTTP_MAX_GET_ATTEMPTS)):
             with attempt:
                 async with ClientSession() as session:
-                    # TODO: check response code
                     with closing(
                         await session.get(uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False)
                     ) as response:
