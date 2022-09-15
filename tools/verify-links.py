@@ -26,7 +26,24 @@ DEBUG = False
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
 _SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no\s+verify-links", re.IGNORECASE)
-# TODO: unreferenced bookmarks
+_NEWLINE_PATTERN = re.compile(r"\n")
+_UNDEFINED_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
+
+
+def _line_of_match(match: re.Match, origin_text: str) -> int:
+    return (
+        #  count all newlines in the text before the given match
+        len(_NEWLINE_PATTERN.findall(origin_text, 0, match.start(0)))
+        + 1  # adding one because line count starts from 1 and not 0
+    )
+
+
+def _query_all_docs(directory: Path) -> Set[Path]:
+    return set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
+
+
+def _pattern_issue(match: re.Match, origin_text: str, issue_message: str) -> Issue:
+    return Issue(f"line {_line_of_match(match, origin_text)}: {issue_message}")
 
 
 @lru_cache
@@ -128,6 +145,15 @@ async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
             return _local_path_uri_issues(uri, path)
 
 
+def _undefined_bokkmark_issues(html: str) -> Iterable[Issue]:
+    for match in _UNDEFINED_BOOKMARK_PATTERN.finditer(html):
+        yield _pattern_issue(
+            match,
+            html,
+            f"Undefined markdown bookmark referenced ({repr(match.group(0))})",
+        )
+
+
 async def _html_issues(path: Path) -> Iterable[Issue]:
     html = read_html_text(path)
     if not _should_skip_text(html):
@@ -137,7 +163,7 @@ async def _html_issues(path: Path) -> Iterable[Issue]:
                 *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
             )
             for issue in issues
-        ]
+        ] + list(_undefined_bokkmark_issues(html))
     else:
         return []
 
