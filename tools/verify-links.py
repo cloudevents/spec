@@ -117,18 +117,31 @@ def read_html_text(path: Path) -> str:
         return path.read_text()
 
 
-async def _query_issues(directory: Path, verbose: bool) -> Iterable[TaggedIssue]:
+async def _query_file_issues(path: Path, verbose: bool) -> Sequence[TaggedIssue]:
     result: List[TaggedIssue] = []
-
-    for path in sorted(_query_all_docs(directory)):
+    for issue in await _html_issues(read_html_text(path)):
+        tagged_issue = (path, issue)
         if verbose:
-            print(f"> {path}")
-        for issue in await _html_issues(read_html_text(path)):
-            tagged_issue = (path, issue)
-            if verbose:
-                _print_issue(tagged_issue)
-            result.append(tagged_issue)
+            _print_issue(tagged_issue)
+        result.append(tagged_issue)
+    if verbose:
+        print(f"> {path}")
     return result
+
+
+async def _query_directory_issues(
+    directory: Path, verbose: bool
+) -> Iterable[TaggedIssue]:
+    return [
+        issue
+        for issues in await asyncio.gather(
+            *[
+                _query_file_issues(path, verbose)
+                for path in sorted(_query_all_docs(directory))
+            ]
+        )
+        for issue in issues
+    ]
 
 
 parser = ArgumentParser()
@@ -139,7 +152,7 @@ import asyncio
 
 
 async def main():
-    issues = list(await _query_issues(Path(args.root), verbose=args.verbose))
+    issues = list(await _query_directory_issues(Path(args.root), verbose=args.verbose))
     if issues:
         _print_issues(issues)
         exit(1)
