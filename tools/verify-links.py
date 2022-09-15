@@ -55,7 +55,8 @@ def _is_mail_uri(uri: Uri) -> bool:
     return uri.startswith("mailto")
 
 
-async def _uri_availability_issues(uri: HttpUri) -> Iterable[Issue]:
+async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
+    result: List[Issue] = []
     try:
         for attempt in Retrying(stop=stop_after_attempt(_HTTP_MAX_GET_ATTEMPTS)):
             with attempt:
@@ -66,9 +67,8 @@ async def _uri_availability_issues(uri: HttpUri) -> Iterable[Issue]:
                     )
                     response.close()
     except Exception as e:
-        return [Issue(f"Could Not access {repr(uri)}: due to {e.__class__}({e})")]
-    else:
-        return []
+        result.append(Issue(f"Could Not access {repr(uri)}: due to {e.__class__}({e})"))
+    return result
 
 
 async def _http_uri_issue(uri: HttpUri) -> Sequence[Issue]:
