@@ -288,12 +288,10 @@ async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
     ]
 
 
-parser = ArgumentParser()
-parser.add_argument("root", default=".", nargs="?")
-args = parser.parse_args()
-
-
 async def main():
+    parser = ArgumentParser()
+    parser.add_argument("root", default=".", nargs="?")
+    args = parser.parse_args()
     issues = list(await _query_directory_issues(Path(args.root)))
     if issues:
         _print_issues(issues)
