@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 from dataclasses import dataclass
 from pathlib import Path
+from random import random
 from typing import Iterable, List, NewType, Sequence, Set, Tuple
 import re
 from markdown import markdown
@@ -10,6 +11,7 @@ from tenacity import Retrying, stop_after_attempt
 from aiohttp import ClientSession
 import urllib3
 from tqdm.asyncio import tqdm
+import random
 
 # it is ok, we use insecure https only to verify that the links are valid
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -18,7 +20,7 @@ TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
 
-_HTTP_MAX_GET_ATTEMPTS = 2
+_HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
 _SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no\s+verify-links", re.IGNORECASE)
 # TODO: unreferenced bookmarks
@@ -65,6 +67,17 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
                     response = await session.get(
                         uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False
                     )
+                    if not response.ok:
+                        if response.status == 429:  # rate limiting
+                            await asyncio.sleep(
+                                random.randint(20, 30)
+                            )  # we sleep so after retry we will not have rate limiting
+                            raise RuntimeError("Rate limited")
+                        result.append(
+                            Issue(
+                                f"GET {repr(uri)} returned status code {response.status}"
+                            )
+                        )
                     response.close()
     except Exception:  # noqa
         result.append(Issue(f"Could Not access {repr(uri)}"))
