@@ -51,14 +51,6 @@ def _find_all_uris(html: str) -> Iterable[Uri]:
             yield Uri(uri.strip())
 
 
-def _is_http_uri(uri: Uri) -> bool:
-    return uri.startswith("http:") or uri.startswith("https:")
-
-
-def _is_mail_uri(uri: Uri) -> bool:
-    return uri.startswith("mailto:")
-
-
 async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
     try:
         for attempt in Retrying(stop=stop_after_attempt(_HTTP_MAX_GET_ATTEMPTS)):
@@ -91,12 +83,14 @@ async def _http_uri_issue(uri: HttpUri) -> Sequence[Issue]:
 
 
 async def _uri_issues(uri: Uri) -> Sequence[Issue]:
-    if _is_http_uri(uri):
-        return await _http_uri_issue(HttpUri(uri))
-    elif _is_mail_uri(uri):
-        return []  # this uri SHOULD NOT have any issues
-    else:
-        return []
+    schema = uri.split(":")[0]
+    match schema:
+        case "http" | "https":
+            return await _http_uri_issue(HttpUri(uri))
+        case "mailto":
+            return []
+        case _:
+            return []
 
 
 async def _html_issues(html: str) -> Iterable[Issue]:
