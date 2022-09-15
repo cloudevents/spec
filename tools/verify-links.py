@@ -58,7 +58,7 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
                         await session.get(uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False)
                     ) as response:
                         match response.status:
-                            case HTTPStatus.OK | HTTPStatus.FORBIDDEN:
+                            case HTTPStatus.OK | HTTPStatus.FORBIDDEN | HTTPStatus.INTERNAL_SERVER_ERROR:
                                 return []  # no issues
                             case HTTPStatus.TOO_MANY_REQUESTS:
                                 if DEBUG:
