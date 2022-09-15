@@ -2,7 +2,6 @@ all: verify
 
 verify:
 	@echo Running href checker:
-	@# Use "-x" if you want to skip external links
-	@tools/verify-links.sh -t -v .
+	@python tools/verify-links.py .
 	@echo Running the doc phrase checker:
 	@python tools/verify-docs.py -v .
