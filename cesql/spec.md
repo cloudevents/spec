@@ -457,7 +457,7 @@ hop < ttl
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [total-programming-language-wiki]: https://en.wikipedia.org/wiki/Total_functional_programming
 [referential-transparency-wiki]: https://en.wikipedia.org/wiki/Referential_transparency
-[ce-attribute-naming-convention]: ../cloudevents/spec.md#attribute-naming-convention
+[ce-attribute-naming-convention]: ../cloudevents/spec.md#naming-conventions
 [ce-type-system]: ../cloudevents/spec.md#type-system
 [ce-id-attribute]: ../cloudevents/spec.md#id
 [subscriptions-filter-dialect]: ../subscriptions/spec.md#3241-filter-dialects
