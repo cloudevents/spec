@@ -1,5 +1,6 @@
 #!python
 from argparse import ArgumentParser
+from contextlib import closing
 from dataclasses import dataclass
 from pathlib import Path
 from random import random
@@ -12,6 +13,7 @@ from aiohttp import ClientSession
 import urllib3
 from tqdm.asyncio import tqdm
 import random
+from http import HTTPStatus
 
 # it is ok, we use insecure https only to verify that the links are valid
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -64,21 +66,23 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
             with attempt:
                 async with ClientSession() as session:
                     # TODO: check response code
-                    response = await session.get(
-                        uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False
-                    )
-                    if not response.ok:
-                        if response.status == 429:  # rate limiting
-                            await asyncio.sleep(
-                                random.randint(20, 30)
-                            )  # we sleep so after retry we will not have rate limiting
-                            raise RuntimeError("Rate limited")
-                        result.append(
-                            Issue(
-                                f"GET {repr(uri)} returned status code {response.status}"
-                            )
-                        )
-                    response.close()
+                    with closing(
+                        await session.get(uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False)
+                    ) as response:
+                        match response.status:
+                            case HTTPStatus.OK | HTTPStatus.FORBIDDEN:
+                                pass
+                            case HTTPStatus.TOO_MANY_REQUESTS:
+                                await asyncio.sleep(
+                                    random.randint(20, 30)
+                                )  # we sleep so after retry we will not have rate limiting
+                                raise RuntimeError("Rate limited")
+                            case _:
+                                result.append(
+                                    Issue(
+                                        f"GET {repr(uri)} returned status code {response.status}"
+                                    )
+                                )
     except Exception:  # noqa
         result.append(Issue(f"Could Not access {repr(uri)}"))
     return result
@@ -167,5 +171,5 @@ async def main():
 
 if __name__ == "__main__":
     # Need async because we perform alot of http requests.
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     loop.run_until_complete(main())
