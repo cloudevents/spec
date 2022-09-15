@@ -2,21 +2,21 @@
 from argparse import ArgumentParser
 from contextlib import closing
 from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from random import random
-from typing import Iterable, List, NewType, Sequence, Set, Tuple
+from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple
 import re
 from markdown import markdown
 from bs4 import BeautifulSoup
 from tenacity import Retrying, stop_after_attempt
 from aiohttp import ClientSession
-import urllib3
 from tqdm.asyncio import tqdm
 import random
 from http import HTTPStatus
+from pymdownx import slugs
 
 # it is ok, we use insecure https only to verify that the links are valid
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
@@ -28,12 +28,9 @@ _SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no\s+verify-links", re.IGNORECASE)
 # TODO: unreferenced bookmarks
 
 
-def _line_of_match(match: re.Match, origin_text: str) -> int:
-    return (
-        #  count all newlines in the text before the given match
-        len(_NEWLINE_PATTERN.findall(origin_text, 0, match.start(0)))
-        + 1  # adding one because line count starts from 1 and not 0
-    )
+@lru_cache
+def _html_parser(html: str) -> BeautifulSoup:
+    return BeautifulSoup(html, "html.parser")
 
 
 def _query_all_docs(directory: Path) -> Set[Path]:
@@ -45,7 +42,7 @@ def _should_skip_text(text: str) -> bool:
 
 
 def _find_all_uris(html: str) -> Iterable[Uri]:
-    for a in BeautifulSoup(html, "html.parser").findAll("a"):
+    for a in _html_parser(html).findAll("a"):
         uri = a.get("href")
         if uri:
             yield Uri(uri.strip())
@@ -82,7 +79,42 @@ async def _http_uri_issue(uri: HttpUri) -> Sequence[Issue]:
     return await _uri_availability_issues(uri)
 
 
-async def _uri_issues(uri: Uri) -> Sequence[Issue]:
+def _does_html_contains_id(html: str, id: str) -> bool:
+    return _html_parser(html).find(id=id) is not None
+
+
+def _missing_segment_issue(path: Path, segment: str) -> Issue:
+    return Issue(f"{path} does not contain {segment} segment")
+
+
+def _missing_file_issue(path: Path) -> Issue:
+    return Issue(f"{path} does not exist")
+
+
+def _local_path_uri_issues(uri: Uri, current_path: Path) -> Sequence[Issue]:
+    path: Optional[Path] = None
+    path_segment: Optional[str] = None
+
+    match uri.split("#"):
+        case ["", segment]:
+            path = current_path
+            path_segment = segment
+        case [relative_path, segment]:
+            path = current_path.parent / relative_path
+            path_segment = segment
+        case [relative_path]:
+            path = current_path.parent / relative_path
+        case _:
+            return [Issue("Invalid local path uri")]
+
+    if not path.exists():
+        return [_missing_file_issue(path)]
+    if path_segment and not _does_html_contains_id(read_html_text(path), path_segment):
+        return [_missing_segment_issue(path, path_segment)]
+    return []
+
+
+async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
     schema = uri.split(":")[0]
     match schema:
         case "http" | "https":
@@ -90,15 +122,16 @@ async def _uri_issues(uri: Uri) -> Sequence[Issue]:
         case "mailto":
             return []
         case _:
-            return []
+            return _local_path_uri_issues(uri, path)
 
 
-async def _html_issues(html: str) -> Iterable[Issue]:
+async def _html_issues(path: Path) -> Iterable[Issue]:
+    html = read_html_text(path)
     if not _should_skip_text(html):
         return [
             issue
             for issues in await asyncio.gather(
-                *[_uri_issues(uri) for uri in _find_all_uris(html)]
+                *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
             )
             for issue in issues
         ]
@@ -120,16 +153,24 @@ def _print_issues(tagged_issues: Sequence[TaggedIssue]):
     )
 
 
+@lru_cache
 def read_html_text(path: Path) -> str:
     if path.name.endswith(".md"):
-        return markdown(path.read_text())  # Convert markdown to html
+        return markdown(
+            path.read_text(encoding="utf-8"),
+            extensions=["toc"],  # need toc so headers will generate ids
+            extension_configs={
+                # we need this for unicode titles
+                "toc": {"slugify": slugs.slugify(case="lower", percent_encode=False)}
+            },
+        )  # Convert markdown to html
     else:
         return path.read_text()
 
 
 async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
     result: List[TaggedIssue] = []
-    for issue in await _html_issues(read_html_text(path)):
+    for issue in await _html_issues(path):
         tagged_issue = (path, issue)
         result.append(tagged_issue)
     return result
@@ -147,7 +188,7 @@ async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
 
 
 parser = ArgumentParser()
-parser.add_argument("root")
+parser.add_argument("root", default=".", nargs="?")
 args = parser.parse_args()
 import asyncio
 
