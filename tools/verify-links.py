@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from tenacity import Retrying, stop_after_attempt
 from aiohttp import ClientSession
 import urllib3
+from tqdm.asyncio import tqdm
 
 # it is ok, we use insecure https only to verify that the links are valid
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -117,28 +118,20 @@ def read_html_text(path: Path) -> str:
         return path.read_text()
 
 
-async def _query_file_issues(path: Path, verbose: bool) -> Sequence[TaggedIssue]:
+async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
     result: List[TaggedIssue] = []
     for issue in await _html_issues(read_html_text(path)):
         tagged_issue = (path, issue)
-        if verbose:
-            _print_issue(tagged_issue)
         result.append(tagged_issue)
-    if verbose:
-        print(f"> {path}")
     return result
 
 
-async def _query_directory_issues(
-    directory: Path, verbose: bool
-) -> Iterable[TaggedIssue]:
+async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
     return [
         issue
-        for issues in await asyncio.gather(
-            *[
-                _query_file_issues(path, verbose)
-                for path in sorted(_query_all_docs(directory))
-            ]
+        for issues in await tqdm.gather(
+            *[_query_file_issues(path) for path in sorted(_query_all_docs(directory))],
+            unit="files",
         )
         for issue in issues
     ]
@@ -146,13 +139,12 @@ async def _query_directory_issues(
 
 parser = ArgumentParser()
 parser.add_argument("root")
-parser.add_argument("-v", dest="verbose", action="store_true")
 args = parser.parse_args()
 import asyncio
 
 
 async def main():
-    issues = list(await _query_directory_issues(Path(args.root), verbose=args.verbose))
+    issues = list(await _query_directory_issues(Path(args.root)))
     if issues:
         _print_issues(issues)
         exit(1)
