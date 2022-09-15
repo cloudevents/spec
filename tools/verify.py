@@ -112,10 +112,6 @@ def _line_of_match(match: re.Match, origin_text: str) -> int:
     )
 
 
-def _query_all_docs(directory: Path) -> Set[Path]:
-    return set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
-
-
 def _pattern_issue(match: re.Match, origin_text: str, issue_message: str) -> Issue:
     return Issue(f"line {_line_of_match(match, origin_text)}: {issue_message}")
 
