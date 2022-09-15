@@ -203,7 +203,7 @@ async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
             return _local_path_uri_issues(uri, path)
 
 
-def _undefined_bokkmark_issues(html: str) -> Iterable[Issue]:
+def _undefined_bookmark_issues(html: str) -> Iterable[Issue]:
     for match in _UNDEFINED_BOOKMARK_PATTERN.finditer(html):
         yield _pattern_issue(
             match,
@@ -221,7 +221,7 @@ async def _html_issues(path: Path) -> Iterable[Issue]:
                 *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
             )
             for issue in issues
-        ] + list(_undefined_bokkmark_issues(html))
+        ] + list(_undefined_bookmark_issues(html))
     else:
         return []
 
