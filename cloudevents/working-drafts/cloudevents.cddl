@@ -1,0 +1,28 @@
+cloudevent = {
+	id: ce_text,
+	source: ce_uri_reference,
+	specversion: ce_text,
+	type: ce_text,
+	? datacontenttype: ce_text / null,
+	? dataschema: ce_uri / null,
+	? subject: ce_text / null,
+	? "time": tdate / null,
+	? data: ce_bytes / ce_text / any / null,
+    * text => ce_attribute_type
+}
+
+ce_timestamp = tdate
+ce_text = text
+ce_uri = uri / text
+ce_uri_reference = uri / text
+ce_bytes = bytes
+ce_bool = bool
+ce_int = int
+
+ce_attribute_type = ce_bool
+	/ ce_int
+	/ ce_bytes
+	/ ce_text
+	/ ce_uri
+	/ ce_uri_reference
+	/ ce_timestamp
