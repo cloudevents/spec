@@ -112,7 +112,7 @@ def _print_issues(tagged_issues: Sequence[TaggedIssue]):
 
 def read_html_text(path: Path) -> str:
     if path.name.endswith(".md"):
-        return markdown(path.read_text())
+        return markdown(path.read_text())  # Convert markdown to html
     else:
         return path.read_text()
 
