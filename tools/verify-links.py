@@ -18,7 +18,7 @@ TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
 
-_HTTP_MAX_GET_ATTEMPTS = 5
+_HTTP_MAX_GET_ATTEMPTS = 2
 _HTTP_TIMEOUT_SECONDS = 10
 _SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no\s+verify-links", re.IGNORECASE)
 # TODO: unreferenced bookmarks
