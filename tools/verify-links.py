@@ -22,7 +22,6 @@ Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
-DEBUG = False
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
 _SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no\s+verify-links", re.IGNORECASE)
@@ -75,22 +74,11 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
                         await session.get(uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False)
                     ) as response:
                         match response.status:
-                            case HTTPStatus.OK | HTTPStatus.FORBIDDEN | HTTPStatus.INTERNAL_SERVER_ERROR:
-                                return []  # no issues
-                            case HTTPStatus.TOO_MANY_REQUESTS:
-                                if DEBUG:
-                                    return []
-                                await asyncio.sleep(
-                                    random.randint(20, 30)
-                                )  # sleep so after retry we will not have rate limiting
-                                raise RuntimeError("Rate limited")
+                            case HTTPStatus.NOT_FOUND:
+                                return [Issue(f"{repr(uri)} was not found")]
                             case _:
-                                return [
-                                    Issue(
-                                        f"GET {repr(uri)} returned "
-                                        f"status code {response.status}"
-                                    )
-                                ]
+                                return []  # no issues
+
     except Exception:  # noqa
         return [Issue(f"Could Not access {repr(uri)}")]
 
@@ -218,9 +206,7 @@ async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
 
 parser = ArgumentParser()
 parser.add_argument("root", default=".", nargs="?")
-parser.add_argument("--debug", dest="debug", action="store_true")
 args = parser.parse_args()
-DEBUG = args.debug
 
 
 async def main():
