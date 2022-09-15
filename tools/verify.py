@@ -4,7 +4,6 @@ from contextlib import closing
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from random import random
 from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple
 import re
 from markdown import markdown
@@ -12,7 +11,6 @@ from bs4 import BeautifulSoup
 from tenacity import Retrying, stop_after_attempt
 from aiohttp import ClientSession
 from tqdm.asyncio import tqdm
-import random
 from http import HTTPStatus
 from pymdownx import slugs
 import asyncio
@@ -24,9 +22,84 @@ Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
-_SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no\s+verify-links", re.IGNORECASE)
+
+_SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no[\s-]+verify", re.IGNORECASE)
+
 _NEWLINE_PATTERN = re.compile(r"\n")
 _UNDEFINED_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
+_PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
+    r"(MUST(\s+NOT)?|"
+    # catch the "required" in the jsonschema of the json-format.md
+    r'(?<!")REQUIRED(?!")|'
+    r"(?<!mar)SHALL(\s+NOT)?|"  # catch the word "marshall"
+    r"SHOULD(\s+NOT)?|"
+    r"RECOMMENDED|"
+    r"MAY|"
+    r"OPTIONAL(?!LY)"  # catch the word "optionally"
+    r")",
+    flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
+)
+
+
+_BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
+_NEWLINE_PATTERN = re.compile(r"\n")
+
+Issue = NewType("Issue", str)
+TaggedIssue = Tuple[Path, Issue]
+
+
+def _is_text_capitalized(text: str) -> bool:
+    return text == text.upper()
+
+
+def _text_issues(text: str) -> Iterable[Issue]:
+    if not _should_skip_text(text):
+        for match in _BANNED_PHRASES_PATTERN.finditer(text):
+            yield _pattern_issue(match, text, f"{repr(match.group(0))} is banned")
+        for match in _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.finditer(text):
+            phrase = match.group(0)
+            if not _is_text_capitalized(phrase):
+                yield _pattern_issue(
+                    match,
+                    text,
+                    f"{repr(phrase)} MUST be capitalized ({repr(phrase.upper())})",
+                )
+
+
+def test_text_issues():
+    assert (
+        set(
+            _text_issues(
+                """
+                Hello World this MUST be a test
+                SHOULD NOT be something
+                should be CloudEvents 
+                CloudEvent
+                Cloud
+                Event
+                Cloud Events 
+                Cloud
+                Events 
+                must
+                MAY
+                MUST
+                ShOULD        nOt
+                mAy
+                Optionally
+                "required"
+                """
+            )
+        )
+        == {
+            "line 6: 'Cloud\\n                Event' is banned",
+            "line 8: 'Cloud Events' is banned",
+            "line 9: 'Cloud\\n                Events' is banned",
+            "line 4: 'should' MUST be capitalized ('SHOULD')",
+            "line 11: 'must' MUST be capitalized ('MUST')",
+            "line 14: 'ShOULD        nOt' MUST be capitalized ('SHOULD        NOT')",
+            "line 15: 'mAy' MUST be capitalized ('MAY')",
+        }
+    )
 
 
 def _line_of_match(match: re.Match, origin_text: str) -> int:
@@ -145,13 +218,17 @@ def _undefined_bokkmark_issues(html: str) -> Iterable[Issue]:
 async def _html_issues(path: Path) -> Iterable[Issue]:
     html = read_html_text(path)
     if not _should_skip_text(html):
-        return [
-            issue
-            for issues in await asyncio.gather(
-                *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
-            )
-            for issue in issues
-        ] + list(_undefined_bokkmark_issues(html))
+        return (
+            [
+                issue
+                for issues in await asyncio.gather(
+                    *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
+                )
+                for issue in issues
+            ]
+            + list(_undefined_bokkmark_issues(html))
+            + list(_text_issues(_read_text(path)))
+        )
     else:
         return []
 
@@ -171,10 +248,15 @@ def _print_issues(tagged_issues: Sequence[TaggedIssue]):
 
 
 @lru_cache
+def _read_text(path: Path):
+    return path.read_text(encoding="utf-8")
+
+
+@lru_cache
 def read_html_text(path: Path) -> str:
     if path.name.endswith(".md"):
         return markdown(
-            path.read_text(encoding="utf-8"),
+            _read_text(path),
             extensions=["toc"],  # need toc so headers will generate ids
             extension_configs={
                 # we need this for unicode titles
@@ -182,14 +264,13 @@ def read_html_text(path: Path) -> str:
             },
         )  # Convert markdown to html
     else:
-        return path.read_text()
+        return _read_text(path)
 
 
 async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
     result: List[TaggedIssue] = []
     for issue in await _html_issues(path):
-        tagged_issue = (path, issue)
-        result.append(tagged_issue)
+        result.append((path, issue))
     return result
 
 
