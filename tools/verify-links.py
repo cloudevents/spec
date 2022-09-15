@@ -15,13 +15,14 @@ from tqdm.asyncio import tqdm
 import random
 from http import HTTPStatus
 from pymdownx import slugs
+import asyncio
 
 # it is ok, we use insecure https only to verify that the links are valid
 Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
-
+DEBUG = False
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
 _SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no\s+verify-links", re.IGNORECASE)
@@ -60,6 +61,8 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
                             case HTTPStatus.OK | HTTPStatus.FORBIDDEN:
                                 return []  # no issues
                             case HTTPStatus.TOO_MANY_REQUESTS:
+                                if DEBUG:
+                                    return []
                                 await asyncio.sleep(
                                     random.randint(20, 30)
                                 )  # sleep so after retry we will not have rate limiting
@@ -189,8 +192,9 @@ async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
 
 parser = ArgumentParser()
 parser.add_argument("root", default=".", nargs="?")
+parser.add_argument("--debug", dest="debug", action="store_true")
 args = parser.parse_args()
-import asyncio
+DEBUG = args.debug
 
 
 async def main():
