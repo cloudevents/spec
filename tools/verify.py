@@ -23,7 +23,9 @@ HttpUri = NewType("HttpUri", Uri)
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
 
-_SKIP_TEXT_PATTERN = re.compile(r"<!--\s+no[\s-]+verify", re.IGNORECASE)
+_SKIP_TEXT_PATTERN = re.compile(
+    r"<!--\s+no[\s-]+verify[\s-]+(?P<type>\w+)", re.IGNORECASE
+)
 
 _NEWLINE_PATTERN = re.compile(r"\n")
 _UNDEFINED_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
@@ -53,7 +55,7 @@ def _is_text_capitalized(text: str) -> bool:
 
 
 def _text_issues(text: str) -> Iterable[Issue]:
-    if not _should_skip_text(text):
+    if _skip_type(text) != "specs":
         for match in _BANNED_PHRASES_PATTERN.finditer(text):
             yield _pattern_issue(match, text, f"{repr(match.group(0))} is banned")
         for match in _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.finditer(text):
@@ -127,8 +129,11 @@ def _query_all_docs(directory: Path) -> Set[Path]:
     return set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
 
 
-def _should_skip_text(text: str) -> bool:
-    return bool(_SKIP_TEXT_PATTERN.search(text))
+def _skip_type(text: str) -> Optional[str]:
+    match = _SKIP_TEXT_PATTERN.search(text)
+    if match:
+        return match.groupdict().get("type")
+    return None
 
 
 def _find_all_uris(html: str) -> Iterable[Uri]:
@@ -217,18 +222,14 @@ def _undefined_bokkmark_issues(html: str) -> Iterable[Issue]:
 
 async def _html_issues(path: Path) -> Iterable[Issue]:
     html = read_html_text(path)
-    if not _should_skip_text(html):
-        return (
-            [
-                issue
-                for issues in await asyncio.gather(
-                    *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
-                )
-                for issue in issues
-            ]
-            + list(_undefined_bokkmark_issues(html))
-            + list(_text_issues(_read_text(path)))
-        )
+    if _skip_type(html) != "links":
+        return [
+            issue
+            for issues in await asyncio.gather(
+                *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
+            )
+            for issue in issues
+        ] + list(_undefined_bokkmark_issues(html))
     else:
         return []
 
@@ -270,6 +271,8 @@ def read_html_text(path: Path) -> str:
 async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
     result: List[TaggedIssue] = []
     for issue in await _html_issues(path):
+        result.append((path, issue))
+    for issue in _text_issues(_read_text(path)):
         result.append((path, issue))
     return result
 
