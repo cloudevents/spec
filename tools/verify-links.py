@@ -163,5 +163,5 @@ async def main():
 
 if __name__ == "__main__":
     # Need async because we perform alot of http requests.
-    loop = asyncio.get_running_loop()
+    loop = asyncio.new_event_loop()
     loop.run_until_complete(main())
