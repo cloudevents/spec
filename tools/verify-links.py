@@ -110,18 +110,20 @@ def _print_issues(tagged_issues: Sequence[TaggedIssue]):
     )
 
 
+def read_html_text(path: Path) -> str:
+    if path.name.endswith(".md"):
+        return markdown(path.read_text())
+    else:
+        return path.read_text()
+
+
 async def _query_issues(directory: Path, verbose: bool) -> Iterable[TaggedIssue]:
     result: List[TaggedIssue] = []
 
     for path in sorted(_query_all_docs(directory)):
         if verbose:
             print(f"> {path}")
-
-        if path.name.endswith(".md"):
-            html = markdown(path.read_text())
-        else:
-            html = path.read_text()
-        for issue in await _html_issues(html):
+        for issue in await _html_issues(read_html_text(path)):
             tagged_issue = (path, issue)
             if verbose:
                 _print_issue(tagged_issue)
