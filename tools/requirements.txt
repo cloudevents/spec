@@ -4,4 +4,4 @@ tenacity
 aiohttp
 tqdm
 pymdown-extensions
-pytest
+pytest-asyncio
