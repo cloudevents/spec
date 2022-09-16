@@ -22,9 +22,14 @@ Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
 T = TypeVar("T")
 HtmlText = NewType("HtmlText", str)
+TranslationsDir = NewType("TranslationsDir", Path)
 
+_TOOLS_DIR = Path(__file__).parent
+_REPO_ROOT = _TOOLS_DIR.parent
 _FAKE_DOCS_DIR = Path(__file__).parent / "fake-docs"
 _FAKE_DOCS = set(_FAKE_DOCS_DIR.rglob("**/*"))
+_LANGUAGES_DIR_NAME = "languages"
+_ROOT_LANGUAGES_DIR = _REPO_ROOT / _LANGUAGES_DIR_NAME
 
 
 @dataclass
@@ -53,6 +58,7 @@ _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
 )
 _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
 _NEWLINE_PATTERN = re.compile(r"\n")
+_LANGUAGES_DIR_PATTERN = re.compile(f"[/^]{_LANGUAGES_DIR_NAME}[/$]")
 
 
 def _is_text_all_uppercase(text: str) -> bool:
@@ -267,6 +273,58 @@ def read_html_text(path: Path) -> HtmlText:
         return HtmlText(_read_text(path))  # assuming given file is already html
 
 
+def _is_english_file(path: Path) -> bool:
+    return not bool(_LANGUAGES_DIR_PATTERN.search(str(path.absolute().as_posix())))
+
+
+def _is_root_languages_dir(path: Path) -> bool:
+    return path.absolute() == _ROOT_LANGUAGES_DIR.absolute()
+
+
+def _translations_directory(path: Path) -> Optional[TranslationsDir]:
+    if not _is_english_file(path):
+        return None  # non english files do not have a translation directory
+    languages_dir = path.parent / _LANGUAGES_DIR_NAME
+    if languages_dir.exists() and not _is_root_languages_dir(languages_dir):
+        return TranslationsDir(languages_dir)  # found dir, end recursion
+    if path.parent == path:  # reached end of path, end recursion
+        return None
+    return _translations_directory(path.parent)
+
+
+def _relative_to_absolute(a: Path, b: Path) -> Path:
+    return a.absolute().relative_to(b.absolute())
+
+
+def _expected_language_codes(my_dir: TranslationsDir):
+    return [path.name for path in my_dir.glob("*") if path.is_dir()]
+
+
+def _expected_translation_files(path: Path) -> Sequence[Path]:
+    if not _is_english_file(path):
+        return []  # non english files are not expected to be translated
+    translations_directory = _translations_directory(path)
+    if translations_directory is None:
+        return []  # no translations dir - no translation is expected
+
+    # assuming translation directory located in the project dir root
+    project_dir = translations_directory.parent
+    return [
+        translations_directory / lang_code / _relative_to_absolute(path, project_dir)
+        for lang_code in _expected_language_codes(translations_directory)
+    ]
+
+
+def _translation_issues(path: Path) -> Iterable[Issue]:
+    if not _is_english_file(path):
+        return []
+    for translation_file in _expected_translation_files(path):
+        if not translation_file.exists():
+            yield Issue(
+                f"Translation file {translation_file.as_posix()} does not exist"
+            )
+
+
 def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
@@ -274,7 +332,8 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
 async def _file_issues(path: Path, settings: Settings) -> Sequence[TaggedIssue]:
     return _tag_issues(
         list(await _html_issues(path, settings))
-        + list(_plain_text_issues(_read_text(path))),
+        + list(_plain_text_issues(_read_text(path)))
+        + list(_translation_issues(path)),
         tag=path,
     )
 
@@ -293,12 +352,17 @@ async def _directory_issues(
     )
 
 
+def _cache_files(path: Path) -> Set[Path]:
+    return set(path.rglob("**/.pytest_cache/**/*"))
+
+
 async def main():
     parser = ArgumentParser()
     parser.add_argument("root", default=".", nargs="?")
     args = parser.parse_args()
-    settings = Settings(excluded_paths=_FAKE_DOCS)
-    issues = list(await _directory_issues(Path(args.root), settings))
+    root = Path(args.root)
+    settings = Settings(excluded_paths=_FAKE_DOCS | _cache_files(root))
+    issues = list(await _directory_issues(root, settings))
     if issues:
         _print_issues(issues)
         exit(1)
