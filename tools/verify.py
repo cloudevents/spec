@@ -43,7 +43,7 @@ _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
 _NEWLINE_PATTERN = re.compile(r"\n")
 
 
-def _is_text_capitalized(text: str) -> bool:
+def _is_text_all_uppercase(text: str) -> bool:
     return text == text.upper()
 
 
@@ -53,7 +53,7 @@ def _text_issues(text: str) -> Iterable[Issue]:
             yield _pattern_issue(match, text, f"{repr(match.group(0))} is banned")
         for match in _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.finditer(text):
             phrase = match.group(0)
-            if not _is_text_capitalized(phrase):
+            if not _is_text_all_uppercase(phrase):
                 yield _pattern_issue(
                     match,
                     text,
