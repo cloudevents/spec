@@ -21,6 +21,10 @@ We are checking that all the links are referenced correctly
 [normal https link]("https://github.com")
 [non existing website]("http://non-existing-website.sadkjaskldjalksjd")
 
+## Mail links
+
+[dummy@dummy.com](mailto:dummy@dummy.com)
+
 ## Local Links to other files
 
 [link to existing file](README.md)
