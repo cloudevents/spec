@@ -14,6 +14,13 @@ We are checking that all the links are referenced correctly
 
 [This links to non existing title](#non-existing)
 
+## HTTP links
+
+[404 link](https://github.com/non-existing-page)
+[normal http link]("http://github.com")
+[normal https link]("https://github.com")
+[non existing website]("http://non-existing-website.sadkjaskldjalksjd")
+
 ## Local Links to other files
 
 [link to existing file](README.md)
