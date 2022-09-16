@@ -1,12 +1,16 @@
+from pathlib import Path
 from re import Match
 from typing import Optional
 
 import pytest
 from verify import (
     _BANNED_PHRASES_PATTERN,
+    _FAKE_DOCS_DIR,
     _MARKDOWN_BOOKMARK_PATTERN,
     _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
     _SKIP_TEXT_PATTERN,
+    Settings,
+    _directory_issues,
     _is_text_all_uppercase,
     _plain_text_issues,
     _render_markdown_to_html,
@@ -179,3 +183,91 @@ def test_rtl_unicode_must_be_rendered_in_the_id():
         _render_markdown_to_html("#כותרת בעברית")
         == '<h1 id="כותרת-בעברית">כותרת בעברית</h1>'
     )
+
+
+@pytest.mark.asyncio
+async def test_app(monkeypatch):
+    monkeypatch.chdir(str(Path(__file__).parent))
+    assert {
+        (path, issue)
+        for path, issue in await _directory_issues(
+            _FAKE_DOCS_DIR.absolute().relative_to(Path(".").absolute()),
+            Settings(
+                excluded_paths=set(), http_max_get_attemps=2, http_timeout_seconds=2
+            ),
+        )
+    } == {
+        (
+            Path("fake-docs/link-verification.md"),
+            "Could Not access 'http://non-existing-website.sadkjaskldjalksjd'",
+        ),
+        (
+            Path("fake-docs/link-verification.md"),
+            "'https://github.com/non-existing-page' was not found",
+        ),
+        (
+            Path("fake-docs/link-verification.md"),
+            "fake-docs/README.md does not contain '#non-existing' segment",
+        ),
+        (
+            Path("fake-docs/link-verification.md"),
+            "fake-docs/link-verification.md does not contain '#non-existing' segment",
+        ),
+        (
+            Path("fake-docs/link-verification.md"),
+            "fake-docs/non-existing.md does not exist",
+        ),
+        (
+            Path("fake-docs/link-verification.md"),
+            "line 23: Undefined markdown bookmark referenced ('[link to non existing "
+            "bookmark][non-existing]')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            r"line 13: 'Cloud\n\nEvent' is banned",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 23: 'must' MUST be capitalized ('MUST')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 25: 'must NOT' MUST be capitalized ('MUST NOT')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            r"line 35: 'must\n\nnot' MUST be capitalized ('MUST\n\nNOT')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 39: 'sHoulD' MUST be capitalized ('SHOULD')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 41: 'should not' MUST be capitalized ('SHOULD NOT')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 43: 'optionaL' MUST be capitalized ('OPTIONAL')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 47: 'shall' MUST be capitalized ('SHALL')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 49: 'shall not' MUST be capitalized ('SHALL NOT')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 53: 'required' MUST be capitalized ('REQUIRED')",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 9: 'Cloud Event' is banned",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "line 9: 'Cloud Events' is banned",
+        ),
+    }
