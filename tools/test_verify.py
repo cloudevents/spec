@@ -96,8 +96,8 @@ def test_bookmark_pattern_matches_given_patterns(given, expected):
     "given, expected",
     (
         (
-            "this sHouLd\n\n\ynot jsakhndja",
-            "sHouLd\n\n\ynot",
+            "this sHouLd\n\nnot jsakhndja",
+            "sHouLd\n\nnot",
         ),
         (
             "asdjkasbndkj optional asjdkjasjd",
