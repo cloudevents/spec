@@ -47,18 +47,26 @@ def _is_text_all_uppercase(text: str) -> bool:
     return text == text.upper()
 
 
+def _banned_phrase_issues(text: str) -> Iterable[Issue]:
+    for match in _BANNED_PHRASES_PATTERN.finditer(text):
+        yield _pattern_issue(match, text, f"{repr(match.group(0))} is banned")
+
+
+def _miscased_phrase_issues(text: str) -> Iterable[Issue]:
+    for match in _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.finditer(text):
+        phrase = match.group(0)
+        if not _is_text_all_uppercase(phrase):
+            yield _pattern_issue(
+                match,
+                text,
+                f"{repr(phrase)} MUST be capitalized ({repr(phrase.upper())})",
+            )
+
+
 def _text_issues(text: str) -> Iterable[Issue]:
     if _skip_type(text) != "specs":
-        for match in _BANNED_PHRASES_PATTERN.finditer(text):
-            yield _pattern_issue(match, text, f"{repr(match.group(0))} is banned")
-        for match in _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.finditer(text):
-            phrase = match.group(0)
-            if not _is_text_all_uppercase(phrase):
-                yield _pattern_issue(
-                    match,
-                    text,
-                    f"{repr(phrase)} MUST be capitalized ({repr(phrase.upper())})",
-                )
+        yield from _banned_phrase_issues(text)
+        yield from _miscased_phrase_issues(text)
 
 
 def _line_of_match(match: re.Match, origin_text: str) -> int:
