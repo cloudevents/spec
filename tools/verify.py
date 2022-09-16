@@ -14,7 +14,6 @@ from http import HTTPStatus
 from pymdownx import slugs
 import asyncio
 
-# it is ok, we use insecure https only to verify that the links are valid
 Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
