@@ -5,6 +5,7 @@ from verify import (
     _SKIP_TEXT_PATTERN,
     _MARKDOWN_BOOKMARK_PATTERN,
     _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
+    _BANNED_PHRASES_PATTERN,
 )
 import pytest
 
@@ -112,3 +113,44 @@ def test_bookmark_pattern_matches_given_patterns(given, expected):
 )
 def test_capitalization_phrases(given, expected):
     _maybe_group(_PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.match(given)) == expected
+
+
+@pytest.mark.parametrize(
+    "given, expected",
+    (
+        (
+            "sad asd Cloud Events asd asd",
+            "Cloud Events",
+        ),
+        (
+            "sad asd Cloud Event asd asd",
+            "Cloud Event",
+        ),
+        (
+            "CloudEvent",
+            None,
+        ),
+        (
+            "CloudEvents",
+            None,
+        ),
+        (
+            "sad asd cloud\t\t\t  events asd asd",
+            "cloud\t\t\t  events",
+        ),
+        (
+            "sad asd cloud\nevent asd asd",
+            "cloud\nevent",
+        ),
+        (
+            "cloudevent",
+            None,
+        ),
+        (
+            "cloudevents",
+            None,
+        ),
+    ),
+)
+def test_bookmark_pattern_matches_given_patterns(given, expected):
+    assert _maybe_group(_BANNED_PHRASES_PATTERN.search(given)) == expected
