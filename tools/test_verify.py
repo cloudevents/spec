@@ -6,6 +6,7 @@ from verify import (
     _MARKDOWN_BOOKMARK_PATTERN,
     _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
     _BANNED_PHRASES_PATTERN,
+    _is_text_all_uppercase,
 )
 import pytest
 
@@ -154,3 +155,11 @@ def test_capitalization_phrases(given, expected):
 )
 def test_bookmark_pattern_matches_given_patterns(given, expected):
     assert _maybe_group(_BANNED_PHRASES_PATTERN.search(given)) == expected
+
+
+def test_upper_text_must_be_detected_as_such():
+    assert _is_text_all_uppercase("YES")
+
+
+def test_non_upper_text_must_be_detected_as_such():
+    assert not _is_text_all_uppercase("tHis Is NoT cOrRect")
