@@ -112,6 +112,8 @@ async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
 
     except Exception:  # noqa
         return [Issue(f"Could Not access {repr(uri)}")]
+    else:
+        return []
 
 
 def _does_html_contains_id(html: str, id: str) -> bool:
