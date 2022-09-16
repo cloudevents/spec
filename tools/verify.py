@@ -18,8 +18,6 @@ Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
-Issue = NewType("Issue", str)
-TaggedIssue = Tuple[Path, Issue]
 
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
