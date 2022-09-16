@@ -20,13 +20,15 @@ Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
+Issue = NewType("Issue", str)
+TaggedIssue = Tuple[Path, Issue]
+
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
 
 _SKIP_TEXT_PATTERN = re.compile(
     r"<!--\s+no[\s-]+verify[\s-]+(?P<type>\w+)", re.IGNORECASE
 )
-
 _NEWLINE_PATTERN = re.compile(r"\n")
 _UNDEFINED_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
@@ -41,13 +43,8 @@ _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
     r")",
     flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
 )
-
-
 _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
 _NEWLINE_PATTERN = re.compile(r"\n")
-
-Issue = NewType("Issue", str)
-TaggedIssue = Tuple[Path, Issue]
 
 
 def _is_text_capitalized(text: str) -> bool:
