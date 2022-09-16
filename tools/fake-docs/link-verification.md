@@ -17,9 +17,12 @@ We are checking that all the links are referenced correctly
 ## HTTP links
 
 [404 link](https://github.com/non-existing-page)
-[normal http link]("http://github.com")
-[normal https link]("https://github.com")
-[non existing website]("http://non-existing-website.sadkjaskldjalksjd")
+
+[normal http link](http://github.com)
+
+[normal https link](https://github.com)
+
+[non existing website](http://non-existing-website.sadkjaskldjalksjd)
 
 ## Mail links
 
