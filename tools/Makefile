@@ -1,4 +1,4 @@
-all: test test_tools 
+all: test_tools verify
 
 verify:
 	@python tools/verify.py .
