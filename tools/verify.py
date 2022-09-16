@@ -232,11 +232,14 @@ def read_html_text(path: Path) -> str:
         return _read_text(path)
 
 
+def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
+    return [(tag, issue) for issue in issues]
+
+
 async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
-    result: List[TaggedIssue] = []
-    for issue in list(await _html_issues(path)) + list(_text_issues(_read_text(path))):
-        result.append((path, issue))
-    return result
+    return _tag_issues(
+        list(await _html_issues(path)) + list(_text_issues(_read_text(path))), tag=path
+    )
 
 
 async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
