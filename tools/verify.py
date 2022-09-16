@@ -163,6 +163,10 @@ async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
 
 
 def _undefined_bookmark_issues(html: str) -> Iterable[Issue]:
+    """
+    Assuming the html was already rendered from markdown and all the unreferenced
+    bookmarks remain as-is in the html text.
+    """
     for match in _MARKDOWN_BOOKMARK_PATTERN.finditer(html):
         yield _pattern_issue(
             match,
