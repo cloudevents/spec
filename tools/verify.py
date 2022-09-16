@@ -5,7 +5,6 @@ from argparse import ArgumentParser
 from contextlib import closing
 from functools import lru_cache
 from http import HTTPStatus
-from itertools import chain
 from pathlib import Path
 from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple, TypeVar
 
