@@ -6,7 +6,7 @@ This is the reason we have a `<!-- no verify links -->` here
 
 ## Things we are checking
 
-You MUST NOT have the word Cloud Event or the work Cloud Events
+You MUST NOT have the word Cloud Event or the word Cloud Events
 
 even if they are seperated by newlines
 
