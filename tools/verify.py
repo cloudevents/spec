@@ -1,24 +1,26 @@
 #!python
+import asyncio
+import re
 from argparse import ArgumentParser
 from contextlib import closing
 from functools import lru_cache
+from http import HTTPStatus
 from itertools import chain
 from pathlib import Path
-from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple
-import re
-from markdown import markdown
-from bs4 import BeautifulSoup
-from tenacity import Retrying, stop_after_attempt
+from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple, TypeVar
+
 from aiohttp import ClientSession
-from tqdm.asyncio import tqdm
-from http import HTTPStatus
+from bs4 import BeautifulSoup
+from markdown import markdown
 from pymdownx import slugs
-import asyncio
+from tenacity import Retrying, stop_after_attempt
+from tqdm.asyncio import tqdm
 
 Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
+T = TypeVar("T")
 
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
@@ -184,16 +186,18 @@ def _undefined_bookmark_issues(html: str) -> Iterable[Issue]:
         )
 
 
+def _flatten(lists: List[List[T]]) -> List[T]:
+    return [item for a_list in lists for item in a_list]
+
+
 async def _html_issues(path: Path) -> Iterable[Issue]:
     html = read_html_text(path)
     if _skip_type(html) != "links":
-        return [
-            issue
-            for issues in await asyncio.gather(
+        return _flatten(
+            await asyncio.gather(
                 *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
             )
-            for issue in issues
-        ] + list(_undefined_bookmark_issues(html))
+        ) + list(_undefined_bookmark_issues(html))
     else:
         return []
 
@@ -244,14 +248,12 @@ async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
 
 
 async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
-    return [
-        issue
-        for issues in await tqdm.gather(
+    return _flatten(
+        await tqdm.gather(
             *[_query_file_issues(path) for path in sorted(_query_all_docs(directory))],
             unit="files",
         )
-        for issue in issues
-    ]
+    )
 
 
 async def main():
