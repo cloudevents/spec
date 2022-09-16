@@ -23,8 +23,8 @@ HttpUri = NewType("HttpUri", Uri)
 T = TypeVar("T")
 HtmlText = NewType("HtmlText", str)
 
-
-_FAKE_DOCS = set((Path(__file__).parent / "fake-docs").rglob("**/*"))
+_FAKE_DOCS_DIR = Path(__file__).parent / "fake-docs"
+_FAKE_DOCS = set(_FAKE_DOCS_DIR.rglob("**/*"))
 
 
 @dataclass
