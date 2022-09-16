@@ -24,8 +24,12 @@ T = TypeVar("T")
 HtmlText = NewType("HtmlText", str)
 
 
+_FAKE_DOCS = set((Path(__file__).parent / "fake-docs").rglob("**/*"))
+
+
 @dataclass
 class Settings:
+    excluded_paths: Set[Path]
     http_max_get_attemps: int = 5
     http_timeout_seconds: int = 10
 
@@ -98,8 +102,13 @@ def _html_parser(html: str) -> BeautifulSoup:
     return BeautifulSoup(html, "html.parser")
 
 
-def _all_docs(directory: Path) -> Set[Path]:
-    return set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
+def _all_docs(directory: Path, excluded_paths: Set[Path]) -> Set[Path]:
+    excluded_paths = {path.absolute() for path in excluded_paths}
+    return {
+        path
+        for path in set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
+        if path.absolute() not in excluded_paths
+    }
 
 
 def _skip_type(text: str) -> Optional[str]:
@@ -275,7 +284,10 @@ async def _directory_issues(
 ) -> Iterable[TaggedIssue]:
     return _flatten(
         await tqdm.gather(
-            *[_file_issues(path, settings) for path in sorted(_all_docs(directory))],
+            *[
+                _file_issues(path, settings)
+                for path in sorted(_all_docs(directory, settings.excluded_paths))
+            ],
             unit="files",
         )
     )
@@ -285,7 +297,7 @@ async def main():
     parser = ArgumentParser()
     parser.add_argument("root", default=".", nargs="?")
     args = parser.parse_args()
-    settings = Settings()
+    settings = Settings(excluded_paths=_FAKE_DOCS)
     issues = list(await _directory_issues(Path(args.root), settings))
     if issues:
         _print_issues(issues)
