@@ -28,7 +28,7 @@ _SKIP_TEXT_PATTERN = re.compile(
     r"<!--\s*no[\s-]+verify[\s-]+(?P<type>\w+)[\s-]*-->", re.IGNORECASE
 )
 _NEWLINE_PATTERN = re.compile(r"\n")
-_UNDEFINED_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
+_MARKDOWN_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
     r"(MUST(\s+NOT)?|"
     # catch the "required" in the jsonschema of the json-format.md
@@ -163,7 +163,7 @@ async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
 
 
 def _undefined_bookmark_issues(html: str) -> Iterable[Issue]:
-    for match in _UNDEFINED_BOOKMARK_PATTERN.finditer(html):
+    for match in _MARKDOWN_BOOKMARK_PATTERN.finditer(html):
         yield _pattern_issue(
             match,
             html,
