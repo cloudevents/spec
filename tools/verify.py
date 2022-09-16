@@ -66,8 +66,12 @@ def _miscased_phrase_issues(text: str) -> Iterable[Issue]:
             )
 
 
+def _should_skip_plain_text_issues(text: str) -> bool:
+    return _skip_type(text) == "specs"
+
+
 def _plain_text_issues(text: str) -> Iterable[Issue]:
-    if _skip_type(text) != "specs":
+    if not _should_skip_plain_text_issues(text):
         yield from _banned_phrase_issues(text)
         yield from _miscased_phrase_issues(text)
 
@@ -190,16 +194,19 @@ def _flatten(lists: List[List[T]]) -> List[T]:
     return [item for a_list in lists for item in a_list]
 
 
+def _should_skip_html_issues(html: str) -> bool:
+    return _skip_type(html) == "links"
+
+
 async def _html_issues(path: Path) -> Iterable[Issue]:
     html = read_html_text(path)
-    if _skip_type(html) != "links":
-        return _flatten(
-            await asyncio.gather(
-                *[_uri_issues(uri, path) for uri in _find_all_uris(html)]
-            )
-        ) + list(_undefined_bookmark_issues(html))
-    else:
+
+    if _should_skip_html_issues(html):
         return []
+
+    return _flatten(
+        await asyncio.gather(*[_uri_issues(uri, path) for uri in _find_all_uris(html)])
+    ) + list(_undefined_bookmark_issues(html))
 
 
 def _print_issue(tagged_issue: TaggedIssue) -> None:
