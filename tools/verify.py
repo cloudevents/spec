@@ -64,7 +64,7 @@ def _miscased_phrase_issues(text: str) -> Iterable[Issue]:
             )
 
 
-def _text_issues(text: str) -> Iterable[Issue]:
+def _plain_text_issues(text: str) -> Iterable[Issue]:
     if _skip_type(text) != "specs":
         yield from _banned_phrase_issues(text)
         yield from _miscased_phrase_issues(text)
@@ -238,7 +238,8 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
 
 async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
     return _tag_issues(
-        list(await _html_issues(path)) + list(_text_issues(_read_text(path))), tag=path
+        list(await _html_issues(path)) + list(_plain_text_issues(_read_text(path))),
+        tag=path,
     )
 
 

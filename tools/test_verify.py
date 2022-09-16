@@ -1,7 +1,7 @@
 from re import Match
 from typing import Optional
 from verify import (
-    _text_issues,
+    _plain_text_issues,
     _SKIP_TEXT_PATTERN,
     _MARKDOWN_BOOKMARK_PATTERN,
     _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
@@ -14,7 +14,7 @@ import pytest
 def test_text_issues():
     assert (
         set(
-            _text_issues(
+            _plain_text_issues(
                 """
                 Hello World this MUST be a test
                 SHOULD NOT be something
