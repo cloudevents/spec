@@ -93,7 +93,7 @@ def _html_parser(html: str) -> BeautifulSoup:
     return BeautifulSoup(html, "html.parser")
 
 
-def _query_all_docs(directory: Path) -> Set[Path]:
+def _all_docs(directory: Path) -> Set[Path]:
     return set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
 
 
@@ -247,17 +247,17 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
 
-async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
+async def _file_issues(path: Path) -> Sequence[TaggedIssue]:
     return _tag_issues(
         list(await _html_issues(path)) + list(_plain_text_issues(_read_text(path))),
         tag=path,
     )
 
 
-async def _query_directory_issues(directory: Path) -> Iterable[TaggedIssue]:
+async def _directory_issues(directory: Path) -> Iterable[TaggedIssue]:
     return _flatten(
         await tqdm.gather(
-            *[_query_file_issues(path) for path in sorted(_query_all_docs(directory))],
+            *[_file_issues(path) for path in sorted(_all_docs(directory))],
             unit="files",
         )
     )
@@ -267,7 +267,7 @@ async def main():
     parser = ArgumentParser()
     parser.add_argument("root", default=".", nargs="?")
     args = parser.parse_args()
-    issues = list(await _query_directory_issues(Path(args.root)))
+    issues = list(await _directory_issues(Path(args.root)))
     if issues:
         _print_issues(issues)
         exit(1)
