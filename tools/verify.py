@@ -228,17 +228,21 @@ def _read_text(path: Path):
     return path.read_text(encoding="utf-8")
 
 
+def _render_markdown_to_html(markdown_text: str) -> str:
+    return markdown(
+        markdown_text,
+        extensions=["toc"],  # need toc so headers will generate ids
+        extension_configs={
+            # we need this for unicode titles
+            "toc": {"slugify": slugs.slugify(case="lower", percent_encode=False)}
+        },
+    )
+
+
 @lru_cache
 def read_html_text(path: Path) -> str:
     if path.name.endswith(".md"):
-        return markdown(
-            _read_text(path),
-            extensions=["toc"],  # need toc so headers will generate ids
-            extension_configs={
-                # we need this for unicode titles
-                "toc": {"slugify": slugs.slugify(case="lower", percent_encode=False)}
-            },
-        )  # Convert markdown to html
+        return _render_markdown_to_html(_read_text(path))
     else:
         return _read_text(path)
 
