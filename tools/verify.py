@@ -25,7 +25,7 @@ _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
 
 _SKIP_TEXT_PATTERN = re.compile(
-    r"<!--\s+no[\s-]+verify[\s-]+(?P<type>\w+)", re.IGNORECASE
+    r"<!--\s*no[\s-]+verify[\s-]+(?P<type>\w+)[\s-]*-->", re.IGNORECASE
 )
 _NEWLINE_PATTERN = re.compile(r"\n")
 _UNDEFINED_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
