@@ -9,6 +9,7 @@ from verify import (
     _SKIP_TEXT_PATTERN,
     _is_text_all_uppercase,
     _plain_text_issues,
+    _render_markdown_to_html,
 )
 
 
@@ -164,3 +165,17 @@ def test_upper_text_must_be_detected_as_such():
 
 def test_non_upper_text_must_be_detected_as_such():
     assert not _is_text_all_uppercase("tHis Is NoT cOrRect")
+
+
+def test_headers_must_be_rendered_with_ids():
+    assert (
+        _render_markdown_to_html("#Hello World")
+        == '<h1 id="hello-world">Hello World</h1>'
+    )
+
+
+def test_rtl_unicode_must_be_rendered_in_the_id():
+    assert (
+        _render_markdown_to_html("#כותרת בעברית")
+        == '<h1 id="כותרת-בעברית">כותרת בעברית</h1>'
+    )
