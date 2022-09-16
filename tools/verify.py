@@ -3,6 +3,7 @@ import asyncio
 import re
 from argparse import ArgumentParser
 from contextlib import closing
+from dataclasses import dataclass
 from functools import lru_cache
 from http import HTTPStatus
 from pathlib import Path
@@ -22,8 +23,12 @@ HttpUri = NewType("HttpUri", Uri)
 T = TypeVar("T")
 HtmlText = NewType("HtmlText", str)
 
-_HTTP_MAX_GET_ATTEMPTS = 5
-_HTTP_TIMEOUT_SECONDS = 10
+
+@dataclass
+class Settings:
+    http_max_get_attemps: int = 5
+    http_timeout_seconds: int = 10
+
 
 _SKIP_TEXT_PATTERN = re.compile(
     r"<!--\s*no[\s-]+verify[\s-]+(?P<type>\w+)[\s-]*-->", re.IGNORECASE
@@ -111,13 +116,15 @@ def _find_all_uris(html: HtmlText) -> Iterable[Uri]:
             yield Uri(uri.strip())
 
 
-async def _uri_availability_issues(uri: HttpUri) -> Sequence[Issue]:
+async def _uri_availability_issues(uri: HttpUri, settings: Settings) -> Sequence[Issue]:
     try:
-        for attempt in Retrying(stop=stop_after_attempt(_HTTP_MAX_GET_ATTEMPTS)):
+        for attempt in Retrying(stop=stop_after_attempt(settings.http_max_get_attemps)):
             with attempt:
                 async with ClientSession() as session:
                     with closing(
-                        await session.get(uri, timeout=_HTTP_TIMEOUT_SECONDS, ssl=False)
+                        await session.get(
+                            uri, timeout=settings.http_timeout_seconds, ssl=False
+                        )
                     ) as response:
                         match response.status:
                             case HTTPStatus.NOT_FOUND:
@@ -166,11 +173,11 @@ def _local_path_uri_issues(uri: Uri, current_path: Path) -> Sequence[Issue]:
     return []
 
 
-async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
+async def _uri_issues(uri: Uri, path: Path, settings: Settings) -> Sequence[Issue]:
     schema = uri.split(":")[0]
     match schema:
         case "http" | "https":
-            return await _uri_availability_issues(HttpUri(uri))
+            return await _uri_availability_issues(HttpUri(uri), settings)
         case "mailto":
             return []  # mail URIs cannot have issues
         case _:  # assuming it is a local path markdown reference
@@ -198,14 +205,16 @@ def _should_skip_html_issues(html: HtmlText) -> bool:
     return _skip_type(html) == "links"
 
 
-async def _html_issues(path: Path) -> Iterable[Issue]:
+async def _html_issues(path: Path, settings: Settings) -> Iterable[Issue]:
     html = read_html_text(path)
 
     if _should_skip_html_issues(html):
         return []
 
     return _flatten(
-        await asyncio.gather(*[_uri_issues(uri, path) for uri in _find_all_uris(html)])
+        await asyncio.gather(
+            *[_uri_issues(uri, path, settings) for uri in _find_all_uris(html)]
+        )
     ) + list(_undefined_bookmark_issues(html))
 
 
@@ -253,17 +262,20 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
 
-async def _file_issues(path: Path) -> Sequence[TaggedIssue]:
+async def _file_issues(path: Path, settings: Settings) -> Sequence[TaggedIssue]:
     return _tag_issues(
-        list(await _html_issues(path)) + list(_plain_text_issues(_read_text(path))),
+        list(await _html_issues(path, settings))
+        + list(_plain_text_issues(_read_text(path))),
         tag=path,
     )
 
 
-async def _directory_issues(directory: Path) -> Iterable[TaggedIssue]:
+async def _directory_issues(
+    directory: Path, settings: Settings
+) -> Iterable[TaggedIssue]:
     return _flatten(
         await tqdm.gather(
-            *[_file_issues(path) for path in sorted(_all_docs(directory))],
+            *[_file_issues(path, settings) for path in sorted(_all_docs(directory))],
             unit="files",
         )
     )
@@ -273,7 +285,8 @@ async def main():
     parser = ArgumentParser()
     parser.add_argument("root", default=".", nargs="?")
     args = parser.parse_args()
-    issues = list(await _directory_issues(Path(args.root)))
+    settings = Settings()
+    issues = list(await _directory_issues(Path(args.root), settings))
     if issues:
         _print_issues(issues)
         exit(1)
