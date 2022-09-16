@@ -31,7 +31,7 @@ We are checking that all the links are referenced correctly
 
 [link to existing segment in a file](README.md#fake-docs)
 
-[link to non-existing segment in a file](READMEmd#non-existing)
+[link to non-existing segment in a file](README.md#non-existing)
 
 [link to non-existing file](non-existing.md)
 
