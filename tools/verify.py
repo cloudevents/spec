@@ -152,11 +152,11 @@ def _does_html_contains_id(html: str, id: str) -> bool:
 
 
 def _missing_segment_issue(path: Path, segment: str) -> Issue:
-    return Issue(f"{path} does not contain {repr('#' + segment)} segment")
+    return Issue(f"{path.as_posix()} does not contain {repr('#' + segment)} segment")
 
 
 def _missing_file_issue(path: Path) -> Issue:
-    return Issue(f"{path} does not exist")
+    return Issue(f"{path.as_posix()} does not exist")
 
 
 def _local_path_uri_issues(uri: Uri, current_path: Path) -> Sequence[Issue]:
