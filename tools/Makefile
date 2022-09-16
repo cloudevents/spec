@@ -1,9 +1,7 @@
-all: test verify 
+all: test test_tools 
 
 verify:
-	@echo Verifing Specification
 	@python tools/verify.py .
 
-test:
-	@echo Testing Verification
-	@pytest tools/ -q
+test_tools:
+	@pytest tools/ 
