@@ -168,8 +168,8 @@ async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
         case "http" | "https":
             return await _uri_availability_issues(HttpUri(uri))
         case "mailto":
-            return []
-        case _:
+            return []  # mail URIs cannot have issues
+        case _:  # assuming it is a local path markdown reference
             return _local_path_uri_issues(uri, path)
 
 
