@@ -270,4 +270,20 @@ async def test_app(monkeypatch):
             Path("fake-docs/text-verification.md"),
             "line 9: 'Cloud Events' is banned",
         ),
+        (
+            Path("fake-docs/README.md"),
+            "Translation file fake-docs/languages/your-lang/README.md does not exist",
+        ),
+        (
+            Path("fake-docs/README.md"),
+            "Translation file fake-docs/languages/my-lang/README.md does not exist",
+        ),
+        (
+            Path("fake-docs/link-verification.md"),
+            "Translation file fake-docs/languages/your-lang/link-verification.md does not exist",
+        ),
+        (
+            Path("fake-docs/text-verification.md"),
+            "Translation file fake-docs/languages/my-lang/text-verification.md does not exist",
+        ),
     }
