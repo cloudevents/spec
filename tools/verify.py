@@ -278,6 +278,7 @@ async def main():
         _print_issues(issues)
         exit(1)
     else:
+        print("Spec verification succeeded")
         exit(0)
 
 
