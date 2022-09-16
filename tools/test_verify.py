@@ -1,4 +1,5 @@
-from verify import _text_issues
+from verify import _text_issues, _SKIP_TEXT_PATTERN
+import pytest
 
 
 def test_text_issues():
@@ -35,3 +36,21 @@ def test_text_issues():
             "line 15: 'mAy' MUST be capitalized ('MAY')",
         }
     )
+
+
+@pytest.mark.parametrize(
+    "given, expected",
+    [
+        (
+            "sadnakskd bad <!--  no verify specs --> dasdasd",
+            "<!--  no verify specs -->",
+        ),
+        (
+            "sadnakskd bad <!--\t no-verify-docs --> dasdasd",
+            "<!--\t no-verify-docs -->",
+        ),
+        ("sadnakskd bad <!--no-verify-specs--> dasdasd", "<!--no-verify-specs-->"),
+    ],
+)
+def test_skip_text(given, expected):
+    assert _SKIP_TEXT_PATTERN.search(given).group() == expected
