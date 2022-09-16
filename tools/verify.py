@@ -50,6 +50,8 @@ _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
 _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
 _NEWLINE_PATTERN = re.compile(r"\n")
 
+_FAKE_DOCS = set((Path(__file__).parent / "fake-docs").rglob("**/*"))
+
 
 def _is_text_all_uppercase(text: str) -> bool:
     return text == text.upper()
@@ -99,7 +101,9 @@ def _html_parser(html: str) -> BeautifulSoup:
 
 
 def _all_docs(directory: Path) -> Set[Path]:
-    return set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
+    return (
+        set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
+    ) - _FAKE_DOCS
 
 
 def _skip_type(text: str) -> Optional[str]:
