@@ -21,6 +21,7 @@ TaggedIssue = Tuple[Path, Issue]
 Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
 T = TypeVar("T")
+HtmlText = NewType("HtmlText", str)
 
 _HTTP_MAX_GET_ATTEMPTS = 5
 _HTTP_TIMEOUT_SECONDS = 10
@@ -104,7 +105,7 @@ def _skip_type(text: str) -> Optional[str]:
     return None
 
 
-def _find_all_uris(html: str) -> Iterable[Uri]:
+def _find_all_uris(html: HtmlText) -> Iterable[Uri]:
     for a in _html_parser(html).findAll("a"):
         uri = a.get("href")
         if uri:
@@ -177,7 +178,7 @@ async def _uri_issues(uri: Uri, path: Path) -> Sequence[Issue]:
             return _local_path_uri_issues(uri, path)
 
 
-def _undefined_bookmark_issues(html: str) -> Iterable[Issue]:
+def _undefined_bookmark_issues(html: HtmlText) -> Iterable[Issue]:
     """
     Assuming the html was already rendered from markdown and all the unreferenced
     bookmarks remain as-is in the html text.
@@ -194,7 +195,7 @@ def _flatten(lists: List[List[T]]) -> List[T]:
     return [item for a_list in lists for item in a_list]
 
 
-def _should_skip_html_issues(html: str) -> bool:
+def _should_skip_html_issues(html: HtmlText) -> bool:
     return _skip_type(html) == "links"
 
 
@@ -228,23 +229,25 @@ def _read_text(path: Path):
     return path.read_text(encoding="utf-8")
 
 
-def _render_markdown_to_html(markdown_text: str) -> str:
-    return markdown(
-        markdown_text,
-        extensions=["toc"],  # need toc so headers will generate ids
-        extension_configs={
-            # we need this for unicode titles
-            "toc": {"slugify": slugs.slugify(case="lower", percent_encode=False)}
-        },
+def _render_markdown_to_html(markdown_text: str) -> HtmlText:
+    return HtmlText(
+        markdown(
+            markdown_text,
+            extensions=["toc"],  # need toc so headers will generate ids
+            extension_configs={
+                # we need this for unicode titles
+                "toc": {"slugify": slugs.slugify(case="lower", percent_encode=False)}
+            },
+        )
     )
 
 
 @lru_cache
-def read_html_text(path: Path) -> str:
+def read_html_text(path: Path) -> HtmlText:
     if path.name.endswith(".md"):
         return _render_markdown_to_html(_read_text(path))
     else:
-        return _read_text(path)
+        return HtmlText(_read_text(path))  # assuming given file is already html
 
 
 def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
