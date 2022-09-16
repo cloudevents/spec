@@ -1,6 +1,11 @@
 from re import Match
 from typing import Optional
-from verify import _text_issues, _SKIP_TEXT_PATTERN, _MARKDOWN_BOOKMARK_PATTERN
+from verify import (
+    _text_issues,
+    _SKIP_TEXT_PATTERN,
+    _MARKDOWN_BOOKMARK_PATTERN,
+    _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
+)
 import pytest
 
 
@@ -81,3 +86,29 @@ def _maybe_group(match: Optional[Match]) -> Optional[str]:
 )
 def test_bookmark_pattern_matches_given_patterns(given, expected):
     assert _maybe_group(_MARKDOWN_BOOKMARK_PATTERN.search(given)) == expected
+
+
+@pytest.mark.parametrize(
+    "given, expected",
+    (
+        (
+            "this sHouLd\n\n\ynot jsakhndja",
+            "sHouLd\n\n\ynot",
+        ),
+        (
+            "asdjkasbndkj optional asjdkjasjd",
+            "optional",
+        ),
+        ("optionally", None),
+        (" asd asd shall            not asdasdas", "shall            not"),
+        ('asd "required" not asdasdas', None),
+        ("this Must, handle commas", "Must"),
+        ("this (must) handle braces", "must"),
+        ("marshall is ok not to be matched", None),
+        ("may be matched", "may"),
+        (" dasa shall not asjdbajsbd", "shall not"),
+        ("ds as must not asd ", "must not"),
+    ),
+)
+def test_capitalization_phrases(given, expected):
+    _maybe_group(_PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.match(given)) == expected
