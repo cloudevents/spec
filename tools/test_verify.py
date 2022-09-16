@@ -1,14 +1,15 @@
 from re import Match
 from typing import Optional
+
+import pytest
 from verify import (
-    _plain_text_issues,
-    _SKIP_TEXT_PATTERN,
+    _BANNED_PHRASES_PATTERN,
     _MARKDOWN_BOOKMARK_PATTERN,
     _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
-    _BANNED_PHRASES_PATTERN,
+    _SKIP_TEXT_PATTERN,
     _is_text_all_uppercase,
+    _plain_text_issues,
 )
-import pytest
 
 
 def test_text_issues():
