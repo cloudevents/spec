@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 from contextlib import closing
 from functools import lru_cache
+from itertools import chain
 from pathlib import Path
 from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple
 import re
@@ -233,9 +234,7 @@ def read_html_text(path: Path) -> str:
 
 async def _query_file_issues(path: Path) -> Sequence[TaggedIssue]:
     result: List[TaggedIssue] = []
-    for issue in await _html_issues(path):
-        result.append((path, issue))
-    for issue in _text_issues(_read_text(path)):
+    for issue in list(await _html_issues(path)) + list(_text_issues(_read_text(path))):
         result.append((path, issue))
     return result
 
