@@ -1,4 +1,6 @@
-from verify import _text_issues, _SKIP_TEXT_PATTERN
+from re import Match
+from typing import Optional
+from verify import _text_issues, _SKIP_TEXT_PATTERN, _MARKDOWN_BOOKMARK_PATTERN
 import pytest
 
 
@@ -40,7 +42,7 @@ def test_text_issues():
 
 @pytest.mark.parametrize(
     "given, expected",
-    [
+    (
         (
             "sadnakskd bad <!--  no verify specs --> dasdasd",
             "<!--  no verify specs -->",
@@ -50,7 +52,32 @@ def test_text_issues():
             "<!--\t no-verify-docs -->",
         ),
         ("sadnakskd bad <!--no-verify-specs--> dasdasd", "<!--no-verify-specs-->"),
-    ],
+    ),
 )
 def test_skip_text(given, expected):
     assert _SKIP_TEXT_PATTERN.search(given).group() == expected
+
+
+def _maybe_group(match: Optional[Match]) -> Optional[str]:
+    if match is None:
+        return None
+    else:
+        return match.group()
+
+
+@pytest.mark.parametrize(
+    "given, expected",
+    (
+        (
+            "sadnakskd bad [Hello][World] dasdasd",
+            "[Hello][World]",
+        ),
+        (
+            "sadnakskd bad [What is going][on]dasdasd",
+            "[What is going][on]",
+        ),
+        ("This is [not] [a bookmark]", None),
+    ),
+)
+def test_bookmark_pattern_matches_given_patterns(given, expected):
+    assert _maybe_group(_MARKDOWN_BOOKMARK_PATTERN.search(given)) == expected
