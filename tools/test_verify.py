@@ -3,25 +3,18 @@ from re import Match
 from typing import Optional
 
 import pytest
-from verify import (
-    _BANNED_PHRASES_PATTERN,
-    _FAKE_DOCS_DIR,
-    _MARKDOWN_BOOKMARK_PATTERN,
-    _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
-    _SKIP_TEXT_PATTERN,
-    Settings,
-    _directory_issues,
-    _is_text_all_uppercase,
-    _plain_text_issues,
-    _render_markdown_to_html,
-)
+from verify import (_BANNED_PHRASES_PATTERN, _FAKE_DOCS_DIR,
+                    _MARKDOWN_BOOKMARK_PATTERN,
+                    _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
+                    _SKIP_TEXT_PATTERN, Settings, _directory_issues,
+                    _is_text_all_uppercase, _plain_text_issues,
+                    _render_markdown_to_html)
 
 
 def test_text_issues():
-    assert (
-        set(
-            _plain_text_issues(
-                """
+    assert set(
+        _plain_text_issues(
+            """
                 Hello World this MUST be a test
                 SHOULD NOT be something
                 should be CloudEvents 
@@ -39,18 +32,16 @@ def test_text_issues():
                 Optionally
                 "required"
                 """
-            )
         )
-        == {
-            "line 6: 'Cloud\\n                Event' is banned",
-            "line 8: 'Cloud Events' is banned",
-            "line 9: 'Cloud\\n                Events' is banned",
-            "line 4: 'should' MUST be capitalized ('SHOULD')",
-            "line 11: 'must' MUST be capitalized ('MUST')",
-            "line 14: 'ShOULD        nOt' MUST be capitalized ('SHOULD        NOT')",
-            "line 15: 'mAy' MUST be capitalized ('MAY')",
-        }
-    )
+    ) == {
+        "line 6: 'Cloud\\n                Event' is banned",
+        "line 8: 'Cloud Events' is banned",
+        "line 9: 'Cloud\\n                Events' is banned",
+        "line 4: 'should' MUST be capitalized ('SHOULD')",
+        "line 11: 'must' MUST be capitalized ('MUST')",
+        "line 14: 'ShOULD        nOt' MUST be capitalized ('SHOULD        NOT')",
+        "line 15: 'mAy' MUST be capitalized ('MAY')",
+    }
 
 
 @pytest.mark.parametrize(
@@ -119,8 +110,9 @@ def test_bookmark_pattern_matches_given_patterns(given, expected):
     ),
 )
 def test_capitalization_phrases(given, expected):
-    assert _maybe_group(_PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.match(given)) == \
-    expected
+    assert (
+        _maybe_group(_PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.match(given)) == expected
+    )
 
 
 @pytest.mark.parametrize(
@@ -281,10 +273,12 @@ async def test_app(monkeypatch):
         ),
         (
             Path("fake-docs/link-verification.md"),
-            "Translation file fake-docs/languages/your-lang/link-verification.md does not exist",
+            "Translation file fake-docs/languages/your-lang/link-verification.md does"
+            " not exist",
         ),
         (
             Path("fake-docs/text-verification.md"),
-            "Translation file fake-docs/languages/my-lang/text-verification.md does not exist",
+            "Translation file fake-docs/languages/my-lang/text-verification.md does not"
+            " exist",
         ),
     }
