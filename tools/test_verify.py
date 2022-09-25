@@ -119,7 +119,8 @@ def test_bookmark_pattern_matches_given_patterns(given, expected):
     ),
 )
 def test_capitalization_phrases(given, expected):
-    _maybe_group(_PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.match(given)) == expected
+    assert _maybe_group(_PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN.match(given)) == \
+    expected
 
 
 @pytest.mark.parametrize(
