@@ -1,10 +1,6 @@
 # Cryptography Extension
 
 ## Abstract
-
-Some CloudEvents MAY contain encrypted or cryptographically-signed `data`. The "plain"
-data which was encrypted or signed data usually differs in format from the plain data.
-
 Events with encrypted or signed `data` values create a few problems:
  - [`datacontenttype`](../spec.md#datacontenttype) MUST hold the content type of 
  the encrypted buffer, and not the plain data. 
