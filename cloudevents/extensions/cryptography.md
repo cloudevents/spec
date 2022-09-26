@@ -21,29 +21,16 @@ metadata.
 
 ## Terminology
 
-### Encrypted Data
-Refers to a data which was encrypted with some sort of an encryption algorithm.
-The encrypted data MAY contain additional metadata which is not the plain data.
-
-This additional metadata MAY be encrypted as-well, or stored in a plain format.
-
-Example for additional metadata:
-- RSA encrypted AES key which is pre-appended to the AES encrypted plain data
-- A Header containing the algorithm which was used to encrypt the data
-
-This extension does not Impose any requirements on the encryption algorithm.
-
-### Signed Data
-A data which consists of a the plain data and additional metadata that contains a
-cryptographic signature.
-
 ### Plain data
-
-Refers to the data as it were before application of the encryption algorithm or the
-data which was signed (and does not include the signature).
-
+Data which was fed to the cryptographic algorithm which produced the given event
+ `data` value
+ 
+Examples:
+ - Data before it was encrypted
+ - Data before it was signed   
+ 
+ 
 ## Attributes
-
 ### cryptdatacontenttype
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
 - Description: Content type of the plain data value.
