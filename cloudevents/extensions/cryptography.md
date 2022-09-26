@@ -35,7 +35,7 @@ This extension does not Impose any requirements on the encryption algorithm.
 
 ### Signed Data
 A data which consists of a the plain data and additional metadata that contains a
-signature.
+cryptographic signature.
 
 ### Plain data
 
