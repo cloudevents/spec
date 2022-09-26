@@ -7,6 +7,7 @@ data which was encrypted or signed data usually differs in format from the plain
 
 This extension provides a standard way for expressing the properties of the plain data.
 
+## Terminology
 
 ### Encrypted Data
 Refers to a data which was encrypted with some sort of an encryption algorithm.
