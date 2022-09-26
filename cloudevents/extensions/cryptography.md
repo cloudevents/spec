@@ -14,8 +14,10 @@ Events with encrypted or signed `data` values create a few problems:
 This means consumers and intermediaries cannot route and validate events based on 
 the `datacontenttype` and `dataschema` attributes as they do with "normal" events.
 
-To solve this problem this extension proposes the attributes `cryptdatacontenttype` 
-and `cryptdataschema` to provide a way for describing this needed metadata.
+To solve this problem this extension proposes the attributes 
+[`cryptdatacontenttype`](#cryptdatacontenttype)  and 
+[`cryptdataschema`](#cryptdataschema) to provide a way for describing this needed 
+metadata.
 
 ## Terminology
 
