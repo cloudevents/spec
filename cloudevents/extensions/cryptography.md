@@ -33,7 +33,7 @@ Refers to the data as it were before application of the encryption algorithm or 
 
 ### cryptdatacontenttype
 - Type: `String` per [RFC 2046](https://tools.ietf.org/html/rfc2046)
-- Description: Content type of plain data value.
+- Description: Content type of the plain data value.
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in
@@ -45,7 +45,7 @@ Refers to the data as it were before application of the encryption algorithm or 
 #### cryptdataschema
 
 - Type: `URI`
-- Description: Identifies the schema that plain data adheres to. Incompatible
+- Description: Identifies the schema that the plain data adheres to. Incompatible
   changes to the schema SHOULD be reflected by a different URI. See
   [Versioning of CloudEvents in the Primer](../primer.md#versioning-of-cloudevents)
   for more information.
