@@ -5,7 +5,17 @@
 Some CloudEvents MAY contain encrypted or cryptographically-signed `data`. The "plain"
 data which was encrypted or signed data usually differs in format from the plain data.
 
-This extension provides a standard way for expressing the properties of the plain data.
+Events with encrypted or signed `data` values create a few problems:
+ - `datacontenttype` MUST hold the content type of the encrypted buffer, and not the
+  plain data. 
+- `dataschema` MUST hold the schema of the encrypted buffer, and not the the schema 
+  of the plain data
+
+This means consumers and intermediaries cannot route and validate events based on 
+the `datacontenttype` and `dataschema` attributes as they do with "normal" events.
+
+To solve this problem this extension proposes the attributes `cryptdatacontenttype` 
+and `cryptdataschema` to provide a way for describing this needed metadata.
 
 ## Terminology
 
