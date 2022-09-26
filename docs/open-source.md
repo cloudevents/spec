@@ -21,8 +21,7 @@ CloudEvents, please include in the list below.
   for event-driven, serverless architectures. The Event Gateway combines both
   API Gateway and Pub/Sub functionality into a single event-driven experience.
 - [CloudEvents Extend API](https://github.com/goextend/cloudevents-extend-api)
-  is a JavaScript programming model for Extend which allows handling Cloud
-  Events.
+  is a JavaScript programming model for Extend which allows handling CloudEvents.
 - [CloudEvents Verify](https://github.com/btbd/CEVerify): is a tool to help
   verify CloudEvents according to the proper specifications. It is currently
   being hosted publicly [here](http://soaphub.org/ceverify).

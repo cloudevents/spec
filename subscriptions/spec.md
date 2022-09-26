@@ -260,7 +260,7 @@ how many subscriptions are supported is implementation specific.
 To help explain the subscription resource, the following non-normative pseudo
 json shows its basic structure:
 
-(`*` means zero or more, `+` means one or more, `?` means optional)
+(`*` means zero or more, `+` means one or more, `?` means OPTIONAL)
 
 Subscription:
 

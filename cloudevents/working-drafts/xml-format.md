@@ -23,7 +23,7 @@ This document is a working draft.
 [CloudEvents][ce-spec] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how
 elements defined in the CloudEvents specification are to be represented using
-[Extensible Markup Language (XML)](xml-spec) elements.
+[Extensible Markup Language (XML)][xml-spec] elements.
 
 * The [Attributes](#2-attributes) section describes the representation and
 data type mappings for CloudEvents context attributes.

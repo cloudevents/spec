@@ -1,0 +1,7 @@
+markdown
+bs4 
+tenacity
+aiohttp
+tqdm
+pymdown-extensions
+pytest-asyncio

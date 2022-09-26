@@ -11,12 +11,12 @@ Each test definition includes:
 
 * `name`: Name of the test case
 * `expression`: Expression to test.
-* `result`: Expected result (optional). Can be a boolean, an integer or a string.
-* `error`: Expected error (optional). If absent, no error is expected.
-* `event`: Input event (optional). If present, this is a valid event serialized in JSON format. If absent, when testing
+* `result`: Expected result (OPTIONAL). Can be a boolean, an integer or a string.
+* `error`: Expected error (OPTIONAL). If absent, no error is expected.
+* `event`: Input event (OPTIONAL). If present, this is a valid event serialized in JSON format. If absent, when testing
   the expression, any valid event can be passed.
-* `eventOverrides`: Overrides to the input event (optional). This might be used when `event` is missing, in order to
-  define only some specific values, while the other (required) attributes can be any value.
+* `eventOverrides`: Overrides to the input event (OPTIONAL). This might be used when `event` is missing, in order to
+  define only some specific values, while the other (REQUIRED) attributes can be any value.
 
 The `error` values could be any of the following:
 

@@ -6,4 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: make -f tools/Makefile
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+          cache-dependency-path: "tools/requirements.txt"
+      - name: Install tools dependencies
+        run: python -m pip install -r tools/requirements.txt
+      - name: Test Tools
+        run: make -f tools/Makefile test_tools
+      - name: Verify Specification
+        run: make -f tools/Makefile verify
