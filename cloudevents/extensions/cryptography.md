@@ -22,12 +22,12 @@ This extension does not Impose any requirements on the encryption algorithm.
 
 ### Signed Data
 A data which consists of a the plain data and additional metadata that contains a
- signature.
+signature.
 
 ### Plain data
 
 Refers to the data as it were before application of the encryption algorithm or the
- data which was signed (and does not include the signature).
+data which was signed (and does not include the signature).
 
 ## Attributes
 
