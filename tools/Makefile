@@ -7,7 +7,7 @@ verify:
 	@python tools/verify.py .
 
 test_tools:
-	@pytest tools/
+	@pytest -vvv tools/
 
 docker:
 	@docker run -ti -v $(PWD):/tmp/spec -w /tmp/spec python:latest \
