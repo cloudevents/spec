@@ -197,7 +197,7 @@ async def test_app(monkeypatch):
         ),
         (
             PurePosixPath("fake-docs/link-verification.md"),
-            "'https://github.com/non-existing-page' was not found",
+            "'https://google.com/non-existing-page' was not found",
         ),
         (
             PurePosixPath("fake-docs/link-verification.md"),

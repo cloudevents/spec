@@ -16,7 +16,7 @@ We are checking that all the links are referenced correctly
 
 ## HTTP links
 
-[404 link](https://github.com/non-existing-page)
+[404 link](https://google.com/non-existing-page)
 
 [normal http link](http://github.com)
 
