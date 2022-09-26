@@ -11,4 +11,4 @@ test_tools:
 
 docker:
 	@docker run -ti -v $(PWD):/tmp/spec -w /tmp/spec python:latest \
-	    "make -f tools/Makefile deps test_tools verify"
+	    make -f tools/Makefile deps test_tools verify
