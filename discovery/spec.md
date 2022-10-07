@@ -446,7 +446,7 @@ Talk about how each has metadata and data
     "docs": "URL", ?
 
     "format": "STRING",
-    "metadata": {
+    "attrschema": {
         "attributes": {
             "ATTRIBUTE_NAME": {
                 "required": true|false,
@@ -457,8 +457,10 @@ Talk about how each has metadata and data
             }
         } *
     }, ?
-    "schema": { ... }, ?
-    "schemaurl": "URL", ?
+    "attrschemaurl": "URL", ?
+    
+    "dataschema": { ... }, ?
+    "dataschemaurl": "URL", ?
 
     "groups": [ GROUP-reference, ... ], ?
     "endpoints": [ ENDPOINT-reference, ... ] ?
