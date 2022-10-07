@@ -7,7 +7,8 @@ from dataclasses import dataclass
 from functools import lru_cache
 from http import HTTPStatus
 from pathlib import Path
-from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple, TypeVar
+from typing import (Iterable, List, NewType, Optional, Sequence, Set, Tuple,
+                    TypeVar)
 
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
@@ -336,22 +337,44 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
 
-def _file_that_should_have_the_same_title(path: Path) -> Optional[Path]:
+def _maybe_existing_path(path: Path) -> Optional[ExistingPath]:
+    if path.exists():
+        return ExistingPath(path)
+    else:
+        return None
+
+
+def _file_that_should_have_the_same_title(path: Path) -> Optional[ExistingPath]:
     if path.name == "spec.md":
-        return path.parent / "README.md"
+        return _maybe_existing_path(path.parent / "README.md")
 
 
-def _title_issues(path: Path) -> Iterable[Issue]:
+def _file_title(path: ExistingPath) -> str:
+    return _read_text(path).splitlines()[0].rstrip()
+
+
+def _non_matching_titles_issue(path_a: ExistingPath, path_b: ExistingPath):
+    return Issue(
+        f"{path_a.as_posix()} title ({repr(_file_title(path_a))}) does not match "
+        f"the title of {path_b.as_posix()} ({repr(_file_title(path_b))})"
+    )
+
+
+def _title_issues(path: ExistingPath) -> Iterable[Issue]:
     other_path = _file_that_should_have_the_same_title(path)
-    if other_path is None or not other_path.exists():
+    if other_path is None:
         return []
+    if _file_title(path) != _file_title(other_path):
+        return [_non_matching_titles_issue(path, other_path)]
+    return []
 
 
 async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[TaggedIssue]:
     return _tag_issues(
         list(await _html_issues(path, settings))
         + list(_plain_text_issues(_read_text(path)))
-        + list(_translation_issues(path)),
+        + list(_translation_issues(path))
+        + list(_title_issues(path)),
         tag=path,
     )
 
