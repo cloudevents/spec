@@ -3,12 +3,18 @@ from re import Match
 from typing import Optional
 
 import pytest
-from verify import (_BANNED_PHRASES_PATTERN, _FAKE_DOCS_DIR,
-                    _MARKDOWN_BOOKMARK_PATTERN,
-                    _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
-                    _SKIP_TEXT_PATTERN, Settings, _directory_issues,
-                    _is_text_all_uppercase, _plain_text_issues,
-                    _render_markdown_to_html)
+from verify import (
+    _BANNED_PHRASES_PATTERN,
+    _FAKE_DOCS_DIR,
+    _MARKDOWN_BOOKMARK_PATTERN,
+    _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
+    _SKIP_TEXT_PATTERN,
+    Settings,
+    _directory_issues,
+    _is_text_all_uppercase,
+    _plain_text_issues,
+    _render_markdown_to_html,
+)
 
 
 def test_text_issues():
@@ -281,5 +287,11 @@ async def test_app(monkeypatch):
             PurePosixPath("fake-docs/text-verification.md"),
             "Translation file fake-docs/languages/my-lang/text-verification.md does not"
             " exist",
+        ),
+        (
+            PurePosixPath("fake-docs/yourspec/spec.md"),
+            "fake-docs/yourspec/spec.md title ('# Your Spec - Version 1.0.1') does not "
+            "match the title of fake-docs/yourspec/README.md ('# His Spec - Version "
+            "1.0.0')",
         ),
     }
