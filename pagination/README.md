@@ -1,3 +1,3 @@
-# Pagination v1.0.0-wip
+# Pagination - Version 0.1-wip
 
 See the [Pagination specfication](spec.md).
