@@ -1,3 +1,3 @@
-# My Spec - Version 1.0.0 (Language specific suffix)
+# My Spec - Version 1.0.0
 
-Notice that this file has the same title as the english version but with a suffix
+Notice that this file has the same title as the english version
