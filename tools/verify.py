@@ -316,7 +316,13 @@ def _expected_translation_files(path: Path) -> Sequence[Path]:
     ]
 
 
+def _should_skip_translation_issues(path: Path) -> bool:
+    return _skip_type(_read_text(path)) == "translation"
+
+
 def _translation_issues(path: Path) -> Iterable[Issue]:
+    if _should_skip_translation_issues(path):
+        return []
     if not _is_english_file(path):
         return []
     for translation_file in _expected_translation_files(path):
