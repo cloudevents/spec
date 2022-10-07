@@ -7,8 +7,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from http import HTTPStatus
 from pathlib import Path
-from typing import (Iterable, List, NewType, Optional, Sequence, Set, Tuple,
-                    TypeVar)
+from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple, TypeVar
 
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
@@ -237,7 +236,7 @@ async def _html_issues(path: Path, settings: Settings) -> Iterable[Issue]:
 
 def _print_issue(tagged_issue: TaggedIssue) -> None:
     path, issue = tagged_issue
-    print(f"{path}:{issue}")
+    print(f"{path}: {issue}")
 
 
 def _print_issues(tagged_issues: Sequence[TaggedIssue]):
@@ -279,8 +278,19 @@ def _is_english_file(path: Path) -> bool:
     return not bool(_LANGUAGES_DIR_PATTERN.search(str(path.absolute().as_posix())))
 
 
+def _is_english_text(text: str) -> bool:
+    try:
+        text.encode(encoding="utf-8").decode("ascii")
+    except UnicodeDecodeError:
+        return False
+    else:
+        return True
+
+
 def _is_translation_file(path: Path) -> bool:
-    return not _is_english_file(path) # assuming every non english file is a translation
+    return not _is_english_file(
+        path
+    )  # assuming every non english file is a translation
 
 
 def _is_root_languages_dir(path: Path) -> bool:
@@ -357,14 +367,21 @@ def _file_title(path: ExistingPath) -> str:
 
 def _non_matching_titles_issue(path_a: ExistingPath, path_b: ExistingPath) -> Issue:
     return Issue(
-        f"{path_a.as_posix()} title ({repr(_file_title(path_a))}) does not match "
+        f"title ({repr(_file_title(path_a))}) does not match "
         f"the title of {path_b.as_posix()} ({repr(_file_title(path_b))})"
     )
 
 
+def _titles_match(title_a: str, title_b: str) -> bool:
+    if _is_english_text(title_a) and _is_english_text(title_b):
+        return title_a == title_b
+    else:
+        return True  # Translations probably have specific titles
+
+
 def _title_issues(path: ExistingPath) -> Iterable[Issue]:
     for other_path in _existing_paths(_files_that_should_have_matching_titles(path)):
-        if not _file_title(other_path).startswith(_file_title(path)):
+        if not _titles_match(_file_title(path), _file_title(other_path)):
             yield _non_matching_titles_issue(path, other_path)
 
 
