@@ -294,4 +294,23 @@ async def test_app(monkeypatch):
             "match the title of fake-docs/yourspec/README.md ('# His Spec - Version "
             "1.0.0')",
         ),
+        (
+            PurePosixPath("fake-docs/languages/your-lang/myspec/spec.md"),
+            "fake-docs/languages/your-lang/myspec/spec.md title ('# Your Spec - Version"
+            " 1.0.0') does not match the title of"
+            " fake-docs/languages/your-lang/myspec/README.md ('# His Spec - Version"
+            " 1.0.0')",
+        ),
+        (
+            PurePosixPath("fake-docs/myspec/README.md"),
+            "fake-docs/myspec/README.md title ('# My Spec - Version 1.0.0') does not "
+            "match the title of fake-docs/languages/your-lang/myspec/README.md ('# His "
+            "Spec - Version 1.0.0')",
+        ),
+        (
+            PurePosixPath("fake-docs/myspec/spec.md"),
+            "fake-docs/myspec/spec.md title ('# My Spec - Version 1.0.0') does not"
+            " match the title of fake-docs/languages/your-lang/myspec/spec.md ('# Your"
+            " Spec - Version 1.0.0')",
+        ),
     }
