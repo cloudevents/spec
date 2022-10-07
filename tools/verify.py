@@ -279,6 +279,10 @@ def _is_english_file(path: Path) -> bool:
     return not bool(_LANGUAGES_DIR_PATTERN.search(str(path.absolute().as_posix())))
 
 
+def _is_translation_file(path: Path) -> bool:
+    return not _is_english_file(path) # assuming every non english file is a translation
+
+
 def _is_root_languages_dir(path: Path) -> bool:
     return path.absolute() == _ROOT_LANGUAGES_DIR.absolute()
 
@@ -337,16 +341,14 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
 
-def _maybe_existing_path(path: Path) -> Optional[ExistingPath]:
-    if path.exists():
-        return ExistingPath(path)
-    else:
-        return None
+def _existing_paths(paths: Iterable[Path]) -> Sequence[ExistingPath]:
+    return [ExistingPath(path) for path in paths if path.exists()]
 
 
-def _file_that_should_have_matching_title(path: Path) -> Optional[ExistingPath]:
+def _files_that_should_have_matching_titles(path: Path) -> Iterable[Path]:
+    yield from _expected_translation_files(path)
     if path.name == "spec.md":
-        return _maybe_existing_path(path.parent / "README.md")
+        yield path.parent / "README.md"
 
 
 def _file_title(path: ExistingPath) -> str:
@@ -361,12 +363,9 @@ def _non_matching_titles_issue(path_a: ExistingPath, path_b: ExistingPath) -> Is
 
 
 def _title_issues(path: ExistingPath) -> Iterable[Issue]:
-    other_path = _file_that_should_have_matching_title(path)
-    if other_path is None:
-        return []
-    if _file_title(path) != _file_title(other_path):
-        return [_non_matching_titles_issue(path, other_path)]
-    return []
+    for other_path in _existing_paths(_files_that_should_have_matching_titles(path)):
+        if not _file_title(other_path).startswith(_file_title(path)):
+            yield _non_matching_titles_issue(path, other_path)
 
 
 async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[TaggedIssue]:
