@@ -344,7 +344,7 @@ def _maybe_existing_path(path: Path) -> Optional[ExistingPath]:
         return None
 
 
-def _file_that_should_have_the_same_title(path: Path) -> Optional[ExistingPath]:
+def _file_that_should_have_matching_title(path: Path) -> Optional[ExistingPath]:
     if path.name == "spec.md":
         return _maybe_existing_path(path.parent / "README.md")
 
@@ -361,7 +361,7 @@ def _non_matching_titles_issue(path_a: ExistingPath, path_b: ExistingPath):
 
 
 def _title_issues(path: ExistingPath) -> Iterable[Issue]:
-    other_path = _file_that_should_have_the_same_title(path)
+    other_path = _file_that_should_have_matching_title(path)
     if other_path is None:
         return []
     if _file_title(path) != _file_title(other_path):
