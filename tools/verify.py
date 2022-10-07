@@ -353,7 +353,7 @@ def _file_title(path: ExistingPath) -> str:
     return _read_text(path).splitlines()[0].rstrip()
 
 
-def _non_matching_titles_issue(path_a: ExistingPath, path_b: ExistingPath):
+def _non_matching_titles_issue(path_a: ExistingPath, path_b: ExistingPath) -> Issue:
     return Issue(
         f"{path_a.as_posix()} title ({repr(_file_title(path_a))}) does not match "
         f"the title of {path_b.as_posix()} ({repr(_file_title(path_b))})"
