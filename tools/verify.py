@@ -22,7 +22,8 @@ Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
 T = TypeVar("T")
 HtmlText = NewType("HtmlText", str)
-TranslationsDir = NewType("TranslationsDir", Path)
+ExistingPath = NewType("ExistingPath", Path)
+TranslationsDir = NewType("TranslationsDir", ExistingPath)
 
 _TOOLS_DIR = Path(__file__).parent
 _REPO_ROOT = _TOOLS_DIR.parent
@@ -108,10 +109,10 @@ def _html_parser(html: str) -> BeautifulSoup:
     return BeautifulSoup(html, "html.parser")
 
 
-def _all_docs(directory: Path, excluded_paths: Set[Path]) -> Set[Path]:
+def _all_docs(directory: Path, excluded_paths: Set[Path]) -> Set[ExistingPath]:
     excluded_paths = {path.absolute() for path in excluded_paths}
     return {
-        path
+        ExistingPath(path)
         for path in set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
         if path.absolute() not in excluded_paths
     }
@@ -286,7 +287,7 @@ def _translations_directory(path: Path) -> Optional[TranslationsDir]:
         return None  # non english files do not have a translation directory
     languages_dir = path.parent / _LANGUAGES_DIR_NAME
     if languages_dir.exists() and not _is_root_languages_dir(languages_dir):
-        return TranslationsDir(languages_dir)  # found dir, end recursion
+        return TranslationsDir(ExistingPath(languages_dir))  # found dir, end recursion
     if path.parent == path:  # reached end of path, end recursion
         return None
     return _translations_directory(path.parent)
@@ -329,7 +330,18 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
 
-async def _file_issues(path: Path, settings: Settings) -> Sequence[TaggedIssue]:
+def _file_that_should_have_the_same_title(path: Path) -> Optional[Path]:
+    if path.name == "spec.md":
+        return path.parent / "README.md"
+
+
+def _title_issues(path: Path) -> Iterable[Issue]:
+    other_path = _file_that_should_have_the_same_title(path)
+    if other_path is None or not other_path.exists():
+        return []
+
+
+async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[TaggedIssue]:
     return _tag_issues(
         list(await _html_issues(path, settings))
         + list(_plain_text_issues(_read_text(path)))
