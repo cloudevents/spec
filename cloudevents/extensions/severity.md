@@ -59,3 +59,10 @@ in a context of a `source` SHOULD be in a
   - if present, MUST NOT be negative
 
 
+# References
+  - [Mapping of SeverityNumber](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#mapping-of-severitynumber)
+  - [Reverse Mapping](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#reverse-mapping)
+  - [Error Semantics](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#error-semantics)
+  - [Displaying Severity](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#displaying-severity)
+  - [Comparing Severity](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#comparing-severity)
+  - [Mapping of existing log formats to severity levels](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md#appendix-a-example-mappings)
