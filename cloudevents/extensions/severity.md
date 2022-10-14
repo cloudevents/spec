@@ -1,4 +1,4 @@
-# Log Level Extension
+# Severity Extension
 
 ## Abstract
 This extension defines attributes that MAY be included within a CloudEvent
