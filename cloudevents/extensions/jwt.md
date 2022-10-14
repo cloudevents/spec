@@ -10,6 +10,10 @@ This extension does not support [JWE Json Serialization][jwe-json-serialization]
 When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
  `datacontenttype` MUST be set to `application/octet-stream`
 
+When using JWS the signed data MUST be decoded from base64url format and mapped onto
+`data` in `Binary` format where `datacontenttype` is taken from the `cty` property
+of the JOSE header, if no `cty` property exists `datacontenttype` MUST be set to `application/octet-stream`
+  
 ## Attributes
 
 ### JOSE Attributes
@@ -79,7 +83,33 @@ When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
 - Constraints:
   - OPTIONAL
   - MAY be an empty octet sequence
+
+## Examples
+
+How to map a JWS signed data onto a CloudEvent
+
+This is an example JWS value
+
+```eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCIsImN0eSI6ImFwcGxpY2F0aW9uL215Zm9ybWF0K2pzb24ifQ.eyJ2YWx1ZSI6IkhlbGxvIFdvcmxkIn0.xs78ebtFbrKWn7avnfOaV7MsA3tNe2Z7gyXN3Xba5KA0HJZd9jTz9rv6jftdyC9E0cuwXoAXysT_wIkVPPbxUQ```
+
+
+It consists of 3 parts
+  - The JOSE header
+   `eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCIsImN0eSI6ImFwcGxpY2F0aW9uL215Zm9ybWF0K2pzb24ifQ` (`{"alg": "HS512","typ": "JWT","cty": "application/myformat+json"}`)
+  - The signed payload `eyJ2YWx1ZSI6IkhlbGxvIFdvcmxkIn0` (`{"value": "Hello World"}`)
+  - The signature `xs78ebtFbrKWn7avnfOaV7MsA3tNe2Z7gyXN3Xba5KA0HJZd9jTz9rv6jftdyC9E0cuwXoAXysT_wIkVPPbxUQ`
   
+We will decode all of these values using base64url (as defined by the spec) and
+ assign the resulting values in the following way: 
+
+  - The JOSE header will be assigned to `jose`
+  - The signed payload will be assigned to `data`
+  - `datacontentype` will be set to `application/myformat+json`
+  - The signature
+   `xs78ebtFbrKWn7avnfOaV7MsA3tNe2Z7gyXN3Xba5KA0HJZd9jTz9rv6jftdyC9E0cuwXoAXysT_wIkVPPbxUQ` will be assigned to `jwssignature`
+  
+
+
 ## References
   - [JWT for dummies](https://medium.facilelogin.com/jwt-jws-and-jwe-for-not-so-dummies-b63310d201a3)
   
