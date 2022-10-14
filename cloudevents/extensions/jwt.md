@@ -16,9 +16,7 @@ of the JOSE header, if no `cty` property exists `datacontenttype` MUST be set to
   
 ## Attributes
 
-### JOSE Attributes
-
-#### jose
+### jose
 - Type: `Binary`
 - Description: utf-8 encoded JOSE Header value.
     Both JWS and JWE have JOSE Header definitions.
