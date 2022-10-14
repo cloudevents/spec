@@ -1,4 +1,4 @@
-# CNCF Schema Registry API Version 0.2-wip
+# CloudEvents Schema Registry API Version 0.2-wip
 
 本文档尚未被翻译，请先阅读英文[原版文档](../../spec.md) 。
 

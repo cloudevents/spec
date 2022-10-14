@@ -1,3 +1,3 @@
-# CESQL v1.0.0-wip
+# CloudEvents SQL Expression Language - Version 0.1-wip
 
 See the [CESQL specfication](spec.md).

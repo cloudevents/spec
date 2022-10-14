@@ -22,7 +22,8 @@ Uri = NewType("Uri", str)
 HttpUri = NewType("HttpUri", Uri)
 T = TypeVar("T")
 HtmlText = NewType("HtmlText", str)
-TranslationsDir = NewType("TranslationsDir", Path)
+ExistingPath = NewType("ExistingPath", Path)
+TranslationsDir = NewType("TranslationsDir", ExistingPath)
 
 _TOOLS_DIR = Path(__file__).parent
 _REPO_ROOT = _TOOLS_DIR.parent
@@ -57,7 +58,6 @@ _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
     flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
 )
 _BANNED_PHRASES_PATTERN = re.compile(r"Cloud\s+Events?", flags=re.IGNORECASE)
-_NEWLINE_PATTERN = re.compile(r"\n")
 _LANGUAGES_DIR_PATTERN = re.compile(f"[/^]{_LANGUAGES_DIR_NAME}[/$]")
 
 
@@ -108,10 +108,10 @@ def _html_parser(html: str) -> BeautifulSoup:
     return BeautifulSoup(html, "html.parser")
 
 
-def _all_docs(directory: Path, excluded_paths: Set[Path]) -> Set[Path]:
+def _all_docs(directory: Path, excluded_paths: Set[Path]) -> Set[ExistingPath]:
     excluded_paths = {path.absolute() for path in excluded_paths}
     return {
-        path
+        ExistingPath(path)
         for path in set(directory.rglob("**/*.md")) | set(directory.rglob("**/*.htm*"))
         if path.absolute() not in excluded_paths
     }
@@ -235,7 +235,7 @@ async def _html_issues(path: Path, settings: Settings) -> Iterable[Issue]:
 
 def _print_issue(tagged_issue: TaggedIssue) -> None:
     path, issue = tagged_issue
-    print(f"{path}:{issue}")
+    print(f"{path}: {issue}")
 
 
 def _print_issues(tagged_issues: Sequence[TaggedIssue]):
@@ -277,6 +277,21 @@ def _is_english_file(path: Path) -> bool:
     return not bool(_LANGUAGES_DIR_PATTERN.search(str(path.absolute().as_posix())))
 
 
+def _is_english_text(text: str) -> bool:
+    try:
+        text.encode(encoding="utf-8").decode("ascii")
+    except UnicodeDecodeError:
+        return False
+    else:
+        return True
+
+
+def _is_translation_file(path: Path) -> bool:
+    return not _is_english_file(
+        path
+    )  # assuming every non english file is a translation
+
+
 def _is_root_languages_dir(path: Path) -> bool:
     return path.absolute() == _ROOT_LANGUAGES_DIR.absolute()
 
@@ -286,7 +301,7 @@ def _translations_directory(path: Path) -> Optional[TranslationsDir]:
         return None  # non english files do not have a translation directory
     languages_dir = path.parent / _LANGUAGES_DIR_NAME
     if languages_dir.exists() and not _is_root_languages_dir(languages_dir):
-        return TranslationsDir(languages_dir)  # found dir, end recursion
+        return TranslationsDir(ExistingPath(languages_dir))  # found dir, end recursion
     if path.parent == path:  # reached end of path, end recursion
         return None
     return _translations_directory(path.parent)
@@ -315,7 +330,13 @@ def _expected_translation_files(path: Path) -> Sequence[Path]:
     ]
 
 
+def _should_skip_translation_issues(path: Path) -> bool:
+    return _skip_type(_read_text(path)) == "translation"
+
+
 def _translation_issues(path: Path) -> Iterable[Issue]:
+    if _should_skip_translation_issues(path):
+        return []
     if not _is_english_file(path):
         return []
     for translation_file in _expected_translation_files(path):
@@ -329,11 +350,46 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
 
-async def _file_issues(path: Path, settings: Settings) -> Sequence[TaggedIssue]:
+def _existing_paths(paths: Iterable[Path]) -> Sequence[ExistingPath]:
+    return [ExistingPath(path) for path in paths if path.exists()]
+
+
+def _files_that_should_have_matching_titles(path: Path) -> Iterable[Path]:
+    yield from _expected_translation_files(path)
+    if path.name == "spec.md":
+        yield path.parent / "README.md"
+
+
+def _file_title(path: ExistingPath) -> str:
+    return _read_text(path).splitlines()[0].rstrip()
+
+
+def _non_matching_titles_issue(path_a: ExistingPath, path_b: ExistingPath) -> Issue:
+    return Issue(
+        f"title ({repr(_file_title(path_a))}) does not match "
+        f"the title of {path_b.as_posix()} ({repr(_file_title(path_b))})"
+    )
+
+
+def _titles_match(title_a: str, title_b: str) -> bool:
+    if _is_english_text(title_a) and _is_english_text(title_b):
+        return title_a == title_b
+    else:
+        return True  # Translations probably have specific titles
+
+
+def _title_issues(path: ExistingPath) -> Iterable[Issue]:
+    for other_path in _existing_paths(_files_that_should_have_matching_titles(path)):
+        if not _titles_match(_file_title(path), _file_title(other_path)):
+            yield _non_matching_titles_issue(path, other_path)
+
+
+async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[TaggedIssue]:
     return _tag_issues(
         list(await _html_issues(path, settings))
         + list(_plain_text_issues(_read_text(path)))
-        + list(_translation_issues(path)),
+        + list(_translation_issues(path))
+        + list(_title_issues(path)),
         tag=path,
     )
 
