@@ -86,6 +86,8 @@ of the JOSE header, if no `cty` property exists `datacontenttype` MUST be set to
 
 ## Examples
 
+### JWS
+
 How to map a JWS signed data onto a CloudEvent
 
 This is an example JWS value
@@ -100,15 +102,41 @@ It consists of 3 parts
   - The signature `xs78ebtFbrKWn7avnfOaV7MsA3tNe2Z7gyXN3Xba5KA0HJZd9jTz9rv6jftdyC9E0cuwXoAXysT_wIkVPPbxUQ`
   
 We will decode all of these values using base64url (as defined by the spec) and
- assign the resulting values in the following way: 
+assign the resulting values in the following way: 
 
   - The JOSE header will be assigned to `jose`
-  - The signed payload will be assigned to `data`
+  - The signed payload will be assigned to `data` in a binary form
   - `datacontentype` will be set to `application/myformat+json`
   - The signature
    `xs78ebtFbrKWn7avnfOaV7MsA3tNe2Z7gyXN3Xba5KA0HJZd9jTz9rv6jftdyC9E0cuwXoAXysT_wIkVPPbxUQ` will be assigned to `jwssignature`
   
+### JWE
 
+Here is an example JWE compact encoded value
+
+`eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0.-3z2QWPXgU3ZjjJysgX0ZetYqBP_GTDNhlR1OaDF4Z66f4rILsFG7ox_HW73YvNkoubpCTsE0uez6JHq3id0muOH7Zf0zydz.Ja5lUcRlp8_6bv4JqMgjWA.xT3GozwdSdJE5z1x_33-yg.C8VVM4NhkKLzfIsCwswQB08PkBNJCCsjbF8BEjXt-PQ`
+
+This value is an encrypted `Hello World!` plaintext with the JWK of `{"k":"MKwYqAHLPx35ImzJwqU-4pFzjleyjOdYSl_BUwo9PKg","kty":"oct"}`
+
+The value consists of 5 parts:
+  - The JOSE header
+   `eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0` 
+  - The JWE encrypted key
+   `-3z2QWPXgU3ZjjJysgX0ZetYqBP_GTDNhlR1OaDF4Z66f4rILsFG7ox_HW73YvNkoubpCTsE0uez6JHq3id0muOH7Zf0zydz`
+  - The initialization vector `Ja5lUcRlp8_6bv4JqMgjWA`
+  - The encrypted cipher text `xT3GozwdSdJE5z1x_33-yg`
+  - The authentication tag `C8VVM4NhkKLzfIsCwswQB08PkBNJCCsjbF8BEjXt-PQ`
+
+We will decode all of these values using base64url (as defined by the spec) and
+assign the resulting values in the following way: 
+
+  - The JOSE header will be assigned to `jose`
+  - The JWE encrypted key will be assigned to `jweencryptedkey`
+  - The initialization vector will be assigned to `jweinitvector`
+  - The encrypted cipher text will be assigned to `data` in a binary form
+  - `datacontentype` will be set to `application/octet-stream`
+  - The authentication tag will be assigned to `jweauthtag`
+  
 
 ## References
   - [JWT for dummies](https://medium.facilelogin.com/jwt-jws-and-jwe-for-not-so-dummies-b63310d201a3)
