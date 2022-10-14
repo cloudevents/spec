@@ -15,7 +15,7 @@ When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
 ### JOSE Attributes
 
 #### jose
-- Type: `Bytes`
+- Type: `Binary`
 - Description: utf-8 encoded JOSE Header value.
     Both JWS and JWE have JOSE Header definitions.
 - Constraints:
@@ -25,7 +25,7 @@ When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
   - `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9` (`{"alg": "HS256","typ": "JWT"}`)
 
 ### jwssignature
-- Type: `Bytes`
+- Type: `Binary`
 - Description: JWS Signature.
     Computed over the complete JOSE header and `data` value
 - Constraints:
@@ -35,7 +35,7 @@ When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
   - `SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c` 
 
 ### jweencryptedkey
-- Type: `Bytes`
+- Type: `Binary`
 - Description : [JWE Encrypted Key][jwe-encrypted-key].
     Encrypted Content Encryption Key value. Note that for some algorithms, 
     the JWE Encrypted Key value is specified as being the empty octet sequence
@@ -48,7 +48,7 @@ When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
   - MAY be an empty octet sequence
 
 ### jweinitvector
-- Type: `Bytes`
+- Type: `Binary`
 - Description: [JWE Initialization Vector][jwe-initialization-vector].
     Additional value to be integrity protected by the authenticated
     encryption operation.  This can only be present when using the JWE
@@ -63,7 +63,7 @@ When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
 
 
 ### jweauthtag 
-- Type: `Bytes`
+- Type: `Binary`
 - Description: [ JWE Authentication Tag][jwe-authentication-tag].
     Authentication Tag value resulting from authenticated encryption
     of the plaintext with Additional Authenticated Data.
