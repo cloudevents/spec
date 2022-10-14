@@ -7,6 +7,9 @@ JWE MAY be used to encrypt a CloudEvent data and JWS MAY be used to sign CloudEv
 
 This extension does not support [JWE Json Serialization][jwe-json-serialization] 
 
+When using [JWE Cipher Text][jwe-ciphertext] MUST be mapped onto `data` and
+ `datacontenttype` MUST be set to `application/octet-stream`
+
 ## Attributes
 
 ### JOSE Attributes
@@ -47,17 +50,36 @@ This extension does not support [JWE Json Serialization][jwe-json-serialization]
 ### jweinitvector
 - Type: `Bytes`
 - Description: [JWE Initialization Vector][jwe-initialization-vector].
-      Initialization Vector value used when encrypting the plaintext.
-      Note that some algorithms may not use an Initialization Vector, in
-      which case this value is the empty octet sequence.
-      
-      <!--Q: Should we keep this?-->
-      If this attribute does not exist consumers MAY assume that the value is empty
-      an octet sequence
+    Additional value to be integrity protected by the authenticated
+    encryption operation.  This can only be present when using the JWE
+    JSON Serialization.  (Note that this can also be achieved when
+    using either the JWE Compact Serialization or the JWE JSON
+    Serialization by including the AAD value as an integrity-protected
+    Header Parameter value, but at the cost of the value being double
+    base64url encoded.)
 - Constraints:
   - OPTIONAL
   - MAY be an empty octet sequence
+
+
+### jweauthtag 
+- Type: `Bytes`
+- Description: [ JWE Authentication Tag][jwe-authentication-tag].
+    Authentication Tag value resulting from authenticated encryption
+    of the plaintext with Additional Authenticated Data.
     
+    An output of an AEAD operation that ensures the integrity of the
+    ciphertext and the Additional Authenticated Data.  Note that some
+    algorithms may not use an Authentication Tag, in which case this
+    value is the empty octet sequence.
+
+    <!--Q: Should we keep this?-->
+    If this attribute does not exist consumers MAY assume that the value is empty
+    an octet sequence
+- Constraints:
+  - OPTIONAL
+  - MAY be an empty octet sequence
+  
 ## References
   - [JWT for dummies](https://medium.facilelogin.com/jwt-jws-and-jwe-for-not-so-dummies-b63310d201a3)
   
@@ -65,3 +87,5 @@ This extension does not support [JWE Json Serialization][jwe-json-serialization]
 [jwe-json-serialization]: https://www.rfc-editor.org/rfc/rfc7516#section-2
 [jwe-encrypted-key]: https://www.rfc-editor.org/rfc/rfc7516#section-2
 [jwe-initialization-vector]: https://www.rfc-editor.org/rfc/rfc7516#section-2
+[jwe-ciphertext]: https://www.rfc-editor.org/rfc/rfc7516#section-2
+[jwe-authentication-tag]: https://www.rfc-editor.org/rfc/rfc7516#section-2
