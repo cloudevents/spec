@@ -1,4 +1,4 @@
-# Links verification
+# Link Verification
 
 We check that the link verification works correctly
 

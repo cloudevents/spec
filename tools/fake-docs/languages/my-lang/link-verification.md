@@ -1,4 +1,4 @@
-# Translated Link verification
+# Link Verification
 
 This is the translation of the link verification to my language
 

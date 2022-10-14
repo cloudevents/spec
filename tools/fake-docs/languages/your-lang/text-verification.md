@@ -1,4 +1,4 @@
-# Translated Text Verification
+# Text Verification
 
 This is the translation of the text verification to your language
 
