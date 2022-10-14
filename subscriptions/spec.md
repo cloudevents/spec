@@ -1,4 +1,4 @@
-# CNCF CloudEvents – Subscriptions API - Version 0.1-wip
+# CloudEvents Subscriptions API - Version 0.1-wip
 
 ## Abstract
 
