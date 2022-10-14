@@ -44,7 +44,7 @@ of the JOSE header, if no `cty` property exists `datacontenttype` MUST be set to
     Encrypted Content Encryption Key value. Note that for some algorithms, 
     the JWE Encrypted Key value is specified as being the empty octet sequence
     
-    <!--Q: Should we keep this?-->
+    <!--Q: SHOULD we keep this?-->
     If this attribute does not exist consumers MAY assume that the value is empty
     an octet sequence
 - Constraints:
@@ -74,10 +74,10 @@ of the JOSE header, if no `cty` property exists `datacontenttype` MUST be set to
     
     An output of an AEAD operation that ensures the integrity of the
     ciphertext and the Additional Authenticated Data.  Note that some
-    algorithms may not use an Authentication Tag, in which case this
+    algorithms MAY not use an Authentication Tag, in which case this
     value is the empty octet sequence.
 
-    <!--Q: Should we keep this?-->
+    <!--Q: SHOULD we keep this?-->
     If this attribute does not exist consumers MAY assume that the value is empty
     an octet sequence
 - Constraints:
