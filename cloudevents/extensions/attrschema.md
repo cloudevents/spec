@@ -44,7 +44,10 @@ To validated a given CloudEvent the attrschema implementation MUST:
     [JSON Schema Spec][json-schema-spec] 
 5. Attributes are considered adhering to the attrschema document if the JSON schema
    validation succeeded.
-   
+
+Note: in addition to the attribute schema, the usual CloudEvent attribute constraints
+still apply, even though they are not expressed in the schema explicitly. 
+
 ### JSON Schema Version
 This document does not specify exact json schema version to be used in the attrschema
 definition.
