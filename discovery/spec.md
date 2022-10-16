@@ -1,4 +1,4 @@
-# Discovery Service - Version 0.2-wip
+# Discovery Service - Version 0.3-wip
 
 ## Abstract
 
@@ -22,17 +22,16 @@ mechanisms by which interactions with those Endpoints can be established.
 ## Overview
 
 Message Endpoints provide a location from which Message producers and consumers
-can share Messages. Endpoints could act as either consumers or producers
-of Messages, and the mechanisms by which those Messages are transferred
-might vary.
+can share Messages. Endpoints could act as either consumers or producers of
+Messages, and the mechanisms by which those Messages are transferred might vary.
 
 This specification defines a set of APIs, and related documents, that allow
 for the discovery of these Endpoints and their related metadata. This
 information can then be used to perform actions such as:
 - Subscribing for Messages
 - Pushing or Pulling of Messages with the Endpoint
-- Generating of Message validation code based on the schema associated with
-  a Message Definition
+- Generating of Message validation code based on the schema associated with a
+  Message Definition
 
 While the specification is written in term of "messaging", it applies equally
 to "eventing" since it can be considered as subset of messaging.
@@ -58,46 +57,23 @@ This specification defines the following terms:
 #### Discovery Service
 
 A compliant implementation of this specification that advertises the set of
-Endpoints, Groups, Definitions and other metadata to aid in the programmic
+Endpoints, Groups, Definitions and other metadata to aid in the programmatic
 interactions with the Endpoints.
 
-### Conventions
+#### Endpoint
 
-#### References
+A network accessible location that can consume or produce messages and any
+associated metadata, such as how to consume messages from it.
 
-Within the data model defined by this specification there are properties
-that represent references to Discovery resources. Despite these properties
-being simple URIs to the targeted resource, their values will be serialized as
-Objects with a nested property name `uri` whose value will be the URI to the
-resource. For example:
-```
-{ "uri": "https://example.com/discovery/endpoints/123" }
-```
+#### Group
 
-They are serialized as Objects so that query results MAY include additional
-properties of the targeted resource as siblings to the `uri` property.
-Implementation MAY include ANY of the properties of the resource except the
-`self` property (more on this below). For example:
-```
-{ "uri": "https://example.com/discovery/endpoints/123", "name": "MyService" }
-```
+A set of Definitions that related in some way. This specification does not
+define how or why they are related.
 
-This allows for requestors to have some additional information about the
-target resource without the need to perform any additional queries. This
-is most commonly used for user-interfaces that wish to display some meaningful
-information about the resource instead of just its URI. It is RECOMMENDED that
-references include at least the `name` property.
+#### Definition
 
-During serialization of these references, typically due to the inclusion of an
-`inline` type of flag on a query, an implementation MAY choose to replace these
-Object references with a full Object serialization of the targeted resource.
-As such, it might be ambiguous as to whether the Object is just a reference or
-the full inlined resource.  To address this, each full serialization of a
-resource MUST include the `self` property of the resource but MUST NOT
-include the `uri` property defined above, since it is no longer a "reference".
-
-With these rules, the presence of `self` or `uri` can be used to determine
-if the serialized Object is a reference or a full serialization of a resource.
+The description of a particular message and associated metadata, such as
+the schema of the message.
 
 ## Resource Model
 
@@ -114,15 +90,17 @@ defined:
 - Description: A unique identifier for the resource.
 - Constraints:
   - REQUIRED
+  - MUST be immutable
   - MUST be a non-empty String
   - MUST conform with
     [RFC3986/3.3](https://datatracker.ietf.org/doc/html/rfc3986#section-3.3)
     `segment-nz-nc` syntax
   - MUST be unique across all instances of the this resource type within the
-    the current Discovery Service.
+    current Discovery Service.
 - Examples:
   - A UUID
   - `1234`
+  - `MyCoolResource`
 
 #### name
 
@@ -146,7 +124,7 @@ defined:
   - REQUIRED
   - MUST be a non-empty URI
 - Examples:
-  - `https://example.com/discovery/endpoints/1234`
+  - `https://example.com/discovery/endpoints/MyCoolEndpoint`
   - `https://example.com/discovery/groups/234`
   - `https://example.com/discovery/definitions/569`
 
@@ -155,7 +133,9 @@ defined:
 - Type: Unsigned Integer
 - Description: A number representing the version number of the resource. Each
   time the resource is modified this property MUST be updated with a new value
-  that is greater than the current one.
+  that is greater than the current one. Note that this version number is used
+  to indicate the Discovery resource changing not the semantic version of
+  the resource itself.
 - Constraints:
   - REQUIRED
   - MUST be an unsigned integer
@@ -198,22 +178,22 @@ defined:
   map or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
-  - if present, MUST be a map of name/value string pairs
-  - Each name MUST be a non-empty, unique within the scope of this map, string.
-    Values MAY be empty strings
+  - if present, MUST be a map of zero or more name/value string pairs
+  - Each name MUST be a non-empty string and unique within the scope of this
+    map. Values MAY be empty strings
 - Examples:
   - `{ "owner": "John", "verified": "" }`
 
 #### docs
 
-- Type: URI-reference
+- Type: URI-Reference
 - Description: A URI-reference to additional documentation about this resource.
   This specification does not define any constraints on the data returned from
   this URI-reference.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a non-empty URI-reference
-  - if present with a schema, it MUST use either `http` or `https`
+  - if present with a scheme, it MUST use either `http` or `https`
 - Examples:
   - `https://example.com/docs/myQueue`
 
@@ -221,7 +201,7 @@ defined:
 
 An Endpoint is ...
 
-The following pseudo JSON shows the basic defintion of an Endpoint:
+The following pseudo JSON shows the defintion of an Endpoint:
 ```
 {
     "id": "URI-reference",
@@ -242,52 +222,24 @@ The following pseudo JSON shows the basic defintion of an Endpoint:
         "protocol": "STRING",
         "endpoints": "URL" | [ "URL", ... ],
         "options": { ... }, ?
-        "strict": true|false, ?
+        "strict": true|false ?
     }, ?
 
-    "groups": [ GROUP-reference, ... ], ?
-    "definitions": [ DEFINITION-reference, ... ] ?
+    "groups": [ GROUP-URI-Reference, ... ], ?
+    "definitions": { "ID": DEFINITION, ... } ?
 }
 
 ```
 
 The following Endpoint properties are defined:
 
-#### id
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### name
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### self
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### epoch
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### origin
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### description
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### tags
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### docs
+#### id, name, self, epoch, origin, description, tags, docs
 
 See [Common Resource Properties](#common-resource-properties).
 
 #### deprecated
 
-- Type: Object container the following properties:
+- Type: Object containing the following properties:
   - effective<br>
     An OPTIONAL property indicating the time when the Endpoint entered, or will
     enter, a deprecated state. The date MAY be in the past or future.
@@ -332,16 +284,16 @@ See [Common Resource Properties](#common-resource-properties).
   - ```
     "deprecated": {
       "removaltime": "2030-12-19T00:00:00-00:00",
-      "alternative": "https://discovery.example.com/services/123"
+      "alternative": "https://example.com/endpoints/123"
     }
-    ````
+    ```
 
 #### channel
 
 - Type: String
 - Description: A string that can be used to correlate Endpoints. Any Endpoints
-  within an instance of a Discovery Service that share the same `channel`
-  non-empty value MUST have some relationship. This specification does not
+  within an instance of a Discovery Service that share the same non-empty
+  `channel` value MUST have some relationship. This specification does not
   define that relationship or the specific values used in this property.
 
   When this property has no value it MUST either be serialized as an empty
@@ -388,11 +340,11 @@ See [Common Resource Properties](#common-resource-properties).
 - Constraints:
   - OPTIONAL
 - Examples:
-  - `{ "protocol": "kafka" , "endpoint": "https://example.com/queue/1234" }`
+  - `{ "protocol": "kafka" }`
 
 #### groups
 
-- Type: Array of Group-References
+- Type: Array of Group-URI-References
 - Description: A set of Definition Groups supported by this Endpoint. Each
   Group Reference MAY be to a Group defined outside of the current Discovery
   Service instance.
@@ -401,32 +353,28 @@ See [Common Resource Properties](#common-resource-properties).
   array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
-  - if present, the same Group, as identified by its `id` or `uri`, MUST NOT
-    appear more than once within this property.
+  - if present, the same Group, as identified by its `id`, MUST NOT appear
+    more than once within this property.
 - Examples:
-  - `[ { "uri": "https://example.com/discovery/group/987", "name", "John's blob store messages" } ]`
+  - `[ "https://example.com/discovery/group/987", "/groups/MyGroup" ]`
 
 #### definitions
 
-- Type: Array of Definition-References
-- Description: A set of Message Definitions supported by this Endpoint. Each
-  Definition Reference MAY be to a Definition defined outside of th current
-  Discovery Service instance.
-
-  This list is meant to be for Definitions that are not part of a Group that
-  is related to this Endpoint. However, since it might not be possible to
-  guarantee that there is no duplication between the two sets, if a conflict
-  does appear then the Definition that is part of this property takes
-  precendent over the one in the Group.
+- Type: Collection of Definitions
+- Description: A collection of Message Definitions supported by this Endpoint.
+  This MUST include all Definitions defined exclusively for this Endpoint as
+  well as Definitions from the `groups` property above. Clients can determine
+  which are not part of those groups by finding the Definitions whose
+  `ownergroup` property matches the `self` property of this Endpoint.
 
   When this property has no value it MUST either be serialized as an empty
   array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
-  - if present, the same Definition, as identified by its `id` or `uri`,
-    MUST NOT appear more than once within this property.
+  - if present, the same Definition, as identified by its `id`, MUST NOT appear
+    more than once within this property.
 - Examples:
-  - `[ { "uri", "https://example.com/discovery/defs/8765", "name": "Blob created" } ]`
+  - TBD add one
 
 ### Definition
 
@@ -445,6 +393,7 @@ Talk about how each has metadata and data
     "tags": { "STRING": "STRING", ... } ?
     "docs": "URL", ?
 
+    "ownergroup": "GROUP-URI-Reference",
     "format": "STRING",
     "metadata": {
         "attributes": {
@@ -458,47 +407,25 @@ Talk about how each has metadata and data
         } *
     }, ?
     "schema": { ... }, ?
-    "schemaurl": "URL", ?
-
-    "groups": [ GROUP-reference, ... ], ?
-    "endpoints": [ ENDPOINT-reference, ... ] ?
+    "schemaurl": "URL" ?
 }
 
 ```
 
 The following Definition properties are defined:
 
-#### id
+#### id, name, self, epoch, origin, description, tags, docs
 
 See [Common Resource Properties](#common-resource-properties).
 
-#### name
+#### ownergroup
 
-See [Common Resource Properties](#common-resource-properties).
-
-#### self
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### epoch
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### origin
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### description
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### tags
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### docs
-
-See [Common Resource Properties](#common-resource-properties).
+- Type: URI-Reference
+- Description: A reference to the Group or Endpoint that defined this
+  Definition.
+- Constraints:
+  - REQUIRED
+  - MUST be the `self` property of the owning Group or Endpoint.
 
 #### format
 
@@ -552,40 +479,7 @@ See [Common Resource Properties](#common-resource-properties).
   - if present, MUST be a non-empty URL
   - MUST NOT be present if `schema` is present
 - Examples:
-  - `https://example.com/schema/...`
-
-#### groups
-
-- Type: Array of Group-References
-- Description: A set of Definition Groups that this Definition is part of.
-  Each Group reference MAY be to a Group defined outside of the current
-  Discovery service instance.
-
-  When this property has no value it MUST either be serialized as an empty
-  array or excluded from the serialization entirely.
-- Constraints:
-  - OPTIONAL
-  - if present, the same Group, as identified by its `id` or `uri`,
-    MUST NOT appear more than once within this property.
-- Examples:
-  - `[ { "uri", "https://example.com/discovery/defs/8765", "name": "Blob created" } ]`
-
-#### endpoints
-
-- Type: Array of Endpoint-References
-- Description: A set of Endpoints that this Definition is supported by.
-  Each Endpoint reference MAY be to an Endpoint defined outside of the current
-  Discovery Service instance.
-
-  When this property has no value it MUST either be serialized as an empty
-  array or excluded from the serialization entirely.
-- Constraints:
-  - OPTIONAL
-  - if present, the same Endpoint, as identified by its `id` or `uri`,
-    MUST NOT appear more than once within this property.
-- Examples:
-  - `{ "uri": "https://example.com/discovery/endpoints/123", "name": "MyService" }`
-
+  - `https://example.com/schema/...` TBD
 
 ### Group
 
@@ -603,43 +497,14 @@ A Group is ...
     "docs": "URL", ?
 
     "format": "STRING",
-    "definitions": [ DEFINITION-reference, ... ], ?
-    "groups": [ GROUP-reference, ... ] ?
-    "endpoints": [ ENDPOINTS-reference, ... ] ?
+    "groups": [ GROUP-URI-Reference, ... ] ?
+    "definitions": { "ID": DEFINITION, ... } ?
 }
 ```
 
 The following Group properties are defined:
 
-#### id
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### name
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### self
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### epoch
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### origin
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### description
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### tags
-
-See [Common Resource Properties](#common-resource-properties).
-
-#### docs
+#### id, name, self, epoch, origin, description, tags, docs
 
 See [Common Resource Properties](#common-resource-properties).
 
@@ -658,26 +523,10 @@ See [Common Resource Properties](#common-resource-properties).
   - `CloudEvents/1.0`
   - `AMQP/1.0`
 
-#### definitions
-
-- Type: Array of Definition-References
-- Description: A set of Message Definitions supported by this Group. Each
-  Definition Reference MAY be to a Definition defined outside of the current
-  Discovery Service instance.
-
-  When this property has no value it MUST either be serialized as an empty
-  array or excluded from the serialization entirely.
-- Constraints:
-  - OPTIONAL
-  - if present, the same Definition, as identified by its `id` or `uri`,
-    MUST NOT appear more than once within this property.
-- Examples:
-  - `[ { "uri", "https://example.com/discovery/defs/8765", "name": "Blob created" } ]`
-
 #### groups
 
 - Type: Array of Group References
-- Description: A set of neted Definition Groups supported by this Group. Each
+- Description: A set of nested Definition Groups supported by this Group. Each
   Group Reference MAY be to a Group defined outside of the current Discovery
   Service instance.
 
@@ -685,27 +534,28 @@ See [Common Resource Properties](#common-resource-properties).
   array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
-  - if present, the same Group, as identified by its `id` or `uri`, MUST NOT
+  - if present, the same Group, as identified by its `id``, MUST NOT
     appear more than once within this property.
 - Examples:
-  - `[ { "uri": "https://example.com/discovery/group/987", "name", "John's blob store messages" } ]`
+  - `[ "https://example.com/discovery/groups/987" ]`
 
-#### endpoints
+#### definitions
 
-- Type: Array of Endpoint-References
-- Description: A set of Endpoints that this Definition is supported by.
-  Each Endpoint reference MAY be to an Endpoint defined outside of the current
-  Discovery Service instance.
+- Type: Collection of Definition-References
+- Description: A collection of Message Definitions supported by this Group.
+  This MUST include all Definitions defined exclusively for this Group as
+  well as Definitions from the `groups` property above. Clients can determine
+  which are not part of those groups by finding the Definitions whose
+  `ownergroup` property matches the `self` property of this Group.
 
   When this property has no value it MUST either be serialized as an empty
   array or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
-  - if present, the same Endpoint, as identified by its `id` or `uri`,
-    MUST NOT appear more than once within this property.
+  - if present, the same Definition, as identified by its `id`, MUST NOT
+    appear more than once within this property.
 - Examples:
-  - `{ "uri": "https://example.com/discovery/endpoints/123", "name": "MyService" }`
-
+  - TBD
 
 ## Usage Values
 
@@ -736,7 +586,7 @@ If a Discovery Service can perform authorization checks to determine
 which client can see which resource, and the requesting client is not allowed
 access to a particular resource, then the Discovery Service MUST respond
 as if that resource does not exist. For example, it would be excluded from
-any array of Endpoints returned and it would result in a `404 Not Found`
+any collection of Endpoints returned and it would result in a `404 Not Found`
 error for a request to that Endpoints directly.
 
 All APIs MUST support JSON encoding, which means that HTTP requests
@@ -747,11 +597,11 @@ format MUST be supported. Likewise requests with `Accept` header of
 Unknown query parameters on the APIs MUST be ignored.
 
 Any resource previously returned to a client that does not appear in a
-subsequent query can be assumed to be no longer available in the scope of the
-query specified. In the unfiltered query case this means the resource has been
-deleted. In the filtered case it is not possible to know if the resource has
-been deleted or if the filters no longer apply to that resource, and therefore
-it can not be assumed to be deleted.
+subsequent similar query can be assumed to be no longer available in the scope
+of the query specified. In the unfiltered query case this means the resource
+has been deleted. In the filtered case it is not possible to know if the
+resource has been deleted or if the filters no longer apply to that resource,
+and therefore it can not be assumed to be deleted.
 
 ### Filtering
 
@@ -767,7 +617,7 @@ Nested attribute names MUST be specified by using a dot (`.`) as the nesting
 operator. For example: `config.protocol` references the `protocol` attribute
 under the top-level `config` attribute. If a property is a collection then
 specifiying that property implies that all items in the collection will be
-searched and only the ones that match the remaiing part of the filter
+searched and only the ones that match the remaining part of the filter
 criteria will be returned.
 
 When an attribute is a collection then specifying that attribute in the
@@ -829,40 +679,6 @@ Some sample filter expressions:
 | /endpoints?filter=description=test,name=mine | All resources that have a `description` with the string `test,name=mine` (in any case) as part of its value |
 | /endpoints?filter=definitions.id=123 | All endpoints that have a Definition with an `id` of `123` |
 
-### Inlining References
-
-As discussed in the [References](#references) section, Reference properties
-will be serialized as Objects and MAY include properties of the targeted
-resource for convinience.
-
-When requesting resources from a Discovery Service instance, if the request
-includes the `inline` query parameter then, except in the cases listed below,
-all properties that are References to other Discovery resources MUST be
-serialized as Objects that are as full representations of the target resource
-and not the Object References defined in [References](#references).
-
-The following Reference properties MUST NOT be inlined:
-- Definition's `endpoints` property
-- Definition's `groups` property
-- Group's `endpoints` property
-
-Additionally if while inlining a resource an infinite recursion loop is
-detected then the inlining MUST stop when a resource is encountered that
-already exists in the current heirarchy of the serialization.
-
-For example, if the resource references look like:
-```
-      B -> C -> A
-  A <
-      D -> B -> C -> A
-```
-Then the inlining will stop on the right-most `A` in each branch. All others
-will be inlined.
-
-Note: the flag MAY be specified as `?inline` or `?inline=true` (case
-sensitive). Specifying `?inline=false` disables this feature. Any value other
-than `true` or `false` MUST return a `400 Bad Request` error.
-
 ### Pagination
 
 ...
@@ -897,16 +713,6 @@ This MUST return an object that matches the following format:
 
             ... remainder of Group's attributes ...
         } *
-    }, ?
-    "definitions": {
-        "ID": {
-            "id": "URI-reference",
-            "name": "STRING",
-            "self": "URI",
-            "epoch": UINT,
-
-            ... remainder of Definition's attributes ...
-        } *
     } ?
 }
 ```
@@ -918,25 +724,19 @@ Where:
   resource's `id` property
 - `groups` is a map of zero or more Group resources were the key is the
   resource's `id` property
-- `definitions` is a map of zero or more Defintion resources were the key is
-  the resource's `id` property
 
-If any of the above maps are empty then that property MAY be omitted from
-the output.
+If any of the above collections are empty then that property MAY be omitted
+from the output.
 
 Without any filtering specified, this MUST return all of the resources
-available from the Discovery Service. Any resource that appears under another
-resource MUST also be included as a stand-alone resource in its respective
-map. For example, a Definition that appears within a Group will also appear
-in the `definitions` map.
+available from the Discovery Service.
 
 When filtering is specified then only the resources related to the requested
 resources MUST be returned. For example, a filter that results in just one
-Endpoint being returned would only include Groups and Definitions that are
-related to that Endpoint.
+Endpoint being returned would only include Groups that are related to that
+Endpoint.
 
 #### `GET /endpoints`
-#### `GET /definitions`
 #### `GET /groups`
 
 These MUST return a map of zero or more instances of the requested resource.
@@ -963,8 +763,8 @@ Content-Type: application/json
 Where the key for each map entry is the `id` of corresponding resource.
 
 #### `GET /endpoints/ID`
-#### `GET /definitions/ID`
 #### `GET /groups/ID`
+#### `GET /definitions/ID`
 
 This MUST return the latest version of the resource with the given `ID` if
 it exists.
