@@ -105,7 +105,7 @@ This section defines the resource model of a Discovery Service.
 
 ### Common Resource Properties
 
-All resources defined by this specifation have the following common properties
+All resources defined by this specification have the following common properties
 defined:
 
 #### id
