@@ -37,9 +37,9 @@ To validated a given CloudEvent the attrschema implementation MUST:
 1. Create a map of all attributes of a given event, where the keys are the attribute
     names and the values are the attribute values
 2. Strip all `null` OPTIONAL attributes from the event if present
-3. Map all non boolean, non string, and non integer types into the string
-   canonical string representation as defined in the [CloudEvent spec](../spec.md#type-system) 
-   corresponding to the attribute type.
+3. Map all attribute values into the string canonical string representation as
+   defined in the [CloudEvent spec](../spec.md#type-system) corresponding to 
+   the attribute type.
 4. Validate the given dictionary using Attrschema document and the rules defined by the
     [JSON Schema Spec][json-schema-spec] 
 5. Attributes are considered adhering to the attrschema document if the JSON schema
@@ -48,6 +48,60 @@ To validated a given CloudEvent the attrschema implementation MUST:
 Note: in addition to the attribute schema, the usual CloudEvent attribute constraints
 still apply, even though they are not expressed in the schema explicitly. 
 
+#### Examples
+Here is an example attrschema
+```json
+{
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^A[0-9]{3}-[0-9]{4}-[0-9]{4}$"
+    },
+    "comexampleothervalue": {
+      "type": "string"
+    },
+    "datacontenttype": {
+      "const": "text/xml"
+    }
+  }
+}
+```
+##### Json Event
+```json
+{
+    "specversion" : "1.0",
+    "type" : "com.github.pull_request.opened",
+    "source" : "https://github.com/cloudevents/spec/pull",
+    "id" : "A234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
+    "myattr" : 5,
+    "yourattr" : true ,
+    "datacontenttype" : "text/xml",
+    "data" : "<much wow=\"xml\"/>"
+}
+```
+Notice that this event is adhering to the example attrschema even though the
+`myattr` is of type `integer` and not `string`. The reason for it is
+that the `myattr` value MUST be converted to the string representation
+before validation. 
+
+This is the actual JSON object which is being validated
+
+```json
+{
+    "specversion" : "1.0",
+    "type" : "com.github.pull_request.opened",
+    "source" : "https://github.com/cloudevents/spec/pull",
+    "id" : "A234-1234-1234",
+    "time" : "2018-04-05T17:31:00Z",
+    "myattr" : "5",
+    "yourattr" : "true",
+    "datacontenttype" : "text/xml",
+}
+```
+Pay attention that the `data` property is missing from this object, and `myattr` and
+`yourattr` were converted to the string representation.
+   
 ### JSON Schema Version
 This document does not specify exact json schema version to be used in the attrschema
 definition.
