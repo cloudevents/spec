@@ -51,7 +51,7 @@ Note: in addition to the attribute schema, the usual CloudEvent attribute constr
 still apply, even though they are not expressed in the schema explicitly. 
 
 #### Examples
-Here is an example attrschema
+Here is an example attrschema document
 ```json
 {
   "properties": {
@@ -69,7 +69,8 @@ Here is an example attrschema
          "application/json"
       ],
     }
-  }
+  },
+  "required": ["comexampleothervalue"]
 }
 ```
 ##### Json Event
@@ -121,6 +122,19 @@ Pay attention that the `data` property is missing from this object, and `myattr`
     <data xsi:type="xs:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
 </event>
 ```
+This event will be transformed to 
+```json
+{
+    "specversion" : "1.0",
+    "time" : "2020-03-19T12:54:00-07:00",
+    "datacontenttype" : "application/json",
+    "id" : "A000-1111-2222",
+    "source" : "urn:uuid:123e4567-e89b-12d3-a456-426614174000",
+    "type" : "SOME.EVENT.TYPE",
+}
+```
+But will fail validation because `comexampleothervalue` is not present
+
 ### JSON Schema Version
 This document does not specify exact json schema version to be used in the attrschema
 definition.
