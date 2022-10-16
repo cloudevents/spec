@@ -25,7 +25,7 @@ different validation algorithms
 ## Attrschema Document
 
 Attrschema is a [JSON Schema][json-schema] document. This document asserts what the
-CloudEvent context attributes must look like, ways to extract information from them, and
+CloudEvent context attributes MUST look like, ways to extract information from them, and
 how to interact with them.
 
 Although JSON Schema is used to validate JSON Documents, Attrschema provides an
@@ -37,7 +37,7 @@ To validated a given CloudEvent the attrschema implementation MUST:
 1. Create a map of all attributes of a given event, where the keys are the attribute
     names and the values are the attribute values
 2. Strip all `null` OPTIONAL attributes from the event if present
-3. All assumed values must be evaluated as-if the event was translated to another
+3. All assumed values MUST be evaluated as-if the event was translated to another
    format. (`datacontenttype` assumptions of the JSON format for example)
 4. Map all attribute values into the string canonical string representation as
    defined in the [CloudEvent spec](../spec.md#type-system) corresponding to 
