@@ -37,12 +37,14 @@ To validated a given CloudEvent the attrschema implementation MUST:
 1. Create a map of all attributes of a given event, where the keys are the attribute
     names and the values are the attribute values
 2. Strip all `null` OPTIONAL attributes from the event if present
-3. Map all attribute values into the string canonical string representation as
+3. All assumed values must be evaluated as-if the event was translated to another
+   format. (`datacontenttype` assumptions of the JSON format for example)
+4. Map all attribute values into the string canonical string representation as
    defined in the [CloudEvent spec](../spec.md#type-system) corresponding to 
    the attribute type.
-4. Validate the given dictionary using Attrschema document and the rules defined by the
+5. Validate the given dictionary using Attrschema document and the rules defined by the
     [JSON Schema Spec][json-schema-spec] 
-5. Attributes are considered adhering to the attrschema document if the JSON schema
+6. Attributes are considered adhering to the attrschema document if the JSON schema
    validation succeeded.
 
 Note: in addition to the attribute schema, the usual CloudEvent attribute constraints
@@ -61,7 +63,11 @@ Here is an example attrschema
       "type": "string"
     },
     "datacontenttype": {
-      "const": "text/xml"
+      "type": "string",
+      "enum": [
+         "text/xml",
+         "application/json"
+      ],
     }
   }
 }
@@ -101,7 +107,20 @@ This is the actual JSON object which is being validated
 ```
 Pay attention that the `data` property is missing from this object, and `myattr` and
 `yourattr` were converted to the string representation.
-   
+ 
+#### XML Event
+ ```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+    <time>2020-03-19T12:54:00-07:00</time>
+    <datacontenttype>application/json</datacontenttype>
+    <id>A000-1111-2222</id>
+    <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
+    <type>SOME.EVENT.TYPE</type>
+    <data xsi:type="xs:string">{ "salutation": "Good Morning", "text": "hello world" }</data>
+</event>
+```
 ### JSON Schema Version
 This document does not specify exact json schema version to be used in the attrschema
 definition.
