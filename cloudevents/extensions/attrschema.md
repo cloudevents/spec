@@ -26,5 +26,8 @@ Although JSON Schema is used to validate JSON Documents, Attrschema provides an
 algorithm to validate non-JSON formatted CloudEvents (XML, Protobuf, etc.) as well.
 
 
+### JSON Schema Version
+This document does not specify exact json schema version to be used in the attrschema
+definition.
 
 [json-schema]: https://json-schema.org/
