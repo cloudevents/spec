@@ -5,3 +5,5 @@ aiohttp
 tqdm
 pymdown-extensions
 pytest-asyncio
+PyYAML
+jsonschema
