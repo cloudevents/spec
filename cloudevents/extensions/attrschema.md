@@ -72,7 +72,7 @@ Here is an example attrschema document
       "type": "string",
       "pattern": "^A[0-9]{3}-[0-9]{4}-[0-9]{4}$"
     },
-    "comexampleothervalue": {
+    "myattr": {
       "type": "string"
     },
     "datacontenttype": {
@@ -83,7 +83,7 @@ Here is an example attrschema document
       ],
     }
   },
-  "required": ["comexampleothervalue"]
+  "required": ["myattr"]
 }
 ```
 ##### Json Event
@@ -146,7 +146,7 @@ This event will be transformed to
     "type" : "SOME.EVENT.TYPE",
 }
 ```
-But will fail validation because `comexampleothervalue` is not present
+But will fail validation because `myattr` is not present
 
 ### JSON Schema Version
 This document does not specify exact json schema version to be used in the attrschema
