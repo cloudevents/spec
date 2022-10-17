@@ -4,13 +4,52 @@ $id: "https://cloudevents.io/attrschema/2022-10/schema#"
 allOf:
   - { "$ref": "https://json-schema.org/draft/2019-06/schema#" }
 properties: # this is the properties of the JSON schema
+  type:
+    const: object
   properties: # this is the properties property of the JSON schema
     type: object
     patternProperties:
       "^[a-z0-9]+$": # CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or digits ('0' to '9') from the ASCII character set
         type: object
-        properties:
-          type:
-            const: string # All context attribute values are normalized to string
-    },
+        allOf:
+          - type: object
+            properties:
+              type:
+                const: string # All context attribute values are normalized to string
+          - type: object
+            oneOf:
+              - properties:
+                  cetype:
+                    type: string
+                    enum:
+                      - boolean
+                      - integer
+                      - string
+                      - binary
+                required:
+                  - cetype
+              - properties:
+                  cetype:
+                    const: uri
+                  format:
+                    const: uri
+                required:
+                  - cetype
+                  - format
+              - properties:
+                  cetype:
+                    const: uri-reference
+                  format:
+                    const: uri-reference
+                required:
+                  - cetype
+                  - format
+              - properties:
+                  cetype:
+                    const: timestamp
+                  format:
+                    const: date-time
+                required:
+                  - cetype
+                  - format
     additionalProperties: false
