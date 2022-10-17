@@ -32,7 +32,7 @@ Although JSON Schema is used to validate JSON Documents, Attrschema provides an
 algorithm to validate non-JSON formatted CloudEvents (XML, Protobuf, etc.) as well.
 
 ### Validation Algorithm
-To validated a given CloudEvent the attrschema implementation MUST:
+To validate a given CloudEvent the attrschema implementation MUST:
 
 1. Create a map of all attributes of a given event, where the keys are the attribute
     names and the values are the attribute values
