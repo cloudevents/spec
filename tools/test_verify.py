@@ -3,18 +3,12 @@ from re import Match
 from typing import Optional
 
 import pytest
-from verify import (
-    _BANNED_PHRASES_PATTERN,
-    _FAKE_DOCS_DIR,
-    _MARKDOWN_BOOKMARK_PATTERN,
-    _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
-    _SKIP_TEXT_PATTERN,
-    Settings,
-    _directory_issues,
-    _is_text_all_uppercase,
-    _plain_text_issues,
-    _render_markdown_to_html,
-)
+from verify import (_BANNED_PHRASES_PATTERN, _FAKE_DOCS_DIR,
+                    _MARKDOWN_BOOKMARK_PATTERN,
+                    _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN,
+                    _SKIP_TEXT_PATTERN, Settings, _directory_issues,
+                    _is_text_all_uppercase, _plain_text_issues,
+                    _render_markdown_to_html)
 
 
 def test_text_issues():
@@ -312,5 +306,19 @@ async def test_app(monkeypatch):
             "title ('# My Spec - Version 1.0.0') does not"
             " match the title of fake-docs/languages/your-lang/myspec/spec.md ('# Your"
             " Spec - Version 1.0.0')",
+        ),
+        (
+            PurePosixPath("fake-docs/myspec/extensions/his.md"),
+            "Extension schema for fake-docs/myspec/extensions/his.md does not exist",
+        ),
+        (
+            PurePosixPath("fake-docs/myspec/extensions/our.md"),
+            "Attribute description 'this is our attr' is not present in spec "
+            "fake-docs/myspec/extensions/our.md",
+        ),
+        (
+            PurePosixPath("fake-docs/myspec/extensions/your.md"),
+            "Extension schema from fake-docs/myspec/extensions/your.md is not a valid "
+            "attrschema",
         ),
     }

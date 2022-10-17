@@ -1,0 +1,6 @@
+type: object
+properties:
+  myattr:
+    description: this is my attr
+    cetype: uri
+    format: uri
