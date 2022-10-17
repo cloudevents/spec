@@ -400,6 +400,7 @@ def _title_issues(path: ExistingPath) -> Iterable[Issue]:
         if not _titles_match(_file_title(path), _file_title(other_path)):
             yield _non_matching_titles_issue(path, other_path)
 
+
 def _extension_spec(path: ExistingPath) -> Optional[ExtensionSpecPath]:
     if path.parent.name == "extensions":
         return ExtensionSpecPath(path)
@@ -426,24 +427,27 @@ def _valid_extension_schema(schema: ExtensionSchema) -> Optional[ValidExtensionS
 
 
 def _normalize_text(text: str) -> str:
-    return " ".join((token for token in nltk.word_tokenize(text, preserve_line=True)
-                     if token not in ",.`()/"))
+    return " ".join((t for t in (token.strip(",.`()/") for token in
+                                 nltk.word_tokenize(text, preserve_line=True)) if t))
 
 
-def _extension_issues(spec: ExistingPath) -> Iterable[Issue]:
-    if spec := _extension_spec(spec):
+def _extension_issues(path: ExistingPath) -> Iterable[Issue]:
+    if spec := _extension_spec(path):
         if schema := _read_schema(_extension_schema_path(spec)):
             if schema := _valid_extension_schema(schema):
-                for attribute_schema in schema.get("properties", tuple()):
+                for attribute_schema in schema.get("properties",{}).values():
                     if description  := attribute_schema.get("description"):
-                        if _normalize_text(description) not in _read_text(spec):
-                            yield Issue(f"{repr(description)} is not present in spec "
-                                        f"{spec.as_posix()}")
+                        if _normalize_text(description) not in \
+                                _normalize_text(_read_text(spec)):
+                            yield Issue(
+                                f"Attribute description {repr(description)} is "
+                                f"not present in spec {spec.as_posix()}"
+                            )
             else:
                 yield Issue(f"Extension schema from {spec.as_posix()} "
                             f"is not a valid attrschema")
         else:
-            yield Issue(f"Extension schema for {spec.as_posix()} does not exist")
+            yield Issue(f"Extension schema for {path.as_posix()} does not exist")
 
 
 async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[TaggedIssue]:
@@ -451,7 +455,8 @@ async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[Tagge
         list(await _html_issues(path, settings))
         + list(_plain_text_issues(_read_text(path)))
         + list(_translation_issues(path))
-        + list(_title_issues(path)),
+        + list(_title_issues(path))
+        + list(_extension_issues(path)),
         tag=path,
     )
 
