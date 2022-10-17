@@ -1,4 +1,4 @@
-title:  Sampled Rate Extension Schema
+title: Sampled Rate Extension Schema
 type: object
 properties:
   sampledrate:
