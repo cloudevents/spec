@@ -1,5 +1,5 @@
 title: "Attrschema meta-schema"
-$schema: "https://cloudevents.io/attrschema/2022-10/schema#"
+$schema: "http://json-schema.org/draft-07/schema#"
 $id: "https://cloudevents.io/attrschema/2022-10/schema#"
 allOf:
   - { "$ref": "http://json-schema.org/draft-07/schema#" }
