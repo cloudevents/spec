@@ -435,7 +435,7 @@ def _extension_issues(path: ExistingPath) -> Iterable[Issue]:
                 for attribute_schema in schema.get("properties",{}).values():
                     if description  := attribute_schema.get("description"):
                         if _normalize_text(description) not in \
-                                _normalize_text(_read_text(spec)):
+                                _normalize_text(_html_parser(read_html_text(path)).text):
                             yield Issue(
                                 f"Attribute description {repr(description)} is "
                                 f"not present in spec {spec.as_posix()}"
