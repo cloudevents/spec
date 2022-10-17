@@ -402,7 +402,7 @@ def _title_issues(path: ExistingPath) -> Iterable[Issue]:
 
 
 def _extension_spec(path: ExistingPath) -> Optional[ExtensionSpecPath]:
-    if path.parent.name == "extensions":
+    if _is_english_file(path) and path.parent.name == "extensions":
         return ExtensionSpecPath(path)
 
 
