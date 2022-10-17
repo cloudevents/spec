@@ -1,0 +1,24 @@
+title: "Attrschema meta-schema"
+$schema: "https://cloudevents.io/attrschema/2022-10/schema#"
+$id: "https://cloudevents.io/attrschema/2022-10/schema#"
+$vocabulary:
+    "https://json-schema.org/draft/2019-WIP/vocab/core": true
+    "https://json-schema.org/draft/2019-WIP/vocab/applicator": true
+    "https://json-schema.org/draft/2019-WIP/vocab/validation": true
+    "https://json-schema.org/draft/2019-WIP/vocab/meta-data": true
+    "https://json-schema.org/draft/2019-WIP/vocab/format": true
+    "https://json-schema.org/draft/2019-WIP/vocab/content": true
+    "https://myserver.net/my-vocab": true
+allOf:
+  - { "$ref": "https://json-schema.org/draft/2019-06/schema#" }
+properties: # this is the properties of the JSON schema
+  properties: # this is the properties property of the JSON schema
+    type: object
+    patternProperties:
+      "^[a-z0-9]+$": # CloudEvents attribute names MUST consist of lower-case letters ('a' to 'z') or digits ('0' to '9') from the ASCII character set
+        type: object
+        properties:
+          type:
+            const: string # All context attribute values are normalized to string
+    },
+    additionalProperties: false
