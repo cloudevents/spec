@@ -1,0 +1,9 @@
+title: Atterschema Extension Schema
+type: object
+properties:
+  sampledrate:
+    cetype: uri
+    format: uri
+    description: Identifies the Attrschema that attributes ofthe current CloudEvent
+      adhere to.
+    minLength: 1
