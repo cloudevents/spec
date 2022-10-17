@@ -1,0 +1,14 @@
+title: Partitioning Extension Schema
+type: object
+properties:
+  partitionkey:
+    cetype: string
+    description: A partition key for the event, typically for the purposes of
+      defining a causal relationship/grouping between multiple events. In cases
+      where the CloudEvent is delivered to an event consumer via multiple hops,
+      it is possible that the value of this attribute might change, or even be
+      removed, due to protocol semantics or business processing logic within
+      each hop.
+    minLength: 1
+required:
+  - partitionkey
