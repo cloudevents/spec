@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import (Any, Dict, Iterable, List, NewType, Optional, Sequence,
                     Set, Tuple, TypeVar)
 
-import jsonschema
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 from markdown import markdown
@@ -19,7 +18,6 @@ from tenacity import Retrying, stop_after_attempt
 from tqdm.asyncio import tqdm
 from yaml import safe_load
 import jsonschema
-import nltk
 
 Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
@@ -427,8 +425,7 @@ def _valid_extension_schema(schema: ExtensionSchema) -> Optional[ValidExtensionS
 
 
 def _normalize_text(text: str) -> str:
-    return " ".join((t for t in (token.strip(",.`()/") for token in
-                                 nltk.word_tokenize(text, preserve_line=True)) if t))
+    return " ".join(re.findall(r"\w+", text))
 
 
 def _extension_issues(path: ExistingPath) -> Iterable[Issue]:
