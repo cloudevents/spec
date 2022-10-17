@@ -7,4 +7,5 @@ properties:
     description: The rate at which this event has already been sampled. Represents
       the number of similar events that happened but were not sent plus this event.
       For example, if a system sees 30 occurrences and emits a single event,
-      `sampledrate` would be 30 (29 not sent and 1 sent). A value of `1` is the
+      sampledrate would be 30 (29 not sent and 1 sent). A value of 1 is the
+      equivalent of this extension not being used at all.
