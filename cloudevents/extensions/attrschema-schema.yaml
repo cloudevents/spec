@@ -2,7 +2,7 @@ title: "Attrschema meta-schema"
 $schema: "https://cloudevents.io/attrschema/2022-10/schema#"
 $id: "https://cloudevents.io/attrschema/2022-10/schema#"
 allOf:
-  - { "$ref": "https://json-schema.org/draft/2019-06/schema#" }
+  - { "$ref": "https://json-schema.org/draft/2020-12/schema#" }
 properties: # this is the properties of the JSON schema
   type:
     const: object
