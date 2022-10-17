@@ -1,0 +1,9 @@
+title: Dataref Extension Schema
+type: object
+properties:
+  sampledrate:
+    cetype: uri-reference
+    format: uri-reference
+    description: A reference to a location where the event payload is stored. The
+      location MAY not be accessible without further information (e.g. a pre-shared
+      secret).
