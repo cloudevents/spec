@@ -1,14 +1,6 @@
 title: "Attrschema meta-schema"
 $schema: "https://cloudevents.io/attrschema/2022-10/schema#"
 $id: "https://cloudevents.io/attrschema/2022-10/schema#"
-$vocabulary:
-    "https://json-schema.org/draft/2019-WIP/vocab/core": true
-    "https://json-schema.org/draft/2019-WIP/vocab/applicator": true
-    "https://json-schema.org/draft/2019-WIP/vocab/validation": true
-    "https://json-schema.org/draft/2019-WIP/vocab/meta-data": true
-    "https://json-schema.org/draft/2019-WIP/vocab/format": true
-    "https://json-schema.org/draft/2019-WIP/vocab/content": true
-    "https://myserver.net/my-vocab": true
 allOf:
   - { "$ref": "https://json-schema.org/draft/2019-06/schema#" }
 properties: # this is the properties of the JSON schema
