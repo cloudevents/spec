@@ -1,0 +1,11 @@
+title: Distributed Tracing Extension Schema
+type: object
+properties:
+  traceparent:
+    cetype: string
+    description: Contains a version, trace ID, span ID, and trace options
+  tracestate:
+    cetype: string
+    description: comma-delimited list of key-value pairs
+required:
+  - traceparent
