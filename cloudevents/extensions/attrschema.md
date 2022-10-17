@@ -50,6 +50,16 @@ To validated a given CloudEvent the attrschema implementation MUST:
 Note: in addition to the attribute schema, the usual CloudEvent attribute constraints
 still apply, even though they are not expressed in the schema explicitly. 
 
+### Type Annotation
+Attrschema provides a way to annotate the defined attributes with the CloudEvent type
+information using the `cetype` keyword.
+
+This keyword indicates which of the standard CloudEvent types this attribute holds.
+
+This keyword MUST be one of `boolean`, `integer`, `string`, `binary`, `uri`,
+`uri-reference`, or `timestamp`.
+
+
 #### Examples
 Here is an example attrschema document
 ```json
