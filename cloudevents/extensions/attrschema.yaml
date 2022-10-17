@@ -5,6 +5,6 @@ properties:
   sampledrate:
     cetype: uri
     format: uri
-    description: Identifies the Attrschema that attributes ofthe current CloudEvent
+    description: Identifies the Attrschema that attributes of the current CloudEvent
       adhere to.
     minLength: 1
