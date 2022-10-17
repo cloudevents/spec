@@ -1,3 +1,4 @@
+$schema: "https://cloudevents.io/attrschema/2022-10/schema#"
 title: Partitioning Extension Schema
 type: object
 properties:
