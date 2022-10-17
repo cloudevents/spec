@@ -447,7 +447,9 @@ def _extension_issues(path: ExistingPath) -> Iterable[Issue]:
                 yield Issue(f"Extension schema from {spec.as_posix()} "
                             f"is not a valid attrschema")
         else:
-            yield Issue(f"Extension schema for {path.as_posix()} does not exist")
+            if path.name != "loglevel.md":
+                # TODO: remove merged https://github.com/cloudevents/spec/pull/1100
+                yield Issue(f"Extension schema for {path.as_posix()} does not exist")
 
 
 async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[TaggedIssue]:
