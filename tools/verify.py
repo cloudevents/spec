@@ -425,7 +425,7 @@ def _valid_extension_schema(schema: ExtensionSchema) -> Optional[ValidExtensionS
 
 
 def _normalize_text(text: str) -> str:
-    return " ".join(re.findall(r"\w+", text))
+    return " ".join(re.findall(r"[a-zA-Z0-9_]+", text))
 
 
 def _extension_issues(path: ExistingPath) -> Iterable[Issue]:
