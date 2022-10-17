@@ -59,6 +59,9 @@ This keyword indicates which of the standard CloudEvent types this attribute hol
 This keyword MUST be one of `boolean`, `integer`, `string`, `binary`, `uri`,
 `uri-reference`, or `timestamp`.
 
+When `uri` is used the `format` keyword MUST be set to `uri`
+When `uri-reference` is used the `format` keyword MUST be set to `uri-reference`
+When `timestamp` is used the `format` keyword MUST be set to `date-time`
 
 #### Examples
 Here is an example attrschema document
