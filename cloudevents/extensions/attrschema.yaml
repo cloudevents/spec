@@ -2,7 +2,7 @@ $schema: "https://cloudevents.io/attrschema/2022-10/schema#"
 title: Atterschema Extension Schema
 type: object
 properties:
-  sampledrate:
+  attrschema:
     cetype: uri
     format: uri
     description: Identifies the Attrschema that attributes of the current CloudEvent
