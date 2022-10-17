@@ -7,14 +7,19 @@ from dataclasses import dataclass
 from functools import lru_cache
 from http import HTTPStatus
 from pathlib import Path
-from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple, TypeVar
+from typing import (Any, Dict, Iterable, List, NewType, Optional, Sequence,
+                    Set, Tuple, TypeVar)
 
+import jsonschema
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
 from markdown import markdown
 from pymdownx import slugs
 from tenacity import Retrying, stop_after_attempt
 from tqdm.asyncio import tqdm
+from yaml import safe_load
+import jsonschema
+import nltk
 
 Issue = NewType("Issue", str)
 TaggedIssue = Tuple[Path, Issue]
@@ -24,6 +29,10 @@ T = TypeVar("T")
 HtmlText = NewType("HtmlText", str)
 ExistingPath = NewType("ExistingPath", Path)
 TranslationsDir = NewType("TranslationsDir", ExistingPath)
+ExtensionSpecPath = NewType("ExtensionSpecPath", ExistingPath)
+ExtensionSchemaPath = NewType("ExtensionSchemaPath", ExistingPath)
+ExtensionSchema = NewType("ExtensionSchema", Dict[str, Any])
+ValidExtensionSchema = NewType("ValidExtensionSchema", ExtensionSchema)
 
 _TOOLS_DIR = Path(__file__).parent
 _REPO_ROOT = _TOOLS_DIR.parent
@@ -32,6 +41,9 @@ _FAKE_DOCS = set(_FAKE_DOCS_DIR.rglob("**/*"))
 _LANGUAGES_DIR_NAME = "languages"
 _ROOT_LANGUAGES_DIR = _REPO_ROOT / _LANGUAGES_DIR_NAME
 
+_ATTRSCHEMA_SCHEMA = safe_load(
+    (_REPO_ROOT / "cloudevents" / "extensions" / "attrschema-schema.yaml").open()
+)
 
 @dataclass
 class Settings:
@@ -350,6 +362,11 @@ def _tag_issues(issues: Iterable[Issue], tag: Path) -> Sequence[TaggedIssue]:
     return [(tag, issue) for issue in issues]
 
 
+def _existing_path(path: Path) -> Optional[ExistingPath]:
+    if path.exists():
+        return ExistingPath(path)
+    
+
 def _existing_paths(paths: Iterable[Path]) -> Sequence[ExistingPath]:
     return [ExistingPath(path) for path in paths if path.exists()]
 
@@ -382,6 +399,51 @@ def _title_issues(path: ExistingPath) -> Iterable[Issue]:
     for other_path in _existing_paths(_files_that_should_have_matching_titles(path)):
         if not _titles_match(_file_title(path), _file_title(other_path)):
             yield _non_matching_titles_issue(path, other_path)
+
+def _extension_spec(path: ExistingPath) -> Optional[ExtensionSpecPath]:
+    if path.parent.name == "extensions":
+        return ExtensionSpecPath(path)
+
+
+def _extension_schema_path(path: ExtensionSpecPath) -> Optional[ExtensionSchemaPath]:
+    if existing := _existing_path(path.with_suffix(".yaml")):
+        return ExtensionSchemaPath(existing)
+
+
+def _read_schema(path: Optional[ExtensionSchemaPath]) -> Optional[ExtensionSchema]:
+    if path:
+        with path.open("r") as f:
+            return ExtensionSchema(safe_load(f))
+
+
+def _valid_extension_schema(schema: ExtensionSchema) -> Optional[ValidExtensionSchema]:
+    try:
+        jsonschema.validators.validate(schema, _ATTRSCHEMA_SCHEMA)
+    except jsonschema.exceptions.ValidationError:
+        return None
+    else:
+        return ValidExtensionSchema(schema)
+
+
+def _normalize_text(text: str) -> str:
+    return " ".join((token for token in nltk.word_tokenize(text, preserve_line=True)
+                     if token not in ",.`()/"))
+
+
+def _extension_issues(spec: ExistingPath) -> Iterable[Issue]:
+    if spec := _extension_spec(spec):
+        if schema := _read_schema(_extension_schema_path(spec)):
+            if schema := _valid_extension_schema(schema):
+                for attribute_schema in schema.get("properties", tuple()):
+                    if description  := attribute_schema.get("description"):
+                        if _normalize_text(description) not in _read_text(spec):
+                            yield Issue(f"{repr(description)} is not present in spec "
+                                        f"{spec.as_posix()}")
+            else:
+                yield Issue(f"Extension schema from {spec.as_posix()} "
+                            f"is not a valid attrschema")
+        else:
+            yield Issue(f"Extension schema for {spec.as_posix()} does not exist")
 
 
 async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[TaggedIssue]:
