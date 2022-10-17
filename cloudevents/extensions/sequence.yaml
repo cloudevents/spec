@@ -1,0 +1,10 @@
+title: Sequence Extension Schema
+type: object
+properties:
+  sequence:
+    cetype: string
+    description: Value expressing the relative order of the event.
+      This enables interpretation of data supercedence.
+    minLength: 1
+required:
+  - sequence
