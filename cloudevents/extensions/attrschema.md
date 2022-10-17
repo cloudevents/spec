@@ -31,6 +31,8 @@ how to interact with them.
 Although JSON Schema is used to validate JSON Documents, Attrschema provides an
 algorithm to validate non-JSON formatted CloudEvents (XML, Protobuf, etc.) as well.
 
+The Attrschema meta-schema is defined under [attrschema-schema.yaml](attrschema-schema.yaml)
+
 ### Validation Algorithm
 To validate a given CloudEvent the attrschema implementation MUST:
 
@@ -148,9 +150,7 @@ This event will be transformed to
 ```
 But will fail validation because `myattr` is not present
 
-### JSON Schema Version
-This document does not specify exact json schema version to be used in the attrschema
-definition.
+
 
 [json-schema]: https://json-schema.org/
 [json-schema-spec]: https://json-schema.org/draft/2020-12/json-schema-core.html
