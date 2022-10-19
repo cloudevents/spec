@@ -11,9 +11,9 @@ mechanisms by which interactions with those Endpoints can be established.
 - [Overview](#overview)
 - [Notations and Terminology](#notations-and-terminology)
 - [Resource Model](#resource-model)
-  - [Endpoint](#endpoint)
-  - [Definition](#definition)
-  - [Group](#group)
+  - [Endpoint](#endpoint-resource)
+  - [Definition](#definition-resource)
+  - [Group](#group-resource)
 - [Usage Values](#usage-values)
 - [Message Formats](#message-formats)
 - [API Specification](#api-specification)
@@ -197,7 +197,7 @@ defined:
 - Examples:
   - `https://example.com/docs/myQueue`
 
-### Endpoint
+### Endpoint Resource
 
 An Endpoint is ...
 
@@ -225,6 +225,7 @@ The following pseudo JSON shows the defintion of an Endpoint:
         "strict": true|false ?
     }, ?
 
+    "format": "STRING",
     "groups": [ GROUP-URI-Reference, ... ], ?
     "definitions": { "ID": DEFINITION, ... } ?
 }
@@ -342,6 +343,21 @@ See [Common Resource Properties](#common-resource-properties).
 - Examples:
   - `{ "protocol": "kafka" }`
 
+#### format
+
+- Type: String
+- Description: Specifies the `format` value of the Definitions associated with
+  this Endpoint. All Groups and Definitions associated with this Endpoint MUST
+  have a `format` value that matches this property's value.
+
+  When this property has no value it MUST either be serialized as an empty
+  string or excluded from the serialization entirely.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `CloudEvents/1.0`
+  - `AMQP/1.0`
+
 #### groups
 
 - Type: Array of Group-URI-References
@@ -376,7 +392,7 @@ See [Common Resource Properties](#common-resource-properties).
 - Examples:
   - TBD add one
 
-### Definition
+### Definition Resource
 
 A Definition is ...
 
@@ -430,9 +446,10 @@ See [Common Resource Properties](#common-resource-properties).
 #### format
 
 - Type: String
-- Description: Specifies the type of message associated with this Definition.
-  This value can be used to definitively identify the type of message without
-  checking the individual attributes listed under the `metadata` property.
+- Description: Specifies the set of rules that goven how the message for this
+  Definition will be formatted. This value can be used to definitively
+  identify the type of message without checking the individual attributes
+  listed under the `metadata` property.
   See the [Message Formats](#message-formats) section for more information.
 
   When this property has no value it MUST either be serialized as an empty
@@ -481,7 +498,7 @@ See [Common Resource Properties](#common-resource-properties).
 - Examples:
   - `https://example.com/schema/...` TBD
 
-### Group
+### Group Resource
 
 A Group is ...
 
@@ -559,12 +576,30 @@ See [Common Resource Properties](#common-resource-properties).
 
 ## Usage Values
 
-subscriber | consumer | producer
-...
+The Endpoint `usage` value indicates how clients of the Endpoint are meant
+to interact with it. There are 3 values defined by this specification:
+- `subscriber`: in order for clients to receives messages from this Endpoint
+  a subscribe request MUST be sent to one of the Endpoint's `config.endpoints`
+  URLs. The sent messages MUST be sent using a "push" delivery mechanism to a
+  location specified within the subscribe request.
+- `consumer`: clients can receive messages from this Endpoint by issuing a
+  "pull" type of request to one of the Endpoint's `config.endpoints` URLs.
+- `producer`: clients can send messages to this Endpoint by ussing a "push"
+   type of request to one of the Endpoint's `config.endpoints` URLs.
+
+Implementations MAY defined additional `usage` values, but it is RECOMMENDED
+that they are defined with some unique organizational unique string to reduce
+the chances of collisions with possible future spec-defined values.
+
+For each possible `usage` value, the Endpoint's `config.protocol` value
+indicates the mechanism by which the messages will be transferred to/from the
+Endpoint.
 
 ## Message Formats
 
 CloudEvents/1.0
+AMQP
+Kafka
 ...
 
 
