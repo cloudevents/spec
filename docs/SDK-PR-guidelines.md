@@ -1,5 +1,7 @@
 # Pull Request Guidelines
 
+document language: [English](README.md) | [简体中文](README.zh-cn.md)
+
 <!-- no verify-specs -->
 
 Here you will find step by step guidance for creating, submitting and updating
@@ -7,12 +9,12 @@ a pull request for an SDK repository. We hope it will help you have an easy time
 managing your work and a positive, satisfying experience when contributing
 your code. Thanks for getting involved! :rocket:
 
-* [Getting Started](#getting-started)
-* [Branches](#branches)
-* [Commit Messages](#commit-messages)
-* [Staying current with main](#staying-current-with-main)
-* [Submitting and Updating a Pull Request](#submitting-and-updating-your-pull-request)
-* [Congratulations!](#congratulations)
+- [Getting Started](#getting-started)
+- [Branches](#branches)
+- [Commit Messages](#commit-messages)
+- [Staying current with main](#staying-current-with-main)
+- [Submitting and Updating a Pull Request](#submitting-and-updating-your-pull-request)
+- [Congratulations!](#congratulations)
 
 ## Getting Started
 
