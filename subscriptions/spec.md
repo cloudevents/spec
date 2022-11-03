@@ -1,5 +1,7 @@
 # CloudEvents Subscriptions API - Version 0.1-wip
 
+document language: [English](spec.md) | [简体中文](spec.zh-cn.md)
+
 ## Abstract
 
 This specification defines mechanisms, including an API definition, for CNCF
@@ -772,7 +774,12 @@ empty strings.
 For example:
 
 ```json
-{ "exact": { "type": "com.github.push", "subject": "https://github.com/cloudevents/spec" } }
+{
+  "exact": {
+    "type": "com.github.push",
+    "subject": "https://github.com/cloudevents/spec"
+  }
+}
 ```
 
 ###### `prefix` filter dialect
@@ -788,7 +795,12 @@ empty strings.
 For example:
 
 ```json
-{ "prefix": { "type": "com.github.", "subject": "https://github.com/cloudevents" } }
+{
+  "prefix": {
+    "type": "com.github.",
+    "subject": "https://github.com/cloudevents"
+  }
+}
 ```
 
 ###### `suffix` filter dialect
