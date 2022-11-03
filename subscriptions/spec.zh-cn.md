@@ -292,7 +292,7 @@ HTTP 的应用，而不是 HTTP 本身的固有特性。
 
 ##### source
 
-- 类型:`URI-reference`——一个 CloudEvents 的源值
+- 类型:`URI-reference`- 一个 CloudEvents 的源值
 - 描述:订阅源的相关信息。
   当出现在订阅请求上时，因此产生的所有事件
   订阅必须有一个与之匹配的 CloudEvents`source`属性
