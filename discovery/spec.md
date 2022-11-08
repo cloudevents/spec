@@ -211,7 +211,7 @@ The following pseudo JSON shows the defintion of an Endpoint:
     "epoch": UINT,
     "origin": "URI" ?
     "description": "STRING", ?
-    "tags": { "STRING": "STRING", ... } ?
+    "tags": { "STRING": "STRING", ... }, ?
     "docs": "URL", ?
 
     "deprecated": { ... }, ?
@@ -432,7 +432,7 @@ The following pseudo JSON shows the defintion of a Definition:
     "epoch": UINT,
     "origin": "URI" ?
     "description": "STRING", ?
-    "tags": { "STRING": "STRING", ... } ?
+    "tags": { "STRING": "STRING", ... }, ?
     "docs": "URL", ?
 
     "ownergroup": "GROUP-URI-Reference",
@@ -537,11 +537,11 @@ grouping.
     "epoch": UINT,
     "origin": "URI" ?
     "description": "STRING", ?
-    "tags": { "STRING": "STRING", ... } ?
+    "tags": { "STRING": "STRING", ... }, ?
     "docs": "URL", ?
 
     "format": "STRING", ?
-    "groups": [ GROUP-URI-Reference, ... ] ?
+    "groups": [ GROUP-URI-Reference, ... ], ?
     "definitions": { "ID": DEFINITION, ... } ?
 }
 ```
