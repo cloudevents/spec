@@ -94,6 +94,8 @@ CloudEvents 是一个以通用格式来描述事件数据的规范。它提供�
 
 如果对本仓库中任意规范有安全方面的担忧，请[提交一个issue](https://github.com/cloudevents/spec/issues) ，告知我们。
 
+[Trail of Bits](https://www.trailofbits.com/) 于 2022 年 10 月对本项目进行了安全评估。详情参见[完整报告](../../docs/CE-SecurityAudit-2022-10.pdf)。
+
 ## 联系方式
 
 邮件联系方式如下:
