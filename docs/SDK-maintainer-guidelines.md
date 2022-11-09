@@ -1,6 +1,6 @@
 # SDK Maintainer's Guide
 
-Language: [English](SDK-maintainer-guidelines.md) | [简体中文](/languages/zh-CN/SDK-maintainer-guidelines.md)
+Language: [English](SDK-maintainer-guidelines.md) | [简体中文](/docs/languages/zh-CN/SDK-maintainer-guidelines.md)
 
 <!-- no verify-specs -->
 

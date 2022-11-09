@@ -1,6 +1,6 @@
 # Pull Request Guidelines
 
-Language: [English](SDK-PR-guidelines.md) | [简体中文](/languages/zh-CN/SDK-PR-guidelines.md)
+Language: [English](SDK-PR-guidelines.md) | [简体中文](/docs/languages/zh-CN/SDK-PR-guidelines.md)
 
 <!-- no verify-specs -->
 

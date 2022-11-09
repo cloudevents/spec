@@ -1,6 +1,6 @@
 # 拉取请求指导
 
-语言: [English](/docs/SDK-PR-guidelines.md) | [简体中文](SDK-PR-guidelines.md)
+语言: [English](/docs/SDK-maintainer-guidelines.md) | [简体中文](SDK-PR-guidelines.md)
 
 <!-- no verify-specs -->
 
@@ -12,7 +12,7 @@
 - [开始](#开始)
 - [分支](#分支机构)
 - [提交的信息](#提交的信息)
-- [与主流保持同步](#与' main '保持同步)
+- [与主流保持同步](#与main保持同步)
 - [提交和更新一个 Pull Request](#提交和更新你的拉请求)
 - [恭喜你!](#恭喜你)
 
@@ -91,7 +91,7 @@ Date:   Thu Feb 2 11:41:15 2018 -0800
 注意“Author”和“Signed-off-by”行是匹配的。如果他们不这么做，你的 PR 就会这么做
 被自动 DCO 检查拒绝。
 
-## 与' main '保持同步
+## 与'main'保持同步
 
 当你在你的分支上工作时，“main”上可能会发生变化。之前
 提交你的拉请求，确保你的分支已经更新
