@@ -36,8 +36,6 @@ information can then be used to perform actions such as:
 While the specification is written in term of "messaging", it applies equally
 to "eventing" since it can be considered as subset of messaging.
 
-** we need more verbage here **
-
 ## Notations and Terminology
 
 ### Notational Conventions
@@ -56,18 +54,17 @@ This specification defines the following terms:
 
 #### Discovery Service
 
-A compliant implementation of this specification that advertises the set of
+A compliant implementation of this specification that advertises a set of
 Endpoints, Groups, Definitions and other metadata to aid in the programmatic
 interactions with the Endpoints.
 
 #### Endpoint
 
-A network accessible location that can consume or produce messages and any
-associated metadata, such as how to consume messages from it.
+A network accessible location that can consume or produce messages.
 
 #### Group
 
-A set of Definitions that related in some way. This specification does not
+A set of Definitions that are related in some way. This specification does not
 define how or why they are related.
 
 #### Definition
@@ -81,8 +78,8 @@ This section defines the resource model of a Discovery Service.
 
 ### Common Resource Properties
 
-All resources defined by this specification have the following common properties
-defined:
+All resources defined by this specification have the following common
+properties defined:
 
 #### id
 
@@ -121,7 +118,8 @@ defined:
   of the base URI of the list of this resource type for the current Discovery
   Service appended with the `id` of this resource.
 - Constraints:
-  - REQUIRED
+  - OPTIONAL but STRONGLY RECOMMENDED in cases where the resource is part of
+    an API response.
   - MUST be a non-empty URI
 - Examples:
   - `https://example.com/discovery/endpoints/MyCoolEndpoint`
@@ -179,8 +177,9 @@ defined:
 - Constraints:
   - OPTIONAL
   - if present, MUST be a map of zero or more name/value string pairs
-  - Each name MUST be a non-empty string and unique within the scope of this
-    map. Values MAY be empty strings
+  - Each name MUST be a non-empty string (consisting of only alphanumeric
+    characters, `-`, `_`, or a `.`), be no longer than 63 characters and
+    unique within the scope of this map. Values MAY be empty strings
 - Examples:
   - `{ "owner": "John", "verified": "" }`
 
@@ -189,17 +188,19 @@ defined:
 - Type: URI-Reference
 - Description: A URI-reference to additional documentation about this resource.
   This specification does not define any constraints on the data returned from
-  this URI-reference.
+  an HTTP GET this URI-reference.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a non-empty URI-reference
   - if present with a scheme, it MUST use either `http` or `https`
+  - MUST support an HTTP GET to the specified URI-Reference
 - Examples:
   - `https://example.com/docs/myQueue`
 
 ### Endpoint Resource
 
-An Endpoint is ...
+An Endpoint is a network accessible location that is capable of receiving or
+sending messages.
 
 The following pseudo JSON shows the defintion of an Endpoint:
 ```
@@ -210,7 +211,7 @@ The following pseudo JSON shows the defintion of an Endpoint:
     "epoch": UINT,
     "origin": "URI" ?
     "description": "STRING", ?
-    "tags": { "STRING": "STRING", ... } ?
+    "tags": { "STRING": "STRING", ... }, ?
     "docs": "URL", ?
 
     "deprecated": { ... }, ?
@@ -225,7 +226,7 @@ The following pseudo JSON shows the defintion of an Endpoint:
         "strict": true|false ?
     }, ?
 
-    "format": "STRING",
+    "format": "STRING", ?
     "groups": [ GROUP-URI-Reference, ... ], ?
     "definitions": { "ID": DEFINITION, ... } ?
 }
@@ -243,7 +244,8 @@ See [Common Resource Properties](#common-resource-properties).
 - Type: Object containing the following properties:
   - effective<br>
     An OPTIONAL property indicating the time when the Endpoint entered, or will
-    enter, a deprecated state. The date MAY be in the past or future.
+    enter, a deprecated state. The date MAY be in the past or future. If this
+    propety is not present the Endpoint is already in a deprecated state.
     If present, this MUST be an [RFC3339][rfc3339] timestamp.
 
   - removal<br>
@@ -251,7 +253,8 @@ See [Common Resource Properties](#common-resource-properties).
     The Endpoint MUST NOT be deleted before this time. If this property is not
     present then client can not make any assumption as to when the Endpoint
     might be removed. Note: as with most Endpoint properties, this property
-    is mutable. If present, this MUST be an [RFC3339][rfc3339] timestamp.
+    is mutable. If present, this MUST be an [RFC3339][rfc3339] timestamp and
+    MUST NOT be sooner than the `effective` time if present.
 
   - alternative<br>
     An OPTIONAL property specifying the URL to an alternative Endpoint the
@@ -265,16 +268,12 @@ See [Common Resource Properties](#common-resource-properties).
     the deprecation of the Endpoint. This specification does not mandate any
     particular format or information, however some possibilities include:
     reasons for the deprecation or additional information about likely
-    alternative Endpoints.
+    alternative Endpoints. The URL MUST support an HTTP GET request.
 
-- Description: Presence of this property (even without any nested properties)
-  indicates that the Endpoint is, or will be, deprecated and will be removed at
-  some point in the future.
-
-  This specification makes no statement as to whether any existing subscription
-  will still be valid and usable after this date. However, it is expected that
-  new subscription requests after the Endpoint is deleted will likely be
-  rejected.
+- Description: This specification makes no statement as to whether any
+  existing subscription will still be valid and usable after this date.
+  However, it is expected that new subscription requests after the Endpoint is
+  deleted will likely be rejected.
 
   Note that an implementation is not mandated to use this attribute in
   advance of removing an Endpoint, but is it RECOMMENDED that they do so.
@@ -307,12 +306,14 @@ See [Common Resource Properties](#common-resource-properties).
 
 #### authscope
 
-- Type: TBD
-- Description: TBD
+- Type: URI-Reference
+- Description: A URI-Reference to an Endpoint that represents the original
+  source of truth for this Endpoint. If not present then this Endpoint does
+  not have an originating Endpoint from which it is derived or related.
 - Constraints:
   - OPTIONAL
 - Examples:
-  - TBD
+  - https://example.com/endpoints/194575
 
 #### usage
 
@@ -332,23 +333,30 @@ See [Common Resource Properties](#common-resource-properties).
 #### config
 
 - Type: Object
-- Description: Metadata the provides additional information concerning the
-  interactions with this Endpoint. Each `usage` value MUST define the set of
-  `config` properties that are valid.
+- Description: Metadata that provides additional information concerning the
+  interactions with this Endpoint. This metadata MUST be related to the
+  `usage` value specified.
 
   When this property has no value it MUST either be serialized as an empty
   object or excluded from the serialization entirely.
 - Constraints:
   - OPTIONAL
 - Examples:
-  - `{ "protocol": "kafka" }`
+  - `{ "protocol": "kafka", "endpoints": "example.com/mykafka" }`
 
 #### format
 
 - Type: String
-- Description: Specifies the `format` value of the Definitions associated with
-  this Endpoint. All Groups and Definitions associated with this Endpoint MUST
-  have a `format` value that matches this property's value.
+- Description: Specifies the set of rules that govern how the messages for this
+  Endpoint MUST be formatted. This value can be used to definitively
+  identify the type of messages without checking the individual attributes
+  listed under the `metadata` property.
+
+  If present and is not an empty string, then all Groups and Definitions
+  associated with this Endpoint MUST have a `format` value that matches this
+  property's value.
+
+  See the [Message Formats](#message-formats) section for more information.
 
   When this property has no value it MUST either be serialized as an empty
   string or excluded from the serialization entirely.
@@ -370,7 +378,13 @@ See [Common Resource Properties](#common-resource-properties).
 - Constraints:
   - OPTIONAL
   - if present, the same Group, as identified by its `id`, MUST NOT appear
-    more than once within this property.
+    more than once within this property. It might be difficult to detect
+    cases where a nested Group reference would result in a recursive situation.
+    In those cases it would be an error state and this Discovery service
+    is not compliant. As a means to recover from this state, a client MAY
+    choose to break the recursive nature of the references by removing the
+    first occurrence of a reference that refers to a previous seen parent
+    reference.
 - Examples:
   - `[ "https://example.com/discovery/group/987", "/groups/MyGroup" ]`
 
@@ -394,10 +408,22 @@ See [Common Resource Properties](#common-resource-properties).
 
 ### Definition Resource
 
-A Definition is ...
+A Definition is describes the format a message that can be transfered to or
+from an Endpoint. Each message is assumed to be made up of two parts:
+- Metadata - OPTIONAL information used to annotate or provide additional
+  information about the purpose or content of the message
+- Data - the business logic of the message
 
-Talk about how each has metadata and data
+Beyond allowing for a Definition to include information about the data's
+schema, this specification does not concern itself with the data as that is
+application specific.
 
+A Definition allows for the inclusion of metadata to aid with the discovery of:
+- additional properties that might appear in the associated message
+- the type, value, description and requirements of those properties
+- where those properties will appear in the message
+
+The following pseudo JSON shows the defintion of a Definition:
 ```
 {
     "id": "URI-reference",
@@ -406,11 +432,11 @@ Talk about how each has metadata and data
     "epoch": UINT,
     "origin": "URI" ?
     "description": "STRING", ?
-    "tags": { "STRING": "STRING", ... } ?
+    "tags": { "STRING": "STRING", ... }, ?
     "docs": "URL", ?
 
     "ownergroup": "GROUP-URI-Reference",
-    "format": "STRING",
+    "format": "STRING", ?
     "metadata": {
         "attributes": {
             "ATTRIBUTE_NAME": {
@@ -425,7 +451,6 @@ Talk about how each has metadata and data
     "schema": { ... }, ?
     "schemaurl": "URL" ?
 }
-
 ```
 
 The following Definition properties are defined:
@@ -437,28 +462,24 @@ See [Common Resource Properties](#common-resource-properties).
 #### ownergroup
 
 - Type: URI-Reference
-- Description: A reference to the Group or Endpoint that defined this
-  Definition.
+- Description:
+  Note: for the purposes of this discussion, Endpoints can be considered
+  Groups since Endpoints extend the Groups resource with extra properties.
+
+  When retrieving a Group, the `definitions` property will include all
+  Definitions regardless of whether each was included indirectly due to a
+  reference to a Group in the `groups` property or the Definition was defined
+  as part of the Group. In order for a client to distinguish between these two
+  situations, the `ownergroup` property will reference the Group that defined
+  the Definition - thus the "owner".
+
 - Constraints:
   - REQUIRED
-  - MUST be the `self` property of the owning Group or Endpoint.
+  - MUST be the `self` property of the owning Group (or Endpoint).
 
 #### format
 
-- Type: String
-- Description: Specifies the set of rules that goven how the messages for this
-  Definition will be formatted. This value can be used to definitively
-  identify the type of message without checking the individual attributes
-  listed under the `metadata` property.
-  See the [Message Formats](#message-formats) section for more information.
-
-  When this property has no value it MUST either be serialized as an empty
-  string or excluded from the serialization entirely.
-- Constraints:
-  - OPTIONAL
-- Examples:
-  - `cloudevents/1.0`
-  - `amqp/1.0`
+See [Endpoint's `format`](#format) property.
 
 #### metadata
 
@@ -466,6 +487,9 @@ See [Common Resource Properties](#common-resource-properties).
 - Description: Specifies the message attributes for the Definition that will
   appear as metadata in the resulting serialized message. Note that this will
   define the metadata of the message, not the data portion of the message.
+
+  The contents of this property will vary based on the `format` property.
+  See the [Message Formats](#message-formats) section for more information.
 
   When this property has no value it MUST either be serialized as an empty
   object or excluded from the serialization entirely.
@@ -500,7 +524,10 @@ See [Common Resource Properties](#common-resource-properties).
 
 ### Group Resource
 
-A Group is ...
+A Group provides a mechanism by which a set of Definitions can be bundled and
+identified as a single unit. This specification places no constraints on how
+the grouping is defined nor does it mandate any semantic meaning to the
+grouping.
 
 ```
 {
@@ -510,11 +537,11 @@ A Group is ...
     "epoch": UINT,
     "origin": "URI" ?
     "description": "STRING", ?
-    "tags": { "STRING": "STRING", ... } ?
+    "tags": { "STRING": "STRING", ... }, ?
     "docs": "URL", ?
 
-    "format": "STRING",
-    "groups": [ GROUP-URI-Reference, ... ] ?
+    "format": "STRING", ?
+    "groups": [ GROUP-URI-Reference, ... ], ?
     "definitions": { "ID": DEFINITION, ... } ?
 }
 ```
@@ -527,52 +554,15 @@ See [Common Resource Properties](#common-resource-properties).
 
 #### format
 
-- Type: String
-- Description: Specifies the `format` value of the Definitions associated with
-  this Group. All Definitions associated with this Group MUST have a `format`
-  value that matches this property's value.
-
-  When this property has no value it MUST either be serialized as an empty
-  string or excluded from the serialization entirely.
-- Constraints:
-  - OPTIONAL
-- Examples:
-  - `cloudevents/1.0`
-  - `amqp/1.0`
+See [Endpoint's `format`](#format) property.
 
 #### groups
 
-- Type: Array of Group References
-- Description: A set of nested Definition Groups supported by this Group. Each
-  Group Reference MAY be to a Group defined outside of the current Discovery
-  Service instance.
-
-  When this property has no value it MUST either be serialized as an empty
-  array or excluded from the serialization entirely.
-- Constraints:
-  - OPTIONAL
-  - if present, the same Group, as identified by its `id``, MUST NOT
-    appear more than once within this property.
-- Examples:
-  - `[ "https://example.com/discovery/groups/987" ]`
+See [Endpoint's `groups`](#groups) property.
 
 #### definitions
 
-- Type: Collection of Definition-References
-- Description: A collection of Message Definitions supported by this Group.
-  This MUST include all Definitions defined exclusively for this Group as
-  well as Definitions from the `groups` property above. Clients can determine
-  which are not part of those groups by finding the Definitions whose
-  `ownergroup` property matches the `self` property of this Group.
-
-  When this property has no value it MUST either be serialized as an empty
-  array or excluded from the serialization entirely.
-- Constraints:
-  - OPTIONAL
-  - if present, the same Definition, as identified by its `id`, MUST NOT
-    appear more than once within this property.
-- Examples:
-  - TBD
+See [Endpoint's `definitions`](#definitions) property.
 
 ## Usage Values
 
@@ -597,10 +587,11 @@ Endpoint.
 
 ## Message Formats
 
+```
 cloudevents/1.0
 amqp
 kafka
-...
+```
 
 
 ## API Specification
