@@ -1,5 +1,7 @@
 # SDK Maintainer's Guide
 
+Language: [English](SDK-maintainer-guidelines.md) | [简体中文](./languages/zh-CN/SDK-maintainer-guidelines.md)
+
 <!-- no verify-specs -->
 
 This guide is meant to provide SDK maintainers with some recommended common
@@ -12,15 +14,15 @@ expect a common experience with each SDK.
 These tips are meant to help prevent issues and pull requests from becoming
 stale and outdated.
 
-* Stay on top of your own pull requests. PRs that languish for too long can become difficult to merge.
-* Work from your own fork. As you are making contributions to the project, you should be working from your own fork just as outside contributors do. This keeps the branches in github to a minimum and reduces unnecessary CI runs.
-* Proactively label issues and pull requests with relevant and descriptive labels.
-* Actively review pull requests as they are submitted. A pull request should not go for more than a couple of days without a comment or review.
-* Triage issues regularly.
-  * If some issues are stale for too long because they are no longer valid/relevant or because the discussion reached no significant action items to perform, close the issue and invite users to reopen if they need it.
-  * If some PRs are no longer valid due to conflicts, but the PR is still needed, ask the contributor to rebase their PR from the main branch.
-  * If you find an issue that you want to create a pull request for, be sure to assign the issue to yourself so that other maintainers don't start working on it at the same time.
-* Consider using GitHub actions to proactively label and eventually close older issues and pull requests as they become stale.
+- Stay on top of your own pull requests. PRs that languish for too long can become difficult to merge.
+- Work from your own fork. As you are making contributions to the project, you should be working from your own fork just as outside contributors do. This keeps the branches in github to a minimum and reduces unnecessary CI runs.
+- Proactively label issues and pull requests with relevant and descriptive labels.
+- Actively review pull requests as they are submitted. A pull request should not go for more than a couple of days without a comment or review.
+- Triage issues regularly.
+  - If some issues are stale for too long because they are no longer valid/relevant or because the discussion reached no significant action items to perform, close the issue and invite users to reopen if they need it.
+  - If some PRs are no longer valid due to conflicts, but the PR is still needed, ask the contributor to rebase their PR from the main branch.
+  - If you find an issue that you want to create a pull request for, be sure to assign the issue to yourself so that other maintainers don't start working on it at the same time.
+- Consider using GitHub actions to proactively label and eventually close older issues and pull requests as they become stale.
 
 ## Commit Messages
 
@@ -62,11 +64,11 @@ submitted, and before it has landed.
 
 Here are some guidelines around pull request approvals and timing.
 
-* No pull request may land without passing all automated checks
-* All pull requests require at least one approval from a maintainer before landing
-* A pull request author may approve their own PR, but will need an additional approval to land it
-* If a maintainer has submitted a pull request and it has not received approval from at least one other maintainer, it can be landed after 72 hours
-* If a pull request has both approvals and requested changes, it can't be landed until those requested changes are resolved
+- No pull request may land without passing all automated checks
+- All pull requests require at least one approval from a maintainer before landing
+- A pull request author may approve their own PR, but will need an additional approval to land it
+- If a maintainer has submitted a pull request and it has not received approval from at least one other maintainer, it can be landed after 72 hours
+- If a pull request has both approvals and requested changes, it can't be landed until those requested changes are resolved
 
 ## Branch Management
 
@@ -81,4 +83,3 @@ level releases of that major version. However, development will continue
 apace on `main` for the next major version - e.g. 2.0.0. Version branches
 are only created for each major version. Minor and patch level releases
 are simply tagged.
-
