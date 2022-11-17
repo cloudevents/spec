@@ -1,5 +1,7 @@
 # CloudEvents Community
 
+Language: [English](README.md) | [简体中文](./languages/zh-CN/README.md)
+
 We have an amazing community working together to build a dynamic cloud native
 ecosystem by increasing interoperability between systems which generate and
 respond to events.
