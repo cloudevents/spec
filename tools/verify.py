@@ -132,6 +132,12 @@ def _find_all_uris(html: HtmlText) -> Iterable[Uri]:
 
 
 async def _uri_availability_issues(uri: HttpUri, settings: Settings) -> Sequence[Issue]:
+    if "ietf.org" in uri:
+      return []
+
+    if "rfc-edit.org" in uri:
+      return []
+
     try:
         for attempt in Retrying(stop=stop_after_attempt(settings.http_max_get_attemps)):
             with attempt:
