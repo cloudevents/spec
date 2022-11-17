@@ -1,6 +1,6 @@
 # 拉取请求指导
 
-语言: [English](/docs/SDK-maintainer-guidelines.md) | [简体中文](SDK-PR-guidelines.md)
+语言: [English](../../docs/SDK-maintainer-guidelines.md) | [简体中文](SDK-PR-guidelines.md)
 
 <!-- no verify-specs -->
 

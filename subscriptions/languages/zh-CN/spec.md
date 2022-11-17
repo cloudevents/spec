@@ -1,6 +1,6 @@
 # CloudEvents 订阅 API - 0.1 wip 版本
 
-语言: [English](/subscriptions/spec.md) | [简体中文](spec.md)
+语言: [English](../../spec.md) | [简体中文](spec.md)
 
 ## 文摘
 
@@ -851,7 +851,7 @@ this 的使用必须包含一个嵌套过滤器表达式，其中 this 的结果
 
 ###### `sql` filter dialect
 
-使用此必须有一个字符串值，表示 [CloudEvents SQL 表达式](/cesql/spec.md)。
+使用此必须有一个字符串值，表示 [CloudEvents SQL 表达式](../../../cesql/spec.md)。
 如果表达式的结果值（强制为布尔值）等于“TRUE”布尔值，则过滤器结果必须为真，
 否则，如果在评估表达式时发生错误或结果值，则必须为 false，
 强制为布尔值，等于“FALSE”布尔值。
