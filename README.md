@@ -112,6 +112,11 @@ native ecosystem by making our systems interoperable with CloudEvents.
 If there is a security concern with one of the specifications in this
 repository please [open an issue](https://github.com/cloudevents/spec/issues).
 
+A security assessment was performed by
+
+[Trail of Bits](https://www.trailofbits.com/) in October 2022. The report
+can be found [here](docs/CE-SecurityAudit-2022-10.pdf).
+
 ### Communications
 
 The main mailing list for e-mail communications:
