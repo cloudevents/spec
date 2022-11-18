@@ -122,6 +122,9 @@ CloudEvents 已经收到了大量的行业兴趣，从主要的
 如果其中一个规范存在安全问题
 请存储库[打开一个问题](https://github.com/cloudevents/spec/issues)。
 
+安全评估由
+[比特的踪迹](https://www.trailofbits.com/)将于2022年10月发布。报告可以在[这里](docs/CE-SecurityAudit-2022-10.pdf)。
+
 ### 通信
 
 用于电子邮件通信的主要邮件列表:
