@@ -111,7 +111,8 @@ repository please [open an issue](https://github.com/cloudevents/spec/issues).
 
 A security assessment was performed by
 [Trail of Bits](https://www.trailofbits.com/) in October 2022. The report
-can be found [here](docs/CE-SecurityAudit-2022-10.pdf).
+can be found [here](docs/CE-SecurityAudit-2022-10.pdf) or on the Trail of Bits
+[website](https://github.com/trailofbits/publications/blob/master/reviews/CloudEvents.pdf).
 
 ### Communications
 
