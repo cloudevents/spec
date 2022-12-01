@@ -825,9 +825,10 @@ transited and allow for better introspection of the data.
 #### Event Tracing
 
 An event sent from a source may result in a sequence of additional events sent
-from various middleware devices such as event brokers and gateways. CloudEvents
-includes metadata in events to associate these events as being part of an event
-sequence for the purpose of event tracing and troubleshooting.
+from various middleware devices such as event brokers and gateways. A
+CloudEvents extension could be defined to include the metadata required to
+associate each individual CloudEvent with an event sequence, for the purpose of
+event tracing and troubleshooting.
 
 #### IoT
 
