@@ -17,6 +17,11 @@ emitted event represents a given number of other similar events. It also
 provides a place for intermediary transport systems to modify the event when
 they impose additional sampling.
 
+This specification does not mandate which component (e.g. event source, event
+producer) is responsible for doing the sampling. Rather just if sampling is
+done then the attributes defined below are where the metadata would appear
+within the CloudEvent.
+
 ## Attributes
 
 ### sampledrate
