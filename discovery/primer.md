@@ -32,7 +32,7 @@ need to understand the business logic of the event itself. Often, this
 is needed to help properly route the message to the next hop in the event's
 journey to its final recipient.
 
-With that specification reaching verson 1.0 status, the project members then
+With that specification reaching version 1.0 status, the project members then
 considered what additional pain-points might need to be addressed in this
 space. And, it seemed only natural that once there was some standardization
 around the format of the events, that the group's attention should be to help
@@ -77,7 +77,7 @@ insight into the team's focus during the development cycle.
   allow for the consumer to subscribe only to those producers since those are
   the only events that the consumer is interested in, or can support.
 
-- Consumer wants to know which event delivery mechansims a producer can support.
+- Consumer wants to know which event delivery mechanisms a producer can support.
   This will allow them to pick a transport that best suits their needs. For
   example, a push vs pull delivery model.
 
@@ -119,7 +119,7 @@ insight into the team's focus during the development cycle.
 Per the Discovery API specification, the Service's `id` is a globally
 unique identifier for the Service. By ensuring that this value is immutable,
 clients will be able to know when a Service is returned from the
-Discovery Enpoints whether it is the same underlying Service as was returned
+Discovery Endpoints whether it is the same underlying Service as was returned
 in a previous query despite any changes to its metadata - even if all of the
 metadata has changed (except, of course, for the `id`). This includes the
 cases where the same Service is returned from multiple Discovery Endpoints.

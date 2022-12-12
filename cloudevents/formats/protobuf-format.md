@@ -163,7 +163,7 @@ A compliant protobuf batch representation is identifed using the following media
 
 ## 6. Examples
 
-The following code-snippets show how proto representations might be constucted
+The following code-snippets show how proto representations might be constructed
 assuming the availability of some convenience methods.
 
 ### 6.1 Plain Text event data

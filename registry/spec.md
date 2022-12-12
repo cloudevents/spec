@@ -665,7 +665,7 @@ Registry-epoch: STRING
 Registry-self: STRING            # URL to the specific version
 Registry-RESOURCEURI: URI ?      # If present body MUST be empty
 Content-Location: URL            # Same as Registry-self value
-Location: URL                    # If 307. Same a Regsitry-RESOURCEURI
+Location: URL                    # If 307. Same a Registry-RESOURCEURI
 
 { ...Resource entity... } ?
 ```
@@ -715,8 +715,8 @@ TODO
 #### Updating a Resource
 
 This will update the latest version of a Resource. Missing Registry HTTP
-headers MUST NOT be interpretted as deleting the property. However, a Regsitry
-HTTP headers with an empty string for its value MUST be interpretted as a
+headers MUST NOT be interpreted as deleting the property. However, a Registry
+HTTP headers with an empty string for its value MUST be interpreted as a
 request to delete the property.
 
 The request MUST be of the form:
@@ -999,7 +999,7 @@ Registry-epoch: STRING
 Registry-self: STRING            # URL to the specific version
 Registry-RESOURCEURI: URI ?      # If present body MUST be empty
 Content-Location: URL            # Same as Registry-self value
-Location: URL                    # If 307. Same a Regsitry-RESOURCEURI
+Location: URL                    # If 307. Same a Registry-RESOURCEURI
 
 { ...Resource entity... } ?
 ```
@@ -1047,8 +1047,8 @@ TODO
 #### Updating a version of a Resource
 
 This will update a particular version of a Resource. Missing Registry HTTP
-headers MUST NOT be interpretted as deleting the property. However, a Regsitry
-HTTP headers with an empty string for its value MUST be interpretted as a
+headers MUST NOT be interpreted as deleting the property. However, a Registry
+HTTP headers with an empty string for its value MUST be interpreted as a
 request to delete the property.
 
 The request MUST be of the form:

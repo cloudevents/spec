@@ -6,7 +6,7 @@ The community is organized as follows:
 
 - Every SDK has its own
   [Github Team](https://github.com/orgs/cloudevents/teams), for example
-  `sdk-go-maintainers` is the group of mantainers for
+  `sdk-go-maintainers` is the group of maintainers for
   [cloudevents/sdk-go project](https://github.com/cloudevents/sdk-go)
 - The union of all the `sdk-*-maintainers` assembles the _sdk maintainers_ group
 
@@ -94,8 +94,8 @@ We define an SDK project _healthy_ if:
 
 We define a project `cloudevents/sdk-x` _not actively maintained_ if:
 
-6. Issues and/or PRs are not being triaged from `sdk-x-mantainers` for 2 months
-7. Security patches are not being **released** from `sdk-x-mantainers` for 1
+6. Issues and/or PRs are not being triaged from `sdk-x-maintainers` for 2 months
+7. Security patches are not being **released** from `sdk-x-maintainers` for 1
    months from CVE disclosures
 
 It may happen that there has been no necessary activity within the SDK for at
