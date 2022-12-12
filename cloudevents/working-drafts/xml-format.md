@@ -339,7 +339,7 @@ non-normative example.
                 <PmtMtd>TRF</PmtMtd>
                 <BtchBookg>false</BtchBookg>
 
-            <!-- Content ommited for brevity -->
+            <!-- Content omitted for brevity -->
 
             </PmtInf>
         </Document>

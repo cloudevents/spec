@@ -498,7 +498,7 @@ There might exist special cases in which it is necessary to create a CloudEvent
 that contains another CloudEvent. Although the specification does not define
 nesting explicitly, it is possible. When doing so, the inner event will always
 use [structured mode](spec.md#event-format), this is because if the inner event
-was in binary mode then its metadata could be misinterpretted as metadata for
+was in binary mode then its metadata could be misinterpreted as metadata for
 the outer event. The outer event can use either binary or structured mode,
 however, its `datacontenttype` attribute must not be set to
 `application/cloudevents+json` or any other media type that is used to denote
@@ -526,7 +526,7 @@ ce-source: example.com
 
 Note that by doing so the receiver can no longer know the inner event is
 a CloudEvent by examination of the `Content-Type` HTTP header. If this is a
-concern then using structured mode for the outer event might be preferrable.
+concern then using structured mode for the outer event might be preferable.
 
 ## Qualifying Protocols and Encodings
 

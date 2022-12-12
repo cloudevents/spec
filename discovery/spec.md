@@ -202,7 +202,7 @@ properties defined:
 An Endpoint is a network accessible location that is capable of receiving or
 sending messages.
 
-The following pseudo JSON shows the defintion of an Endpoint:
+The following pseudo JSON shows the definition of an Endpoint:
 ```
 {
     "id": "URI-reference",
@@ -245,7 +245,7 @@ See [Common Resource Properties](#common-resource-properties).
   - effective<br>
     An OPTIONAL property indicating the time when the Endpoint entered, or will
     enter, a deprecated state. The date MAY be in the past or future. If this
-    propety is not present the Endpoint is already in a deprecated state.
+    property is not present the Endpoint is already in a deprecated state.
     If present, this MUST be an [RFC3339][rfc3339] timestamp.
 
   - removal<br>
@@ -408,7 +408,7 @@ See [Common Resource Properties](#common-resource-properties).
 
 ### Definition Resource
 
-A Definition is describes the format a message that can be transfered to or
+A Definition is describes the format a message that can be transferred to or
 from an Endpoint. Each message is assumed to be made up of two parts:
 - Metadata - OPTIONAL information used to annotate or provide additional
   information about the purpose or content of the message
@@ -423,7 +423,7 @@ A Definition allows for the inclusion of metadata to aid with the discovery of:
 - the type, value, description and requirements of those properties
 - where those properties will appear in the message
 
-The following pseudo JSON shows the defintion of a Definition:
+The following pseudo JSON shows the definition of a Definition:
 ```
 {
     "id": "URI-reference",
@@ -642,7 +642,7 @@ MUST be used. The format for the `filter` query parameter MUST be:
 Nested attribute names MUST be specified by using a dot (`.`) as the nesting
 operator. For example: `config.protocol` references the `protocol` attribute
 under the top-level `config` attribute. If a property is a collection then
-specifiying that property implies that all items in the collection will be
+specifying that property implies that all items in the collection will be
 searched and only the ones that match the remaining part of the filter
 criteria will be returned.
 
@@ -668,7 +668,7 @@ The following rules constrain the filter processing:
   part of its value.
 - Matching of attribute names MUST be case sensitive.
 - Matching of attribute values MUST be case insensitive.
-- If there are mulitple filter expressions, they MUST be specified as separate
+- If there are multiple filter expressions, they MUST be specified as separate
   `filter` query parameters. When there are multiple filters, the resulting
   set of resources MUST only include ones that match all of the filters
   specified. When multiple nested attribute names are used, each nested
