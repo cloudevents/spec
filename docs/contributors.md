@@ -45,6 +45,8 @@ Contributions do not constitute an official endorsement.
   - David Lyle - [@dklyle](https://github.com/dklyle)
 - **Lightbend**
   - James Roper - [@jroper](https://github.com/jroper)
+- **Linkall**
+  - Jie Ding - [@jieding](https://github.com/jieding)
 - **Microsoft**
   - Clemens Vasters - [@clemensv](https://github.com/clemensv)
   - Bahram Banisadr - [@banisadr](https://github.com/banisadr)
