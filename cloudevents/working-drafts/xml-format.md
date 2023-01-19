@@ -135,19 +135,35 @@ Example:
 
 ### 3.2 Text Data
 
-Text MUST be carried in an element with a defined type of `xs:string`.
-The element MUST NOT contain any child elements.
+Text MUST be carried in an element with a defined type of `xs:string`. The content
+of this element is either:
 
-Example:
+* Regular XML textual content, or
+* A CDATA section.
+
+Implementations MUST accept both textual representations.
+
+
+Examples:
 
 ``` xml
 <data xsi:type="xs:string">This is text</data>
 ```
 
+The following are equivalent representions of the string `if (X < Y) { .. }` :
+
+```xml
+<data xsi:type="xs:string">if X &lt; Y { .. }</data>
+```
+
+```xml
+<data xsi:type="xs:string"><![CDATA[if X < Y { .. }]]></data>
+```
+
 ### 3.3 XML Data
 
 XML data MUST be carried in an element with a defined type of `xs:any` with
-exactly one child XML element (with any mandatory namespace definitions).
+exactly one child XML element (including any mandatory namespace definitions).
 
 All XML nodes (including comments) within the child XML element MUST
 be preserved during processing.
