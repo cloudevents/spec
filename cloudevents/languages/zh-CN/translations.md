@@ -29,4 +29,4 @@
 | /cloudevents/README.md |   PR reviewing   |   2022-03-26T13:54:11.254Z    |     -     |
 | /cloudevents/RELEASE_NOTES.md |   Ready to start   |       |     -     |
 | /cloudevents/SDK.md |   Ready to start   |       |          |
-| /cloudevents/spec.md |   Ready to start   |       |         |
+| /cloudevents/spec.md |   PR reviewing   |    2022-12-30T08:53:56.534Z   |         |
