@@ -4,6 +4,10 @@
 
 ![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
 
+[![CLOMonitor](https://img.shields.io/endpoint?url=https://clomonitor.io/api/projects/cncf/cloudevents/badge)](https://clomonitor.io/projects/cncf/cloudevents)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/6770/badge)](https://bestpractices.coreinfrastructure.org/projects/6770)
+
+
 事件(Events)在现代系统中无处不在。但不同的事件生产者往往用不同的规范来描述自己的事件。
 
 对事件的统一描述的匮乏意味着开发者必须不断重新学习如何消费不同定义的事件。
