@@ -1,0 +1,29 @@
+name: Stale
+
+on:
+  schedule:
+    - cron: "0 1 * * *" # daily
+
+jobs:
+  stale:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: "actions/stale@v7"
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+
+          stale-issue-message: |-
+            This issue is stale because it has been open for 30 days with no
+            activity. Mark as fresh by updating e.g., adding the comment `/remove-lifecycle stale`.
+          stale-issue-label: "lifecycle/stale"
+          exempt-issue-labels: "lifecycle/frozen"
+
+          stale-pr-message: |-
+            This Pull Request is stale because it has been open for 30 days with
+            no activity. Mark as fresh by updating e.g., adding the comment `/remove-lifecycle stale`.
+          stale-pr-label: "lifecycle/stale"
+          exempt-pr-labels: "lifecycle/frozen"
+
+          days-before-stale: 30
+          days-before-close: -1 # never
