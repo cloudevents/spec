@@ -367,10 +367,13 @@ majority of the cases.
 
 When the group determines that an attribute is not common enough to fall into
 those two categories but would still benefit from the level of interoperability
-that comes from being well-defined, then they will be placed into the
-"extensions" category and put into
-[documented extensions](documented-extensions.md). The specification defines how
-these extension attributes will appear within a CloudEvent.
+that comes from being well-defined, this repo's
+[documented extensions](documented-extensions.md) provides a shared collaboration
+space. Each extension specification defines how it will appear within a CloudEvent.
+Extensions which are documented in this way have no special status,
+and may take breaking changes (including being removed entirely). They are not
+part of the main versioned CloudEvents specification, and are only present as a
+form of collaboration.
 
 In determining which category a proposed attribute belongs, or even if it will
 be included at all, the group uses use-cases and user-stories to explain the
