@@ -70,7 +70,7 @@ where all nodes MUST be preserved.
 XML elements in namespaces other than `http://cloudevents.io/xmlformat/V1`, and
 XML attributes other than those described in this specification MAY appear within an XML
 representation of a CloudEvent or CloudEvent batch. These SHOULD be ignored during
-processing, except for the child element of a `<data>` element containing
+CloudEvent processing, except for the child element of a `<data>` element containing
 [XML element data](#33-xml-element-data), where all nodes MUST be preserved.
 
 ## 2. Attributes
