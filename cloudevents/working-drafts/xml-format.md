@@ -64,8 +64,14 @@ an XML document preamble SHOULD be included to ensure deterministic processing.
 
 XML comments are permitted anywhere within an XML representation of a
 CloudEvent or CloudEvent batch. Comments MUST be ignored during processing, except
-for the child element of a `<data>` element containing [XML data](#33-xml-data),
+for the child element of a `<data>` element containing [XML element data](#33-xml-element-data),
 where all nodes MUST be preserved.
+
+XML elements in namespaces other than `http://cloudevents.io/xmlformat/V1`, and
+XML attributes other than those described in this specification MAY appear within an XML
+representation of a CloudEvent or CloudEvent batch. These SHOULD be ignored during
+CloudEvent processing, except for the child element of a `<data>` element containing
+[XML element data](#33-xml-element-data), where all nodes MUST be preserved.
 
 ## 2. Attributes
 
@@ -144,9 +150,9 @@ Example:
 <data xsi:type="xs:string">This is text</data>
 ```
 
-### 3.3 XML Data
+### 3.3 XML Element Data
 
-XML data MUST be carried in an element with a defined type of `xs:any` with
+XML element data MUST be carried in an element with a defined type of `xs:any` with
 exactly one child XML element (with any mandatory namespace definitions).
 
 All XML nodes (including comments) within the child XML element MUST
