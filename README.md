@@ -145,8 +145,8 @@ Please see the
 [meeting minutes doc](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for the latest information on how to join the calls.
 
-Recording from our calls are available
-[here](https://www.youtube.com/channel/UC70hQml92GsoNgnB-CKNEXg/videos), and
+Recording from our calls are available 
+[here](https://www.youtube.com/playlist?list=PLO-qzjSpLN1BEyKjOVX_nMg7ziHXUYwec), and
 older ones are
 [here](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt).
 
