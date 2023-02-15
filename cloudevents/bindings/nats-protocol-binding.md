@@ -114,6 +114,8 @@ If the content mode is _structured_ then the NATS message payload MUST be
 the [JSON event format][json-format] serialized as specified by the
 [UTF-8][rfc3629] encoded JSON text for use in NATS.
 
+The NATS protocol binding does not currently support the _batch_ content mode.
+
 ### 3.1 Binary Content Mode
 
 The _binary_ content mode accommodates any shape of event data, and allows for

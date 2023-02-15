@@ -401,14 +401,12 @@ Content-Length: nnnn
 
 In the _batched_ content mode several events are batched into a single HTTP
 request or response body. The chosen [event format](#14-event-formats) MUST
-define how a batch is represented. Based on the [JSON format][json-format] (that
-MUST be supported by any compliant implementation), the [JSON Batch
-format][json-batch-format] is an event format that supports batching.
+define how a batch is represented, including a suitable media type.
 
 #### 3.3.1. HTTP Content-Type
 
 The [HTTP `Content-Type`][content-type] header MUST be set to the media type of
-an [event format](#14-event-formats).
+the batch mode for the [event format](#14-event-formats).
 
 Example for the [JSON Batch format][json-batch-format]:
 

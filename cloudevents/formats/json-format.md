@@ -423,11 +423,6 @@ In the _JSON Batch Format_ several CloudEvents are batched into a single JSON
 document. The document is a JSON array filled with CloudEvents in the [JSON
 Event format][json-format].
 
-Although the _JSON Batch Format_ builds ontop of the _JSON Format_, it is
-considered as a separate format: a valid implementation of the _JSON Format_
-doesn't need to support it. The _JSON Batch Format_ MUST NOT be used when only
-support for the _JSON Format_ is indicated.
-
 ### 4.1. Mapping CloudEvents
 
 This section defines how a batch of CloudEvents is mapped to JSON.

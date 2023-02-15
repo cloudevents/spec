@@ -49,8 +49,9 @@ MQTT PUBLISH messages ([3.1.1][3-publish], [5.0][5-publish]).
 
 ### 1.3. Content Modes
 
-The specification defines two content modes for transferring events:
-_structured_ and _binary_.
+The specification defines three content modes for transferring events:
+_structured_, _binary_ and _batch_. The MQTT protocol binding does not
+currently support the _batch_ content mode.
 
 The _binary_ mode _only_ applies to MQTT 5.0, because of MQTT 3.1.1's lack of
 support for custom metadata.
