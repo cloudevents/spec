@@ -384,6 +384,9 @@ on the definition of OPTIONAL.
   different format or protocol binding, the target `datacontenttype` SHOULD be
   set explicitly to the implied `datacontenttype` of the source.
 
+  The `datacontenttype` attribute MAY appear even if there is no `data` value
+  present.
+
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in
