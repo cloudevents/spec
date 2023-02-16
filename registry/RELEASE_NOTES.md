@@ -1,4 +1,4 @@
-# Schema Registry Release Notes
+# Regsitry Release Notes
 
 <!-- no verify-specs -->
 
