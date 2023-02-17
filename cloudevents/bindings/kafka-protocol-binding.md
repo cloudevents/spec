@@ -70,6 +70,11 @@ the records.
 
 ### 1.3. Content Modes
 
+The CloudEvents specification defines three content modes for transferring
+events: _structured_, _binary_ and _batch_. The Kafka protocol binding does not
+currently support the batch content mode. Every compliant implementation SHOULD
+support both structured and binary modes.
+
 The specification defines three content modes for transferring events:
 _structured_, _binary_ and _batch_. The Kafka protocol binding does not
 currently support the _batch_ content mode.

@@ -61,9 +61,10 @@ which is compatible with HTTP 1.1 semantics.
 
 ### 1.3. Content Modes
 
-This specification defines three content modes for transferring events:
-_binary_, _structured_ and _batched_. Every compliant implementation SHOULD
-support the _structured_ and _binary_ modes.
+The CloudEvents specification defines three content modes for transferring
+events: _structured_, _binary_ and _batch_. The HTTP protocol binding supports
+all three content modes. Every compliant implementation SHOULD
+support both structured and binary modes.
 
 In the _binary_ content mode, the value of the event `data` is placed into the
 HTTP request, or response, body as-is, with the `datacontenttype` attribute

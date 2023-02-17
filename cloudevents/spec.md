@@ -147,9 +147,7 @@ as one that is unaware of CloudEvents.
 
 A "batch-mode message" is one where multiple (zero or more) events are
 encoded in a single message body, according to a specific event format. Not
-all event formats or protocol bindings support batch-mode messages. Batch mode
-is less widely-supported than structured mode and binary mode, and MUST only
-be used when indicated.
+all event formats or protocol bindings support batch-mode messages.
 
 #### Protocol
 

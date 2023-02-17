@@ -118,7 +118,9 @@ and encoding:
   supports.
 - Each SDK SHOULD support batch-mode messages for each transport that it
   supports (where the event format and transport combination supports batch mode).
-- Each SDK MUST indicate which modes it supports for each supported event format.
+- Each SDK SHOULD indicate which modes it supports for each supported event
+  format, both in the [table below](#feature-support) and in any SDK-specific
+  documentation provided.
 
 #### Data
 
