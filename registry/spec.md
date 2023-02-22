@@ -20,12 +20,12 @@ automation and tooling.
   - [Managing Resources](#managing-resources)
   - [Managing versions of a Resource](#managing-versions-of-a-resource)
 - [Endpoint Registry](#endpoint-registry)
-  - [Endpoints](#group-endpoints)
-  - [Groups](#group-groups)
-  - [Definition](#resource-definitions)
+  - [Endpoints](#endpoints)
+  - [DefinitionGroups](#definitiongroups)
+  - [Definition](#definitions)
 - [Schema Registry](#schema-registry)
-  - [Schemagroups](#group-schemagroups)
-  - [Schemas](#resource-schemas)
+  - [SchemaGroups](#schemagroups)
+  - [Schemas](#schemas)
 
 ## Overview
 
@@ -1506,8 +1506,8 @@ The Registry model defined by an Endpoint Registry is:
       ]
     },
     {
-      "singular": "group",
-      "plural": "groups",
+      "singular": "definitiongroup",
+      "plural": "definitiongroups",
       "schema": "TBD",
       "resources": [
         {
@@ -1523,7 +1523,7 @@ The Registry model defined by an Endpoint Registry is:
 ```
 
 
-### Group: endpoints
+### Endpoints
 
 A Group (GROUP) name of `endpoints` is defined with the following
 extension attributes:
@@ -1543,24 +1543,24 @@ extension attributes:
   "strict": true|false ?
 }, ?
 
-"groups": [ GROUP-URI-Reference, ... ], ?
+"definitionGroups": [ GROUP-URI-Reference, ... ], ?
 ```
 
 
-### Group: groups
+### DefinitionGroups
 
-A Group (GROUP) name of `groups` is defined with the following
+A Group (GROUP) name of `definitiongroups` is defined with the following
 extension attributes:
 
 ```
   "self": "URI",
   "origin": "URI", ?
-  "groups": [ GROUP-URI-Reference, ... ], ?
+  "definitionGroups": [ GROUP-URI-Reference, ... ], ?
 }
 ```
 
 
-### Resource: definitions
+### Definitions
 
 A Resource (RESOURCE) name of `definitions` and a Resource Entity are
 defined.
@@ -1626,7 +1626,7 @@ The Registry model defined by a Schema Registry is:
 ```
 
 
-### Group: schemagroups
+### SchemaGroups
 
 A Group (GROUP) name of `schemagroups` is defined with the following extension
 attributes:
@@ -1636,7 +1636,7 @@ None
 ```
 
 
-### Resource: schemas
+### Schemas
 
 A Resource (RESOURCE) name of `schemas` is defined with the following `meta`
 extension attributes:
