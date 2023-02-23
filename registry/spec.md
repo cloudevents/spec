@@ -124,7 +124,7 @@ specification, MUST be adhere to.
   - MUST be a non-empty string
   - MUST be unique within the scope of the Registry for Groups, or the owning
     Group for Resources
-	QUESTION: SHOULD Resource IDs be unique across the entire Registry too?
+    QUESTION: SHOULD Resource IDs be unique across the entire Registry too?
 - Examples:
   - A UUID
 
@@ -157,8 +157,8 @@ specification, MUST be adhere to.
   - if present, MUST be a map of zero or more name/value string pairs
   - each name MUST be a non-empty string consisting of only alphanumeric
     characters, `-`, `_` or a `.`; be no longer than 63 characters;
-	start with an alphanumeric character and be unique within the scope of
-	this map. Values MAY be empty strings
+    start with an alphanumeric character and be unique within the scope of
+    this map. Values MAY be empty strings
 - Examples:
   - `{ "owner": "John", "verified": "" }`
 
@@ -262,20 +262,20 @@ This specification defines the following API patterns:
 ```
 /?model                             # Manage the registry model
 /                                   # Show all Groups
-/GROUP                              # Manage a Group Type
-/GROUP/gID                          # Manage a Group
-/GROUP/gID/RESOURCE                 # Manage a Resource Type
-/GROUP/gID/RESOURCE/rID             # Manage the latest Resource version
-/GROUP/gID/RESOURCE/rID?meta        # Metadata about the latest Resource version
-/GROUP/gID/RESOURCE/rID/versions    # Show version strings for a Resource
-/GROUP/gID/RESOURCE/rID/versions/VERSION         # Manage a Resource version
-/GROUP/gID/RESOURCE/rID/versions/VERSION?meta    # Metadata about a Resource version
+/GROUPs                             # Manage a Group Type
+/GROUPs/gID                         # Manage a Group
+/GROUPs/gID/RESOURCEs               # Manage a Resource Type
+/GROUPs/gID/RESOURCEs/rID           # Manage the latest Resource version
+/GROUPs/gID/RESOURCEs/rID?meta      # Metadata about the latest Resource version
+/GROUPs/gID/RESOURCEs/rID/versions  # Show version strings for a Resource
+/GROUPs/gID/RESOURCEs/rID/versions/VERSION         # Manage a Resource version
+/GROUPs/gID/RESOURCEs/rID/versions/VERSION?meta    # Metadata about a Resource version
 ```
 
 Where:
-- `GROUP` is a grouping name (plural). E.g. `endpoints`
+- `GROUPs` is a grouping name (plural). E.g. `endpoints`
 - `gID` is the unique identifier of a single Group
-- `RESOURCE` is the type of resources (plural). E.g. `definitions`
+- `RESOURCEs` is the type of resources (plural). E.g. `definitions`
 - `rID` is the unique identifier of a single Resource
 - `VERSION` is a version string referencing a versioned instead of a resource
 
@@ -307,7 +307,7 @@ Content-Length: nnnn
       "schema": "URI-Reference", ?     # Schema doc for the group
 
       "resources": [
-        { "singluar": "STRING",        # eg. "definition"
+        { "singular": "STRING",        # eg. "definition"
           "plural": "STRING",          # eg. "definitions"
           "versions": INT ?            # Num old versions. Def=0, -1=unlimited
         } +
@@ -347,7 +347,7 @@ The following describes the attributes of Registry model:
   - The default value is zero (`0`), meaning no old versions will be stored
   - A value of negative one (`-1`) indicates there is no stated limit, and
     implementation MAY prune old versions at any time. Implementation MUST
-	NOT delete a version without also deleting all older versions.
+    NOT delete a version without also deleting all older versions.
 
 **Example:**
 
@@ -412,8 +412,8 @@ Content-Length: nnnn
   "endpointsURL": "https://example.com/endpoints",
   "endpointsCount": 42,
 
-  "groupsURL": "https://example.com/groups",
-  "groupsCount": 3
+  "definitionGroupsURL": "https://example.com/groups",
+  "definitionGroupsCount": 3
 }
 ```
 
@@ -448,7 +448,7 @@ Content-Length: nnnn
         "schema": "URI-Reference", ?     # Schema doc for the group
 
         "resources": [
-          { "singluar": "STRING",        # eg. "definition"
+          { "singular": "STRING",        # eg. "definition"
             "plural": "STRING",          # eg. "definitions"
             "versions": INT ?            # Num old versions. Def=0, -1=unlimited
           } +
@@ -472,7 +472,7 @@ Content-Length: nnnn
       "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
       "RESOURCEsCount": INT   # Total number resources
       "RESOURCEs": {          # eg. "definitions"
-        "ID": {
+        "ID": {               # MUST match the "id" on the next line
           "id": "STRING",
           ... remaining RESOURCE ?meta and RESOURCE itself ...
         } *
@@ -536,7 +536,7 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
     "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
     "RESOURCEsCount": INT,  # Total number resources
     "RESOURCEs": {          # Only when ?inline is present
-      "ID": {
+      "ID": {               # MUST match the "id" on the next line
         "id": "STRING",
         ... remaining RESOURCE ?meta and RESOURCE itself ...
       } *
@@ -546,7 +546,7 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
 ```
 
 Note: If the `inline` query parameter is present and the presence of the
-`RESOURCES` map results in even a single Group being too large to return in
+`RESOURCEs` map results in even a single Group being too large to return in
 one response then an error MUST be generated. In those cases the client will
 need to query the individual Resources via the `RESOURCEsURL` so the Registry
 can leverage pagination of the response data.
@@ -612,7 +612,7 @@ Location: URL             # .../GROUPs/ID
   "name": "STRING",
   "epoch": UINT,
 
-  # Repeat for each RESOURCE in the Group
+  # Repeat for each RESOURCE type in the Group
   "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
   "RESOURCEsCount": INT   # Total number resources
 }
@@ -659,7 +659,7 @@ Content-Length: nnnn
   "name": "STRING",
   "epoch": UINT,           # Server controlled
 
-  # Repeat for each RESOURCE in the Group
+  # Repeat for each RESOURCE type in the Group
   "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
   "RESOURCEsCount": INT,  # Total number resources
   "RESOURCEs": {          # Only when ?inline is present
@@ -722,7 +722,7 @@ Content-Length: nnnn
   "name": "STRING",
   "epoch": UINT,          # MUST be greater than previous value
 
-  # Repeat for each RESOURCE in the Group
+  # Repeat for each RESOURCE type in the Group
   "RESOURCEsURL": "URL",
   "RESOURCEsCount": INT
 }
@@ -840,9 +840,9 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
     "epoch": UINT,
     "self": "URL",                   # URL to specific version
 
-    "RESOURCEURI": "URI", ?          # If not locally stored
-    "RESOURCE": {} ?,                # If ?inline present & JSON
-    "RESOURCEBase64": "STRING" ?     # If ?inline present & ~JSON
+    "RESOURCEURI": "URI", ?          # If not locally stored (singular)
+    "RESOURCE": {} ?,                # If ?inline present & JSON (singular)
+    "RESOURCEBase64": "STRING" ?     # If ?inline present & ~JSON (singular)
   } *
 }
 ```
@@ -881,7 +881,7 @@ The request MUST be of the form:
 POST /GROUPs/ID/RESOURCEs
 Registry-name: STRING ?          # If absent, default to the ID?
 Registry-type: STRING ?
-Registry-RESOURCEURI: URI ?      # If present body MUST be empty
+Registry-RESOURCEURI: URI ?      # If present body MUST be empty (singular)
 
 { ...Resource entity... } ?
 ```
@@ -897,7 +897,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT
 Registry-self: STRING            # URL to the specific version
-Registry-RESOURCEURI: URI ?      # If present body MUST be empty
+Registry-RESOURCEURI: URI ?      # If present body MUST be empty (singular)
 Location: URL                    # Points to "latest" URL
 Content-Location: URL            # Same as Registry-self value
 
@@ -914,8 +914,8 @@ TODO
 #### Retrieving a Resource
 
 This will retrieve the latest version of a Resource. This can be considered an
-alias for `/GROUPs/ID/RESOURCEID/versions/VERSION` where `VERSION` is the
-latest version value.
+alias for `/GROUPs/ID/RESOURCEs/RESOURCEID/versions/VERSION` where
+`VERSION` is the latest version value.
 
 The request MUST be of the form:
 ```
@@ -934,7 +934,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT
 Registry-self: STRING            # URL to the specific version
-Registry-RESOURCEURI: URI ?      # If present body MUST be empty
+Registry-RESOURCEURI: URI ?      # If present body MUST be empty (singular)
 Content-Location: URL            # Same as Registry-self value
 Location: URL                    # If 307. Same a Registry-RESOURCEURI
 
@@ -951,8 +951,9 @@ TODO
 #### Retrieving a Resource's Metadata
 
 This will retrieve the metadata for the latest version of a Resource. This can
- be considered an alias for `/GROUPs/ID/RESOURCEID/versions/VERSION?meta` where
-`VERSION` is the latest version value.
+be considered an alias for
+`/GROUPs/ID/RESOURCEs/RESOURCEID/versions/VERSION?meta` where `VERSION` is the
+latest version value.
 
 The request MUST be of the form:
 ```
@@ -972,7 +973,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,
   "self": "URL",
-  "RESOURCEURI": "URI" ?
+  "RESOURCEURI": "URI" ?     # singular
 }
 ```
 
@@ -999,7 +1000,7 @@ Registry-type: STRING ?
 Registry-version: STRING ?       # If present it MUST match current value
 Registry-epoch: UINT ?           # If present it MUST match current value & URL
 Registry-self: STRING ?          # If present it MUST be ignored?
-Registry-RESOURCEURI: URI ?      # If present body MUST be empty
+Registry-RESOURCEURI: URI ?      # If present body MUST be empty (singular)
 
 { ...Resource entity... } ?      # If empty then content is erased
 ```
@@ -1015,7 +1016,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT             # MUST be incremented
 Registry-self: STRING
-Registry-RESOURCEURI: URI ?
+Registry-RESOURCEURI: URI ?      # singular
 Content-Location: URL
 
 { ...Resource entity... } ?
@@ -1059,7 +1060,7 @@ PUT /GROUPs/ID/RESOURCEs/ID?meta[&epoch=EPOCH]
   "version": INT, ?            # If present it MUST match current value
   "epoch": UINT, ?             # If present it MUST match current value & URL
   "self": "URL", ?             # If present it MUST be ignored
-  "RESOURCEURI": "URI" ?
+  "RESOURCEURI": "URI" ?       # singular
 }
 ```
 
@@ -1076,7 +1077,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,               # MUST be incremented
   "self": "URL",
-  "RESOURCEURI": "URI" ?
+  "RESOURCEURI": "URI" ?       # singular
 }
 ```
 
@@ -1113,7 +1114,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT
 Registry-self: STRING
-Registry-RESOURCEURI: URI ?
+Registry-RESOURCEURI: URI ?        # singular
 Content-Location: URL              # Does this make sense if it's been deleted?
 
 { ...Resource entity... } ?
@@ -1185,9 +1186,9 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
     "version": INT,
     "epoch": UINT,
     "self": "URL",
-    "RESOURCEURI": "URI", ?          # If not locally stored
-    "RESOURCE": {} ?,                # If ?inline present & JSON
-    "RESOURCEBase64": "STRING" ?     # If ?inline present & ~JSON
+    "RESOURCEURI": "URI", ?          # If not locally stored (singular)
+    "RESOURCE": {} ?,                # If ?inline present & JSON (singular)
+    "RESOURCEBase64": "STRING" ?     # If ?inline present & ~JSON (singular)
   } *
 }
 ```
@@ -1214,7 +1215,7 @@ Registry-type: STRING ?
 Registry-version: STRING ?       # MUST NOT be present
 Registry-epoch: UINT ?           # If present it MUST match current value & URL
 Registry-self: STRING ?          # If present it MUST be ignored?
-Registry-RESOURCEURI: URI ?      # If present body MUST be empty
+Registry-RESOURCEURI: URI ?      # If present body MUST be empty (singular)
 
 { ...Resource entity... } ?      # If empty then content is erased
 ```
@@ -1230,7 +1231,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT
 Registry-self: STRING
-Registry-RESOURCEURI: URI ?
+Registry-RESOURCEURI: URI ?       # singular
 Content-Location: URL            # Same as self
 Location: .../GROUPs/ID/RESOURCEs/ID   # or self?
 
@@ -1268,7 +1269,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT
 Registry-self: STRING            # URL to the specific version
-Registry-RESOURCEURI: URI ?      # If present body MUST be empty
+Registry-RESOURCEURI: URI ?      # If present body MUST be empty (singular)
 Content-Location: URL            # Same as Registry-self value
 Location: URL                    # If 307. Same a Registry-RESOURCEURI
 
@@ -1304,7 +1305,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,
   "self": "URL",
-  "RESOURCEURI": "URI" ?
+  "RESOURCEURI": "URI" ?          # singular
 }
 ```
 
@@ -1331,7 +1332,7 @@ Registry-type: STRING ?
 Registry-version: STRING ?       # If present it MUST match current value & URL
 Registry-epoch: UINT ?           # If present it MUST match current value & URL
 Registry-self: STRING ?          # If present it MUST be ignored?
-Registry-RESOURCEURI: URI ?      # If present body MUST be empty
+Registry-RESOURCEURI: URI ?      # If present body MUST be empty (singular)
 
 { ...Resource entity... } ?      # If empty then content is erased
 ```
@@ -1347,7 +1348,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT             # MUST be incremented
 Registry-self: STRING
-Registry-RESOURCEURI: URI ?
+Registry-RESOURCEURI: URI ?      # singular
 Content-Location: URL
 
 { ...Resource entity... } ?
@@ -1384,7 +1385,7 @@ PUT /GROUPs/ID/RESOURCEs/ID/versions/VERSION?meta[&epoch=EPOCH]
   "version": INT, ?            # If present it MUST match current value
   "epoch": UINT, ?             # If present it MUST match current value & URL
   "self": "URL", ?             # If present it MUST be ignored
-  "RESOURCEURI": "URI" ?
+  "RESOURCEURI": "URI" ?       # singular
 }
 ```
 
@@ -1401,7 +1402,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,               # MUST be incremented
   "self": "URL",
-  "RESOURCEURI": "URI" ?
+  "RESOURCEURI": "URI" ?       # singular
 }
 ```
 
@@ -1438,7 +1439,7 @@ Registry-type: STRING ?
 Registry-version: STRING
 Registry-epoch: UINT
 Registry-self: STRING
-Registry-RESOURCEURI: URI ?
+Registry-RESOURCEURI: URI ?        # singular
 Content-Location: URL              # Does this make sense if it's been deleted?
 
 { ...Resource entity... } ?
@@ -1513,8 +1514,8 @@ The Registry model defined by an Endpoint Registry is:
       ]
     },
     {
-      "singular": "definitiongroup",
-      "plural": "definitiongroups",
+      "singular": "defintionGroup",
+      "plural": "definitionGroups",
       "schema": "TBD",
       "resources": [
         {
@@ -1536,11 +1537,9 @@ A Group (GROUP) name of `endpoints` is defined with the following
 extension attributes:
 
 ```
-"self": "URI",
 "origin": "URI", ?
 "deprecated": { ... }, ?
 "channel", "STRING", ?
-"authscope": "URI", ?
 
 "usage": "subscriber|consumer|producer",
 "config": {
@@ -1550,19 +1549,238 @@ extension attributes:
   "strict": true|false ?
 }, ?
 
-"definitionGroups": [ GROUP-URI-Reference, ... ], ?
+"format": "STRING", ?
+"definitionGroups": [ DEFINITIONGROUP-URI-Reference, ... ] ?
 ```
 
+??? maybe `definitionGroups` ought to be a URL in case the list is large?
+
+#### `origin`
+- Type: URI
+- Description: A URI reference to the original source of this Endpoint. This
+  can be used to locate the true authority owner of the Endpoint in cases of
+  distributed Endpoint Registries. If this property is absent its default value
+  is the value of the `self` property and in those cases its presence in the
+  serialization of the Endpoint is OPTIONAL.
+- Constraints:
+  - OPTIONAL if this Endpoint Regsitry is the authority owner
+  - REQUIRED if this Ednpoint Regsitry is not the authority owner
+  - if present, MUST be a non-empty URI
+- Examples:
+  - `https://example2.com/myregistry/endpoints/9876`
+
+#### `deprecated`
+- Type: Object containing the following properties:
+  - effective<br>
+    An OPTIONAL property indicating the time when the Endpoint entered, or will
+    enter, a deprecated state. The date MAY be in the past or future. If this
+    property is not present the Endpoint is already in a deprecated state.
+    If present, this MUST be an [RFC3339][rfc3339] timestamp.
+
+  - removal<br>
+    An OPTIONAL property indicating the time when the Endpoint MAY be removed.
+    The Endpoint MUST NOT be removed before this time. If this property is not
+    present then client can not make any assumption as to when the Endpoint
+    might be removed. Note: as with most properties, this property is mutable.
+    If present, this MUST be an [RFC3339][rfc3339] timestamp and MUST NOT be
+    sooner than the `effective` time if present.
+
+  - alternative<br>
+    An OPTIONAL property specifying the URL to an alternative Endpoint the
+    client can consider as a replacement for this Endpoint. There is no
+    guarantee that the referenced Endpoint is an exact replacement, rather the
+    client is expected to investigate the Endpoint to determine if it is
+    appropriate.
+
+  - docs<br>
+    An OPTIONAL property specifying the URL to additional information about
+    the deprecation of the Endpoint. This specification does not mandate any
+    particular format or information, however some possibilities include:
+    reasons for the deprecation or additional information about likely
+    alternative Endpoints. The URL MUST support an HTTP GET request.
+
+- Description: This specification makes no statement as to whether any
+  existing secondary resources (such as subscriptions) will still be valid and
+  usable after the Endpoint is removed. However, it is expected that new
+  requests to create a secondary resource will likely be rejected.
+
+  Note that an implementation is not mandated to use this attribute in
+  advance of removing an Endpoint, but is it RECOMMENDED that they do so.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `"deprecated": {}`
+  - ```
+    "deprecated": {
+      "removal": "2030-12-19T00:00:00-00:00",
+      "alternative": "https://example.com/endpoints/123"
+    }
+    ```
+
+#### `channel`
+- Type: String
+- Description: A string that can be used to correlate Endpoints. Any Endpoints
+  within an instance of an Endpoint Regsitry that share the same non-empty
+  `channel` value MUST have some relationship. This specification does not
+  define that relationship or the specific values used in this property.
+  However, it is expected that the `usage` value in combination with this
+  `channel` property will provide some information to help determine the
+  relationship.
+
+  When this property has no value it MUST either be serialized as an empty
+  string or excluded from the serialization entirely.
+- Constraints:
+  - OPTIONAL
+  - if present, MUST be a string
+- Examples:
+  - `queue1`
+
+#### `usage`
+- Type: String
+- Description: The interaction model supported by this Endpoint. This
+  specification defines a set of possible values (see the
+  [Usage Values](#usage-values) section for more information, however,
+  implementations MAY define new values as extensions. It is RECOMMENDED
+  that extension values be defined with some organizational unique string
+  to reduce the chances of collisions with possible future spec-defined values.
+- Constraints:
+  - REQUIRED
+  - MUST be a non-empty string
+- Examples:
+  - `consumer`
+
+#### `config`
+- Type: Object
+- Description: Metadata that provides additional information concerning the
+  interactions with this Endpoint. This metadata MUST be related to the
+  `usage` value specified.
+
+  When this property has no value it MUST either be serialized as an empty
+  object or excluded from the serialization entirely.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `{ "protocol": "kafka", "endpoints": "example.com/mykafka" }`
+
+##### `config.protocol`
+- Type: xxx
+- Description: xxx
+- Constraints:
+  - xxx
+- Examples:
+  - xxx
+
+##### `config.endpoints`
+- Type: xxx
+- Description: xxx
+- Constraints:
+  - xxx
+- Examples:
+  - xxx
+
+##### `config.options`
+- Type: xxx
+- Description: xxx
+- Constraints:
+  - xxx
+- Examples:
+  - xxx
+
+##### `config.strict`
+- Type: xxx
+- Description: xxx
+- Constraints:
+  - xxx
+- Examples:
+  - xxx
+
+#### `format`
+- Type: String
+- Description: Specifies the set of rules that govern how the messages for this
+  Endpoint MUST be formatted. This value can be used to definitively identify
+  the type of messages without checking the individual attributes defined by
+  the associated message definitions.
+
+  If present and is not an empty string, then all Definition Groups and
+  Definitions associated with this Endpoint MUST have a `format` value that
+  matches this property's value.
+
+  See the [Message Formats](#message-formats) section for more information.
+
+  When this property has no value it MUST either be serialized as an empty
+  string or excluded from the serialization entirely.
+- Constraints:
+  - OPTIONAL
+- Examples:
+  - `cloudevents/1.0`
+  - `amqp/1.0`
+
+#### `definitionGroups`
+- Type: Array of DEFINITIONGROUP-URI-References
+- Description: A set of Definition Groups supported by this Endpoint. Each
+  Group Reference MAY be to a Group defined outside of the current Endpoint
+  Regsitry instance.
+
+  When this property has no value it MUST either be serialized as an empty
+  array or excluded from the serialization entirely.
+- Constraints:
+  - OPTIONAL
+  - if present, the same Group, as identified by its `id`, MUST NOT appear
+    more than once within this property. It might be difficult to detect
+    cases where a nested Group reference would result in a recursive situation.
+    In those cases it would be an error state and this Endpoint Registry
+    is not compliant. As a means to recover from this state, a client MAY
+    choose to break the recursive nature of the references by removing the
+    first occurrence of a reference that refers to a previous seen parent
+    reference.
+- Examples:
+  - ```
+    [ "https://example.com/myendpoints/definitionGroups/987",
+       "/definitionGroups/MyGroup" ]
+    ```
+
+
+#### Usage Values
+
+The Endpoint `usage` value indicates how clients of the Endpoint are meant
+to interact with it. There are 3 values defined by this specification:
+- `subscriber`: in order for clients to receives messages from this Endpoint
+  a subscribe request MUST be sent to one of the Endpoint's `config.endpoints`
+  URLs. The Endpoints messages MUST be sent using a "push" delivery mechanism
+  to a location specified within the subscribe request.
+- `consumer`: clients can receive messages from this Endpoint by issuing a
+  "pull" type of request to one of the Endpoint's `config.endpoints` URLs.
+- `producer`: clients can send messages to this Endpoint by ussing a "push"
+   type of request to one of the Endpoint's `config.endpoints` URLs.
+
+Implementations MAY defined additional `usage` values, but it is RECOMMENDED
+that they are defined with some organizational unique string to reduce the
+ chances of collisions with possible future spec-defined values.
+
+For each possible `usage` value, the Endpoint's `config.protocol` value
+indicates the mechanism by which the messages will be transferred to/from the
+Endpoint.
+
+
+#### Message Formats
+
+TBD
+
+```
+cloudevents/1.0
+amqp
+kafka
+```
 
 ### DefinitionGroups
 
-A Group (GROUP) name of `definitiongroups` is defined with the following
+A Group (GROUP) name of `definitionGoups` is defined with the following
 extension attributes:
 
 ```
   "self": "URI",
   "origin": "URI", ?
-  "definitionGroups": [ GROUP-URI-Reference, ... ], ?
+  "definitionGroups": [ GROUP-URI-Reference, ... ], ?  # Nested groups
 }
 ```
 
@@ -1590,7 +1808,7 @@ The Resource entity is defined as:
 
   "self": "URI",
   "origin": "URI", ?
-  "ownergroup": "GROUP-URI-Reference",
+  "ownerGroup": "GROUP-URI-Reference",
   "format": "STRING", ?                      # type ?
   "metadata": {
     "attributes": {
@@ -1599,13 +1817,13 @@ The Resource entity is defined as:
         "description": "STRING", ?
         "value": JSON_OBJECT,
         "type": "string|object|...", ?
-        "specurl": "URL" ?
+        "specURL": "URL" ?
       }
     } *
   }, ?
   "schemaformat": "STRING", ?
   "schema": { ... }, ?
-  "schemaurl": "URL" ?
+  "schemaURL": "URL" ?
 }
 ```
 
@@ -1652,3 +1870,5 @@ extension attributes:
 ```
 "authority": "URI" ?
 ```
+
+[rfc3339]: https://tools.ietf.org/html/rfc3339
