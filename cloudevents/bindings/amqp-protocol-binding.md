@@ -55,9 +55,10 @@ format][message-format].
 
 ### 1.3. Content Modes
 
-The specification defines two content modes for transferring events:
-_structured_ and _binary_. Every compliant implementation SHOULD support both
-modes.
+The CloudEvents specification defines three content modes for transferring
+events: _structured_, _binary_ and _batch_. The AMQP protocol binding does not
+currently support the batch content mode. Every compliant implementation SHOULD
+support both structured and binary modes.
 
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the AMQP message's [application data][data] section using an

@@ -53,8 +53,8 @@ format][ce-event-format].
 
 ### 1.3. Content Modes
 
-The [CloudEvents specification][ce-message] defines two content modes for
-transferring events: _structured_ and _binary_.
+The [CloudEvents specification][ce-message] defines three content modes for
+transferring events: _structured_, _binary_ and _batch_.
 
 Because of the nature of WebSockets messages, this specification supports only
 _structured_ data mode, hence event metadata attributes and event data are

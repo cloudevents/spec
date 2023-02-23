@@ -124,12 +124,15 @@ Stand-alone event formats, such as the [JSON format](formats/json-format.md),
 specify serialization independent of any protocol or storage medium. Protocol
 Bindings MAY define formats that are dependent on the protocol.
 
+Each Event Format MUST define a structured-mode representation, and MAY define
+a batch-mode representation.
+
 #### Message
 
 Events are transported from a source to a destination via messages.
 
 A "structured-mode message" is one where the entire event (attributes and data)
-are encoded in the message body.
+are encoded in the message body, according to a specific event format.
 
 A "binary-mode message" is one where the event data is stored in the message
 body, and event attributes are stored as part of message metadata.
@@ -141,6 +144,10 @@ break an existing receiver's processing of the event because the message's
 metadata typically allows for extension attributes. In other words, a binary
 formatted CloudEvent would work for both a CloudEvents enabled receiver as well
 as one that is unaware of CloudEvents.
+
+A "batch-mode message" is one where multiple (zero or more) events are
+encoded in a single message body, according to a specific event format. Not
+all event formats or protocol bindings support batch-mode messages.
 
 #### Protocol
 

@@ -109,9 +109,18 @@ based on the parameters set, most importantly the CloudEvents spec version.
 
 #### Encode/Decode an Event
 
-Each SDK will support encoding and decoding an Event with regards to a transport
-and encoding. `Structured` encoding is the easiest to support, as it is just
-`json`, but `Binary` is fairly custom for each transport.
+Each SDK MUST support encoding and decoding an Event with regards to a transport
+and encoding:
+
+- Each SDK MUST support structured-mode messages for each transport that it
+  supports.
+- Each SDK SHOULD support binary-mode messages for each transport that it
+  supports.
+- Each SDK SHOULD support batch-mode messages for each transport that it
+  supports (where the event format and transport combination supports batch mode).
+- Each SDK SHOULD indicate which modes it supports for each supported event
+  format, both in the [table below](#feature-support) and in any SDK-specific
+  documentation provided.
 
 #### Data
 

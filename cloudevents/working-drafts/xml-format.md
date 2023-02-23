@@ -209,11 +209,6 @@ In the _XML Batch Format_ several CloudEvents are batched into a single XML
 The `<event>` element MUST NOT contain any direct child text nodes with non-whitespace
 content.
 
-Although the _XML Batch Format_ builds on top of the _XML Format_, it is
-considered as a separate format: a valid implementation of the _XML Format_
-doesn't need to support it. The _XML Batch Format_ MUST NOT be used when only
-support for the _XML Format_ is indicated.
-
 An XML Batch of CloudEvents MUST use the media type
 `application/cloudevents-batch+xml`.
 

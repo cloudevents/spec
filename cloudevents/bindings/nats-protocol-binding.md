@@ -50,8 +50,10 @@ the NATS protocol as client messages that are [produced][nats-pub-proto] and
 
 ### 1.3 Content Modes
 
-This specification defines two content modes for transferring events: _binary_
-and _structured_.
+The CloudEvents specification defines three content modes for transferring
+events: _structured_, _binary_ and _batch_. The NATS protocol binding does not
+currently support the batch content mode. Every compliant implementation SHOULD
+support both structured and binary modes.
 
 In the _binary_ content mode, event metadata attributes are placed in message
 headers and the event data are placed in the NATS message payload. Binary mode

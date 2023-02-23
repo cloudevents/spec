@@ -27,6 +27,8 @@ This specification does not define an envelope format. The Avro type system's
 intent is primarily to provide a consistent type system for Avro itself and not
 for message payloads.
 
+The Avro event format does not currently define a batch mode format.
+
 ### 1.1. Conformance
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",

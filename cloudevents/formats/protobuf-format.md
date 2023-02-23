@@ -135,12 +135,9 @@ Transports that support content identification MUST use the following designatio
 
 ## 5. Batch Format
 
-Batch format allows for a set of CloudEvents to be represented, no relationship
-between those events is implied.
-
-Although the _protobuf batch format_ builds on the _protobuf format_ it is considered
-separate, that is to say that support of _protobuf format_ does not indicate support
-of the batch representation. The batch format MUST only be used where supported.
+In the _Protobuf Batch Format_ several CloudEvents are batched into a single Protobuf
+message. The message contains a repeated field filled with independent CloudEvent messages
+in the structured mode Protobuf event format.
 
 ### 5.1 Envelope
 
@@ -242,7 +239,6 @@ private static Spec.CloudEvent protoExample() {
 [proto-wellknown]: https://developers.google.com/protocol-buffers/docs/reference/google.protobuf
 [proto-timestamp]: https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.Timestamp
 [proto-schema]: ./cloudevents.proto
-[json-format]: ./json-format.md
 [ce]: ../spec.md
 [ce-types]: ../spec.md#type-system
 [rfc2119]: https://tools.ietf.org/html/rfc2119
