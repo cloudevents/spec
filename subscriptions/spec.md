@@ -23,7 +23,7 @@ subscription manager for each type of event, or any other combination. An event
 producer can also offer up the same set of events for subscription at multiple
 concurrent subscription managers. Regardless of relationship between the event
 producer(s) and the subscription manager(s), the advertisement of the
-subscription offers are published in a CloudEvents Discovery service.
+subscription offers are published in a CloudEvents Registry service.
 
 As with the core CloudEvents specification, the goal of this specification is to
 reuse mechanisms based on existing standards and conventions where such exist
@@ -340,9 +340,9 @@ Each subscription is represented by an object that has the following properties:
 - Description: A set of key/value pairs that modify the configuration of
   of the subscription related to the event generation process. While this
   specification places no constraints on the data type of the map values.
-  When there is a Discovery Endpoint Service definition defined for the
+  When there is a Registry Endpoint Service definition defined for the
   subscription manager, then the `key` MUST be one of the `subscriptionconfig`
-  keys specified in the Discovery Endpoint Service definition. The `value`
+  keys specified in the Registry Endpoint Service definition. The `value`
   MUST conform to the data type specified by the value in the
   `subscriptionconfig` entry for the `key`
 
@@ -457,7 +457,7 @@ events to have 3 conceptual phases:
 Additionally, it might be possible for one Subscription property to have
 influence over multiple phases of the event processing. Regardless of which
 aspect of the Subscription is controlled by which of the above
-phases/properties, the Service description specified by the Discovery
+phases/properties, the Service description specified by the Registry
 specification SHOULD contain enough information for a consumer to know which
 properties to use when creating a Subscription to get the desired results.
 

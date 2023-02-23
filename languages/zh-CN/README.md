@@ -51,9 +51,7 @@ CloudEvents 是一个以通用格式来描述事件数据的规范。它提供�
 |                 | 最新发行版本 | 工作草案                 |
 | :-------------- | :------------: | :---------------------------: |
 | CE SQL          |       -        | [WIP](../../cesql/languages/zh-CN/spec.md)          |
-| Discovery       |       -        | [WIP](../../discovery/languages/zh-CN/spec.md)      |
 | Pagination      |       -        | [WIP](../../pagination/languages/zh-CN/spec.md)     |
-| Schema Registry |       -        | [WIP](../../schemaregistry/languages/zh-CN/spec.md) |
 | Subscriptions   |       -        | [WIP](../../subscriptions/languages/zh-CN/spec.md)  |
 
 其它发行相关信息可以在

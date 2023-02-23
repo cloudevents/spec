@@ -57,9 +57,8 @@ incubator project on [Oct 24, 2019](https://github.com/cncf/toc/pull/297).
 |                 | Latest Release | Working Draft                 |
 | :-------------- | :------------: | :---------------------------: |
 | CE SQL          |       -        | [WIP](cesql/spec.md)          |
-| Discovery       |       -        | [WIP](discovery/spec.md)      |
+| Registry        |       -        | [WIP](registry/spec.md)       |
 | Pagination      |       -        | [WIP](pagination/spec.md)     |
-| Schema Registry |       -        | [WIP](schemaregistry/spec.md) |
 | Subscriptions   |       -        | [WIP](subscriptions/spec.md)  |
 
 Additional release related information:
