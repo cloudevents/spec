@@ -1596,6 +1596,7 @@ The Resource entity is defined as:
       }
     } *
   }, ?
+  "schemaformat": "STRING", ?
   "schema": { ... }, ?
   "schemaurl": "URL" ?
 }
