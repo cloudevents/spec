@@ -10,7 +10,13 @@ MUST be identical.
 Both `data` and the `dataref` attribute MAY exist at the same time. A middleware
 MAY drop `data` when the `dataref` attribute exists, it MAY add
 the `dataref` attribute and drop the `data` attribute, or it MAY add the `data`
-attribute by using the `dataref` attribute.
+attribute by using the `dataref` attribute. Note that since the CloudEvents
+specification does not define a mechanism by which a sender can know if the
+receiver supports any particular CloudEvent extension, removing the `data`
+attribute in favor of just having the `dataref` attribute could yield
+unexpected results. As such, removing the `data` attribute SHOULD only be done
+when the sender is confident that all receivers support the `dataref`
+attribute - via some out-of-band agreement.
 
 ## Attributes
 
