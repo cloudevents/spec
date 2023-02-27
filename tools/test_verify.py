@@ -111,6 +111,8 @@ def test_bookmark_pattern_matches_given_patterns(given, expected):
         ("this (must) handle braces", "must"),
         ("marshall is ok not to be matched", None),
         ("may be matched", "may"),
+        ("maybe", None),
+        ("`required`", None),
         (" dasa shall not asjdbajsbd", "shall not"),
         ("ds as must not asd ", "must not"),
     ),
