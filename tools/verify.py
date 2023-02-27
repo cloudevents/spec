@@ -46,14 +46,14 @@ _SKIP_TEXT_PATTERN = re.compile(
 _NEWLINE_PATTERN = re.compile(r"\n")
 _MARKDOWN_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
-    r"(MUST(\s+NOT)?|"
+    r"(?<!`)(MUST(\s+NOT)?|"
     # ignore the "required" in the jsonschema of the json-format.md
-    r'(?<!")REQUIRED(?!")|'
+    r'(?<![`"])REQUIRED(?!")|'
     r"(?<!mar)SHALL(\s+NOT)?|"  # ignore the word "marshall"
-    r"SHOULD(\s+NOT)?|"
-    r"RECOMMENDED|"
-    r"MAY|"
-    r"OPTIONAL(?!LY)"  # ignore the word "optionally"
+    r"(?<!`)SHOULD(\s+NOT)?|"
+    r"(?<!`)RECOMMENDED|"
+    r"(?<![`A-Z])MAY(?![A-Z])|"
+    r"(?<![`A-Z])OPTIONAL(?![A-Z])"  # ignore the word "optionally"
     r")",
     flags=re.IGNORECASE,  # we want to catch all the words that were not capitalized
 )
