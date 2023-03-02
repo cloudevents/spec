@@ -423,10 +423,6 @@ all event attributes, and `data`, are represented.
 The batch of events is then rendered in accordance with the event format
 specification and the resulting data becomes the HTTP message body.
 
-The batch MAY be empty. All batched CloudEvents MUST have the same `specversion`
-attribute. Other attributes MAY differ, including the `datacontenttype`
-attribute.
-
 #### 3.3.3. Examples
 
 This example shows two batched CloudEvents, sent with a PUT request:
