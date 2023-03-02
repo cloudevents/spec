@@ -683,7 +683,14 @@ HTTP/1.1 ...
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
 
-{ TODO }
+{
+  "id": "123",
+  "name": "A cool endpoint",
+  "epoch": 1,
+
+  "definitionsURL": "https://example.com/endpoints/123/definitions",
+  "definitionsCount": 5
+}
 ```
 
 #### Updating a Group
