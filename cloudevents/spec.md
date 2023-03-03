@@ -150,13 +150,8 @@ encoded in a single message body, according to a specific event format. Not
 all event formats or protocol bindings support batch-mode messages.
 The CloudEvents within a batch are largely independent from one another: there
 is no restriction that they have the same source, producer, content type etc.
-There are just two restrictions, however:
-
-- All CloudEvents within the same batch MUST have the same `specversion`
-  attribute value.
-- All CloudEvents within the same batch MUST be distinct, i.e. the
-  (`source`, `id`) attribute value pair for each CloudEvent in the batch MUST
-  be unique.
+The only restriction is that all CloudEvents within the same batch MUST have
+the same value for the `specversion` attribute.
 
 #### Protocol
 
