@@ -148,6 +148,10 @@ as one that is unaware of CloudEvents.
 A "batch-mode message" is one where multiple (zero or more) events are
 encoded in a single message body, according to a specific event format. Not
 all event formats or protocol bindings support batch-mode messages.
+The CloudEvents within a batch are largely independent from one another: there
+is no restriction that they have the same source, producer, content type etc.
+The only restriction is that all CloudEvents within the same batch MUST have
+the same value for the `specversion` attribute.
 
 #### Protocol
 
