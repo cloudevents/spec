@@ -107,6 +107,7 @@ paths:
         - name: id
           in: path
           required: true
+          description: A unique identifier of the entity.
           schema:
             type: string
       responses:
@@ -155,34 +156,79 @@ paths:
               properties:
                 name:
                   type: string
+                  description: >-
+                    A human readable name of the entity. Note that
+                    implementations MAY choose to enforce constraints on this
+                    value. For example, they could mandate that id and name be
+                    the same value. How any such requirement is shared with all
+                    parties is out of scope of this specification.
                 description:
                   type: string
+                  description: A human readable summary of the purpose of the entity.
                 tags:
                   type: array
                   items:
                     $ref: '#/components/schemas/RegistryTag'
                   x-typespec-name: RegistryTag[]
+                  description: >-
+                    A mechanism in which additional metadata about the entity
+                    can be stored without changing the schema of the entity.
                 version:
                   type: integer
                   format: int32
+                  description: >-
+                    A numeric value representing a specific instance of an
+                    entity. Note that versions of an entity can be modified
+                    without changing the version value. Often this value, or
+                    when a new version is created, is controlled by a user of
+                    the Registry.
                 epoch:
                   type: integer
                   format: int64
+                  description: >-
+                    A numeric value used to determine whether an entity has been
+                    modified. Each time the associated entity is updated, this
+                    value MUST be set to a new value that is greater than the
+                    current one. Note that unlike version, this attribute is
+                    most often managed by the Registry itself. Additionally, if
+                    an entity is created that is based on another entity (e.g. a
+                    new version of an entity is created), then the new entity's
+                    `epoch` value can be reset (e.g. to zero) since the scope of
+                    its values is the entity.
                 self:
                   type: string
                   format: uri
+                  description: >-
+                    A unique URL for the entity. The URL MUST be a combination
+                    of the base URL for the list of resources of this type of
+                    entity appended with the id of the entity.
                 createdBy:
                   type: string
+                  description: >-
+                    A reference to the user or component that was responsible
+                    for the creation of this entity. This specification makes no
+                    requirement on the semantics or syntax of this value.
                 createdOn:
                   type: string
                   format: date-time
+                  description: The date/time of when the entity was created.
                 modifiedBy:
                   type: string
+                  description: >-
+                    A reference to the user or component that was responsible
+                    for the the latest update of this entity. This specification
+                    makes no requirement on the semantics or syntax of this
+                    value
                 modifiedOn:
                   type: string
                   format: date-time
+                  description: The date/time of when the entity was last updated.
                 docs:
                   type: string
+                  description: >-
+                    A URI-Reference to additional documentation about this
+                    entity. This specification does not place any constraints on
+                    the data returned from an HTTP GET to this value.
               x-typespec-name: Patch<RegistryResource>
     delete:
       tags:
@@ -345,6 +391,7 @@ components:
       name: id
       in: path
       required: true
+      description: A unique identifier of the entity.
       schema:
         type: string
   schemas:
@@ -468,69 +515,152 @@ components:
       properties:
         name:
           type: string
+          description: >-
+            A human readable name of the entity. Note that implementations MAY
+            choose to enforce constraints on this value. For example, they could
+            mandate that id and name be the same value. How any such requirement
+            is shared with all parties is out of scope of this specification.
         description:
           type: string
+          description: A human readable summary of the purpose of the entity.
         tags:
           type: array
           items:
             $ref: '#/components/schemas/RegistryTag'
           x-typespec-name: RegistryTag[]
+          description: >-
+            A mechanism in which additional metadata about the entity can be
+            stored without changing the schema of the entity.
         version:
           type: integer
           format: int32
+          description: >-
+            A numeric value representing a specific instance of an entity. Note
+            that versions of an entity can be modified without changing the
+            version value. Often this value, or when a new version is created,
+            is controlled by a user of the Registry.
         epoch:
           type: integer
           format: int64
+          description: >-
+            A numeric value used to determine whether an entity has been
+            modified. Each time the associated entity is updated, this value
+            MUST be set to a new value that is greater than the current one.
+            Note that unlike version, this attribute is most often managed by
+            the Registry itself. Additionally, if an entity is created that is
+            based on another entity (e.g. a new version of an entity is
+            created), then the new entity's `epoch` value can be reset (e.g. to
+            zero) since the scope of its values is the entity.
         self:
           type: string
           format: uri
+          description: >-
+            A unique URL for the entity. The URL MUST be a combination of the
+            base URL for the list of resources of this type of entity appended
+            with the id of the entity.
         createdBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            creation of this entity. This specification makes no requirement on
+            the semantics or syntax of this value.
         createdOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was created.
         modifiedBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            the latest update of this entity. This specification makes no
+            requirement on the semantics or syntax of this value
         modifiedOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was last updated.
         docs:
           type: string
+          description: >-
+            A URI-Reference to additional documentation about this entity. This
+            specification does not place any constraints on the data returned
+            from an HTTP GET to this value.
     RegistryResourceCreateOrUpdateItem:
       type: object
       properties:
         id:
           type: string
+          description: A unique identifier of the entity.
         name:
           type: string
+          description: >-
+            A human readable name of the entity. Note that implementations MAY
+            choose to enforce constraints on this value. For example, they could
+            mandate that id and name be the same value. How any such requirement
+            is shared with all parties is out of scope of this specification.
         description:
           type: string
+          description: A human readable summary of the purpose of the entity.
         tags:
           type: array
           items:
             $ref: '#/components/schemas/RegistryTag'
           x-typespec-name: RegistryTag[]
+          description: >-
+            A mechanism in which additional metadata about the entity can be
+            stored without changing the schema of the entity.
         version:
           type: integer
           format: int32
+          description: >-
+            A numeric value representing a specific instance of an entity. Note
+            that versions of an entity can be modified without changing the
+            version value. Often this value, or when a new version is created,
+            is controlled by a user of the Registry.
         epoch:
           type: integer
           format: int64
+          description: >-
+            A numeric value used to determine whether an entity has been
+            modified. Each time the associated entity is updated, this value
+            MUST be set to a new value that is greater than the current one.
+            Note that unlike version, this attribute is most often managed by
+            the Registry itself. Additionally, if an entity is created that is
+            based on another entity (e.g. a new version of an entity is
+            created), then the new entity's `epoch` value can be reset (e.g. to
+            zero) since the scope of its values is the entity.
         self:
           type: string
           format: uri
+          description: >-
+            A unique URL for the entity. The URL MUST be a combination of the
+            base URL for the list of resources of this type of entity appended
+            with the id of the entity.
         createdBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            creation of this entity. This specification makes no requirement on
+            the semantics or syntax of this value.
         createdOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was created.
         modifiedBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            the latest update of this entity. This specification makes no
+            requirement on the semantics or syntax of this value
         modifiedOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was last updated.
         docs:
           type: string
+          description: >-
+            A URI-Reference to additional documentation about this entity. This
+            specification does not place any constraints on the data returned
+            from an HTTP GET to this value.
       required:
         - id
     RegistryResourceRead:
@@ -538,36 +668,78 @@ components:
       properties:
         id:
           type: string
+          description: A unique identifier of the entity.
         name:
           type: string
+          description: >-
+            A human readable name of the entity. Note that implementations MAY
+            choose to enforce constraints on this value. For example, they could
+            mandate that id and name be the same value. How any such requirement
+            is shared with all parties is out of scope of this specification.
         description:
           type: string
+          description: A human readable summary of the purpose of the entity.
         tags:
           type: array
           items:
             $ref: '#/components/schemas/RegistryTag'
           x-typespec-name: RegistryTag[]
+          description: >-
+            A mechanism in which additional metadata about the entity can be
+            stored without changing the schema of the entity.
         version:
           type: integer
           format: int32
+          description: >-
+            A numeric value representing a specific instance of an entity. Note
+            that versions of an entity can be modified without changing the
+            version value. Often this value, or when a new version is created,
+            is controlled by a user of the Registry.
         epoch:
           type: integer
           format: int64
+          description: >-
+            A numeric value used to determine whether an entity has been
+            modified. Each time the associated entity is updated, this value
+            MUST be set to a new value that is greater than the current one.
+            Note that unlike version, this attribute is most often managed by
+            the Registry itself. Additionally, if an entity is created that is
+            based on another entity (e.g. a new version of an entity is
+            created), then the new entity's `epoch` value can be reset (e.g. to
+            zero) since the scope of its values is the entity.
         self:
           type: string
           format: uri
+          description: >-
+            A unique URL for the entity. The URL MUST be a combination of the
+            base URL for the list of resources of this type of entity appended
+            with the id of the entity.
         createdBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            creation of this entity. This specification makes no requirement on
+            the semantics or syntax of this value.
         createdOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was created.
         modifiedBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            the latest update of this entity. This specification makes no
+            requirement on the semantics or syntax of this value
         modifiedOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was last updated.
         docs:
           type: string
+          description: >-
+            A URI-Reference to additional documentation about this entity. This
+            specification does not place any constraints on the data returned
+            from an HTTP GET to this value.
       required:
         - id
     RegistryResourceReadItem:
@@ -575,36 +747,78 @@ components:
       properties:
         id:
           type: string
+          description: A unique identifier of the entity.
         name:
           type: string
+          description: >-
+            A human readable name of the entity. Note that implementations MAY
+            choose to enforce constraints on this value. For example, they could
+            mandate that id and name be the same value. How any such requirement
+            is shared with all parties is out of scope of this specification.
         description:
           type: string
+          description: A human readable summary of the purpose of the entity.
         tags:
           type: array
           items:
             $ref: '#/components/schemas/RegistryTag'
           x-typespec-name: RegistryTag[]
+          description: >-
+            A mechanism in which additional metadata about the entity can be
+            stored without changing the schema of the entity.
         version:
           type: integer
           format: int32
+          description: >-
+            A numeric value representing a specific instance of an entity. Note
+            that versions of an entity can be modified without changing the
+            version value. Often this value, or when a new version is created,
+            is controlled by a user of the Registry.
         epoch:
           type: integer
           format: int64
+          description: >-
+            A numeric value used to determine whether an entity has been
+            modified. Each time the associated entity is updated, this value
+            MUST be set to a new value that is greater than the current one.
+            Note that unlike version, this attribute is most often managed by
+            the Registry itself. Additionally, if an entity is created that is
+            based on another entity (e.g. a new version of an entity is
+            created), then the new entity's `epoch` value can be reset (e.g. to
+            zero) since the scope of its values is the entity.
         self:
           type: string
           format: uri
+          description: >-
+            A unique URL for the entity. The URL MUST be a combination of the
+            base URL for the list of resources of this type of entity appended
+            with the id of the entity.
         createdBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            creation of this entity. This specification makes no requirement on
+            the semantics or syntax of this value.
         createdOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was created.
         modifiedBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            the latest update of this entity. This specification makes no
+            requirement on the semantics or syntax of this value
         modifiedOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was last updated.
         docs:
           type: string
+          description: >-
+            A URI-Reference to additional documentation about this entity. This
+            specification does not place any constraints on the data returned
+            from an HTTP GET to this value.
       required:
         - id
     RegistryResourceUpdateItem:
@@ -612,36 +826,78 @@ components:
       properties:
         id:
           type: string
+          description: A unique identifier of the entity.
         name:
           type: string
+          description: >-
+            A human readable name of the entity. Note that implementations MAY
+            choose to enforce constraints on this value. For example, they could
+            mandate that id and name be the same value. How any such requirement
+            is shared with all parties is out of scope of this specification.
         description:
           type: string
+          description: A human readable summary of the purpose of the entity.
         tags:
           type: array
           items:
             $ref: '#/components/schemas/RegistryTag'
           x-typespec-name: RegistryTag[]
+          description: >-
+            A mechanism in which additional metadata about the entity can be
+            stored without changing the schema of the entity.
         version:
           type: integer
           format: int32
+          description: >-
+            A numeric value representing a specific instance of an entity. Note
+            that versions of an entity can be modified without changing the
+            version value. Often this value, or when a new version is created,
+            is controlled by a user of the Registry.
         epoch:
           type: integer
           format: int64
+          description: >-
+            A numeric value used to determine whether an entity has been
+            modified. Each time the associated entity is updated, this value
+            MUST be set to a new value that is greater than the current one.
+            Note that unlike version, this attribute is most often managed by
+            the Registry itself. Additionally, if an entity is created that is
+            based on another entity (e.g. a new version of an entity is
+            created), then the new entity's `epoch` value can be reset (e.g. to
+            zero) since the scope of its values is the entity.
         self:
           type: string
           format: uri
+          description: >-
+            A unique URL for the entity. The URL MUST be a combination of the
+            base URL for the list of resources of this type of entity appended
+            with the id of the entity.
         createdBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            creation of this entity. This specification makes no requirement on
+            the semantics or syntax of this value.
         createdOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was created.
         modifiedBy:
           type: string
+          description: >-
+            A reference to the user or component that was responsible for the
+            the latest update of this entity. This specification makes no
+            requirement on the semantics or syntax of this value
         modifiedOn:
           type: string
           format: date-time
+          description: The date/time of when the entity was last updated.
         docs:
           type: string
+          description: >-
+            A URI-Reference to additional documentation about this entity. This
+            specification does not place any constraints on the data returned
+            from an HTTP GET to this value.
       required:
         - id
     RegistryTag:
