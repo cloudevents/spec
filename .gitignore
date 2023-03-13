@@ -4,3 +4,4 @@ gen/
 gen/
 .DS_Store
 *.pyc
+/registry/typespec/node_modules

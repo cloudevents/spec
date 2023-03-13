@@ -1,0 +1,660 @@
+openapi: 3.0.0
+info:
+  title: xregistry
+  version: 0.0.1
+tags:
+  - name: Groups
+  - name: Resources
+paths:
+  /groups:
+    get:
+      tags:
+        - Groups
+      operationId: Groups_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GroupReadItem'
+                    x-typespec-name: Group[]
+                    description: List of elements
+                  nextLink:
+                    type: string
+                    format: uri
+                    description: A link to the next page of results if present.
+                required:
+                  - value
+                x-typespec-name: List<Group>
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/resources:
+    get:
+      tags:
+        - Resources
+      operationId: Resources_list
+      parameters:
+        - $ref: '#/components/parameters/GroupPathId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RegistryResourceReadItem'
+                    x-typespec-name: RegistryResource[]
+                    description: List of elements
+                  nextLink:
+                    type: string
+                    format: uri
+                    description: A link to the next page of results if present.
+                required:
+                  - value
+                x-typespec-name: List<RegistryResource>
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/{groupId}/resources/{id}:
+    get:
+      tags:
+        - Resources
+      operationId: Resources_read
+      parameters:
+        - $ref: '#/components/parameters/GroupPathId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryResourceRead'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Resources
+      operationId: Resources_create
+      parameters:
+        - $ref: '#/components/parameters/GroupPathId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryResourceRead'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryResource'
+    patch:
+      tags:
+        - Resources
+      operationId: Resources_update
+      parameters:
+        - $ref: '#/components/parameters/GroupPathId'
+        - $ref: '#/components/parameters/RegistryResource.id'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryResourceRead'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/merge-patch+json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/RegistryTag'
+                  x-typespec-name: RegistryTag[]
+                version:
+                  type: integer
+                  format: int32
+                epoch:
+                  type: integer
+                  format: int64
+                self:
+                  type: string
+                  format: uri
+                createdBy:
+                  type: string
+                createdOn:
+                  type: string
+                  format: date-time
+                modifiedBy:
+                  type: string
+                modifiedOn:
+                  type: string
+                  format: date-time
+                docs:
+                  type: string
+              x-typespec-name: Patch<RegistryResource>
+    delete:
+      tags:
+        - Resources
+      operationId: Resources_delete
+      parameters:
+        - $ref: '#/components/parameters/GroupPathId'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: >-
+            There is no content to send for this request, but the headers may be
+            useful. 
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /groups/{id}:
+    get:
+      tags:
+        - Groups
+      operationId: Groups_read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupRead'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - Groups
+      operationId: Groups_create
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupRead'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreateOrUpdate'
+    patch:
+      tags:
+        - Groups
+      operationId: Groups_update
+      parameters:
+        - $ref: '#/components/parameters/Group.id'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupRead'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/merge-patch+json:
+            schema:
+              type: object
+              properties:
+                resources:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/RegistryResourceUpdateItem'
+                  x-typespec-name: RegistryResource[]
+              x-typespec-name: Patch<Group>
+    delete:
+      tags:
+        - Groups
+      operationId: Groups_delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: >-
+            There is no content to send for this request, but the headers may be
+            useful. 
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /registryMetdata:
+    get:
+      operationId: RegistryMetadataInterface_read
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryMetadata'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  parameters:
+    Group.id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    GroupPathId:
+      name: groupId
+      in: path
+      required: true
+      schema:
+        type: string
+    RegistryResource.id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    CommonMetadata:
+      type: object
+      properties:
+        singlular:
+          type: string
+        plural:
+          type: string
+        schema:
+          type: string
+          format: uri
+        resources:
+          type: array
+          items: {}
+          x-typespec-name: '[CommonMetadata]'
+      required:
+        - singlular
+        - plural
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: A server-defined code that uniquely identifies the error.
+        error:
+          allOf:
+            - $ref: '#/components/schemas/ErrorDetail'
+          description: Top-level error object
+      description: Error response
+      required:
+        - code
+        - error
+    ErrorDetail:
+      type: object
+      properties:
+        code:
+          type: string
+          description: A server-defined code that uniquely identifies the error.
+        message:
+          type: string
+          description: A human-readable representation of the error.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+          x-typespec-name: ErrorDetail[]
+          description: >-
+            An array of details about specific errors that led to this reported
+            error.
+      description: Error details
+      required:
+        - code
+        - message
+    GroupCreateOrUpdate:
+      type: object
+      properties:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryResourceCreateOrUpdateItem'
+          x-typespec-name: RegistryResource[]
+      required:
+        - resources
+    GroupRead:
+      type: object
+      properties:
+        id:
+          type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryResourceReadItem'
+          x-typespec-name: RegistryResource[]
+      required:
+        - id
+        - resources
+    GroupReadItem:
+      type: object
+      properties:
+        id:
+          type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryResourceReadItem'
+          x-typespec-name: RegistryResource[]
+      required:
+        - id
+        - resources
+    RegistryMetadata:
+      type: object
+      properties:
+        registryMetadata:
+          type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            tags:
+              type: array
+              items:
+                $ref: '#/components/schemas/RegistryTag'
+              x-typespec-name: RegistryTag[]
+            groups:
+              type: array
+              items: {}
+              x-typespec-name: '[CommonMetadata]'
+          required:
+            - name
+            - description
+            - tags
+            - groups
+          x-typespec-name: (anonymous model)
+      required:
+        - registryMetadata
+    RegistryResource:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryTag'
+          x-typespec-name: RegistryTag[]
+        version:
+          type: integer
+          format: int32
+        epoch:
+          type: integer
+          format: int64
+        self:
+          type: string
+          format: uri
+        createdBy:
+          type: string
+        createdOn:
+          type: string
+          format: date-time
+        modifiedBy:
+          type: string
+        modifiedOn:
+          type: string
+          format: date-time
+        docs:
+          type: string
+    RegistryResourceCreateOrUpdateItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryTag'
+          x-typespec-name: RegistryTag[]
+        version:
+          type: integer
+          format: int32
+        epoch:
+          type: integer
+          format: int64
+        self:
+          type: string
+          format: uri
+        createdBy:
+          type: string
+        createdOn:
+          type: string
+          format: date-time
+        modifiedBy:
+          type: string
+        modifiedOn:
+          type: string
+          format: date-time
+        docs:
+          type: string
+      required:
+        - id
+    RegistryResourceRead:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryTag'
+          x-typespec-name: RegistryTag[]
+        version:
+          type: integer
+          format: int32
+        epoch:
+          type: integer
+          format: int64
+        self:
+          type: string
+          format: uri
+        createdBy:
+          type: string
+        createdOn:
+          type: string
+          format: date-time
+        modifiedBy:
+          type: string
+        modifiedOn:
+          type: string
+          format: date-time
+        docs:
+          type: string
+      required:
+        - id
+    RegistryResourceReadItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryTag'
+          x-typespec-name: RegistryTag[]
+        version:
+          type: integer
+          format: int32
+        epoch:
+          type: integer
+          format: int64
+        self:
+          type: string
+          format: uri
+        createdBy:
+          type: string
+        createdOn:
+          type: string
+          format: date-time
+        modifiedBy:
+          type: string
+        modifiedOn:
+          type: string
+          format: date-time
+        docs:
+          type: string
+      required:
+        - id
+    RegistryResourceUpdateItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistryTag'
+          x-typespec-name: RegistryTag[]
+        version:
+          type: integer
+          format: int32
+        epoch:
+          type: integer
+          format: int64
+        self:
+          type: string
+          format: uri
+        createdBy:
+          type: string
+        createdOn:
+          type: string
+          format: date-time
+        modifiedBy:
+          type: string
+        modifiedOn:
+          type: string
+          format: date-time
+        docs:
+          type: string
+      required:
+        - id
+    RegistryTag:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      required:
+        - key
+        - value
+servers:
+  - url: https://xregistry.example/
+    description: Actual server to be set during client setup
+    variables: {}
