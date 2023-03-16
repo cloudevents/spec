@@ -67,6 +67,10 @@ CloudEvent or CloudEvent batch. Comments MUST be ignored during processing, exce
 for the child element of a `<data>` element containing [XML element data](#33-xml-element-data),
 where all nodes MUST be preserved.
 
+CDATA nodes and regular text nodes MUST be treated interchangably during processing,
+except for the child element `<data>` element containing [XML element data](#33-xml-element-data),
+where all nodes MUST be preserved.
+
 XML elements in namespaces other than `http://cloudevents.io/xmlformat/V1`, and
 XML attributes other than those described in this specification MAY appear within an XML
 representation of a CloudEvent or CloudEvent batch. These SHOULD be ignored during
@@ -155,7 +159,7 @@ Example:
 XML element data MUST be carried in an element with a defined type of `xs:any` with
 exactly one child XML element (with any mandatory namespace definitions).
 
-All XML nodes (including comments) within the child XML element MUST
+All XML nodes (including comments and CDATA nodes) within the child XML element MUST
 be preserved during processing.
 
 The `<data>` XML element MUST NOT contain any direct child text nodes with
