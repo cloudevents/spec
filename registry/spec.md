@@ -119,11 +119,16 @@ specification, MUST be adhere to.
 
 ### `id`
 - Type: String   # SHOULD this be a URI-Reference?
-- Description: A unique identifier of the entity.
+- Description: An immutable unique identifier of the entity.
 - Constraints:
   - MUST be a non-empty string
-  - MUST be unique within the scope of the Registry for Groups, or the owning
-    Group for Resources
+  - MUST be immutable
+  - MUST be unique within the scope of the entity's parent. In the case
+    of the `id` for the Registry itself, the uniqueness scope will be
+    based on where the Registry is used. For example, a publicly accessible
+    Registry might want to consider using a UUID, while a private Registry
+    does not need to be so widely unique.
+    <br>
     QUESTION: SHOULD Resource IDs be unique across the entire Registry too?
 - Examples:
   - A UUID
@@ -382,9 +387,11 @@ Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
 
 {
+  "id": "STRING",
   "name": "STRING", ?
   "description": "STRING", ?  # Description of Registry
   "specVersion": "STRING",    # Registry spec version
+  "self": "URL",
   "tags": { "STRING": "STRING" * }, ?
   "docs": "URL", ?
 
