@@ -105,7 +105,13 @@ An XML element representing a core context attribute MAY be decorated with
 an `xsi:type` XML attribute. If present, this designator MUST match that of the type specified
 by the [CloudEvent context attributes][ce-attrs].
 
-An XML element representing a context attribute MUST NOT contain any child elements.
+An XML element representing a context attribute MUST NOT contain any child elements. The text
+within an XML element representing a context attribute MUST NOT contain any line breaks.
+When processing the text, the attribute value MUST be parsed without discarding any other
+whitespace. (For example, `<myextension xsi:type="ce:string">  text  </myextension>` represents
+an extension attribute value with leading and trailing whitespace, whereas
+`<myextension xsi:type="ce:integer">  10  </myextension>` is invalid as the textual representation
+of an Integer attribute never contains whitespace.)
 
 No other XML element attributes are expected, if present they MUST be ignored during
 processing.
