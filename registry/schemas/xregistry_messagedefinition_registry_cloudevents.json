@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "anyOf": [
+    { "$ref" : "#/definitions/cloudEventMetadata"}
+  ],
+  "properties": {
+    "ref": {
+      "$ref": "#/definitions/cloudEventDefinition"
+    }
+  },
+  "definitions": {
+    "cloudEventDefinition": {
+      "type": "object",
+      "title": "cloudEventDefinition",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/cloudEventMetadata"
+        },
+        "format": {
+          "type": "string",
+          "description": "Specifies the `format` of this definition.",
+          "enum": [
+            "CloudEvents", "CloudEvents/1.0"
+          ]
+        }
+      },
+      "required": [
+        "metadata", "format"
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_definition.json#/definitions/definition"
+        }
+      ]
+    },
+    "cloudEventMetadata": {
+      "type": "object",
+      "title": "cloudEventMetadata",
+      "properties": {
+        "attributes": {
+          "$ref": "#/definitions/cloudEventMetadataAttributes"
+        }
+      },
+      "required": [
+        "attributes"
+      ]
+    },
+    "cloudEventMetadataAttributes": {
+      "type": "object",
+      "title": "cloudEventMetadataAttributes",
+      "properties": {
+        "id": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "type": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "time": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyTimeStamp"
+        },
+        "source": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        },
+        "subject": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "dataschema": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        },
+        "datacontenttype": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertySymbol"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataProperty"
+      }
+    }
+  }
+}

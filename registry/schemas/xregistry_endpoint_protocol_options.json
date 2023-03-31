@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "allOf": [
+    {
+      "title": "endpointConfigOption",
+      "properties": {
+        "options": {
+          "$ref": "#/definitions/endpointOptions"
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/endpointConfigBase"
+    }
+  ],
+  "definitions": {
+    "endpointConfigBase": {
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "description": "Specifies the `protocol` of this endpoint.",
+          "enum": [
+            "AMQP",
+            "AMQP/1.0",
+            "HTTP",
+            "HTTP/1.1",
+            "HTTP/2",
+            "HTTP/3",
+            "Kafka",
+            "MQTT",
+            "MQTT/3.1.1",
+            "MQTT/5.0",
+            "NATS",
+            "NATS/1.0.0"
+          ]
+        },
+        "options": {
+          "anyOf": [
+            { "$ref": "xregistry_endpoint_registry_amqp.json#/definitions/endpointOptionsAmqp" },
+            { "$ref": "xregistry_endpoint_registry_http.json#/definitions/endpointOptionsHttp" },
+            { "$ref": "xregistry_endpoint_registry_mqtt.json#/definitions/endpointOptionsMqtt" },
+            { "$ref": "xregistry_endpoint_registry_nats.json#/definitions/endpointOptionsNats" },
+            { "$ref": "xregistry_endpoint_registry_kafka.json#/definitions/endpointOptionsKafka" }
+          ]
+        }
+      }
+    },
+    "endpointOptions": {
+      "type": "object",
+      "title": "endpointOptions",
+      "properties": {
+        "protocol": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

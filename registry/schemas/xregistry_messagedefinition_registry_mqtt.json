@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "ref": {
+      "$ref": "#/definitions/mqttDefinition"
+    }
+  },
+  "definitions": {
+    "mqttDefinition": {
+      "type": "object",
+      "title": "mqttDefinition",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/mqttMetadata"
+        },
+        "format": {
+          "type": "string",
+          "description": "Specifies the `format` of this definition.",
+          "enum": [
+            "MQTT", "MQTT/3.1.1", "MQTT/5.0"
+          ]
+        }
+      },
+      "required": [
+        "metadata","format"
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_definition.json#/definitions/definition"
+        }
+      ]
+    },
+    "mqttMetadata": {
+      "type": "object",
+      "title": "mqttMetadata",
+      "properties": {
+        "qos": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "retain": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyBoolean"
+        },
+        "topic-name": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        },
+        "payload-format": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "message-expiry-interval": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "response-topic": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        },
+        "correlation-data": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyBinary"
+        },
+        "content-type": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertySymbol"
+        },
+        "user-properties": {
+          "type": "array",
+          "description": "User Property is allowed to appear multiple times to represent multiple name, value pairs. The same name is allowed to appear more than once.",
+          "items": {
+            "$ref": "#/definitions/mqttUserProperty"
+          }
+        }
+      }
+    },
+    "mqttUserProperty": {
+      "type": "object",
+      "title": "mqttUserProperty",
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataProperty"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

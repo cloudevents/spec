@@ -1,0 +1,1004 @@
+{
+  "openapi": "3.0.6",
+  "info": {
+    "title": "xRegistry API",
+    "description": "xRegistry API",
+    "version": "0.5-wip"
+  },
+  "servers": [],
+  "security": [
+    {
+      "api_key": []
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "getAll",
+        "description": "Gets the root document",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "inline",
+            "description": "Set if references shall be inlined",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The root document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/document"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "uploadDoc",
+        "description": "Uploads a registry document and upserts its contents into the registry",
+        "requestBody": {
+          "description": "A request to create or update the discovery endpoint's collection of endpoints with the given endpoints",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "xregistry_resources.json#/definitions/document"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The resulting document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/document"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{groupType}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/groupType"
+        }
+      ],
+      "get": {
+        "operationId": "getResourceGroupAll",
+        "description": "Gets all entries of the resource group",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "inline",
+            "description": "Set if references shall be inlined",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "description": "Query expression",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter expression"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resource groups that match the query or all available resource groups if no query was specified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "xregistry_resources.json#/definitions/resource"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No groups found"
+          }
+        }
+      },
+      "post": {
+        "operationId": "postResourceGroup",
+        "requestBody": {
+          "description": "Create a new resource group",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "xregistry_resources.json#/definitions/resource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The resulting resource group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
+                }
+              }
+            },
+            "headers": {
+              "Location": {
+                "description": "The location of the created resource",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "409": {
+            "description": "Conflict - epoch not greater"
+          }
+        }
+      }
+    },
+    "/{groupType}/{groupId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/groupType"
+        },
+        {
+          "$ref": "#/components/parameters/groupId"
+        }
+      ],
+      "get": {
+        "operationId": "getResourceGroup",
+        "responses": {
+          "200": {
+            "description": "The schema group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "operationId": "putResourceGroup",
+        "description": "creates or updates the resource group",
+        "requestBody": {
+          "description": "A request to create or update the discovery group's collection of groups with the given group",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "xregistry_resources.json#/definitions/resource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict - epoch not greater"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteResourceGroup",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "epoch",
+            "description": "The epoch of the resource group to be deleted",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "A number representing the version number of the resource.",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ok"            
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "409": {
+            "description": "Conflict - epoch not greater"
+          }
+        }
+      }
+    },
+    "/{groupType}/{groupId}/{resourceType}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/groupType"
+        },
+        {
+          "$ref": "#/components/parameters/groupId"
+        },
+        {
+          "$ref": "#/components/parameters/resourceType"
+        }
+      ],
+      "get": {
+        "operationId": "getResourcesAll",
+        "description": "Get an optionally filtered collection of resources",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "Query expression",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter expression"
+            }
+          },
+          {
+            "in": "query",
+            "name": "inline",
+            "description": "Set if references shall be inlined",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of resources (optionally matching the query parameter)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "xregistry_resources.json#/definitions/resource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "putResources",
+        "requestBody": {
+          "description": "A request to create or update the discovery group's collection of groups with the given group",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated list of resources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                     "$ref": "xregistry_resources.json#/definitions/resource"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "409": {
+            "description": "Conflict - epoch not greater"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteResources",
+        "responses": {
+          "204": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "409": {
+            "description": "Conflict - epoch not greater"
+          }
+        }
+      }
+    },
+    "/{groupType}/{groupId}/{resourceType}/{resourceId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/groupType"
+        },
+        {
+          "$ref": "#/components/parameters/groupId"
+        },
+        {
+          "$ref": "#/components/parameters/resourceType"
+        },
+        {
+          "$ref": "#/components/parameters/resourceId"
+        },
+        {
+          "in": "query",
+          "name": "meta",
+          "description": "Interact with the metadata",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getResource",
+        "responses": {
+          "200": {
+            "description": "The corresponding resource",
+            "headers": {
+              "resource-id": {
+                "$ref": "#/components/headers/resource-id"
+              },
+              "resource-version": {
+                "$ref": "#/components/headers/resource-version"
+              },
+              "resource-name": {
+                "$ref": "#/components/headers/resource-name"
+              },
+              "resource-self": {
+                "$ref": "#/components/headers/resource-self"
+              },
+              "resource-description": {
+                "$ref": "#/components/headers/resource-description"
+              },
+              "resource-docs": {
+                "$ref": "#/components/headers/resource-docs"
+              },
+              "resource-origin": {
+                "$ref": "#/components/headers/resource-origin"
+              },
+              "resource-tags": {
+                "$ref": "#/components/headers/resource-tags"
+              },
+              "resource-createdby": {
+                "$ref": "#/components/headers/resource-createdby"
+              },
+              "resource-createdon": {
+                "$ref": "#/components/headers/resource-createdon"
+              },
+              "resource-modifiedby": {
+                "$ref": "#/components/headers/resource-modifiedby"
+              },
+              "resource-modifiedon": {
+                "$ref": "#/components/headers/resource-modifiedon"
+              },
+              "Content-Location": {
+                "description": "permalink location of the returned version",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "summary": "Post new resource version",
+        "description": "Register resource version If resource of specified name does not exist in specified group, resource and resource version is created at version 1. If resource of specified name exists already in specified group, resource is created at latest version + 1. If resource with identical content already exists, existing resource's ID is returned. \n",
+        "operationId": "postResource",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/resource-description"
+          },
+          {
+            "$ref": "#/components/parameters/resource-docs"
+          },
+          {
+            "$ref": "#/components/parameters/resource-origin"
+          },
+          {
+            "$ref": "#/components/parameters/resource-tags"
+          },
+          {
+            "in": "header",
+            "description": "format",
+            "name": "format",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A request to add a new resource to the version collection",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "xregistry_resources.json#/definitions/resource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created resource",
+            "headers": {
+              "resource-id": {
+                "$ref": "#/components/headers/resource-id"
+              },
+              "resource-version": {
+                "$ref": "#/components/headers/resource-version"
+              },
+              "resource-name": {
+                "$ref": "#/components/headers/resource-name"
+              },
+              "resource-self": {
+                "$ref": "#/components/headers/resource-self"
+              },
+              "resource-description": {
+                "$ref": "#/components/headers/resource-description"
+              },
+              "resource-docs": {
+                "$ref": "#/components/headers/resource-docs"
+              },
+              "resource-origin": {
+                "$ref": "#/components/headers/resource-origin"
+              },
+              "resource-tags": {
+                "$ref": "#/components/headers/resource-tags"
+              },
+              "resource-createdby": {
+                "$ref": "#/components/headers/resource-createdby"
+              },
+              "resource-createdon": {
+                "$ref": "#/components/headers/resource-createdon"
+              },
+              "resource-modifiedby": {
+                "$ref": "#/components/headers/resource-modifiedby"
+              },
+              "resource-modifiedon": {
+                "$ref": "#/components/headers/resource-modifiedon"
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict - epoch not greater"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete resource",
+        "description": "Delete resource",
+        "operationId": "deleteResource",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "epoch",
+            "description": "The epoch of the resource to be deleted",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "A number representing the version number of the resource.",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/{groupType}/{groupId}/{resourceType}/{resourceId}/versions/{versionId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/groupType"
+        },
+        {
+          "$ref": "#/components/parameters/groupId"
+        },
+        {
+          "$ref": "#/components/parameters/resourceType"
+        },
+        {
+          "$ref": "#/components/parameters/resourceId"
+        },
+        {
+          "$ref": "#/components/parameters/versionId"
+        },
+        {
+          "in": "query",
+          "name": "meta",
+          "description": "Interact with the metadata",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "getResourceVersion",
+        "description": "Gets the document stored for the schema version",
+        "responses": {
+          "200": {
+            "description": "The schema version document",
+            "headers": {
+              "resource-id": {
+                "$ref": "#/components/headers/resource-id"
+              },
+              "resource-version": {
+                "$ref": "#/components/headers/resource-version"
+              },
+              "resource-name": {
+                "$ref": "#/components/headers/resource-name"
+              },
+              "resource-self": {
+                "$ref": "#/components/headers/resource-self"
+              },
+              "resource-description": {
+                "$ref": "#/components/headers/resource-description"
+              },
+              "resource-docs": {
+                "$ref": "#/components/headers/resource-docs"
+              },
+              "resource-origin": {
+                "$ref": "#/components/headers/resource-origin"
+              },
+              "resource-tags": {
+                "$ref": "#/components/headers/resource-tags"
+              },
+              "resource-createdby": {
+                "$ref": "#/components/headers/resource-createdby"
+              },
+              "resource-createdon": {
+                "$ref": "#/components/headers/resource-createdon"
+              },
+              "resource-modifiedby": {
+                "$ref": "#/components/headers/resource-modifiedby"
+              },
+              "resource-modifiedon": {
+                "$ref": "#/components/headers/resource-modifiedon"
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteResourceVersion",
+        "responses": {
+          "204": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad Request - constraint failure"
+          },
+          "409": {
+            "description": "Conflict - epoch not greater"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "code",
+        "in": "query"
+      }
+    },
+    "parameters": {
+      "groupType": {
+        "in": "path",
+        "name": "groupType",
+        "description": "The groupType (plural)",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resourceType": {
+        "in": "path",
+        "name": "id",
+        "description": "The resourceType (plural)",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "id": {
+        "in": "path",
+        "name": "id",
+        "description": "The id of the endpoint",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "description": "A unique identifier",
+          "format": "uri-reference"
+        }
+      },
+      "groupId": {
+        "in": "path",
+        "name": "groupId",
+        "description": "The id of the group",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "description": "A unique identifier",
+          "format": "uri-reference"
+        }
+      },
+      "resourceId": {
+        "in": "path",
+        "name": "resourceId",
+        "description": "The id of the schema",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "description": "A unique identifier",
+          "format": "uri-reference"
+        }
+      },
+      "versionId": {
+        "in": "path",
+        "name": "versionId",
+        "description": "The id of the schema",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "description": "A unique identifier",
+          "format": "uri-reference"
+        }
+      },
+      "resource-type": {
+        "in": "header",
+        "name": "resource-type",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-id": {
+        "in": "header",
+        "name": "resource-id",
+        "required": false,
+        "description": "A unique identifier for this resource. This value MUST be globally unique",
+        "schema": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "resource-version": {
+        "in": "header",
+        "name": "resource-version",
+        "required": false,
+        "description": "A number representing the version number of the resource.",
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "resource-self": {
+        "in": "header",
+        "name": "resource-self",
+        "required": false,
+        "description": "A unique URI for the resource.",
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "resource-description": {
+        "in": "header",
+        "name": "resource-description",
+        "required": false,
+        "description": "A summary of the purpose of the resource.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-name": {
+        "in": "header",
+        "name": "resource-name",
+        "required": false,
+        "description": "The name of the resource.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-docs": {
+        "in": "header",
+        "required": false,
+        "name": "resource-docs",
+        "description": "Absolute URL that provides a link to additional documentation about the resource.",
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "resource-origin": {
+        "in": "header",
+        "required": false,
+        "name": "resource-origin",
+        "description": "A URI reference to the original source of this resource.",
+        "schema": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "resource-tags": {
+        "in": "header",
+        "name": "resource-tags",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/resource-tag"
+          }
+        }
+      },
+      "resource-createdby": {
+        "in": "header",
+        "name": "resource-createdby",
+        "required": false,
+        "description": "Identity of who created this entity",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-createdon": {
+        "in": "header",
+        "name": "resource-createdon",
+        "required": false,
+        "description": "Time when this entity was created",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "resource-modifiedby": {
+        "in": "header",
+        "name": "resource-modifiedby",
+        "required": false,
+        "description": "Identity of who last modified this entity",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-modifiedon": {
+        "in": "header",
+        "name": "resource-modifiedon",
+        "required": false,
+        "description": "Time when this entity was last modified",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "headers": {
+      "resource-type": {
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-id": {
+        "required": false,
+        "description": "A unique identifier for this Endpoint. This value MUST be globally unique",
+        "schema": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "resource-version": {
+        "required": false,
+        "description": "A number representing the version number of the resource.",
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "resource-self": {
+        "required": false,
+        "description": "A unique URI for the resource. The URI MUST be a combination of the  base URI of the list of this resource type for the current Discovery  Service appended with the `id` of this resource.\n",
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "resource-description": {
+        "required": false,
+        "description": "A summary of the purpose of the resource.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-name": {
+        "required": false,
+        "description": "The name of the resource.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-docs": {
+        "description": "Absolute URL that provides a link to additional documentation about the resource.",
+        "schema": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "resource-origin": {
+        "description": "A URI reference to the original source of this resource.",
+        "schema": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "resource-tags": {
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/resource-tag"
+          }
+        }
+      },
+      "resource-createdby": {
+        "required": false,
+        "description": "Identity of who created this entity",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-createdon": {
+        "required": false,
+        "description": "Time when this entity was created",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "resource-modifiedby": {
+        "required": false,
+        "description": "Identity of who last modified this entity",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "resource-modifiedon": {
+        "required": false,
+        "description": "Time when this entity was last modified",
+        "schema": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "schemas": {
+      "resource-tag": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

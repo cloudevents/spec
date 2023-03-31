@@ -1,0 +1,222 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "description": "Universal message definition registry.",
+  "$comment": "Message definition formats are registered in the `xregistry_messagedefinition_definition.json` schema.",
+  "properties": {
+    "definitionGroups": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/definitionGroup"
+      }
+    }
+  },
+  "required": [
+    "definitionGroups"
+  ],
+  "definitions": {
+    "definitionGroup": {
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_definition.json"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "definitionsUrl": {
+              "type": "string",
+              "format": "uri-reference"
+            },
+            "definitionGroups": {
+              "type": "object",
+              "description": "A set of Definition Groups.",
+              "additionalProperties": {
+                "$ref": "#/definitions/definitionGroup"
+              }
+            },
+            "definitionGroupsUrl": {
+              "type": "string",
+              "format": "uri-reference"
+            }
+          },
+          "required": [
+            "format"
+          ],
+          "allOf": [
+            {
+              "$ref": "xregistry_resources.json#/definitions/resource"
+            }
+          ]
+        }
+      ]
+    },
+    "metadataProperty": {
+      "type": "object",
+      "description": "Base class for all metadata properties.",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "specurl": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "metadataPropertyBoolean": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyString": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertySymbol": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "pattern": "^[\\x32-\\x7F]*$"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyBinary": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "binary"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyTimeStamp": {
+      "description": "This is a date-time property, holding RFC3339 string expressions.",
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyDuration": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "duration"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyUriTemplate": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "uri-template"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyInteger": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyNumber": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyUri": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    },
+    "metadataPropertyUriReference": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/metadataProperty"
+        }
+      ]
+    }
+  }
+}

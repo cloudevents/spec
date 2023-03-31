@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "This schema declares the 'definitions' property for message definition groups along with all well-known extensions to the 'definition' type.",
+  "$comment": "New message definition formats MUST be added to the 'oneOf' array in the 'definitions' property and the format identifiers MUST be registered in the 'format' property.",
+  "allOf": [
+    {
+      "title": "definitionBase",
+      "properties": {
+        "definitions": {
+          "type": "object",
+          "description": "A collection of Message Definitions.",
+          "additionalProperties": {
+            "$ref": "#/definitions/definition"
+          }
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/definitionGroupBase"
+    }
+  ],
+  "definitions": {
+    "definitionGroupBase": {
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "Specifies the `format` of this definition.",
+          "enum": [
+            "AMQP",
+            "AMQP/1.0",
+            "HTTP",
+            "HTTP/1.1",
+            "HTTP/2",
+            "HTTP/3",
+            "Kafka",
+            "Kafka/0.11",
+            "MQTT",
+            "MQTT/3.1.1",
+            "MQTT/5.0",
+            "CloudEvents",
+            "CloudEvents/1.0"
+          ]
+        },
+        "definitions": {
+          "type": "object",
+          "description": "A collection of Message Definitions.",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "xregistry_messagedefinition_registry_amqp.json#/definitions/amqpDefinition"
+              },
+              {
+                "$ref": "xregistry_messagedefinition_registry_mqtt.json#/definitions/mqttDefinition"
+              },
+              {
+                "$ref": "xregistry_messagedefinition_registry_http.json#/definitions/httpDefinition"
+              },
+              {
+                "$ref": "xregistry_messagedefinition_registry_kafka.json#/definitions/kafkaDefinition"
+              },
+              {
+                "$ref": "xregistry_messagedefinition_registry_cloudevents.json#/definitions/cloudEventDefinition"
+              }
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "xregistry_resources.json#/definitions/resource"
+        }
+      ]
+    },
+    "definition": {
+      "type": "object",
+      "description": "a message definition",
+      "properties": {
+        "schemaUrl": {
+          "type": "string",
+          "description": "A URL to the schema of the message's data.",
+          "format": "uri-reference"
+        },
+        "schema": {
+          "oneOf": [
+            {
+              "type": "object",
+              "description": "An in-line definition of the schema of the message's data."
+            },
+            {
+              "type": "string",
+              "description": "An in-line definition of the schema of the message's data."
+            }
+          ]
+        },
+        "schemaFormat": {
+          "type": "string",
+          "description": "Declares the schema format"
+        },
+        "format": {
+          "type": "string",
+          "description": "Specifies the `format` of this definition."
+        },
+        "metadata": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "format"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "format",
+            "schema",
+            "schemaFormat"
+          ]
+        },
+        {
+          "required": [
+            "format",
+            "schemaUrl",
+            "schemaFormat"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ],
+          "not": {
+            "required": [
+              "schema",
+              "schemaUrl",
+              "schemaFormat"
+            ]
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_resources.json#/definitions/resource"
+        }
+      ]
+    }
+  }
+}
