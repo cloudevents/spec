@@ -1,4 +1,4 @@
-# Regsitry Release Notes
+# Registry Release Notes
 
 <!-- no verify-specs -->
 
