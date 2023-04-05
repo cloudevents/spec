@@ -1,0 +1,6 @@
+/groupNamePlural/s/{%-groupNamePlural-%}/schemagroups/g
+/resourceNamePlural/s/{%-resourceNamePlural-%}/schemas/g
+/resourceType/s/{%-resourceTypeReference-%}/xregistry_schema_registry.json#\/definitions\/schema/g
+/resourceVersionType/s/{%-resourceVersionTypeReference-%}/xregistry_schema_registry.json#\/definitions\/schemaVersion/g
+/groupType/s/{%-groupTypeReference-%}/xregistry_schema_registry.json#\/definitions\/schemaGroup/g
+/documentType/s/{%-documentTypeReference-%}/xregistry_schema_registry.json/g
