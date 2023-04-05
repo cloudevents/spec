@@ -148,7 +148,7 @@
         "operationId": "getResourceGroup",
         "responses": {
           "200": {
-            "description": "The schema group",
+            "description": "The resource group",
             "content": {
               "application/json": {
                 "schema": {
@@ -301,7 +301,7 @@
         ],
         "responses": {
           "200": {
-            "description": "A list of resources (optionally matching the query parameter)",
+            "description": "Updated list of resources",
             "content": {
               "application/json": {
                 "schema": {
@@ -780,6 +780,11 @@
                 "schema": {
                   "type": "string",
                   "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
                 }
               }
             }

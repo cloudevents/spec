@@ -83,9 +83,7 @@
     },
     "/{%-groupNamePlural-%}": {
       "parameters": [
-        {
-          "$ref": "#/components/parameters/groupType"
-        }
+        
       ],
       "get": {
         "operationId": "getResourceGroupAll",
@@ -135,11 +133,8 @@
         }
       }
     },
-    "/{groupType}/{groupId}": {
+    "/{%-groupNamePlural-%}/{groupId}": {
       "parameters": [
-        {
-          "$ref": "#/components/parameters/groupType"
-        },
         {
           "$ref": "#/components/parameters/groupId"
         }
@@ -244,13 +239,7 @@
     "/{%-groupNamePlural-%}/{groupId}/{%-resourceNamePlural-%}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/groupType"
-        },
-        {
           "$ref": "#/components/parameters/groupId"
-        },
-        {
-          "$ref": "#/components/parameters/resourceType"
         }
       ],
       "get": {
@@ -325,13 +314,7 @@
     "/{%-groupNamePlural-%}/{groupId}/{%-resourceNamePlural-%}/{resourceId}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/groupType"
-        },
-        {
           "$ref": "#/components/parameters/groupId"
-        },
-        {
-          "$ref": "#/components/parameters/resourceType"
         },
         {
           "$ref": "#/components/parameters/resourceId"
@@ -624,101 +607,7 @@
     "/{%-groupNamePlural-%}/{groupId}/{%-resourceNamePlural-%}/{resourceId}/versions/{versionId}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/groupType"
-        },
-        {
           "$ref": "#/components/parameters/groupId"
-        },
-        {
-          "$ref": "#/components/parameters/resourceType"
-        },
-        {
-          "$ref": "#/components/parameters/resourceId"
-        },
-        {
-          "in": "query",
-          "name": "meta",
-          "description": "Interact with the metadata",
-          "required": false,
-          "allowEmptyValue": true,
-          "schema": {
-            "type": "boolean"
-          }
-        }
-      ],
-      "get": {
-        "operationId": "getResourceVersionsAll",
-        "description": "Get an optionally filtered collection of resources",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "inline",
-            "description": "Set if references shall be inlined",
-            "required": false,
-            "allowEmptyValue": true,
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "skip",
-            "description": "The number of resources to skip",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "top",
-            "description": "The number of resources to show",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "filter",
-            "description": "Filter criterion(s)",
-            "explode": true,
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of resource versions",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "$ref": "xregistry_resources.json#/definitions/resource"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/{groupType}/{groupId}/{resourceType}/{resourceId}/versions/{versionId}": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/groupType"
-        },
-        {
-          "$ref": "#/components/parameters/groupId"
-        },
-        {
-          "$ref": "#/components/parameters/resourceType"
         },
         {
           "$ref": "#/components/parameters/resourceId"
@@ -786,6 +675,11 @@
                 "schema": {
                   "type": "string",
                   "format": "binary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "xregistry_resources.json#/definitions/resource"
                 }
               }
             }

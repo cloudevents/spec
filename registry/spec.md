@@ -1680,7 +1680,7 @@ schema for its payload.
 ``` JSON
 {
   "$schema": "https://cloudevents.io/schemas/registry",
-  "specversion": "0.4-wip",
+  "specversion": "0.5-wip",
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
   "endpoints" : 
   {
@@ -1815,6 +1815,7 @@ scenarios:
               "id" : "1.0",
               "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; }"
           }
+        }
       }
     }
   }
@@ -1918,7 +1919,7 @@ embedded or referenced. Any of the three sub-registries MAY be omitted.
    "specversion": "0.4-wip",
    "endpoints": { ... } | "endpointsUrl": "URL",
    "definitionGroups": { ... } | "definitionGroupsUrl": "URL"
-   "schemaGroups" : { ... } | "schemagroupsUrl": "URL",
+   "schemaGroups" : { ... } | "schemaGroupsUrl": "URL",
 }
 ```
 
@@ -1956,8 +1957,8 @@ The group (GROUP) name for the Schema Registry is `schemaGroups`. The group does
 not have any specific extension attributes.
 
 A schema group is a collection of schemas that are related to each other in some
-application-defined way. A schema group does not impose an restrictions on the
-contained schenmas, meaning that a schema group can contain schemas of different
+application-defined way. A schema group does not impose any restrictions on the
+contained schemas, meaning that a schema group can contain schemas of different
 formats. Every schema MUST reside inside a schema group.
 
 Example:
@@ -1986,7 +1987,7 @@ Any new schema version that is added to a schema definition MUST be backwards
 compatible with all previous versions of the schema, meaning that a consumer
 using the new schema MUST be able to understand data encoded using a prior
 version of the schema. If a new version introduces a breaking change, it MUST be
-regisetered as a new schema with a new name.
+registered as a new schema with a new name.
 
 When you retrieve a schema without qualifying the version, you will get the
 latest version of the schema, see [retrieving a
@@ -2031,14 +2032,14 @@ attributes.
 - Description: Embedded schema string or object. The format and encoding of the
   schema is defined by the `format` attribute.
 - Constraints:
-  - Mutually exlusive with `schemaurl`. One of the two MUST be present.
+  - Mutually exclusive with `schemaurl`. One of the two MUST be present.
 
 ##### `schemaurl`
 
 - Type: URI
 - Description: Reference to a schema document external to the registry.
 - Constraints:
-  - Mutually exlusive with `schemaurl`. One of the two MUST be present.
+  - Mutually exclusive with `schemaurl`. One of the two MUST be present.
   - Cross-references to a schema document within the same registry MUST NOT be
     used.
 
@@ -3121,7 +3122,7 @@ Example:
   respective protocol endpoints, but implementations MAY define and use
   additional protocol names.
 
-  Predefined protocols are referred tp by name and version as
+  Predefined protocols are referred to by name and version as
   `{NAME}/{VERSION}`. If the version is not specified, the default version of
   the protocol is assumed. The version number format is determined by the
   protocol specification's usage of versions.
