@@ -1799,6 +1799,7 @@ scenarios:
           "schemaurl" : "#/schemaGroups/com.example.telemetry/schema/com.example.telemetrydata/versions/1.0"
         }
       }
+    }
   },
   "schemaGroups" : {
     "com.example.telemetry" : {
