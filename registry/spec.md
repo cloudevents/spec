@@ -1814,6 +1814,7 @@ scenarios:
               "type" : "schemaversion",
               "id" : "1.0",
               "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; }"
+            }
           }
         }
       }
