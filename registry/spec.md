@@ -65,7 +65,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 For clarity, when a feature is marked as "OPTIONAL" this means that it is
-OPTIONAL for both the sender and receiver of a message message to support that
+OPTIONAL for both the sender and receiver of a message to support that
 feature. In other words, a sender can choose to include that feature in a
 message if it wants, and a receiver can choose to support that feature if it
 wants. A receiver that does not support that feature is free to take any
@@ -102,7 +102,7 @@ MAY be versioned and grouped as needed by the Registry's model.
 This section defines common Registry metadata elements and APIs. It is an
 explicit goal for this specification that metadata can be created and managed in
 files in a file system, for instance in a Git repository, and also managed in a
-Registry service that implement the API described here.
+Registry service that implements the API described here.
 
 For instance, during development of a module, the metadata about the events
 raised by the modules will best be managed in a file that resides alongside the
@@ -113,7 +113,7 @@ from, and which allows discovery of the endpoint and all related metadata by
 other systems at runtime.
 
 Therefore, the hierarchical structure of the Registry model is defined in such a
-way that is can be represented in a single file, including but not limited to
+way that it can be represented in a single file, including but not limited to
 JSON or YAML, or via the resource graph of a REST API.
 
 ### Attributes and Extensions
@@ -187,7 +187,7 @@ specification, MUST be adhere to.
 - Type: String
 - Description: A human readable summary of the purpose of the entity.
 - Constraints:
-  - When this attributes has no value it MUST be serialized by either an empty
+  - When this attribute has no value it MUST be serialized by either an empty
     string or by being excluded from the serialization of the owning entity
 - Examples:
   - `A queue of the sensor generated messages`
@@ -256,7 +256,7 @@ specification, MUST be adhere to.
   the creation of this entity. This specification makes no requirement on
   the semantics or syntax of this value.
 - Constraints:
-  - When this attributes has no value it MUST be serialized by either an empty
+  - When this attribute has no value it MUST be serialized by either an empty
     string or by being excluded from the serialization of the owning entity
 - Examples:
   - `John Smith`
@@ -278,7 +278,7 @@ specification, MUST be adhere to.
   the the latest update of this entity. This specification makes no requirement
   on the semantics or syntax of this value.
 - Constraints:
-  - When this attributes has no value it MUST be serialized by either an empty
+  - When this attribute has no value it MUST be serialized by either an empty
     string or by being excluded from the serialization of the owning entity
 - Examples:
   - `John Smith`
@@ -1023,7 +1023,7 @@ GET /GROUPs/ID/RESOURCEs/ID
 A successful response MUST be of the form:
 
 ``` meta
-HTTP/1.1 200 OK  or 307 Tempary Redirect    # 307 if RESOURCEURI is present
+HTTP/1.1 200 OK  or 307 Temporary Redirect    # 307 if RESOURCEURI is present
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
 
@@ -1372,7 +1372,7 @@ TODO
 
 ##### Retrieving a version of a Resource
 
-This will retrieve a partiuclar version of a Resource.
+This will retrieve a particular version of a Resource.
 
 The request MUST be of the form:
 
@@ -1383,7 +1383,7 @@ GET /GROUPs/ID/RESOURCEs/ID/versions/VERSION
 A successful response MUST be of the form:
 
 ``` meta
-HTTP/1.1 200 OK  or 307 Tempary Redirect    # 307 if RESOURCEURI is present
+HTTP/1.1 200 OK  or 307 Temporary Redirect    # 307 if RESOURCEURI is present
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
 Registry-id: STRING
@@ -2978,8 +2978,8 @@ The following attributes are defined for the `endpoint` type:
   is the value of the `self` property and in those cases its presence in the
   serialization of the Endpoint is OPTIONAL.
 - Constraints:
-  - OPTIONAL if this Endpoint Regsitry is the authority owner
-  - REQUIRED if this Ednpoint Regsitry is not the authority owner
+  - OPTIONAL if this Endpoint Registry is the authority owner
+  - REQUIRED if this Endpoint Registry is not the authority owner
   - if present, MUST be a non-empty URI
 - Examples:
   - `https://example2.com/myregistry/endpoints/9876`
