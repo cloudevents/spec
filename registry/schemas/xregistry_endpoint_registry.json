@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "properties": {
+    "endpoints": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/endpoint"
+      }
+    }
+  },
+  "required": [
+    "endpoints"
+  ],
+  "definitions": {
+    "endpoint": {
+      "allOf": [
+        {
+          "$ref": "xregistry_resources.json#/definitions/resource"
+        },
+        {
+          "$ref": "xregistry_messagedefinition_definition.json"
+        },
+        {
+          "type": "object",
+          "title": "endpoint",
+          "properties": {
+            "channel": {
+              "type": "string",
+              "description": "A string that can be used to correlate Endpoints"
+            },
+            "usage": {
+              "description": "The interaction model supported by this Endpoint",
+              "type": "string",
+              "enum": [
+                "consumer",
+                "producer",
+                "subscriber"
+              ]
+            },
+            "config": {
+              "$ref": "#/definitions/endpointConfig"
+            },
+            "deprecated": {
+              "type": "object",
+              "properties": {
+                "effective": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time at which the endpoint will enter a deprecated state"
+                },
+                "removal": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The time at which the endpoint will be removed"
+                },
+                "alternative": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "A URL to an possible alternative endpoint"
+                },
+                "docs": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "A URL to additional information concerning the deprecation of this endpoint. Possible information might include rationale behind the action, or discussion of alternatives"
+                }
+              }
+            },
+            "authscope": {
+              "type": "string",
+              "description": "Authorization scope needed for creating subscriptions. The actual meaning of this field is determined on a per-endpoint basis",
+              "example": "storage.read"
+            },
+            "definitionGroups": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri-reference"
+              }
+            }
+          },
+          "required": [
+            "usage",
+            "format"
+          ]
+        }
+      ]
+    },
+    "endpointConfig": {
+      "allOf": [
+        {
+          "type": "object",
+          "title": "endpointConfig",
+          "properties": {
+            "strict": {
+              "type": "boolean"
+            },
+            "endpoints": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        },
+        {
+          "title": "endpointConfigBase",
+          "$ref": "xregistry_endpoint_protocol_options.json"
+        }
+      ]
+    },
+    "endpointConfigSubscriber": {
+      "type": "object",
+      "title": "endpointConfigSubscriber",
+      "properties": {
+        "subscriptionConfig": {
+          "type": "object",
+          "description": "A map indicating supported options for the config parameter for the CloudSubscriptions subscribe() API call. Keys are the name of keys in the allowed config map, the values indicate the type of that parameter, confirming to the CloudEvents type system. TODO: Needs resolution with CloudSubscriptions API",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "filterDialects": {
+          "type": "array",
+          "description": "Filter dialects that can be used in subscriptions for this endpoint",
+          "items": {
+            "type": "string",
+            "description": "filter dialect"
+          },
+          "example": "[ \"basic\" ]"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/endpointConfig"
+        }
+      ]
+    },
+    "endpointConfigConsumer": {
+      "type": "object",
+      "title": "endpointConfigConsumer",
+      "allOf": [
+        {
+          "$ref": "#/definitions/endpointConfig"
+        }
+      ]
+    },
+    "endpointConfigProducer": {
+      "type": "object",
+      "title": "endpointConfigProducer",
+      "allOf": [
+        {
+          "$ref": "#/definitions/endpointConfig"
+        }
+      ]
+    }
+  }
+}

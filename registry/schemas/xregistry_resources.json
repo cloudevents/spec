@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "document",
+  "properties": {
+    "_ref": {      "$ref": "#/definitions/document"
+    }
+  },
+  "definitions": {
+    "document": {
+      "type": "object",
+      "title": "document",
+      "properties": {
+        "specversion": {
+          "type": "string"
+        }
+      },      
+      "additionalProperties": true
+    },
+    "reference": {
+      "type": "string",
+      "format": "uri-reference"
+    },
+    "resource": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "A unique identifier for this Endpoint. This value MUST be globally unique",
+          "format": "uri-reference"
+        },
+        "groupId": {
+          "type": "string",
+          "description": "Optional reference to a definitionGroup that this resource is subordinate to",
+          "format": "uri-reference"
+        },
+        "version": {
+          "type": "integer",
+          "description": "A number representing the version number of the resource.",
+          "format": "int64"
+        },
+        "self": {
+          "type": "string",
+          "description": "A unique URI for the resource. The URI MUST be a combination of the base URI of the list of this resource type for the current Discovery Service appended with the `id` of this resource.",
+          "format": "uri-reference"
+        },
+        "description": {
+          "type": "string",
+          "description": "A summary of the purpose of the resource."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the resource."
+        },
+        "docs": {
+          "type": "string",
+          "description": "Absolute URL that provides a link to additional documentation about the resource.",
+          "format": "uri"
+        },
+        "origin": {
+          "type": "string",
+          "description": "A URI reference to the original source of this resource.",
+          "format": "uri-reference"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tag"
+          }
+        },
+        "createdBy": {
+          "description": "Identity of who created this entity",
+          "type": "string"
+        },
+        "createdOn": {
+          "description": "Time when this entity was created",
+          "type": "string",
+          "format": "date-time"
+        },
+        "modifiedBy": {
+          "description": "Identity of who last modified this entity",
+          "type": "string"
+        },
+        "modifiedOn": {
+          "description": "Time when this entity was last modified",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "tag": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

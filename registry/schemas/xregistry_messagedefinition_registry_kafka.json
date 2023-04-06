@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "ref": {
+      "$ref": "#/definitions/kafkaDefinition"
+    }
+  },
+  "definitions": {
+    "kafkaDefinition": {
+      "type": "object",
+      "title": "kafkaDefinition",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/kafkaMetadata"
+        },
+        "format": {
+          "type": "string",
+          "description": "Specifies the `format` of this definition.",
+          "enum": [
+            "KAFKA", "KAFKA/0.11"
+          ]
+        }
+      },
+      "required": [
+        "metadata", "format"
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_definition.json#/definitions/definition"
+        }
+      ]
+    },
+    "kafkaMetadata": {
+      "type": "object",
+      "title": "kafkaMetadata",
+      "properties": {
+        "topic": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "partition": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "key": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyBinary"
+        },
+        "timestamp": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "recordHeaders": {
+          "type": "object",
+          "description": "Apache Kafka headers are key value pairs",
+          "additionalProperties": {
+            "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataProperty"
+          }
+        }
+      }
+    }
+  }
+}

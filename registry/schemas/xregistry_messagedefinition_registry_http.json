@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "ref": {
+      "$ref": "#/definitions/httpDefinition"
+    }
+  },
+  "definitions": {
+    "httpDefinition": {
+      "type": "object",
+      "title": "httpDefinition",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/httpMetadata"
+        },
+        "format": {
+          "type": "string",
+          "description": "Specifies the `format` of this definition.",
+          "enum": [
+            "HTTP", "HTTP/1.1", "HTTP/2", "HTTP/3"
+          ]
+        }
+      },
+      "required": [
+        "metadata", "format"
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_definition.json#/definitions/definition"
+        }
+      ]
+    },
+    "httpMetadata": {
+      "type": "object",
+      "title": "httpMetadata",
+      "properties": {
+        "method": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "status": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "path": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        },
+        "requestHeaders": {
+          "type": "array",
+          "description": "HTTP Header is allowed to appear multiple times to represent multiple name, value pairs. The same name is allowed to appear more than once.",
+          "items": {
+            "$ref": "#/definitions/httpHeaderProperty"
+          }
+        },
+        "query": {
+          "type": "object",
+          "description": "HTTP Query Parameters are key value pairs",
+          "additionalProperties": {
+            "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataProperty"
+          }
+        }
+      }
+    },
+    "httpHeaderProperty": {
+      "type": "object",
+      "title": "httpHeaderProperty",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_definition.json#/definitions/definition"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "description": "These are the endpoint options for the HTTP protocol",
+  "properties": {
+    "options": {
+      "$ref": "#/definitions/endpointOptionsHttp"
+    }
+  },
+  "definitions": {
+    "endpointOptionsHttp": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "The HTTP method to use for this endpoint"
+        },
+        "headers": {
+          "type": "array",
+          "description": "The default HTTP request headers to use for this endpoint",
+          "items": {
+            "$ref": "#/definitions/httpRequestHeaders"
+          }
+        },
+        "query": {
+          "type": "object",
+          "description": "The HTTP query parameters to use for this endpoint",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "xregistry_endpoint_protocol_options.json#/definitions/endpointOptions"
+        }
+      ]
+    },
+    "httpRequestHeaders": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The HTTP header name"
+        },
+        "value": {
+          "type": "string",
+          "description": "The HTTP header value"
+        }
+      }
+    }
+  }
+}

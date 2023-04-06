@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "ref": {
+      "$ref": "#/definitions/amqpDefinition"
+    }
+  },
+  "definitions": {
+    "amqpDefinition": {
+      "type": "object",
+      "title": "amqpDefinition",
+      "properties": {
+        "metadata": {
+          "$ref": "#/definitions/amqpMetadata"
+        },
+        "format": {
+          "type": "string",
+          "description": "Specifies the `format` of this definition.",
+          "enum": [
+            "AMQP", "AMQP/1.0"
+          ]
+        }
+      },
+      "required": [
+        "metadata", "format"
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_messagedefinition_definition.json#/definitions/definition"
+        }
+      ]
+    },
+    "amqpMetadata": {
+      "type": "object",
+      "title": "amqpMetadata",
+      "properties": {
+        "application-properties": {
+          "$ref": "#/definitions/amqpAnnotations"
+        },
+        "properties": {
+          "$ref": "#/definitions/amqpProperties"
+        },
+        "delivery-annotations": {
+          "$ref": "#/definitions/amqpAnnotations"
+        },
+        "message-annotations": {
+          "$ref": "#/definitions/amqpAnnotations"
+        },
+        "header": {
+          "$ref": "#/definitions/amqpHeader"
+        },
+        "footer": {
+          "$ref": "#/definitions/amqpAnnotations"
+        }
+      }
+    },
+    "amqpProperties": {
+      "type": "object",
+      "properties": {
+        "message-id": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "user-id": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyBinary"
+        },
+        "to": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        },
+        "subject": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "reply-to": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        },
+        "correlation-id": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "content-type": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertySymbol"
+        },
+        "content-encoding": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertySymbol"
+        },
+        "absolute-expiry-time": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyTimeStamp"
+        },
+        "creation-time": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyTimeStamp"
+        },
+        "group-id": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyString"
+        },
+        "group-sequence": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "reply-to-group-id": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyUriTemplate"
+        }
+      }
+    },
+    "amqpHeader": {
+      "type": "object",
+      "properties": {
+        "durable": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyBoolean"
+        },
+        "priority": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "ttl": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        },
+        "first-acquirer": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyBoolean"
+        },
+        "delivery-count": {
+          "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataPropertyInteger"
+        }
+      }
+    },
+    "amqpAnnotations": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "xregistry_messagedefinition_registry.json#/definitions/metadataProperty"
+      }
+    }
+  }
+}

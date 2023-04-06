@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "type": "object",
+  "description": "These are the endpoint options for the NATS protocol",
+  "properties": {
+    "options": {
+      "$ref": "#/definitions/endpointOptionsNats"
+    }
+  },
+  "definitions": {
+    "endpointOptionsNats": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "description": "The NATS topic to use for this endpoint"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "xregistry_endpoint_protocol_options.json#/definitions/endpointOptions"
+        }
+      ]
+    }
+  }
+}

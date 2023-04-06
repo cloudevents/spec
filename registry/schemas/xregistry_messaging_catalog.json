@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "catalog",
+  "description": "A catalog is a collection of definition groups, schema groups, and endpoints.",
+  "type": "object",
+  "properties": {
+    "definitionGroups": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "xregistry_messagedefinition_registry.json#/definitions/definitionGroup"
+      }
+    },
+    "definitionGroupsUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "schemaGroups": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "xregistry_schema_registry.json#/definitions/schemaGroup"
+      }
+    },
+    "schemaGroupsUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "endpoints": {
+      "additionalProperties": {
+        "$ref": "xregistry_endpoint_registry.json#/definitions/endpoint"
+      }
+    },
+    "endpointsUrl": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "xregistry_resources.json#/definitions/document"
+    }
+  ]
+}

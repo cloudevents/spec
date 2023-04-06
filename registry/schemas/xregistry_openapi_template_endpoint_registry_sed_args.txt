@@ -1,0 +1,6 @@
+/groupNamePlural/s/{%-groupNamePlural-%}/endpoints/g
+/resourceNamePlural/s/{%-resourceNamePlural-%}/definitions/g
+/resourceType/s/{%-resourceTypeReference-%}/xregistry_messagedefinition_definition.json#\/definitions\/definition/g
+/resourceVersionType/s/{%-resourceVersionTypeReference-%}/xregistry_resources.json#\/definitions\/resource/g
+/groupType/s/{%-groupTypeReference-%}/xregistry_endpoint_registry.json#\/definitions\/endpoint/g
+/documentType/s/{%-documentTypeReference-%}/xregistry_endpoint_registry.json/g

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "properties": {
+    "schemaGroups": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/schemaGroup"
+      }
+    }
+  },
+  "required": [
+    "schemaGroups"
+  ],
+  "definitions": {
+    "schemaGroup": {
+      "type": "object",
+      "title": "schemaGroup",
+      "properties": {
+        "format": {
+          "type": "string",
+          "description": "Specifies the format of all schemas in this definitionGroup in the format {schema-type}/{version}",
+          "example": [
+            "jsonschema/draft-07",
+            "avro",
+            "xsd",
+            "protobuf"
+          ]
+        },
+        "schemas": {
+          "type": "object",
+          "description": "A collection of schemas",
+          "additionalProperties": {
+            "$ref": "#/definitions/schema"
+          }
+        },
+        "schemaGroups": {
+          "type": "object",
+          "description": "A collection of schemaGroups",
+          "additionalProperties": {
+            "$ref": "#/definitions/schemaGroup"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "xregistry_resources.json#/definitions/resource"
+        }
+      ]
+    },
+    "schema": {
+      "type": "object",
+      "title": "schema",
+      "description": "a schema is a collection of schema version documents that describe semantically the same data item",
+      "properties": {
+        "versions": {
+          "type": "object",
+          "description": "A collection of schema versions",
+          "additionalProperties": {
+            "$ref": "#/definitions/schemaVersion"
+          }
+        },
+        "format": {
+          "type": "string",
+          "description": "The format of the schema in the format {schema-type}/{version}"
+        }
+      },
+      "required": [
+        "versions",
+        "format"
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_resources.json#/definitions/resource"
+        }
+      ]
+    },
+    "schemaVersion": {
+      "type": "object",
+      "title" : "schemaVersion",
+      "description": "a schema version (a document)",
+      "properties": {
+        "schemaUrl": {
+          "type": "string",
+          "description": "A URL to the schema document.",
+          "format": "uri"
+        },
+        "schema": {
+          "oneOf": [
+            {
+              "type": "object",
+              "description": "An in-line definition of the schema of the message's data."
+            },
+            {
+              "type": "string",
+              "description": "An in-line definition of the schema of the message's data."
+            }
+          ]
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "schemaUrl"
+          ]
+        },
+        {
+          "required": [
+            "schema"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "xregistry_resources.json#/definitions/resource"
+        }
+      ]
+    }
+  }
+}
