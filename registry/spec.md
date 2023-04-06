@@ -2201,7 +2201,10 @@ fragment.
 
 Examples:
 
-- If the Protobuf schema document is referenced using the URI `https://example.com/protobuf/telemetry.proto`, the URI fragment `#TelemetryEvent` references the message declaration of the `TelemetryEvent` message.
+- If the Protobuf schema document is referenced using the URI 
+  `https://example.com/protobuf/telemetry.proto`, the URI fragment 
+  `#TelemetryEvent` references the message declaration of the `TelemetryEvent` 
+  message.
 - If the Protobuf schema document is a local schema registry reference like
   `#/schemaGroups/com.example.telemetry/schemas/com.example.telemetrydata`, in
   the which the reference is already in the form of a URI fragment, the suffix
