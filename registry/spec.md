@@ -1691,7 +1691,7 @@ schema for its payload.
         "protocol": "MQTT/5.0",
         "strict": false,
         "endpoints": [
-            "mqtt://mqtt.example.com:1883",
+            "mqtt://mqtt.example.com:1883"
         ],
         "options" : {
             "topic": "{deviceid}/telemetry"
