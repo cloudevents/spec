@@ -35,7 +35,7 @@ automation and tooling.
 A Registry Service is one that manages metadata about resources. At its core,
 the management of an individual resource is simply a REST-based interface for
 creating, modifying and deleting the resource. However, many resource models
-share a common pattern of grouping resources by their "type" and can
+share a common pattern of grouping resources by their "format" and can
 optionally support versioning of the resources. This specification aims to
 provide a common interaction pattern for these types of services with the goal
 of providing an interoperable framework that will enable common tooling and
@@ -152,6 +152,15 @@ In situations where an attribute is serialized in a case-sensitive situation,
 then the case specified by this specification, or the defining extension
 specification, MUST be adhere to.
 
+TODO: Add `format`
+  - MUST be of the form document-type[/version]
+  - children MUST NOT be looser than parent (can't do parent xx/3, child xx)
+  - format group level is OPTIONAL, if present all resources/versions MUST
+    match its previs
+  - REQUIRED on resources and versions
+    - format prefix MUST be consistent
+    - but format version number can differe
+
 #### `id`
 
 - Type: String   # SHOULD this be a URI-Reference?
@@ -159,13 +168,11 @@ specification, MUST be adhere to.
 - Constraints:
   - MUST be a non-empty string
   - MUST be immutable
-  - MUST be unique within the scope of the entity's parent. In the case
-    of the `id` for the Registry itself, the uniqueness scope will be
-    based on where the Registry is used. For example, a publicly accessible
+  - MUST be case-insensitive unique within the scope of the entity's parent.
+    In the case of the `id` for the Registry itself, the uniqueness scope will
+    be based on where the Registry is used. For example, a publicly accessible
     Registry might want to consider using a UUID, while a private Registry
     does not need to be so widely unique.
-    <br>
-    QUESTION: SHOULD Resource IDs be unique across the entire Registry too?
 - Examples:
   - A UUID
 
@@ -320,7 +327,7 @@ This specification defines the following API patterns:
 /GROUPs/gID/RESOURCEs/rID?meta      # Metadata about the latest Resource version
 /GROUPs/gID/RESOURCEs/rID/versions  # Show version strings for a Resource
 /GROUPs/gID/RESOURCEs/rID/versions/VERSION         # Manage a Resource version
-/GROUPs/gID/RESOURCEs/rID/versions/VERSION?meta    # Metadata about a Resource version
+/GROUPs/gID/RESOURCEs/rID/versions/VERSION?meta    # Metadata about a version
 ```
 
 Where:
@@ -362,7 +369,7 @@ Content-Length: nnnn
       "resources": [
         { "singular": "STRING",        # eg. "definition"
           "plural": "STRING",          # eg. "definitions"
-          "versions": INT ?            # Num old versions. Def=0, -1=unlimited
+          "versions": INT ?            # Num versions(>=1). Def=1, -1=unlimited
         } +
       ] ?
     } +
@@ -449,7 +456,7 @@ Content-Length: nnnn
   "docs": "URL", ?
 
   # Repeat for each Group
-  "GROUPsURL": "URL",         # eg. "endpointsURL" - repeated for each GROUP
+  "GROUPsUrl": "URL",         # eg. "endpointsUrl" - repeated for each GROUP
   "GROUPsCount": INT          # eg. "endpointsCount"
 }
 ```
@@ -472,10 +479,10 @@ Content-Length: nnnn
 {
   "specVersion": "0.1",
 
-  "endpointsURL": "https://example.com/endpoints",
+  "endpointsUrl": "https://example.com/endpoints",
   "endpointsCount": 42,
 
-  "definitionGroupsURL": "https://example.com/groups",
+  "definitionGroupsUrl": "https://example.com/groups",
   "definitionGroupsCount": 3
 }
 ```
@@ -523,9 +530,9 @@ Content-Length: nnnn
   }
 
   # Repeat for each Group
-  "GROUPsURL": "URL",         # eg. "endpointsURL"
+  "GROUPsUrl": "URL",         # eg. "endpointsUrl"
   "GROUPsCount": INT,         # eg. "endpointsCount"
-  "GROUPs": {                 # eg. "endpoints"
+  "GROUPs": {                 # eg. "endpoints" - only when ?inline is present
     "ID": {                   # The Group ID
       "id": "STRING",
       "name": "STRING",
@@ -534,12 +541,21 @@ Content-Length: nnnn
                               # description? self?
 
       # Repeat for each RESOURCE in the Group
-      "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
-      "RESOURCEsCount": INT   # Total number resources
-      "RESOURCEs": {          # eg. "definitions"
+      "RESOURCEsUrl": "URL",  # URL to retrieve all nested Resources
+      "RESOURCEsCount": INT,  # Total number resources
+      "RESOURCEs": {          # eg. "definitions" - only when ?inline is present
         "ID": {               # MUST match the "id" on the next line
           "id": "STRING",
           ... remaining RESOURCE ?meta and RESOURCE itself ...
+
+          "versionsUrl": "URL",
+          "versionsCount": INT,
+          "versions": {       # Only when ?inline is present
+            "ID": {
+              "id": "STRING",
+              ... remaining VERSION ?meta and VERSION itself ...
+            }
+          } ?
         } *
       } ?                     # OPTIONAL if RESOURCEsCount is zero
     } *
@@ -549,7 +565,7 @@ Content-Length: nnnn
 
 Note: If the Registry can not return all expected data in one response then it
 MUST generate an error. In those cases, the client will need to query the
-individual Groups via the `/GROUPsURL` API so the Registry can leverage
+individual Groups via the `/GROUPsUrl` API so the Registry can leverage
 pagination of the response.
 
 TODO: define the error / add filtering / pagination
@@ -602,12 +618,21 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
     "epoch": UINT,          # Server controlled
 
     # Repeat for each RESOURCE in the Group
-    "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
+    "RESOURCEsUrl": "URL",  # URL to retrieve all nested Resources
     "RESOURCEsCount": INT,  # Total number resources
     "RESOURCEs": {          # Only when ?inline is present
       "ID": {               # MUST match the "id" on the next line
         "id": "STRING",
         ... remaining RESOURCE ?meta and RESOURCE itself ...
+
+        "versionsUrl": "URL",
+        "versionsCount": INT,
+        "versions": {       # Only when ?inline is present
+          "ID": {
+            "id": "STRING",
+            ... remaining VERSION ?meta and VERSION itself ...
+          } ?
+        } ?
       } *
     } ?                     # OPTIONAL if RESOURCEsCount is zero
   } *
@@ -617,7 +642,7 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
 Note: If the `inline` query parameter is present and the presence of the
 `RESOURCEs` map results in even a single Group being too large to return in
 one response then an error MUST be generated. In those cases the client will
-need to query the individual Resources via the `RESOURCEsURL` so the Registry
+need to query the individual Resources via the `RESOURCEsUrl` so the Registry
 can leverage pagination of the response data.
 
 **Example:**
@@ -642,7 +667,7 @@ Link: <http://example.com/endpoints&page=2>;rel=next;count=100
     "name": "A cool endpoint",
     "epoch": 1,
 
-    "definitionsURL": "https://example.com/endpoints/123/definitions",
+    "definitionsUrl": "https://example.com/endpoints/123/definitions",
     "definitionsCount": 5
   },
   "124": {
@@ -650,7 +675,7 @@ Link: <http://example.com/endpoints&page=2>;rel=next;count=100
     "name": "Redis Queue",
     "epoch": 3,
 
-    "definitionsURL": "https://example.com/endpoints/124/definitions",
+    "definitionsUrl": "https://example.com/endpoints/124/definitions",
     "definitionsCount": 1
   }
 }
@@ -687,7 +712,7 @@ Location: URL             # .../GROUPs/ID
   "epoch": UINT,
 
   # Repeat for each RESOURCE type in the Group
-  "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
+  "RESOURCEsUrl": "URL",  # URL to retrieve all nested Resources
   "RESOURCEsCount": INT   # Total number resources
 }
 ```
@@ -739,12 +764,21 @@ Content-Length: nnnn
   "epoch": UINT,           # Server controlled
 
   # Repeat for each RESOURCE type in the Group
-  "RESOURCEsURL": "URL",  # URL to retrieve all nested Resources
+  "RESOURCEsUrl": "URL",  # URL to retrieve all nested Resources
   "RESOURCEsCount": INT,  # Total number resources
   "RESOURCEs": {          # Only when ?inline is present
     "ID": {
       "id": "STRING",
       ... remaining RESOURCE ?meta and RESOURCE itself ...
+
+      "versionsUrl": "URL",
+      "versionsCount": INT,
+      "versions": {       # Only when ?inline is present
+        "ID": {
+          "id": "STRING",
+          ... remaining VERSION ?meta and VERSION itself ...
+        } ?
+      } ?
     } *
   } ?                     # OPTIONAL if RESOURCEsCount is zero
 }
@@ -770,7 +804,7 @@ Content-Length: nnnn
   "name": "A cool endpoint",
   "epoch": 1,
 
-  "definitionsURL": "https://example.com/endpoints/123/definitions",
+  "definitionsUrl": "https://example.com/endpoints/123/definitions",
   "definitionsCount": 5
 }
 ```
@@ -807,7 +841,7 @@ Content-Length: nnnn
   "epoch": UINT,          # MUST be greater than previous value
 
   # Repeat for each RESOURCE type in the Group
-  "RESOURCEsURL": "URL",
+  "RESOURCEsUrl": "URL",
   "RESOURCEsCount": INT
 }
 ```
@@ -838,7 +872,7 @@ Content-Length: nnnn
   "name": "A cooler endpoint",
   "epoch": 2,
 
-  "definitionsURL": "https://example.com/endpoints/123/definitions",
+  "definitionsUrl": "https://example.com/endpoints/123/definitions",
   "definitionsCount": 5,
 }
 ```
@@ -931,12 +965,27 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
     "epoch": UINT,
     "self": "URL",                   # URL to specific version
 
-    "RESOURCEURI": "URI", ?          # If not locally stored (singular)
+    "RESOURCEUri": "URI", ?          # If not locally stored (singular)
     "RESOURCE": {} ?,                # If ?inline present & JSON (singular)
     "RESOURCEBase64": "STRING" ?     # If ?inline present & ~JSON (singular)
+
+    "versionsUrl": "URL",
+    "versionsCount": INT,
+    "versions": {                    # Only when ?inline is present
+      "ID": {
+        "id": "STRING",
+        ... remaining VERSION ?meta and VERSION itself ...
+      } ?
+    } ?
   } *
 }
 ```
+
+Note: If the `inline` query parameter is present and the presence of the
+`versions` map results in even a single Resource being too large to return in
+one response then an error MUST be generated. In those cases the client will
+need to query the individual Versions via the `versionUrl` so the Registry
+can leverage pagination of the response data.
 
 **Example:**
 
@@ -1074,7 +1123,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,
   "self": "URL",
-  "RESOURCEURI": "URI" ?     # singular
+  "RESOURCEUri": "URI" ?     # singular
 }
 ```
 
@@ -1167,7 +1216,7 @@ PUT /GROUPs/ID/RESOURCEs/ID?meta[&epoch=EPOCH]
   "version": INT, ?            # If present it MUST match current value
   "epoch": UINT, ?             # If present it MUST match current value & URL
   "self": "URL", ?             # If present it MUST be ignored
-  "RESOURCEURI": "URI" ?       # singular
+  "RESOURCEUri": "URI" ?       # singular
 }
 ```
 
@@ -1184,7 +1233,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,               # MUST be incremented
   "self": "URL",
-  "RESOURCEURI": "URI" ?       # singular
+  "RESOURCEUri": "URI" ?       # singular
 }
 ```
 
@@ -1295,13 +1344,13 @@ Content-Length: nnnn
 Link: <URL>;rel=next;count=INT  # If pagination is needed
 
 {
-  VERSION: {
+  "ID": {                            # Versions ID/string
     "id": "STRING",
     "name": "STRING",
     "version": INT,
     "epoch": UINT,
     "self": "URL",
-    "RESOURCEURI": "URI", ?          # If not locally stored (singular)
+    "RESOURCEUri": "URI", ?          # If not locally stored (singular)
     "RESOURCE": {} ?,                # If ?inline present & JSON (singular)
     "RESOURCEBase64": "STRING" ?     # If ?inline present & ~JSON (singular)
   } *
@@ -1430,7 +1479,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,
   "self": "URL",
-  "RESOURCEURI": "URI" ?          # singular
+  "RESOURCEUri": "URI" ?          # singular
 }
 ```
 
@@ -1514,7 +1563,7 @@ PUT /GROUPs/ID/RESOURCEs/ID/versions/VERSION?meta[&epoch=EPOCH]
   "version": INT, ?            # If present it MUST match current value
   "epoch": UINT, ?             # If present it MUST match current value & URL
   "self": "URL", ?             # If present it MUST be ignored
-  "RESOURCEURI": "URI" ?       # singular
+  "RESOURCEUri": "URI" ?       # singular
 }
 ```
 
@@ -1531,7 +1580,7 @@ Content-Length: nnnn
   "version": INT,
   "epoch": UINT,               # MUST be incremented
   "self": "URL",
-  "RESOURCEURI": "URI" ?       # singular
+  "RESOURCEUri": "URI" ?       # singular
 }
 ```
 
@@ -1633,8 +1682,8 @@ versions (except the latest) of the Resource.
 ## CloudEvents Registry
 
 The CloudEvents Registry is a universal catalog and discovery metadata format
-as well as a metadata service API for messaging and eventing schemas, metaschemas,
-and messaging and eventing endpoints.
+as well as a metadata service API for messaging and eventing schemas,
+metaschemas, and messaging and eventing endpoints.
 
 The CloudEvents registry model contains three separate registries that can be
 implemented separately or in combination.
@@ -1743,6 +1792,8 @@ scenarios:
   "$schema": "https://cloudevents.io/schemas/registry",
   "specversion": "0.4-wip",
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
+
+  "endpointsCount": 1,
   "endpoints" : 
   {
     "com.example.telemetry" : {
@@ -1764,10 +1815,13 @@ scenarios:
       ]
     }
   },
+
+  "definitionGroupsCount": 1,
   "definitionGroups" : {
     "com.example.telemetryEvents" : {
-      "type" : "definitionGroup",
       "id" : "com.example.telemetryEvents",
+
+      "definitionsCount": 1,
       "definitions": {
         "com.example.telemetry" : {
           "id": "com.example.telemetry",
@@ -1801,18 +1855,22 @@ scenarios:
       }
     }
   },
+
+  "schemaGroupsCount": 1,
   "schemaGroups" : {
     "com.example.telemetry" : {
-      "type" : "schemagroup",
       "id" : "com.example.telemetry",
+
+      "schemasCount": 1,
       "schemas": {
         "com.example.telemetrydata" : {
           "id": "com.example.telemetrydata",
           "description": "device telemetry event data",
           "format": "Protobuf/3.0",
+
+          "versionsCount": 1,
           "versions" : {
             "1.0" : {
-              "type" : "schemaversion",
               "id" : "1.0",
               "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; }"
             }
@@ -1833,6 +1891,8 @@ group with a deep link to the respective object in the service:
   "$schema": "https://cloudevents.io/schemas/registry",
   "specversion": "0.4-wip",
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
+
+  "endpointsCount": 1,
   "endpoints" : 
   {
     "com.example.telemetry" : {
@@ -1842,7 +1902,7 @@ group with a deep link to the respective object in the service:
         // ... details ...
       },
       "format" : "CloudEvents/1.0",
-      "definitionGroups" :[
+      "definitionGroups": [
           "https://site.example.com/registry/definitiongroups/com.example.telemetryEvents"
       ]
     }
@@ -1860,6 +1920,8 @@ link will first reference the file and then the object within the file, using
   "$schema": "https://cloudevents.io/schemas/registry",
   "specversion": "0.4-wip",
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
+
+  "endpointsCount": 1,
   "endpoints" : 
   {
     "com.example.telemetry" : {
@@ -1869,7 +1931,7 @@ link will first reference the file and then the object within the file, using
         // ... details ......
       },
       "format" : "CloudEvents/1.0",
-      "definitionGroups" :[
+      "definitionGroups": [
         "https://rawdata.repos.example.com/myorg/myproject/main/example.telemetryEvents.cereg#/definitionGroups/com.example.telemetryEvents"
       ]
     }
@@ -1904,8 +1966,9 @@ encoding. The formal JSON schema for the file format is defined in the
 [CloudEvents Registry Document Schema](#cloudevents-registry-document-schema),
 which implements the Registry format and the CloudEvents Registry format.
 
-The media-type for the file format is `application/cloudevents-registry+json` for the
-JSON encoding and `application/cloudevents-registry+yaml` for the YAML encoding.
+The media-type for the file format is `application/cloudevents-registry+json`
+for the JSON encoding and `application/cloudevents-registry+yaml` for the YAML
+encoding.
 
 The JSON schema identifier is `https://cloudevents.io/schemas/registry` and the
 `specversion` property indicates the version of this specification that the
@@ -1919,14 +1982,24 @@ embedded or referenced. Any of the three sub-registries MAY be omitted.
 {
    "$schema": "https://cloudevents.io/schemas/registry",
    "specversion": "0.4-wip",
-   "endpoints": { ... } | "endpointsUrl": "URL",
-   "definitionGroups": { ... } | "definitionGroupsUrl": "URL"
-   "schemaGroups" : { ... } | "schemaGroupsUrl": "URL",
+
+   "endpointsUrl": "URL",
+   "endpointsCount": INT,
+   "endpoints": { ... },
+
+   "definitionGroupsUrl": "URL",
+   "definitionGroupsCount": INT,
+   "definitionGroups": { ... },
+
+   "schemaGroupsUrl": "URL",
+   "schemaGroupsCount": INT,
+   "schemaGroups" : { ... }
 }
 ```
 
 While the file structure leads with endpoints followed by definition groups and
-then schema groups by convention, the order of the sub-registries is not significant.
+then schema groups by convention, the order of the sub-registries is not
+significant.
 
 ### Schema Registry
 
@@ -1967,9 +2040,13 @@ Example:
 
 ``` meta
 {
+  "schemaGroupsUrl": "http://example.com/schemagroups",
+  "schemaGroupsCount": 1,
   "schemaGroups": {
     "com.example.schemas": {
       "id": "com.example.schemas",
+      "schemasUrl": "https://example.com/schemagroups/com.example.schemas/schemas",
+      "schemasCount": 5,
       "schemas": {
         ...
       }
@@ -2024,9 +2101,9 @@ basic [attributes](#attributes-and-extensions):
 #### Resource Version: schemaversion
 
 The `VERSION` object of the `schema` resource is of type `schemaversion`. The
-[`format`](#format-schema-format) extension attribute of `schema` MAY be repeated in `schemaversion` for
-clarity, but MUST be identical. `schemaversion` has the following extension
-attributes.
+[`format`](#format-schema-format) extension attribute of `schema` MAY be
+repeated in `schemaversion` for clarity, but MUST be identical.
+`schemaversion` has the following extension attributes.
 
 ##### `schema`
 
@@ -2050,28 +2127,32 @@ schema named `com.example.telemetrydata`:
 
 ``` JSON
 {
+  "schemaGroupsUrl": "...",
+  "schemaGroupsCount": 1,
   "schemaGroups" : {
     "com.example.telemetry" : {
-      "type" : "schemagroup",
       "id" : "com.example.telemetry",
+
+      "schemasUrl": "...",
+      "schemasCount": 1,
       "schemas": {
         "com.example.telemetrydata" : {
           "id": "com.example.telemetrydata",
           "description": "device telemetry event data",
           "format": "Protobuf/3",
+
+          "versionsUrl": "...",
+          "versionsCount": 3,
           "versions" : {
             "1.0" : {
-              "type" : "schemaversion",
               "id" : "1.0",
               "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; } }"
             },
             "2.0" : {
-              "type" : "schemaversion",
               "id" : "2.0",
               "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; string unit = 2; } }"
             },
             "3.0" : {
-              "type" : "schemaversion",
               "id" : "3.0",
               "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; string unit = 2; string description = 3; } }"
             }
@@ -2127,8 +2208,8 @@ version number.
 ##### XML Schema
 
 The [`format`](#format-schema-format) identifier for XML Schema is `XSD`. The
-version of the XML Schema format is the version of the W3C XML Schema specification
-that is used to define the schema.
+version of the XML Schema format is the version of the W3C XML Schema
+specification that is used to define the schema.
 
 When the `format` attribute is set to `XSD`, the `schema` attribute of
 `schemaversion` is a string containing an XML Schema document conformant with
@@ -2152,8 +2233,8 @@ are defined as follows:
 ##### Apache Avro Schema
 
 The [`format`](#format-schema-format) identifier for Apache Avro Schema is
-`Avro`. The version of the Apache Avro Schema format is the version of the Apache
-Avro Schema release that is used to define the schema.
+`Avro`. The version of the Apache Avro Schema format is the version of the
+Apache Avro Schema release that is used to define the schema.
 
 When the `format` attribute is set to `Avro`, the `schema` attribute of the
 `schemaversion` is a JSON object representing an Avro schema document conformant
@@ -2187,17 +2268,17 @@ The [`format`](#format-schema-format) identifier for Protobuf Schema is
 Protobuf syntax that is used to define the schema.
 
 When the `format` attribute is set to `Protobuf`, the `schema` attribute of the
-`schemaversion` is a string containing a Protobuf schema document conformant with
-the declared version.
+`schemaversion` is a string containing a Protobuf schema document conformant
+with the declared version.
 
 - `Protobuf/3` is the identifier for the Protobuf syntax version 3.
 - `Protobuf/2` is the identifier for the Protobuf syntax version 2.
 
 A URI-reference, like [`schemaurl`](#schemaurl-message-schema-url) that points
 to an Protobuf Schema document MUST reference an Protobuf `message` declaration
-contained in the schema document using a URI fragment suffix `[:]{message-name}`.
-The ':' character is used as a separator when the URI already contains a
-fragment.
+contained in the schema document using a URI fragment suffix
+`[:]{message-name}`. The ':' character is used as a separator when the URI
+already contains a fragment.
 
 Examples:
 
@@ -2220,7 +2301,8 @@ concrete values and patterns for the `type`, `source`, and `subject` attributes
 of a CloudEvent.
 
 All message definitions (events are a from of messages and are therefore always
-implied to be included from here on forward) are defined inside definition groups.
+implied to be included from here on forward) are defined inside definition
+groups.
 
 A definition group is a collection of message definitions that are related to
 each other in some application-specific way. For instance, a definition group
@@ -2240,7 +2322,7 @@ The Registry API extension model of the Message Definitions Registry is
         {
           "singular": "definition",
           "plural": "definitions",
-          "versions": 0,
+          "versions": 1,
         }
       ]
     }
@@ -2250,10 +2332,11 @@ The Registry API extension model of the Message Definitions Registry is
 
 #### Message Definition Groups
 
-The Group (GROUP) name is `definitionGroups`. The type of a group is `definitionGroup`.
+The Group (GROUP) name is `definitionGroups`. The type of a group is
+`definitionGroup`.
 
-The following attributes are defined for the `definitionGroup` object in addition to the
-basic [attributes](#attributes-and-extensions):
+The following attributes are defined for the `definitionGroup` object in
+addition to the basic [attributes](#attributes-and-extensions):
 
 ##### `format` (Message format)
 
@@ -2285,8 +2368,8 @@ Different from schemas, message definitions do not contain a
 version history. If the metadata of two messages differs, they are considered
 different definitions.
 
-The following extension is defined for the `definition` object in addition to the
-basic [attributes](#attributes-and-extensions):
+The following extension is defined for the `definition` object in addition to
+the basic [attributes](#attributes-and-extensions):
 
 ##### `format` (Message format, definition)
 
@@ -2302,21 +2385,23 @@ Illustrating example:
 
 ``` JSONC
 
+"definitionGroupsUrl": "...",
+"definitionGroupsCount": 2,
 "definitionGroups" : {
   "com.example.abc" : {
-    "type" : "definitionGroup",
     "id": "com.example.abc",
     "format" : "CloudEvents/1.0",
+
+    "definitionsUrl": "...",
+    "definitionsCount": 2,
     "definitions" : {
       "com.example.abc.event1" : {
-        "type" : "definition",
         "id": "com.example.abc.event1",
         "format" : "CloudEvents/1.0",
          // ... details ...
         }
       },
       "com.example.abc.event2" : {
-        "type" : "definition",
         "id": "com.example.abc.event1",
         "format" : "CloudEvents/1.0",
         // ... details ...
@@ -2325,10 +2410,13 @@ Illustrating example:
   "com.example.def" : {
     "id": "com.example.def",
     "format" : "CloudEvents/1.0",
+
+    "definitionsUrl": "...",
+    "definitionsCount": 1,
     "definitions" : {
       "com.example.abc.event1" : {
         "uri": "#/definitionGroups/com.example.abc/definitions/com.example.abc.event1",
-        // ... more ...
+        // ... details ...
       }
     }
   }
@@ -2366,8 +2454,9 @@ Illustrating example:
 ##### `schema` (Message schema)
 
 - Type: String | Object as defined by the schema format
-- Description: Contains the inline schema for the message payload. The schema format
-  is identified by the `schemaformat` attribute. Equivalent to the schemaversion
+- Description: Contains the inline schema for the message payload. The schema
+  format is identified by the `schemaformat` attribute. Equivalent to the
+  schemaversion
   ['schema'](#schema) attribute
 - Constraints:
   - OPTIONAL.
@@ -2492,9 +2581,9 @@ For the "CloudEvents/1.0" format, the [`metadata`](#metadata-message-metadata)
 object contains a property `attributes`, which is an object whose properties
 correspond to the CloudEvents context attributes.
 
-As with the [CloudEvents specification][CloudEvents], the attributes form a flat list and
-extension attributes are allowed. Attribute names are restricted to lower-case
-alphanumerical characters without separators.
+As with the [CloudEvents specification][CloudEvents], the attributes form a
+flat list and extension attributes are allowed. Attribute names are restricted
+to lower-case alphanumerical characters without separators.
 
 The base attributes are defined as follows:
 
@@ -2636,9 +2725,9 @@ The following example defines a message that is sent over HTTP/1.1:
 
 #### "AMQP/1.0"
 
-The "AMQP/1.0" format is used to define messages that are sent over an [AMQP][AMQP 1.0]
-connection. The format is based on the default [AMQP 1.0 Message Format][AMQP
-1.0 Message Format].
+The "AMQP/1.0" format is used to define messages that are sent over an
+[AMQP][AMQP 1.0] connection. The format is based on the default
+[AMQP 1.0 Message Format][AMQP 1.0 Message Format].
 
 The [`metadata`](#metadata-message-metadata) object MAY contain several
 properties, each of which corresponds to a section of the AMQP 1.0 Message:
@@ -2719,7 +2808,8 @@ following properties are defined, with type constraints:
 ##### `application-properties` (AMQP 1.0 Application Properties)
 
 The `application-properties` property is an object that contains the custom
-properties of the AMQP 1.0 [Application Properties][AMQP 1.0 Application Properties] section.
+properties of the AMQP 1.0 [Application Properties][AMQP 1.0 Application
+Properties] section.
 
 The names of the properties MUST be of type `symbol` and MUST be unique.
 The values of the properties MAY be of any permitted type.
@@ -2727,7 +2817,8 @@ The values of the properties MAY be of any permitted type.
 ##### `message-annotations` (AMQP 1.0 Message Annotations)
 
 The `message-annotations` property is an object that contains the custom
-properties of the AMQP 1.0 [Message Annotations][AMQP 1.0 Message Annotations] section.
+properties of the AMQP 1.0 [Message Annotations][AMQP 1.0 Message Annotations]
+section.
 
 The names of the properties MUST be of type `symbol` and MUST be unique.
 The values of the properties MAY be of any permitted type.
@@ -2735,7 +2826,8 @@ The values of the properties MAY be of any permitted type.
 ##### `delivery-annotations` (AMQP 1.0 Delivery Annotations)
 
 The `delivery-annotations` property is an object that contains the custom
-properties of the AMQP 1.0 [Delivery Annotations][AMQP 1.0 Delivery Annotations] section.
+properties of the AMQP 1.0
+[Delivery Annotations][AMQP 1.0 Delivery Annotations] section.
 
 The names of the properties MUST be of type `symbol` and MUST be unique.
 The values of the properties MAY be of any permitted type.
@@ -2876,9 +2968,10 @@ can be consumed, or which makes messages available for subscription and
 delivery to a consumer-designated endpoint.
 
 As discussed in [CloudEvents Registry overview](#cloudevents-registry),
-endpoints are supersets of [message definition groups](#message-definition-groups)
-and MAY contain inlined definitions. Therefore, the RESORCE level in the
-meta-model for the Endpoint Registry are likewise `definitions`:
+endpoints are supersets of
+[message definition groups](#message-definition-groups) and MAY contain
+inlined definitions. Therefore, the RESORCE level in the meta-model for the
+Endpoint Registry are likewise `definitions`:
 
 ``` JSON
 {
@@ -2891,7 +2984,7 @@ meta-model for the Endpoint Registry are likewise `definitions`:
         {
           "singular": "definition",
           "plural": "definitions",
-          "versions": 0,
+          "versions": 1,
           "mutable": true
         }
       ]
@@ -3063,8 +3156,9 @@ The following attributes are defined for the `endpoint` type:
 
 ##### `definitions` (Endpoint)
 
-Endpoints are supersets of [message definition groups](#message-definition-groups)
-and MAY contain inlined definitions. See [Message Definitions](#message-definitions).
+Endpoints are supersets of
+[message definition groups](#message-definition-groups) and MAY contain
+inlined definitions. See [Message Definitions](#message-definitions).
 
 Example:
 
@@ -3074,6 +3168,8 @@ Example:
   "options": {
     "method": "POST"
     },
+  "definitionsUrl": "..."
+  "definitionsCount": 1,
   "definitions" : {
     "myevent": {
       "format": "CloudEvents/1.0",
@@ -3244,8 +3340,9 @@ present, it MUST be a valid AMQP node name.
 
 The following options are defined for AMQP endpoints.
 
-- `node`: The name of the AMQP node (a queue or topic or some addressable entity) to
-  use for the endpoint. If present, the value overrides the path portion of the Endpoint URI.
+- `node`: The name of the AMQP node (a queue or topic or some addressable
+  entity) to use for the endpoint. If present, the value overrides the path
+  portion of the Endpoint URI.
 - `durable`: If `true`, the AMQP `durable` flag is set on transfers. The default
   value is `false`. This option only applies to `usage:producer` endpoints.
 - `link-properties`: A map of AMQP link properties to use for the endpoint. The
@@ -3298,7 +3395,8 @@ The following options are defined for MQTT endpoints.
   placeholders using the [RFC6570][RFC6570] Level 1 URI Template syntax
 - `qos`: The MQTT Quality of Service (QoS) level to use for the endpoint. The
   value MUST be an integer between 0 and 2. The default value is 0. The value is
-  overidden by the `qos` property of the [MQTT message format](#mqtt311-and-mqtt50).
+  overidden by the `qos` property of the
+  [MQTT message format](#mqtt311-and-mqtt50).
 - `retain`: If `true`, the MQTT `retain` flag is set on transfers. The default
   value is `false`. The value is overidden by the `retain` property of the [MQTT
   message format](#mqtt311-and-mqtt50). This option only applies to
@@ -3339,8 +3437,8 @@ bootstrap server addresses. The scheme follows Kafka configuration usage, e.g.
 
 The following options are defined for Kafka endpoints.
 
-- `topic`: The Kafka topic to use for the endpoint. The value MUST be a non-empty
-  string if present. The value MAY contain placeholders using the
+- `topic`: The Kafka topic to use for the endpoint. The value MUST be a
+  non-empty string if present. The value MAY contain placeholders using the
   [RFC6570][RFC6570] Level 1 URI Template syntax
 - `acks`: The Kafka `acks` setting to use for the endpoint. The value MUST be an
   integer between -1 and 1. The default value is 1. This option only applies to
