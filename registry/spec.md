@@ -15,7 +15,8 @@ automation and tooling.
 - [Registry Formats and APIs](#registry-formats-and-apis)
   - [Attributes and Extensions](#attributes-and-extensions)
   - [Registry APIs](#registry-apis)
-    - [Retrieving the Registry Model](#retrieving-the-registry-model)
+    - [Registry Model](#registry-model)
+    - [Registry Collections](#registry-collections)
     - [Retrieving the Registry](#retrieving-the-registry)
     - [Managing Groups](#managing-groups)
     - [Managing Resources](#managing-resources)
@@ -128,7 +129,7 @@ Attributes:
 - `"name": "STRING"`
 - `"description": "STRING"`
 - `"tags": { "STRING": "STRING" * }`
-- `"version": UINT`
+- `"versionId": STRING`
 - `"epoch": UINT`
 - `"self": "URL"`
 - `"createdBy": "STRING"`
@@ -213,19 +214,21 @@ TODO: Add `format`
 - Examples:
   - `{ "owner": "John", "verified": "" }`
 
-#### `version`
+#### `versionId`
 
-- Type: Unsigned Integer       # SHOULD this be a String?
-- Description: A numeric value representing a specific instance of an entity.
+- Type: String
+- Description: The ID of a specific version of an entity.
   Note that versions of an entity can be modified without changing the
-  `version` value. Often this value, or when a new version is created, is
-  controlled by a user of the Registry. Also see `epoch`.
+  `versionId` value. Often this value is controlled by a user of the Registry.
+  This specification makes no statement as to the format or versioning scheme
+  used by implementations of this specification. However, it is assumed that
+  newer versions of an entity will have a "higher" versionId value than older
+  versions.  Also see `epoch`.
 - Constraints:
-  - MUST be an unsigned integer equal to or greater than zero
-  - older versions of the entity MUST have numerically smaller `version` values
+  - MUST be a non-empty string.
   - MUST be unique across all versions of the entity
 - Examples:
-  - `1`, `2`, `3`
+  - `1`, `2.0`, `v3-rc1`
 
 #### `epoch`
 
@@ -233,7 +236,7 @@ TODO: Add `format`
 - Description: A numeric value used to determine whether an entity has been
   modified. Each time the associated entity is updated, this value MUST be
   set to a new value that is greater than the current one.
-  Note that unlike `version`, this attribute is most often managed by
+  Note that unlike `versionId`, this attribute is most often managed by
   the Registry itself. Additionally, if an entity is created that is based
   on another entity (e.g. a new version of an entity is created), then the
   new entity's `epoch` value can be reset (e.g. to zero) since the scope of
@@ -318,7 +321,7 @@ TODO: Add `format`
 This specification defines the following API patterns:
 
 ``` meta
-/?model                             # Manage the registry model
+/model                              # Manage the registry model
 /                                   # Show all Groups
 /GROUPs                             # Manage a Group Type
 /GROUPs/gID                         # Manage a Group
@@ -326,8 +329,8 @@ This specification defines the following API patterns:
 /GROUPs/gID/RESOURCEs/rID           # Manage the latest Resource version
 /GROUPs/gID/RESOURCEs/rID?meta      # Metadata about the latest Resource version
 /GROUPs/gID/RESOURCEs/rID/versions  # Show version strings for a Resource
-/GROUPs/gID/RESOURCEs/rID/versions/VERSION         # Manage a Resource version
-/GROUPs/gID/RESOURCEs/rID/versions/VERSION?meta    # Metadata about a version
+/GROUPs/gID/RESOURCEs/rID/versions/vID         # Manage a Resource version
+/GROUPs/gID/RESOURCEs/rID/versions/vID?meta    # Metadata about a version
 ```
 
 Where:
@@ -335,7 +338,7 @@ Where:
 - `gID` is the unique identifier of a single Group
 - `RESOURCEs` is the type of resources (plural). E.g. `definitions`
 - `rID` is the unique identifier of a single Resource
-- `VERSION` is a version string referencing a versioned instead of a resource
+- `vID` is the unique identifier of a version of a Resource
 
 While these APIs are shown to be at the root path of a Registry Service,
 implementation MAY choose to prefix them as necessary. However, the same
@@ -343,24 +346,26 @@ prefix MUST be used consistently for all APIs in the same Registry Service.
 
 The following sections define the APIs in more detail.
 
-#### Retrieving the Registry Model
+#### Registry Model
 
-This returns the metadata describing the model of the Registry Service.
+The Registry model defines the Groups and Resources supported by the Registry
+Service. This information will usually be used by tooling that does not have
+advanced knowledge of the data stored within the Registry.
 
-The request MUST be of the form:
+The Registry model can be retrieved two ways:
+
+1. as a stand-alone resource. This is useful when management of the Registry's
+   model is needed independently from the resources within the Registry.
+2. as part of the Registry resources. This is useful when it is desirable to
+   view the entire Registry as a single document - such as an "export" type
+   of scenario. See the [Retrieving the Registry](#retrieving-the-registry)
+   section (the `?model` flag) for more information on this option.
+
+Regardless of how the model is retrieved, the overall format is as follows:
 
 ``` meta
-GET /?model
-```
-
-A successful response MUST be of the form:
-
-``` meta
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-Content-Length: nnnn
-
 {
+  "schema": "URI-Reference", ?         # Schema doc for the entire Registry
   "groups": [
     { "singular": "STRING",            # eg. "endpoint"
       "plural": "STRING",              # eg. "endpoints"
@@ -369,7 +374,7 @@ Content-Length: nnnn
       "resources": [
         { "singular": "STRING",        # eg. "definition"
           "plural": "STRING",          # eg. "definitions"
-          "versions": INT ?            # Num versions(>=1). Def=1, -1=unlimited
+          "versions": UINT ?           # Num versions(>=1). Def=1, 0=unlimited
         } +
       ] ?
     } +
@@ -410,12 +415,46 @@ The following describes the attributes of Registry model:
     implementation MAY prune old versions at any time. Implementation MUST
     NOT delete a version without also deleting all older versions.
 
+
+Below describes how to retrieve the model as an independent resource.
+
+The request MUST be of the form:
+
+``` meta
+GET /model
+```
+
+A successful response MUST be of the form:
+
+``` meta
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: nnnn
+
+{
+  "schema": "URI-Reference", ?         # Schema doc for the entire Registry
+  "groups": [
+    { "singular": "STRING",            # eg. "endpoint"
+      "plural": "STRING",              # eg. "endpoints"
+      "schema": "URI-Reference", ?     # Schema doc for the group
+
+      "resources": [
+        { "singular": "STRING",        # eg. "definition"
+          "plural": "STRING",          # eg. "definitions"
+          "versions": UINT ?           # Num versions. Def=1, 0=unlimited
+        } +
+      ] ?
+    } +
+  ] ?
+}
+```
+
 **Example:**
 
 Request:
 
 ``` meta
-GET /?model
+GET /model
 ```
 
 Response:
@@ -425,8 +464,61 @@ HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
 
-{ TODO }
+{
+  "model": {
+    "groups": [
+      { "singular": "endpoint",
+        "plural": "endpoints",
+
+        "resources": [
+          { "singular": "definitionGroup",
+            "plural": "definitionGroups",
+            "versions": 1
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
+
+#### Registry Collections
+
+The Registry collections (groupings of same-typed resources) that are defined
+by the Registry Model discussed in the previous section follow a consistent
+pattern with respect to how they are represented in the serialization of the
+Registry.
+
+Each collection MUST be serialized as 2 REQUIRED properties and 1 OPTIONAL
+one - as shown in the following example for a GROUP:
+```
+  "GROUPsUrl": "URL,
+  "GROUPsCount": UINT,
+  "GROUPs": { ... map of entities in the group, key is the "id" of each ... } ?
+```
+
+Each property MUST start with the plural name of the entity type. For example,
+`endpointsUrl`, not `endpointUrl`. The `xxxsUrl` property MUST always be
+present and MUST contain an absolute URL that can be used to retrieve the
+latest set of entities in the collection via an HTTP `GET`. The `xxxsCount`
+property MUST always be present and MUST containe the number of entities in
+the collection after any filtering might have been applied. The `xxxs`
+property is OPTIONAL and MUST only be included if the Registry request included
+the `inline` flag and it included this collection's plural name. This property
+MUST be a map with the key equal to the `id` of each entity in the collection.
+When filtering is applied then this property MUST only include entities that
+satisfy the filter criteria.
+
+The set of entitie returned in the `xxxs` property is a point-in-time view
+of the Registry. There is no guarantee that a `GET` to the `xxxsUrl` will
+return the exact same collection since the contents of the Registry might
+have changed.
+
+When the number of entities in the collection is zero, the `xxxs` property
+MAY be excluded from the serialization, even if `inline` is specified.
+
+For clarity, these rules MUST apply to the `GROUPs`, `RESOURCEs` and
+`versions` collections.
 
 #### Retrieving the Registry
 
@@ -436,8 +528,11 @@ Registry itself.
 The request MUST be of the form:
 
 ``` meta
-GET /
+GET /[?model]
 ```
+
+The presence of the `model` query parameter indicates that the response
+MUST include the Registry model as an additional top-level property.
 
 A successful response MUST be of the form:
 
@@ -454,6 +549,8 @@ Content-Length: nnnn
   "self": "URL",
   "tags": { "STRING": "STRING" * }, ?
   "docs": "URL", ?
+
+  "model": { ... } ?          # if ?model is present
 
   # Repeat for each Group
   "GROUPsUrl": "URL",         # eg. "endpointsUrl" - repeated for each GROUP
@@ -477,7 +574,52 @@ Content-Type: application/json; charset=utf-8
 Content-Length: nnnn
 
 {
+  "id": "123",
   "specVersion": "0.1",
+  "self": "http://example.com/",
+
+  "endpointsURL": "https://example.com/endpoints",
+  "endpointsCount": 42,
+
+  "definitionGroupsURL": "https://example.com/groups",
+  "definitionGroupsCount": 3
+}
+```
+
+Another example asking for the model to be included:
+
+Request:
+
+``` meta
+GET /?model
+```
+
+Response:
+
+``` meta
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: nnnn
+
+{
+  "id": "123",
+  "specVersion": "0.1",
+  "self": "http://example.com/",
+
+  "model": {
+    "groups": [
+      { "singular": "endpoint",
+        "plural": "endpoints",
+
+        "resources": [
+          { "singular": "definitionGroup",
+            "plural": "definitionGroups",
+            "versions": 1
+          }
+        ]
+      }
+    ]
+  },
 
   "endpointsUrl": "https://example.com/endpoints",
   "endpointsCount": 42,
@@ -496,8 +638,19 @@ entire Registry's contents are to be represented as a single document.
 The request MUST be of the form:
 
 ``` meta
-GET /?inline
+GET /[?inline[=PATH,...]][&model]
 ```
+
+Where `PATH` is a string indicating which collections of GROUPs, RESOURCEs
+and `versions` to include in the response. The PATH MUST be of the form
+`GROUPs[.RESOURCEs[.versions]]` where `GROUPs` is replaced with the plural
+name of a Group, and `RESOURCEs` is replaced with the plural name of a nested
+Resource. There MAY be mulitple PATHs specified, either as comma separated
+values or via mulitple `inline` query parameters. Absence of a value, or a
+value of an empty string, indicates that all nested collections MUST be inlined.
+
+Presence of the `model` query parameter indicates that the response MUST
+include the Registry model definition as a top-level property.
 
 A successful response MUST be of the form:
 
@@ -513,26 +666,12 @@ Content-Length: nnnn
   "tags": { "STRING": "STRING" * }, ?
   "docs": "URL", ?
 
-  "model": {
-    "groups": [
-      { "singular": "STRING",            # eg. "endpoint"
-        "plural": "STRING",              # eg. "endpoints"
-        "schema": "URI-Reference", ?     # Schema doc for the group
-
-        "resources": [
-          { "singular": "STRING",        # eg. "definition"
-            "plural": "STRING",          # eg. "definitions"
-            "versions": INT ?            # Num old versions. Def=0, -1=unlimited
-          } +
-        ]
-      } +
-    ]
-  }
+  "model": { ... } ?          # Only if ?model is present
 
   # Repeat for each Group
   "GROUPsUrl": "URL",         # eg. "endpointsUrl"
   "GROUPsCount": INT,         # eg. "endpointsCount"
-  "GROUPs": {                 # eg. "endpoints" - only when ?inline is present
+  "GROUPs": {                 # eg. "endpoints" - only if ?inline is present
     "ID": {                   # The Group ID
       "id": "STRING",
       "name": "STRING",
@@ -542,8 +681,8 @@ Content-Length: nnnn
 
       # Repeat for each RESOURCE in the Group
       "RESOURCEsUrl": "URL",  # URL to retrieve all nested Resources
-      "RESOURCEsCount": INT,  # Total number resources
-      "RESOURCEs": {          # eg. "definitions" - only when ?inline is present
+      "RESOURCEsCount": INT,  # Total number of resources
+      "RESOURCEs": {          # eg. "definitions" - only if ?inline is present
         "ID": {               # MUST match the "id" on the next line
           "id": "STRING",
           ... remaining RESOURCE ?meta and RESOURCE itself ...
@@ -597,11 +736,15 @@ This returns all entities that are in a Group.
 The request MUST be of the form:
 
 ``` meta
-GET /GROUPs[?inline]
+GET /GROUPs[?inline[=PATH,...]]
 ```
 
-The OPTIONAL `inline` query parameter indicates the nested Resources are to
-be included in the response.
+Where `PATH` is a string indicating which collections of RESOURCEs and
+`versions` to include in the response. The PATH MUST be of the form
+`RESOURCEs[.versions]` where `RESOURCEs` is replaced with the plural name of
+a Resource. There MAY be mulitple PATHs specified, either as comma separated
+values or via mulitple `inline` query parameters. Absence of a value
+indicates that all nested collections MUST be inlined.
 
 A successful response MUST be of the form:
 
@@ -745,11 +888,15 @@ This will return a single Group.
 The request MUST be of the form:
 
 ``` meta
-GET /GROUPs/ID[?inline]
+GET /GROUPs/ID[?inline[=PATH,...]]
 ```
 
-The OPTIONAL `inline` query parameter indicates the nested Resources are to
-be included in the response.
+Where `PATH` is a string indicating which collections of RESOURCEs and
+`versions` to include in the response. The PATH MUST be of the form
+`RESOURCEs[.versions]` where `RESOURCEs` is replaced with the plural name of
+a Resource. There MAY be mulitple PATHs specified, either as comma separated
+values or via mulitple `inline` query parameters. Absence of a value, or a
+value of an empty string, indicates that all nested collections MUST be inlined.
 
 A successful response MUST be of the form:
 
@@ -943,11 +1090,14 @@ This will retrieve the Resources from a Group.
 The request MUST be of the form:
 
 ``` meta
-GET /GROUPs/ID/RESOURCEs[?inline]
+GET /GROUPs/ID/RESOURCEs[?inline[=versions]]
 ```
 
-The OPTIONAL `inline` query parameter indicates the nested Resources are to
-be included in the response.
+Where `inline` indicates whether to include the `versions` collection
+in the response. In this case the "versions" value is OPTIONAL since it is the
+only collection within the RESOURCE that might be shown. Absence of a value, or
+a value of an empty string, indicates that the `versions` collection MUST
+be inlined.
 
 A successful response MUST be of the form:
 
@@ -961,7 +1111,7 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
   "ID": {
     "id": "STRING",
     "name": "STRING",
-    "version": INT,
+    "versionId": "STRING",
     "epoch": UINT,
     "self": "URL",                   # URL to specific version
 
@@ -1008,7 +1158,7 @@ Link: <http://example.com/endpoints/123/definitions&page=2>;rel=next;count=100
     "id": "456",
     "name": "Blob Created",
     "format": "CloudEvents/1.0",
-    "version": 3,
+    "versionId": "3.0",
     "epoch": 1,
     "self": "https://example.com/endpoints/123/definitions/456/version/3"
   }
@@ -1060,14 +1210,20 @@ TODO
 ##### Retrieving a Resource
 
 This will retrieve the latest version of a Resource. This can be considered an
-alias for `/GROUPs/ID/RESOURCEs/RESOURCEID/versions/VERSION` where
-`VERSION` is the latest version value.
+alias for `/GROUPs/gID/RESOURCEs/rID/versions/vID` where `vID` is the latest
+versionId value.
 
 The request MUST be of the form:
 
 ``` meta
-GET /GROUPs/ID/RESOURCEs/ID
+GET /GROUPs/ID/RESOURCEs/ID[?inline[=versions]]
 ```
+
+Where `inline` indicates whether to include the `versions` collection
+in the response. In this case the "versions" value is OPTIONAL since it is the
+only collection within the RESOURCE that might be shown. Absence of a value, or
+a value of an empty string, indicates that the `versions` collection MUST
+be inlined.
 
 A successful response MUST be of the form:
 
@@ -1101,8 +1257,8 @@ TODO
 
 This will retrieve the metadata for the latest version of a Resource. This can
 be considered an alias for
-`/GROUPs/ID/RESOURCEs/RESOURCEID/versions/VERSION?meta` where `VERSION` is the
-latest version value.
+`/GROUPs/ID/RESOURCEs/RESOURCEID/versions/VERSIONID?meta` where `VERSIONID` is
+the latest versionId value.
 
 The request MUST be of the form:
 
@@ -1120,7 +1276,7 @@ Content-Length: nnnn
 {
   "id": "STRING",
   "name": "STRING",
-  "version": INT,
+  "versionId": "STRING",
   "epoch": UINT,
   "self": "URL",
   "RESOURCEUri": "URI" ?     # singular
@@ -1213,7 +1369,7 @@ PUT /GROUPs/ID/RESOURCEs/ID?meta[&epoch=EPOCH]
 {
   "id": "STRING",
   "name": "STRING",
-  "version": INT, ?            # If present it MUST match current value
+  "versionId": "STRING", ?     # If present it MUST match current value
   "epoch": UINT, ?             # If present it MUST match current value & URL
   "self": "URL", ?             # If present it MUST be ignored
   "RESOURCEUri": "URI" ?       # singular
@@ -1230,7 +1386,7 @@ Content-Length: nnnn
 {
   "id": "STRING",
   "name": "STRING",
-  "version": INT,
+  "versionId": "STRING",
   "epoch": UINT,               # MUST be incremented
   "self": "URL",
   "RESOURCEUri": "URI" ?       # singular
@@ -1329,11 +1485,8 @@ This will retrieve all versions of a Resource.
 The request MUST be of the form:
 
 ``` meta
-GET /GROUPs/ID/RESOURCEs/ID/versions[?inline]
+GET /GROUPs/ID/RESOURCEs/ID/versions
 ```
-
-The OPTIONAL `inline` query parameter indicates the nested Resources are to
-be included in the response.
 
 A successful response MUST be of the form:
 
@@ -1347,7 +1500,7 @@ Link: <URL>;rel=next;count=INT  # If pagination is needed
   "ID": {                            # Versions ID/string
     "id": "STRING",
     "name": "STRING",
-    "version": INT,
+    "versionId": "STRING",
     "epoch": UINT,
     "self": "URL",
     "RESOURCEUri": "URI", ?          # If not locally stored (singular)
@@ -1463,7 +1616,7 @@ This will retrieve the metadata for a particular version of a Resource.
 The request MUST be of the form:
 
 ``` meta
-GET /GROUPs/ID/RESOURCEs/ID/versions/VERSION?meta
+GET /GROUPs/ID/RESOURCEs/ID/versions/ID?meta
 ```
 
 A successful response MUST be of the form:
@@ -1476,7 +1629,6 @@ Content-Length: nnnn
 {
   "id": "STRING",
   "name": "STRING",
-  "version": INT,
   "epoch": UINT,
   "self": "URL",
   "RESOURCEUri": "URI" ?          # singular
@@ -1555,12 +1707,11 @@ creating a new version.
 The request MUST be of the form:
 
 ``` meta
-PUT /GROUPs/ID/RESOURCEs/ID/versions/VERSION?meta[&epoch=EPOCH]
+PUT /GROUPs/ID/RESOURCEs/ID/versions/ID?meta[&epoch=EPOCH]
 
 {
   "id": "STRING",
   "name": "STRING",
-  "version": INT, ?            # If present it MUST match current value
   "epoch": UINT, ?             # If present it MUST match current value & URL
   "self": "URL", ?             # If present it MUST be ignored
   "RESOURCEUri": "URI" ?       # singular
@@ -1577,7 +1728,6 @@ Content-Length: nnnn
 {
   "id": "STRING",
   "name": "STRING",
-  "version": INT,
   "epoch": UINT,               # MUST be incremented
   "self": "URL",
   "RESOURCEUri": "URI" ?       # singular
@@ -1652,7 +1802,6 @@ DELETE /GROUPs/ID/RESOURCEs/ID/versions
 [
   {
     "id": "STRING",
-    "version": INT,
     "epoch": UINT ?     # If present it MUST match current value
   } *
 ]
@@ -1672,7 +1821,7 @@ If any of the individual deletes fails then the entire request MUST fail
 and none of the Resources are deleted.
 
 If the latest version is deleted then the remaining version with the largest
-`version` value MUST become the latest.
+`versionId` value MUST become the latest.
 
 An attempt to delete all versions MUST generate an error.
 
@@ -1731,10 +1880,10 @@ schema for its payload.
   "$schema": "https://cloudevents.io/schemas/registry",
   "specversion": "0.5-wip",
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
-  "endpoints" : 
+  "endpoints":
   {
-    "com.example.telemetry" : {
-      "id" : "com.example.telemetry",
+    "com.example.telemetry": {
+      "id": "com.example.telemetry",
       "usage": "consumer",
       "config": {
         "protocol": "MQTT/5.0",
@@ -1742,13 +1891,13 @@ schema for its payload.
         "endpoints": [
             "mqtt://mqtt.example.com:1883"
         ],
-        "options" : {
+        "options": {
             "topic": "{deviceid}/telemetry"
         }
       },
-      "format" : "CloudEvents/1.0",
+      "format": "CloudEvents/1.0",
       "definitions": {
-        "com.example.telemetry" : {
+        "com.example.telemetry": {
           "id": "com.example.telemetry",
           "description": "device telemetry event",
           "format": "CloudEvents/1.0",
@@ -1775,7 +1924,7 @@ schema for its payload.
             }
           },
           "schemaformat": "Protobuf/3.0",
-          "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; } }"
+          "schema": "syntax = \"proto3\"; message Metrics { float metric = 1; } }"
         }
       }
     }
@@ -1794,10 +1943,10 @@ scenarios:
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
 
   "endpointsCount": 1,
-  "endpoints" : 
+  "endpoints":
   {
-    "com.example.telemetry" : {
-      "id" : "com.example.telemetry",
+    "com.example.telemetry": {
+      "id": "com.example.telemetry",
       "usage": "consumer",
       "config": {
         "protocol": "MQTT/5.0",
@@ -1805,25 +1954,25 @@ scenarios:
         "endpoints": [
           "mqtt://mqtt.example.com:1883"
         ],
-        "options" : {
+        "options": {
           "topic": "{deviceid}/telemetry"
         }
       },
-      "format" : "CloudEvents/1.0",
-      "definitionGroups" :[
+      "format": "CloudEvents/1.0",
+      "definitionGroups": [
         "#/definitionGroups/com.example.telemetryEvents"
       ]
     }
   },
 
   "definitionGroupsCount": 1,
-  "definitionGroups" : {
-    "com.example.telemetryEvents" : {
-      "id" : "com.example.telemetryEvents",
+  "definitionGroups": {
+    "com.example.telemetryEvents": {
+      "id": "com.example.telemetryEvents",
 
       "definitionsCount": 1,
       "definitions": {
-        "com.example.telemetry" : {
+        "com.example.telemetry": {
           "id": "com.example.telemetry",
           "description": "device telemetry event",
           "format": "CloudEvents/1.0",
@@ -1850,29 +1999,29 @@ scenarios:
             }
           },
           "schemaformat": "Protobuf/3.0",
-          "schemaurl" : "#/schemaGroups/com.example.telemetry/schema/com.example.telemetrydata/versions/1.0"
+          "schemaurl": "#/schemaGroups/com.example.telemetry/schema/com.example.telemetrydata/versions/1.0"
         }
       }
     }
   },
 
   "schemaGroupsCount": 1,
-  "schemaGroups" : {
-    "com.example.telemetry" : {
-      "id" : "com.example.telemetry",
+  "schemaGroups": {
+    "com.example.telemetry": {
+      "id": "com.example.telemetry",
 
       "schemasCount": 1,
       "schemas": {
-        "com.example.telemetrydata" : {
+        "com.example.telemetrydata": {
           "id": "com.example.telemetrydata",
           "description": "device telemetry event data",
           "format": "Protobuf/3.0",
 
           "versionsCount": 1,
-          "versions" : {
-            "1.0" : {
-              "id" : "1.0",
-              "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; }"
+          "versions": {
+            "1.0": {
+              "id": "1.0",
+              "schema": "syntax = \"proto3\"; message Metrics { float metric = 1; }"
             }
           }
         }
@@ -1893,15 +2042,15 @@ group with a deep link to the respective object in the service:
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
 
   "endpointsCount": 1,
-  "endpoints" : 
+  "endpoints":
   {
-    "com.example.telemetry" : {
-      "id" : "com.example.telemetry",
+    "com.example.telemetry": {
+      "id": "com.example.telemetry",
       "usage": "consumer",
       "config": {
         // ... details ...
       },
-      "format" : "CloudEvents/1.0",
+      "format": "CloudEvents/1.0",
       "definitionGroups": [
           "https://site.example.com/registry/definitiongroups/com.example.telemetryEvents"
       ]
@@ -1922,15 +2071,15 @@ link will first reference the file and then the object within the file, using
   "id": "urn:uuid:3978344f-8596-4c3a-a978-8fc9a6a469f7",
 
   "endpointsCount": 1,
-  "endpoints" : 
+  "endpoints":
   {
-    "com.example.telemetry" : {
-      "id" : "com.example.telemetry",
+    "com.example.telemetry": {
+      "id": "com.example.telemetry",
       "usage": "consumer",
       "config": {
         // ... details ......
       },
-      "format" : "CloudEvents/1.0",
+      "format": "CloudEvents/1.0",
       "definitionGroups": [
         "https://rawdata.repos.example.com/myorg/myproject/main/example.telemetryEvents.cereg#/definitionGroups/com.example.telemetryEvents"
       ]
@@ -1993,7 +2142,7 @@ embedded or referenced. Any of the three sub-registries MAY be omitted.
 
    "schemaGroupsUrl": "URL",
    "schemaGroupsCount": INT,
-   "schemaGroups" : { ... }
+   "schemaGroups": { ... }
 }
 ```
 
@@ -2018,7 +2167,7 @@ The Registry API extension model of the Schema Registry is:
         {
           "singular": "schema",
           "plural": "schemas",
-          "versions": -1
+          "versions": 0
         }
       ]
     }
@@ -2079,7 +2228,7 @@ basic [attributes](#attributes-and-extensions):
 
 ##### `format` (Schema format)
 
-- Type: String  
+- Type: String
 - Description: Identifies the schema format. In absence of formal media-type
   definitions for several important schema formats, we define a convention here
   to reference schema formats by name and version as `{NAME}/{VERSION}`. This
@@ -2096,7 +2245,7 @@ basic [attributes](#attributes-and-extensions):
   - `JsonSchema/draft-07`
   - `Protobuf/3`
   - `XSD/1.1`
-  - `Avro/1.9`  
+  - `Avro/1.9`
 
 #### Resource Version: schemaversion
 
@@ -2129,32 +2278,32 @@ schema named `com.example.telemetrydata`:
 {
   "schemaGroupsUrl": "...",
   "schemaGroupsCount": 1,
-  "schemaGroups" : {
-    "com.example.telemetry" : {
-      "id" : "com.example.telemetry",
+  "schemaGroups": {
+    "com.example.telemetry": {
+      "id": "com.example.telemetry",
 
       "schemasUrl": "...",
       "schemasCount": 1,
       "schemas": {
-        "com.example.telemetrydata" : {
+        "com.example.telemetrydata": {
           "id": "com.example.telemetrydata",
           "description": "device telemetry event data",
           "format": "Protobuf/3",
 
           "versionsUrl": "...",
           "versionsCount": 3,
-          "versions" : {
-            "1.0" : {
-              "id" : "1.0",
-              "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; } }"
+          "versions": {
+            "1.0": {
+              "id": "1.0",
+              "schema": "syntax = \"proto3\"; message Metrics { float metric = 1; } }"
             },
-            "2.0" : {
-              "id" : "2.0",
-              "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; string unit = 2; } }"
+            "2.0": {
+              "id": "2.0",
+              "schema": "syntax = \"proto3\"; message Metrics { float metric = 1; string unit = 2; } }"
             },
-            "3.0" : {
-              "id" : "3.0",
-              "schema" : "syntax = \"proto3\"; message Metrics { float metric = 1; string unit = 2; string description = 3; } }"
+            "3.0": {
+              "id": "3.0",
+              "schema": "syntax = \"proto3\"; message Metrics { float metric = 1; string unit = 2; string description = 3; } }"
             }
           }
         }
@@ -2282,9 +2431,9 @@ already contains a fragment.
 
 Examples:
 
-- If the Protobuf schema document is referenced using the URI 
-  `https://example.com/protobuf/telemetry.proto`, the URI fragment 
-  `#TelemetryEvent` references the message declaration of the `TelemetryEvent` 
+- If the Protobuf schema document is referenced using the URI
+  `https://example.com/protobuf/telemetry.proto`, the URI fragment
+  `#TelemetryEvent` references the message declaration of the `TelemetryEvent`
   message.
 - If the Protobuf schema document is a local schema registry reference like
   `#/schemaGroups/com.example.telemetry/schemas/com.example.telemetrydata`, in
@@ -2340,7 +2489,7 @@ addition to the basic [attributes](#attributes-and-extensions):
 
 ##### `format` (Message format)
 
-- Type: String  
+- Type: String
 - Description: Identifies the message metadata format. Message metadata formats
   are referenced by name and version as `{NAME}/{VERSION}`. This specification
   defines a set of common [message format names](#message-formats) that MUST be
@@ -2357,7 +2506,7 @@ addition to the basic [attributes](#attributes-and-extensions):
   - `CloudEvents/1.0`
   - `MQTT/3.1.1`
   - `AMQP/1.0`
-  - `Kafka/0.11`  
+  - `Kafka/0.11`
 
 #### Message Definitions
 
@@ -2387,34 +2536,34 @@ Illustrating example:
 
 "definitionGroupsUrl": "...",
 "definitionGroupsCount": 2,
-"definitionGroups" : {
-  "com.example.abc" : {
+"definitionGroups": {
+  "com.example.abc": {
     "id": "com.example.abc",
-    "format" : "CloudEvents/1.0",
+    "format": "CloudEvents/1.0",
 
     "definitionsUrl": "...",
     "definitionsCount": 2,
-    "definitions" : {
-      "com.example.abc.event1" : {
+    "definitions": {
+      "com.example.abc.event1": {
         "id": "com.example.abc.event1",
-        "format" : "CloudEvents/1.0",
+        "format": "CloudEvents/1.0",
          // ... details ...
         }
       },
-      "com.example.abc.event2" : {
+      "com.example.abc.event2": {
         "id": "com.example.abc.event1",
-        "format" : "CloudEvents/1.0",
+        "format": "CloudEvents/1.0",
         // ... details ...
       }
   },
-  "com.example.def" : {
+  "com.example.def": {
     "id": "com.example.def",
-    "format" : "CloudEvents/1.0",
+    "format": "CloudEvents/1.0",
 
     "definitionsUrl": "...",
     "definitionsCount": 1,
-    "definitions" : {
-      "com.example.abc.event1" : {
+    "definitions": {
+      "com.example.abc.event1": {
         "uri": "#/definitionGroups/com.example.abc/definitions/com.example.abc.event1",
         // ... details ...
       }
@@ -2755,18 +2904,18 @@ definition:
 
 ``` JSON
 {
-  "format" : "AMQP/1.0",
+  "format": "AMQP/1.0",
   "metadata": {
     "properties": {
       "message-id": {
-        "required" : true
+        "required": true
       },
       "to": {
         "value": "https://{host}/{queue}"
       },
       "subject": {
         "value": "MyMessageType"
-        "required" : true
+        "required": true
       },
       "content-type": {
         "value": "application/json"
@@ -2894,7 +3043,7 @@ QoS 1 delivery, with a topic name of "mytopic", and a user property of
 
 ``` JSON
 {
-  "format" : "MQTT/5.0",
+  "format": "MQTT/5.0",
   "metadata": {
     "qos": {
       "value": 1
@@ -2947,13 +3096,13 @@ Example:
 
 ``` JSON
 {
-  "format" : "Kafka/0.11",
-  "metadata" : {
-    "topic" : {
-      "value" : "mytopic"
+  "format": "Kafka/0.11",
+  "metadata": {
+    "topic": {
+      "value": "mytopic"
     },
-    "key" : {
-      "value" : "thisdevice"
+    "key": {
+      "value": "thisdevice"
     }
   }
 }
@@ -3004,7 +3153,7 @@ The following attributes are defined for the `endpoint` type:
 - Type: String (Enum: `subscriber`, `consumer`, `producer`)
 - Description: The `usage` attribute is a string that indicates the intended
   usage of the endpoint by communicating parties.
-  
+
   Each of these parties will have a different perspective on an endpoint. For
   instance, a `producer` endpoint is seen as a "target" by the originator of
   messages, and as a "source" by the party that accepts the messages. The
@@ -3012,7 +3161,7 @@ The following attributes are defined for the `endpoint` type:
   common scenario of network endpoints being provided by some sort of
   intermediary like a message broker. The term `producer` primarily describes
   the relationship of a client with that intermediary.
-  
+
   In a direct-delivery scenario where the originator of messages connects
   directly to the target (e.g. a "WebHook" call), the target endpoint implements
   the accepting end of the `producer` relationship.
@@ -3021,7 +3170,7 @@ The following attributes are defined for the `endpoint` type:
   formally defined or reflected in the metadata model. Perspectives depend on
   the context in which the endpoint metadata is used and this metadata model is
   intentionally leaving perspectives open to users.
-  
+
   The following values are defined for `usage`
 
   - `subscriber`: The endpoint offers managing subscriptions for delivery of
@@ -3033,7 +3182,7 @@ The following attributes are defined for the `endpoint` type:
     - Application which accepts messages from the delivery agent
     - Application which manages subscriptions for delivery of messages to the
       target application. This might be a message broker subscription manager.
-  
+
   - `consumer`:  The endpoint offers messages being consumed from it.
 
     Some perspectives that might exist on a consumer endpoint:
@@ -3042,7 +3191,7 @@ The following attributes are defined for the `endpoint` type:
     - Proxy or other intermediary which solicits messages from the source and
       forwards them to the target endpoint.
     - Application which consumes messages
-  
+
   - `producer`: The endpoint offers messages being produces (sent) to it.
 
     Some perspectives might exist on a producer endpoint:
@@ -3054,7 +3203,7 @@ The following attributes are defined for the `endpoint` type:
       handles messages.
 
   Any endpoint can be seen from different role perspectives:
-  
+
   There might also be further perspectives such as pipeline stages for
   pre-/post-processing, etc.
 
@@ -3170,13 +3319,13 @@ Example:
     },
   "definitionsUrl": "..."
   "definitionsCount": 1,
-  "definitions" : {
+  "definitions": {
     "myevent": {
       "format": "CloudEvents/1.0",
       "metadata": {
         "attributes": {
-          "type" : {
-            "value" : "myevent"
+          "type": {
+            "value": "myevent"
           }
 }}}}}
 ```
@@ -3195,7 +3344,7 @@ Example:
   "options": {
     "method": "POST"
     },
-  "definitionGroups" : [
+  "definitionGroups": [
     "https://example.com/registry/definitiongroups/mygroup"
   ]
 }
@@ -3241,7 +3390,7 @@ Example:
   - "KAFKA/3.5" - Use the [Apache Kafka][Apache Kafka] protocol. MAY be
     shortened to "KAFKA", which assumes usage of the latest Apache Kafka
     clients.
-  
+
   An example for an extension protocol identifier might be "BunnyMQ/0.9.1".
 
 - Constraints:
@@ -3364,7 +3513,7 @@ Example:
 
 ```JSON
 {
-  "usage" : "producer",
+  "usage": "producer",
   "protocol": "AMQP/1.0",
   "options": {
     "node": "myqueue",
@@ -3416,7 +3565,7 @@ Example:
 
 ```JSON
 {
-  "usage" : "producer",
+  "usage": "producer",
   "protocol": "MQTT/5.0",
   "options": {
     "topic": "mytopic",
@@ -3459,7 +3608,7 @@ Example:
 
 ```JSON
 {
-  "usage" : "producer",
+  "usage": "producer",
   "protocol": "Kafka/2.0",
   "options": {
     "topic": "mytopic",
@@ -3484,7 +3633,7 @@ Example:
 
 ```JSON
 {
-  "usage" : "producer",
+  "usage": "producer",
   "protocol": "NATS/1.0.0",
   "options": {
     "subject": "mysubject"
