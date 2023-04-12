@@ -216,8 +216,12 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 In the _XML Batch Format_ several CloudEvents are batched into a single XML
 `<batch>` element. The element comprises a list of elements in the XML Format.
 
-The `<event>` element MUST NOT contain any direct child text nodes with non-whitespace
+The `<batch>` element MUST NOT contain any direct child text nodes with non-whitespace
 content.
+
+The `<batch>` element MUST NOT contain any direct child elements in
+the namespace `http://cloudevents.io/xmlformat/V1` except `<event>`
+elements.
 
 An XML Batch of CloudEvents MUST use the media type
 `application/cloudevents-batch+xml`.
