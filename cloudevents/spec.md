@@ -181,7 +181,7 @@ these types MAY be represented differently by different event formats and in
 protocol metadata fields. This specification defines a canonical
 string-encoding for each type that MUST be supported by all implementations.
 
-- `Boolean` - a boolean value of "true" or "false".
+- `Boolean` - A boolean value of "true" or "false".
   - String encoding: a case-sensitive value of `true` or `false`.
 - `Integer` - A whole number in the range -2,147,483,648 to +2,147,483,647
   inclusive. This is the range of a signed, 32-bit, twos-complement encoding.
