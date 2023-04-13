@@ -44,7 +44,7 @@ _SKIP_TEXT_PATTERN = re.compile(
     r"<!--\s*no[\s-]+verify[\s-]+(?P<type>\w+)[\s-]*-->", re.IGNORECASE
 )
 _NEWLINE_PATTERN = re.compile(r"\n")
-_MARKDOWN_BOOKMARK_PATTERN = re.compile(r"\[.+?\]\[.+?\]", re.IGNORECASE)
+_MARKDOWN_BOOKMARK_PATTERN = re.compile(r"\[[^\?=].+?\]\[.+?\]", re.IGNORECASE)
 _PHRASES_THAT_MUST_BE_CAPITALIZED_PATTERN = re.compile(
     r"(?<!`)(MUST(\s+NOT)?|"
     # ignore the "required" in the jsonschema of the json-format.md
