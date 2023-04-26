@@ -1,4 +1,0 @@
-#!/bin/bash
-sed -f xregistry_openapi_template_endpoint_registry_sed_args.txt xregistry_openapi_template.json > xregistry_openapi_endpoint.json
-sed -f xregistry_openapi_template_messagedefinition_registry_sed_args.txt xregistry_openapi_template.json > xregistry_openapi_messagedefinition.json
-sed -f xregistry_openapi_template_schema_registry_sed_args.txt xregistry_openapi_template.json > xregistry_openapi_schema.json

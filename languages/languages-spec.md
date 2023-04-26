@@ -77,7 +77,7 @@ what you want to do.
 
 ### Step 2. Build the structure locally
 
-Currently, each spec directory (/cloudevents, /registry, or /cesql, etc)
+Currently, each spec directory (e.g., /cloudevents, /cesql, etc)
 has its own `languages` sub-directory.
 You should choose the spec directory you are interested in and create a directory
 under its `languages` sub-directory, named after the specific
@@ -92,7 +92,7 @@ For example:
 copy /README.md to /languages/zh-CN/README.md
 copy /cloudevents/README.md to /cloudevents/languages/zh-CN/README.md
 copy /cloudevents/adapters/github.md to /cloudevents/languages/zh-CN/adapters/github.md
-copy /registry/README.md to /registry/languages/zh-CN/README.md
+copy /cesql/README.md to /cesql/languages/zh-CN/README.md
 ......
 ```
 You should also clear the content of copied documents and leave a message like:
