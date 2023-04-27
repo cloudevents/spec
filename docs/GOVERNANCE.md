@@ -147,7 +147,7 @@ Note that these rules do not apply to the
 
 All versions are tagged from the `main` branch, but the tag only applies to
 the "subject" of the release - the directory containing the information
-covered by that release (e.g. `registry` or `cloudevents`). The
+covered by that release (e.g. `subscriptions` or `cloudevents`). The
 [CloudEvents web site](https://cloudevents.io/) takes appropriate content from
 each tagged version. (If the directory containing the information covered
 by the release is not in a top-level directory, the subject should be the full path,
@@ -171,7 +171,7 @@ To create a new release:
 - Merge the PR.
 - Create a [new release](https://github.com/cloudevents/spec/releases/new):
   - Choose a "Tag version" of the form: `<subject>/vX.Y.Z`, e.g.
-    `cloudevents/v1.0.4` or `registry/v1.0.0`
+    `cloudevents/v1.0.4` or `subscriptions/v1.0.0`
   - Target should be `main`, the default value
   - Release title should be the same as the Tag - `<subject>/vX.Y.Z`
   - Add some descriptive text, or the list of PRs that have been merged since

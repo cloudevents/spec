@@ -57,9 +57,10 @@ incubator project on [Oct 24, 2019](https://github.com/cncf/toc/pull/297).
 |                 | Latest Release | Working Draft                 |
 | :-------------- | :------------: | :---------------------------: |
 | CE SQL          |       -        | [WIP](cesql/spec.md)          |
-| Registry        |       -        | [WIP](registry/spec.md)       |
-| Pagination      |       -        | [WIP](pagination/spec.md)     |
 | Subscriptions   |       -        | [WIP](subscriptions/spec.md)  |
+
+The Registry and Pagination specifications can now be found in the
+[xRegistry/spec](https://github.com/xregistry/spec) repo.
 
 Additional release related information:
   [Historical releases and changelogs](docs/RELEASES.md)
