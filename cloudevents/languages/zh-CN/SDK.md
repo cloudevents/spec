@@ -2,7 +2,7 @@
 
 本文档旨在描述对新建CloudEvents软件开发工具（SDKs）的最低要求集。开发者设计并实现这些SDKs来增强并加速CloudEvents的集成。以下SDKs作为社区的重要成果将会被CloudEvents团队支持并维护下去：
 
-- [CSharp](https://github.com/cloudevents/sdk-csharp)
+- [C#/.NET SDK](https://github.com/cloudevents/sdk-csharp)
 - [Go SDK](https://github.com/cloudevents/sdk-go)
 - [Java SDK](https://github.com/cloudevents/sdk-java)
 - [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)

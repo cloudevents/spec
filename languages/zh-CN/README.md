@@ -66,7 +66,7 @@ CloudEvents 是一个以通用格式来描述事件数据的规范。它提供�
 
 除了上述文档，我们还提供了[SDK 提议](../../cloudevents/languages/zh-CN/SDK.md)以及一些编程语言的SDK：
 
-- [CSharp](https://github.com/cloudevents/sdk-csharp)
+- [C#/.NET](https://github.com/cloudevents/sdk-csharp)
 - [Go](https://github.com/cloudevents/sdk-go)
 - [Java](https://github.com/cloudevents/sdk-java)
 - [Javascript](https://github.com/cloudevents/sdk-javascript)
