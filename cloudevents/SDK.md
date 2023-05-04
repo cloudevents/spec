@@ -8,7 +8,7 @@ implemented to enhance and speed up CloudEvents integration. As part of
 community efforts CloudEvents team committed to support and maintain the
 following SDKs:
 
-- [CSharp](https://github.com/cloudevents/sdk-csharp)
+- [C#/.NET SDK](https://github.com/cloudevents/sdk-csharp)
 - [Go SDK](https://github.com/cloudevents/sdk-go)
 - [Java SDK](https://github.com/cloudevents/sdk-java)
 - [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
