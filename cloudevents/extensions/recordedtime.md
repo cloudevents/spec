@@ -29,7 +29,7 @@ by consumers:
 - Description: Timestamp of when the occurrence was recorded in this CloudEvent,
   i.e. when the CloudEvent was created by a producer.
 - Constraints:
-  - OPTIONAL
+  - REQUIRED
   - If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 
@@ -59,25 +59,10 @@ Having bitemporal data makes it easier to get reproducible datasets for
 analytics and data science, as the datasets can be created by placing
 constraints on both the `time` and `recordedtime` attributes of events.
 
-Knowing when an occurrence was recorded in a particular event was recorded also
-makes it possible to determine latency between event producers and consumers. It
-also makes it possible to do operations which are sensitive to the time when an
-event was recorded, such as capturing events into time-intervalled files.
+Knowing when an occurrence was recorded in a particular event also makes it
+possible to determine latency between event producers and consumers. It also
+makes it possible to do operations which are sensitive to the time when an event
+was recorded, such as capturing events into time-intervalled files.
 
 The recorded time also makes it easier to differentiate different records of the
 same occurrence in analytical data stores.
-
-## Terminology
-
-This specification uses the [terminology from the CloudEvents core specification](../spec.md#terminology).
-Additionally, this specification introduces the following terms:
-
-### Occurrence time
-
-The timestamp of when the occurrence happened.
-
-### Recorded time
-
-The timestamp of when the occurrence was recorded in a specific CloudEvent. A
-single occurrence might result in more than one event, and each event might have a
-different recorded time.
