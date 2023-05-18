@@ -32,6 +32,7 @@ by consumers:
   - REQUIRED
   - If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
+  - SHOULD be equal to or later than the _occurrence time_.
 
 ## Usage
 
