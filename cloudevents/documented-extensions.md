@@ -43,5 +43,6 @@ for more information.
 - [Dataref (Claim Check Pattern)](extensions/dataref.md)
 - [Distributed Tracing](extensions/distributed-tracing.md)
 - [Partitioning](extensions/partitioning.md)
+- [Recorded Time](extensions/recordedtime.md)
 - [Sampling](extensions/sampledrate.md)
 - [Sequence](extensions/sequence.md)
