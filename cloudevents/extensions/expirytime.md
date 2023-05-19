@@ -2,13 +2,13 @@
 
 This extension provides a mechanism to hint to [consumers](../spec.md#consumer)
 or [intermediaries](../spec.md#intermediary) a time after which an
-[event](../spec.md#event) may be ignored.
+[event](../spec.md#event) can be ignored.
 
-In distributed systems with message delivery guarantees, events may be delivered
-to a consumer some significant amount of time after an event has been sent via
-an intermediary. In this situation, it may be desirable to ignore events that
-are no longer relevant. The [`time` attribute](../spec.md#time) may be used
-to handle this on the consumer side but can be tricky if the logic should vary
+In distributed systems with message delivery guarantees, events might be delivered
+to a consumer some significant amount of time after an event has been sent.
+In this situation, it might be desirable to ignore events that
+are no longer relevant. The [`time` attribute](../spec.md#time) could be used
+to handle this on the consumer side but can be tricky if the logic varies
 depending on the event type or producer.
 
 ## Attributes
@@ -27,7 +27,7 @@ depending on the event type or producer.
 ## Usage
 
 When this extension is used, producers MUST set the value of the `expirytime`
-attribute. The attribute value SHOULD be a timestamp in the future.
+attribute.
 
 Intermediaries and consumers MAY ignore and discard an event that has an
 `expirytime` at or before the current timestamp at the time of any checks.
@@ -51,8 +51,8 @@ updates upon resuming delivery.
 #### Jobs triggered by Continuous Integration
 
 A Continuous Integration (CI) system uses CloudEvents to delegate a job to a
-runner machine. The job has a set deadline and must complete before that time
+runner machine. The job has a set deadline and needs to complete before that time
 has elapsed to be considered successful. The CI system can set the
-`expirytime` to match the deadline. The job runner may ignore/reject the job
-if the `expirytime` has elapsed since the CI may have likely already determined
+`expirytime` to match the deadline. The job runner would ignore/reject the job
+if the `expirytime` has elapsed since the CI might have likely already determined
 the job state.
