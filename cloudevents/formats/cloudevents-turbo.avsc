@@ -53,7 +53,7 @@
       "default": null
     },
     {
-      "name": "attribute",
+      "name": "attributes",
       "type": {
         "type": "map",
         "values": [
