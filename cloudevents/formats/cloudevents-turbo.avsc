@@ -62,7 +62,11 @@
           "int",
           "long",
           "string",
-          "bytes"
+          "bytes",
+          {
+            "type": "string",
+            "logicalType": "uri"
+          }
         ]
       },
       "default": {}

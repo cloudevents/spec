@@ -91,7 +91,7 @@ The following table shows exemplary mappings:
 | datacontenttype | string | `application/octet-stream`                |
 | dataschema      | string | `http://registry.com/schema/v1/much.json` |
 | subject         | string | `mynewfile.jpg`                           |
-| time            | long   | `1685121689691`                           |
+| time            | long   | `1685121689691000`                        |
 | data            | bytes  | `[bytes]`                                 |
 
 ## References
