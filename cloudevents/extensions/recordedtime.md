@@ -21,6 +21,18 @@ by consumers:
 - _Recorded time_: the timestamp of when the occurrence was recorded in a
   specific CloudEvent instance, which is represented by this extension.
 
+## Notational Conventions
+
+As with the main [CloudEvents specification](../spec.md), the key words "MUST",
+"MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT",
+"RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
+described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+
+However, the scope of these key words is limited to when this extension is
+used. For example, an attribute being marked as "REQUIRED" does not mean
+it needs to be in all CloudEvents, rather it needs to be included only when 
+this extension is being used.
+
 ## Attributes
 
 ### recordedtime
