@@ -13,7 +13,7 @@ following SDKs:
 - [Java SDK](https://github.com/cloudevents/sdk-java)
 - [JavaScript SDK](https://github.com/cloudevents/sdk-javascript)
 - [PHP SDK](https://github.com/cloudevents/sdk-php)
-- [PowerShell](https://github.com/cloudevents/sdk-powershell)
+- [PowerShell SDK](https://github.com/cloudevents/sdk-powershell)
 - [Python SDK](https://github.com/cloudevents/sdk-python)
 - [Ruby SDK](https://github.com/cloudevents/sdk-ruby)
 - [Rust SDK](https://github.com/cloudevents/sdk-rust)
@@ -168,11 +168,12 @@ Undo it when done:
 -->
 
 | Feature                                                                                                                                       | C#  | Go  | Java | JS  | PHP | PS  | Python | Ruby | Rust |
-| :------                                                                                                                                       | :-: | :-: | :--: | :-: | :-: | :-: | :----: | :--: | :--: |
+| :------                                                       | :-: | :-: | :--: | :-: | :-: | :-: | :----: | :--: | :--: |
 | **[v1.0](https://github.com/cloudevents/spec/tree/v1.0)** |
 | [CloudEvents Core](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md)                                                       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:    | :heavy_check_mark:  | :heavy_check_mark:  |
 | Event Formats |
 | [Avro](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/avro-format.md)                                                    | :heavy_check_mark: |     | :x:  | :x: |     |     |        | :x: | :x:  |
+| [Avro Compact](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/avro-compact-format.md)                                      | :heavy_check_mark: |     | :x:  | :x: |     |     |        |     | :x:  |
 | [JSON](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/json-format.md)                                                    | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    | :heavy_check_mark: | :heavy_check_mark:  |
 | [Protobuf ](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/protobuf-format.md)                                           | :heavy_check_mark: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
 | Bindings / Content Modes |
