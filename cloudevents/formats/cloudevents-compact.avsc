@@ -60,7 +60,10 @@
           "null",
           "boolean",
           "int",
-          "long",
+          { 
+            "type": "long",
+            "logicalType" : "timestamp-micros"
+          },
           "string",
           "bytes"
         ]
