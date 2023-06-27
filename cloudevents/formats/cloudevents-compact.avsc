@@ -53,11 +53,10 @@
       "default": null
     },
     {
-      "name": "attributes",
+      "name": "extensions",
       "type": {
         "type": "map",
         "values": [
-          "null",
           "boolean",
           "int",
           { 
