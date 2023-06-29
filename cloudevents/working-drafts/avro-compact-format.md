@@ -5,7 +5,7 @@
 The Avro Compact Format for CloudEvents defines how events are expressed in
 the [Avro 1.9.0 Specification][avro-spec].
 
-This differs from the [Avro format](avro-format.md) in that:
+This differs from the [Avro format](../formats/avro-format.md) in that:
 
 - It is optimized for performance, preferring a more compact representation.
 - It only supports spec version 1.0 (any changes to spec version requires changes to the Avro schema,
