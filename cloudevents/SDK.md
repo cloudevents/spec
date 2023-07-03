@@ -168,15 +168,15 @@ Undo it when done:
 -->
 
 | Feature                                                                                                                                       | C#  | Go  | Java | JS  | PHP | PS  | Python | Ruby | Rust |
-| :------                                                       | :-: | :-: | :--: | :-: | :-: | :-: | :----: | :--: | :--: |
-| **[v1.0](https://github.com/cloudevents/spec/tree/v1.0)** |
+|:----------------------------------------------------------------------------------------------------------------------------------------------| :-: | :-: | :--: | :-: | :-: | :-: | :----: | :--: | :--: |
+| **[v1.0](https://github.com/cloudevents/spec/tree/v1.0)**                                                                                     |
 | [CloudEvents Core](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md)                                                       | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark:    | :heavy_check_mark:  | :heavy_check_mark:  |
-| Event Formats |
+| Event Formats                                                                                                                                 |
 | [Avro](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/avro-format.md)                                                    | :heavy_check_mark: |     | :x:  | :x: |     |     |        | :x: | :x:  |
-| [Avro Compact](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/avro-compact-format.md)                                      | :heavy_check_mark: |     | :x:  | :x: |     |     |        |     | :x:  |
+| [Avro Compact](https://github.com/cloudevents/spec/blob/main/cloudevents/formats/working-drafts/avro-compact-format.md)                       | :heavy_check_mark: |     | :x:  | :x: |     |     |        |     | :x:  |
 | [JSON](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/json-format.md)                                                    | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    | :heavy_check_mark: | :heavy_check_mark:  |
 | [Protobuf ](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/protobuf-format.md)                                           | :heavy_check_mark: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
-| Bindings / Content Modes |
+| Bindings / Content Modes                                                                                                                      |
 | [AMQP Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/amqp-protocol-binding.md#31-binary-content-mode)           | :heavy_check_mark: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
 | [AMQP Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/amqp-protocol-binding.md#32-structured-content-mode)   | :heavy_check_mark: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
 | [HTTP Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/http-protocol-binding.md#31-binary-content-mode)           | :heavy_check_mark: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    | :heavy_check_mark: | :heavy_check_mark:  |
@@ -190,16 +190,16 @@ Undo it when done:
 | [NATS Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/nats-protocol-binding.md)                              | :x: |     | :x:  | :x: |     |     |        | :x: | :heavy_check_mark:  |
 | [WebSockets Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                      | :x: |     | :x:  | :heavy_check_mark: |     |     |        | :x: | :x:  |
 | [WebSockets Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                  | :x: |     | :x:  | :heavy_check_mark: |     |     |        | :x: | :x:  |
-| Proprietary Bindings |
+| Proprietary Bindings                                                                                                                          |
 | [RocketMQ](https://github.com/apache/rocketmq-externals/blob/master/rocketmq-cloudevents-binding/rocketmq-transport-binding.md)               | :x: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
-||
-| **[v0.3](https://github.com/cloudevents/spec/tree/v0.3)** |
+|                                                                                                                                               |
+| **[v0.3](https://github.com/cloudevents/spec/tree/v0.3)**                                                                                     |
 | [CloudEvents Core](https://github.com/cloudevents/spec/blob/v0.3/spec.md)                                                                     | :x: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :x: | :x: | :heavy_check_mark:    | :heavy_check_mark:  | :heavy_check_mark:  |
-| Event Formats |
+| Event Formats                                                                                                                                 |
 | [AMQP](https://github.com/cloudevents/spec/blob/v0.3/amqp-format.md)                                                                          | :x: |     | :x:  | :x: |     |     |        | :x: | :x:  |
 | [JSON](https://github.com/cloudevents/spec/blob/v0.3/json-format.md)                                                                          | :x: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    | :heavy_check_mark: | :heavy_check_mark:  |
 | [Protobuf](https://github.com/cloudevents/spec/blob/v0.3/protobuf-format.md)                                                                  | :x: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
-| Bindings / Content Modes |
+| Bindings / Content Modes                                                                                                                      |
 | [AMQP Binary](https://github.com/cloudevents/spec/blob/v0.3/amqp-transport-binding.md#31-binary-content-mode)                                 | :x: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
 | [AMQP Structured](https://github.com/cloudevents/spec/blob/v0.3/amqp-transport-binding.md#32-structured-content-mode)                         | :x: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
 | [HTTP Binary](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md)                                                        | :x: |     | :heavy_check_mark:  | :heavy_check_mark: |     |     | :heavy_check_mark:    | :heavy_check_mark: | :heavy_check_mark:  |
@@ -213,6 +213,6 @@ Undo it when done:
 | [NATS Structured](https://github.com/cloudevents/spec/blob/v0.3/nats-transport-binding.md)                                                    | :x: |     | :x:  | :x: |     |     |        | :x: | :heavy_check_mark:  |
 | [WebSockets Binary](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                      | :x: |     | :x:  | :heavy_check_mark: |     |     |        | :x: | :x:  |
 | [WebSockets Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                  | :x: |     | :x:  | :heavy_check_mark: |     |     |        | :x: | :x:  |
-| Proprietary Bindings |
+| Proprietary Bindings                                                                                                                          |
 | [RocketMQ](https://github.com/apache/rocketmq-externals/blob/master/rocketmq-cloudevents-binding/rocketmq-transport-binding.md)               | :x: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
 
