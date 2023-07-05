@@ -1033,4 +1033,4 @@ of this format.
 }
 ```
 
-[Documentation](https://www.adobe.io/apis/cloudplatform/events/documentation.html)
+[Documentation](https://developer.adobe.com/events/docs/)

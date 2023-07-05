@@ -1,17 +1,24 @@
-# Avro Event Format for CloudEvents - Version 1.0.3-wip
+# Avro Compact Event Format for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
-The Avro Format for CloudEvents defines how events are expressed in
+The Avro Compact Format for CloudEvents defines how events are expressed in
 the [Avro 1.9.0 Specification][avro-spec].
+
+This differs from the [Avro format](../formats/avro-format.md) in that:
+
+- It is optimized for performance, preferring a more compact representation.
+- It only supports spec version 1.0 (any changes to spec version requires changes to the Avro schema,
+  which changes the fingerprint, breaking compatibility).
+- It does not natively support JSON (JSON can be straight-forwardly serialized 
+  to bytes and this was therefore not considered necessary).
 
 ## Table of Contents
 
 1. [Introduction](#1-introduction)
 2. [Attributes](#2-attributes)
-3. [Data](#3-data)
-4. [Transport](#4-transport)
-4. [Examples](#5-examples)
+3. [Transport](#3-transport)
+4. [Examples](#4-examples)
 
 ## 1. Introduction
 
@@ -52,111 +59,26 @@ The CloudEvents type system MUST be mapped to Avro types as follows.
 | Binary        | [bytes][avro-primitives]                                               |
 | URI           | [string][avro-primitives] following [RFC 3986 §4.3][rfc3986-section43] |
 | URI-reference | [string][avro-primitives] following [RFC 3986 §4.1][rfc3986-section41] |
-| Timestamp     | [string][avro-primitives] following [RFC 3339][rfc3339] (ISO 8601)     |
+| Timestamp     | [long][avro-primitives]  using `timestamp-micros` logical type         |
 
 Extension specifications MAY define secondary mapping rules for the values of
 attributes they define, but MUST also include the previously defined primary
 mapping.
 
-### 2.3 OPTIONAL Attributes
-
-CloudEvents Spec defines OPTIONAL attributes. The Avro format defines that these
-fields MUST use the `null` type and the actual type through the
-[union][avro-unions].
-
-Example:
-
-```json
-["null", "string"]
-```
-
-### 2.4 Definition
+### 2.2 Definition
 
 Users of Avro MUST use a message whose binary encoding is identical to the one
-described by the [CloudEvent Avro Schema](cloudevents.avsc):
+described by the [CloudEvent Avro Compact Schema](cloudevents-compact.avsc).
 
-```json
-{
-  "namespace": "io.cloudevents",
-  "type": "record",
-  "name": "CloudEvent",
-  "version": "1.0",
-  "doc": "Avro Event Format for CloudEvents",
-  "fields": [
-    {
-      "name": "attribute",
-      "type": {
-        "type": "map",
-        "values": ["null", "boolean", "int", "string", "bytes"]
-      }
-    },
-    {
-      "name": "data",
-      "type": [
-        "bytes",
-        "null",
-        "boolean",
-        {
-          "type": "map",
-          "values": [
-            "null",
-            "boolean",
-            {
-              "type": "record",
-              "name": "CloudEventData",
-              "doc": "Representation of a JSON Value",
-              "fields": [
-                {
-                  "name": "value",
-                  "type": {
-                    "type": "map",
-                    "values": [
-                      "null",
-                      "boolean",
-                      { "type": "map", "values": "CloudEventData" },
-                      { "type": "array", "items": "CloudEventData" },
-                      "double",
-                      "string"
-                    ]
-                  }
-                }
-              ]
-            },
-            "double",
-            "string"
-          ]
-        },
-        { "type": "array", "items": "CloudEventData" },
-        "double",
-        "string"
-      ]
-    }
-  ]
-}
-```
-
-## 3 Data
-
-Before encoding, the AVRO serializer MUST first determine the runtime data type
-of the content. This can be determined by examining the data for invalid UTF-8
-sequences or by consulting the `datacontenttype` attribute.
-
-If the implementation determines that the type of the data is binary, the value
-MUST be stored in the `data` field using the `bytes` type.
-
-For other types (non-binary data without a `datacontenttype` attribute), the
-implementation MUST translate the data value into a representation of the JSON
-value using the union types described for the `data` record.
-
-## 4 Transport
+## 3 Transport
 
 Transports that support content identification MUST use the following designation:
 
 ```text
-application/cloudevents+avro
+application/cloudevents+avro-compact
 ```
 
-## 5 Examples
+## 4 Examples
 
 The following table shows exemplary mappings:
 
@@ -164,12 +86,12 @@ The following table shows exemplary mappings:
 |-----------------|--------|-------------------------------------------|
 | id              | string | `7a0dc520-c870-4193c8`                    |
 | source          | string | `https://github.com/cloudevents`          |
-| specversion     | string | `1.0`                                     |
+| specversion     | N/A    | Spec version is always `1.0`.             |
 | type            | string | `com.example.object.deleted.v2`           |
 | datacontenttype | string | `application/octet-stream`                |
 | dataschema      | string | `http://registry.com/schema/v1/much.json` |
 | subject         | string | `mynewfile.jpg`                           |
-| time            | long   | `2019-06-05T23:45:00Z`                    |
+| time            | long   | `1685121689691000`                        |
 | data            | bytes  | `[bytes]`                                 |
 
 ## References

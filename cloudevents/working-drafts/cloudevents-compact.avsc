@@ -1,0 +1,81 @@
+{
+  "namespace": "io.cloudevents.v1.avro.compact",
+  "type": "record",
+  "name": "CloudEvent",
+  "version": "1.0",
+  "doc": "Avro Compact Event Format for CloudEvents",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "source",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "datacontenttype",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "dataschema",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "subject",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "time",
+      "type": [
+        "null",
+        {
+          "type": "long",
+          "logicalType": "timestamp-micros"
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "extensions",
+      "type": {
+        "type": "map",
+        "values": [
+          "boolean",
+          "int",
+          { 
+            "type": "long",
+            "logicalType" : "timestamp-micros"
+          },
+          "string",
+          "bytes"
+        ]
+      },
+      "default": {}
+    },
+    {
+      "name": "data",
+      "type": [
+        "bytes",
+        "null"
+      ],
+      "default": "null"
+    }
+  ]
+}

@@ -781,4 +781,4 @@ AWS 上的很大一部分事件处理系统都在使用这种格式。
 }
 ```
 
-[Documentation](https://www.adobe.io/apis/cloudplatform/events/documentation.html)
+[Documentation](https://developer.adobe.com/events/docs/)

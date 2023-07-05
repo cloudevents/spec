@@ -36,6 +36,7 @@ incubator project on [Oct 24, 2019](https://github.com/cncf/toc/pull/297).
 | **Optional Specifications:**  |
 | AMQP Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/amqp-protocol-binding.md)  | [WIP](cloudevents/bindings/amqp-protocol-binding.md)       |
 | AVRO Event Format             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/avro-format.md)             | [WIP](cloudevents/formats/avro-format.md)                  |
+| AVRO Compact Event Format       | | [WIP](cloudevents/working-drafts/avro-compact-format.md)             |
 | HTTP Protocol Binding         | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/http-protocol-binding.md)  | [WIP](cloudevents/bindings/http-protocol-binding.md)       |
 | JSON Event Format             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/json-format.md)             | [WIP](cloudevents/formats/json-format.md)                  |
 | Kafka Protocol Binding        | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/kafka-protocol-binding.md) | [WIP](cloudevents/bindings/kafka-protocol-binding.md)      |
