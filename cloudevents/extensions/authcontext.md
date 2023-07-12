@@ -1,10 +1,12 @@
 # Auth Context
 
-This extension embeds information about the principal which triggered an occurence. This allows consumers of the
+This extension embeds information about the principal which triggered an
+occurence. This allows consumers of the
 CloudEvent to perform user-dependent actions without requiring the user ID to
 be embedded in the `data` or `source` field.
 
-This extension is purely informational and is not intended to secure CloudEvents.
+This extension is purely informational and is not intended to secure
+CloudEvents.
 
 ## Notational Conventions
 
@@ -21,10 +23,9 @@ this extension is being used.
 ## Attributes
 
 ### authtype
-
 - Type: `String`
-- Description: An enum representing the type of principal that triggered the occurence.
-Valid values are:
+- Description: An enum representing the type of principal that triggered the
+  occurence. Valid values are:
   - `app_user`: An end user of an application. Examples include an AWS cognito,
     Google Cloud Identity Platform, or Azure Active Directory user.
   - `user`: A user account registered in the infrastructure. Examples include
@@ -36,20 +37,25 @@ Valid values are:
     was deleted based on a TTL.
 - Constriants
   - REQUIRED
-  - SHOULD be one of the above enum values
-  - If the enum values are not sufficient for a Producer, they SHOULD amend this spec to include the new enum value.
+  - This specification defines the following values, and it is RECOMMENDED that
+    they be used. However, implementations MAY define additional values.
 
 ### authid
 - Type: `String`
-- Description: A unique identifier of the principal that triggered the occurence. This might, for example, be a unique ID in an identity database (userID), an email of a platform user or service account, or the label for an API key.
+- Description: A unique identifier of the principal that triggered the
+  occurence. This might, for example, be a unique ID in an identity database
+  (userID), an email of a platform user or service account, or the label for an
+  API key.
 - Constraints
   - OPTIONAL
 
 ### authclaims
 - Type: `String`
 - Description: A JSON string representing claims of the principal that triggered
-  the event. This field MAY be omitted.
+  the event.
 - Constraints
   - OPTIONAL
-  - MUST NOT contain actual credentials sufficient for the Consumer to impersonate the principal directly.
-  - MAY contain enough information that a Consumer can authenticate against an identity service to mint a credential impersonating the original principal.
+  - MUST NOT contain actual credentials sufficient for the Consumer to
+    impersonate the principal directly.
+  - MAY contain enough information that a Consumer can authenticate against an
+    identity service to mint a credential impersonating the original principal.
