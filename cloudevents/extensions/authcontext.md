@@ -35,6 +35,8 @@ this extension is being used.
   - `system`: An obscured identity used when a cloud platform or other system
     service triggers an event. Examples include a database record which
     was deleted based on a TTL.
+  - `unauthenticated`: No credentials were used to authenticate the change that
+    triggered the occurence.
 - Constraints
   - REQUIRED
   - This specification defines the following values, and it is RECOMMENDED that
