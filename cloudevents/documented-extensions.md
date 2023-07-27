@@ -40,6 +40,7 @@ for more information.
 
 ## Known Extensions
 
+- [Auth Context](extensions/authcontext.md)
 - [Dataref (Claim Check Pattern)](extensions/dataref.md)
 - [Distributed Tracing](extensions/distributed-tracing.md)
 - [Expiry Time](extensions/expirytime.md)
