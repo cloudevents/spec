@@ -37,7 +37,7 @@ There are three categories of project membership:
    of our communication channels (email, github issues/PRs, meetings, etc.). No
    formal registration process is needed.
 
-2. **Voting Member.** See the (Voting)[#voting]section below for more
+2. **Voting Member.** See the [Voting](#voting) section below for more
    information on how the list of Voting Members are determined. During the
    normal operations of the group, Voting Members and Members are the same with
    respect to influence over the groups actions. The rights associated with
@@ -83,7 +83,7 @@ merged:
 
 ## Voting
 
-If a vote is taken during a meeting, the follow rules will be followed:
+If a vote is taken, the follow rules will be followed:
 
 - There is only 1 vote per participating company, or nonaffiliated individual.
 - Each participating company can assign a primary and secondary representative.
@@ -99,16 +99,18 @@ If a vote is taken during a meeting, the follow rules will be followed:
   An acceptable absence would include situations where the person is not
   officially working at all, such as being on vacation, taking a sabbatical or
   there is a public holiday. However, situations such as a scheduling conflict
-  would not apply. Absence from meetings during that time will not impact
-  their voting rights.
-- Only members with voting rights will be allowed to vote.
+  would not apply. Absence from meetings during a leave-of-absence will not
+  impact their voting rights.
+- Only members with voting rights will have their vote counted towards the
+  decision.
 - A vote passes if more than 50% of the votes cast approve the motion.
 - Only "yes" or "no" votes count, "abstain" votes do not count towards the
   total.
 - Meeting attendance will be formally tracked
   [here](https://docs.google.com/spreadsheets/d/1bw5s9sC2ggYyAiGJHEk7xm-q2KG6jyrfBy69ifkdmt0/edit#gid=0).
   Members must acknowledge their presence verbally, meaning, adding yourself to
-  the "Attendees" section of the Agenda document is not sufficient.
+  the "Attendees" section of the Agenda document is not sufficient. An Admin
+  will be responsible for updating the spreadsheet.
 - When a vote is called, unless all voting members have voted, the vote will be
   tallied no less than one week after calling the vote.
 - Voting process:
