@@ -218,7 +218,7 @@ Percent-encoding SHOULD be performed using upper-case for values A-F,
 but decoding MUST accept lower-case values.
 
 When performing percent-decoding (when decoding an NATS message to a
-CloudEvent), values that have been unncessarily percent-encoded MUST be
+CloudEvent), values that have been unnecessarily percent-encoded MUST be
 accepted, but encoded byte sequences which are invalid in UTF-8 MUST be
 rejected. (For example, "%C0%A0" is an overlong encoding of U+0020, and
 MUST be rejected.)
