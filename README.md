@@ -96,6 +96,12 @@ The SDK [feature support table](cloudevents/SDK.md#feature-support) is a
 good resource to see which features, event formats and bindings are supported
 by each SDK.
 
+For more information about how the SDKs operate, please see the following
+documents:
+- [SDK Governance](docs/SDK-GOVERNANCE.md)
+- [SDK Maintainer Guidlines](docs/SDK-maintainer-guidelines.md)
+- [SDK PR Guidlines](docs/SDK-PR-guidelines.md)
+
 ## Community and Docs
 
 Learn more about the people and organizations who are creating a dynamic cloud
@@ -138,6 +144,9 @@ For SDK related comments and questions:
 - To subscribe see: https://lists.cncf.io/g/cncf-cloudevents-sdk
 - Archives are at: https://lists.cncf.io/g/cncf-cloudevents-sdk/topics
 - Slack: #cloudeventssdk on [CNCF's Slack workspace](http://slack.cncf.io/)
+
+For SDK specific communications, please see the main README in each
+SDK's github repo - see the [list of SDKs](#sdks).
 
 ### Meeting Time
 

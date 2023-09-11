@@ -5,6 +5,16 @@
 This document describes the governance process under which the CloudEvents
 project will manage this repository.
 
+For easy reference, additional documentation related to how this project,
+and its subprojects, operate are listed below:
+- [Contributing](CONTRIBUTING.md)
+  - [List of contributors to the project](contributors.md)
+- [Project Releases](RELEASES.md)
+- [Project Roadmap](ROADMAP.md)
+- [SDK Governance](SDK-GOVERNANCE.md)
+  - [SDK Maintainer Guidlines](SDK-maintainer-guidelines.md)
+  - [SDK PR Guidlines](SDK-PR-guidelines.md)
+
 ## Meetings
 
 In order to provide equitable rights to all members, the following process will
@@ -17,7 +27,8 @@ be followed:
   NOT LGTMs) and comments are strongly encouraged to gauge the group's opinion
   on the proposed change prior to the meeting.
 - During meetings, priority will be given to PRs that appear to be ready for a
-  vote over those that appear to require discussions.
+  vote over those that appear to require discussions. See [PRs](#prs) for more
+  information.
 - PRs should not be merged if they have had substantial changes made within two
   days of the meeting. Rebases, typo fixes, etc. do not count as substantial.
   Note, administrivia PRs that do not materially modify output documents may be
@@ -80,6 +91,10 @@ merged:
 - All comments have been addressed.
 - PRs that have objections/concerns will be discussed off-line by interested
   parties. A resolution, updated PR, will be expected from those talks.
+
+Anyone is welcome to comment on PRs, not just Admins, voting members or
+regular call participants. The goal of the project is consensus and broad
+community support, so community input is strongly encouraged.
 
 ## Voting
 
