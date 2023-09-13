@@ -10,7 +10,7 @@ mapped to [DDS messages][dds-message-format].
 1. [Introduction](#1-introduction)
 
 - 1.1. [Conformance](#11-conformance)
-- 1.2. [Relation to Kafka](#12-relation-to-kafka)
+- 1.2. [Relation to DDS](#12-relation-to-kafka)
 - 1.3. [Content Modes](#13-content-modes)
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
