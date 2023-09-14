@@ -10,6 +10,23 @@ The community is organized as follows:
   [cloudevents/sdk-go project](https://github.com/cloudevents/sdk-go)
 - The union of all the `sdk-*-maintainers` assembles the _sdk maintainers_ group
 
+## SDK Repository Requirements
+
+Each SDK must include the following:
+- a pointer to its github repo from the CloudEvents [README.md](README.md)
+  file
+- a README.md file with at least the following information:
+  - a description of the SDK
+  - a "Community" section with information about things like the communication
+    channels that are available, regular meeting information, ...
+  - references to the other required files for easy discovery
+- a MAINTAINERS.md file that lists the current set of maintainers
+- a CONTRIBUTING.md file that describes how/where to open issues and change
+  requests
+- a LICENSE file
+- a RELEASING.md file that describes the process for when and how new releases
+  are created
+
 ## New SDKs
 
 To propose a new SDK for the community, a PR should be opened in the `spec`
