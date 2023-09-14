@@ -88,7 +88,7 @@ The following table shows exemplary mappings:
 | time        | string | `"sec: 1694707005, nanosec: 996000000"`                       |
 | dataschema  | string | `"http://cloudevents.io/schema.json'"`    |
 | contenttype | string | `"cloudevent/json"`                           |
-| data        | bytes  | `"{"color":"red","x":120,"y":42,"shapesize":20}"`                    |
+| data        | string  | `"{"color":"red","x":120,"y":42,"shapesize":20}"`                    |
 | contenttype | string | `"application/cloudevent+dds"`                           |
 | data        | bytes  | `"data_base64":"anVzdCBub3JtYWwgdGV4dA=="`                      |
 
