@@ -238,7 +238,7 @@ defined for structured data.
 
 - [OMG][omg] Object Management Group (OMG) 
 - [DDS][dds] OMG Data Distribution Service (DDS) Specification
-- [RTPS][rpts] OMG Real-Time Publish Subscribe Wire Protocol
+- [RTPS][rtps] OMG Real-Time Publish Subscribe Wire Protocol
 - [DDS-Message-Format][dds-message-format] The DDS message format
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
