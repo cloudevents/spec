@@ -293,8 +293,8 @@ content-type: application/cloudevents+json
 
 ## 4. References
 
-- [DDS][dds]
-- [DDS-Message-Format][dds-message-format] The DDS format message
+- [DDS][dds] Object Management Group (OMG) Data Distribution Service (DDS) Specification 
+- [DDS-Message-Format][dds-message-format] The DDS message format
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
 - [RFC2119][rfc2119] Key words for use in RFCs to Indicate Requirement Levels
@@ -303,6 +303,8 @@ content-type: application/cloudevents+json
   Format
 
 [ce]: ../spec.md
+[dds] https://www.omg.org/spec/DDS/1.4/PDF
+[dds-message-format] ../formats/dds-format.md
 [json-format]: ../formats/json-format.md
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
