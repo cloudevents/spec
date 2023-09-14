@@ -31,8 +31,8 @@ mapped to [DDS messages][dds-message-format].
 
 [CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
-elements defined in the CloudEvents specification are to be used in the DDS
-protocol as [DDS messages][dds-message-format].
+elements defined in the CloudEvents specification are implemented in the DDS protocol
+and transmitted as [DDS messages][dds-message-format].
 
 ### 1.1. Conformance
 
@@ -46,37 +46,34 @@ This specification does not prescribe rules constraining transfer or settlement
 of event messages with DDS; it solely defines how CloudEvents are expressed in
 the DDS protocol as [DDS messages][dds-message-format].
 
-The DDS protocol is a middleware standard for efficient and real-time data exchange
-in distributed systems. It enables communication using a publish-subscribe model and
-operates in conjunction with the Real-Time Publish Subscribe (RTPS) wire protocol.
-DDS ensures reliable data delivery, supporting Quality of Service (QoS) parameters
-like reliability, lifespan and partitioning. DDS is used for  mission-critical
-applications in industries such as aerospace, healthcare, and industrial automation.
+The DDS protocol is an [Object Management Group (OMG)][omg] middleware standard
+for efficient and real-time data exchange in distributed systems.
+It enables communication using a publish-subscribe model and
+operates in conjunction with the [Real-Time Publish Subscribe (RTPS)][rpts] wire protocol.
+DDS ensures reliable data delivery for latency-sensitive payloads,
+supporting Quality of Service (QoS) parameters like reliability, lifespan and partitioning.
+DDS is most commonly used for mission-critical applications in industries
+such as aerospace, healthcare, and industrial automation.
 
 This binding specification defines how attributes and data of a CloudEvent is
 mapped to a DDS message format.
 
-Generally, the user SHOULD configure the key of the DDS message in a way that
-makes most sense for their specific use case.
-
 ### 1.3. Content Modes
 
 The CloudEvents specification defines three content modes for transferring
-events: _structured_, _binary_ and _batch_. The DDS protocol binding does not
-currently support the batch content mode. Every compliant implementation SHOULD
-support both structured and binary modes.
+events: _structured_, _binary_ and _batch_. 
 
-The specification defines three content modes for transferring events:
-_structured_, _binary_ and _batch_. The DDS protocol binding does not
-currently support the _batch_ content mode.
+Every compliant implementation of the CloudEvent specification SHOULD support
+both structured and binary modes. The DDS protocol binding supports both these modes.
+
+The DDS protocol binding does not currently support the _batch_ content mode.
 
 In the _structured_ content mode, event metadata attributes and event data are
-placed into the DDS message value section using an [event format](#14-event-formats).
+placed into the DDS message using an [event format](#14-event-formats).
 
-In the _binary_ content mode, the value of the event `data` MUST be placed into
-the DDS message's value section as-is, with the `content-type` header value
-declaring its media type; all other event attributes MUST be mapped to the DDS
-message's [header section][dds-message-header].
+In the _binary_ content mode, the value of the event `data` is placed into
+the DDS message's body section as-is; all other event attributes are
+mapped to the DDS message's event metadata fields.
 
 ### 1.4. Event Formats
 
@@ -98,49 +95,79 @@ attributes.
 ### 2.1. data
 
 `data` is assumed to contain opaque application data that is encoded as declared
-by the `datacontenttype` attribute.
+by the `datacontenttype` attribute. 
 
-An application is free to hold the information in any in-memory representation
-of its choosing, but as the value is transposed into DDS as defined in this
-specification, core DDS provides data available as a sequence of bytes.
+There are two values of 'datacontenttype' currently supported:
+- 'cloudevent/json' for JSON data
+- 'application/cloudevent+dds' for a wider range of data types (text, binary, JSON)
 
-For instance, if the declared `datacontenttype` is
-`application/json;charset=utf-8`, the expectation is that the `data` value is
-made available as [UTF-8][rfc3629] encoded JSON text.
+If the 'datacontenttype' attribute  is not defined, the data content is
+assumed to be JSON (datacontenttype='cloudevent/json').
+
+If the 'datacontenttype' attribute is set to 'application/cloudevent+dds', the
+'dataencoding' attribute defines the encoding of the message body. 
+
+The 'content-type' field in the message header MUST be consistent with the
+'datacontenttype' attribute.
 
 ## 3. DDS Message Mapping
 
-With DDS, the content mode is chosen by the sender of the event. Usage patterns that
-might require (or allow)  solicitation of events using a
-particular content mode might be defined by an application, but are not defined
-here.
+The content type is chosen by the sender of the event. Usage patterns that
+might require (or allow)  solicitation of events using a particular content
+type might be defined by an application, but are no requirements for the usage
+of a particular content type for specific contexts established in this document.
 
 The receiver of the event can distinguish between content modes by
 inspecting the `content-type` [Header][dds-message-header] of the DDS
-message. If the header is present and its value is prefixed with the CloudEvents
-media type `application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver uses _structured_ mode,
-otherwise it defaults to _binary_ mode.
+message.
+
+If the header is present and its value is 'cloudevent/json', the receiver
+decodes the message as JSON data.
+
+If the header is present and its value is 'application/cloudevent+dds', the
+receiver decodes the message into the DDS message format, using the 'dataencoding'
+attribute to determine the encoding of the message body. There are
+three valid values of the 'dataencoding' attribute currently supported:
+- 'text' for ASCII text
+- 'binary' for binary data
+- 'json' for JSON data
+
+The 'content-type' of the DDS message is required to be consistent with the
+'datacontenttype' attribute.
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
 event format that it cannot handle, for instance `application/cloudevents+dds`,
-it MAY still treat the event as binary and forward it to another party as-is.
+it MAY treat the event as binary and forward it to another party as-is.
 
-When the `content-type` header value is not prefixed with the CloudEvents media
-type, knowing when the message ought to be parsed as a CloudEvent can be a
-challenge. While this specification can not mandate that senders do not include
-any of the CloudEvents headers when the message is not a CloudEvent, it would be
-reasonable for a receiver to assume that if the message has all of the mandatory
+When the `content-type` header value is not set, knowing when the message ought
+to be parsed as a CloudEvent can be a challenge. While this specification
+can not mandate that senders do not include any of the CloudEvents headers
+when the message is not a CloudEvent, it would be reasonable for a receiver
+to assume that if the message has all of the mandatory
 CloudEvents attributes as headers then it's probably a CloudEvent. However, as
 with all CloudEvent messages, if it does not adhere to all of the normative
 language of this specification then it is not a valid CloudEvent.
 
 ### 3.1. Keys
 
-The 'key' of the DDS message MAY be populated by 
-which might map the key directly from one of the CloudEvent's attributes, but
-might also use information from the application environment, from the
-CloudEvent's data or other sources.
+The 'datakey' of the DDS message MAY be populated. A _key field_ in DDS is way
+to uniquely identify individual instances of data being published to a topic. For example,
+if you are publishing data to a Temperature Topic dealing with temperature
+readings from different sensors, the sensor ID could be a key field.
+
+Key fields in DDS are used to enable numerous data-centric communications capabilities that
+are central to the protocol. These include:
+- Keyed Access: Subscribers can express interest in receiving data samples with
+specific key values.
+- Filtering and Matching: Publishers use key values to categorize data samples, and
+subscribers use key-based filters to specify which data samples they are interested in.
+This reduces the amount of data that is sent over the wire in a DDS-based system.
+- Reliability and Durability: These Quality of Service (QoS) settings control how DDS handles
+reliable message delivery of data samples with the same key, and when to overwrite locally
+available data samples with the same key.
+
+While it is not required to set the 'datakey' field for a DDS Cloud Event message,
+setting this value will enable many of the more powerful features of the DDS protocol.
 
 ### 3.2. Binary Content Mode
 
@@ -154,70 +181,22 @@ directly to the CloudEvents `datacontenttype` attribute.
 
 #### 3.2.2. Event Data Encoding
 
-The [`data`](#21-data) byte-sequence MUST be used as the value of the DDS
+The [`data`](#21-data) byte-sequence MUST be used as the body of the DDS
 message.
 
 In binary mode, the DDS representation of a CloudEvent with no `data` is a
-DDS message with no value.
+DDS message with no body. Transmission such a DDS message is allowable.
 
 #### 3.2.3. Metadata Headers
 
-All [CloudEvents][ce] attributes and
-[CloudEvent Attributes Extensions](../primer.md#cloudevent-extension-attributes)
+All [CloudEvents][ce] attributes and [CloudEvent Attributes Extensions]
+(../primer.md#cloudevent-extension-attributes)
 with exception of `data` MUST be individually mapped to and from the Header
-fields in the DDS message. Both header keys and header values MUST be encoded
-as UTF-8 strings.
+fields in the DDS message.
 
-##### 3.2.3.1 Property Names
-
-CloudEvent attributes are prefixed with `ce_` for use in the
-[message-headers][dds-message-header] section.
-
-Examples:
-
-    * `time` maps to `ce_time`
-    * `id` maps to `ce_id`
-    * `specversion` maps to `ce_specversion`
-
-##### 3.2.4.2 Property Values
-
-The value for each DDS header is constructed from the respective header's
-DDS representation, compliant with the [DDS message format][dds-message-format] specification.
-
-#### 3.2.5 Example
-
-This example shows the _binary_ mode mapping of an event into the DDS message.
-All other CloudEvents attributes are mapped to DDS Header fields with prefix
-`ce_`.
-
-Mind that `ce_` here does refer to the event `data` content carried in the
-payload.
-
-```text
------------------- Message -------------------
-
-Topic Name: mytopic
-
-------------------- key ----------------------
-
-Key: mykey
-
------------------- headers -------------------
-
-ce_specversion: "1.0"
-ce_type: "com.example.someevent"
-ce_source: "/mycontext/subcontext"
-ce_id: "1234-1234-1234"
-ce_time: "2018-04-05T03:56:24Z"
-content-type: application/binary
-       .... further attributes ...
-
-------------------- value --------------------
-
-            ... application data encode in some binary format ...
-
------------------------------------------------
-```
+At this time, the DDS protocol binding does not support any Cloud Event
+extension attributes. The 'content-type' header attribute is mapped to the
+'datacontenttype' attribute in the DDS message.
 
 ### 3.3. Structured Content Mode
 
@@ -233,7 +212,7 @@ media type of an [event format](#14-event-formats).
 Example for the [JSON format][json-format]:
 
 ```text
-content-type: application/cloudevents+json; charset=UTF-8
+content-type: cloudevent/json
 ```
 
 #### 3.3.2. Event Data Encoding
@@ -245,55 +224,21 @@ The event metadata and data are then rendered in accordance with the
 [event format](#14-event-formats) specification and the resulting data becomes
 the DDS application [data](#21-data) section.
 
-In structured mode, the DDS representation of a CloudEvent with no `data`
-is a DDS message which still has a data section (containing the attributes
-of the CloudEvent).
+Similar to binary mode, the DDS representation of a structured CloudEvent with
+no `data` is a DDS message with no body, and transmission of such a message
+is allowable.
 
 #### 3.3.3. Metadata Headers
 
-Implementations MAY include the same DDS headers as defined for the
-[binary mode](#32-binary-content-mode).
-
-#### 3.3.4 Example
-
-This example shows a JSON event format encoded event:
-
-```text
------------------- Message -------------------
-
-Topic Name: mytopic
-
-------------------- key ----------------------
-
-Key: mykey
-
------------------- headers -------------------
-
-content-type: application/cloudevents+json
-
-------------------- value --------------------
-
-{
-    "specversion" : "1.0",
-    "type" : "com.example.someevent",
-    "source" : "/mycontext/subcontext",
-    "id" : "1234-1234-1234",
-    "time" : "2018-04-05T03:56:24Z",
-    "datacontenttype" : "application/json",
-
-    ... further attributes omitted ...
-
-    "data" : {
-        ... application data encoded in JSON ...
-    }
-}
-
------------------------------------------------
-```
+Implementations include the same DDS headers as defined for the
+[binary mode](#32-binary-content-mode). No additional metadata header attributes are
+defined for structured data.
 
 ## 4. References
 
-- [DDS][dds] Object Management Group (OMG) Data Distribution Service (DDS) Specification 
+- [OMG][omg] Object Management Group (OMG) 
+- [DDS][dds] OMG Data Distribution Service (DDS) Specification
+- [RTPS][rpts] OMG Real-Time Publish Subscribe Wire Protocol
 - [DDS-Message-Format][dds-message-format] The DDS message format
 - [RFC2046][rfc2046] Multipurpose Internet Mail Extensions (MIME) Part Two:
   Media Types
@@ -303,7 +248,9 @@ content-type: application/cloudevents+json
   Format
 
 [ce]: ../spec.md
+[omg]: https://www.omg.org/
 [dds]: https://www.omg.org/spec/DDS/1.4/PDF
+[rtps]: https://www.omg.org/spec/DDSI-RTPS/2.3/PDF
 [dds-message-format]: ../formats/dds-format.md
 [json-format]: ../formats/json-format.md
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
