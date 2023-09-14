@@ -95,7 +95,7 @@ The following table shows exemplary mappings:
 ## References
 - [OMG][omg] Object Management Group (OMG)
 - [idl-spec] OMG Interface Definition Language (IDL) Specification 
-- [DDS][dds] OMG Data Distribution Service (DDS) Specification
+- [DDS][dds-spec] OMG Data Distribution Service (DDS) Specification
 - [dds-event-format] XML representation of DDS event format
 - [RFC2119][rfc2119] Key words for use in RFCs to Indicate Requirement Levels
 
