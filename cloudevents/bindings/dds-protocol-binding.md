@@ -303,8 +303,8 @@ content-type: application/cloudevents+json
   Format
 
 [ce]: ../spec.md
-[dds] https://www.omg.org/spec/DDS/1.4/PDF
-[dds-message-format] ../formats/dds-format.md
+[dds]: https://www.omg.org/spec/DDS/1.4/PDF
+[dds-message-format]: ../formats/dds-format.md
 [json-format]: ../formats/json-format.md
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
