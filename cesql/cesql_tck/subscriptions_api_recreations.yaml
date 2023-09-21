@@ -146,30 +146,35 @@ tests:
     eventOverrides:
       id: "myId" 
       type: "example.event.warning"
+      source: "http://localhost.localdomain"
   - name: Conjunctive Normal Form (2)
     expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
     result: true
     eventOverrides:
       id: "notmyId"
       type: "example.event.success"
+      source: "http://localhost.localdomain"
   - name: Conjunctive Normal Form (3)
     expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
     result: false
     eventOverrides:
       id: "notmyId"
       type: "example.event.warning"
+      source: "http://localhost.localdomain"
   - name: Conjunctive Normal Form (4)
     expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
     result: true
     eventOverrides:
       id: "myId" 
       type: "example.event.success"
+      source: "http://localhost.localdomain"
   - name: Conjunctive Normal Form (5)
     expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning') AND (myext = 'customext')"
     error: missingAttribute
     eventOverrides:
       id: "myId" 
       type: "example.event.success"
+      source: "http://localhost.localdomain"
 
 
 

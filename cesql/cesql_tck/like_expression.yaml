@@ -101,7 +101,7 @@ tests:
     expression: "2344 LIKE '23%'"
     result: true
   - name: With type coercion from int (3)
-    expression: "2344 LIKE '23%'"
+    expression: "2344 LIKE '23_'"
     result: false 
 
   - name: With type coercion from bool (1)
