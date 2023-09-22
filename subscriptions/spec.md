@@ -759,65 +759,65 @@ When encoded in JSON, a filter is encoded as follows:
 ###### 3.2.4.1.1 Mandatory Filter Dialects
 
 This specification defines the following 6 filter dialects that MUST be 
-implemented by every implementation:
+supported by every implementation:
 
-`exact`
+**`exact`**
 
-: The keys are the names of the CloudEvents attributes to be matched,
+The keys are the names of the CloudEvents attributes to be matched,
 and their values are the String values to use in the comparison.
 To evaluate to true the values of the matching CloudEvents attributes MUST
 all exactly match with the associated value String specified (case sensitive).
 
-: The attribute name and value specified in the filter expression MUST NOT be
+The attribute name and value specified in the filter expression MUST NOT be
 empty strings.
 
-: For example:
+For example:
 
-: ```json
+```json
 { "exact": { "type": "com.github.push", "subject": "https://github.com/cloudevents/spec" } }
 ```
 
-`prefix`
+**`prefix`**
 
-: The keys are the names of the CloudEvents attributes to be matched,
+The keys are the names of the CloudEvents attributes to be matched,
 and their values are the String values to use in the comparison.
 To evaluate to true the values of the matching CloudEvents attributes MUST
 all start with the associated value String specified (case sensitive).
 
-: The attribute name and value specified in the filter expression MUST NOT be
+The attribute name and value specified in the filter expression MUST NOT be
 empty strings.
 
-: For example:
+For example:
 
 ```json
 { "prefix": { "type": "com.github.", "subject": "https://github.com/cloudevents" } }
 ```
 
-`suffix`
+**`suffix`**
 
-: The keys are the names of the CloudEvents attributes to be matched,
+The keys are the names of the CloudEvents attributes to be matched,
 and their values are the String values to use in the comparison.
 To evaluate to true the values of the matching CloudEvents attributes MUST
 all end with the associated value String specified (case sensitive).
 
-: The attribute name and value specified in the filter expression MUST NOT be
+The attribute name and value specified in the filter expression MUST NOT be
 empty strings.
 
-: For example:
+For example:
 
 ```json
 { "suffix": { "type": ".created", "subject": "/cloudevents/spec" } }
 ```
 
-`all` 
+**`all`**
 
-: Use of this MUST include a nested array of filter expressions, where all
+Use of this MUST include a nested array of filter expressions, where all
 nested filter expressions MUST evaluate to true in order for the `all`
 filter expression to be true.
 
-: Note: there MUST be at least one filter expression in the array.
+Note: there MUST be at least one filter expression in the array.
 
-: For example:
+For example:
 
 ```json
 {
@@ -828,15 +828,15 @@ filter expression to be true.
 }
 ```
 
-`any`
+**`any`**
 
-: Use of this MUST include one nested array of filter expressions, where at 
+Use of this MUST include one nested array of filter expressions, where at 
 least one nested filter expressions MUST evaluate to true in order for the `any`
 filter expression to be true.
 
-: Note: there MUST be at least one filter expression in the array.
+Note: there MUST be at least one filter expression in the array.
 
-: For example:
+For example:
 
 ```json
 {
@@ -847,15 +847,15 @@ filter expression to be true.
 }
 ```
 
-`not`
+**`not`**
 
-: Use of this MUST include one nested filter expression, where the result of 
+Use of this MUST include one nested filter expression, where the result of 
 this
 filter expression is the inverse of the result of the nested expression.
 In other words, if the nested expression evaluated to true, then the `not`
 filter expression's result is false.
 
-: For example:
+For example:
 
 ```json
 {
@@ -865,22 +865,22 @@ filter expression's result is false.
 
 ###### 3.2.4.1.2 Optional Filter Dialects
 
-The implementation of the following dialect is OPTIONAL for implementations 
-of this specification. 
+The support of the following dialect is OPTIONAL for implementations of
+this specification. 
 
-`sql` 
+**`sql`**
 
-: Use of this MUST have a string value, representing a [CloudEvents SQL 
+Use of this MUST have a string value, representing a [CloudEvents SQL 
 Expression](../cesql/spec.md).
-: The filter result MUST be true if the result value of the expression, 
+The filter result MUST be true if the result value of the expression, 
 coerced to boolean, equals to the `TRUE` boolean value,
 otherwise MUST be false if an error occurred while evaluating the expression or if the result value,
 coerced to boolean, equals to the `FALSE` boolean value.
 
-: Implementations SHOULD reject subscriptions with invalid CloudEvents SQL 
+Implementations SHOULD reject subscriptions with invalid CloudEvents SQL 
 expressions.
 
-: For example:
+For example:
 
 ```json
 { "sql": "source LIKE '%cloudevents%'" }
