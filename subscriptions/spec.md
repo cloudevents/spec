@@ -756,7 +756,7 @@ When encoded in JSON, a filter is encoded as follows:
 { "dialect URI-Reference" : { <dialect-specific-properties> } }
 ```
 
-###### 3.2.4.1.1 Mandatory Filter Dialects
+###### 3.2.4.1.1 REQUIRED Filter Dialects
 
 This specification defines the following 6 filter dialects that MUST be 
 supported by every implementation:
@@ -863,10 +863,10 @@ For example:
 }
 ```
 
-###### 3.2.4.1.2 Optional Filter Dialects
+###### 3.2.4.1.2 OPTIONAL Filter Dialects
 
-The support of the following dialect is OPTIONAL for implementations of
-this specification. 
+The support of the following dialects are OPTIONAL for implementations of
+this specification: 
 
 **`sql`**
 
