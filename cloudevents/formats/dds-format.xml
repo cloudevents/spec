@@ -3,12 +3,16 @@
     <types>
       <module name="io">
         <module name="cloudevents">
+
+	  <struct name="Headers" extensibility="mutable">
+            <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
+          </struct>
 	  
           <typedef name="ce_boolean" type="boolean"/>
 	  <typedef name="ce_int32" type="int32"/>
 	  <typedef name="ce_string" type="string" stringMaxLength="255"/>
-	  <typedef name="ce_bytes" type="bytes"/>
-          <typedef name="ce_uri_ref" type="string" stringMaxLength="255"/>
+	  <typedef name="ce_bytes" type="octet"/>
+          <typedef name="ce_uri" type="string" stringMaxLength="255"/>
 	  <typedef name="ce_uri_reference" type="string" stringMaxLength="255"/>
 
 	  <struct name="ce_timestamp" extensibility="final">
@@ -41,20 +45,20 @@
 
           <struct name="Event" extensibility="mutable">
             <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>
-            <member name="id" type="ce_string" stringMaxLength="255"/>
-            <member name="source" type="ce_uri_reference"/>
-            <member name="specversion" type="ce_string"/>
-            <member name="type" type="ce_string"/>
-            <member name="datacontenttype" type="ce_string"/>
-            <member name="datacontentencoding" type="ce_string"/>
-            <member name="dataschema" type="ce_uri"/>
-            <member name="subject" type="ce_string"/>
-            <member name="time" type="ce_timestamp" optional="true"/>
+            <member name="id" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+            <member name="source" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri_reference"/>
+            <member name="specversion" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+            <member name="type" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+            <member name="datacontenttype" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+            <member name="datacontentencoding" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+            <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
+            <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+            <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>
 	    
             <!-- member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::Attributes" optional="true"/ -->
 	    
-            <member name="datakey" type="ce_string" key="true"/>
-            <member name="body" type="nonBasic" nonBasicTypeName="Data" optional="true"/>
+            <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
+            <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
           </struct>
 	    
         </module>
