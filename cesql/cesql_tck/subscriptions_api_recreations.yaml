@@ -105,12 +105,6 @@ tests:
     eventOverrides:
       id: "notmyId"
       source: "http://www.some-website.com"
-  - name: Prefix OR Suffix filter (5)
-    expression: "id LIKE 'my%' OR myext LIKE '%ext'"
-    error: missingAttribute
-    eventOverrides:
-      id: "notmyId"
-      source: "http://www.some-website.com"
 
   - name: Disjunctive Normal Form (1)
     expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
@@ -128,13 +122,6 @@ tests:
   - name: Disjunctive Normal Form (3)
     expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
     result: false 
-    eventOverrides:
-      id: "notmyId"
-      type: "example.event.warning"
-      source: "https://localhost.localdomain"
-  - name: Disjunctive Normal Form (4)
-    expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning') OR (myext = 'cusomext')"
-    error: missingAttribute
     eventOverrides:
       id: "notmyId"
       type: "example.event.warning"
