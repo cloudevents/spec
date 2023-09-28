@@ -75,21 +75,21 @@ DDS users must use a message whose format is identical to the one described by t
 ```xml
 
 <struct name="Event" extensibility="mutable">
-            <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>
-            <member name="id" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-            <member name="source" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri_reference"/>
-            <member name="specversion" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-            <member name="type" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-            <member name="datacontenttype" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-            <member name="datacontentencoding" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-            <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
-            <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-            <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>
+   <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>
+   <member name="id" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+   <member name="source" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri_reference"/>
+   <member name="specversion" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+   <member name="type" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+   <member name="datacontenttype" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+   <member name="datacontentencoding" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+   <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
+   <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+   <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>
 	    
-            <!-- member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::Attributes" optional="true"/ -->
+   <!-- member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::Attributes" optional="true"/ -->
 	    
-            <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
-            <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
+   <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
+   <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
 </struct>
 ```
 
@@ -97,7 +97,7 @@ This format is defined in the io::cloudevents DDS module and is dependent on the
 
 ```xml
  <struct name="Headers" extensibility="mutable">
-            <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
+   <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
  </struct>
 	  
  <typedef name="ce_boolean" type="boolean"/>
@@ -108,8 +108,8 @@ This format is defined in the io::cloudevents DDS module and is dependent on the
  <typedef name="ce_uri_reference" type="string" stringMaxLength="255"/>
 
  <struct name="ce_timestamp" extensibility="final">
-     <member name="sec" type="int64"/>
-     <member name="nanosec" type="uint32"/>
+   <member name="sec" type="int64"/>
+   <member name="nanosec" type="uint32"/>
  </struct>
 ```
 
@@ -117,27 +117,27 @@ Since the DDS Event Format currently supports only three types of data payloads,
 
 ```xml
  <enum name="DataKind">
-    <enumerator name="BINARY"/>
-    <enumerator name="TEXT"/>
-    <enumerator name="JSON"/>
+   <enumerator name="BINARY"/>
+   <enumerator name="TEXT"/>
+   <enumerator name="JSON"/>
  </enum>
 	  
  <union name="Data" extensibility="final">
-     <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::DataKind"/>
-       <case>
-          <caseDiscriminator value="(io::cloudevents::BINARY)"/>
-          <member name="binary_data" type="byte" sequenceMaxLength="100"/>
-       </case>
-       <case>
-          <caseDiscriminator value="(io::cloudevents::JSON)"/>
-          <member name="json_dds_data" type="string" stringMaxLength="255"/>
-       </case>
-       <case>
-          <caseDiscriminator value="(io::cloudevents::TEXT)"/>
-          <member name="text_data" type="string" stringMaxLength="255"/>
-       </case>
+   <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::DataKind"/>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::BINARY)"/>
+       <member name="binary_data" type="byte" sequenceMaxLength="100"/>
+    </case>
+    <case>
+      <caseDiscriminator value="(io::cloudevents::JSON)"/>
+       <member name="json_dds_data" type="string" stringMaxLength="255"/>
+    </case>
+    <case>
+      <caseDiscriminator value="(io::cloudevents::TEXT)"/>
+      <member name="text_data" type="string" stringMaxLength="255"/>
+    </case>
  </union>
-``
+```
 
 
 ## 3 Data
