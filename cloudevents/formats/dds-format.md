@@ -93,7 +93,7 @@ DDS users must use a message whose format is identical to the one described by t
 </struct>
 ```
 
-This format is defined in the io::cloudevents DDS module and is dependent on the following base types that are defined in that module:
+This format is defined in the io::cloudevents DDS module and is dependent on the following base types:
 
 ```xml
  <struct name="Headers" extensibility="mutable">
