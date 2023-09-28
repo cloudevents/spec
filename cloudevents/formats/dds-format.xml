@@ -11,7 +11,7 @@
           <typedef name="ce_boolean" type="boolean"/>
 	  <typedef name="ce_int32" type="int32"/>
 	  <typedef name="ce_string" type="string" stringMaxLength="255"/>
-	  <typedef name="ce_bytes" type="octet"/>
+	  <typedef name="ce_bytes" type="byte"/>
           <typedef name="ce_uri" type="string" stringMaxLength="255"/>
 	  <typedef name="ce_uri_reference" type="string" stringMaxLength="255"/>
 

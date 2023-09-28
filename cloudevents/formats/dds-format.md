@@ -74,7 +74,7 @@ DDS users must use a message whose format is identical to the one described by t
 
 ```xml
 
-  <struct name="Event" extensibility="mutable">
+<struct name="Event" extensibility="mutable">
             <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>
             <member name="id" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
             <member name="source" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri_reference"/>
@@ -90,8 +90,55 @@ DDS users must use a message whose format is identical to the one described by t
 	    
             <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
             <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
-          </struct>
+</struct>
 ```
+
+This format is defined in the io::cloudevents DDS module and is dependent on the following base types that are defined in that module:
+
+```xml
+ <struct name="Headers" extensibility="mutable">
+            <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
+ </struct>
+	  
+ <typedef name="ce_boolean" type="boolean"/>
+ <typedef name="ce_int32" type="int32"/>
+ <typedef name="ce_string" type="string" stringMaxLength="255"/>
+ <typedef name="ce_bytes" type="byte"/>
+ <typedef name="ce_uri" type="string" stringMaxLength="255"/>
+ <typedef name="ce_uri_reference" type="string" stringMaxLength="255"/>
+
+ <struct name="ce_timestamp" extensibility="final">
+     <member name="sec" type="int64"/>
+     <member name="nanosec" type="uint32"/>
+ </struct>
+```
+
+Since the DDS Event Format currently supports only three types of data payloads, these are defined within the io::cloudevents DDS module by the folowing enumeration and union:
+
+```xml
+ <enum name="DataKind">
+    <enumerator name="BINARY"/>
+    <enumerator name="TEXT"/>
+    <enumerator name="JSON"/>
+ </enum>
+	  
+ <union name="Data" extensibility="final">
+     <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::DataKind"/>
+       <case>
+          <caseDiscriminator value="(io::cloudevents::BINARY)"/>
+          <member name="binary_data" type="byte" sequenceMaxLength="100"/>
+       </case>
+       <case>
+          <caseDiscriminator value="(io::cloudevents::JSON)"/>
+          <member name="json_dds_data" type="string" stringMaxLength="255"/>
+       </case>
+       <case>
+          <caseDiscriminator value="(io::cloudevents::TEXT)"/>
+          <member name="text_data" type="string" stringMaxLength="255"/>
+       </case>
+ </union>
+``
+
 
 ## 3 Data
 
