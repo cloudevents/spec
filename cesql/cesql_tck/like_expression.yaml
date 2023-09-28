@@ -93,3 +93,26 @@ tests:
     eventOverrides:
       myext: "abc123123%456_dzf"
     result: false
+  
+  - name: With type coercion from int (1)
+    expression: "234 LIKE '23_'"
+    result: true
+  - name: With type coercion from int (2)
+    expression: "2344 LIKE '23%'"
+    result: true
+  - name: With type coercion from int (3)
+    expression: "2344 LIKE '23_'"
+    result: false 
+
+  - name: With type coercion from bool (1)
+    expression: "TRUE LIKE 'tr%'"
+    result: true
+  - name: With type coercion from bool (2)
+    expression: "TRUE LIKE '%ue'"
+    result: true
+  - name: With type coercion from bool (3)
+    expression: "FALSE LIKE 'tr%'"
+    result: false
+  - name: With type coercion from bool (4)
+    expression: "FALSE LIKE 'fal%'"
+    result: true 

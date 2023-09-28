@@ -1,0 +1,168 @@
+name: SubscriptionsAPI Recreations
+tests:
+  - name: Prefix filter (1)
+    expression: "source LIKE 'https://%'"
+    result: true
+    eventOverrides:
+      source: "https://example.com"
+  - name: Prefix filter (2)
+    expression: "source LIKE 'https://%'"
+    result: false
+    eventOverrides:
+      source: "http://example.com"
+  - name: Prefix filter on string extension
+    expression: "myext LIKE 'custom%'"
+    result: true
+    eventOverrides:
+      myext: "customext"
+  - name: Prefix filter on missing string extension
+    expression: "myext LIKE 'custom%'"
+    error: missingAttribute
+
+  - name: Suffix filter (1)
+    expression: "type like '%.error'"
+    result: true
+    eventOverrides:
+      type: "com.github.error"
+  - name: Suffix filter (2)
+    expression: "type like '%.error'"
+    result: false 
+    eventOverrides:
+      type: "com.github.success"
+  - name: Suffix filter on string extension
+    expression: "myext LIKE '%ext'"
+    result: true
+    eventOverrides:
+      myext: "customext"
+  - name: Suffix filter on missing string extension
+    expression: "myext LIKE '%ext'"
+    error: missingAttribute
+
+  - name: Exact filter (1)
+    expression: "id = 'myId'"
+    result: true
+    eventOverrides:
+      id: "myId"
+  - name: Exact filter  (2)
+    expression: "id = 'myId'"
+    result: false
+    eventOverrides:
+      id: "notmyId"
+  - name: Exact filter on string extension
+    expression: "myext = 'customext'"
+    result: true
+    eventOverrides:
+      myext: "customext"
+  - name: Exact filter on missing string extension
+    expression: "myext = 'customext'"
+    error: missingAttribute
+
+  - name: Prefix filter AND Suffix filter (1)
+    expression: "id LIKE 'my%' AND source LIKE '%.ca'"
+    result: true
+    eventOverrides:
+      id: "myId"
+      source: "http://www.some-website.ca"
+  - name: Prefix filter AND Suffix filter (2)
+    expression: "id LIKE 'my%' AND source LIKE '%.ca'"
+    result: false
+    eventOverrides:
+      id: "myId"
+      source: "http://www.some-website.com"
+  - name: Prefix filter AND Suffix filter (3)
+    expression: "myext LIKE 'custom%' AND type LIKE '%.error'"
+    result: true
+    eventOverrides:
+      myext: "customext"
+      type: "com.github.error"
+  - name: Prefix AND Suffix filter (4)
+    expression: "type LIKE 'example.%' AND myext LIKE 'custom%'"
+    error: missingAttribute
+    eventOverrides:
+      type: "example.event.type"
+
+  - name: Prefix OR Suffix filter (1)
+    expression: "id LIKE 'my%' OR source LIKE '%.ca'"
+    result: true
+    eventOverrides:
+      id: "myId"
+      source: "http://www.some-website.ca"
+  - name: Prefix OR Suffix filter (2)
+    expression: "id LIKE 'my%' OR source LIKE '%.ca'"
+    result: true
+    eventOverrides:
+      id: "myId"
+      source: "http://www.some-website.com"
+  - name: Prefix OR Suffix filter (3)
+    expression: "id LIKE 'my%' OR source LIKE '%.ca'"
+    result: true
+    eventOverrides:
+      id: "notmyId"
+      source: "http://www.some-website.ca"
+  - name: Prefix OR Suffix filter (4)
+    expression: "id LIKE 'my%' OR source LIKE '%.ca'"
+    result: false 
+    eventOverrides:
+      id: "notmyId"
+      source: "http://www.some-website.com"
+
+  - name: Disjunctive Normal Form (1)
+    expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
+    result: true
+    eventOverrides:
+      id: "myId"
+      type: "example.event.success"
+  - name: Disjunctive Normal Form (2)
+    expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
+    result: true
+    eventOverrides:
+      id: "notmyId"
+      type: "example.event.warning"
+      source: "http://localhost.localdomain"
+  - name: Disjunctive Normal Form (3)
+    expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
+    result: false 
+    eventOverrides:
+      id: "notmyId"
+      type: "example.event.warning"
+      source: "https://localhost.localdomain"
+
+  - name: Conjunctive Normal Form (1)
+    expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
+    result: true
+    eventOverrides:
+      id: "myId" 
+      type: "example.event.warning"
+      source: "http://localhost.localdomain"
+  - name: Conjunctive Normal Form (2)
+    expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
+    result: true
+    eventOverrides:
+      id: "notmyId"
+      type: "example.event.success"
+      source: "http://localhost.localdomain"
+  - name: Conjunctive Normal Form (3)
+    expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
+    result: false
+    eventOverrides:
+      id: "notmyId"
+      type: "example.event.warning"
+      source: "http://localhost.localdomain"
+  - name: Conjunctive Normal Form (4)
+    expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
+    result: true
+    eventOverrides:
+      id: "myId" 
+      type: "example.event.success"
+      source: "http://localhost.localdomain"
+  - name: Conjunctive Normal Form (5)
+    expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning') AND (myext = 'customext')"
+    error: missingAttribute
+    eventOverrides:
+      id: "myId" 
+      type: "example.event.success"
+      source: "http://localhost.localdomain"
+
+
+
+
