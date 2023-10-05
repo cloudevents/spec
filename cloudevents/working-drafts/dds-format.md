@@ -66,7 +66,62 @@ mapping.
 ### 2.2 OPTIONAL Attributes
 
 CloudEvents Spec defines OPTIONAL attributes. The DDS format defines that these
-fields MUST use... (TODO)
+must be defined in one of the basic types. The set of possible Attribute Types and Values
+for optional attributes are defined in the [DDS Event Format][dds-event-format] as follows:
+
+```xml
+<enum name="AttributeType">
+   <enumerator name="BOOL"/>
+   <enumerator name="INT32"/>
+   <enumerator name="STRING"/>
+   <enumerator name="BYTES"/>
+   <enumerator name="URI"/>
+   <enumerator name="URI_REF"/>
+   <enumerator name="TIMESTAMP"/>
+</enum>
+	  
+<union name="AttributeValue" extensibility="final">
+   <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeType"/>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::BOOL)"/>
+      <member name="ce_boolean" type="boolean"/>
+   </case>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::INT32)"/>
+      <member name="ce_integer" type="int32"/>
+   </case>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::STRING)"/>
+      <member name="ce_string" type="string" stringMaxLength="255"/>
+   </case>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::BYTES)"/>
+      <member name="ce_bytes" type="byte" sequenceMaxLength="100"/>
+   </case>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::URI)"/>
+      <member name="ce_uri" type="nonBasic" nonBasicTypeName="io::cloudevents::URI"/>
+   </case>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::URI_REF)"/>
+      <member name="ce_uri_reference" type="nonBasic" nonBasicTypeName="io::cloudevents::URI_Ref"/>
+   </case>
+</union>
+
+```
+
+Based on the above, the type definition for optional Attributes is defined as follows:
+
+```xml
+
+<struct name="Attribute">
+    <member name="key" type="string" stringMaxLength="255"/>
+    <member name="value" type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeValue"/>
+</struct>
+
+<typedef name="Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::Attribute" sequenceMaxLength="100"/>
+
+```
 
 ### 2.3 Definition
 
@@ -84,10 +139,8 @@ DDS users must use a message whose format is identical to the one described by t
    <member name="datacontentencoding" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
    <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
    <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-   <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>
-	    
-   <!-- member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::Attributes" optional="true"/ -->
-	    
+   <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>	    
+   <member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::Attributes" optional="true"/>
    <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
    <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
 </struct>
