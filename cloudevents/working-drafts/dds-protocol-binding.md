@@ -171,7 +171,7 @@ efficient transfer and without transcoding effort.
 
 For the _binary_ mode, the header `content-type` property MUST be mapped
 directly to the CloudEvents `datacontenttype` attribute and the
-`datacontentencoding` attribute must be set to BINARY.
+`datacontentencoding` attribute must be set to 'binary'.
 
 #### 3.2.2. Event Data Encoding
 
@@ -212,7 +212,7 @@ content-type: application/cloudevent+dds
 
 For both of the above cases, the `content-type` property MUST be mapped
 directly to the CloudEvents `datacontenttype` attribute and the
-`datacontentencoding` attribute must be set to either TEXT or JSON
+`datacontentencoding` attribute must be set to either 'text' or 'json'
 depending on the type of structured data being transmitted.
 
 
