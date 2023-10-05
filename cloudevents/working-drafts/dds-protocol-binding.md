@@ -104,7 +104,7 @@ There are two values of `datacontenttype` currently supported:
 - `application/cloudevent+dds` for a wider range of data types (text, binary, JSON)
 
 If the `datacontenttype` attribute is set to `application/cloudevent+dds`, the
-`dataencoding` attribute defines the encoding of the message body. 
+`datacontentencoding` attribute defines the encoding of the message body. 
 
 The `content-type` field in the message header MUST be consistent with the
 `datacontenttype` attribute.
@@ -119,9 +119,9 @@ If the header is present and its value is `cloudevent/json`, the receiver
 decodes the message as JSON data.
 
 If the header is present and its value is `application/cloudevent+dds`, the
-receiver decodes the message into the DDS message format, using the `dataencoding`
+receiver decodes the message into the DDS message format, using the `datacontentencoding`
 attribute to determine the encoding of the message body. There are
-three valid values of the `dataencoding` attribute currently supported:
+three valid values of the `datacontentencoding` attribute currently supported:
 - `text` for ASCII text
 - `binary` for binary data
 - `json` for JSON data
@@ -130,7 +130,7 @@ The `content-type` of the DDS message is required to be consistent with the
 `datacontenttype` attribute.
 
 If a receiver finds a CloudEvents type as per the above rule, but with a
-`dataencoding` that it cannot handle, it MAY treat the event as binary and forward it to another party as-is.
+`datacontentencoding` that it cannot handle, it MAY treat the event as binary and forward it to another party as-is.
 
 When the `content-type` header value is not set, knowing when the message ought
 to be parsed as a CloudEvent can be a challenge. While this specification
