@@ -111,12 +111,7 @@ The 'content-type' field in the message header MUST be consistent with the
 
 ## 3. DDS Message Mapping
 
-The content type is chosen by the sender of the event. Usage patterns that
-might require (or allow)  solicitation of events using a particular content
-type might be defined by an application, but are no requirements for the usage
-of a particular content type for specific contexts established in this document.
-
-The receiver of the event can distinguish between content modes by
+The content type is chosen by the sender of the event. The receiver of the event can distinguish between content modes by
 inspecting the `content-type` [Header][dds-message-header] of the DDS
 message.
 
