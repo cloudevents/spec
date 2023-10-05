@@ -105,6 +105,10 @@ for optional attributes are defined in the [DDS Event Format][dds-event-format] 
       <caseDiscriminator value="(io::cloudevents::URI_REF)"/>
       <member name="ce_uri_reference" type="nonBasic" nonBasicTypeName="io::cloudevents::URI_Ref"/>
    </case>
+   <case>
+      <caseDiscriminator value="(io::cloudevents::TIMESTAMP)"/>
+      <member name="ce_timestamp" type="nonBasic" nonBasicTypeName="io::cloudevents::Timestamp"/>
+   </case>
 </union>
 
 ```
