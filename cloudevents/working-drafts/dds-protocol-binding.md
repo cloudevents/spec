@@ -103,9 +103,6 @@ There are two values of 'datacontenttype' currently supported:
 - 'cloudevent/json' for JSON data
 - 'application/cloudevent+dds' for a wider range of data types (text, binary, JSON)
 
-If the 'datacontenttype' attribute  is not defined, the data content is
-assumed to be JSON (datacontenttype='cloudevent/json').
-
 If the 'datacontenttype' attribute is set to 'application/cloudevent+dds', the
 'dataencoding' attribute defines the encoding of the message body. 
 
