@@ -113,7 +113,7 @@ for optional attributes are defined in the [DDS Event Format][dds-event-format] 
 
 ```
 
-Based on the above, the type definition for optional Attributes is defined as follows:
+Based on the above, the type definition for optional Attributes is as follows:
 
 ```xml
 
@@ -128,28 +128,7 @@ Based on the above, the type definition for optional Attributes is defined as fo
 
 ### 2.3 Definition
 
-DDS users must use a message whose format is identical to the one described by the [DDS Event Format][dds-event-format]:
-
-```xml
-
-<struct name="Event" extensibility="mutable">
-   <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>
-   <member name="id" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-   <member name="source" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri_reference"/>
-   <member name="specversion" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-   <member name="type" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-   <member name="datacontenttype" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-   <member name="datacontentencoding" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-   <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
-   <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-   <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>	    
-   <member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::Attributes" optional="true"/>
-   <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
-   <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
-</struct>
-```
-
-This format is defined in the io::cloudevents DDS module and is dependent on the following base types:
+The [DDS Event Format][dds-message-format] is defined in the io::cloudevents DDS module and is dependent on the following base types:
 
 ```xml
  <struct name="Headers" extensibility="mutable">
@@ -195,12 +174,32 @@ Since the DDS Event Format currently supports only three types of data payloads,
  </union>
 ```
 
+Finally, the complete [DDS Event Format][dds-event-format] structure is:
+
+```xml
+
+<struct name="Event" extensibility="mutable">
+   <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>
+   <member name="id" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+   <member name="source" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri_reference"/>
+   <member name="specversion" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+   <member name="type" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
+   <member name="datacontenttype" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+   <member name="datacontentencoding" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+   <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
+   <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
+   <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>	    
+   <member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::Attributes" optional="true"/>
+   <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
+   <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
+</struct>
+```
 
 ## 3 Data
 
 Before encoding, the DDS serializer MUST first determine the runtime data type
 of the content. This can be determined by examining by consulting the `datacontenttype`
-and 'dataencoding' attributes.
+and `datacontentencoding` attributes.
 
 If the implementation determines that the type of the data is binary, the value
 MUST be stored in the `body` field using the `bytes` type.
