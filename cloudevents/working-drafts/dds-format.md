@@ -205,7 +205,7 @@ If the implementation determines that the type of the data is binary, the value
 MUST be stored in the `body` field using the `bytes` type.
 
 For other types, the implementation MUST translate the data value into a text or JSON
-representation of the value using the union types described for the message body.
+representation using the union type described for the message body.
 
 ## 4 Examples
 
