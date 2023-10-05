@@ -72,15 +72,17 @@ In the _structured_ content mode, event metadata attributes and event data are
 placed into the DDS message using an [event format](#14-event-formats).
 
 In the _binary_ content mode, the value of the event `data` is placed into
-the DDS message's body section as-is; all other event attributes are
+the DDS message's "Data" section as-is; all other event attributes are
 mapped to the DDS message's event metadata fields.
 
 ### 1.4. Event Formats
 
-Event formats, used with the _structured_ content mode, define how an event is
-expressed in a particular data format. All implementations of this specification
-that support the _structured_ content mode MUST support the [JSON event
-format][json-format].
+Event formats define how an event is expressed in a particular data format.
+All implementations of this specification that support the _structured_
+content mode MUST support the [JSON event format][json-format].
+
+The DDS protocol binding additionally supports the
+[DDS event format][dds-message-format].
 
 ### 1.5. Security
 
@@ -177,11 +179,12 @@ efficient transfer and without transcoding effort.
 #### 3.2.1. Content Type
 
 For the _binary_ mode, the header `content-type` property MUST be mapped
-directly to the CloudEvents `datacontenttype` attribute.
+directly to the CloudEvents `datacontenttype` attribute and the
+`datacontentencoding` attribute must be set to BINARY.
 
 #### 3.2.2. Event Data Encoding
 
-The [`data`](#21-data) byte-sequence MUST be used as the body of the DDS
+The [`data`](#21-data) byte-sequence MUST be used as the body ("Data" field) of the DDS
 message.
 
 In binary mode, the DDS representation of a CloudEvent with no `data` is a
@@ -194,17 +197,13 @@ All [CloudEvents][ce] attributes and [CloudEvent Attributes Extensions]
 with exception of `data` MUST be individually mapped to and from the Header
 fields in the DDS message.
 
-At this time, the DDS protocol binding does not support any Cloud Event
-extension attributes. The 'content-type' header attribute is mapped to the
-'datacontenttype' attribute in the DDS message.
-
 ### 3.3. Structured Content Mode
 
 The _structured_ content mode keeps event metadata and data together in the
 payload, allowing simple forwarding of the same event across multiple routing
 hops, and across multiple protocols.
 
-#### 3.3.1. DDS Content-Type
+#### 3.3.1. Content-Type
 
 If present, the DDS message header property `content-type` MUST be set to the
 media type of an [event format](#14-event-formats).
@@ -214,6 +213,17 @@ Example for the [JSON format][json-format]:
 ```text
 content-type: cloudevent/json
 ```
+Example for the [DDS event format][dds-message-format]:
+
+```text
+content-type: application/cloudevent+dds
+```
+
+For both of the above cases, the `content-type` property MUST be mapped
+directly to the CloudEvents `datacontenttype` attribute and the
+`datacontentencoding` attribute must be set to either TEXT or JSON
+depending on the type of structured data being transmitted.
+
 
 #### 3.3.2. Event Data Encoding
 
@@ -251,7 +261,7 @@ defined for structured data.
 [omg]: https://www.omg.org/
 [dds]: https://www.omg.org/spec/DDS/1.4/PDF
 [rtps]: https://www.omg.org/spec/DDSI-RTPS/2.3/PDF
-[dds-message-format]: ../formats/dds-format.md
+[dds-message-format]: ./dds-format.md
 [json-format]: ../formats/json-format.md
 [json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [rfc2046]: https://tools.ietf.org/html/rfc2046
