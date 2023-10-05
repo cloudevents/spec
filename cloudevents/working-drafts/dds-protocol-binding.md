@@ -72,7 +72,7 @@ In the _structured_ content mode, event metadata attributes and event data are
 placed into the DDS message using an [event format](#14-event-formats).
 
 In the _binary_ content mode, the value of the event `data` is placed into
-the DDS message's "Data" section as-is; all other event attributes are
+the DDS message's `data` section as-is; all other event attributes are
 mapped to the DDS message's event metadata fields.
 
 ### 1.4. Event Formats
@@ -99,15 +99,15 @@ attributes.
 `data` is assumed to contain opaque application data that is encoded as declared
 by the `datacontenttype` attribute. 
 
-There are two values of 'datacontenttype' currently supported:
-- 'cloudevent/json' for JSON data
-- 'application/cloudevent+dds' for a wider range of data types (text, binary, JSON)
+There are two values of `datacontenttype` currently supported:
+- `cloudevent/json` for JSON data
+- `application/cloudevent+dds` for a wider range of data types (text, binary, JSON)
 
-If the 'datacontenttype' attribute is set to 'application/cloudevent+dds', the
-'dataencoding' attribute defines the encoding of the message body. 
+If the `datacontenttype` attribute is set to `application/cloudevent+dds`, the
+`dataencoding` attribute defines the encoding of the message body. 
 
-The 'content-type' field in the message header MUST be consistent with the
-'datacontenttype' attribute.
+The `content-type` field in the message header MUST be consistent with the
+`datacontenttype` attribute.
 
 ## 3. DDS Message Mapping
 
@@ -115,35 +115,35 @@ The content type is chosen by the sender of the event. The receiver of the event
 inspecting the `content-type` [Header][dds-message-header] of the DDS
 message.
 
-If the header is present and its value is 'cloudevent/json', the receiver
+If the header is present and its value is `cloudevent/json`, the receiver
 decodes the message as JSON data.
 
-If the header is present and its value is 'application/cloudevent+dds', the
-receiver decodes the message into the DDS message format, using the 'dataencoding'
+If the header is present and its value is `application/cloudevent+dds`, the
+receiver decodes the message into the DDS message format, using the `dataencoding`
 attribute to determine the encoding of the message body. There are
-three valid values of the 'dataencoding' attribute currently supported:
-- 'text' for ASCII text
-- 'binary' for binary data
-- 'json' for JSON data
+three valid values of the `dataencoding` attribute currently supported:
+- `text` for ASCII text
+- `binary` for binary data
+- `json` for JSON data
 
-The 'content-type' of the DDS message is required to be consistent with the
-'datacontenttype' attribute.
+The `content-type` of the DDS message is required to be consistent with the
+`datacontenttype` attribute.
 
 If a receiver finds a CloudEvents type as per the above rule, but with a
-'dataencoding' that it cannot handle, it MAY treat the event as binary and forward it to another party as-is.
+`dataencoding` that it cannot handle, it MAY treat the event as binary and forward it to another party as-is.
 
 When the `content-type` header value is not set, knowing when the message ought
 to be parsed as a CloudEvent can be a challenge. While this specification
 can not mandate that senders do not include any of the CloudEvents headers
 when the message is not a CloudEvent, it would be reasonable for a receiver
 to assume that if the message has all of the mandatory
-CloudEvents attributes as headers then it's probably a CloudEvent. However, as
+CloudEvents attributes as headers then it`s probably a CloudEvent. However, as
 with all CloudEvent messages, if it does not adhere to all of the normative
 language of this specification then it is not a valid CloudEvent.
 
 ### 3.1. Keys
 
-The 'datakey' of the DDS message MAY be populated. A _key field_ in DDS is way
+The `datakey` of the DDS message MAY be populated. A _key field_ in DDS is way
 to uniquely identify individual instances of data being published to a topic. For example,
 if you are publishing data to a Temperature Topic dealing with temperature
 readings from different sensors, the sensor ID could be a key field.
@@ -159,7 +159,7 @@ This reduces the amount of data that is sent over the wire in a DDS-based system
 reliable message delivery of data samples with the same key, and when to overwrite locally
 available data samples with the same key.
 
-While it is not required to set the 'datakey' field for a DDS Cloud Event message,
+While it is not required to set the `datakey` field for a DDS Cloud Event message,
 setting this value will enable many of the more powerful features of the DDS protocol.
 
 ### 3.2. Binary Content Mode
@@ -171,7 +171,7 @@ efficient transfer and without transcoding effort.
 
 For the _binary_ mode, the header `content-type` property MUST be mapped
 directly to the CloudEvents `datacontenttype` attribute and the
-`datacontentencoding` attribute must be set to 'binary'.
+`datacontentencoding` attribute must be set to `binary`.
 
 #### 3.2.2. Event Data Encoding
 
@@ -212,7 +212,7 @@ content-type: application/cloudevent+dds
 
 For both of the above cases, the `content-type` property MUST be mapped
 directly to the CloudEvents `datacontenttype` attribute and the
-`datacontentencoding` attribute must be set to either 'text' or 'json'
+`datacontentencoding` attribute must be set to either `text` or `json`
 depending on the type of structured data being transmitted.
 
 
