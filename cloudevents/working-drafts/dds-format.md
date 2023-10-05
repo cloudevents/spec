@@ -128,7 +128,7 @@ Based on the above, the type definition for optional Attributes is as follows:
 
 ### 2.3 Definition
 
-The [DDS Event Format][dds-message-format] is defined in the io::cloudevents DDS module and is dependent on the following base types:
+The [DDS Event Format][dds-event-format] is defined in the io::cloudevents DDS module and is dependent on the following base types:
 
 ```xml
  <struct name="Headers" extensibility="mutable">
