@@ -78,9 +78,8 @@ events into CloudEvents, see
 
 ## SDKs
 
-In addition to the documentation mentioned above, there is also an
-[SDK requirements](cloudevents/SDK.md) doc as well as a set of SDKs being
-developed:
+In addition to the documentation mentioned above, there are also a set of
+language specific SDKs being developed:
 
 - [C#/.NET](https://github.com/cloudevents/sdk-csharp)
 - [Go](https://github.com/cloudevents/sdk-go)
@@ -92,6 +91,8 @@ developed:
 - [Ruby](https://github.com/cloudevents/sdk-ruby)
 - [Rust](https://github.com/cloudevents/sdk-rust)
 
+The [SDK requirements](cloudevents/SDK.md) document provides information
+on how the SDKs are managed and what is expected of each one.
 The SDK [feature support table](cloudevents/SDK.md#feature-support) is a
 good resource to see which features, event formats and bindings are supported
 by each SDK.

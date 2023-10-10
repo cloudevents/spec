@@ -21,6 +21,12 @@ following SDKs:
 This is intended to provide guidance and requirements for SDK authors. This
 document is intended to be kept up to date with the CloudEvents spec.
 
+The SDKs are community driven activities and are (somewhat) distinct from the
+CloudEvents specification itself. In other words, while ideally the SDKs are
+expected to keep up with changes to the specification, it is not a hard
+requirement that they do so. It will be continguent on the specific SDK's
+maintainers to find the time.
+
 ## Contribution Acceptance
 
 Being an open source community the CloudEvents team is open for new members as
