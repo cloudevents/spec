@@ -120,8 +120,9 @@ native ecosystem by making our systems interoperable with CloudEvents.
 
 ### Security Concerns
 
-If there is a security concern with one of the specifications in this
-repository please [open an issue](https://github.com/cloudevents/spec/issues).
+If there is a security concern with one of the CloudEvents specifications, or
+with one of the project's SDKs, please send an email to
+[cncf-cloudevents-security@lists.cncf.io](mailto:cncf-cloudevents-security@lists.cncf.io).
 
 A security assessment was performed by
 [Trail of Bits](https://www.trailofbits.com/) in October 2022. The report
