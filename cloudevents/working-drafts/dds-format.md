@@ -1,9 +1,11 @@
-# Data Distribution Service (DDS) Event Format for CloudEvents - Version 1.0.0-wip
+# Data Distribution Service (DDS) Event Format for CloudEvents
+- Version 1.0.0-wip
 
 ## Abstract
 
-The Data Distribution Service (DDS) Format for CloudEvents defines how event attributes are
-expressed using the data types defined in the [Object Management Group (OMG)][omg]
+The Data Distribution Service (DDS) Format for CloudEvents defines how event
+attributes are expressed using the data types defined in the
+[Object Management Group (OMG)][omg]
 [Interface Definition Language (IDL) Specification][idl-spec].
 
 The [OMG DDS Specification][dds-spec] is closely related to the IDL specification as
@@ -31,8 +33,9 @@ This specification does not define an envelope format.
 
 The DDS event format does not currently define a batch mode format.
 
-An eXtensible Markup Language (XML) reprsentation of the [DDS Event Format][dds-event-format]
-is provided in conjunction with this document.
+An eXtensible Markup Language (XML) reprsentation of the
+[DDS Event Format][dds-event-format] is provided in conjunction with this
+document.
 
 ### 1.1. Conformance
 
@@ -49,10 +52,10 @@ type-system used by DDS. This specification explicitly maps each attribute.
 
 The CloudEvents type system MUST be mapped to DDS types as follows.
 
-| CloudEvents   | DDS                                                                   |
-| ------------- | ---------------------------------------------------------------------- |
-| Boolean       | Boolean                                             |
-| Integer       | Int32                                                 |
+| CloudEvents   | DDS                                                           |
+| ------------- | ------------------------------------------------------------- |
+| Boolean       | Boolean                                                       |
+| Integer       | Int32                                                         |
 | String        | String (255)                                              |
 | Binary        | Bytes (100)                                               |
 | URI           | String (255) following [RFC 3986 §4.3][rfc3986-section43] |
@@ -65,8 +68,9 @@ mapping.
 
 ### 2.2 OPTIONAL Attributes
 
-The CloudEvents spec defines OPTIONAL attributes. The set of possible Attribute Types and Values
-for OPTIONAL attributes are defined in the [DDS Event Format][dds-event-format] as follows:
+The CloudEvents spec defines OPTIONAL attributes. The set of possible Attribute
+Types and Values for OPTIONAL attributes are defined in the
+[DDS Event Format][dds-event-format] as follows:
 
 ```xml
 <enum name="AttributeType">
@@ -128,7 +132,8 @@ Based on the above, the type definition for OPTIONAL Attributes is as follows:
 
 ### 2.3 Definition
 
-The [DDS Event Format][dds-event-format] is defined in the io::cloudevents DDS module and is dependent on the following base types:
+The [DDS Event Format][dds-event-format] is defined in the io::cloudevents DDS
+module and is dependent on the following base types:
 
 ```xml
  <struct name="Headers" extensibility="mutable">
@@ -148,7 +153,8 @@ The [DDS Event Format][dds-event-format] is defined in the io::cloudevents DDS m
  </struct>
 ```
 
-Since the DDS Event Format currently supports only three types of data payloads, these are defined within the io::cloudevents DDS module by the folowing enumeration and union:
+Since the DDS Event Format currently supports only three types of data payloads,
+these are defined within the io::cloudevents DDS module by the folowing enumeration and union:
 
 ```xml
  <enum name="DataKind">

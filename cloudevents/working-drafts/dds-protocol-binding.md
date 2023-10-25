@@ -1,9 +1,10 @@
-# Data Distribution Service Protocol Binding for CloudEvents - Version 1.0.0-wip
+# Data Distribution Service Protocol Binding for CloudEvents
+- Version 1.0.0-wip
 
 ## Abstract
 
-The [Data Distribution Service(DDS)][dds] Protocol Binding for CloudEvents defines how events are
-mapped to [DDS messages][dds-message-format].
+The [Data Distribution Service(DDS)][dds] Protocol Binding for CloudEvents
+defines how events are mapped to [DDS messages][dds-message-format].
 
 ## Table of Contents
 
@@ -49,11 +50,12 @@ the DDS protocol as [DDS messages][dds-message-format].
 The DDS protocol is an [Object Management Group (OMG)][omg] middleware standard
 for efficient and real-time data exchange in distributed systems.
 It enables communication using a publish-subscribe model and
-operates in conjunction with the [Real-Time Publish Subscribe (RTPS)][rtps] wire protocol.
+operates in conjunction with the [Real-Time Publish Subscribe (RTPS)][rtps]
+wire protocol.
 DDS ensures reliable data delivery for latency-sensitive payloads,
-supporting Quality of Service (QoS) parameters like reliability, lifespan and partitioning.
-DDS is most commonly used for mission-critical applications in industries
-such as aerospace, healthcare, and industrial automation.
+supporting Quality of Service (QoS) parameters like reliability, lifespan
+and partitioning. DDS is most commonly used for mission-critical applications
+in industries such as aerospace, healthcare, and industrial automation.
 
 This binding specification defines how attributes and data of a CloudEvent is
 mapped to a DDS message format.
@@ -111,17 +113,18 @@ The `content-type` field in the message header MUST be consistent with the
 
 ## 3. DDS Message Mapping
 
-The content type is chosen by the sender of the event. The receiver of the event can distinguish between content modes by
-inspecting the `content-type` [Header][#323-metadata-headers] of the DDS
-message.
+The content type is chosen by the sender of the event. The receiver of the
+event can distinguish between content modes by inspecting the `content-type`
+[Header][#323-metadata-headers] of the DDS message.
 
 If the header is present and its value is `cloudevent/json`, the receiver
 decodes the message as JSON data.
 
 If the header is present and its value is `application/cloudevent+dds`, the
-receiver decodes the message into the DDS message format, using the `datacontentencoding`
-attribute to determine the encoding of the message body. There are
-three valid values of the `datacontentencoding` attribute currently supported:
+receiver decodes the message into the DDS message format, using the
+`datacontentencoding` attribute to determine the encoding of the message body.
+There are three valid values of the `datacontentencoding` attribute
+currently supported:
 - `text` for ASCII text
 - `binary` for binary data
 - `json` for JSON data
@@ -130,7 +133,8 @@ The `content-type` of the DDS message is REQUIRED to be consistent with the
 `datacontenttype` attribute.
 
 If a receiver finds a CloudEvents type as per the above rule, but with a
-`datacontentencoding` that it cannot handle, it MAY treat the event as binary and forward it to another party as-is.
+`datacontentencoding` that it cannot handle, it MAY treat the event as binary
+and forward it to another party as-is.
 
 When the `content-type` header value is not set, knowing when the message ought
 to be parsed as a CloudEvent can be a challenge. While this specification
@@ -144,20 +148,21 @@ language of this specification then it is not a valid CloudEvent.
 ### 3.1. Keys
 
 The `datakey` of the DDS message MAY be populated. A _key field_ in DDS is way
-to uniquely identify individual instances of data being published to a topic. For example,
-if you are publishing data to a Temperature Topic dealing with temperature
-readings from different sensors, the sensor ID could be a key field.
+to uniquely identify individual instances of data being published to a topic. For
+example, if you are publishing data to a Temperature Topic dealing with
+temperature readings from different sensors, the sensor ID could be a key field.
 
-Key fields in DDS are used to enable numerous data-centric communications capabilities that
-are central to the protocol. These include:
+Key fields in DDS are used to enable numerous data-centric communications
+capabilities that are central to the protocol. These include:
 - Keyed Access: Subscribers can express interest in receiving data samples with
 specific key values.
 - Filtering and Matching: Publishers use key values to categorize data samples, and
-subscribers use key-based filters to specify which data samples they are interested in.
-This reduces the amount of data that is sent over the wire in a DDS-based system.
-- Reliability and Durability: These Quality of Service (QoS) settings control how DDS handles
-reliable message delivery of data samples with the same key, and when to overwrite locally
-available data samples with the same key.
+subscribers use key-based filters to specify which data samples they are
+interested in. This reduces the amount of data that is sent over the wire in a
+DDS-based system.
+- Reliability and Durability: These Quality of Service (QoS) settings control
+how DDS handles reliable message delivery of data samples with the same key, and
+when to overwrite locally available data samples with the same key.
 
 While it is not necessary to set the `datakey` field for a DDS CloudEvent message,
 setting this value will enable many of the more powerful features of the DDS protocol.
@@ -175,8 +180,8 @@ directly to the CloudEvents `datacontenttype` attribute and the
 
 #### 3.2.2. Event Data Encoding
 
-The [`data`](#21-data) byte-sequence MUST be used as the body ("Data" field) of the DDS
-message.
+The [`data`](#21-data) byte-sequence MUST be used as the body ("Data" field)
+of the DDS message.
 
 In binary mode, the DDS representation of a CloudEvent with no `data` is a
 DDS message with no body. Transmission such a DDS message is allowable.
@@ -232,8 +237,8 @@ is allowable.
 #### 3.3.3. Metadata Headers
 
 Implementations include the same DDS headers as defined for the
-[binary mode](#32-binary-content-mode). No additional metadata header attributes are
-defined for structured data.
+[binary mode](#32-binary-content-mode). No additional metadata header attributes
+are defined for structured data.
 
 ## 4. References
 
