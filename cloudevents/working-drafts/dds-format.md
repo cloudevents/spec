@@ -65,7 +65,7 @@ mapping.
 
 ### 2.2 OPTIONAL Attributes
 
-CloudEvents Spec defines OPTIONAL attributes. The set of possible Attribute Types and Values
+The CloudEvents spec defines OPTIONAL attributes. The set of possible Attribute Types and Values
 for OPTIONAL attributes are defined in the [DDS Event Format][dds-event-format] as follows:
 
 ```xml
@@ -117,12 +117,12 @@ Based on the above, the type definition for OPTIONAL Attributes is as follows:
 
 ```xml
 
-<struct name="Attribute">
+<struct name="DDS-CE-Attribute">
     <member name="key" type="string" stringMaxLength="255"/>
     <member name="value" type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeValue"/>
 </struct>
 
-<typedef name="Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::Attribute" sequenceMaxLength="100"/>
+<typedef name="DDS-CE-Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attribute" sequenceMaxLength="100"/>
 
 ```
 

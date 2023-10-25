@@ -58,11 +58,11 @@
             </case>
 	  </union>
 
-	   <struct name="Attribute">
+	   <struct name="DDS-CE-Attribute">
             <member name="key" type="string" stringMaxLength="255"/>
             <member name="value" type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeValue"/>
           </struct>
-          <typedef name="Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::Attribute" sequenceMaxLength="100"/>
+          <typedef name="DDS-CE-Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attribute" sequenceMaxLength="100"/>
 	    
           <enum name="DataKind">
             <enumerator name="BINARY"/>
