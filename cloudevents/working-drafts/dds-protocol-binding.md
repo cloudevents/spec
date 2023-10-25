@@ -10,7 +10,7 @@ mapped to [DDS messages][dds-message-format].
 1. [Introduction](#1-introduction)
 
 - 1.1. [Conformance](#11-conformance)
-- 1.2. [Relation to DDS](#12-relation-to-kafka)
+- 1.2. [Relation to DDS](#12-relation-to-dds)
 - 1.3. [Content Modes](#13-content-modes)
 - 1.4. [Event Formats](#14-event-formats)
 - 1.5. [Security](#15-security)
@@ -21,7 +21,7 @@ mapped to [DDS messages][dds-message-format].
 
 3. [DDS Message Mapping](#3-dds-message-mapping)
 
-- 3.1. [Key Mapping](#31-key-mapping)
+- 3.1. [Keys](#31-keys)
 - 3.2. [Binary Content Mode](#32-binary-content-mode)
 - 3.3. [Structured Content Mode](#33-structured-content-mode)
 
@@ -49,7 +49,7 @@ the DDS protocol as [DDS messages][dds-message-format].
 The DDS protocol is an [Object Management Group (OMG)][omg] middleware standard
 for efficient and real-time data exchange in distributed systems.
 It enables communication using a publish-subscribe model and
-operates in conjunction with the [Real-Time Publish Subscribe (RTPS)][rpts] wire protocol.
+operates in conjunction with the [Real-Time Publish Subscribe (RTPS)][rtps] wire protocol.
 DDS ensures reliable data delivery for latency-sensitive payloads,
 supporting Quality of Service (QoS) parameters like reliability, lifespan and partitioning.
 DDS is most commonly used for mission-critical applications in industries
@@ -112,7 +112,7 @@ The `content-type` field in the message header MUST be consistent with the
 ## 3. DDS Message Mapping
 
 The content type is chosen by the sender of the event. The receiver of the event can distinguish between content modes by
-inspecting the `content-type` [Header][dds-message-header] of the DDS
+inspecting the `content-type` [Header][#323-metadata-headers] of the DDS
 message.
 
 If the header is present and its value is `cloudevent/json`, the receiver
@@ -126,7 +126,7 @@ three valid values of the `datacontentencoding` attribute currently supported:
 - `binary` for binary data
 - `json` for JSON data
 
-The `content-type` of the DDS message is required to be consistent with the
+The `content-type` of the DDS message is REQUIRED to be consistent with the
 `datacontenttype` attribute.
 
 If a receiver finds a CloudEvents type as per the above rule, but with a
@@ -159,7 +159,7 @@ This reduces the amount of data that is sent over the wire in a DDS-based system
 reliable message delivery of data samples with the same key, and when to overwrite locally
 available data samples with the same key.
 
-While it is not required to set the `datakey` field for a DDS Cloud Event message,
+While it is not necessary to set the `datakey` field for a DDS CloudEvent message,
 setting this value will enable many of the more powerful features of the DDS protocol.
 
 ### 3.2. Binary Content Mode
@@ -171,7 +171,7 @@ efficient transfer and without transcoding effort.
 
 For the _binary_ mode, the header `content-type` property MUST be mapped
 directly to the CloudEvents `datacontenttype` attribute and the
-`datacontentencoding` attribute must be set to `binary`.
+`datacontentencoding` attribute MUST be set to `binary`.
 
 #### 3.2.2. Event Data Encoding
 
@@ -212,7 +212,7 @@ content-type: application/cloudevent+dds
 
 For both of the above cases, the `content-type` property MUST be mapped
 directly to the CloudEvents `datacontenttype` attribute and the
-`datacontentencoding` attribute must be set to either `text` or `json`
+`datacontentencoding` attribute MUST be set to either `text` or `json`
 depending on the type of structured data being transmitted.
 
 

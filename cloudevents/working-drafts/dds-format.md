@@ -66,7 +66,7 @@ mapping.
 ### 2.2 OPTIONAL Attributes
 
 CloudEvents Spec defines OPTIONAL attributes. The set of possible Attribute Types and Values
-for optional attributes are defined in the [DDS Event Format][dds-event-format] as follows:
+for OPTIONAL attributes are defined in the [DDS Event Format][dds-event-format] as follows:
 
 ```xml
 <enum name="AttributeType">
@@ -113,7 +113,7 @@ for optional attributes are defined in the [DDS Event Format][dds-event-format] 
 
 ```
 
-Based on the above, the type definition for optional Attributes is as follows:
+Based on the above, the type definition for OPTIONAL Attributes is as follows:
 
 ```xml
 
