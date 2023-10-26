@@ -115,7 +115,7 @@ The `content-type` field in the message header MUST be consistent with the
 
 The content type is chosen by the sender of the event. The receiver of the
 event can distinguish between content modes by inspecting the `content-type`
-[Header][#323-metadata-headers] of the DDS message.
+header of the DDS message.
 
 If the header is present and its value is `cloudevent/json`, the receiver
 decodes the message as JSON data.
