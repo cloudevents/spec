@@ -872,10 +872,10 @@ this specification:
 
 Use of this MUST have a string value, representing a [CloudEvents SQL 
 Expression](../cesql/spec.md).
-The filter result MUST be true if the result value of the expression, 
-coerced to boolean, equals to the `TRUE` boolean value,
-otherwise MUST be false if an error occurred while evaluating the expression or if the result value,
-coerced to boolean, equals to the `FALSE` boolean value.
+The filter result MUST be true if the result value of the expression
+equals to the `TRUE` boolean value, otherwise MUST be false if an
+error occurred while evaluating the expression or if the result value
+is equal to the `FALSE` boolean value, or if the result value is not a boolean.
 
 Implementations SHOULD reject subscriptions with invalid CloudEvents SQL 
 expressions.
