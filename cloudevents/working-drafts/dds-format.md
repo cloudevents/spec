@@ -202,7 +202,6 @@ const emit = async () => {
     datacontenttype: "application/cloudevent+dds",
     subject: "SQUARE",
     time,
-    dataschema,
     datakey:"Somekey",
     datacontentencoding: "binary",
     data: Buffer.from("Some text string" as string) // send the binary representation of a string
