@@ -4,10 +4,6 @@
       <module name="io">
         <module name="cloudevents">
 
-	  <struct name="Headers" extensibility="mutable">
-            <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
-          </struct>
-	  
           <typedef name="ce_boolean" type="boolean"/>
 	  <typedef name="ce_int32" type="int32"/>
 	  <typedef name="ce_string" type="string" stringMaxLength="255"/>
@@ -20,6 +16,10 @@
             <member name="nanosec" type="uint32"/>
           </struct>
 
+	  <struct name="Headers" extensibility="mutable">
+            <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
+          </struct>
+	  
 	  <enum name="AttributeType">
             <enumerator name="BOOL"/>
             <enumerator name="INT32"/>
@@ -67,7 +67,6 @@
           <enum name="DataKind">
             <enumerator name="BINARY"/>
             <enumerator name="TEXT"/>
-            <enumerator name="JSON"/>
           </enum>
 	  
           <union name="Data" extensibility="final">
@@ -77,15 +76,10 @@
               <member name="binary_data" type="byte" sequenceMaxLength="100"/>
             </case>
             <case>
-              <caseDiscriminator value="(io::cloudevents::JSON)"/>
-              <member name="json_dds_data" type="string" stringMaxLength="255"/>
-            </case>
-            <case>
               <caseDiscriminator value="(io::cloudevents::TEXT)"/>
               <member name="text_data" type="string" stringMaxLength="255"/>
             </case>
           </union>
-
 
           <struct name="Event" extensibility="mutable">
             <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>

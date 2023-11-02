@@ -103,7 +103,7 @@ by the `datacontenttype` attribute.
 
 There are two values of `datacontenttype` currently supported:
 - `cloudevent/json` for JSON data
-- `application/cloudevent+dds` for a wider range of data types (text, binary, JSON)
+- `application/cloudevent+dds` for binary and plain text data types
 
 If the `datacontenttype` attribute is set to `application/cloudevent+dds`, the
 `datacontentencoding` attribute defines the encoding of the message body. 
@@ -127,7 +127,6 @@ There are three valid values of the `datacontentencoding` attribute
 currently supported:
 - `text` for ASCII text
 - `binary` for binary data
-- `json` for JSON data
 
 The `content-type` of the DDS message is REQUIRED to be consistent with the
 `datacontenttype` attribute.
@@ -140,10 +139,10 @@ When the `content-type` header value is not set, knowing when the message ought
 to be parsed as a CloudEvent can be a challenge. While this specification
 can not mandate that senders do not include any of the CloudEvents headers
 when the message is not a CloudEvent, it would be reasonable for a receiver
-to assume that if the message has all of the mandatory
-CloudEvents attributes as headers then it`s probably a CloudEvent. However, as
-with all CloudEvent messages, if it does not adhere to all of the normative
-language of this specification then it is not a valid CloudEvent.
+to assume that if the message has all of the mandatory CloudEvents attributes
+as headers then it`s probably a CloudEvent. However, as with all CloudEvent
+messages, if it does not adhere to all of the normative language of this
+specification then it is not a valid CloudEvent.
 
 ### 3.1. Keys
 
@@ -165,7 +164,8 @@ how DDS handles reliable message delivery of data samples with the same key, and
 when to overwrite locally available data samples with the same key.
 
 While it is not necessary to set the `datakey` field for a DDS CloudEvent message,
-setting this value will enable many of the more powerful features of the DDS protocol.
+setting this value will enable many of the more powerful features of the DDS
+protocol.
 
 ### 3.2. Binary Content Mode
 

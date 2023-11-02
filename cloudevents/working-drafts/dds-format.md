@@ -4,38 +4,36 @@
 ## Abstract
 
 The Data Distribution Service (DDS) Format for CloudEvents defines how event
-attributes are expressed using the data types defined in the
-[Object Management Group (OMG)][omg]
-[Interface Definition Language (IDL) Specification][idl-spec].
+attributes are expressed using data types defined in the [Object Management
+Group (OMG)][omg] [Interface Definition Language (IDL) Specification][idl-spec].
 
 The [OMG DDS Specification][dds-spec] is closely related to the IDL specification as
 messages transmitted over the DDS protocol are defined via the IDL type system.
+These messages are sent over the wire using the Common Data Representation (CDR)
+serialization, as defined in the OMG [Real-Time Publish Subscribe (RTPS)][rtps]
+specification.
 
 ## Table of Contents
 
 1. [Introduction](#1-introduction)
 2. [Attributes](#2-attributes)
 3. [Data](#3-data)
-4. [Examples](#4-examples)
+4. [Transport](#4-transport)
+5. [Batch Format](#5-batch-format)
+6. [Examples](#6-examples)
 
 ## 1. Introduction
 
 [CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
-elements defined in the CloudEvents specification are to be represented in IDL
-primitive types.
+elements defined in the CloudEvents specification are are represented using
+a protobuf schema.
 
 The [Attributes](#2-attributes) section describes the naming conventions and
-data type mappings for CloudEvents attributes for use as DDS message
+data type mappings for CloudEvent attributes for use as protobuf message
 properties.
 
-This specification does not define an envelope format.
-
-The DDS event format does not currently define a batch mode format.
-
-An eXtensible Markup Language (XML) reprsentation of the
-[DDS Event Format][dds-event-format] is provided in conjunction with this
-document.
+The [Data](#3-data) section describes how the event payload is carried.
 
 ### 1.1. Conformance
 
@@ -43,37 +41,45 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in [RFC2119][rfc2119].
 
+### 1.2 Content-Type
+
+There is no official IANA *media-type* designation for DDS, as such this
+specification uses 'application/dds' to identify such content.
+
 ## 2. Attributes
 
-This section defines how CloudEvents attributes are mapped to the IDL
-type-system used by DDS. This specification explicitly maps each attribute.
+This section defines how CloudEvents attributes are represented in the DDS
+[schema][proto-schema].
 
-### 2.1 Type System Mapping
+## 2.1 Type System
 
-The CloudEvents type system MUST be mapped to DDS types as follows.
+The CloudEvents type system is mapped to IDL datatypes as follows :
 
-| CloudEvents   | DDS                                                           |
-| ------------- | ------------------------------------------------------------- |
-| Boolean       | Boolean                                                       |
-| Integer       | Int32                                                         |
-| String        | String (255)                                              |
-| Binary        | Bytes (100)                                               |
-| URI           | String (255) following [RFC 3986 §4.3][rfc3986-section43] |
-| URI-reference | String (255) following [RFC 3986 §4.1][rfc3986-section41] |
-| Timestamp     | seconds: Int64 nanoseconds: UInt32     |
+| CloudEvents   | protobuf |
+| ------------- | ---------------------------------------------------------------------- |
+| Boolean       | [boolean][dds-schema] |
+| Integer       | [int32][dds-schema] |
+| String        | [string][dds-schema] |
+| Binary        | [bytes][dds-schema] |
+| URI           | [string][dds-schema] following [RFC 3986 §4.3][rfc3986-section43]|
+| URI-reference | [string][dds-schema] following [RFC 3986 §4.1][rfc3986-section41] |
+| Timestamp     | [Timestamp][dds-schema]  |
 
-Extension specifications MAY define secondary mapping rules for the values of
-attributes they define, but MUST also include the previously defined primary
-mapping.
+## 2.3 REQUIRED Attributes
 
-### 2.2 OPTIONAL Attributes
+REQUIRED attributes are represented explicitly as fields in the [Event type definition][dds-schema].
 
-The CloudEvents spec defines OPTIONAL attributes. The set of possible Attribute
-Types and Values for OPTIONAL attributes are defined in the
-[DDS Event Format][dds-event-format] as follows:
+## 2.4 OPTIONAL Attributes & Extensions
+
+OPTIONAL and extension attributes are represented using a sequence of key-value
+constructs (DDS-CE-Attributes) enabling direct support of the CloudEvent
+[type system][ce-types]. An underlying union and enumeration data structure
+are needed to construct the key-value sequence to establish the association
+between the IDL types and the CloudEvent type system.
 
 ```xml
-<enum name="AttributeType">
+
+  <enum name="AttributeType">
    <enumerator name="BOOL"/>
    <enumerator name="INT32"/>
    <enumerator name="STRING"/>
@@ -81,160 +87,152 @@ Types and Values for OPTIONAL attributes are defined in the
    <enumerator name="URI"/>
    <enumerator name="URI_REF"/>
    <enumerator name="TIMESTAMP"/>
-</enum>
+ </enum>
 	  
-<union name="AttributeValue" extensibility="final">
+ <union name="AttributeValue" extensibility="final">
    <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeType"/>
    <case>
-      <caseDiscriminator value="(io::cloudevents::BOOL)"/>
-      <member name="ce_boolean" type="boolean"/>
+     <caseDiscriminator value="(io::cloudevents::BOOL)"/>
+     <member name="ce_boolean" type="boolean"/>
    </case>
    <case>
-      <caseDiscriminator value="(io::cloudevents::INT32)"/>
-      <member name="ce_integer" type="int32"/>
+     <caseDiscriminator value="(io::cloudevents::INT32)"/>
+     <member name="ce_integer" type="int32"/>
    </case>
    <case>
-      <caseDiscriminator value="(io::cloudevents::STRING)"/>
-      <member name="ce_string" type="string" stringMaxLength="255"/>
+     <caseDiscriminator value="(io::cloudevents::STRING)"/>
+     <member name="ce_string" type="string" stringMaxLength="255"/>
    </case>
    <case>
-      <caseDiscriminator value="(io::cloudevents::BYTES)"/>
-      <member name="ce_bytes" type="byte" sequenceMaxLength="100"/>
+     <caseDiscriminator value="(io::cloudevents::BYTES)"/>
+     <member name="ce_bytes" type="byte" sequenceMaxLength="100"/>
    </case>
    <case>
-      <caseDiscriminator value="(io::cloudevents::URI)"/>
-      <member name="ce_uri" type="nonBasic" nonBasicTypeName="io::cloudevents::URI"/>
+     <caseDiscriminator value="(io::cloudevents::URI)"/>
+     <member name="ce_uri" type="nonBasic" nonBasicTypeName="io::cloudevents::URI"/>
    </case>
    <case>
-      <caseDiscriminator value="(io::cloudevents::URI_REF)"/>
-      <member name="ce_uri_reference" type="nonBasic" nonBasicTypeName="io::cloudevents::URI_Ref"/>
+     <caseDiscriminator value="(io::cloudevents::URI_REF)"/>
+     <member name="ce_uri_reference" type="nonBasic" nonBasicTypeName="io::cloudevents::URI_Ref"/>
    </case>
-   <case>
-      <caseDiscriminator value="(io::cloudevents::TIMESTAMP)"/>
-      <member name="ce_timestamp" type="nonBasic" nonBasicTypeName="io::cloudevents::Timestamp"/>
-   </case>
-</union>
+ </union>
 
-```
-
-Based on the above, the type definition for OPTIONAL Attributes is as follows:
-
-```xml
-
-<struct name="DDS-CE-Attribute">
-    <member name="key" type="string" stringMaxLength="255"/>
-    <member name="value" type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeValue"/>
-</struct>
-
-<typedef name="DDS-CE-Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attribute" sequenceMaxLength="100"/>
-
-```
-
-### 2.3 Definition
-
-The [DDS Event Format][dds-event-format] is defined in the io::cloudevents DDS
-module and is dependent on the following base types:
-
-```xml
- <struct name="Headers" extensibility="mutable">
-   <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
+ <struct name="DDS-CE-Attribute">
+   <member name="key" type="string" stringMaxLength="255"/>
+   <member name="value" type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeValue"/>
  </struct>
-	  
- <typedef name="ce_boolean" type="boolean"/>
- <typedef name="ce_int32" type="int32"/>
- <typedef name="ce_string" type="string" stringMaxLength="255"/>
- <typedef name="ce_bytes" type="byte"/>
- <typedef name="ce_uri" type="string" stringMaxLength="255"/>
- <typedef name="ce_uri_reference" type="string" stringMaxLength="255"/>
 
- <struct name="ce_timestamp" extensibility="final">
-   <member name="sec" type="int64"/>
-   <member name="nanosec" type="uint32"/>
- </struct>
+ <typedef name="DDS-CE-Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attribute" sequenceMaxLength="100"/>
+
 ```
+In this model an attribute's name is used as the *key* and is associated
+with its *value* stored in the appropriately typed property.
 
-Since the DDS Event Format currently supports only three types of data payloads,
-these are defined within the io::cloudevents DDS module by the folowing enumeration and union:
+This approach allows attributes to be represented and transported
+with no loss of *type* information.
+
+## 3. Data
+
+The specification allows for data payloads of the following types to be explicitly represented:
+
+* binary
+* string
 
 ```xml
+
  <enum name="DataKind">
    <enumerator name="BINARY"/>
    <enumerator name="TEXT"/>
-   <enumerator name="JSON"/>
  </enum>
 	  
  <union name="Data" extensibility="final">
    <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::DataKind"/>
    <case>
-      <caseDiscriminator value="(io::cloudevents::BINARY)"/>
-       <member name="binary_data" type="byte" sequenceMaxLength="100"/>
-    </case>
-    <case>
-      <caseDiscriminator value="(io::cloudevents::JSON)"/>
-       <member name="json_dds_data" type="string" stringMaxLength="255"/>
-    </case>
-    <case>
-      <caseDiscriminator value="(io::cloudevents::TEXT)"/>
-      <member name="text_data" type="string" stringMaxLength="255"/>
-    </case>
+     <caseDiscriminator value="(io::cloudevents::BINARY)"/>
+     <member name="binary_data" type="byte" sequenceMaxLength="100"/>
+   </case>
+   <case>
+     <caseDiscriminator value="(io::cloudevents::TEXT)"/>
+     <member name="text_data" type="string" stringMaxLength="255"/>
+   </case>
  </union>
 ```
 
-Finally, the complete [DDS Event Format][dds-event-format] structure is:
+* When the type of the data is binary the DataKind attribute MUST be set to BINARY.
+* When the type of the data is generic text the DataKind attribute MUST be set to TEXT.
 
-```xml
+* It is noted here that when using DDS it is not necessary to specify the dataschema
+as the DDS protocol itself transmits the schema during the discovery handshake
+between event producers and consumers.
 
-<struct name="Event" extensibility="mutable">
-   <member name="headers" type="nonBasic" nonBasicTypeName="io::cloudevents::Headers"/>
-   <member name="id" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-   <member name="source" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri_reference"/>
-   <member name="specversion" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-   <member name="type" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string"/>
-   <member name="datacontenttype" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-   <member name="datacontentencoding" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-   <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
-   <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
-   <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>	    
-   <member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attributes" optional="true"/>
-   <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
-   <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
-</struct>
+## 4. Transport
+
+Transports that support content identification MUST use the following designation:
+
+```text
+   application/cloudevents+dds
 ```
 
-## 3 Data
+## 5. Batch Format
 
-Before encoding, the DDS serializer MUST first determine the runtime data type
-of the content. This can be determined by examining by consulting the `datacontenttype`
-and `datacontentencoding` attributes.
+The DDS event format does not currently define a batch mode format.
 
-If the implementation determines that the type of the data is binary, the value
-MUST be stored in the `body` field using the `bytes` type.
+## 6. Examples
 
-For other types, the implementation MUST translate the data value into a text or JSON
-representation using the union type described for the message body.
+The following code-snippet shows how messages in the DDS event format might
+be constructed and transmitted assuming the availability of some convenience
+methods.
 
-## 4 Examples
+### 6.1 Binary message event data
 
-The following table shows exemplary mappings:
+```javascript
 
-| CloudEvents | Type   | Exemplary DDS Value                           |
-| ----------- | ------ | ---------------------------------------------- |
-| type        | string | `"org.cncf.cloudevents.example"`                      |
-| specversion | string | `"1.0"`                                        |
-| source      | string | `"urn:event:from:myapi/resource/123"`                                 |
-| id          | string | `"b46cf653-d48a-4b90-8dfa-355c01061361"`                       |
-| time        | string | `"sec: 1694707005, nanosec: 996000000"`                       |
-| dataschema  | string | `"http://cloudevents.io/schema.json'"`    |
-| contenttype | string | `"cloudevent/json"`                           |
-| data        | string  | `"{"color":"red","x":120,"y":42,"shapesize":20}"`                    |
-| contenttype | string | `"application/cloudevent+dds"`                           |
-| data        | bytes  | `"data_base64":"anVzdCBub3JtYWwgdGV4dA=="`                      |
+const emit = async () => {
+  
+  const type = "org.cncf.cloudevents.example";
+  const source = "urn:event:from:myapi/resource/123";
+  const time = new Date().toISOString();
+  
+  // cloudevent+dds / binary
+  const ce_dds_binary_obj = new CloudEvent({
+    specversion: "1.0",
+    id: "b46cf653-d48a-4b90-8dfa-355c01061364",
+    type,
+    source,
+    datacontenttype: "application/cloudevent+dds",
+    subject: "SQUARE",
+    time,
+    dataschema,
+    datakey:"Somekey",
+    datacontentencoding: "binary",
+    data: Buffer.from("Some text string" as string) // send the binary representation of a string
+    // [ext1Name]: ext1Value,
+    // [ext2Name]: ext2Value,
+  })
+
+  try {
+    console.log('Event producer listening for consumers...')
+    await output.waitForSubscriptions()
+
+    const dds_binary_event_obj = DDS.binary(ce_dds_binary_obj);
+    output.instance.setFromJson(dds_binary_event_obj) // Json translation needed for the DDS JS API
+    output.write() // emit the message
+
+    sleep.msleep(500)
+
+    // Wait for all subscriptions to receive the data
+    await output.wait()
+  }
+}
+
+```
 
 ## References
 - [OMG][omg] Object Management Group (OMG)
 - [idl-spec] OMG Interface Definition Language (IDL) Specification 
 - [DDS][dds-spec] OMG Data Distribution Service (DDS) Specification
-- [dds-event-format] XML representation of DDS event format
+- [RTPS][rtps] OMG Real-Time Publish Subscribe Wire Protocol
+- [dds-schema] XML representation of DDS event schema
 - [RFC2119][rfc2119] Key words for use in RFCs to Indicate Requirement Levels
 
 
@@ -242,7 +240,9 @@ The following table shows exemplary mappings:
 [omg]: https://www.omg.org/
 [idl-spec]: https://www.omg.org/spec/IDL/4.2/PDF
 [dds-spec]: https://www.omg.org/spec/DDS/1.4/PDF
-[dds-event-format]: ./dds-format.xml
+[rtps]: https://www.omg.org/spec/DDSI-RTPS/2.3/PDF
+[dds-schema]: ./dds-cloudevent.xml
+[ce-types]: ../spec.md#type-system
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3986-section41]: https://tools.ietf.org/html/rfc3986#section-4.1
 [rfc3986-section43]: https://tools.ietf.org/html/rfc3986#section-4.3
