@@ -1,5 +1,4 @@
-# Data Distribution Service (DDS) Event Format for CloudEvents
-- Version 1.0.0-wip
+# Data Distribution Service (DDS) Event Format for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
@@ -49,13 +48,13 @@ specification uses 'application/dds' to identify such content.
 ## 2. Attributes
 
 This section defines how CloudEvents attributes are represented in the DDS
-[schema][proto-schema].
+[schema][dds-schema].
 
 ## 2.1 Type System
 
 The CloudEvents type system is mapped to IDL datatypes as follows :
 
-| CloudEvents   | protobuf |
+| CloudEvents   | DDS |
 | ------------- | ---------------------------------------------------------------------- |
 | Boolean       | [boolean][dds-schema] |
 | Integer       | [int32][dds-schema] |
