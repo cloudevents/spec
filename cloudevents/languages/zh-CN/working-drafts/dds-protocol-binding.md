@@ -1,4 +1,4 @@
-# # Data Distribution Service Protocol Binding for CloudEvents - Version 1.0.3-wip
+# Data Distribution Service Protocol Binding for CloudEvents - Version 1.0.3-wip
 
 本文档尚未被翻译，请先阅读英文[原版文档](../../../working-drafts/dds-protocol-binding.md) 。
 
