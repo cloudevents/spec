@@ -1,5 +1,4 @@
-# Data Distribution Service Protocol Binding for CloudEvents
-- Version 1.0.0-wip
+# Data Distribution Service Protocol Binding for CloudEvents - Version 1.0.3-wip
 
 ## Abstract
 
