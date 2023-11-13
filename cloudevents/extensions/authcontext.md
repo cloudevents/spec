@@ -38,7 +38,7 @@ this extension is being used.
   - `unauthenticated`: No credentials were used to authenticate the change that
     triggered the occurence.
 - Constraints
-  - REQUIRED
+  - OPTIONAL
   - This specification defines the following values, and it is RECOMMENDED that
     they be used. However, implementations MAY define additional values.
 
