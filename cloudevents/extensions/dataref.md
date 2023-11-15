@@ -57,7 +57,7 @@ this extension is being used.
   of time.
 
 - Constraints:
-  - OPTIONAL
+  - REQUIRED
 
 # Examples
 
