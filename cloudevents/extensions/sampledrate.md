@@ -45,4 +45,5 @@ this extension is being used.
   `sampledrate` would be 30 (29 not sent and 1 sent). A value of `1` is the
   equivalent of this extension not being used at all.
 - Constraints
+  - REQUIRED
   - The rate MUST be greater than zero.

@@ -48,3 +48,4 @@ for more information.
 - [Recorded Time](extensions/recordedtime.md)
 - [Sampling](extensions/sampledrate.md)
 - [Sequence](extensions/sequence.md)
+- [Severity](extensions/severity.md)
