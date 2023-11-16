@@ -37,6 +37,7 @@ this extension is being used.
     was deleted based on a TTL.
   - `unauthenticated`: No credentials were used to authenticate the change that
     triggered the occurence.
+  - `unknown`: The type of principal cannot be determined and is unknown.
 - Constraints
   - REQUIRED
   - This specification defines the following values, and it is RECOMMENDED that
