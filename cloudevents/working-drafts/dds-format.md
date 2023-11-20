@@ -79,19 +79,18 @@ REQUIRED attributes are represented explicitly as fields in the [Event type defi
 
 At this time OPTIONAL and extension attributes are not supported in the DDS format.  
 
-There is some overlap between the extension attributes and protocol level parameters
+There is overlap between the extension attributes and protocol level parameters
 that are specified using DDS Quality of Service (QoS) settings. For example, the
 Expiry Time extension attribute is very similar to the Lifespan QoS defined in the
 [DDS Specification][dds-spec]. There also is some overlap between the Sampling and
 Partitioning extension attributes and the DDS Time-Based Filter and Partition QoS.
 It is expected that a future revision of this binding will include support for these
-attributes once a comprehensive review of has been completed.
+attributes once we have resolved any ambiguities.
 
 Similarly, support for OPTIONAL attributes is deferred to a later draft of this binding as
 the DDS User Data, Group Data and Topic Data QoS also enable the transmission of
 user-defined contextual data. It is expected that a future revision of this binding will
-include support for OPTIONAL attributes once the ambiguity (and potential conflicts)
-between DDS-level QoS and CE-level attributes and extensions are resolved.
+include support for OPTIONAL attributes.
 
 ## 3. Data
 
