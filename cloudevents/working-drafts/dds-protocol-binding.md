@@ -147,7 +147,7 @@ specification then it is not a valid CloudEvent.
 ### 3.1. Keys
 
 The `datakey` of the DDS message MAY be populated. A _key field_ in DDS is a way
-to uniquely identify types or categories of data being published to a topic. For
+to uniquely identify categories of data being published to a topic. For
 example, if you are publishing data to a Temperature Topic dealing with
 temperature readings from different sensors, the Sensor ID could be a key field.
 
