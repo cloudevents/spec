@@ -72,9 +72,9 @@ The DDS protocol binding does not currently support the _batch_ content mode.
 In the _structured_ content mode, event metadata attributes and event data are
 placed into the DDS message using an [event format](#14-event-formats).
 
-In the _binary_ content mode, the value of the event `data` is placed into
-the DDS message's `data` section as-is; all other event attributes are
-mapped to the DDS message's event metadata fields.
+In the _binary_ content mode, the event `data` is placed into the DDS message's `data`
+section as-is; all other event attributes are mapped to the DDS message's event
+metadata fields.
 
 ### 1.4. Event Formats
 
@@ -105,7 +105,8 @@ There are two values of `datacontenttype` currently supported:
 - `application/cloudevent+dds` for binary and plain text data types
 
 If the `datacontenttype` attribute is set to `application/cloudevent+dds`, the
-`datacontentencoding` attribute defines the encoding of the message body. 
+`datacontentencoding` attribute, if present, MUST define the encoding of the
+message body. 
 
 The `content-type` field in the message header MUST be consistent with the
 `datacontenttype` attribute.
@@ -122,7 +123,7 @@ decodes the message as JSON data.
 If the header is present and its value is `application/cloudevent+dds`, the
 receiver decodes the message into the DDS message format, using the
 `datacontentencoding` attribute to determine the encoding of the message body.
-There are three valid values of the `datacontentencoding` attribute
+There are two valid values of the `datacontentencoding` attribute
 currently supported:
 - `text` for ASCII text
 - `binary` for binary data
@@ -145,10 +146,10 @@ specification then it is not a valid CloudEvent.
 
 ### 3.1. Keys
 
-The `datakey` of the DDS message MAY be populated. A _key field_ in DDS is way
-to uniquely identify individual instances of data being published to a topic. For
+The `datakey` of the DDS message MAY be populated. A _key field_ in DDS is a way
+to uniquely identify types or categories of data being published to a topic. For
 example, if you are publishing data to a Temperature Topic dealing with
-temperature readings from different sensors, the sensor ID could be a key field.
+temperature readings from different sensors, the Sensor ID could be a key field.
 
 Key fields in DDS are used to enable numerous data-centric communications
 capabilities that are central to the protocol. These include:
@@ -229,15 +230,14 @@ The event metadata and data are then rendered in accordance with the
 [event format](#14-event-formats) specification and the resulting data becomes
 the DDS application [data](#21-data) section.
 
-Similar to binary mode, the DDS representation of a structured CloudEvent with
-no `data` is a DDS message with no body, and transmission of such a message
-is allowable.
+The DDS representation of a structured CloudEvent with no `data` is a message
+that contains all of the CE attributes but has an empty body. Transmission of
+such a message is allowable.
 
 #### 3.3.3. Metadata Headers
 
-Implementations include the same DDS headers as defined for the
-[binary mode](#32-binary-content-mode). No additional metadata header attributes
-are defined for structured data.
+The content-type header is currently the only supported metadata header for both
+binary and structured data.  
 
 ## 4. References
 

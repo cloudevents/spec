@@ -4,12 +4,14 @@
       <module name="io">
         <module name="cloudevents">
 
+	  <const name="LENGTH_UNLIMITED" value="-1" type="int64"/>
+
           <typedef name="ce_boolean" type="boolean"/>
 	  <typedef name="ce_int32" type="int32"/>
-	  <typedef name="ce_string" type="string" stringMaxLength="255"/>
+	  <typedef name="ce_string" type="string" stringMaxLength="LENGTH_UNLIMITED"/>
 	  <typedef name="ce_bytes" type="byte"/>
-          <typedef name="ce_uri" type="string" stringMaxLength="255"/>
-	  <typedef name="ce_uri_reference" type="string" stringMaxLength="255"/>
+          <typedef name="ce_uri" type="string" stringMaxLength="LENGTH_UNLIMITED"/>
+	  <typedef name="ce_uri_reference" type="string" stringMaxLength="LENGTH_UNLIMITED"/>
 
 	  <struct name="ce_timestamp" extensibility="final">
             <member name="sec" type="int64"/>
@@ -17,53 +19,9 @@
           </struct>
 
 	  <struct name="Headers" extensibility="mutable">
-            <member name="content-type" type="string" stringMaxLength="255" optional="true"/>
+            <member name="content-type" type="string" stringMaxLength="LENGTH_UNLIMITED" optional="true"/>
           </struct>
 	  
-	  <enum name="AttributeType">
-            <enumerator name="BOOL"/>
-            <enumerator name="INT32"/>
-            <enumerator name="STRING"/>
-            <enumerator name="BYTES"/>
-            <enumerator name="URI"/>
-            <enumerator name="URI_REF"/>
-            <enumerator name="TIMESTAMP"/>
-          </enum>
-	  
-          <union name="AttributeValue" extensibility="final">
-            <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeType"/>
-            <case>
-              <caseDiscriminator value="(io::cloudevents::BOOL)"/>
-              <member name="ce_boolean" type="boolean"/>
-            </case>
-            <case>
-              <caseDiscriminator value="(io::cloudevents::INT32)"/>
-              <member name="ce_integer" type="int32"/>
-            </case>
-            <case>
-              <caseDiscriminator value="(io::cloudevents::STRING)"/>
-              <member name="ce_string" type="string" stringMaxLength="255"/>
-            </case>
-            <case>
-              <caseDiscriminator value="(io::cloudevents::BYTES)"/>
-              <member name="ce_bytes" type="byte" sequenceMaxLength="100"/>
-            </case>
-            <case>
-              <caseDiscriminator value="(io::cloudevents::URI)"/>
-              <member name="ce_uri" type="nonBasic" nonBasicTypeName="io::cloudevents::URI"/>
-            </case>
-            <case>
-              <caseDiscriminator value="(io::cloudevents::URI_REF)"/>
-              <member name="ce_uri_reference" type="nonBasic" nonBasicTypeName="io::cloudevents::URI_Ref"/>
-            </case>
-	  </union>
-
-	   <struct name="DDS-CE-Attribute">
-            <member name="key" type="string" stringMaxLength="255"/>
-            <member name="value" type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeValue"/>
-          </struct>
-          <typedef name="DDS-CE-Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attribute" sequenceMaxLength="100"/>
-	    
           <enum name="DataKind">
             <enumerator name="BINARY"/>
             <enumerator name="TEXT"/>
@@ -73,11 +31,11 @@
             <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::DataKind"/>
             <case>
               <caseDiscriminator value="(io::cloudevents::BINARY)"/>
-              <member name="binary_data" type="byte" sequenceMaxLength="100"/>
+              <member name="binary_data" type="byte" sequenceMaxLength="LENGTH_UNLIMITED"/>
             </case>
             <case>
               <caseDiscriminator value="(io::cloudevents::TEXT)"/>
-              <member name="text_data" type="string" stringMaxLength="255"/>
+              <member name="text_data" type="string" stringMaxLength="LENGTH_UNLIMITED"/>
             </case>
           </union>
 
@@ -92,7 +50,6 @@
             <member name="dataschema" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_uri" optional="true"/>
             <member name="subject" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" optional="true"/>
             <member name="time" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_timestamp" optional="true"/>
-            <member name="extension" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attributes" optional="true"/>
             <member name="datakey" type="nonBasic" nonBasicTypeName="io::cloudevents::ce_string" key="true"/>
             <member name="body" type="nonBasic" nonBasicTypeName="io::cloudevents::Data" optional="true"/>
           </struct>

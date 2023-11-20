@@ -12,6 +12,10 @@ These messages are sent over the wire using the Common Data Representation (CDR)
 serialization, as defined in the OMG [Real-Time Publish Subscribe (RTPS)][rtps]
 specification.
 
+It should be noted here that the DDS Event Format is coupled to the DDS Protocol
+Binding for CloudEvents. CloudEvents defined in the DDS Event Format can only be
+decoded by a message receiver that is using the DDS protocol.  
+
 ## Table of Contents
 
 1. [Introduction](#1-introduction)
@@ -25,11 +29,11 @@ specification.
 
 [CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
-elements defined in the CloudEvents specification are are represented using
-a protobuf schema.
+elements defined in the CloudEvents specification are represented using a DDS
+schema.
 
 The [Attributes](#2-attributes) section describes the naming conventions and
-data type mappings for CloudEvent attributes for use as protobuf message
+data type mappings for CloudEvent attributes for use as DDS message
 properties.
 
 The [Data](#3-data) section describes how the event payload is carried.
@@ -45,10 +49,13 @@ interpreted as described in [RFC2119][rfc2119].
 There is no official IANA *media-type* designation for DDS, as such this
 specification uses 'application/dds' to identify such content.
 
+### 1.3 DDS Schema  
+
+DDS encoded CloudEvent messages MUST adhere to the format defined in the [DDS Schema][dds-schema].
+
 ## 2. Attributes
 
-This section defines how CloudEvents attributes are represented in the DDS
-[schema][dds-schema].
+This section defines how CloudEvents attributes are represented in the [DDS schema][dds-schema].
 
 ## 2.1 Type System
 
@@ -70,65 +77,21 @@ REQUIRED attributes are represented explicitly as fields in the [Event type defi
 
 ## 2.4 OPTIONAL Attributes & Extensions
 
-OPTIONAL and extension attributes are represented using a sequence of key-value
-constructs (DDS-CE-Attributes) enabling direct support of the CloudEvent
-[type system][ce-types]. An underlying union and enumeration data structure
-are needed to construct the key-value sequence to establish the association
-between the IDL types and the CloudEvent type system.
+At this time OPTIONAL and extension attributes are not supported in the DDS format.  
 
-```xml
+There is some overlap between the extension attributes and protocol level parameters
+that are specified using DDS Quality of Service (QoS) settings. For example, the
+Expiry Time extension attribute is very similar to the Lifespan QoS defined in the
+[DDS Specification][dds-spec]. There also is some overlap between the Sampling and
+Partitioning extension attributes and the DDS Time-Based Filter and Partition QoS.
+It is expected that a future revision of this binding will include support for these
+attributes once a comprehensive review of has been completed.
 
-  <enum name="AttributeType">
-   <enumerator name="BOOL"/>
-   <enumerator name="INT32"/>
-   <enumerator name="STRING"/>
-   <enumerator name="BYTES"/>
-   <enumerator name="URI"/>
-   <enumerator name="URI_REF"/>
-   <enumerator name="TIMESTAMP"/>
- </enum>
-	  
- <union name="AttributeValue" extensibility="final">
-   <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeType"/>
-   <case>
-     <caseDiscriminator value="(io::cloudevents::BOOL)"/>
-     <member name="ce_boolean" type="boolean"/>
-   </case>
-   <case>
-     <caseDiscriminator value="(io::cloudevents::INT32)"/>
-     <member name="ce_integer" type="int32"/>
-   </case>
-   <case>
-     <caseDiscriminator value="(io::cloudevents::STRING)"/>
-     <member name="ce_string" type="string" stringMaxLength="255"/>
-   </case>
-   <case>
-     <caseDiscriminator value="(io::cloudevents::BYTES)"/>
-     <member name="ce_bytes" type="byte" sequenceMaxLength="100"/>
-   </case>
-   <case>
-     <caseDiscriminator value="(io::cloudevents::URI)"/>
-     <member name="ce_uri" type="nonBasic" nonBasicTypeName="io::cloudevents::URI"/>
-   </case>
-   <case>
-     <caseDiscriminator value="(io::cloudevents::URI_REF)"/>
-     <member name="ce_uri_reference" type="nonBasic" nonBasicTypeName="io::cloudevents::URI_Ref"/>
-   </case>
- </union>
-
- <struct name="DDS-CE-Attribute">
-   <member name="key" type="string" stringMaxLength="255"/>
-   <member name="value" type="nonBasic" nonBasicTypeName="io::cloudevents::AttributeValue"/>
- </struct>
-
- <typedef name="DDS-CE-Attributes" type="nonBasic" nonBasicTypeName="io::cloudevents::DDS-CE-Attribute" sequenceMaxLength="100"/>
-
-```
-In this model an attribute's name is used as the *key* and is associated
-with its *value* stored in the appropriately typed property.
-
-This approach allows attributes to be represented and transported
-with no loss of *type* information.
+Similarly, support for OPTIONAL attributes is deferred to a later draft of this binding as
+the DDS User Data, Group Data and Topic Data QoS also enable the transmission of
+user-defined contextual data. It is expected that a future revision of this binding will
+include support for OPTIONAL attributes once the ambiguity (and potential conflicts)
+between DDS-level QoS and CE-level attributes and extensions are resolved.
 
 ## 3. Data
 
@@ -148,11 +111,11 @@ The specification allows for data payloads of the following types to be explicit
    <discriminator type="nonBasic" nonBasicTypeName="io::cloudevents::DataKind"/>
    <case>
      <caseDiscriminator value="(io::cloudevents::BINARY)"/>
-     <member name="binary_data" type="byte" sequenceMaxLength="100"/>
+     <member name="binary_data" type="byte" sequenceMaxLength="LENGTH_UNLIMITED"/>
    </case>
    <case>
      <caseDiscriminator value="(io::cloudevents::TEXT)"/>
-     <member name="text_data" type="string" stringMaxLength="255"/>
+     <member name="text_data" type="string" stringMaxLength="LENGTH_UNLIMITED"/>
    </case>
  </union>
 ```
@@ -204,8 +167,6 @@ const emit = async () => {
     datakey:"Somekey",
     datacontentencoding: "binary",
     data: Buffer.from("Some text string" as string) // send the binary representation of a string
-    // [ext1Name]: ext1Value,
-    // [ext2Name]: ext2Value,
   })
 
   try {
@@ -232,7 +193,7 @@ const emit = async () => {
 - [RTPS][rtps] OMG Real-Time Publish Subscribe Wire Protocol
 - [dds-schema] XML representation of DDS event schema
 - [RFC2119][rfc2119] Key words for use in RFCs to Indicate Requirement Levels
-
+- [CE-Extensions][ce-extensions] Cloud Events Extension Attributes 
 
 [ce]: ../spec.md
 [omg]: https://www.omg.org/
@@ -241,7 +202,9 @@ const emit = async () => {
 [rtps]: https://www.omg.org/spec/DDSI-RTPS/2.3/PDF
 [dds-schema]: ./dds-cloudevent.xml
 [ce-types]: ../spec.md#type-system
+[ce-extensions]: ..//documented-extensions.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3986-section41]: https://tools.ietf.org/html/rfc3986#section-4.1
 [rfc3986-section43]: https://tools.ietf.org/html/rfc3986#section-4.3
 [rfc3339]: https://tools.ietf.org/html/rfc3339
+
