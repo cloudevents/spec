@@ -12,8 +12,8 @@ These messages are sent over the wire using the Common Data Representation (CDR)
 serialization, as defined in the OMG [Real-Time Publish Subscribe (RTPS)][rtps]
 specification.
 
-It should be noted here that the DDS Event Format is coupled to the DDS Protocol
-Binding for CloudEvents. CloudEvents defined in the DDS Event Format can only be
+It is noted here that the DDS Event Format is coupled to the DDS Protocol Binding
+for CloudEvents. CloudEvents defined in the DDS Event Format can only be
 decoded by a message receiver that is using the DDS protocol.  
 
 ## Table of Contents
@@ -193,7 +193,7 @@ const emit = async () => {
 - [RTPS][rtps] OMG Real-Time Publish Subscribe Wire Protocol
 - [dds-schema] XML representation of DDS event schema
 - [RFC2119][rfc2119] Key words for use in RFCs to Indicate Requirement Levels
-- [CE-Extensions][ce-extensions] Cloud Events Extension Attributes 
+- [CE-Extensions][ce-extensions] CloudEvents Extension Attributes 
 
 [ce]: ../spec.md
 [omg]: https://www.omg.org/
