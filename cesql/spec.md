@@ -117,7 +117,7 @@ CESQL defines 3 different literal kinds: integer numbers, `true` or `false` bool
 digit ::= [0-9]
 number-literal ::= digit+
 
-boolean-literal ::= "true" | "false"
+boolean-literal ::= "true" | "false" (* Case insensitive *)
 
 string-literal ::= ( "'" ( [^'] | "\'" )* "'" ) | ( '"' ( [^"] | '\"' )* '"')
 
