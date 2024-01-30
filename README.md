@@ -2,7 +2,7 @@
 
 <!-- no verify-specs -->
 
-![CloudEvents logo](https://github.com/cncf/artwork/blob/master/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png)
+![CloudEvents logo](https://github.com/cncf/artwork/blob/main/projects/cloudevents/horizontal/color/cloudevents-horizontal-color.png?raw=true)
 
 [![CLOMonitor](https://img.shields.io/endpoint?url=https://clomonitor.io/api/projects/cncf/cloudevents/badge)](https://clomonitor.io/projects/cncf/cloudevents)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/6770/badge)](https://bestpractices.coreinfrastructure.org/projects/6770)
