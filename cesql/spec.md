@@ -206,7 +206,7 @@ by expected or unexpected errors. Nevertheless CESQL includes the concept of err
 case an error arises, the evaluator collects a list of errors, referred in this spec as _error list_, which is then
 returned together with the evaluated value of the CESQL expression.
 
-Addressing an attribute which is missing from the input event MUST not return an error due to the missing attribute. Instead, 
+Addressing an attribute which is missing from the input event MUST NOT return an error due to the missing attribute. Instead, 
 an empty string MUST be assumed as its value, and execution MUST proceed as it would with any other string value.
 
 Whenever possible, some error checks SHOULD be done at compile time by the expression evaluator, in order to prevent
