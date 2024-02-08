@@ -116,6 +116,8 @@ native ecosystem by making our systems interoperable with CloudEvents.
 - [Adopters](https://cloudevents.io/) - See "Integrations".
 - [Contributors](docs/contributors.md): people and organizations who helped
   us get started or are actively working on the CloudEvents specification.
+- [Presentations, notes and other misc shared
+  docs](https://drive.google.com/drive/folders/1eKH-tVNV25jwkuBEoi3ESqvVjNRlJqYX?usp=sharing)
 - [Demos & open source](docs/README.md) -- if you have something to share
   about your use of CloudEvents, please submit a PR!
 - [Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md)
