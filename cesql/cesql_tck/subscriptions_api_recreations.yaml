@@ -107,20 +107,20 @@ tests:
       source: "http://www.some-website.com"
 
   - name: Disjunctive Normal Form (1)
-    expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
+    expression: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
     result: true
     eventOverrides:
       id: "myId"
       type: "example.event.success"
   - name: Disjunctive Normal Form (2)
-    expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
+    expression: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
     result: true
     eventOverrides:
       id: "notmyId"
       type: "example.event.warning"
       source: "http://localhost.localdomain"
   - name: Disjunctive Normal Form (3)
-    expresion: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
+    expression: "(id = 'myId' AND type LIKE '%.success') OR (id = 'notmyId' AND source LIKE 'http://%' AND type LIKE '%.warning')"
     result: false 
     eventOverrides:
       id: "notmyId"
@@ -150,7 +150,7 @@ tests:
       source: "http://localhost.localdomain"
   - name: Conjunctive Normal Form (4)
     expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning')"
-    result: true
+    result: false
     eventOverrides:
       id: "myId" 
       type: "example.event.success"
@@ -160,7 +160,7 @@ tests:
     error: missingAttribute
     eventOverrides:
       id: "myId" 
-      type: "example.event.success"
+      type: "example.event.warning"
       source: "http://localhost.localdomain"
 
 
