@@ -42,7 +42,7 @@ this extension is being used.
 The Distributed Tracing Extension is not intended to replace the protocol specific headers for tracing,
 like the ones described in [W3C Trace Context](https://w3c.github.io/trace-context/) for HTTP.
 
-Given a single hop event transmission (from sink to source directly), the Distributed Tracing Extension,
+Given a single hop event transmission (from source to sink directly), the Distributed Tracing Extension,
 if used, MUST carry the same trace information contained in protocol specific tracing headers.
 
 Given a multi hop event transmission, the Distributed Tracing Extension, if used, MUST
