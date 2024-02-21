@@ -197,7 +197,8 @@ Unless otherwise specified, every attribute and extension MUST be represented by
 Through implicit type casting, the user can convert the addressed value instances to _Integer_ and
 _Boolean_.
 
-When addressing an attribute not included in the input event, an empty _String_ MUST be assumed as its value.
+When addressing an attribute not included in the input event, the entire subexpression MUST evaluate to `false`.
+For example, `true AND (missingAttribute = "")` would evaluate to `false` as the subexpression `missingAttribute = ""` would be false.
 
 ### 3.3. Errors
 
@@ -205,9 +206,6 @@ Because every operator and function is total, an expression evaluation flow is d
 by expected or unexpected errors. Nevertheless CESQL includes the concept of errors: when an expression is evaluated, in
 case an error arises, the evaluator collects a list of errors, referred in this spec as _error list_, which is then
 returned together with the evaluated value of the CESQL expression.
-
-Addressing an attribute which is missing from the input event MUST NOT return an error due to the missing attribute. Instead, 
-an empty string MUST be assumed as its value, and execution MUST proceed as it would with any other string value.
 
 Whenever possible, some error checks SHOULD be done at compile time by the expression evaluator, in order to prevent
 runtime errors.
