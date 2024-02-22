@@ -446,14 +446,14 @@ on the definition of OPTIONAL.
       - `source`: `https://example.com/storage/tenant/container`
       - `subject`: `mynewfile.jpg`
   - Building on the previous example, a subscriber might register interest for when new
-     blobs are created inside a blob-storage container. However, this time both the name
-     and/or size of the newly created blob are relevant for decision making purposes.
-     In this case, the `subject` MAY simply list meta-properties (including custom extensions),
-     separated with comma, containing additional data:
-       - `source`: `https://example.com/storage/tenant/container`
-       - `subject`: `myextensionfilename,myextensionfilesize`
-       - `myextensionfilename`: `mynewfile.jpg`
-       - `myextensionfilesize`: `100MB`
+    blobs are created inside a blob-storage container. However, this time both the name
+    and/or size of the newly created blob are relevant for decision making purposes.
+    In this case, the `subject` MAY simply list meta-properties (including custom extensions),
+    separated with comma, containing additional data:
+      - `source`: `https://example.com/storage/tenant/container`
+      - `subject`: `myextensionfilename,myextensionfilesize`
+      - `myextensionfilename`: `mynewfile.jpg`
+      - `myextensionfilesize`: `100MB`
 
 #### time
 
