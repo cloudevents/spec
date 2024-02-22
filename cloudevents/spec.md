@@ -436,15 +436,24 @@ on the definition of OPTIONAL.
 - Constraints:
   - OPTIONAL
   - If present, MUST be a non-empty string
-- Example:
+- Examples:
   - A subscriber might register interest for when new blobs are created inside a
     blob-storage container. In this case, the event `source` identifies the
     subscription scope (storage container), the `type` identifies the "blob
     created" event, and the `id` uniquely identifies the event instance to
     distinguish separate occurrences of a same-named blob having been created;
     the name of the newly created blob is carried in `subject`:
-    - `source`: `https://example.com/storage/tenant/container`
-    - `subject`: `mynewfile.jpg`
+      - `source`: `https://example.com/storage/tenant/container`
+      - `subject`: `mynewfile.jpg`
+  - Building on the previous example, a subscriber might register interest for when new
+     blobs are created inside a blob-storage container. However, this time both the name
+     and/or size of the newly created blob are relevant for decision making purposes.
+     In this case, the `subject` may simply list meta-properties (including custom extensions),
+     separated with comma, containing additional data:
+       - `source`: `https://example.com/storage/tenant/container`
+       - `subject`: `myextensionfilename,myextensionfilesize`
+       - `myextensionfilename`: `mynewfile.jpg`
+       - `myextensionfilesize`: `100MB`
 
 #### time
 
