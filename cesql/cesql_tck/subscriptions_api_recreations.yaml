@@ -17,7 +17,7 @@ tests:
       myext: "customext"
   - name: Prefix filter on missing string extension
     expression: "myext LIKE 'custom%'"
-    error: missingAttribute
+    result: false
 
   - name: Suffix filter (1)
     expression: "type like '%.error'"
@@ -36,7 +36,7 @@ tests:
       myext: "customext"
   - name: Suffix filter on missing string extension
     expression: "myext LIKE '%ext'"
-    error: missingAttribute
+    result: false
 
   - name: Exact filter (1)
     expression: "id = 'myId'"
@@ -55,7 +55,7 @@ tests:
       myext: "customext"
   - name: Exact filter on missing string extension
     expression: "myext = 'customext'"
-    error: missingAttribute
+    result: false
 
   - name: Prefix filter AND Suffix filter (1)
     expression: "id LIKE 'my%' AND source LIKE '%.ca'"
@@ -77,7 +77,7 @@ tests:
       type: "com.github.error"
   - name: Prefix AND Suffix filter (4)
     expression: "type LIKE 'example.%' AND myext LIKE 'custom%'"
-    error: missingAttribute
+    result: false
     eventOverrides:
       type: "example.event.type"
 
@@ -157,7 +157,7 @@ tests:
       source: "http://localhost.localdomain"
   - name: Conjunctive Normal Form (5)
     expression: "(id = 'myId' OR type LIKE '%.success') AND (id = 'notmyId' OR source LIKE 'https://%' OR type LIKE '%.warning') AND (myext = 'customext')"
-    error: missingAttribute
+    result: false
     eventOverrides:
       id: "myId" 
       type: "example.event.warning"

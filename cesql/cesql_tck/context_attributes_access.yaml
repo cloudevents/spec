@@ -17,8 +17,7 @@ tests:
       id: myId
       source: localhost.localdomain
       type: myType
-    result: ""
-    error: missingAttribute
+    result: false
   - name: Access to optional boolean extension
     expression: mybool
     eventOverrides:

@@ -197,7 +197,8 @@ Unless otherwise specified, every attribute and extension MUST be represented by
 Through implicit type casting, the user can convert the addressed value instances to _Integer_ and
 _Boolean_.
 
-When addressing an attribute not included in the input event, an empty _String_ MUST be assumed as its value.
+When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to `false`.
+For example, `true AND (missingAttribute = "")` would evaluate to `false` as the subexpression `missingAttribute = ""` would be false.
 
 ### 3.3. Errors
 
