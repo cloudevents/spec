@@ -236,7 +236,7 @@ As stated in the [Design Goals](#design-goals) section, interoperability is
 a key objective of the specification. Therefore, there are places in the
 specification where restrictions are recommended. For example, in the
 [Size Limits](./spec.md#size-limits) section it hints that event sizes
-should not exceed 64KB. It is important to note that constraints such as these,
+should not exceed 64 KiB. It is important to note that constraints such as these,
 where they are not mandated via a "MUST", are recommendations to increase
 the likelihood of interoperability between multiple implementations and
 deployments. Specific uses of the specification are free to ignore these
@@ -394,7 +394,7 @@ extensions to a CloudEvent. For example, the
 [HTTP Binary Mode](bindings/http-protocol-binding.md#31-binary-content-mode)
 uses HTTP
 headers to transport metadata; most HTTP servers will reject requests with
-excessive HTTP header data, with limits as low as 8kb. Therefore, the aggregate
+excessive HTTP header data, with limits as low as 8 KiB. Therefore, the aggregate
 size and number of extension attributes should be kept minimal.
 
 If an extension becomes popular then the specification authors might consider
