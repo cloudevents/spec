@@ -445,13 +445,18 @@ on the definition of OPTIONAL.
     the name of the newly created blob is carried in `subject`:
       - `source`: `https://example.com/storage/tenant/container`
       - `subject`: `mynewfile.jpg`
-  - Building on the previous example, a subscriber might register interest for when new
-    blobs are created inside a blob-storage container. Here, both the name
-    and/or size of the newly created blob are relevant for decision making purposes.
-    In this case, the `subject` MAY simply list multiple values, separated with comma,
-    adorned with custom prefixes:
-      - `source`: `https://example.com/storage/tenant/container`
-      - `subject`: `filename:mynewfile.jpg,filesize:100MB`
+  - A subscriber might register interest for when new updates are made to a client
+    in an eCommerce system. In this case, the event `source` identifies the
+    subscription scope (CRM part of an eCommerce system), the `type` identifies
+    the "client updated" event, and the `id` uniquely identifies the event
+    instance to distinguish separate occurrences of a same client being
+    updated multiple times; the affiliate partner and client ids of the updated
+    client are carried in `subject`. Here, it is a composite string
+    (affiliate partner id:client id) that is made up of one or more identifying
+    pieces of data separated by some symbol (like, colon), assuming that each
+    affiliate partner has its own client base:
+      - `source`: `https://example.com/eCommerce/crm`
+      - `subject`: `5:100`
 
 #### time
 
