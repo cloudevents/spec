@@ -419,7 +419,7 @@ on the definition of OPTIONAL.
 #### subject
 
 - Type: `String`
-- Description: This describes the subject of the event in the context of the
+- Description: This identifies the subject of the event in the context of the
   event producer (identified by `source`). In publish-subscribe scenarios, a
   subscriber will typically subscribe to events emitted by a `source`, but the
   `source` identifier alone might not be sufficient as a qualifier for any
@@ -450,9 +450,9 @@ on the definition of OPTIONAL.
     subscription scope (CRM part of an eCommerce system), the `type` identifies
     the "client updated" event, and the `id` uniquely identifies the event
     instance to distinguish separate occurrences of a same client being
-    updated multiple times; the affiliate partner and client ids of the updated
+    updated multiple times; the affiliate partner id and client id of the updated
     client are carried in `subject`. Here, it is a composite string
-    (affiliate partner id:client id) that is made up of one or more identifying
+    (`affiliate partner id:client id`) that is made up of one or more identifying
     pieces of data separated by some symbol (like, colon), assuming that each
     affiliate partner has its own client base:
       - `source`: `https://example.com/eCommerce/crm`
