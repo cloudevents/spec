@@ -450,11 +450,9 @@ on the definition of OPTIONAL.
     subscription scope (CRM part of an eCommerce system), the `type` identifies
     the "client updated" event, and the `id` uniquely identifies the event
     instance to distinguish separate occurrences of a same client being
-    updated multiple times; the affiliate partner id and client id of the updated
-    client are carried in `subject`. Here, it is a composite string
-    (`affiliate partner id:client id`) that is made up of one or more identifying
-    pieces of data separated by some symbol (like, colon), assuming that each
-    affiliate partner has its own client base:
+    updated multiple times; the `subject` uniquely identifies the client within
+    the scope of the `source` by including a "partner id" and "client id"
+    (which is unique within the scope of the "partner id") separated by a colon:
       - `source`: `https://example.com/eCommerce/crm`
       - `subject`: `5:100`
 
