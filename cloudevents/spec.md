@@ -540,10 +540,10 @@ different protocols or for events to be re-encoded, the least efficient
 protocol and encoding used by the application SHOULD be considered for
 compliance with these size constraints:
 
-- Intermediaries MUST forward events of a size of 64 KByte or less.
-- Consumers SHOULD accept events of a size of at least 64 KByte.
+- Intermediaries MUST forward events of a size of 64 KiB or less.
+- Consumers SHOULD accept events of a size of at least 64 KiB.
 
-In effect, these rules will allow producers to publish events up to 64KB in size
+In effect, these rules will allow producers to publish events up to 64 KiB in size
 safely. Safely here means that it is generally reasonable to expect the event to
 be accepted and retransmitted by all intermediaries. It is in any particular
 consumer's control, whether it wants to accept or reject events of that size due
