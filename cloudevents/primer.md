@@ -368,7 +368,7 @@ majority of the cases.
 When the group determines that an attribute is not common enough to fall into
 those two categories but would still benefit from the level of interoperability
 that comes from being well-defined, this repo's
-[documented extensions](documented-extensions.md) provides a shared collaboration
+[documented extensions](extensions/README.md) provides a shared collaboration
 space. Each extension specification defines how it will appear within a CloudEvent.
 Extensions which are documented in this way have no special status,
 and may take breaking changes (including being removed entirely). They are not

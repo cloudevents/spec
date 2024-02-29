@@ -160,7 +160,7 @@ The specifications produced will adhere to the following:
   string will always be of the form `X.0`.
 
 Note that these rules do not apply to the
-[documented extensions](../cloudevents/documented-extensions.md).
+[documented extensions](../cloudevents/extensions/README.md).
 
 All versions are tagged from the `main` branch, but the tag only applies to
 the "subject" of the release - the directory containing the information
