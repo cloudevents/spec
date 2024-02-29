@@ -454,7 +454,7 @@ on the definition of OPTIONAL.
     the scope of the `source` by including a "partner id" and "client id"
     (which is unique within the scope of the "partner id") separated by a colon:
       - `source`: `https://example.com/eCommerce/crm`
-      - `subject`: `5:100`
+      - `subject`: `partnerid/5/clientid/100`
 
 #### time
 
