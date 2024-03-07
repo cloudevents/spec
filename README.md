@@ -53,7 +53,7 @@ and a graduated project on [Jan 25, 2024](https://github.com/cncf/toc/pull/996)
 | CloudEvents Primer                                             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md) | [WIP](cloudevents/primer.md)                          |
 | [CloudEvents Adapters](cloudevents/adapters.md)                | -                                                                               | [Not versioned](cloudevents/adapters.md)              |
 | [CloudEvents SDK Requirements](cloudevents/SDK.md)             | -                                                                               | [Not versioned](cloudevents/SDK.md)                   |
-| [Documented Extensions](cloudevents/documented-extensions.md)  | -                                                                               | [Not versioned](cloudevents/documented-extensions.md) |
+| [Documented Extensions](cloudevents/extensions/README.md)  | -                                                                               | [Not versioned](cloudevents/extensions/README.md) |
 | [Proprietary Specifications](cloudevents/proprietary-specs.md) | -                                                                               | [Not versioned](cloudevents/proprietary-specs.md)     |
 
 ## Other Specifications

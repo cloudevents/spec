@@ -502,7 +502,7 @@ The definition of an extension SHOULD fully define all aspects of the
 attribute - e.g. its name, type, semantic meaning and possible values. New
 extension definitions SHOULD use a name that is descriptive enough to reduce the
 chances of name collisions with other extensions. In particular, extension
-authors SHOULD check the [documented extensions](documented-extensions.md)
+authors SHOULD check the [documented extensions](extensions/README.md)
 document for the set of known extensions - not just for possible name conflicts
 but for extensions that might be of interest.
 

@@ -44,7 +44,7 @@ CloudEvents 是一个以通用格式来描述事件数据的规范。它提供�
 | CloudEvents 入门文档                                             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md) | [WIP](../../cloudevents/languages/zh-CN/primer.md)                          |
 | [CloudEvents 适配器](../../cloudevents/languages/zh-CN/adapters.md)                | -                                                                               | [无版本工作草案](../../cloudevents/languages/zh-CN/adapters.md)              |
 | [CloudEvents SDK 必要条件](../../cloudevents/languages/zh-CN/SDK.md)             | -                                                                               | [无版本工作草案](../../cloudevents/languages/zh-CN/SDK.md)                   |
-| [记录的扩展属性](../../cloudevents/languages/zh-CN/documented-extensions.md)  | -                                                                               | [无版本工作草案](../../cloudevents/languages/zh-CN/documented-extensions.md) |
+| [记录的扩展属性](../../cloudevents/languages/zh-CN/extensions/README.md)  | -                                                                               | [无版本工作草案](../../cloudevents/languages/zh-CN/extensions/README.md) |
 | [专有规范](../../cloudevents/languages/zh-CN/proprietary-specs.md) | -                                                                               | [无版本工作草案](../../cloudevents/languages/zh-CN/proprietary-specs.md)     |
 
 ## 其它规范
