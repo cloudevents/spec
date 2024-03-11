@@ -8,7 +8,7 @@ This is the reason we have a `<!-- no verify links -->` here
 
 You MUST NOT have the word Cloud Event or the word Cloud Events
 
-even if they are seperated by newlines
+even if they are separated by newlines
 
 Cloud
 

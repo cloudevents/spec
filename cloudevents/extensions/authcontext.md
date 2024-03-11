@@ -1,7 +1,7 @@
 # Auth Context
 
 This extension embeds information about the principal which triggered an
-occurence. This allows consumers of the
+occurrence. This allows consumers of the
 CloudEvent to perform user-dependent actions without requiring the user ID to
 be embedded in the `data` or `source` field.
 
@@ -25,7 +25,7 @@ this extension is being used.
 ### authtype
 - Type: `String`
 - Description: An enum representing the type of principal that triggered the
-  occurence. Valid values are:
+  occurrence. Valid values are:
   - `app_user`: An end user of an application. Examples include an AWS cognito,
     Google Cloud Identity Platform, or Azure Active Directory user.
   - `user`: A user account registered in the infrastructure. Examples include
@@ -36,7 +36,7 @@ this extension is being used.
     service triggers an event. Examples include a database record which
     was deleted based on a TTL.
   - `unauthenticated`: No credentials were used to authenticate the change that
-    triggered the occurence.
+    triggered the occurrence.
   - `unknown`: The type of principal cannot be determined and is unknown.
 - Constraints
   - REQUIRED
@@ -46,7 +46,7 @@ this extension is being used.
 ### authid
 - Type: `String`
 - Description: A unique identifier of the principal that triggered the
-  occurence. This might, for example, be a unique ID in an identity database
+  occurrence. This might, for example, be a unique ID in an identity database
   (userID), an email of a platform user or service account, or the label for an
   API key.
 - Constraints

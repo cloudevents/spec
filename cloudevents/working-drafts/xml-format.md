@@ -67,7 +67,7 @@ CloudEvent or CloudEvent batch. Comments MUST be ignored during processing, exce
 for the child element of a `<data>` element containing [XML element data](#33-xml-element-data),
 where all nodes MUST be preserved.
 
-CDATA nodes and regular text nodes MUST be treated interchangably during processing,
+CDATA nodes and regular text nodes MUST be treated interchangeably during processing,
 except for the child element `<data>` element containing [XML element data](#33-xml-element-data),
 where all nodes MUST be preserved.
 
