@@ -128,6 +128,10 @@ and encoding:
   format, both in the [table below](#feature-support) and in any SDK-specific
   documentation provided.
 
+Note that when decoding an event, media types MUST be matched
+case-insensitively, as specified in [RFC 2045]
+(https://tools.ietf.org/html/rfc2045).
+
 #### Data
 
 Data access from the event has some considerations, the Event at rest could be
