@@ -22,7 +22,7 @@ interchangeably.
 
 [CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
-elements defined in the CloudEvents specification are are represented using
+elements defined in the CloudEvents specification are represented using
 a protobuf schema.
 
 The [Attributes](#2-attributes) section describes the naming conventions and
