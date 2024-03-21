@@ -138,10 +138,10 @@ gesture SHOULD allow the receiver to choose the maximum size of a batch.
 
 The receiver of the event can distinguish between the three modes by inspecting
 the `Content-Type` header value. If the value is prefixed with the CloudEvents
-media type `application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver uses _structured_ mode. If the
-value is prefixed with `application/cloudevents-batch`, the receiver uses the
-_batched_ mode. Otherwise it defaults to _binary_ mode.
+media type `application/cloudevents` (matched case-insensitively), indicating
+the use of a known [event format](#14-event-formats), the receiver uses
+_structured_ mode. If the value is prefixed with `application/cloudevents-batch`,
+the receiver uses the _batched_ mode. Otherwise it defaults to _binary_ mode.
 
 If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still

@@ -109,8 +109,8 @@ conditions:
 - If the server is a version earlier than NATS 2.2, the content mode is
 always _structured_.
 - If the server is version 2.2 or above and the `Content-Type` header of
-`application/cloudevents` is present, then the message is in _structured_
-mode, otherwise it is using binary mode.
+`application/cloudevents` is present (matched case-insensitively),
+then the message is in _structured_ mode, otherwise it is using binary mode.
 
 If the content mode is _structured_ then the NATS message payload MUST be
 the [JSON event format][json-format] serialized as specified by the

@@ -404,6 +404,12 @@ on the definition of OPTIONAL.
   The `datacontenttype` attribute MAY appear even if there is no `data` value
   present.
 
+  As specified in [RFC 2045](https://tools.ietf.org/html/rfc2045), the media
+  type part of the content type MUST be treated in a case-insensitive manner
+  by consumers, along with the attribute names in parameters. For example,
+  a `datacontenttype` of `text/plain; charset=utf-8` MUST be treated in the
+  same way as `TEXT/Plain; CharSet=utf-8`.
+
 - Constraints:
   - OPTIONAL
   - If present, MUST adhere to the format specified in

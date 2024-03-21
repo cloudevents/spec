@@ -105,9 +105,9 @@ an application, but are not defined here.
 
 The receiver of the event can distinguish between the two modes by inspecting
 the `content-type` message property field. If the value is prefixed with the
-CloudEvents media type `application/cloudevents`, indicating the use of a known
-[event format](#14-event-formats), the receiver uses _structured_ mode,
-otherwise it defaults to _binary_ mode.
+CloudEvents media type `application/cloudevents` (matched case-insensitively),
+indicating the use of a known [event format](#14-event-formats), the receiver
+uses _structured_ mode, otherwise it defaults to _binary_ mode.
 
 If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
