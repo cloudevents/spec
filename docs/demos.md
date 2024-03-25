@@ -4,6 +4,11 @@ If you have a demo of CloudEvents in action, please add a link here. If there
 isn't an associated blog or github repo, feel free to add descriptive text as a
 markdown file in `docs/demos/`.
 
+- Simulating CloudEvents with [AsyncAPI](https://www.asyncapi.com/) and [Microcks](https://microcks.io/)
+
+  - Presentation and Live demo at AsyncAPI Conference 2021: [AsyncAPI or CloudEvents? Both My Captain!](https://www.youtube.com/watch?v=_p9RyClgYhE).
+  - Blog post: [Simulating CloudEvents with AsyncAPI and Microcks](https://microcks.io/blog/simulating-cloudevents-with-asyncapi/).
+
 - [Orchestrating Cloud Events](https://salaboy.com/2020/05/18/orchestrating-cloud-events-with-zeebe/)
 
   - Blog post about Cloud Events Orchestration using an workflow engine([Zeebe](http://zeebe.io)). 
