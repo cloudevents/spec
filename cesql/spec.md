@@ -258,7 +258,8 @@ The modulo and divisions MUST follow the [truncated divisions definition][modulo
 - The remainder of the modulo MUST have the same sign as the dividend.
 - The quotient MUST be rounded towards zero, _truncating_ the decimal part.
 
-The OR operator MUST be short-circuit evaluated. This means that evaluation of the operation MUST stop as soon as a `true` value is encountered.
+The AND and OR operators MUST be short-circuit evaluated. This means that whenever the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated.
+Similarly, whenever the left operand of the OR operation evaluates to `true`, the right operand MUST NOT be evaluated.
 
 #### 3.4.3. Like operator
 
@@ -347,7 +348,8 @@ The following tables show the built-in functions that MUST be supported by a CES
 Operators MUST be evaluated in order, where the parenthesized expressions have the highest priority over all the other
 operators.
 
-OR operations MUST be short-circuit evaluated, where the operation stops evaluation as soon as a `true` value is encountered.
+AND and OR operations MUST be short-circuit evaluated. When the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated. Similarly, when the 
+left operand of the OR operation evalues to `true`, the right operand MUST NOT be evaluated.
 
 #### 3.7. Type casting
 
