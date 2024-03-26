@@ -32,7 +32,7 @@ MUST map to [Network Message Header](https://reference.opcfoundation.org/Core/Pa
 
 ### datacontenttype
 
-SHALL be `application/json` for OPC UA PubSub JSON payload and MAY be extended by `+gzip` when payload is gzip compressed.
+SHALL be `application/opcua+json` for OPC UA PubSub JSON payload and MAY be extended by `+gzip` when payload is gzip compressed.
 
 ### dataschema
 
@@ -50,7 +50,7 @@ MUST map to [Data Set Message Header](https://reference.opcfoundation.org/Core/P
 
 ## Mapping for other extensions
 
-The following extensions Attributes are REQUIRED for data messages and event messages (type one of `ua-keyframe`, `ua-deltaframe`, `ua-event`).
+The following well-known extensions attributes are used for data messages and event messages (type one of `ua-keyframe`, `ua-deltaframe`, `ua-event`).
 
 ### sequence
 
@@ -70,10 +70,18 @@ Attribute as defined by [recordedtime extension](./recordedtime.md) SHALL be use
 
 ## Attributes
 
-### opcuametadataversion
+### opcuametadatamajorversion
 
-- Type: `String`
-- Description: Links dataset message to the current version of the metadata. Contains JSON object of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`. 
+- Type: `Integer`
+- Description: Links dataset message to the current version of the metadata. Contains value from `MajorVersion` of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`. 
+- Constraints
+  - OPTIONAL
+  - Can be omitted if `dataschema` is used
+
+### opcuametadataminorversion
+
+- Type: `Integer`
+- Description: Links dataset message to the current version of the metadata. Contains value from `MiniorVersion` of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`.
 - Constraints
   - OPTIONAL
   - Can be omitted if `dataschema` is used
@@ -88,4 +96,6 @@ Attribute as defined by [recordedtime extension](./recordedtime.md) SHALL be use
 
 ## General Constraints
 
-- OPC UA messages always use `binary-mode`. 
+- OPC UA messages MUST use `binary-mode` of Cloud Events.
+- OPC UA PubSub JSON messages MUST be encoded using non-reversible encoding as the decoding information are contained in metadata messages or by schema referenced via `dataschema` attribute.
+- Payload of OPC UA PubSub JSON messages MUST NOT contain Network Message Header and Data Set Header as those information are mapped into Cloud Events attributes.
