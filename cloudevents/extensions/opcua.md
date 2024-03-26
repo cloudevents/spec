@@ -26,7 +26,7 @@ MUST either map to [Application Description](https://reference.opcfoundation.org
 
 ### type
 
-MUST map to [Network Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.3#Table163) field `MessageType`.
+MUST map to [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MessageType`.
 
 ## Mapping of OPTIONAL Attributes
 
