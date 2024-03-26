@@ -99,3 +99,4 @@ Attribute as defined by [recordedtime extension](./recordedtime.md) SHALL be use
 - OPC UA messages MUST use `binary-mode` of Cloud Events.
 - OPC UA PubSub JSON messages MUST be encoded using non-reversible encoding as the decoding information are contained in metadata messages or by schema referenced via `dataschema` attribute.
 - Payload of OPC UA PubSub JSON messages MUST NOT contain Network Message Header and Data Set Header as those information are mapped into Cloud Events attributes.
+- OPC UA PubSub JSON messages MUST only contain one dataset message.
