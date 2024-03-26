@@ -726,9 +726,9 @@ to enable delivery of events to a target.
 #### 3.2.4 Filters
 
 Filters allow for subscriptions to specify that only a subset of events are to
-be delivered to the sink based on a set of criteria. The `filter` property in a
-subscription is a set of filter expressions, where each expression evaluates to
-either true or false for each event generated.
+be delivered to the sink based on a set of criteria. The `filters` property in
+a subscription is a set of filter expressions, where each expression evaluates
+to either true or false for each event generated.
 
 If any of the filter expressions in the set evaluate to false, the event MUST
 NOT be sent to the sink. If all the filter expressions in the set evaluate to
