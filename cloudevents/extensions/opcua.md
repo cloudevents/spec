@@ -106,8 +106,7 @@ to determine the latency between event publisher towards consumer.
 - Description: Links dataset message to the current version of the metadata.
 Contains value from `MajorVersion` of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`. 
 - Constraints
-  - OPTIONAL
-  - MAY be omitted if `dataschema` is used
+  - OPTIONAL but MUST NOT be present if `dataschema` is used
 
 ### opcuametadataminorversion
 
@@ -117,8 +116,7 @@ Contains value from `MiniorVersion` of [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MetaDataVersion`.
 - Constraints
-  - OPTIONAL
-  - MAY be omitted if `dataschema` is used
+  - OPTIONAL but MUST NOT be present if `dataschema` is used
 
 ### opcuastatus
 
