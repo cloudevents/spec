@@ -44,6 +44,7 @@ for more information.
 - [Dataref (Claim Check Pattern)](dataref.md)
 - [Distributed Tracing](distributed-tracing.md)
 - [Expiry Time](expirytime.md)
+- [OPC UA](opcua.md)
 - [Partitioning](partitioning.md)
 - [Recorded Time](recordedtime.md)
 - [Sampling](sampledrate.md)
