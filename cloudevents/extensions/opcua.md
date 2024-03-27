@@ -1,9 +1,10 @@
 # OPC UA
 
-This extension defines the mapping of OPC UA dataset to CloudEvents to allow
-seamless routing of OPC UA dataset messages via different protocols, it
-therefore provides a recommendation to map known REQUIRED and OPTIONAL
-attributes using other extensions as well as defines its own extension
+This extension defines the mapping of [OPC UA](https://reference.opcfoundation.org/Core/Part1/v105/docs/)
+[PubSub](https://reference.opcfoundation.org/Core/Part14/v105/docs/) dataset to
+CloudEvents to allow seamless routing of OPC UA dataset messages via different
+protocols, it therefore provides a recommendation to map known REQUIRED and
+OPTIONAL attributes using other extensions as well as defines its own extension
 attributes.
 
 ## Notational Conventions
@@ -35,7 +36,8 @@ like a unified namespace path.
 
 ### type
 
-MUST map to [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MessageType`.
+MUST map to [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
+field `MessageType`.
 
 ## Mapping of OPTIONAL Attributes
 
@@ -116,7 +118,7 @@ Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table1
 field `MetaDataVersion`.
 - Constraints
   - OPTIONAL
-  - Can be omitted if `dataschema` is used
+  - MAY be omitted if `dataschema` is used
 
 ### opcuastatus
 
@@ -125,7 +127,7 @@ field `MetaDataVersion`.
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `Status`.
 - Constraints
   - OPTIONAL
-  - Can be omitted if status is _Good_
+  - MAY be omitted if status is _Good_
 
 ## General Constraints
 
