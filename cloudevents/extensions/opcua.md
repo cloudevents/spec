@@ -1,6 +1,6 @@
 # OPC UA
 
-This extension defines the mapping of OPC UA dataset to cloud events to allow seamless routing of OPC UA dataset messages via different protocols, it therefor provides an recommendation to map known mandatory and optional attributes using other extensions as well as defines own extended attributes.
+This extension defines the mapping of OPC UA dataset to CloudEvents to allow seamless routing of OPC UA dataset messages via different protocols, it therefor provides an recommendation to map known MANDATORY and OPTIONAL attributes using other extensions as well as defines own extended attributes.
 
 ## Notational Conventions
 
@@ -36,7 +36,7 @@ SHALL be `application/opcua+json` for OPC UA PubSub JSON payload and MAY be exte
 
 ### dataschema
 
-OPC UA provides type information as part of PubSub metadata messages, for non OPC UA consumers or when different payload encoding like Avro is used, it is required to provide schema information (based on metadata information) in a separate format like [JSON schema](https://json-schema.org/specification) or [Avro schema](https://avro.apache.org/docs/1.11.1/specification/) or others. For those cases the Attribute references the schema and is used for versioning.
+OPC UA provides type information as part of PubSub metadata messages, for non OPC UA consumers or when different payload encoding like Avro is used, it is REQUIRED to provide schema information (based on metadata information) in a separate format like [JSON schema](https://json-schema.org/specification) or [Avro schema](https://avro.apache.org/docs/1.11.1/specification/) or others. For those cases the Attribute references the schema and is used for versioning.
 
 ### subject
 
@@ -96,7 +96,7 @@ Attribute as defined by [recordedtime extension](./recordedtime.md) SHALL be use
 
 ## General Constraints
 
-- OPC UA messages MUST use `binary-mode` of Cloud Events.
+- OPC UA messages MUST use `binary-mode` of CloudEvents.
 - OPC UA PubSub JSON messages MUST be encoded using non-reversible encoding as the decoding information are contained in metadata messages or by schema referenced via `dataschema` attribute.
-- Payload of OPC UA PubSub JSON messages MUST NOT contain Network Message Header and Data Set Header as those information are mapped into Cloud Events attributes.
+- Payload of OPC UA PubSub JSON messages MUST NOT contain Network Message Header and Data Set Header as those information are mapped into CloudEvents attributes.
 - OPC UA PubSub JSON messages MUST only contain one dataset message.
