@@ -1,15 +1,5 @@
 <!-- no verify-specs -->
 
-#
-Gaining business visibility into processes implement by Cloud Events - Jun 23, 2020
-Orchestrating Cloud Events - May 18, 2020
-CNCF/Kube-Con NA December 2018
-CNCF/Kube-Con EU May 2018
-#
-
-
-
-
 If you have a demo of CloudEvents in action, please add a link here. If there
 isn't an associated blog or github repo, feel free to add descriptive text as a
 markdown file in `docs/demos/`.
