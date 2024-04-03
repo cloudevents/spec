@@ -43,8 +43,8 @@ field `MessageType`.
 
 ### datacontenttype
 
-MUST be `application/json` for OPC UA PubSub JSON payload and MAY be extended by
-`+gzip` when payload is gzip compressed.
+MUST be `application/json` for OPC UA PubSub JSON payload and MAY be appended with
+`+gzip` when the payload is gzip compressed.
 
 ### dataschema
 
@@ -53,7 +53,7 @@ OPC UA consumers or when different payload encoding like Avro is used, it is
 REQUIRED to provide schema information (based on metadata information) in a
 separate format like [JSON schema](https://json-schema.org/specification) or
 [Avro schema](https://avro.apache.org/docs/1.11.1/specification/) or others. For
-those cases the Attribute references the schema and is used for versioning.
+those cases the attribute references the schema and is used for versioning.
 
 ### subject
 
@@ -62,7 +62,7 @@ For metadata, event and data messages (type one of `ua-metadata`, `ua-keyframe`,
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `DataSetWriterId` or `DataSetWriterName`.
 
-For event messages (type equals to `ua-event`) `subject` MUST additional contain 
+For event messages (type equals to `ua-event`) `subject` MUST be appended with 
 "/" and [Base Event Type](https://reference.opcfoundation.org/Core/Part5/v104/docs/6.4.2)
 field `EventId`. 
 
@@ -125,6 +125,7 @@ field `MetaDataVersion`.
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `Status`.
 - Constraints
   - OPTIONAL
+  - REQUIRED if status is not _Good_
   - MAY be omitted if status is _Good_
 
 ## General Constraints
@@ -134,14 +135,14 @@ field `MetaDataVersion`.
 the decoding information is contained in metadata messages or by schema
 referenced via `dataschema` attribute.
 - Payload of OPC UA PubSub JSON messages MUST NOT contain Network Message Header
-and Data Set Header as those information are mapped into CloudEvents attributes.
-- OPC UA PubSub JSON messages MUST only contain one dataset message.
+and Data Set Header as that information is mapped into CloudEvents attributes.
+- OPC UA PubSub JSON messages MUST contain exactly one dataset message.
 
 ## Examples
 
 ### Metadata message
 
-The metadata message help Cloud applications to understand the semantics and 
+The metadata message helps Cloud applications to understand the semantics and 
 structure of dataset messages.
 
 ```text
