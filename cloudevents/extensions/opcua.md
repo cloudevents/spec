@@ -86,7 +86,8 @@ field `SequenceNumber`.
 ### traceparent
 
 Attribute as defined by [distributed-tracing extension](./distributed-tracing.md)
-MUST be used to allow tracing from event publisher towards consumer.
+MUST be present in all OPC UA enabled CloudEvents to allow tracing from event
+publisher towards consumer.
 
 ### tracestate
 
@@ -95,8 +96,9 @@ MAY be used to allow tracing from event publisher towards consumer.
 
 ### recordedtime
 
-Attribute as defined by [recordedtime extension](./recordedtime.md) MUST be used
-to determine the latency between event publisher towards consumer. 
+Attribute as defined by [recordedtime extension](./recordedtime.md) MUST be
+present in all OPC UA enabled CloudEvents to determine the latency between
+event publisher towards consumer.
 
 ## Attributes
 
