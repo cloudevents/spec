@@ -74,7 +74,7 @@ field `Timestamp`.
 
 ## Mapping for other extensions
 
-The following well-known extensions attributes are used for data messages and
+The following well-known extensions attributes MUST be used for data messages and
 event messages (type one of `ua-keyframe`, `ua-deltaframe`, `ua-event`).
 
 ### sequence
@@ -86,8 +86,7 @@ field `SequenceNumber`.
 ### traceparent
 
 Attribute as defined by [distributed-tracing extension](./distributed-tracing.md)
-MUST be present in all OPC UA enabled CloudEvents to allow tracing from event
-publisher towards consumer.
+to allow tracing from event publisher towards consumer.
 
 ### tracestate
 
@@ -96,9 +95,8 @@ MAY be used to allow tracing from event publisher towards consumer.
 
 ### recordedtime
 
-Attribute as defined by [recordedtime extension](./recordedtime.md) MUST be
-present in all OPC UA enabled CloudEvents to determine the latency between
-event publisher towards consumer.
+Attribute as defined by [recordedtime extension](./recordedtime.md) to
+determine the latency between event publisher towards consumer.
 
 ## Attributes
 
@@ -114,7 +112,7 @@ Contains value from `MajorVersion` of [Data Set Message Header](https://referenc
 
 - Type: `Integer`
 - Description: Links dataset message to the current version of the metadata.
-Contains value from `MiniorVersion` of [Data Set Message
+Contains value from `MinorVersion` of [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MetaDataVersion`.
 - Constraints
