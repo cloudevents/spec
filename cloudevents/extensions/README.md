@@ -41,6 +41,7 @@ for more information.
 ## Known Extensions
 
 - [Auth Context](authcontext.md)
+- [BAM](bam.md)
 - [Dataref (Claim Check Pattern)](dataref.md)
 - [Distributed Tracing](distributed-tracing.md)
 - [Expiry Time](expirytime.md)
