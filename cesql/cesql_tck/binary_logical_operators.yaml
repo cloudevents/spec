@@ -12,6 +12,9 @@ tests:
   - name: True and true
     expression: TRUE AND TRUE
     result: true
+  - name: AND operator is short circuit evaluated
+    expression: "false and (1 != 1 / 0)"
+    result: false 
 
   - name: False or false
     expression: FALSE OR FALSE
@@ -24,6 +27,9 @@ tests:
     result: true
   - name: True or true
     expression: TRUE OR TRUE
+    result: true
+  - name: OR operator is short circuit evaluated
+    expression: "true and (1 != 1 / 0)"
     result: true
 
   - name: False xor false
