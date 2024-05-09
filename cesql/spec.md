@@ -278,6 +278,10 @@ For example, the pattern `_b*` will accept values `ab`, `abc`, `abcd1` but won't
 Both `%` and `_` can be escaped with `\`, in order to be matched literally. For example, the pattern `abc\%` will match
 `abc%` but won't match `abcd`.
 
+In cases where the left operand is not a `String`, it MUST be cast to a `String` before the comparison is made. 
+The pattern of the `LIKE` operator (that is, the right operand of the operator) MUST be a valid string predicate, 
+otherwise the parse MUST return a parse error.
+
 #### 3.4.4. Exists operator
 
 | Definition                          | Semantics                                                                   |
@@ -378,6 +382,9 @@ A CESQL engine MUST apply the following implicit casting rules in order:
 
 For the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
 
+For _Boolean_ values being cast to _String_, the resulting string MUST be lowercase. That is `true` becomes `"true"` and `false` becomes `"false"`.
+Similarly, `TRUE` becomes `"true"` and `FALSE` becomes `"false"`.
+
 For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a
 _Boolean_, this expression:
 
@@ -401,6 +408,14 @@ sequence = 10
 `=` is an arity-2 ambiguous operator, because it's defined for `String x String`, `Boolean x Boolean` and
 `Integer x Integer`. Because the right operand of the operator is an _Integer_ and there is only one `=` definition
 which uses the type _Integer_ as the right parameter, `sequence` is cast to _Integer_.
+
+A CESQL engine MUST support the following type casts:
+
+1. `Integer -> String`
+1. `String -> Integer`
+1. `String -> Boolean`
+1. `Boolean -> String`
+
 
 ## 4. Implementation suggestions
 
