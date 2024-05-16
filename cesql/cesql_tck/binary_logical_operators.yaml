@@ -29,7 +29,7 @@ tests:
     expression: TRUE OR TRUE
     result: true
   - name: OR operator is short circuit evaluated
-    expression: "true and (1 != 1 / 0)"
+    expression: "true or (1 != 1 / 0)"
     result: true
 
   - name: False xor false
