@@ -363,7 +363,7 @@ A CESQL engine MUST support the following type casts:
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Integer -> String`  | Returns the string representation of the integer value in base 10. If the value is less than 0, the '-' character is prepended to the result.                                      |
 | `String -> Integer`  | Returns the result of interpreting the string as a 32 bit base 10 integer. The string may begin with a leading sign '+' or '-'. If the result will overflow, an error is returned. |
-| `String -> Boolean`  | Returns `true` or `false` if the lower case representation of the string is exatly "true" or "false, respectively. Otherwise returns an error.                                     |
+| `String -> Boolean`  | Returns `true` or `false` if the lower case representation of the string is exactly "true" or "false, respectively. Otherwise returns an error.                                     |
 | `Boolean -> String`  | Returns `"true"` if the boolean is `true`, and `"false"` if the boolean is `false`.                                                                                                |
 
 An example of how _Boolean_ values cast to _String_ combines with the case insensitivity of CESQL keywords is that:
@@ -372,9 +372,9 @@ TRUE = "true" AND FALSE = "false"
 ```
 will evaluate to `true`, while
 ```
-TRUE = "true" OR FALSE = "false"
+TRUE = "TRUE" OR FALSE = "FALSE"
 ```
-will evaluate to `false.
+will evaluate to `false`.
 
 When the argument types of an operator/function invocation don't match the signature of the operator/function being invoked, the CESQL engine MUST try to perform an implicit cast.
 
