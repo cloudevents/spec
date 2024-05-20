@@ -357,6 +357,25 @@ left operand of the OR operation evalues to `true`, the right operand MUST NOT b
 
 #### 3.7. Type casting
 
+A CESQL engine MUST support the following type casts:
+
+| Definition           | Semantics                                                                                                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Integer -> String`  | Returns the string representation of the integer value in base 10. If the value is less than 0, the '-' character is prepended to the result.                                      |
+| `String -> Integer`  | Returns the result of interpreting the string as a 32 bit base 10 integer. The string may begin with a leading sign '+' or '-'. If the result will overflow, an error is returned. |
+| `String -> Boolean`  | Returns `true` or `false` if the lower case representation of the string is exatly "true" or "false, respectively. Otherwise returns an error.                                     |
+| `Boolean -> String`  | Returns `"true"` if the boolean is `true`, and `"false"` if the boolean is `false`.                                                                                                |
+
+An example of how _Boolean_ values cast to _String_ combines with the case insensitivity of CESQL keywords is that:
+```
+TRUE = "true" AND FALSE = "false"
+```
+will evaluate to `true`, while
+```
+TRUE = "true" OR FALSE = "false"
+```
+will evaluate to `false.
+
 When the argument types of an operator/function invocation don't match the signature of the operator/function being invoked, the CESQL engine MUST try to perform an implicit cast.
 
 This section defines an **ambiguous** operator/function as an operator/function that is overloaded with another
@@ -382,9 +401,6 @@ A CESQL engine MUST apply the following implicit casting rules in order:
 
 For the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
 
-For _Boolean_ values being cast to _String_, the resulting string MUST be lowercase. That is `true` becomes `"true"` and `false` becomes `"false"`.
-Similarly, `TRUE` becomes `"true"` and `FALSE` becomes `"false"`.
-
 For example, assuming `MY_STRING_PREDICATE` is a unary predicate accepting a _String_ parameter and returning a
 _Boolean_, this expression:
 
@@ -408,14 +424,6 @@ sequence = 10
 `=` is an arity-2 ambiguous operator, because it's defined for `String x String`, `Boolean x Boolean` and
 `Integer x Integer`. Because the right operand of the operator is an _Integer_ and there is only one `=` definition
 which uses the type _Integer_ as the right parameter, `sequence` is cast to _Integer_.
-
-A CESQL engine MUST support the following type casts:
-
-1. `Integer -> String`
-1. `String -> Integer`
-1. `String -> Boolean`
-1. `Boolean -> String`
-
 
 ## 4. Implementation suggestions
 
