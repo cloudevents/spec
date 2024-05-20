@@ -359,12 +359,12 @@ left operand of the OR operation evalues to `true`, the right operand MUST NOT b
 
 A CESQL engine MUST support the following type casts:
 
-| Definition           | Semantics                                                                                                                                                                          |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Integer -> String`  | Returns the string representation of the integer value in base 10. If the value is less than 0, the '-' character is prepended to the result.                                      |
-| `String -> Integer`  | Returns the result of interpreting the string as a 32 bit base 10 integer. The string may begin with a leading sign '+' or '-'. If the result will overflow, an error is returned. |
-| `String -> Boolean`  | Returns `true` or `false` if the lower case representation of the string is exactly "true" or "false, respectively. Otherwise returns an error.                                     |
-| `Boolean -> String`  | Returns `"true"` if the boolean is `true`, and `"false"` if the boolean is `false`.                                                                                                |
+| Definition           | Semantics                                                                                                                                                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Integer -> String`  | Returns the string representation of the integer value in base 10. If the value is less than 0, the '-' character is prepended to the result.                                                                                                    |
+| `String -> Integer`  | Returns the result of interpreting the string as a 32 bit base 10 integer. The string may begin with a leading sign '+' or '-'. If the result will overflow or the string is not a valid integer an error is returned along with a value of `0`. |
+| `String -> Boolean`  | Returns `true` or `false` if the lower case representation of the string is exactly "true" or "false, respectively. Otherwise returns an error along with a value of `false`                                                                    |
+| `Boolean -> String`  | Returns `"true"` if the boolean is `true`, and `"false"` if the boolean is `false`.                                                                                                                                                              |
 
 An example of how _Boolean_ values cast to _String_ combines with the case insensitivity of CESQL keywords is that:
 ```
