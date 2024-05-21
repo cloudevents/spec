@@ -203,14 +203,14 @@ as UTF-8 strings.
 
 ##### 3.2.3.1 Property Names
 
-CloudEvent attributes are prefixed with `ce_` for use in the
+CloudEvent attributes are prefixed with `ce-` for use in the
 [message-headers][kafka-message-header] section.
 
 Examples:
 
-    * `time` maps to `ce_time`
-    * `id` maps to `ce_id`
-    * `specversion` maps to `ce_specversion`
+    * `time` maps to `ce-time`
+    * `id` maps to `ce-id`
+    * `specversion` maps to `ce-specversion`
 
 ##### 3.2.4.2 Property Values
 
@@ -222,9 +222,9 @@ format][kafka-message-format] specification.
 
 This example shows the _binary_ mode mapping of an event into the Kafka message.
 All other CloudEvents attributes are mapped to Kafka Header fields with prefix
-`ce_`.
+`ce-`.
 
-Mind that `ce_` here does refer to the event `data` content carried in the
+Mind that `ce-` here does refer to the event `data` content carried in the
 payload.
 
 ```text
@@ -238,11 +238,11 @@ Key: mykey
 
 ------------------ headers -------------------
 
-ce_specversion: "1.0"
-ce_type: "com.example.someevent"
-ce_source: "/mycontext/subcontext"
-ce_id: "1234-1234-1234"
-ce_time: "2018-04-05T03:56:24Z"
+ce-specversion: "1.0"
+ce-type: "com.example.someevent"
+ce-source: "/mycontext/subcontext"
+ce-id: "1234-1234-1234"
+ce-time: "2018-04-05T03:56:24Z"
 content-type: application/avro
        .... further attributes ...
 
