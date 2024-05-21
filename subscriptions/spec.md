@@ -715,7 +715,7 @@ to enable delivery of events to a target.
 - Description: A URL at which the refresh token can be traded for an access
   token.
 
-  Not that in some setups, accessing the refresh token endpoint uses an extra
+  Note that in some setups, accessing the refresh token endpoint uses an extra
   security layer, whereby the requestor passing the refresh token to the
   endpoint MUST be authorized. The credentials for this authorization
   relationship, which exists between the delivery service managed by the
