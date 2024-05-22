@@ -95,7 +95,7 @@ INT(hop) < INT(ttl) AND INT(hop) < 1000
 The root of the expression is the `expression` rule:
 
 ```ebnf
-expression ::= value-identifier | boolean-literal | unary-operation | binary-operation | function-invocation | like-operation | exists-operation | in-operation | ( "(" expression ")" )
+expression ::= value-identifier | literal | unary-operation | binary-operation | function-invocation | like-operation | exists-operation | in-operation | ( "(" expression ")" )
 ```
 
 Nested expressions MUST be correctly parenthesized.
@@ -111,17 +111,17 @@ lowercase-char ::= [a-z]
 value-identifier ::= ( lowercase-char | digit ) ( lowercase-char | digit )*
 ```
 
-CESQL defines 3 different literal kinds: integer numbers, `true` or `false` booleans, and `''` or `""` delimited strings.
+CESQL defines 3 different literal kinds: integer numbers, `true` or `false` booleans, and `''` or `""` delimited strings. Integer literals MUST be valid 32 bit signed integer values.
 
 ```ebnf
 digit ::= [0-9]
-number-literal ::= digit+
+integer-literal ::= ( '+' | '-' ) digit+
 
 boolean-literal ::= "true" | "false" (* Case insensitive *)
 
 string-literal ::= ( "'" ( [^'] | "\'" )* "'" ) | ( '"' ( [^"] | '\"' )* '"')
 
-literal ::= number-literal | boolean-literal | string-literal
+literal ::= integer-literal | boolean-literal | string-literal
 ```
 
 Because string literals can be either `''` or `""` delimited, in the former case, the `'` has to be escaped, while in
@@ -199,6 +199,8 @@ _Boolean_.
 
 When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to `false`.
 For example, `true AND (missingAttribute = "")` would evaluate to `false` as the subexpression `missingAttribute = ""` would be false.
+
+When addressing an attribute represented by the _Integer_ type, if the value of that attribute does not fit into a 32 bit signed integer, an error MUST be returned.
 
 ### 3.3. Errors
 
@@ -341,12 +343,11 @@ The following tables show the built-in functions that MUST be supported by a CES
 
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ABS(x): Integer -> Integer` | Returns the absolute value of `x` |
+| `ABS(x): Integer -> Integer` | Returns the absolute value of `x`. If the value of `x` is `-2147483648` (the most negative 32 bit integer value possible), then this returns `2147483647` as well as a math error. |
 
 ### 3.6. Evaluation of the expression
 
-Operators MUST be evaluated in order, where the parenthesized expressions have the highest priority over all the other
-operators.
+Operators MUST be evaluated in left to right order, where all operators within a parenthized expression MUST be evaluated before continuing to the right of the parenthized expression.
 
 AND and OR operations MUST be short-circuit evaluated. When the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated. Similarly, when the 
 left operand of the OR operation evalues to `true`, the right operand MUST NOT be evaluated.
