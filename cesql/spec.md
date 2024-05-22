@@ -268,7 +268,7 @@ Similarly, whenever the left operand of the OR operation evaluates to `true`, th
 | `x LIKE pattern: String x String -> Boolean`     | Returns `true` if the value x matches the `pattern` |
 | `x NOT LIKE pattern: String x String -> Boolean` | Same as `NOT (x LIKE PATTERN)`                      |
 
-The pattern of the `LIKE` operator can contain:
+The pattern of the `LIKE` operator MUST be a string literal, and can contain:
 
 - `%` represents zero, one, or multiple characters
 - `_` represents a single character
@@ -279,8 +279,8 @@ Both `%` and `_` can be escaped with `\`, in order to be matched literally. For 
 `abc%` but won't match `abcd`.
 
 In cases where the left operand is not a `String`, it MUST be cast to a `String` before the comparison is made. 
-The pattern of the `LIKE` operator (that is, the right operand of the operator) MUST be a valid string predicate, 
-otherwise the parse MUST return a parse error.
+The pattern of the `LIKE` operator (that is, the right operand of the operator) MUST be a valid string literal without casting,
+otherwise the parser MUST return a parse error.
 
 #### 3.4.4. Exists operator
 
