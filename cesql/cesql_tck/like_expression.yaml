@@ -116,3 +116,10 @@ tests:
   - name: With type coercion from bool (4)
     expression: "FALSE LIKE 'fal%'"
     result: true 
+
+  - name: Invalid string literal in comparison causes parse error
+    expression: "x LIKE 123"
+    result: false
+    error: parse
+    eventOverrides:
+      x: "123"
