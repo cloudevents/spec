@@ -196,13 +196,15 @@ or clashes with the permissible character set for identifiers in common
 languages are prevented.
 
 In order to maximize the likelihood of interoperability and portability across
-transport protocols and messaging formats, CloudEvents attribute names MUST
-consist of lower-case letters ('a' to 'z') or digits ('0' to '9') from the
-ASCII character set. Attribute names SHOULD be descriptive and terse and SHOULD
-NOT exceed 20 characters in length.
-
-CloudEvent attributes MUST NOT have the name `data`; this name is reserved as it
-is used in some event formats.
+transport protocols and messaging formats, CloudEvents attribute names have
+the following constraints:
+- MUST consist of lower-case letters [a-z] or digits [0-9] from the ASCII
+  character set.
+- SHOULD start with a letter.
+- MUST be at least one character in length, and SHOULD NOT exceed 20 characters.
+- SHOULD be descriptive and terse.
+- MUST NOT use the name `data` as this is reserved for use by some event
+  formats.
 
 ### Type System
 
