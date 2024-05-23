@@ -41,11 +41,11 @@ CloudEvent instances.
 CloudEvents SQL expressions (also known as CESQL) allow computing values and matching of CloudEvent attributes against complex expressions
 that lean on the syntax of Structured Query Language (SQL) `WHERE` clauses. Using SQL-derived expressions for message
 filtering has widespread implementation usage because the Java Message Service (JMS) message selector syntax also leans
-on SQL. Note that neither the SQL standard (ISO 9075) nor the JMS standard nor any other SQL dialect is used as a
+on SQL. Note that neither the [SQL standard (ISO 9075)][iso-9075] nor the JMS standard nor any other SQL dialect is used as a
 normative foundation or to constrain the expression syntax defined in this specification, but the syntax is informed by
 them.
 
-CESQL is a _[Total pure functional programming language][total-programming-language-wiki]_ in order to guarantee the
+CESQL is a _[total pure functional programming language][total-programming-language-wiki]_ in order to guarantee the
 termination of the evaluation of the expression. It features a type system correlated to the [CloudEvents type
 system][ce-type-system], and it features boolean and arithmetic operations, as well as built-in functions for string
 manipulation.
@@ -56,7 +56,10 @@ producer, or in an intermediary, and it can be implemented using any technology 
 The CloudEvents Expression Language assumes the input always includes, but is not limited to, a single valid and
 type-checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of
 the other input values. The evaluation of an expression observes the concept of [referential
-transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a _boolean_, an _integer_ or a _string_, and it might include an error.
+transparency][referential-transparency-wiki]. The primary output of a CESQL expression evaluation is always a _boolean_, an _integer_ or a _string_.
+The secondary output of a CESQL expression evaluation is a set of errors which occurred during evaluation. This set MAY be empty, indicating that no
+error occurred during execution of the expression. The value used by CESQL engines to represent an empty set of errors is out of the scope of this
+specification.
 
 The CloudEvents Expression Language doesn't support the handling of the data field of the CloudEvent instances, due to
 its polymorphic nature and complexity. Users that need this functionality ought to use other more appropriate tools.
@@ -70,7 +73,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to filter on the input values.
 
-When used as a filter predicate, the expression output value is always cast to a boolean value.
+When used as a filter predicate, the expression output value MUST be a _Boolean_. If the output value is not a _Boolean_ or any errors are returned,
+the event MUST NOT pass the filter.
 
 <!-- TODO -->
 
@@ -103,12 +107,12 @@ Nested expressions MUST be correctly parenthesized.
 ### 2.2. Value identifiers and literals
 
 Value identifiers in CESQL MUST follow the same restrictions of the [Attribute Naming
-Convention][ce-attribute-naming-convention] from the CloudEvents spec. A value identifier MUST NOT be greater than 20
+Convention][ce-attribute-naming-convention] from the CloudEvents spec. A value identifier SHOULD NOT be greater than 20
 characters in length.
 
 ```ebnf
 lowercase-char ::= [a-z]
-value-identifier ::= ( lowercase-char | digit ) ( lowercase-char | digit )*
+value-identifier ::= ( lowercase-char | digit )+
 ```
 
 CESQL defines 3 different literal kinds: integer numbers, `true` or `false` booleans, and `''` or `""` delimited strings. Integer literals MUST be valid 32 bit signed integer values.
@@ -124,8 +128,8 @@ string-literal ::= ( "'" ( [^'] | "\'" )* "'" ) | ( '"' ( [^"] | '\"' )* '"')
 literal ::= integer-literal | boolean-literal | string-literal
 ```
 
-Because string literals can be either `''` or `""` delimited, in the former case, the `'` has to be escaped, while in
-the latter the `"` has to be escaped.
+Because string literals can be either `''` or `""` delimited, in the former case, the `'` character has to be escaped if it is to be used in the string literal, while in
+the latter the `"` has to be escaped if it is to be used in the string literal.
 
 ### 2.3. Operators
 
@@ -200,8 +204,6 @@ _Boolean_.
 When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to `false`.
 For example, `true AND (missingAttribute = "")` would evaluate to `false` as the subexpression `missingAttribute = ""` would be false.
 
-When addressing an attribute represented by the _Integer_ type, if the value of that attribute does not fit into a 32 bit signed integer, an error MUST be returned.
-
 ### 3.3. Errors
 
 Because every operator and function is total, an expression evaluation flow is defined statically and cannot be modified
@@ -214,7 +216,8 @@ runtime errors.
 
 ### 3.4. Operators
 
-The following tables show the operators that MUST be supported by a CESQL evaluator.
+The following tables show the operators that MUST be supported by a CESQL evaluator. When evaluating an operator,
+a CESQL engine MUST attempt to cast the operands to the correct types. If this type casting fails, a _Cast_ error will be returned, along with the zero value for the return type of the expression.
 
 All the operators in the following tables are listed in precedence order.
 
@@ -471,3 +474,4 @@ hop < ttl
 [subscriptions-filter-dialect]: ../subscriptions/spec.md#3241-filter-dialects
 [ebnf-xml-spec]: https://www.w3.org/TR/REC-xml/#sec-notation
 [modulo-operation-wiki]: https://en.wikipedia.org/wiki/Modulo_operation
+[iso-9075]: https://en.wikipedia.org/wiki/ISO/IEC_9075
