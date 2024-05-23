@@ -234,34 +234,29 @@ Corresponds to the syntactic rule `unary-operation`:
 
 Corresponds to the syntactic rule `binary-operation`:
 
-| Definition                              | Semantics                                                                                                  |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `x = y: Boolean x Boolean -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                      |
-| `x != y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x <> y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x AND y: Boolean x Boolean -> Boolean` | Returns the logical and of `x` and `y`                                                                     |
-| `x OR y: Boolean x Boolean -> Boolean`  | Returns the logical or of `x` and `y`                                                                      |
-| `x XOR y: Boolean x Boolean -> Boolean` | Returns the logical xor of `x` and `y`                                                                     |
-| `x = y: Integer x Integer -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                      |
-| `x != y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x <> y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x < y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly less than `y`                                                            |
-| `x <= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is less than or equal to `y`                                                         |
-| `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly greater than `y`                                                         |
-| `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater or equal to `y`                                                           |
-| `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                                         |
-| `x / y: Integer x Integer -> Integer`   | Returns the truncated division of `x` and `y`. Returns `0` and raises an error if `y = 0`                  |
-| `x % y: Integer x Integer -> Integer`   | Returns the remainder of the truncated division of `x` and `y`. Returns `0` and raises an error if `y = 0` |
-| `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                             |
-| `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                                      |
-| `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                                      |
-| `x != y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                      |
-| `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                      |
-
-The modulo and divisions MUST follow the [truncated divisions definition][modulo-operation-wiki], that is:
-
-- The remainder of the modulo MUST have the same sign as the dividend.
-- The quotient MUST be rounded towards zero, _truncating_ the decimal part.
+| Definition                              | Semantics                                                                                                                          |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `x = y: Boolean x Boolean -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                                              |
+| `x != y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x <> y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x AND y: Boolean x Boolean -> Boolean` | Returns the logical and of `x` and `y`                                                                                             |
+| `x OR y: Boolean x Boolean -> Boolean`  | Returns the logical or of `x` and `y`                                                                                              |
+| `x XOR y: Boolean x Boolean -> Boolean` | Returns the logical xor of `x` and `y`                                                                                             |
+| `x = y: Integer x Integer -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                                              |
+| `x != y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x <> y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x < y: Integer x Integer -> Boolean`   | Returns `true` if `x` is less than `y`                                                                                             |
+| `x <= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is less than or equal to `y`                                                                                 |
+| `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is greater than `y`                                                                                          |
+| `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater than or equal to `y`                                                                              |
+| `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                                                                 |
+| `x / y: Integer x Integer -> Integer`   | Returns the result of dividing `x` by `y`, rounded towards `0` to obtain an integer. Returns `0` and raises an error if `y = 0`    |
+| `x % y: Integer x Integer -> Integer`   | Returns the remainder of `x` divided by `y`, where the result has the same sign as `x`. Returns `0` and raises an error if `y = 0` |
+| `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                                                     |
+| `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                                                              |
+| `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                                                              |
+| `x != y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                                              |
+| `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                                              |
 
 The AND and OR operators MUST be short-circuit evaluated. This means that whenever the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated.
 Similarly, whenever the left operand of the OR operation evaluates to `true`, the right operand MUST NOT be evaluated.
@@ -303,7 +298,8 @@ The matching is done using the same semantics of the equal `=` operator, but usi
 
 ### 3.5. Functions
 
-CESQL provides the concept of function, and defines some built-in that every engine MUST implement. An engine SHOULD also allow users to define their custom functions.
+CESQL provides the concept of function, and defines some built-in functions that every engine MUST implement. An engine SHOULD also allow users to define their custom functions, however, the mechanism
+by which this is done is out of scope of this specification.
 
 A function is identified by its name, its parameters and the return value. A function can be variadic, that is the arity is not fixed.
 
@@ -312,18 +308,23 @@ Because of implicit casting, no functions with the same name and same arity but 
 
 An overload on a variadic function is allowed only if the number of initial fixed arguments is greater than the maximum arity for that particular function name. Only one variadic overload is allowed.
 
-For example, the following definitions are valid:
+For example, the following set of definitions are valid and will all be allowed by the rules:
 
 * `ABC(x): String -> Integer`: Unary function (arity 1). 
 * `ABC(x, y): String x String -> Integer`: Binary function (arity 2).
 * `ABC(x, y, z, ...): String x String x String x String^n -> Integer`: n-ary function (variable arity), but the initial fixed arguments are at least 3.
 
-But the following are invalid, so the engine MUST reject them:
+But the following set is invalid, so the engine MUST reject them:
 
 * `ABC(x...): String^n -> Integer`: n-ary function (variable arity), but there are no initial fixed arguments.
 * `ABC(x, y, z): String x String x String -> Integer`: Ternary function (arity 3).
 
-When a function invocation cannot be dispatched, the return value is undefined.
+These two are incompatible because the n-ary function `ABC(x...)` can not be distinguished in any way
+from the ternary function `ABC(x, y, z)` if the n-ary function were called with three arguments.
+In order for these definitions to be valid, the n-ary function would need to have at least 4 fixed
+arguments.
+
+When a function invocation cannot be dispatched, the return value is `false`, and a `_FunctionError` is also returned.
 
 The following tables show the built-in functions that MUST be supported by a CESQL evaluator.
 
@@ -333,10 +334,10 @@ The following tables show the built-in functions that MUST be supported by a CES
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `LENGTH(x): String -> Integer`                             | Returns the character length of the String `x`.                                                                                                                                                                            |
 | `CONCAT(x1, x2, ...): String^n -> String`                  | Returns the concatenation of `x1` up to `xN`.                                                                                                                                                                              |
-| `CONCAT_WS(delimiter, x1, x2, ...): String x String^n -> String`                  | Returns the concatenation of `x1` up to `xN`, using the `delimiter`.                                                                                                                                |
+| `CONCAT_WS(delimiter, x1, x2, ...): String x String^n -> String`                  | Returns the concatenation of `x1` up to `xN`, using the `delimiter` between each string, but not before `x1` or after `xN`.                                                                         |
 | `LOWER(x): String -> String`                               | Returns `x` in lowercase.                                                                                                                                                                                                  |
 | `UPPER(x): String -> String`                               | Returns `x` in uppercase.                                                                                                                                                                                                  |
-| `TRIM(x): String -> String`                                | Returns `x` with leading and trailing trimmed whitespaces.                                                                                                                                                                 |
+| `TRIM(x): String -> String`                                | Returns `x` with leading and trailing whitespaces trimmed. This does not remove any non-whitespace characters, such as control characters.                                                                                 |
 | `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                 |
 | `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                   |
 | `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)`. |
@@ -359,8 +360,9 @@ left operand of the OR operation evalues to `true`, the right operand MUST NOT b
 
 When the argument types of an operator/function invocation don't match the signature of the operator/function being invoked, the CESQL engine MUST try to perform an implicit cast.
 
-This section defines an **ambiguous** operator/function as an operator/function that is overloaded with another
-operator/function definition with same symbol/name and arity but different parameter types.
+This section defines an **ambiguous** operator as an operator that is overloaded with another
+operator definition with same symbol/name and arity but different parameter types. Note: a function
+can not be ambiguous as it is not allowed for two functions to have the same arity and name.
 
 A CESQL engine MUST apply the following implicit casting rules in order:
 
@@ -374,8 +376,7 @@ A CESQL engine MUST apply the following implicit casting rules in order:
       1. If such operator definition exists and is unique, cast `x` to the type of the left parameter
       1. Otherwise, raise an error and the cast results are undefined
 1. If the function is n-ary with `n > 1`:
-   1. If it's not ambiguous, cast all the arguments to the corresponding parameter types.
-   1. If it's ambiguous, raise an error and the cast results are undefined.
+   1. Cast all the arguments to the corresponding parameter types.
 1. If the operator is n-ary with `n > 2`:
    1. If it's not ambiguous, cast all the operands to the target type.
    1. If it's ambiguous, raise an error and the cast results are undefined.
