@@ -357,7 +357,15 @@ left operand of the OR operation evalues to `true`, the right operand MUST NOT b
 
 #### 3.7. Type casting
 
-A CESQL engine MUST support the following type casts:
+The following table indicates which type casts a CESQL engine MUST or MUST NOT support:
+
+| Type    | Integer  | String | Boolean  |
+| ------- | -------- | ------ | -------- |
+| Integer | N/A      | MUST   | MUST NOT |
+| String  | MUST     | N/A    | MUST     |
+| Boolean | MUST NOT | MUST   | N/A      |
+
+For all of the type casts which a CESQL engine MUST support, the semantics which the engine MUST use are defined as follows:
 
 | Definition           | Semantics                                                                                                                                                                                                                                        |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
