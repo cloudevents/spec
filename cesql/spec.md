@@ -275,8 +275,8 @@ Corresponds to the syntactic rule `binary-operation`:
 | `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is greater than `y`                                                                                          |
 | `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater than or equal to `y`                                                                              |
 | `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                                                                 |
-| `x / y: Integer x Integer -> Integer`   | Returns the result of dividing `x` by `y`, rounded towards `0` to obtain an integer. Returns `0` and raises an error if `y = 0`    |
-| `x % y: Integer x Integer -> Integer`   | Returns the remainder of `x` divided by `y`, where the result has the same sign as `x`. Returns `0` and raises an error if `y = 0` |
+| `x / y: Integer x Integer -> Integer`   | Returns the result of dividing `x` by `y`, rounded towards `0` to obtain an integer. Returns `0` and a _MathError_ if `y = 0`      |
+| `x % y: Integer x Integer -> Integer`   | Returns the remainder of `x` divided by `y`, where the result has the same sign as `x`. Returns `0` and a _MathError_ if `y = 0`   |
 | `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                                                     |
 | `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                                                              |
 | `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                                                              |
@@ -367,16 +367,16 @@ The following tables show the built-in functions that MUST be supported by a CES
 | `LOWER(x): String -> String`                               | Returns `x` in lowercase.                                                                                                                                                                                                  |
 | `UPPER(x): String -> String`                               | Returns `x` in uppercase.                                                                                                                                                                                                  |
 | `TRIM(x): String -> String`                                | Returns `x` with leading and trailing whitespaces trimmed. This does not remove any non-whitespace characters, such as control characters.                                                                                 |
-| `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                 |
-| `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                   |
-| `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)`. |
-| `SUBSTRING(x, pos, len): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `pos` (included) of length `len`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. If `len` is greater than the maximum substring starting at `pos`, then return the maximum substring. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)` or if `len` is negative. |
+| `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and a _FunctionEvaluationError_.                                                                     |
+| `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and a _FunctionEvaluationError_.                                                                       |
+| `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and a _FunctionEvaluationError_ if `pos > LENGTH(x) OR pos < -LENGTH(x)`. |
+| `SUBSTRING(x, pos, len): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `pos` (included) of length `len`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. If `len` is greater than the maximum substring starting at `pos`, then return the maximum substring. Returns the empty string and a _FunctionEvaluationError_ if `pos > LENGTH(x) OR pos < -LENGTH(x)` or if `len` is negative. |
 
 #### 3.5.2. Built-in Math functions
 
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ABS(x): Integer -> Integer` | Returns the absolute value of `x`. If the value of `x` is `-2147483648` (the most negative 32 bit integer value possible), then this returns `2147483647` as well as a math error. |
+| `ABS(x): Integer -> Integer` | Returns the absolute value of `x`. If the value of `x` is `-2147483648` (the most negative 32 bit integer value possible), then this returns `2147483647` as well as a _MathError_. |
 
 #### 3.5.3 Function Errors
 
@@ -404,7 +404,7 @@ A CESQL engine MUST apply the following implicit casting rules in order:
 
 1. If the operator/function is unary (argument `x`):
    1. If it's not ambiguous, cast `x` to the parameter type.
-   1. If it's ambiguous, raise an error and the cast result is undefined.
+   1. If it's ambiguous, raise a _CastError_ and the cast result is `false`.
 1. If the operator is binary (left operand `x` and right operand `y`):
    1. If it's not ambiguous, cast `x` and `y` to the corresponding parameter types.
    1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator
@@ -454,7 +454,7 @@ Because CESQL expressions are total, they always define a return value, included
 
 When evaluating an expression, the evaluator can operate in two _modes_, in relation to error handling:
 
-* Fail fast mode: When an error is triggered, the evaluation is interrupted and returns the error, without any result.
+* Fail fast mode: When an error is triggered, the evaluation is interrupted and returns the error, with the zero value for the return type of the expression.
 * Complete evaluation mode: When an error is triggered, the evaluation is continued, and the evaluation of the expression returns both the result and the error(s).
 
 Choosing which evaluation mode to adopt and implement depends on the use case.
