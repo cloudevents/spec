@@ -76,8 +76,6 @@ The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to fil
 When used as a filter predicate, the expression output value MUST be a _Boolean_. If the output value is not a _Boolean_ or any errors are returned,
 the event MUST NOT pass the filter.
 
-<!-- TODO -->
-
 ## 2. Language syntax
 
 The grammar of the language is defined using the EBNF Notation from [W3C XML specification][ebnf-xml-spec].
@@ -186,6 +184,14 @@ The type system contains 3 _primitive_ types:
   32-bit, twos-complement encoding.
 - _Boolean_: A boolean value of "true" or "false".
 
+For each of the 3 _primitive_ types there is an associated zero value, which can be thought of as the "default" value for that type:
+
+| Type      | Zero Value |
+| --------- | ---------- |
+| _String_  | `""`       |
+| _Integer_ | `0`        |
+| _Boolean_ | `false`    |
+
 The types _URI_, _URI Reference_, and _Timestamp_ ([defined in the CloudEvents specification][ce-type-system]) are represented as
 _String_.
 
@@ -201,8 +207,13 @@ Unless otherwise specified, every attribute and extension MUST be represented by
 Through implicit type casting, the user can convert the addressed value instances to _Integer_ and
 _Boolean_.
 
-When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to `false`.
-For example, `true AND (missingAttribute = "")` would evaluate to `false` as the subexpression `missingAttribute = ""` would be false.
+When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to the zero value for the return type of the subexpression.
+For example, `true AND (missingAttribute = "")` would evaluate to `false` as the subexpression `missingAttribute = ""` would be false, given that the return type for the `=` operator is _Boolean_.
+However, the expression `missingattribute * 5` would evaluate to `0` because the return type for the `*` operator is _Integer_. Note that this does not mean that the _value_ of the missing attribute
+is set to be the zero value for the type of the missing attribute. Rather, the subexpression with the missingAttribute returns the zero value of the return type of the subexpression.
+As an example, `1 / missingAttribute` does not raise a _MathError_ due to the division by zero, instead it returns `0` as that is the zero value for the return type of the subexpression.
+In cases where the return type of the subexpression cannot be determined by the CESQL engine, the CESQL engine MUST assume a return type of _Boolean_. In such cases, the return value would
+therefore be `false`.
 
 ### 3.3. Errors
 
@@ -214,10 +225,24 @@ returned together with the evaluated value of the CESQL expression.
 Whenever possible, some error checks SHOULD be done at compile time by the expression evaluator, in order to prevent
 runtime errors.
 
+Every CESQL engine MUST support the following error types:
+
+- _ParseError_: An error that occurs during parseing
+- _MathError_: An error that occurs during the evaluation of a mathematical operation
+- _CastError_: An error that occurs during an implicit or explicit type cast
+- _MissingFunctionError_: An error that occurs due to a call to a function that has not been registered with the CESQL engine
+- _FunctionEvaluationError_: An error that occurs during the evaluation of a function
+
+Whenever an operator or function encounters an error, it MUST return a return value as well as an error value or values. In cases where there is not an obvious return value for the expression,
+the operator or function SHOULD return the zero value for the return type of the operator or function.
+
 ### 3.4. Operators
 
 The following tables show the operators that MUST be supported by a CESQL evaluator. When evaluating an operator,
-a CESQL engine MUST attempt to cast the operands to the correct types. If this type casting fails, a _Cast_ error will be returned, along with the zero value for the return type of the expression.
+a CESQL engine MUST attempt to cast the operands to the correct types. A CESQL evaluator MUST stop evaluating an operator
+when it encounters an error value, and it MUST return both the zero value for the return type of the operator as well
+as the error. In cases where the return type for the operator is ambiguous, the return type MUST be assumed to be
+_Boolean_ and the return value MUST be `false`.
 
 All the operators in the following tables are listed in precedence order.
 
@@ -261,6 +286,8 @@ Corresponds to the syntactic rule `binary-operation`:
 The AND and OR operators MUST be short-circuit evaluated. This means that whenever the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated.
 Similarly, whenever the left operand of the OR operation evaluates to `true`, the right operand MUST NOT be evaluated.
 
+String comparisons (using the `=`, `!=` and `<>` operators) MUST be case sensitive.
+
 #### 3.4.3. Like operator
 
 | Definition                                       | Semantics                                           |
@@ -278,6 +305,8 @@ For example, the pattern `_b*` will accept values `ab`, `abc`, `abcd1` but won't
 Both `%` and `_` can be escaped with `\`, in order to be matched literally. For example, the pattern `abc\%` will match
 `abc%` but won't match `abcd`.
 
+The pattern matching MUST be case sensitive.
+
 #### 3.4.4. Exists operator
 
 | Definition                          | Semantics                                                                   |
@@ -291,8 +320,8 @@ assumed valid, e.g. `EXISTS id` MUST always return `true`.
 
 | Definition                                             | Semantics                                                                  |
 | ------------------------------------------------------ | -------------------------------------------------------------------------- |
-| `x IN (y1, y2, ...): Any x Any^n -> Boolean`     | Returns `true` if `x` is equal to an element in the _Set_ of `yN` elements |
-| `x NOT IN (y1, y2, ...): Any x Any^n -> Boolean` | Same as `NOT (x IN set)`                                                   |
+| `x IN (y1, y2, ...): Any x Any^n -> Boolean`           | Returns `true` if `x` is equal to an element in the _Set_ of `yN` elements |
+| `x NOT IN (y1, y2, ...): Any x Any^n -> Boolean`       | Same as `NOT (x IN set)`                                                   |
 
 The matching is done using the same semantics of the equal `=` operator, but using `x` type as the target type for the implicit type casting.
 
@@ -324,7 +353,7 @@ from the ternary function `ABC(x, y, z)` if the n-ary function were called with 
 In order for these definitions to be valid, the n-ary function would need to have at least 4 fixed
 arguments.
 
-When a function invocation cannot be dispatched, the return value is `false`, and a `_FunctionError` is also returned.
+When a function invocation cannot be dispatched, the return value is `false`, and a _MissingFunctionError_ is also returned.
 
 The following tables show the built-in functions that MUST be supported by a CESQL evaluator.
 
@@ -348,6 +377,13 @@ The following tables show the built-in functions that MUST be supported by a CES
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ABS(x): Integer -> Integer` | Returns the absolute value of `x`. If the value of `x` is `-2147483648` (the most negative 32 bit integer value possible), then this returns `2147483647` as well as a math error. |
+
+#### 3.5.3 Function Errors
+
+As specified in 3.3, in the event of an error a function MUST still return a valid return value for it's defined return type.
+A CESQL engine MUST guarantee that all built-in functions comply with this. For user defined functions, if they return one or more errors
+and fail to providea valid return value for their return type the CESQL engine MUST return the zero value for the return type of the
+function, along with a _FunctionEvaluationError_.
 
 ### 3.6. Evaluation of the expression
 
@@ -374,12 +410,12 @@ A CESQL engine MUST apply the following implicit casting rules in order:
    1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator
       using the `y` type as the right parameter type:
       1. If such operator definition exists and is unique, cast `x` to the type of the left parameter
-      1. Otherwise, raise an error and the cast results are undefined
+      1. Otherwise, raise a _CastError_ and the result is `false`
 1. If the function is n-ary with `n > 1`:
    1. Cast all the arguments to the corresponding parameter types.
 1. If the operator is n-ary with `n > 2`:
    1. If it's not ambiguous, cast all the operands to the target type.
-   1. If it's ambiguous, raise an error and the cast results are undefined.
+   1. If it's ambiguous, raise a _CastError_ and the cast result is `false`.
 
 For the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
 
