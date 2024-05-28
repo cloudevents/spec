@@ -387,7 +387,7 @@ function, along with a _FunctionEvaluationError_.
 
 ### 3.6. Evaluation of the expression
 
-Operators MUST be evaluated in left to right order, where all operators within a parenthized expression MUST be evaluated before continuing to the right of the parenthized expression.
+Operators MUST be evaluated in left to right order, where all operators within a parenthesized expression MUST be evaluated before continuing to the right of the parenthesized expression.
 
 AND and OR operations MUST be short-circuit evaluated. When the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated. Similarly, when the 
 left operand of the OR operation evalues to `true`, the right operand MUST NOT be evaluated.
