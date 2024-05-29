@@ -359,20 +359,22 @@ left operand of the OR operation evalues to `true`, the right operand MUST NOT b
 
 The following table indicates which type casts a CESQL engine MUST or MUST NOT support:
 
-| Type    | Integer  | String | Boolean  |
-| ------- | -------- | ------ | -------- |
-| Integer | N/A      | MUST   | MUST NOT |
-| String  | MUST     | N/A    | MUST     |
-| Boolean | MUST NOT | MUST   | N/A      |
+| Type    | Integer | String | Boolean |
+| ------- | ------- | ------ | ------- |
+| Integer | N/A     | MUST   | MUST    |
+| String  | MUST    | N/A    | MUST    |
+| Boolean | MUST    | MUST   | N/A     |
 
 For all of the type casts which a CESQL engine MUST support, the semantics which the engine MUST use are defined as follows:
 
-| Definition           | Semantics                                                                                                                                                                                                                                        |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Integer -> String`  | Returns the string representation of the integer value in base 10, without leading `0`s. If the value is less than 0, the '-' character is prepended to the result.                                                                              |
-| `String -> Integer`  | Returns the result of interpreting the string as a 32 bit base 10 integer. The string MAY begin with a leading sign '+' or '-'. If the result will overflow or the string is not a valid integer an error is returned along with a value of `0`. |
-| `String -> Boolean`  | Returns `true` or `false` if the lower case representation of the string is exactly "true" or "false, respectively. Otherwise returns an error along with a value of `false`                                                                     |
-| `Boolean -> String`  | Returns `"true"` if the boolean is `true`, and `"false"` if the boolean is `false`.                                                                                                                                                              |
+| Definition           | Semantics                                                                                                                                                                                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Integer -> String`   | Returns the string representation of the integer value in base 10, without leading `0`s. If the value is less than 0, the '-' character is prepended to the result.                                                                              |
+| `Integer -> Boolean`  | Returns `false` if the integer is `0`, and `true` otherwise.                                                                              |
+| `String -> Integer`   | Returns the result of interpreting the string as a 32 bit base 10 integer. The string MAY begin with a leading sign '+' or '-'. If the result will overflow or the string is not a valid integer an error is returned along with a value of `0`. |
+| `String -> Boolean`   | Returns `true` or `false` if the lower case representation of the string is exactly "true" or "false, respectively. Otherwise returns an error along with a value of `false`                                                                     |
+| `Boolean -> Integer`  | Returns `1` if the boolean is `true`, and `0` if the boolean is `false`.                                                                                                                                                                         |
+| `Boolean -> String`   | Returns `"true"` if the boolean is `true`, and `"false"` if the boolean is `false`.                                                                                                                                                              |
 
 An example of how _Boolean_ values cast to _String_ combines with the case insensitivity of CESQL keywords is that:
 ```
