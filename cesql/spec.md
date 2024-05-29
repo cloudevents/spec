@@ -75,7 +75,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to filter on the input values.
 
 When used as a filter predicate, the expression output value MUST be a _Boolean_. If the output value is not a _Boolean_, or any errors are returned,
-the event MUST NOT pass the filter. Due to the requirement that events MUST NOT pass the filter should any errors occur, when used in a filtering
+the event MUST NOT pass the filter. Due to the requirement that events MUST NOT pass the filter if any errors occur, when used in a filtering
 context the CESQL engine SHOULD follow the "fail fast mode" error handling described in section 4.1.
 
 ## 2. Language syntax
