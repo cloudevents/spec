@@ -555,7 +555,8 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 
 # Example
 
-The following example shows a CloudEvent serialized as JSON:
+The following example shows a CloudEvent serialized as JSON carrying encrypted
+data (with line breaks for display purposes only):
 
 ```JSON
 {
@@ -567,7 +568,19 @@ The following example shows a CloudEvent serialized as JSON:
     "time" : "2018-04-05T17:31:00Z",
     "comexampleextension1" : "value",
     "comexampleothervalue" : 5,
-    "datacontenttype" : "text/xml",
-    "data" : "<much wow=\"xml\"/>"
+    "datacontenttype" : "application/jose",
+    "data" : "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.
+     OKOawDo13gRp2ojaHV7LFpZcgV7T6DVZKTyKOMTYUmKoTCVJRgckCL9kiMT03JGe
+     ipsEdY3mx_etLbbWSrFr05kLzcSr4qKAq7YN7e9jwQRb23nfa6c9d-StnImGyFDb
+     Sv04uVuxIp5Zms1gNxKKK2Da14B8S4rzVRltdYwam_lDp5XnZAYpQdb76FdIKLaV
+     mqgfwX7XWRxv2322i-vDxRfqNzo_tETKzpVLzfiwQyeyPGLBIO56YJ7eObdv0je8
+     1860ppamavo35UgoRdbYaBcoh9QcfylQr66oc6vFWXRcZ_ZT2LawVCWTIy3brGPi
+     6UklfCpIMfIjf7iGdXKHzg.
+     48V1_ALb6US04U3b.
+     5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6ji
+     SdiwkIr3ajwQzaBtQD_A.
+     XFBoMYUZodetZdvTiFvSkQ"
 }
 ```
+
+
