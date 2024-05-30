@@ -41,11 +41,11 @@ CloudEvent instances.
 CloudEvents SQL expressions (also known as CESQL) allow computing values and matching of CloudEvent attributes against complex expressions
 that lean on the syntax of Structured Query Language (SQL) `WHERE` clauses. Using SQL-derived expressions for message
 filtering has widespread implementation usage because the Java Message Service (JMS) message selector syntax also leans
-on SQL. Note that neither the SQL standard (ISO 9075) nor the JMS standard nor any other SQL dialect is used as a
+on SQL. Note that neither the [SQL standard (ISO 9075)][iso-9075] nor the JMS standard nor any other SQL dialect is used as a
 normative foundation or to constrain the expression syntax defined in this specification, but the syntax is informed by
 them.
 
-CESQL is a _[Total pure functional programming language][total-programming-language-wiki]_ in order to guarantee the
+CESQL is a _[total pure functional programming language][total-programming-language-wiki]_ in order to guarantee the
 termination of the evaluation of the expression. It features a type system correlated to the [CloudEvents type
 system][ce-type-system], and it features boolean and arithmetic operations, as well as built-in functions for string
 manipulation.
@@ -56,7 +56,11 @@ producer, or in an intermediary, and it can be implemented using any technology 
 The CloudEvents Expression Language assumes the input always includes, but is not limited to, a single valid and
 type-checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of
 the other input values. The evaluation of an expression observes the concept of [referential
-transparency][referential-transparency-wiki]. The output of a CESQL expression evaluation is always a _boolean_, an _integer_ or a _string_, and it might include an error.
+transparency][referential-transparency-wiki]. This means that any part of an expression can be replaced with its output
+value and the overall result of the expression will be unchanged. The primary output of a CESQL expression evaluation is always a _boolean_, an _integer_ or a _string_.
+The secondary output of a CESQL expression evaluation is a set of errors which occurred during evaluation. This set MAY be empty, indicating that no
+error occurred during execution of the expression. The values used by CESQL engines to represent a set of errors (empty or not) is out of the scope
+of this specification.
 
 The CloudEvents Expression Language doesn't support the handling of the data field of the CloudEvent instances, due to
 its polymorphic nature and complexity. Users that need this functionality ought to use other more appropriate tools.
@@ -70,9 +74,9 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 The CESQL can be used as a [filter dialect][subscriptions-filter-dialect] to filter on the input values.
 
-When used as a filter predicate, the expression output value is always cast to a boolean value.
-
-<!-- TODO -->
+When used as a filter predicate, the expression output value MUST be a _Boolean_. If the output value is not a _Boolean_, or any errors are returned,
+the event MUST NOT pass the filter. Due to the requirement that events MUST NOT pass the filter if any errors occur, when used in a filtering
+context the CESQL engine SHOULD follow the "fail fast mode" error handling described in section 4.1.
 
 ## 2. Language syntax
 
@@ -95,7 +99,7 @@ INT(hop) < INT(ttl) AND INT(hop) < 1000
 The root of the expression is the `expression` rule:
 
 ```ebnf
-expression ::= value-identifier | boolean-literal | unary-operation | binary-operation | function-invocation | like-operation | exists-operation | in-operation | ( "(" expression ")" )
+expression ::= value-identifier | literal | unary-operation | binary-operation | function-invocation | like-operation | exists-operation | in-operation | ( "(" expression ")" )
 ```
 
 Nested expressions MUST be correctly parenthesized.
@@ -103,29 +107,29 @@ Nested expressions MUST be correctly parenthesized.
 ### 2.2. Value identifiers and literals
 
 Value identifiers in CESQL MUST follow the same restrictions of the [Attribute Naming
-Convention][ce-attribute-naming-convention] from the CloudEvents spec. A value identifier MUST NOT be greater than 20
+Convention][ce-attribute-naming-convention] from the CloudEvents spec. A value identifier SHOULD NOT be greater than 20
 characters in length.
 
 ```ebnf
 lowercase-char ::= [a-z]
-value-identifier ::= ( lowercase-char | digit ) ( lowercase-char | digit )*
+value-identifier ::= ( lowercase-char | digit )+
 ```
 
-CESQL defines 3 different literal kinds: integer numbers, `true` or `false` booleans, and `''` or `""` delimited strings.
+CESQL defines 3 different literal kinds: integer numbers, `true` or `false` booleans, and `''` or `""` delimited strings. Integer literals MUST be valid 32 bit signed integer values.
 
 ```ebnf
 digit ::= [0-9]
-number-literal ::= digit+
+integer-literal ::= ( '+' | '-' ) digit+
 
 boolean-literal ::= "true" | "false" (* Case insensitive *)
 
 string-literal ::= ( "'" ( [^'] | "\'" )* "'" ) | ( '"' ( [^"] | '\"' )* '"')
 
-literal ::= number-literal | boolean-literal | string-literal
+literal ::= integer-literal | boolean-literal | string-literal
 ```
 
-Because string literals can be either `''` or `""` delimited, in the former case, the `'` has to be escaped, while in
-the latter the `"` has to be escaped.
+Because string literals can be either `''` or `""` delimited, in the former case, the `'` character has to be escaped if it is to be used in the string literal, while in
+the latter the `"` has to be escaped if it is to be used in the string literal.
 
 ### 2.3. Operators
 
@@ -182,6 +186,14 @@ The type system contains 3 _primitive_ types:
   32-bit, twos-complement encoding.
 - _Boolean_: A boolean value of "true" or "false".
 
+For each of the 3 _primitive_ types there is an associated zero value, which can be thought of as the "default" value for that type:
+
+| Type      | Zero Value |
+| --------- | ---------- |
+| _String_  | `""`       |
+| _Integer_ | `0`        |
+| _Boolean_ | `false`    |
+
 The types _URI_, _URI Reference_, and _Timestamp_ ([defined in the CloudEvents specification][ce-type-system]) are represented as
 _String_.
 
@@ -193,12 +205,17 @@ be used in the `IN` operator.
 Each CloudEvent context attribute and extension MUST be addressable from an expression using its identifier, as defined
 by the spec. For example, using `id` in an expression will address the CloudEvent [id attribute][ce-id-attribute].
 
-Unless otherwise specified, every attribute and extension MUST be represented by the _String_ type as its initial type.
-Through implicit type casting, the user can convert the addressed value instances to _Integer_ and
-_Boolean_.
+If the value of the attribute or extension is not one of the primitive CESQL types, it MUST be represented
+by the _String_ type.
 
-When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to `false`.
-For example, `true AND (missingAttribute = "")` would evaluate to `false` as the subexpression `missingAttribute = ""` would be false.
+When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to the zero value for the return type of the subexpression,
+along with a _MissingAttributeError_.
+For example, `true AND (missingAttribute = "")` would evaluate to `false, (missingAttributeError)` as the subexpression `missingAttribute = ""` would be false, given that the return type for the `=` operator is _Boolean_.
+However, the expression `missingattribute * 5` would evaluate to `0, (missingAttributeError)` because the return type for the `*` operator is _Integer_. Note that this does not mean that the _value_ of the missing attribute
+is set to be the zero value for the type of the missing attribute. Rather, the subexpression with the missingAttribute returns the zero value of the return type of the subexpression.
+As an example, `1 / missingAttribute` does not raise a _MathError_ due to the division by zero, instead it returns `0, (missingAttributeError)` as that is the zero value for the return type of the subexpression.
+In cases where the return type of the subexpression cannot be determined by the CESQL engine, the CESQL engine MUST assume a return type of _Boolean_. In such cases, the return value would
+therefore be `false, (missingAttributeError)`.
 
 ### 3.3. Errors
 
@@ -210,11 +227,23 @@ returned together with the evaluated value of the CESQL expression.
 Whenever possible, some error checks SHOULD be done at compile time by the expression evaluator, in order to prevent
 runtime errors.
 
+Every CESQL engine MUST support the following error types:
+
+- _ParseError_: An error that occurs during parsing
+- _MathError_: An error that occurs during the evaluation of a mathematical operation
+- _CastError_: An error that occurs during an implicit or explicit type cast
+- _MissingAttributeError_: An error that occurs when addressing an attribute which is not present on the input event
+- _MissingFunctionError_: An error that occurs due to a call to a function that has not been registered with the CESQL engine
+- _FunctionEvaluationError_: An error that occurs during the evaluation of a function
+- _GenericError_: Any error not specified above
+
+Whenever an operator or function encounters an error, it MUST result in a "return value" as well as one or more "error values". In cases where there is not an obvious "return value" for the expression,
+the operator or function SHOULD return the zero value for the return type of the operator or function.
+
 ### 3.4. Operators
 
-The following tables show the operators that MUST be supported by a CESQL evaluator.
-
-All the operators in the following tables are listed in precedence order.
+The following tables show the operators that MUST be supported by a CESQL evaluator. When evaluating an operator,
+a CESQL engine MUST attempt to cast the operands to the specified types.
 
 #### 3.4.1. Unary operators
 
@@ -229,34 +258,29 @@ Corresponds to the syntactic rule `unary-operation`:
 
 Corresponds to the syntactic rule `binary-operation`:
 
-| Definition                              | Semantics                                                                                                  |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `x = y: Boolean x Boolean -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                      |
-| `x != y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x <> y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x AND y: Boolean x Boolean -> Boolean` | Returns the logical and of `x` and `y`                                                                     |
-| `x OR y: Boolean x Boolean -> Boolean`  | Returns the logical or of `x` and `y`                                                                      |
-| `x XOR y: Boolean x Boolean -> Boolean` | Returns the logical xor of `x` and `y`                                                                     |
-| `x = y: Integer x Integer -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                      |
-| `x != y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x <> y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                      |
-| `x < y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly less than `y`                                                            |
-| `x <= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is less than or equal to `y`                                                         |
-| `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is strictly greater than `y`                                                         |
-| `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater or equal to `y`                                                           |
-| `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                                         |
-| `x / y: Integer x Integer -> Integer`   | Returns the truncated division of `x` and `y`. Returns `0` and raises an error if `y = 0`                  |
-| `x % y: Integer x Integer -> Integer`   | Returns the remainder of the truncated division of `x` and `y`. Returns `0` and raises an error if `y = 0` |
-| `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                             |
-| `x - y: Integer x Integer -> Integer`   | Returns the difference of `x` and `y`                                                                      |
-| `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal                                                      |
-| `x != y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                      |
-| `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)`                                                                                      |
-
-The modulo and divisions MUST follow the [truncated divisions definition][modulo-operation-wiki], that is:
-
-- The remainder of the modulo MUST have the same sign as the dividend.
-- The quotient MUST be rounded towards zero, _truncating_ the decimal part.
+| Definition                              | Semantics                                                                                                                          |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `x = y: Boolean x Boolean -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                                              |
+| `x != y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x <> y: Boolean x Boolean -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x AND y: Boolean x Boolean -> Boolean` | Returns the logical and of `x` and `y`                                                                                             |
+| `x OR y: Boolean x Boolean -> Boolean`  | Returns the logical or of `x` and `y`                                                                                              |
+| `x XOR y: Boolean x Boolean -> Boolean` | Returns the logical xor of `x` and `y`                                                                                             |
+| `x = y: Integer x Integer -> Boolean`   | Returns `true` if the values of `x` and `y` are equal                                                                              |
+| `x != y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x <> y: Integer x Integer -> Boolean`  | Same as `NOT (x = y)`                                                                                                              |
+| `x < y: Integer x Integer -> Boolean`   | Returns `true` if `x` is less than `y`                                                                                             |
+| `x <= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is less than or equal to `y`                                                                                 |
+| `x > y: Integer x Integer -> Boolean`   | Returns `true` if `x` is greater than `y`                                                                                          |
+| `x >= y: Integer x Integer -> Boolean`  | Returns `true` if `x` is greater than or equal to `y`                                                                              |
+| `x * y: Integer x Integer -> Integer`   | Returns the product of `x` and `y`                                                                                                 |
+| `x / y: Integer x Integer -> Integer`   | Returns the result of dividing `x` by `y`, rounded towards `0` to obtain an integer. Returns `0` and a _MathError_ if `y = 0`      |
+| `x % y: Integer x Integer -> Integer`   | Returns the remainder of `x` divided by `y`, where the result has the same sign as `x`. Returns `0` and a _MathError_ if `y = 0`   |
+| `x + y: Integer x Integer -> Integer`   | Returns the sum of `x` and `y`                                                                                                     |
+| `x - y: Integer x Integer -> Integer`   | Returns the value of `y` subtracted from `x`                                                                                       |
+| `x = y: String x String -> Boolean`     | Returns `true` if the values of `x` and `y` are equal (case sensitive)                                                             |
+| `x != y: String x String -> Boolean`    | Same as `NOT (x = y)` (case sensitive)                                                                                             |
+| `x <> y: String x String -> Boolean`    | Same as `NOT (x = y)` (case sensitive)                                                                                             |
 
 The AND and OR operators MUST be short-circuit evaluated. This means that whenever the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated.
 Similarly, whenever the left operand of the OR operation evaluates to `true`, the right operand MUST NOT be evaluated.
@@ -272,8 +296,9 @@ The pattern of the `LIKE` operator MUST be a string literal, and can contain:
 
 - `%` represents zero, one, or multiple characters
 - `_` represents a single character
+- Any other character, representing exactly that character (case sensitive)
 
-For example, the pattern `_b*` will accept values `ab`, `abc`, `abcd1` but won't accept values `b` or `acd`.
+For example, the pattern `_b*` will accept values `ab`, `abc`, `abcd1` but won't accept values `b` or `acd` or `aBc`.
 
 Both `%` and `_` can be escaped with `\`, in order to be matched literally. For example, the pattern `abc\%` will match
 `abc%` but won't match `abcd`.
@@ -293,36 +318,43 @@ assumed valid, e.g. `EXISTS id` MUST always return `true`.
 
 #### 3.4.5. In operator
 
-| Definition                                             | Semantics                                                                  |
-| ------------------------------------------------------ | -------------------------------------------------------------------------- |
-| `x IN (y1, y2, ...): Any x Any^n -> Boolean`     | Returns `true` if `x` is equal to an element in the _Set_ of `yN` elements |
-| `x NOT IN (y1, y2, ...): Any x Any^n -> Boolean` | Same as `NOT (x IN set)`                                                   |
+| Definition                                              | Semantics                                                                  |
+| ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `x IN (y1, y2, ...): Any x Any^n -> Boolean`, n > 0     | Returns `true` if `x` is equal to an element in the _Set_ of `yN` elements |
+| `x NOT IN (y1, y2, ...): Any x Any^n -> Boolean`, n > 0 | Same as `NOT (x IN set)`                                                   |
 
 The matching is done using the same semantics of the equal `=` operator, but using `x` type as the target type for the implicit type casting.
 
 ### 3.5. Functions
 
-CESQL provides the concept of function, and defines some built-in that every engine MUST implement. An engine SHOULD also allow users to define their custom functions.
+CESQL provides the concept of function, and defines some built-in functions that every engine MUST implement. An engine SHOULD also allow users to define their custom functions, however, the mechanism
+by which this is done is out of scope of this specification.
 
 A function is identified by its name, its parameters and the return value. A function can be variadic, that is the arity is not fixed.
 
 CESQL allows overloading, that is the engine MUST be able to distinguish between two functions defined with the same name but different arity.
 Because of implicit casting, no functions with the same name and same arity but different types are allowed.
 
-An overload on a variadic function is allowed only if the number of initial fixed arguments is greater than the maximum arity for that particular function name. Only one variadic overload is allowed.
+A function name MAY have at most one variadic overload definition and only if the number of initial fixed arguments is greater than the maximum arity
+of all other function definitions for that function name.
 
-For example, the following definitions are valid:
+For example, the following set of definitions are valid and will all be allowed by the rules:
 
 * `ABC(x): String -> Integer`: Unary function (arity 1). 
 * `ABC(x, y): String x String -> Integer`: Binary function (arity 2).
 * `ABC(x, y, z, ...): String x String x String x String^n -> Integer`: n-ary function (variable arity), but the initial fixed arguments are at least 3.
 
-But the following are invalid, so the engine MUST reject them:
+But the following set is invalid, so the engine MUST reject them:
 
 * `ABC(x...): String^n -> Integer`: n-ary function (variable arity), but there are no initial fixed arguments.
 * `ABC(x, y, z): String x String x String -> Integer`: Ternary function (arity 3).
 
-When a function invocation cannot be dispatched, the return value is undefined.
+These two are incompatible because the n-ary function `ABC(x...)` can not be distinguished in any way
+from the ternary function `ABC(x, y, z)` if the n-ary function were called with three arguments.
+In order for these definitions to be valid, the n-ary function would need to have at least 4 fixed
+arguments.
+
+When a function invocation cannot be dispatched, the return value is `false`, and a _MissingFunctionError_ is also returned.
 
 The following tables show the built-in functions that MUST be supported by a CESQL evaluator.
 
@@ -331,26 +363,47 @@ The following tables show the built-in functions that MUST be supported by a CES
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `LENGTH(x): String -> Integer`                             | Returns the character length of the String `x`.                                                                                                                                                                            |
-| `CONCAT(x1, x2, ...): String^n -> String`                  | Returns the concatenation of `x1` up to `xN`.                                                                                                                                                                              |
-| `CONCAT_WS(delimiter, x1, x2, ...): String x String^n -> String`                  | Returns the concatenation of `x1` up to `xN`, using the `delimiter`.                                                                                                                                |
+| `CONCAT(x1, x2, ...): String^n -> String`, n >= 0                  | Returns the concatenation of `x1` up to `xN`.                                                                                                                                                                              |
+| `CONCAT_WS(delimiter, x1, x2, ...): String x String^n -> String`, n >= 0                  | Returns the concatenation of `x1` up to `xN`, using the `delimiter` between each string, but not before `x1` or after `xN`.                                                                         |
 | `LOWER(x): String -> String`                               | Returns `x` in lowercase.                                                                                                                                                                                                  |
 | `UPPER(x): String -> String`                               | Returns `x` in uppercase.                                                                                                                                                                                                  |
-| `TRIM(x): String -> String`                                | Returns `x` with leading and trailing trimmed whitespaces.                                                                                                                                                                 |
-| `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                 |
-| `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and raises an error.                                                                                   |
-| `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)`. |
-| `SUBSTRING(x, pos, len): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `pos` (included) of length `len`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. If `len` is greater than the maximum substring starting at `pos`, then return the maximum substring. Returns the empty string and raises an error if `pos > LENGTH(x) OR pos < -LENGTH(x)` or if `len` is negative. |
+| `TRIM(x): String -> String`                                |Returns `x` with leading and trailing whitespaces (as defined by unicode) trimmed. This does not remove any characters which are not unicode whitespace characters, such as control characters.                             |
+| `LEFT(x, y): String x Integer -> String`                   | Returns a new string with the first `y` characters of `x`, or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and a _FunctionEvaluationError_.                                                                     |
+| `RIGHT(x, y): String x Integer -> String`                  | Returns a new string with the last `y` characters of `x` or returns `x` if `LENGTH(x) <= y`. Returns `x` if `y < 0` and a _FunctionEvaluationError_.                                                                       |
+| `SUBSTRING(x, pos): String x Integer x Integer -> String`  | Returns the substring of `x` starting from index `pos` (included) up to the end of `x`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. Returns the empty string and a _FunctionEvaluationError_ if `pos > LENGTH(x) OR pos < -LENGTH(x)`. |
+| `SUBSTRING(x, pos, len): String x Integer x Integer -> String` | Returns the substring of `x` starting from index `pos` (included) of length `len`. Characters' index starts from `1`. If `pos` is negative, the beginning of the substring is `pos` characters from the end of the string. If `pos` is 0, then returns the empty string. If `len` is greater than the maximum substring starting at `pos`, then return the maximum substring. Returns the empty string and a _FunctionEvaluationError_ if `pos > LENGTH(x) OR pos < -LENGTH(x)` or if `len` is negative. |
 
 #### 3.5.2. Built-in Math functions
 
 | Definition                                                 | Semantics                                                                                                                                                                                                                  |
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ABS(x): Integer -> Integer` | Returns the absolute value of `x` |
+| `ABS(x): Integer -> Integer` | Returns the absolute value of `x`. If the value of `x` is `-2147483648` (the most negative 32 bit integer value possible), then this returns `2147483647` as well as a _MathError_. |
+
+#### 3.5.3 Function Errors
+
+As specified in 3.3, in the event of an error a function MUST still return a valid return value for its defined return type.
+A CESQL engine MUST guarantee that all built-in functions comply with this. For user defined functions, if they return one or more errors
+and fail to provide a valid return value for their return type the CESQL engine MUST return the zero value for the return type of the
+function, along with a _FunctionEvaluationError_.
 
 ### 3.6. Evaluation of the expression
 
-Operators MUST be evaluated in order, where the parenthesized expressions have the highest priority over all the other
-operators.
+Operators and functions MUST be evaluated in order of precedence, and MUST be evaluated left to right when the precedence is equal. The order of precedence is as follows:
+
+1. Function invocations
+1. Unary operators
+   1. NOT unary operator
+   1. `-` unary operator
+1. LIKE operator
+1. EXISTS operator
+1. IN operator
+1. Binary operators
+   1. `*`, `/`, `%` binary operators
+   1. `+`, `-` binary operators
+   1. `=`, `!=`, `<>`, `>=`, `<=`, `>`, `<` binary operators
+   1. AND, OR, XOR binary operators
+1. Subexpressions
+1. Attributes and literal values
 
 AND and OR operations MUST be short-circuit evaluated. When the left operand of the AND operation evaluates to `false`, the right operand MUST NOT be evaluated. Similarly, when the 
 left operand of the OR operation evalues to `true`, the right operand MUST NOT be evaluated.
@@ -388,26 +441,26 @@ will evaluate to `false`.
 
 When the argument types of an operator/function invocation don't match the signature of the operator/function being invoked, the CESQL engine MUST try to perform an implicit cast.
 
-This section defines an **ambiguous** operator/function as an operator/function that is overloaded with another
-operator/function definition with same symbol/name and arity but different parameter types.
+This section defines an **ambiguous** operator as an operator that is overloaded with another
+operator definition with same symbol/name and arity but different parameter types. Note: a function
+can not be ambiguous as it is not allowed for two functions to have the same arity and name.
 
 A CESQL engine MUST apply the following implicit casting rules in order:
 
 1. If the operator/function is unary (argument `x`):
    1. If it's not ambiguous, cast `x` to the parameter type.
-   1. If it's ambiguous, raise an error and the cast result is undefined.
+   1. If it's ambiguous, raise a _CastError_ and the cast result is `false`.
 1. If the operator is binary (left operand `x` and right operand `y`):
    1. If it's not ambiguous, cast `x` and `y` to the corresponding parameter types.
    1. If it's ambiguous, use the `y` type to search, in the set of ambiguous operators, every definition of the operator
       using the `y` type as the right parameter type:
       1. If such operator definition exists and is unique, cast `x` to the type of the left parameter
-      1. Otherwise, raise an error and the cast results are undefined
+      1. Otherwise, raise a _CastError_ and the result is `false`
 1. If the function is n-ary with `n > 1`:
-   1. If it's not ambiguous, cast all the arguments to the corresponding parameter types.
-   1. If it's ambiguous, raise an error and the cast results are undefined.
+   1. Cast all the arguments to the corresponding parameter types.
 1. If the operator is n-ary with `n > 2`:
    1. If it's not ambiguous, cast all the operands to the target type.
-   1. If it's ambiguous, raise an error and the cast results are undefined.
+   1. If it's ambiguous, raise a _CastError_ and the cast result is `false`.
 
 For the `IN` operator, a special rule is defined: the left argument MUST be used as the target type to eventually cast the set elements.
 
@@ -446,7 +499,7 @@ Because CESQL expressions are total, they always define a return value, included
 
 When evaluating an expression, the evaluator can operate in two _modes_, in relation to error handling:
 
-* Fail fast mode: When an error is triggered, the evaluation is interrupted and returns the error, without any result.
+* Fail fast mode: When an error is triggered, the evaluation is interrupted and returns the error, with the zero value for the return type of the expression.
 * Complete evaluation mode: When an error is triggered, the evaluation is continued, and the evaluation of the expression returns both the result and the error(s).
 
 Choosing which evaluation mode to adopt and implement depends on the use case.
@@ -503,3 +556,4 @@ hop < ttl
 [subscriptions-filter-dialect]: ../subscriptions/spec.md#3241-filter-dialects
 [ebnf-xml-spec]: https://www.w3.org/TR/REC-xml/#sec-notation
 [modulo-operation-wiki]: https://en.wikipedia.org/wiki/Modulo_operation
+[iso-9075]: https://en.wikipedia.org/wiki/ISO/IEC_9075
