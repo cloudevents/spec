@@ -56,7 +56,7 @@ producer, or in an intermediary, and it can be implemented using any technology 
 The CloudEvents Expression Language assumes the input always includes, but is not limited to, a single valid and
 type-checked CloudEvent instance. An expression MUST NOT mutate the value of the input CloudEvent instance, nor any of
 the other input values. The evaluation of an expression observes the concept of [referential
-transparency][referential-transparency-wiki]. This means that any part of an expression can be replaced with it's output
+transparency][referential-transparency-wiki]. This means that any part of an expression can be replaced with its output
 value and the overall result of the expression will be unchanged. The primary output of a CESQL expression evaluation is always a _boolean_, an _integer_ or a _string_.
 The secondary output of a CESQL expression evaluation is a set of errors which occurred during evaluation. This set MAY be empty, indicating that no
 error occurred during execution of the expression. The values used by CESQL engines to represent a set of errors (empty or not) is out of the scope
@@ -377,7 +377,7 @@ The following tables show the built-in functions that MUST be supported by a CES
 
 #### 3.5.3 Function Errors
 
-As specified in 3.3, in the event of an error a function MUST still return a valid return value for it's defined return type.
+As specified in 3.3, in the event of an error a function MUST still return a valid return value for its defined return type.
 A CESQL engine MUST guarantee that all built-in functions comply with this. For user defined functions, if they return one or more errors
 and fail to provide a valid return value for their return type the CESQL engine MUST return the zero value for the return type of the
 function, along with a _FunctionEvaluationError_.
