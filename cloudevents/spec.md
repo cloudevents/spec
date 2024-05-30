@@ -13,7 +13,7 @@ data.
 - [Event Data](#event-data)
 - [Size Limits](#size-limits)
 - [Privacy & Security](#privacy-and-security)
-- [Example](#example)
+- [Example](#examples)
 
 ## Overview
 
