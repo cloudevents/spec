@@ -205,11 +205,8 @@ be used in the `IN` operator.
 Each CloudEvent context attribute and extension MUST be addressable from an expression using its identifier, as defined
 by the spec. For example, using `id` in an expression will address the CloudEvent [id attribute][ce-id-attribute].
 
-Unless the value of the attribute or extension is one of the 3 primitive CESQL types or otherwise specified, 
-every attribute and extension MUST be represented by the _String_ type as its initial type.
-If the attribute or extension is one of the 3 primitive CESQL types, the attribute or extension
-MUST be represented by its initial type. Through implicit type casting, the user can convert the 
-addressed value instances to the necessary types for an operator or function.
+If the value of the attribute or extension is not one of the primitive CESQL types, it MUST be represented
+by the _String_ type.
 
 When addressing an attribute not included in the input event, the subexpression referencing the missing attribute MUST evaluate to the zero value for the return type of the subexpression,
 along with a _MissingAttributeError_.
