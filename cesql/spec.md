@@ -388,16 +388,16 @@ Operators and functions MUST be evaluated in order of precedence, and MUST be ev
 
 1. Function invocations
 1. Unary operators
-  1. NOT unary operator
-  1. `-` unary operator
+   1. NOT unary operator
+   1. `-` unary operator
 1. LIKE operator
 1. EXISTS operator
 1. IN operator
 1. Binary operators
-  1. `*`, `/`, `%` binary operators
-  1. `+`, `-` binary operators
-  1. `=`, `!=`, `<>`, `>=`, `<=`, `>`, `<` binary operators
-  1. AND, OR, XOR binary operators
+   1. `*`, `/`, `%` binary operators
+   1. `+`, `-` binary operators
+   1. `=`, `!=`, `<>`, `>=`, `<=`, `>`, `<` binary operators
+   1. AND, OR, XOR binary operators
 1. Subexpressions
 1. Attributes and literal values
 
