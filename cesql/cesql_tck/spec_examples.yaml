@@ -62,3 +62,16 @@ tests:
     eventOverrides:
       subject: Francesco Guardiani
     result: true
+
+  - name: Missing attribute (1)
+    expression: true AND (missing = "")
+    result: false
+    error: missingAttribute
+  - name: Missing attribute (2)
+    expression: missing * 5
+    result: 0
+    error: missingAttribute
+  - name: Missing attribute (3)
+    expression: 1 / missing
+    result: 0
+    error: missingAttribute

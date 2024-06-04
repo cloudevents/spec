@@ -21,6 +21,14 @@ tests:
     expression: 5 % 0
     result: 0
     error: math
+  - name: Missing attribute in division results in missing attribute error, not divide by 0 error
+    expression: missing / 0
+    result: 0
+    error: missingAttribute
+  - name: Missing attribute in modulo results in missing attribute error, not divide by 0 error
+    expression: missing % 0
+    result: 0
+    error: missingAttribute
 
   - name: Positive plus positive number
     expression: 4 + 1

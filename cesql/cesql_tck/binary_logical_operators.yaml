@@ -18,6 +18,7 @@ tests:
   - name: AND operator is NOT short circuit evaluated when the first operand evaluates to true
     expression: "true and (1 != 1 / 0)"
     error: math
+    result: false
 
   - name: False or false
     expression: FALSE OR FALSE
@@ -37,6 +38,7 @@ tests:
   - name: OR operator is NOT short circuit evaluated when the first operand evaluates to false
     expression: "false or (1 != 1 / 0)"
     error: math
+    result: false
 
   - name: False xor false
     expression: FALSE XOR FALSE

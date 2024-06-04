@@ -12,10 +12,12 @@ tests:
   - name: Cast identity -1
     expression: INT(-1)
     result: -1
-  - name: Invalid cast from boolean to int
+  - name: Cast from TRUE to int
     expression: INT(TRUE)
+    result: 1
+  - name: Cast from FALSE to int
+    expression: INT(FALSE)
     result: 0
-    error: cast
   - name: Invalid cast from string to int
     expression: INT('ABC')
     result: 0
@@ -37,10 +39,18 @@ tests:
     expression: BOOL('ABC')
     result: false
     error: cast
-  - name: Invalid cast from int to boolean
+  - name: Cast from 1 to boolean
     expression: BOOL(1)
+    result: true
+  - name: Cast from 0 to boolean
+    expression: BOOL(0)
     result: false
-    error: cast
+  - name: Cast from 100 to boolean
+    expression: BOOL(100)
+    result: true
+  - name: Cast from -50 to boolean
+    expression: BOOL(-50)
+    result: true
 
   - name: Cast TRUE to string
     expression: STRING(TRUE)
@@ -87,3 +97,4 @@ tests:
   - name: IS_STRING does not exists
     expression: IS_STRING('ABC')
     error: missingFunction
+    result: false

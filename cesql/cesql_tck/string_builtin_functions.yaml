@@ -35,6 +35,7 @@ tests:
   - name: CONCAT_WS without arguments doesn't exist
     expression: CONCAT_WS()
     error: missingFunction
+    result: false
 
   - name: LOWER (1)
     expression: "LOWER('ABC')"
