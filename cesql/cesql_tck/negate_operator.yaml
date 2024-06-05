@@ -21,4 +21,4 @@ tests:
   - name: Minus with missing attribute
     expression: -missing
     result: 0
-    error: match
+    error: missingAttribute
