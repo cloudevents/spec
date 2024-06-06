@@ -9,3 +9,8 @@ tests:
   - name: ABS (3)
     expression: ABS(0)
     result: 0
+  - name: ABS overflow
+    expression: ABS(-2147483648)
+    result: 2147483647
+    error: math
+

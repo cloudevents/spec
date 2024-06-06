@@ -25,3 +25,5 @@ The `error` values could be any of the following:
 * `cast`: Casting error
 * `missingFunction`: Addressed a missing function
 * `functionEvaluation`: Error while evaluating a function
+* `missingAttribute`: Error due to a missing attribute
+* `generic`: A generic error

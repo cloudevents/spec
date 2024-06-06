@@ -123,3 +123,7 @@ tests:
     error: parse
     eventOverrides:
       x: "123"
+  - name: Missing attribute returns empty string
+    expression: "missing LIKE 'missing'"
+    result: false
+    error: missingAttribute

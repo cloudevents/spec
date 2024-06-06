@@ -18,6 +18,10 @@ tests:
   - name: abc is equal to abc
     expression: "'abc' = 'abc'"
     result: true
+  - name: Equals operator returns false when encountering a missing attribute
+    expression: missing = 2
+    result: false
+    error: missingAttribute
 
   - name: True is not equal to false
     expression: TRUE != FALSE
@@ -37,6 +41,10 @@ tests:
   - name: abc is not equal to abc
     expression: "'abc' != 'abc'"
     result: false
+  - name: Not equal operator returns false when encountering a missing attribute
+    expression: missing != 2
+    result: false
+    error: missingAttribute
 
   - name: True is not equal to false (diamond operator)
     expression: TRUE <> FALSE
@@ -56,6 +64,10 @@ tests:
   - name: abc is not equal to abc (diamond operator)
     expression: "'abc' <> 'abc'"
     result: false
+  - name: Diamond operator returns false when encountering a missing attribute
+    expression: missing <> 2
+    result: false
+    error: missingAttribute
 
   - name: 1 is less or equal than 2
     expression: 2 <= 2
@@ -81,6 +93,10 @@ tests:
   - name: 2 is greater than 2
     expression: 2 > 2
     result: false
+  - name: Less than or equal operator returns false when encountering a missing attribute
+    expression: missing <= 2
+    result: false
+    error: missingAttribute
 
   - name: implicit casting with string as right type
     expression: "true = 'TRUE'"

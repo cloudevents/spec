@@ -14,7 +14,11 @@ tests:
     expression: --'10'
     result: 10
 
-  - name: Invalid boolean cast
+  - name: Minus with boolean cast
     expression: -TRUE
+    result: -1
+
+  - name: Minus with missing attribute
+    expression: -missing
     result: 0
-    error: cast
+    error: missingAttribute

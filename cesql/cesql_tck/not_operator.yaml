@@ -18,3 +18,8 @@ tests:
     expression: NOT 10
     result: true
     error: cast
+
+  - name: Not missing attribute
+    expression: NOT missing
+    result: false
+    error: missingAttribute
