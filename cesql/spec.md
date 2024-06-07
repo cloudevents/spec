@@ -1,4 +1,4 @@
-# CloudEvents SQL Expression Language - Version 0.1-wip
+# CloudEvents SQL Expression Language - Version 1.0
 
 ## Abstract
 
