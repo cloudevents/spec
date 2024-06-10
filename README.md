@@ -7,6 +7,8 @@
 [![CLOMonitor](https://img.shields.io/endpoint?url=https://clomonitor.io/api/projects/cncf/cloudevents/badge)](https://clomonitor.io/projects/cncf/cloudevents)
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/6770/badge)](https://bestpractices.coreinfrastructure.org/projects/6770)
 
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/cloudevents/spec/badge)](https://api.securityscorecards.dev/projects/github.com/cloudevents/spec)
+
 Events are everywhere. However, event producers tend to describe events
 differently.
 
