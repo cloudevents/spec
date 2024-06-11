@@ -18,6 +18,7 @@ tests:
   - name: Prefix filter on missing string extension
     expression: "myext LIKE 'custom%'"
     result: false
+    error: missingAttribute
 
   - name: Suffix filter (1)
     expression: "type like '%.error'"
@@ -37,6 +38,7 @@ tests:
   - name: Suffix filter on missing string extension
     expression: "myext LIKE '%ext'"
     result: false
+    error: missingAttribute
 
   - name: Exact filter (1)
     expression: "id = 'myId'"
@@ -56,6 +58,7 @@ tests:
   - name: Exact filter on missing string extension
     expression: "myext = 'customext'"
     result: false
+    error: missingAttribute
 
   - name: Prefix filter AND Suffix filter (1)
     expression: "id LIKE 'my%' AND source LIKE '%.ca'"
@@ -80,6 +83,7 @@ tests:
     result: false
     eventOverrides:
       type: "example.event.type"
+    error: missingAttribute
 
   - name: Prefix OR Suffix filter (1)
     expression: "id LIKE 'my%' OR source LIKE '%.ca'"
@@ -162,6 +166,7 @@ tests:
       id: "myId" 
       type: "example.event.warning"
       source: "http://localhost.localdomain"
+    error: missingAttribute
 
 
 

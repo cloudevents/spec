@@ -58,11 +58,6 @@ tests:
   - name: Implicit casting, with both values string
     expression: "'5' + '3'"
     result: 8
-  - name: Implicit casting, with invalid boolean value
+  - name: Implicit casting, with boolean value
     expression: "5 + TRUE"
-    result: 5
-    error: cast
-  - name: Implicit casting, with invalid string value
-    expression: "'5avc4' + 10"
-    result: 10
-    error: cast
+    result: 6
