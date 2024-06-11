@@ -70,7 +70,7 @@ FALSE: 'FALSE';
 
 DQUOTED_STRING_LITERAL:                      DQUOTA_STRING;
 SQUOTED_STRING_LITERAL:                      SQUOTA_STRING;
-INTEGER_LITERAL:                             INT_DIGIT+;
+INTEGER_LITERAL:                             ( '+' | '-' )? INT_DIGIT+;
 
 // Identifiers
 
