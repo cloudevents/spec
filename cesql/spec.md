@@ -1,4 +1,4 @@
-# CloudEvents SQL Expression Language - Version 0.1-wip
+# CloudEvents SQL Expression Language - Version 1.0
 
 ## Abstract
 
@@ -141,7 +141,7 @@ bit signed integer values.
 
 ```ebnf
 digit ::= [0-9]
-integer-literal ::= ( '+' | '-' ) digit+
+integer-literal ::= ( '+' | '-' )? digit+
 
 boolean-literal ::= "true" | "false" (* Case insensitive *)
 
