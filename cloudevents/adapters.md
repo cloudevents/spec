@@ -10,5 +10,7 @@ implementations of these adapters, the following documents show the proposed
 algorithms that should be used:
 
 - [AWS S3](adapters/aws-s3.md)
+- [AWS SNS](adapters/aws-sns.md)
+- [CouchDB](adapters/couchdb.md)
 - [GitHub](adapters/github.md)
 - [GitLab](adapters/gitlab.md)
