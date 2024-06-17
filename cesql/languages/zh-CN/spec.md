@@ -1,4 +1,4 @@
-# CloudEvents SQL Expression Language - Version 1.0
+# CloudEvents SQL Expression Language - Version 1.0.0
 
 本文档尚未被翻译，请先阅读英文[原版文档](../../spec.md) 。
 
