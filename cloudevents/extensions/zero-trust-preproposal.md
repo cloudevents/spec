@@ -14,7 +14,7 @@ The primary focus will be on where metadata can be stored, such as headers in th
 
 AMQP supports metadata similar to how HTTP handles this. For AMQP, headers live within the message itself. These headers live within the AMQP message meaning that the headers are sent along with the payload, while HTTP sends headers prior to the payload being sent.
 
-Message properties may look something like this and is part of the content header frame where a frame is how AMQP partitions a request over the wire:
+Message properties MAY look something like this and is part of the content header frame where a frame is how AMQP partitions a request over the wire:
 
 ```
 {
@@ -41,7 +41,7 @@ All frame are sent together in AMQP, while headers are sent separately from the 
 
 ### HTTP
 
-HTTP supports a metadata format known as [headers](https://datatracker.ietf.org/doc/html/rfc2616#section-4.2). The HTTP RFC does not specify a limit for header sizes, but it is important to call out that implementing web servers may have some limits set, at least as some default. For example, Apache HTTP server defaults to a max header size of 8KB.
+HTTP supports a metadata format known as [headers](https://datatracker.ietf.org/doc/html/rfc2616#section-4.2). The HTTP RFC does not specify a limit for header sizes, but it is important to call out that implementing web servers MAY have some limits set, at least as some default. For example, Apache HTTP server defaults to a max header size of 8KB.
 
 ```
 > GET /data HTTP/1.1
@@ -91,7 +91,7 @@ Regardless of how the headers are sent, it is important that custom metadata can
 
 Headers are a concept within Kafka since v0.11.0, and I’d argue a little more powerful than HTTP headers. The biggest benefit is that headers in Kafka are actually byte arrays. Meaning header values allow for more complex encodings, unlike HTTP where header values are generally textual.
 
-However, because of the need to encode these headers a certain way, the producer and consumer must agree on some encoding for them to understand the contents of the headers.
+However, because of the need to encode these headers a certain way, the producer and consumer MUST agree on some encoding for them to understand the contents of the headers.
 
 It is important to note that since Kafka is architected as a producer and consumer messaging service, any consumer ingesting message will see the contents of the headers. I do not think this affects zero trust, but it is something to think about when we write the technical specification for zero trust.
 
@@ -140,12 +140,12 @@ It is important to note that the format of variable headers is dependent on the 
 * UNSUBACK
 
 
-Note that the `PUBLISH` packet type may include a variable header ***only if*** the quality of service (QoS) is greater than zero. QoS is the level of guarantee that a message has been sent and received with QoS of zero makes no guarantees on whether the receiver has received the message.
+Note that the `PUBLISH` packet type MAY include a variable header ***only if*** the quality of service (QoS) is greater than zero. QoS is the level of guarantee that a message has been sent and received with QoS of zero makes no guarantees on whether the receiver has received the message.
 PUBLISH
 
 ### NATS
 
-Out of all protocols, NATS limits its header encoding to ASCII text, which should not be an issue for zero trust, but wanted to call it out. Another key concept in NATS is that messages are asynchronous.
+Out of all protocols, NATS limits its header encoding to ASCII text, which SHOULD NOT be an issue for zero trust, but wanted to call it out. Another key concept in NATS is that messages are asynchronous.
 
 ```
 Subject: user.login
@@ -163,7 +163,7 @@ Payload:
 
 WebSockets are a high-level abstraction of the TCP protocol. They utilize HTTP to first provide the handshake and then upgrade to a full-duplex TCP connection. This means that metadata is primarily restricted to what can be sent during the initial handshake. Consequently, WebSockets are more restrictive in terms of metadata transmission compared to other protocols.
 
-This may mean we have to handle web sockets slightly differently with whatever zero trust approach we take.
+This MAY mean we have to handle web sockets slightly differently with whatever zero trust approach we take.
 
 ## Other
 
@@ -180,7 +180,7 @@ Webhooks are a high-level abstraction built on top of the HTTP protocol. They al
 ## Summary
 
 We have explored each wire protocol, and while some have more limitations than
-others, cloudevents should be able to support some form of zero trust. The
+others, cloudevents SHOULD be able to support some form of zero trust. The
 biggest limitation is MQTT due to only supporting header-like concepts in later
 versions. All other limitations are manageable, like NATS' and HTTP's ASCII
 only support.
