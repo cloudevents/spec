@@ -627,7 +627,14 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 }
 ```
 
-### Example of a CloudEvent with encrypted data
+### Example of a CloudEvent with JOSE encrypted data
+
+For JOSE spec please see https://datatracker.ietf.org/doc/rfc7516/
+
+This example does not imply that CloudEvents has some inherent security features.
+The example shows how data can be encrypted thus achieving confidentiality.
+Security features are intentionally out-of-scope in this spec.
+The choice of encryption method and format is domain specific.
 
 The following example shows a CloudEvent serialized as JSON with line-breaks
 for display purposes only:
@@ -652,5 +659,34 @@ for display purposes only:
        5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oMo4vpzs9tX_EFShS8iB7j6ji
        SdiwkIr3ajwQzaBtQD_A.
        XFBoMYUZodetZdvTiFvSkQ"
+}
+```
+
+
+### Example of a CloudEvent with xmlenc encrypted data
+
+For xmlenc spec please see [xmlenc](https://www.w3.org/TR/xmlenc-core1/)
+
+This example does not imply that CloudEvents has some inherent security features.
+The example shows how data can be encrypted thus achieving confidentiality.
+Security features are intentionally out-of-scope in this spec.
+The choice of encryption method and format is domain specific.
+
+The following example shows a CloudEvent serialized as xmlenc with line-breaks
+for display purposes only:
+
+```
+{
+    "specversion" : "1.0",
+    "type" : "PAYMENT.AUTHORIZATION.CREATED",
+    "source" : "https://paymentprocessor.example.com/",
+    "subject" : "c7bbb040-d458-4d47-82a8-45413f9f2d33",
+    "id" : "a978702e-ef48-4032-ac18-a057e0104076",
+    "time" : "2024-05-30T17:31:00Z",
+    "datacontenttype" : "application/xenc+xml",
+    "data" : "<EncryptedData xmlns=\"http://www.w3.org/2001/04/xmlenc#\"
+              MimeType=\"text/xml\">
+              <CipherData><CipherValue>A23B45C56</CipherValue></CipherData>
+              </EncryptedData>"
 }
 ```
