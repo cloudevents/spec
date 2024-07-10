@@ -105,7 +105,3 @@ Contributions do not constitute an official endorsement.
 # Z
 - Cathy Hong Zhang - [@cathyhongzhang](https://github.com/cathyhongzhang)
 - Ryan Zhang - [@nerdyyatrice](https://github.com/nerdyyatrice)
-  
-
-  
-  
