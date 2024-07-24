@@ -1,11 +1,11 @@
 # GitHub CloudEvents Adapter
 
 This document describes how to convert
-[GitHub webhook events](https://developer.github.com/v3/activity/events/types/)
+[GitHub webhook events](https://docs.github.com/en/webhooks/webhook-events-and-payloads)
 into a CloudEvents.
 
 GitHub webhook event documentation:
-https://developer.github.com/v3/activity/events/types/
+https://docs.github.com/en/webhooks/webhook-events-and-payloads
 
 Each section below describes how to determine the CloudEvents attributes
 based on the specified event.
@@ -130,6 +130,21 @@ based on the specified event.
 | `time`                | Current time                                   |
 | `data`                | Content of HTTP request body                   |
 
+### CustomPropertyValuesEvent
+
+| CloudEvents Attribute | Value                                                 |
+| :-------------------- | :---------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                 |
+| `source`              | "repository.url" value                                |
+| `specversion`         | `1.0`                                                 |
+| `type`                | `com.github.custom_property_values.` + "action" value |
+| `datacontentencoding` | Omit                                                  |
+| `datacontenttype`     | `application/json`                                    |
+| `dataschema`          | Omit                                                  |
+| `subject`             | Omit                                                  |
+| `time`                | Current time                                          |
+| `data`                | Content of HTTP request body                          |
+
 ### DeleteEvent
 
 | CloudEvents Attribute | Value                                   |
@@ -144,6 +159,21 @@ based on the specified event.
 | `subject`             | "ref" value                             |
 | `time`                | Current time                            |
 | `data`                | Content of HTTP request body            |
+
+### DependabotAlertEvent
+
+| CloudEvents Attribute | Value                                           |
+| :-------------------- | :---------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value           |
+| `source`              | "repository.url" value                          |
+| `specversion`         | `1.0`                                           |
+| `type`                | `com.github.dependabot_alert.` + "action" value |
+| `datacontentencoding` | Omit                                            |
+| `datacontenttype`     | `application/json`                              |
+| `dataschema`          | Omit                                            |
+| `subject`             | "alert.id" value                                |
+| `time`                | Current time                                    |
+| `data`                | Content of HTTP request body                    |
 
 ### DeployKeyEvent
 
@@ -175,6 +205,36 @@ based on the specified event.
 | `time`                | "deployment.updated_at" value         |
 | `data`                | Content of HTTP request body          |
 
+### DeploymentProtectionRuleEvent
+
+| CloudEvents Attribute | Value                                                     |
+| :-------------------- | :-------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                     |
+| `source`              | "deployment.url" value                                    |
+| `specversion`         | `1.0`                                                     |
+| `type`                | `com.github.deployment_protection_rule.` + "action" value |
+| `datacontentencoding` | Omit                                                      |
+| `datacontenttype`     | `application/json`                                        |
+| `dataschema`          | Omit                                                      |
+| `subject`             | "deployment.id" value if exists                           |
+| `time`                | Current time                                              |
+| `data`                | Content of HTTP request body                              |
+
+### DeploymentReviewEvent
+
+| CloudEvents Attribute | Value                                            |
+| :-------------------- | :----------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value            |
+| `source`              | "deployment.url" value                           |
+| `specversion`         | `1.0`                                            |
+| `type`                | `com.github.deployment_review.` + "action" value |
+| `datacontentencoding` | Omit                                             |
+| `datacontenttype`     | `application/json`                               |
+| `dataschema`          | Omit                                             |
+| `subject`             | "workflow_run.id" value                          |
+| `time`                | Current time                                     |
+| `data`                | Content of HTTP request body                     |
+
 ### DeploymentStatusEvent
 
 | CloudEvents Attribute | Value                                                             |
@@ -189,6 +249,36 @@ based on the specified event.
 | `subject`             | "deployment_status.url" value                                     |
 | `time`                | "deployment_status.updated_at" value                              |
 | `data`                | Content of HTTP request body                                      |
+
+### DiscussionEvent
+
+| CloudEvents Attribute | Value                                     |
+| :-------------------- | :---------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value     |
+| `source`              | "repository.url" value                    |
+| `specversion`         | `1.0`                                     |
+| `type`                | `com.github.discussion.` + "action" value |
+| `datacontentencoding` | Omit                                      |
+| `datacontenttype`     | `application/json`                        |
+| `dataschema`          | Omit                                      |
+| `subject`             | "discussion.id" value                     |
+| `time`                | Current time                              |
+| `data`                | Content of HTTP request body              |
+
+### DiscussionCommentEvent
+
+| CloudEvents Attribute | Value                                             |
+| :-------------------- | :------------------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value             |
+| `source`              | "repository.url" value                            |
+| `specversion`         | `1.0`                                             |
+| `type`                | `com.github.discussion_comment.` + "action" value |
+| `datacontentencoding` | Omit                                              |
+| `datacontenttype`     | `application/json`                                |
+| `dataschema`          | Omit                                              |
+| `subject`             | "discussion.id" value                             |
+| `time`                | Current time                                      |
+| `data`                | Content of HTTP request body                      |
 
 ### ForkEvent
 
@@ -252,18 +342,33 @@ based on the specified event.
 
 ### InstallationRepositoryEvent
 
-| CloudEvents Attribute | Value                                                  |
-| :-------------------- | :----------------------------------------------------- |
-| `id`                  | "X-GitHub-Delivery" HTTP header value                  |
-| `source`              | "installation.account.url" value                       |
-| `specversion`         | `1.0`                                                  |
-| `type`                | `com.github.installation_repository.` + "action" value |
-| `datacontentencoding` | Omit                                                   |
-| `datacontenttype`     | `application/json`                                     |
-| `dataschema`          | Omit                                                   |
-| `subject`             | "installation.id" value                                |
-| `time`                | "installation.updated_at" value # not a timestamp??    |
-| `data`                | Content of HTTP request body                           |
+| CloudEvents Attribute | Value                                                    |
+| :-------------------- | :------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                    |
+| `source`              | "installation.account.url" value                         |
+| `specversion`         | `1.0`                                                    |
+| `type`                | `com.github.installation_repositories.` + "action" value |
+| `datacontentencoding` | Omit                                                     |
+| `datacontenttype`     | `application/json`                                       |
+| `dataschema`          | Omit                                                     |
+| `subject`             | "installation.id" value                                  |
+| `time`                | "installation.updated_at" value # not a timestamp??      |
+| `data`                | Content of HTTP request body                             |
+
+### InstallationTargetEvent
+
+| CloudEvents Attribute | Value                                              |
+| :-------------------- | :------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value              |
+| `source`              | "installation.account.url" value                   |
+| `specversion`         | `1.0`                                              |
+| `type`                | `com.github.installation_target.` + "action" value |
+| `datacontentencoding` | Omit                                               |
+| `datacontenttype`     | `application/json`                                 |
+| `dataschema`          | Omit                                               |
+| `subject`             | "installation.id" value                            |
+| `time`                | Current time                                       |
+| `data`                | Content of HTTP request body                       |
 
 ### IssueCommentEvent
 
@@ -287,7 +392,7 @@ based on the specified event.
 | `id`                  | "X-GitHub-Delivery" HTTP header value |
 | `source`              | "repository.url" value                |
 | `specversion`         | `1.0`                                 |
-| `type`                | `com.github.issue.` + "action" value  |
+| `type`                | `com.github.issues.` + "action" value |
 | `datacontentencoding` | Omit                                  |
 | `datacontenttype`     | `application/json`                    |
 | `dataschema`          | Omit                                  |
@@ -354,6 +459,21 @@ based on the specified event.
 | `subject`             | "member.login" value ### or `id` ?                              |
 | `time`                | Current time                                                    |
 | `data`                | Content of HTTP request body                                    |
+
+### MergeGroupEvent
+
+| CloudEvents Attribute | Value                                      |
+| :-------------------- | :----------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value      |
+| `source`              | "repository.url" value                     |
+| `specversion`         | `1.0`                                      |
+| `type`                | `com.github.merge_group.` + "action" value |
+| `datacontentencoding` | Omit                                       |
+| `datacontenttype`     | `application/json`                         |
+| `dataschema`          | Omit                                       |
+| `subject`             | "merge_group.head_ref" value               |
+| `time`                | Current time                               |
+| `data`                | Content of HTTP request body               |
 
 ### MetaEvent
 
@@ -490,6 +610,51 @@ based on the specified event.
 | `time`                | "project.updated_at" value             |
 | `data`                | Content of HTTP request body           |
 
+### ProjectsV2Event
+
+| CloudEvents Attribute | Value                                      |
+| :-------------------- | :----------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value      |
+| `source`              | "repository.url" value                     |
+| `specversion`         | `1.0`                                      |
+| `type`                | `com.github.projects_v2.` + "action" value |
+| `datacontentencoding` | Omit                                       |
+| `datacontenttype`     | `application/json`                         |
+| `dataschema`          | Omit                                       |
+| `subject`             | "projects_v2.id" value                     |
+| `time`                | "projects_v2.updated_at" value             |
+| `data`                | Content of HTTP request body               |
+
+### ProjectsV2ItemEvent
+
+| CloudEvents Attribute | Value                                           |
+| :-------------------- | :---------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value           |
+| `source`              | "repository.url" value                          |
+| `specversion`         | `1.0`                                           |
+| `type`                | `com.github.projects_v2_item.` + "action" value |
+| `datacontentencoding` | Omit                                            |
+| `datacontenttype`     | `application/json`                              |
+| `dataschema`          | Omit                                            |
+| `subject`             | "projects_v2_item.id" value                     |
+| `time`                | "projects_v2_item.updated_at" value             |
+| `data`                | Content of HTTP request body                    |
+
+### ProjectsV2ItemEvent
+
+| CloudEvents Attribute | Value                                                    |
+| :-------------------- | :------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                    |
+| `source`              | "repository.url" value                                   |
+| `specversion`         | `1.0`                                                    |
+| `type`                | `com.github.projects_v2_status_update.` + "action" value |
+| `datacontentencoding` | Omit                                                     |
+| `datacontenttype`     | `application/json`                                       |
+| `dataschema`          | Omit                                                     |
+| `subject`             | "projects_v2_status_update.id" value                     |
+| `time`                | "projects_v2_status_update.updated_at" value             |
+| `data`                | Content of HTTP request body                             |
+
 ### PublicEvent
 
 | CloudEvents Attribute | Value                                 |
@@ -549,6 +714,21 @@ based on the specified event.
 | `subject`             | "comment.id" value                                         |
 | `time`                | "pull_request.updated_at" value                            |
 | `data`                | Content of HTTP request body                               |
+
+### PullRequestReviewThreadEvent
+
+| CloudEvents Attribute | Value                                                     |
+| :-------------------- | :-------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                     |
+| `source`              | "pull_request.url" value                                  |
+| `specversion`         | `1.0`                                                     |
+| `type`                | `com.github.pull_request_review_thread.` + "action" value |
+| `datacontentencoding` | Omit                                                      |
+| `datacontenttype`     | `application/json`                                        |
+| `dataschema`          | Omit                                                      |
+| `subject`             | "pull_request.id" value                                   |
+| `time`                | Current time                                              |
+| `data`                | Content of HTTP request body                              |
 
 ### PushEvent
 
@@ -610,6 +790,36 @@ based on the specified event.
 | `time`                | "repository.updated_at" value             |
 | `data`                | Content of HTTP request body              |
 
+### RepositoryAdvisoryEvent
+
+| CloudEvents Attribute | Value                                              |
+| :-------------------- | :------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value              |
+| `source`              | "repository.url" value                             |
+| `specversion`         | `1.0`                                              |
+| `type`                | `com.github.repository_advisory.` + "action" value |
+| `datacontentencoding` | Omit                                               |
+| `datacontenttype`     | `application/json`                                 |
+| `dataschema`          | Omit                                               |
+| `subject`             | "repository_advisory.ghsa_id" value                |
+| `time`                | Current time                                       |
+| `data`                | Content of HTTP request body                       |
+
+### RepositoryDispatchEvent
+
+| CloudEvents Attribute | Value                                             |
+| :-------------------- | :------------------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value             |
+| `source`              | "repository.owner.url" value                      |
+| `specversion`         | `1.0`                                             |
+| `type`                | `com.github.repository_dispatch` + "action" value |
+| `datacontentencoding` | Omit                                              |
+| `datacontenttype`     | `application/json`                                |
+| `dataschema`          | Omit                                              |
+| `subject`             | Omit                                              |
+| `time`                | Current time                                      |
+| `data`                | Content of HTTP request body                      |
+
 ### RepositoryImportEvent
 
 | CloudEvents Attribute | Value                                 |
@@ -624,6 +834,21 @@ based on the specified event.
 | `subject`             | "repository.name" value               |
 | `time`                | "repository.updated_at" value         |
 | `data`                | Content of HTTP request body          |
+
+### RepositoryRulesetEvent
+
+| CloudEvents Attribute | Value                                            |
+| :-------------------- | :----------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value            |
+| `source`              | "repository.owner.url" value                     |
+| `specversion`         | `1.0`                                            |
+| `type`                | `com.github.repository_ruleset` + "action" value |
+| `datacontentencoding` | Omit                                             |
+| `datacontenttype`     | `application/json`                               |
+| `dataschema`          | Omit                                             |
+| `subject`             | "repository.name" value                          |
+| `time`                | "repository.updated_at" value                    |
+| `data`                | Content of HTTP request body                     |
 
 ### RepositoryVulnerabilityAlertEvent
 
@@ -640,6 +865,36 @@ based on the specified event.
 | `time`                | Current time # repository.updated_id ?                        |
 | `data`                | Content of HTTP request body                                  |
 
+### SecretScanningAlertEvent
+
+| CloudEvents Attribute | Value                                                |
+| :-------------------- | :--------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                |
+| `source`              | "repository.url" value                               |
+| `specversion`         | `1.0`                                                |
+| `type`                | `com.github.secret_scanning_alert.` + "action" value |
+| `datacontentencoding` | Omit                                                 |
+| `datacontenttype`     | `application/json`                                   |
+| `dataschema`          | Omit                                                 |
+| `subject`             | "alert.id" value                                     |
+| `time`                | "alert.updated_at" value or "alert.created_at"       |
+| `data`                | Content of HTTP request body                         |
+
+### SecretScanningAlertLocationEvent
+
+| CloudEvents Attribute | Value                                                         |
+| :-------------------- | :------------------------------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                         |
+| `source`              | "repository.url" value                                        |
+| `specversion`         | `1.0`                                                         |
+| `type`                | `com.github.secret_scanning_alert_location.` + "action" value |
+| `datacontentencoding` | Omit                                                          |
+| `datacontenttype`     | `application/json`                                            |
+| `dataschema`          | Omit                                                          |
+| `subject`             | "alert.id" value                                              |
+| `time`                | "alert.updated_at" value or "alert.created_at"                |
+| `data`                | Content of HTTP request body                                  |
+
 ### SecurityAdvisoryEvent
 
 | CloudEvents Attribute | Value                                            |
@@ -654,6 +909,21 @@ based on the specified event.
 | `subject`             | "security_advisory.ghsa_id" value                |
 | `time`                | "security_advisory.updated_at" value             |
 | `data`                | Content of HTTP request body                     |
+
+### SecurityAndAnalysisEvent
+
+| CloudEvents Attribute | Value                                 |
+| :-------------------- | :------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value |
+| `source`              | "repository.url" value                |
+| `specversion`         | `1.0`                                 |
+| `type`                | `com.github.security_and_analysis`    |
+| `datacontentencoding` | Omit                                  |
+| `datacontenttype`     | `application/json`                    |
+| `dataschema`          | Omit                                  |
+| `subject`             | Omit                                  |
+| `time`                | Current time                          |
+| `data`                | Content of HTTP request body          |
 
 ### SponsorshipEvent
 
@@ -744,3 +1014,48 @@ based on the specified event.
 | `subject`             | Omit                                  |
 | `time`                | Current time                          |
 | `data`                | Content of HTTP request body          |
+
+### WorkflowDispatchEvent
+
+| CloudEvents Attribute | Value                                 |
+| :-------------------- | :------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value |
+| `source`              | "repository.url" value                |
+| `specversion`         | `1.0`                                 |
+| `type`                | `com.github.workflow_dispatch`        |
+| `datacontentencoding` | Omit                                  |
+| `datacontenttype`     | `application/json`                    |
+| `dataschema`          | Omit                                  |
+| `subject`             | "workflow" value                      |
+| `time`                | Current time                          |
+| `data`                | Content of HTTP request body          |
+
+### WorkflowJobEvent
+
+| CloudEvents Attribute | Value                                       |
+| :-------------------- | :------------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value       |
+| `source`              | "repository.url" value                      |
+| `specversion`         | `1.0`                                       |
+| `type`                | `com.github.workflow_job.` + "action" value |
+| `datacontentencoding` | Omit                                        |
+| `datacontenttype`     | `application/json`                          |
+| `dataschema`          | Omit                                        |
+| `subject`             | "workflow_job.name" value                   |
+| `time`                | Current time                                |
+| `data`                | Content of HTTP request body                |
+
+### WorkflowRunEvent
+
+| CloudEvents Attribute | Value                                       |
+| :-------------------- | :------------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value       |
+| `source`              | "repository.url" value                      |
+| `specversion`         | `1.0`                                       |
+| `type`                | `com.github.workflow_run.` + "action" value |
+| `datacontentencoding` | Omit                                        |
+| `datacontenttype`     | `application/json`                          |
+| `dataschema`          | Omit                                        |
+| `subject`             | "workflow.name" value                       |
+| `time`                | Current time                                |
+| `data`                | Content of HTTP request body                |
