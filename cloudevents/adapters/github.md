@@ -10,6 +10,21 @@ https://developer.github.com/v3/activity/events/types/
 Each section below describes how to determine the CloudEvents attributes
 based on the specified event.
 
+### BranchProtectionConfigurationEvent
+
+| CloudEvents Attribute | Value                                                          |
+| :-------------------- | :------------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                          |
+| `source`              | "repository.url" value                                         |
+| `specversion`         | `1.0`                                                          |
+| `type`                | `com.github.branch_protection_configuration.` + "action" value |
+| `datacontentencoding` | Omit                                                           |
+| `datacontenttype`     | `application/json`                                             |
+| `dataschema`          | Omit                                                           |
+| `subject`             | Omit                                                           |
+| `time`                | Current time                                                   |
+| `data`                | Content of HTTP request body                                   |
+
 ### BranchProtectionRuleEvent
 
 | CloudEvents Attribute | Value                                                 |
@@ -99,6 +114,21 @@ based on the specified event.
 | `subject`             | "ref" value                             |
 | `time`                | Current time                            |
 | `data`                | Content of HTTP request body            |
+
+### CustomPropertyEvent
+
+| CloudEvents Attribute | Value                                          |
+| :-------------------- | :--------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value          |
+| `source`              | "repository.url" value                         |
+| `specversion`         | `1.0`                                          |
+| `type`                | `com.github.custom_property.` + "action" value |
+| `datacontentencoding` | Omit                                           |
+| `datacontenttype`     | `application/json`                             |
+| `dataschema`          | Omit                                           |
+| `subject`             | "definition.property_name" value               |
+| `time`                | Current time                                   |
+| `data`                | Content of HTTP request body                   |
 
 ### DeleteEvent
 
