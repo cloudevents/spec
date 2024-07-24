@@ -10,6 +10,21 @@ https://developer.github.com/v3/activity/events/types/
 Each section below describes how to determine the CloudEvents attributes
 based on the specified event.
 
+### BranchProtectionRuleEvent
+
+| CloudEvents Attribute | Value                                                 |
+| :-------------------- | :---------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                 |
+| `source`              | "repository.url" value                                |
+| `specversion`         | `1.0`                                                 |
+| `type`                | `com.github.branch_protection_rule.` + "action" value |
+| `datacontentencoding` | Omit                                                  |
+| `datacontenttype`     | `application/json`                                    |
+| `dataschema`          | Omit                                                  |
+| `subject`             | "rule.id" value                                       |
+| `time`                | "rule.updated_at" value                               |
+| `data`                | Content of HTTP request body                          |
+
 ### CheckRunEvent
 
 | CloudEvents Attribute | Value                                                                            |
