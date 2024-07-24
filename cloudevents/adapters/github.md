@@ -610,6 +610,21 @@ based on the specified event.
 | `time`                | "security_advisory.updated_at" value             |
 | `data`                | Content of HTTP request body                     |
 
+### SponsorshipEvent
+
+| CloudEvents Attribute | Value                                      |
+| :-------------------- | :----------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value      |
+| `source`              | "repository.url" value                     |
+| `specversion`         | `1.0`                                      |
+| `type`                | `com.github.sponsorship.` + "action" value |
+| `datacontentencoding` | Omit                                       |
+| `datacontenttype`     | `application/json`                         |
+| `dataschema`          | Omit                                       |
+| `subject`             | "sponsorship.sponsor.login"                |
+| `time`                | Current time                               |
+| `data`                | Content of HTTP request body               |
+
 ### StarEvent
 
 | CloudEvents Attribute | Value                                                 |
