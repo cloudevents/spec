@@ -370,6 +370,21 @@ based on the specified event.
 | `time`                | Current time                             |
 | `data`                | Content of HTTP request body             |
 
+### PackageEvent
+
+| CloudEvents Attribute | Value                                  |
+| :-------------------- | :------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value  |
+| `source`              | "repository.url" value                 |
+| `specversion`         | `1.0`                                  |
+| `type`                | `com.github.package.` + "action" value |
+| `datacontentencoding` | Omit                                   |
+| `datacontenttype`     | `application/json`                     |
+| `dataschema`          | Omit                                   |
+| `subject`             | "package.id" value                     |
+| `time`                | "package.(created\|updated)\_at" value |
+| `data`                | Content of HTTP request body           |
+
 ### PageBuildEvent
 
 | CloudEvents Attribute | Value                                 |
