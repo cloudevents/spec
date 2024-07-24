@@ -177,18 +177,18 @@ based on the specified event.
 
 ### GollumEvent
 
-| CloudEvents Attribute | Value                                       |
-| :-------------------- | :------------------------------------------ |
-| `id`                  | "X-GitHub-Delivery" HTTP header value       |
-| `source`              | "repository.url" value                      |
-| `specversion`         | `1.0`                                       |
-| `type`                | `com.github.gollum.` + "pages.action" value |
-| `datacontentencoding` | Omit                                        |
-| `datacontenttype`     | `application/json`                          |
-| `dataschema`          | Omit                                        |
-| `subject`             | "pages.page_name" value                     |
-| `time`                | Current time                                |
-| `data`                | Content of HTTP request body                |
+| CloudEvents Attribute | Value                                 |
+| :-------------------- | :------------------------------------ |
+| `id`                  | "X-GitHub-Delivery" HTTP header value |
+| `source`              | "repository.url" value                |
+| `specversion`         | `1.0`                                 |
+| `type`                | `com.github.gollum`                   |
+| `datacontentencoding` | Omit                                  |
+| `datacontenttype`     | `application/json`                    |
+| `dataschema`          | Omit                                  |
+| `subject`             | Omit                                  |
+| `time`                | Current time                          |
+| `data`                | Content of HTTP request body          |
 
 ### InstallationEvent
 
@@ -669,4 +669,3 @@ based on the specified event.
 | `subject`             | Omit                                  |
 | `time`                | Current time                          |
 | `data`                | Content of HTTP request body          |
-
