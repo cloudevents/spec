@@ -70,6 +70,21 @@ based on the specified event.
 | `time`                | "check_suite.updated_at" value             |
 | `data`                | Content of HTTP request body               |
 
+### CodeScanningAlertEvent
+
+| CloudEvents Attribute | Value                                              |
+| :-------------------- | :------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value              |
+| `source`              | "repository.url" value                             |
+| `specversion`         | `1.0`                                              |
+| `type`                | `com.github.code_scanning_alert.` + "action" value |
+| `datacontentencoding` | Omit                                               |
+| `datacontenttype`     | `application/json`                                 |
+| `dataschema`          | Omit                                               |
+| `subject`             | "alert.number" value                               |
+| `time`                | Current time                                       |
+| `data`                | Content of HTTP request body                       |
+
 ### CommitCommentEvent
 
 | CloudEvents Attribute | Value                                                 |
