@@ -503,7 +503,7 @@ messages if the copied values differ from the cloud-event serialized values.
 #### Defining Extensions
 
 See
-[CloudEvent Attributes Extensions](primer.md#cloudevent-extension-attributes)
+[CloudEvent Attributes Extensions](primer.md#cloudevents-extension-attributes)
 for additional information concerning the use and definition of extensions.
 
 The definition of an extension SHOULD fully define all aspects of the
@@ -609,6 +609,10 @@ Consider the following to prevent inadvertent leakage especially when leveraging
 
   Protocol level security SHOULD be employed to ensure the trusted and secure
   exchange of CloudEvents.
+
+See the [CloudEvents Primer](primer.md#cloudevents-with-security) for more
+information about how existing security mechanisms can be used with
+CloudEvents.
 
 ## Example
 

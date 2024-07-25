@@ -5,10 +5,10 @@
 ## Abstract
 
 This non-normative document provides an overview of the CloudEvents
-specification. It is meant to complement the CloudEvent specification to provide
-additional background and insight into the history and design decisions made
-during the development of the specification. This allows the specification
-itself to focus on the normative technical details.
+specification. It is meant to complement the CloudEvents specification to
+provide additional background and insight into the history and design
+decisions made during the development of the specification. This allows the
+specification itself to focus on the normative technical details.
 
 ## Table of Contents
 
@@ -17,8 +17,9 @@ itself to focus on the normative technical details.
 - [Design Goals](#design-goals)
 - [Architecture](#architecture)
 - [Versioning of CloudEvents](#versioning-of-cloudevents)
-- [CloudEvent Core Attributes](#cloudevent-core-attributes)
-- [CloudEvent Extension Attributes](#cloudevent-extension-attributes)
+- [CloudEvents Core Attributes](#cloudevents-core-attributes)
+- [CloudEvents Extension Attributes](#cloudevents-extension-attributes)
+- [CloudEvents with Security](#cloudevents-with-security)
 - [Creating CloudEvents](#creating-cloudevents)
 - [Qualifying Protocols and Encodings](#qualifying-protocols-and-encodings)
 - [Proprietary Protocols and Encodings](#proprietary-protocols-and-encodings)
@@ -197,7 +198,7 @@ by the components implemented by the implementor of the specification
 themselves. However, if the community observes a pattern in usage of certain
 extension attributes, as a standard way to deal with the topic of data
 integrity. In that case, such extension attributes can be declared as official
-extensions to the CloudEvent specification.
+extensions to the CloudEvents specification.
 
 ## Architecture
 
@@ -317,10 +318,10 @@ When a CloudEvent's data changes in a backwardly-incompatible way,
 the value of `dataschema` attribute should generally change,
 along with the `type` attribute as described above.
 
-## CloudEvent Core Attributes
+## CloudEvents Core Attributes
 
 This section provides additional background and design points related to some of
-the CloudEvent core attributes.
+the CloudEvents core attributes.
 
 ### id
 
@@ -346,11 +347,11 @@ then some additional data within the CloudEvent would be used for that purpose.
 
 In this respect, while the exact value chosen by the event producer might be
 some random string, or a string that has some semantic meaning in some other
-context, for the purposes of this CloudEvent attribute those meanings are not
+context, for the purposes of this CloudEvents attribute those meanings are not
 relevant and therefore using `id` for some other purpose beyond uniqueness
 checking is out of scope of the specification and not recommended.
 
-## CloudEvent Extension Attributes
+## CloudEvents Extension Attributes
 
 In order to achieve the stated goals, the specification authors will attempt to
 constrain the number of metadata attributes they define in CloudEvents. To that
@@ -380,7 +381,7 @@ be included at all, the group uses use-cases and user-stories to explain the
 rationale and need for them. This supporting information will be added to the
 [Prior Art](#prior-art) section of this document.
 
-Extension attributes to the CloudEvent specification are meant to be additional
+Extension attributes to the CloudEvents specification are meant to be additional
 metadata that needs to be included to help ensure proper routing and processing
 of the CloudEvent. Additional metadata for other purposes, that is related to
 the event itself and not needed in the transportation or processing of the
@@ -447,6 +448,95 @@ simply avoid all of them in the first place by only having one location in the
 serialization for unknown, or even new, properties. It was also noted that the
 HTTP specification is now following a similar pattern by no longer suggesting
 that extension HTTP headers be prefixed with `X-`.
+
+## CloudEvents with Security
+
+The core CloudEvents specification purposely does not address security beyond
+suggesting that preexisting security mechanisms should be used. For example,
+the use of TLS when using HTTP. The CloudEvents specification authors did not
+see the need to invent something new, rather composition with existing
+technologies that are already being used seemed more appropriate.
+
+With that in mind, below are a few CloudEvent serializations that are composed
+with popular encryption technologies to give a non-normative examples of how
+security may be layered on top of a CloudEvent:
+
+- a binary CloudEvent composed with the
+  [JOSE](https://datatracker.ietf.org/doc/rfc7516) specification being sent
+  over HTTP (line-breaks are added for display purposes only):
+
+```json
+POST /receiver HTTP/1.1
+Host: example.com
+Content-Type: application/jose
+ce-specversion: 1.0
+ce-type: PAYMENT.AUTHORIZATION.CREATED
+ce-source: https://paymentprocessor.example.com/
+ce-subject: c7bbb040-d458-4d47-82a8-45413f9f2d33
+ce-id: a978702e-ef48-4032-ac18-a057e0104076
+ce-time: 2024-05-30T17:31:00Z
+
+eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.OKOawDo13gRp2ojaH
+V7LFpZcgV7T6DVZKTyKOMTYUmKoTCVJRgckCL9kiMT03JGeipsEdY3mx_etLbbWS
+rFr05kLzcSr4qKAq7YN7e9jwQRb23nfa6c9d-StnImGyFDbSv04uVuxIp5Zms1gN
+xKKK2Da14B8S4rzVRltdYwam_lDp5XnZAYpQdb76FdIKLaVmqgfwX7XWRxv2322i
+-vDxRfqNzo_tETKzpVLzfiwQyeyPGLBIO56YJ7eObdv0je81860ppamavo35UgoR
+dbYaBcoh9QcfylQr66oc6vFWXRcZ_ZT2LawVCWTIy3brGPi6UklfCpIMfIjf7iGd
+XKHzg.48V1_ALb6US04U3b.5eym8TW_c8SuK0ltJ3rpYIzOeDQz7TALvtu6UG9oM
+o4vpzs9tX_EFShS8iB7j6jiSdiwkIr3ajwQzaBtQD_A.XFBoMYUZodetZdvTiFvS
+kQ
+```
+
+- an XML serialization of a structured CloudEvent composed with the
+  [XML Signature](https://www.w3.org/TR/xmldsig-core1/) specificiation
+  (line-breaks are added for display purposes only):
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<event xmlns="http://cloudevents.io/xmlformat/V1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
+  <time>2020-03-19T12:54:00-07:00</time>
+  <datacontenttype>application/xml</datacontenttype>
+  <id>000-1111-2222</id>
+  <source>urn:uuid:123e4567-e89b-12d3-a456-426614174000</source>
+  <type>SOME.EVENT.TYPE</type>
+  <data xsi:type="xs:any" xml:id="data">
+    <geo:Location xmlns:geo="http://someauthority.example/">
+      <geo:Latitude>51.509865</geo:Latitude>
+      <geo:Longitude>-0.118092</geo:Longitude>
+    </geo:Location>
+  </data>
+
+  <!-- End of CloudEvent, below is the signature info. -->
+  <!-- The Values are examples, and not necessarily accurate for 'data'. -->
+
+  <dsig:Signature xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+    <dsig:SignedInfo>
+      <dsig:CanonicalizationMethod
+        Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+      <dsig:SignatureMethod
+        Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+      <dsig:Reference URI="#data">
+        <dsig:Transforms>
+          <dsig:Transform
+            Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+          <dsig:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        <dsig:DigestValue>DCDNxibEA3BHpFMtzvj7hxd7p5A=</dsig:DigestValue>
+      </dsig:Reference>
+    </dsig:SignedInfo>
+    <dsig:SignatureValue>
+      jocgUrZPKR8jvery4gG4V34qx7/yxOESPJq//iS3Q5Ps7lPADNBEVK4Y50HIdrkodcY
+      LZjBkvuGMT89nTeT24W/Dw/XEeMWXRmy/Mj1/rza8JMaP46F+2MZ6tlGWlyA2tRZNEx
+      e5TPA8Wo6jTSN3KX3aLoLkwRsLBt50Zr8zz8xFtadZciNWnsD6y/UgQzNYfLovMw54A
+      HGk+5FzRWMgwtTseISWxSF+9zsgiQStrrXzy1SaRycQTAjz4PF6HebGWJcECLa+r/iL
+      tigbTmgL3Mj7mkmw90M3mNncqZKBFmjNxTZCPiMQHbSvTgOBe8REwCrclHJkyYP14Ns
+      xEg6LZQ==
+    </dsig:SignatureValue>
+  </dsig:Signature>
+</event>
+```
 
 ## Creating CloudEvents
 
@@ -614,7 +704,7 @@ links to all specs.
 ## Prior Art
 
 This section describes some of the input material used by the group during the
-development of the CloudEvent specification.
+development of the CloudEvents specification.
 
 ### Roles
 

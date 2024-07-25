@@ -196,7 +196,8 @@ message will represent a _tombstone_ record, as described in the
 #### 3.2.3. Metadata Headers
 
 All [CloudEvents][ce] attributes and
-[CloudEvent Attributes Extensions](../primer.md#cloudevent-extension-attributes)
+[CloudEvent Attributes
+Extensions](../primer.md#cloudevents-extension-attributes)
 with exception of `data` MUST be individually mapped to and from the Header
 fields in the Kafka message. Both header keys and header values MUST be encoded
 as UTF-8 strings.
