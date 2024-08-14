@@ -43,6 +43,7 @@ for more information.
 - [Auth Context](authcontext.md)
 - [BAM](bam.md)
 - [Dataref (Claim Check Pattern)](dataref.md)
+- [Deprecation](deprecation.md)
 - [Distributed Tracing](distributed-tracing.md)
 - [Expiry Time](expirytime.md)
 - [OPC UA](opcua.md)
