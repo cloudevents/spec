@@ -73,8 +73,8 @@ migrating to a new event or version.
 
 Consumers SHOULD use the `deprecation` and `deprecationfrom` attributes to
 monitor the lifecycle of events they rely on. If `deprecationsunset` has been
-reached, consumers SHOULD consider switching to the recommended replacement, as
-events may no longer be supported.
+reached, consumers SHOULD consider switching to the RECOMMENDED replacement, as
+events MAY no longer be supported.
 
 If an event is received after the `deprecationsunset` timestamp, consumers
 SHOULD choose to stop processing such events, especially if unsupported events
