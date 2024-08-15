@@ -1,11 +1,10 @@
-# Deprecation and Sunset extension
+# Deprecation extension
 
 This specification defines attributes that can be included in CloudEvents to
 indicate to [consumers](../spec.md#consumer) or
-[intermediaries](../spec.md#intermediary) the deprecation and sunset status of
-the event type. These attributes inform consumers of CloudEvents about upcoming
-changes or removals, facilitating smoother transitions and proactive
-adjustments.
+[intermediaries](../spec.md#intermediary) the deprecation of the events. These
+attributes inform consumers of CloudEvents about upcoming changes or removals,
+facilitating smoother transitions and proactive adjustments.
 
 ## Notational Conventions
 
@@ -23,36 +22,65 @@ extension is being used.
 
 ### deprecation
 
-- Type: `String`
-- Description: Indicates that the event type is deprecated. This can be a
-  boolean `true` or a date in [RFC 5322](https://tools.ietf.org/html/rfc5322)
-  format indicating when the deprecation was announced.
+- Type: `Boolean`
+- Description: Indicates whether the event type is deprecated.
 - Constraints
   - REQUIRED
-  - If the value is a date, it MUST be formatted according to RFC 5322.
-- Examples:
-  - A boolean deprecation: `"deprecation": "true"`
-  - A date-based deprecation: `"deprecation": "Sun, 11 Aug 2024 23:59:59 GMT"`
+  - The value MUST be a boolean (`true` or `false`).
+- Example: `"deprecation": "true"`
 
-### sunset
+### deprecationfrom
 
-- Type: `String`
+- Type: `Timestamp`
+- Description: Specifies the date and time when the event type was
+  officially marked as deprecated.
+- Constraints
+  - OPTIONAL
+  - If present, MUST adhere to the format specified in
+    [RFC 3339](https://tools.ietf.org/html/rfc3339)
+- Example: `"deprecationfrom": "2024-10-11T00:00:00Z"`
+
+### deprecationsunset
+
+- Type: `Timestamp`
 - Description: Specifies the future date and time when the event type will
-  become unsupported, formatted according to
-  [RFC 8594](https://tools.ietf.org/html/rfc8594).
+  become unsupported.
 - Constraints
   - OPTIONAL
   - The timestamp MUST be later or the same as the one given in the
-    `deprecation` field.
-- Example: `"sunset": "Wed, 14 Aug 2024 23:59:59 GMT"`
+    `deprecationfrom` field.
+  - If present, MUST adhere to the format specified in
+    [RFC 3339](https://tools.ietf.org/html/rfc3339)
+- Example: `"deprecationsunset": "2024-11-12T00:00:00Z"`
+
+### deprecationmigration
+
+- Type: `URI`
+- Description: Provides a link to documentation or resources that describe
+the migration path from the deprecated event to an alternative. This helps
+consumers transition away from the deprecated event.
+- Constraints
+  - OPTIONAL
+  - The URI SHOULD point to valid and accessible resources that help the
+    consumer understand what SHOULD replace the deprecated event
+- Example: `"deprecationmigration": "https://example.com/migrate-to-new-evt"`
 
 ## Usage
 
 When this extension is used, producers MUST set the value of the `deprecation`
-attribute to `true` or the `timestamp` of when an event is being phased out but
-still supported. This gives consumers a heads-up that they SHOULD begin
-migrating to a new event type or version.
+attribute to `true`. This gives consumers a heads-up that they SHOULD begin
+migrating to a new event or version.
 
-The `sunset` attribute SHOULD specify the exact date and time when the event
-will no longer be supported. This is the final cutoff date after which the
-event will no longer function as expected.
+Consumers SHOULD use the `deprecation` and `deprecationfrom` attributes to
+monitor the lifecycle of events they rely on. If `deprecationsunset` has been
+reached, consumers SHOULD consider switching to the recommended replacement, as
+events may no longer be supported.
+
+If an event is received after the `deprecationsunset` timestamp, consumers
+SHOULD choose to stop processing such events, especially if unsupported events
+can cause downstream issues.
+
+Producers SHOULD stop emitting deprecated events after the `deprecationsunset`
+timestamp. They SHOULD also provide detailed documentation via the
+`deprecationmigration` attribute to guide consumers toward the correct replacement
+event.
