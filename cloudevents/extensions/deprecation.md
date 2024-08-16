@@ -20,14 +20,15 @@ extension is being used.
 
 ## Attributes
 
-### deprecation
+### deprecated
 
 - Type: `Boolean`
-- Description: Indicates whether the event type is deprecated.
+- Description: Indicates whether the event type is deprecated. Defaults to
+  `false` if not specified.
 - Constraints
-  - REQUIRED
+  - OPTIONAL
   - The value MUST be a boolean (`true` or `false`).
-- Example: `"deprecation": "true"`
+- Example: `"deprecated": "true"`
 
 ### deprecationfrom
 
@@ -38,6 +39,9 @@ extension is being used.
   - OPTIONAL
   - If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
+  - The `deprecationfrom` timestamp SHOULD remain stable once set and SHOULD
+    reflect a point in the past or the present. Pre-announcing deprecation by
+    setting a future date is not encouraged.
 - Example: `"deprecationfrom": "2024-10-11T00:00:00Z"`
 
 ### deprecationsunset
@@ -47,8 +51,9 @@ extension is being used.
   become unsupported.
 - Constraints
   - OPTIONAL
-  - The timestamp MUST be later or the same as the one given in the
-    `deprecationfrom` field.
+  - The timestamp MUST be later than or the same as the one given in the
+    `deprecationfrom` field, if present. It MAY be extended to a later date but
+    MUST NOT be shortened once set.
   - If present, MUST adhere to the format specified in
     [RFC 3339](https://tools.ietf.org/html/rfc3339)
 - Example: `"deprecationsunset": "2024-11-12T00:00:00Z"`
@@ -67,14 +72,14 @@ consumers transition away from the deprecated event.
 
 ## Usage
 
-When this extension is used, producers MUST set the value of the `deprecation`
+When this extension is used, producers MUST set the value of the `deprecated`
 attribute to `true`. This gives consumers a heads-up that they SHOULD begin
 migrating to a new event or version.
 
-Consumers SHOULD use the `deprecation` and `deprecationfrom` attributes to
-monitor the lifecycle of events they rely on. If `deprecationsunset` has been
-reached, consumers SHOULD consider switching to the RECOMMENDED replacement, as
-events MAY no longer be supported.
+Consumers SHOULD make efforts to switch to the suggested replacement before the
+specified `deprecationsunset` timestamp. It is advisable to begin transitioning
+as soon as the event is marked as deprecated to ensure a smooth migration and
+avoid potential disruptions after the sunset date.
 
 If an event is received after the `deprecationsunset` timestamp, consumers
 SHOULD choose to stop processing such events, especially if unsupported events
