@@ -27,7 +27,6 @@ extension is being used.
   `false` if not specified.
 - Constraints
   - OPTIONAL
-  - The value MUST be a boolean (`true` or `false`).
 - Example: `"deprecated": "true"`
 
 ### deprecationfrom
