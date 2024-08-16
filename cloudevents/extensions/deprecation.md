@@ -37,8 +37,6 @@ extension is being used.
   officially marked as deprecated.
 - Constraints
   - OPTIONAL
-  - If present, MUST adhere to the format specified in
-    [RFC 3339](https://tools.ietf.org/html/rfc3339)
   - The `deprecationfrom` timestamp SHOULD remain stable once set and SHOULD
     reflect a point in the past or the present. Pre-announcing deprecation by
     setting a future date is not encouraged.
@@ -54,8 +52,6 @@ extension is being used.
   - The timestamp MUST be later than or the same as the one given in the
     `deprecationfrom` field, if present. It MAY be extended to a later date but
     MUST NOT be shortened once set.
-  - If present, MUST adhere to the format specified in
-    [RFC 3339](https://tools.ietf.org/html/rfc3339)
 - Example: `"deprecationsunset": "2024-11-12T00:00:00Z"`
 
 ### deprecationmigration
