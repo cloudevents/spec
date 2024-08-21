@@ -275,7 +275,7 @@ based on the specified event.
 | `type`                | `com.github.discussion.` + "action" value |
 | `datacontentencoding` | Omit                                      |
 | `datacontenttype`     | `application/json`                        |
-| `dataschema`          | Omit                                      |
+| `dataschema`          | "discussion.updated_at" value             |
 | `subject`             | "discussion.id" value                     |
 | `time`                | Current time                              |
 | `data`                | Content of HTTP request body              |
@@ -292,7 +292,7 @@ based on the specified event.
 | `datacontenttype`     | `application/json`                                |
 | `dataschema`          | Omit                                              |
 | `subject`             | "discussion.id" value                             |
-| `time`                | Current time                                      |
+| `time`                | "comment.updated_at" value                        |
 | `data`                | Content of HTTP request body                      |
 
 ### ForkEvent
@@ -367,7 +367,7 @@ based on the specified event.
 | `datacontenttype`     | `application/json`                                       |
 | `dataschema`          | Omit                                                     |
 | `subject`             | "installation.id" value                                  |
-| `time`                | "installation.updated_at" value # not a timestamp??      |
+| `time`                | "installation.updated_at" value                          |
 | `data`                | Content of HTTP request body                             |
 
 ### InstallationTargetEvent
@@ -562,7 +562,7 @@ based on the specified event.
 | `datacontenttype`     | `application/json`                     |
 | `dataschema`          | Omit                                   |
 | `subject`             | "package.id" value                     |
-| `time`                | "package.(created\|updated)\_at" value |
+| `time`                | "package.(updated\|created)\_at" value |
 | `data`                | Content of HTTP request body           |
 
 ### PageBuildEvent
@@ -655,7 +655,7 @@ based on the specified event.
 | `time`                | "projects_v2_item.updated_at" value             |
 | `data`                | Content of HTTP request body                    |
 
-### ProjectsV2ItemEvent
+### ProjectsV2StatusUpdateEvent
 
 | CloudEvents Attribute | Value                                                    |
 | :-------------------- | :------------------------------------------------------- |
@@ -817,7 +817,7 @@ based on the specified event.
 | `datacontenttype`     | `application/json`                                 |
 | `dataschema`          | Omit                                               |
 | `subject`             | "repository_advisory.ghsa_id" value                |
-| `time`                | Current time                                       |
+| `time`                | "repository_advisory.updated_at" value             |
 | `data`                | Content of HTTP request body                       |
 
 ### RepositoryDispatchEvent
@@ -891,7 +891,7 @@ based on the specified event.
 | `datacontentencoding` | Omit                                                 |
 | `datacontenttype`     | `application/json`                                   |
 | `dataschema`          | Omit                                                 |
-| `subject`             | "alert.id" value                                     |
+| `subject`             | "alert.number" value                                 |
 | `time`                | "alert.updated_at" value or "alert.created_at"       |
 | `data`                | Content of HTTP request body                         |
 
@@ -906,7 +906,7 @@ based on the specified event.
 | `datacontentencoding` | Omit                                                          |
 | `datacontenttype`     | `application/json`                                            |
 | `dataschema`          | Omit                                                          |
-| `subject`             | "alert.id" value                                              |
+| `subject`             | "alert.number" value                                          |
 | `time`                | "alert.updated_at" value or "alert.created_at"                |
 | `data`                | Content of HTTP request body                                  |
 
