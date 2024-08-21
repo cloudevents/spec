@@ -27,7 +27,7 @@ extension is being used.
   `false` if not specified.
 - Constraints
   - OPTIONAL
-- Example: `"deprecated": "true"`
+- Example: `"deprecated": true`
 
 ### deprecationfrom
 
@@ -61,8 +61,8 @@ the migration path from the deprecated event to an alternative. This helps
 consumers transition away from the deprecated event.
 - Constraints
   - OPTIONAL
-  - The URI SHOULD point to valid and accessible resources that help the
-    consumer understand what SHOULD replace the deprecated event
+  - The URI SHOULD point to a valid and accessible resource that helps the
+    consumer understand what SHOULD replace the deprecated event.
 - Example: `"deprecationmigration": "https://example.com/migrate-to-new-evt"`
 
 ## Usage
