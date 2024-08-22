@@ -26,7 +26,7 @@ extension is being used.
 - Description: Indicates whether the event type is deprecated. Defaults to
   `false` if not specified.
 - Constraints
-  - OPTIONAL
+  - REQUIRED
 - Example: `"deprecated": true`
 
 ### deprecationfrom
