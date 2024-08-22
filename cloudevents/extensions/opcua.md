@@ -52,7 +52,7 @@ OPC UA provides type information as part of PubSub metadata messages, for non
 OPC UA consumers or when different payload encoding like Avro is used, it is
 REQUIRED to provide schema information (based on metadata information) in a
 separate format like [JSON schema](https://json-schema.org/specification) or
-[Avro schema](https://avro.apache.org/docs/1.11.1/specification/) or others. For
+[Avro schema](https://avro.apache.org/docs/1.12.0/specification/) or others. For
 those cases the attribute references the schema and is used for versioning.
 
 ### subject

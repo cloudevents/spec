@@ -3,7 +3,7 @@
 ## Abstract
 
 The Avro Format for CloudEvents defines how events are expressed in
-the [Avro 1.9.0 Specification][avro-spec].
+the [Avro 1.12.0 Specification][avro-spec].
 
 ## Table of Contents
 
@@ -11,13 +11,13 @@ the [Avro 1.9.0 Specification][avro-spec].
 2. [Attributes](#2-attributes)
 3. [Data](#3-data)
 4. [Transport](#4-transport)
-4. [Examples](#5-examples)
+5. [Examples](#5-examples)
 
 ## 1. Introduction
 
 [CloudEvents][ce] is a standardized and protocol-agnostic definition of the
 structure and metadata description of events. This specification defines how the
-CloudEvents are to be represented as [Avro 1.9.0][avro-primitives].
+CloudEvents are to be represented as [Avro 1.12.0][avro-primitives].
 
 The [Attributes](#2-attributes) section describes the naming conventions and
 data type mappings for CloudEvents attributes for use as Avro message
@@ -174,12 +174,12 @@ The following table shows exemplary mappings:
 
 ## References
 
-- [Avro 1.9.0][avro-spec] Apache Avro™ 1.9.0 Specification
+- [Avro 1.12.0][avro-spec] Apache Avro™ 1.12.0 Specification
 
-[avro-spec]: http://avro.apache.org/docs/1.9.0/spec.html
-[avro-primitives]: http://avro.apache.org/docs/1.9.0/spec.html#schema_primitive
-[avro-logical-types]: http://avro.apache.org/docs/1.9.0/spec.html#Logical+Types
-[avro-unions]: http://avro.apache.org/docs/1.9.0/spec.html#Unions
+[avro-spec]: http://avro.apache.org/docs/1.12.0/spec.html
+[avro-primitives]: http://avro.apache.org/docs/1.12.0/spec.html#schema_primitive
+[avro-logical-types]: http://avro.apache.org/docs/1.12.0/spec.html#Logical+Types
+[avro-unions]: http://avro.apache.org/docs/1.12.0/spec.html#Unions
 [ce]: ../spec.md
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3986-section41]: https://tools.ietf.org/html/rfc3986#section-4.1
