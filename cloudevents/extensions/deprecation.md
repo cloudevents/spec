@@ -23,9 +23,9 @@ extension is being used.
 ### deprecated
 
 - Type: `Boolean`
-- Description: Indicates whether the event type is deprecated. Defaults to
-  `false` if not specified.
+- Description: Indicates whether the event type is deprecated.
 - Constraints
+  - MUST be true
   - REQUIRED
 - Example: `"deprecated": true`
 
