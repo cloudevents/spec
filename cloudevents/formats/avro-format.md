@@ -169,7 +169,7 @@ The following table shows exemplary mappings:
 | datacontenttype | string | `application/octet-stream`                |
 | dataschema      | string | `http://registry.com/schema/v1/much.json` |
 | subject         | string | `mynewfile.jpg`                           |
-| time            | long   | `2019-06-05T23:45:00Z`                    |
+| time            | string | `2019-06-05T23:45:00Z`                    |
 | data            | bytes  | `[bytes]`                                 |
 
 ## References
