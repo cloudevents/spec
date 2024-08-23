@@ -2,8 +2,8 @@
 
 This specification defines attributes that can be included in CloudEvents to
 indicate to [consumers](../spec.md#consumer) or
-[intermediaries](../spec.md#intermediary) the deprecation of the events. These
-attributes inform consumers of CloudEvents about upcoming changes or removals,
+[intermediaries](../spec.md#intermediary) the deprecation of events. These
+attributes inform CloudEvents consumers about upcoming changes or removals,
 facilitating smoother transitions and proactive adjustments.
 
 ## Notational Conventions
@@ -37,7 +37,7 @@ extension is being used.
 - Constraints
   - OPTIONAL
   - The `deprecationfrom` timestamp SHOULD remain stable once set and SHOULD
-    reflect a point in the past or the present. Pre-announcing deprecation by
+    reflect a point in the past or present. Pre-announcing deprecation by
     setting a future date is not encouraged.
 - Example: `"deprecationfrom": "2024-10-11T00:00:00Z"`
 
@@ -61,8 +61,8 @@ the migration path from the deprecated event to an alternative. This helps
 consumers transition away from the deprecated event.
 - Constraints
   - OPTIONAL
-  - The URI SHOULD point to a valid and accessible resource that helps the
-    consumer understand what SHOULD replace the deprecated event.
+  - The URI SHOULD point to a valid and accessible resource that helps
+    consumers understand what SHOULD replace the deprecated event.
 - Example: `"deprecationmigration": "https://example.com/migrate-to-new-evt"`
 
 ## Usage
