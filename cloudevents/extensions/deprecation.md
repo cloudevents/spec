@@ -25,7 +25,7 @@ extension is being used.
 - Type: `Boolean`
 - Description: Indicates whether the event type is deprecated.
 - Constraints
-  - MUST be true
+  - MUST be `true`
   - REQUIRED
 - Example: `"deprecated": true`
 
