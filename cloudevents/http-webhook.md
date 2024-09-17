@@ -186,7 +186,7 @@ Reaching the delivery agreement is realized using the following validation
 handshake. The handshake can either be executed immediately at registration time
 or as a "pre-flight" request immediately preceding a delivery.
 
-It is important to understand is that the handshake does not aim to establish an
+It is important to understand that the handshake does not aim to establish an
 authentication or authorization context. It only serves to protect the sender
 from being told to a push to a destination that is not expecting the traffic.
 While this specification mandates use of an authorization model, this mandate is
