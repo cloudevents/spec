@@ -8,6 +8,7 @@ the responsibility of the respective project maintainers.
 
 - [Apache RocketMQ Transport Binding](https://github.com/apache/rocketmq-externals/blob/master/rocketmq-cloudevents-binding/rocketmq-transport-binding.md)
 - [Google Cloud Pub/Sub Protocol Binding](https://github.com/googleapis/google-cloudevents/blob/main/docs/spec/pubsub.md)
+- [RabbitMQ Transport Binding](https://github.com/knative-extensions/eventing-rabbitmq/blob/main/cloudevents-protocol-spec/spec.md)
 
 **Want to add a binding to a proprietary transport?**
 

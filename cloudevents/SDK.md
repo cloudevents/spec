@@ -202,6 +202,7 @@ Undo it when done:
 | [WebSockets Structured](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/bindings/websockets-protocol-binding.md)                  | :x: |     | :x:  | :heavy_check_mark: |     |     |        | :x: | :x:  |
 | Proprietary Bindings                                                                                                                          |
 | [RocketMQ](https://github.com/apache/rocketmq-externals/blob/master/rocketmq-cloudevents-binding/rocketmq-transport-binding.md)               | :x: |     | :heavy_check_mark:  | :x: |     |     |        | :x: | :x:  |
+| [RabbitMQ](https://github.com/knative-extensions/eventing-rabbitmq/blob/main/cloudevents-protocol-spec/spec.md)                               | :x: |     |      |     |     |     |        |     |      |
 |                                                                                                                                               |
 | **[v0.3](https://github.com/cloudevents/spec/tree/v0.3)**                                                                                     |
 | [CloudEvents Core](https://github.com/cloudevents/spec/blob/v0.3/spec.md)                                                                     | :x: | :heavy_check_mark: | :heavy_check_mark:  | :heavy_check_mark: | :x: | :x: | :heavy_check_mark:    | :heavy_check_mark:  | :heavy_check_mark:  |
