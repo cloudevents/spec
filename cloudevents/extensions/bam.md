@@ -95,7 +95,7 @@ this extension is being used.
 - Description: Indicates if the instance of the transaction (`bamtxid`) has
   actually been completed, or if the transaction has somehow failed.
   This is a mechanism to indicate a final completion or failure that is
-  not captures by the model of the business process.
+  not captured by the model of the business process.
 - Constraints
   - OPTIONAL
   - if present, MUST be a boolean value
