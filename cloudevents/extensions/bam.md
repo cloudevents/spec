@@ -34,7 +34,7 @@ this extension is being used.
 ### bamtxid (BAM Transaction ID)
 
 - Type: `String`
-- Description: A unique identifer for the instance of a transaction.
+- Description: A unique identifier for the instance of a transaction.
   This identifier connects the actual processing in the distributed
   system (e.g. payment, invoice, warehouse) with the model of this process.
 - Constraints
@@ -53,7 +53,7 @@ this extension is being used.
 - Constraints
   - REQUIRED
   - MUST be a non-empty string
-  - RECOMMENDED a alphanumeric string that contains non-whitespace characters
+  - RECOMMENDED an alphanumeric string that contains non-whitespace characters
     and only hyphens, underscores, and periods.
 
 ### bamptxid (BAM Process Transaction ID)
@@ -64,7 +64,7 @@ this extension is being used.
 - Constraints
   - REQUIRED
   - MUST be a non-empty string
-  - RECOMMENDED a alphanumeric string that contains non-whitespace characters
+  - RECOMMENDED an alphanumeric string that contains non-whitespace characters
     and only hyphens, underscores, and periods.
 
 ### bamptxsid (BAM Process Transaction Step ID)
@@ -75,7 +75,7 @@ this extension is being used.
 - Constraints
   - REQUIRED
   - MUST be a non-empty string
-  - RECOMMENDED a alphanumeric string that contains non-whitespace characters
+  - RECOMMENDED an alphanumeric string that contains non-whitespace characters
     and only hyphens, underscores, and periods.
 
 ### bamptxsstatus (BAM Transaction Step Status)
@@ -86,7 +86,7 @@ this extension is being used.
 - Constraints
   - OPTIONAL
   - if present, MUST be a non-empty string
-  - RECOMMENDED a alphanumeric string that contains non-whitespace characters
+  - RECOMMENDED an alphanumeric string that contains non-whitespace characters
     and only hyphens, underscores, and periods.
 
 ### bamptxcompleted (BAM Process Transaction Completed)
@@ -95,7 +95,7 @@ this extension is being used.
 - Description: Indicates if the instance of the transaction (`bamtxid`) has
   actually been completed, or if the transaction has somehow failed.
   This is a mechanism to indicate a final completion or failure that is
-  not captures by the model of the business process..
+  not captured by the model of the business process.
 - Constraints
   - OPTIONAL
   - if present, MUST be a boolean value
@@ -103,12 +103,12 @@ this extension is being used.
 ## Usage
 
 When this extension is used, producers MUST set the value of
-the `bamtxid`, `bampid`, `bamptxid`, and `bamptxid` attributes 
+the `bamtxid`, `bampid`, `bamptxid`, and `bamptxsid` attributes
 to the unique identifiers of the business process, transaction,
 and transaction step associated with the event.
 
 Intermediaries MUST NOT change the value of the `bamtxid`,
-`bampid`, `bamptxid`, and `bamptxid` attributes.
+`bampid`, `bamptxid`, and `bamptxsid` attributes.
 
 ## Use cases
 
