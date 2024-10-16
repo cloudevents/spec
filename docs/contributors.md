@@ -89,6 +89,7 @@ Contributions do not constitute an official endorsement.
 - Matt Rutkowski - [@mrutkows](https://github.com/mrutkows)
 
 # S
+- Vandewilly Silva - [@vandewillysilva](https://github.com/vandewillysilva)
 - Jon Skeet - [@jskeet](https://github.com/jskeet)
 - Stevo Slavić - [@sslavic](https://github.com/sslavic)
 - Tihomir Surdilovic - [@tsurdilo](https://github.com/tsurdilo)
