@@ -898,7 +898,7 @@ and this help event consumers safely work with event data as it evolves.
 
 #### Normalizing Webhooks
 
-Webhooks is a style of event publishing which does not use a common format.
+Webhooks is a style of event publishing that does not use a common format.
 Consumers of webhooks don’t have a consistent way to develop, test, identify,
 validate, and overall process event data delivered via webhooks.
 
