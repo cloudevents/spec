@@ -42,6 +42,7 @@ for more information.
 
 - [Auth Context](authcontext.md)
 - [BAM](bam.md)
+- [Data Classification](data-classification.md)
 - [Dataref (Claim Check Pattern)](dataref.md)
 - [Deprecation](deprecation.md)
 - [Distributed Tracing](distributed-tracing.md)
