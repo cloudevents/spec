@@ -10,9 +10,9 @@ This extension defines attributes to describe to
 how an event and its payload is classified, category of the payload and any
 applicable data protection regulations.
 
-These attributes are intended for classification on an event and payload level
-and not on `data` field level. Classification on field level is best defined in
-the schema specified via the `dataschema` attribute.
+These attributes are intended for classification at an event and payload level
+and not at a `data` field level. Classification at a field level is best defined
+in the schema specified via the `dataschema` attribute.
 
 ## Notational Conventions
 
