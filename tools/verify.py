@@ -135,6 +135,7 @@ async def _uri_availability_issues(uri: HttpUri, settings: Settings) -> Sequence
     if "example.com"  in uri: return []
     if "ietf.org"     in uri: return []
     if "rfc-edit.org" in uri: return []
+    if "iso20022.org" in uri: return []
 
     try:
         for attempt in Retrying(stop=stop_after_attempt(settings.http_max_get_attemps)):
@@ -151,7 +152,8 @@ async def _uri_availability_issues(uri: HttpUri, settings: Settings) -> Sequence
                             case _:
                                 return []  # no issues
 
-    except Exception:  # noqa
+    except Exception as e:  # noqa
+        print(f"Exception: {e}")
         return [Issue(f"Could Not access {repr(uri)}")]
     else:
         return []
