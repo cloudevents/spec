@@ -32,11 +32,12 @@ is being used.
 
 - Type: `String`
 - Description: Data classification level for the event payload within the
-  context of a `dataregulation`. Typical labels are: `public`, `internal`,
-  `confidential`, `restricted`.
+  context of a `dataregulation`. In situations where `dataregulation` is
+  undefined or the data protection regulation does not define any labels, then
+  recommended labels are: `public`, `internal`, `confidential`, or
+  `restricted`.
 - Constraints:
   - REQUIRED
-  - SHOULD be applicable to data protection regulation.
 
 ### dataregulation
 
@@ -58,7 +59,6 @@ is being used.
 - Constraints:
   - OPTIONAL
   - if present, MUST be a non-empty string
-  - SHOULD be applicable to data regulation and classification.
 
 ## Usage
 
@@ -67,9 +67,11 @@ When this extension is used, producers MUST set the value of the
 `datacategory` attributes MAY be set to provide additional details on the
 classification context.
 
-Intermediaries and consumers SHOULD take these attributes into account and act
-accordingly to data regulations and/or internal policies when processing the
-event and payload.
+When an implementation supports this extension, then intermediaries and
+consumers MUST take these attributes into account and act accordingly to data
+regulations and/or internal policies in processing the event and payload. If
+intermediaries or consumers cannot meet such requirements, they MUST reject or
+ignore the event.
 
 Intermediaries SHOULD NOT modify the `dataclassification`, `dataregulation`, and
 `datacategory` attributes.
