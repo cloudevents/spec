@@ -1,9 +1,9 @@
 # Data Classification Extension
 
-CloudEvents might contain payload which is subjected to data protection
+CloudEvents might contain payloads which are subjected to data protection
 regulations like GDPR or HIPAA. For intermediaries and consumers knowing how
-event payload is classified, which data protection regulation applies and how
-payload is categorized, enables compliant processing of an event.
+event payloads are classified, which data protection regulation applies and how
+payloads are categorized, enables compliant processing of events.
 
 This extension defines attributes to describe to
 [consumers](../spec.md#consumer) or [intermediaries](../spec.md#intermediary)
@@ -34,7 +34,7 @@ is being used.
 - Description: Data classification level for the event payload within the
   context of a `dataregulation`. In situations where `dataregulation` is
   undefined or the data protection regulation does not define any labels, then
-  recommended labels are: `public`, `internal`, `confidential`, or
+  RECOMMENDED labels are: `public`, `internal`, `confidential`, or
   `restricted`.
 - Constraints:
   - REQUIRED
@@ -46,7 +46,8 @@ is being used.
   For example: `GDPR`, `HIPAA`, `PCI-DSS`, `ISO-27001`, `NIST-800-53`, `CCPA`.
 - Constraints:
   - OPTIONAL
-  - if present, MUST be a non-empty string
+  - if present, MUST be a non-empty string without internal spaces. Leading and
+    trailing spaces around each entry MUST be ignored.
 
 ### datacategory
 
@@ -81,7 +82,7 @@ Intermediaries SHOULD NOT modify the `dataclassification`, `dataregulation`, and
 Examples where data classification of events can be useful are:
 
 - When an event contains PII or restricted information and therefore processing
-  by intermediaries or consumers MUST adhere to certain policies. For example
+  by intermediaries or consumers need to adhere to certain policies. For example
   having separate processing pipelines by sensitivity or having logging,
   auditing and access policies based upon classification.
 - When an event payload is subjected to regulation and therefore retention
