@@ -87,4 +87,4 @@ Examples where data classification of events can be useful are:
   auditing and access policies based upon classification.
 - When an event payload is subjected to regulation and therefore retention
   policies apply. For example, having event retention policies based upon data
-  classification or to enable automated data purging durable topics.
+  classification or to enable automated data purging of durable topics.
