@@ -74,6 +74,11 @@ regulations and/or internal policies in processing the event and payload. If
 intermediaries or consumers cannot meet such requirements, they MUST reject or
 ignore the event.
 
+If intermediaries or consumers are unsure on how to interpret these attributes,
+for example when they encounter an unknown classification level or data
+regulation, they must assume they cannot meet requirements and MUST reject or
+ignore the event.
+
 Intermediaries SHOULD NOT modify the `dataclassification`, `dataregulation`, and
 `datacategory` attributes.
 
