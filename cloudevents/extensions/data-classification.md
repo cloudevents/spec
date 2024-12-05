@@ -71,13 +71,13 @@ classification context.
 When an implementation supports this extension, then intermediaries and
 consumers MUST take these attributes into account and act accordingly to data
 regulations and/or internal policies in processing the event and payload. If
-intermediaries or consumers cannot meet such requirements, they MUST reject or
-ignore the event.
+intermediaries or consumers cannot meet such requirements, they MUST reject and
+report an error through a protocol-level mechanism.
 
 If intermediaries or consumers are unsure on how to interpret these attributes,
 for example when they encounter an unknown classification level or data
-regulation, they MUST assume they cannot meet requirements and MUST reject or
-ignore the event.
+regulation, they MUST assume they cannot meet requirements and MUST reject the
+event and report an error through a protocol-level mechanism.
 
 Intermediaries SHOULD NOT modify the `dataclassification`, `dataregulation`, and
 `datacategory` attributes.
