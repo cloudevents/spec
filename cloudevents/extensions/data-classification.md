@@ -93,3 +93,46 @@ Examples where data classification of events can be useful are:
 - When an event payload is subjected to regulation and therefore retention
   policies apply. For example, having event retention policies based upon data
   classification or to enable automated data purging of durable topics.
+
+## Appendix Data Protection and Privacy Regulations
+
+A catalog of common data protection and privacy regulation and abbreviations 
+based upon UNCTAD (United Nations Conference on Trade and Development) 
+information. As UNCTAD itself does not define any abbreviations, this 
+is a non-exhaustive derivative list of most common regulations. For more 
+information see [UNCTAD Data Protection and Privacy Legislation Worldwide](https://unctad.org/page/data-protection-and-privacy-legislation-worldwide).
+
+| Region | Abbreviation | Full Name | Country |
+|--------|--------------|-----------|---------|
+| Africa | POPIA | Protection of Personal Information Act | South Africa |
+| Africa | NDPR | Nigeria Data Protection Regulation | Nigeria |
+| Africa | DPA-KE | Data Protection Act | Kenya |
+| Africa | PDPL | Personal Data Protection Law | Egypt |
+| Africa | GDPL | General Data Protection Law | Tunisia |
+| Americas | LGPD | Lei Geral de Proteção de Dados | Brazil |
+| Americas | LPDP | Ley de Protección de Datos Personales | Mexico |
+| Americas | LOCDI | Ley Orgánica de Datos Personales | Argentina |
+| Americas | CCPA | California Consumer Privacy Act | United States |
+| Americas | CPRA | California Privacy Rights Act | United States |
+| Americas | PIPEDA | Personal Information Protection and Electronic Documents Act | Canada |
+| Americas | VCDPA | Virginia Consumer Data Protection Act | United States |
+| Americas | CPA | Colorado Privacy Act | United States |
+| Americas | UCPA | Utah Consumer Privacy Act | United States |
+| Asia-Pacific | PDPA | Personal Data Protection Act | Singapore |
+| Asia-Pacific | PIPA | Personal Information Protection Act | South Korea |
+| Asia-Pacific | APPI | Act on the Protection of Personal Information | Japan |
+| Asia-Pacific | DPDP | Personal Data Protection Bill | India |
+| Asia-Pacific | PDPO | Personal Data (Privacy) Ordinance | Hong Kong |
+| Asia-Pacific | DPA-MY | Data Protection Act | Malaysia |
+| Asia-Pacific | PIPL | Personal Information Protection Law | China |
+| Asia-Pacific | DPA-ID | Draft Data Protection Act | Indonesia |
+| Europe | GDPR | General Data Protection Regulation | European Union |
+| Middle East | PDPL | Personal Data Protection Law | Saudi Arabia |
+| Middle East | PDPO | Personal Data Protection Ordinance | United Arab Emirates |
+| Middle East | PDPD | Personal Data Protection Draft | Bahrain |
+| Global/Multi-Regional | APEC-CBPR | Asia-Pacific Economic Cooperation Cross Border Privacy Rules | International |
+| Global/Multi-Regional | ISO-27001 | Information Security Management | International |
+| Global/Multi-Regional | ISO-27701 | Privacy Information Management | International |
+| Industry-Specific | HIPAA | Health Insurance Portability and Accountability Act | United States |
+| Industry-Specific | PCI-DSS | Payment Card Industry Data Security Standard | United States |
+| Industry-Specific | NIST-800-53 | National Institute of Standards and Technology Framework | United States |
