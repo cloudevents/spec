@@ -53,7 +53,7 @@ is being used.
 
 - Type: `String`
 - Description: Data category of the event payload within the context of a
-  `dataregulation` and `dataclassification`. For GDPR personal data typical  
+  `dataregulation` and `dataclassification`. For GDPR personal data typical
   labels are: `non-sensitive`, `standard`, `sensitive`, `special-category`. For
   US personal data this could be: `sensitive-pii`, `non-sensitive-pii`,
   `non-pii`. And for personal health information under HIPAA: `phi`.
@@ -93,3 +93,18 @@ Examples where data classification of events can be useful are:
 - When an event payload is subjected to regulation and therefore retention
   policies apply. For example, having event retention policies based upon data
   classification or to enable automated data purging of durable topics.
+
+## Appendix: Data Protection and Privacy Regulations
+
+For reference purposes, a catalog of common data protection and privacy
+regulation and abbreviations is availble from [UNCTAD
+(United Nations Conference on Trade and
+Development)](https://unctad.org/page/data-protection-and-privacy-legislation-worldwide),
+under the `DOWNLOAD FULL DATA` button ([direct
+link](https://unctad.org/system/files/information-document/DP.xlsx)). Others
+might exist.
+
+Some examples include:
+- `GDPR` - General Data Protection Regulation, Europe
+- `HIPAA` - Health Insurance Portability and Accountability Act, United States
+- `NDPR` - Nigeria Data Protection Regulation, Nigeria
