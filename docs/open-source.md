@@ -15,11 +15,13 @@ CloudEvents v1.0, please include it in the list below.
 - [CloudEvents Verify](https://github.com/btbd/CEVerify): is a tool to help
   verify CloudEvents according to the proper specifications. It is currently
   being hosted publicly [here](http://soaphub.org/ceverify).
+- [Cloud Streams](https://github.com/neuroglia-io/cloud-streams): Cloud Streams is a cloud-native tool that empowers users to capture and process CloudEvents in real-time, enabling event-driven architectures that are both scalable and efficient.
 - [Gloo](https://github.com/solo-io/gloo): is a function gateway built on top of
   [Envoy Proxy](https://envoyproxy.io/) by [Solo.io](https://www.solo.io/) that
   supports CloudEvents.
 - [Knative Eventing](https://knative.dev) implements CloudEvents based sources
   and event delivery abstractions build on top of Kubernetes.
 - [Microcks](https://microcks.io/) is a Cloud Native Computing [Sandbox project](https://landscape.cncf.io/?selected=microcks) dedicated to API Mocking and Testing. See our CloudEvents integration 👉 [Simulating CloudEvents with AsyncAPI and Microcks](https://microcks.io/blog/simulating-cloudevents-with-asyncapi/).
+- [Synapse](https://github.com/serverlessworkflow/synapse): Synapse is a vendor-neutral, open-source, and community-driven Workflow Management System (WFMS) designed to implement the [Serverless Workflow specification](https://github.com/serverlessworkflow/specification).
 - [VMware Event Broker Appliance](https://vmweventbroker.io) enables event
   driven workflows from vCenter Server Events.
