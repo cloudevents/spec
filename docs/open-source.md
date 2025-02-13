@@ -15,6 +15,7 @@ CloudEvents v1.0, please include it in the list below.
 - [CloudEvents Verify](https://github.com/btbd/CEVerify): is a tool to help
   verify CloudEvents according to the proper specifications. It is currently
   being hosted publicly [here](http://soaphub.org/ceverify).
+- [Cloud Shapes](https://github.com/neuroglia-io/cloud-shapes): Cloud Shapes is an event-driven database designed for real-time projection materialization based on CloudEvents.
 - [Cloud Streams](https://github.com/neuroglia-io/cloud-streams): Cloud Streams is a cloud-native tool that empowers users to capture and process CloudEvents in real-time, enabling event-driven architectures that are both scalable and efficient.
 - [Gloo](https://github.com/solo-io/gloo): is a function gateway built on top of
   [Envoy Proxy](https://envoyproxy.io/) by [Solo.io](https://www.solo.io/) that
