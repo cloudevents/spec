@@ -139,7 +139,7 @@ components:
       properties:
         protocol:
           $ref: "#/components/schemas/Protocol"
-        protocolSettings:
+        protocolsettings:
           oneOf:
             - $ref: "#/components/schemas/ProtocolSettings"
             - $ref:  "#/components/schemas/AMQPSettings"
@@ -152,7 +152,7 @@ components:
           format: url
           description: REQUIRED. The address to which events shall be delivered using the selected protocol.
           example: "https://endpoint.example.com/webhook"
-        sinkCredential:
+        sinkcredential:
           oneOf:
             - $ref: "#/components/schemas/SinkCredential"
             - $ref: "#/components/schemas/AccessTokenCredential"
@@ -365,7 +365,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/ProtocolSettings"
         - properties:
-            topicName:
+            topicname:
               type: string
             qos:
               type: integer
@@ -375,10 +375,10 @@ components:
             expiry:
               type: integer
               format: int32
-            userProperties:
+            userproperties:
               type: object
           required:
-            - topicName
+            - topicname
     AMQPSettings:
       type: object
       allOf:
@@ -388,7 +388,7 @@ components:
               type: string
             linkName:
               type: string
-            senderSettlementMode:
+            sendersettlementmode:
               type: string
               enum: ["settled", "unsettled"]
             linkProperties:
@@ -400,16 +400,16 @@ components:
       allOf:
         - $ref: "#/components/schemas/ProtocolSettings"
         - properties:
-            topicName:
+            topicname:
               type: string
-            partitionKeyExtractor:
+            partitionkeyextractor:
               type: string
-            clientId:
+            clientid:
               type: string
-            ackMode:
+            ackmode:
               type: integer
           required:
-            - topicName
+            - topicname
     NATSSettings:
       type: object
       allOf:
@@ -422,7 +422,7 @@ components:
     SinkCredential:
       type: object
       properties:
-         credentialType:
+         credentialtype:
             type: string
             enum: ["PLAIN", "ACCESSTOKEN", "REFRESHTOKEN"]
             description: "The type of the credential."
@@ -445,20 +445,20 @@ components:
       allOf:
         - $ref: "#/components/schemas/SinkCredential"
         - properties:
-            accessToken:
+            accesstoken:
               description: REQUIRED. An access token is a previously acquired token granting access to the target resource.
               type: string
-            accessTokenExpiresUtc:
+            accesstokenexpiresutc:
               type: string
               format: date-time
               description: RECOMMENDED. An absolute UTC instant at which the token shall be considered expired.
-            accessTokenType:
+            accesstokentype:
               description: OPTIONAL. )Type of the access token (See https://tools.ietf.org/html/rfc6749#section-7.1).
               type: string
               default: bearer
           required:
-            - accessToken
-            - accessTokenExpiresUtc
+            - accesstoken
+            - accesstokenexpiresutc
     RefreshTokenCredential:
       type: object
       description: An access token credential with a refresh token.
@@ -466,13 +466,13 @@ components:
         - $ref: "#/components/schemas/AccessTokenCredential"
         - type: object
           properties:
-            refreshToken:
+            refreshtoken:
               description: REQUIRED. An refresh token credential used to acquire access tokens.
               type: string
-            refreshTokenEndpoint:
+            refreshtokenendpoint:
               type: string
               format: uri
               description: REQUIRED. A URL at which the refresh token can be traded for an access token.
       required:
-        - refreshToken
-        - refreshTokenEndpoint
+        - refreshtoken
+        - refreshtokenendpoint

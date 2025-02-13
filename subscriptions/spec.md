@@ -388,7 +388,7 @@ Each subscription is represented by an object that has the following properties:
 - Examples:
   - `https://example.com/event-processor`
 
-##### sinkCredential
+##### sinkcredential
 
 - Type: Map of attributes
 - Description: A set of settings carrying credential information that
@@ -643,7 +643,7 @@ settings. All other settings SHOULD be supported.
 A sink credential provides authentication or authorization information necessary
 to enable delivery of events to a target.
 
-##### credentialType
+##### credentialtype
 
 - Type: `String`
 - Description: Identifier of a credential type. The predefined types are "PLAIN",
@@ -662,7 +662,7 @@ to enable delivery of events to a target.
   username.
 
 - Constraints:
-  - REQUIRED for credentialType="PLAIN"
+  - REQUIRED for credentialtype="PLAIN"
 
 ##### secret
 
@@ -671,45 +671,45 @@ to enable delivery of events to a target.
   passphrase or key.
 
 - Constraints:
-  - REQUIRED for credentialType="PLAIN"
+  - REQUIRED for credentialtype="PLAIN"
   - SHOULD NOT be returned during enumeration or retrieval
 
-##### accessToken
+##### accesstoken
 
 - Type: String
 - Description: An access token is a previously acquired token granting access to
   the target resource.
 
 - Constraints:
-  - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
+  - REQUIRED for credentialtype="ACCESSTOKEN" and credentialtype="REFRESHTOKEN"
   - SHOULD NOT be returned during enumeration or retrieval
 
-##### accessTokenExpiresUtc
+##### accesstokenexpiresutc
 
 - Type: Timestamp
 - Description: An absolute UTC instant at which the token SHALL be considered
   expired.
 
 - Constraints:
-  - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
+  - REQUIRED for credentialtype="ACCESSTOKEN" and credentialtype="REFRESHTOKEN"
 
-##### accessTokenType
+##### accesstokentype
 
 - Type: String
 - Description: Type of the access token (See [OAuth 2.0](https://tools.ietf.org/html/rfc6749#section-7.1)).
 
 - Constraints:
-  - REQUIRED for credentialType="ACCESSTOKEN" and credentialType="REFRESHTOKEN"
+  - REQUIRED for credentialtype="ACCESSTOKEN" and credentialtype="REFRESHTOKEN"
 
-##### refreshToken
+##### refreshtoken
 
 - Type: String
 - Description: A refresh token credential used to acquire access tokens.
 
 - Constraints:
-  - REQUIRED for credentialType="REFRESHTOKEN"
+  - REQUIRED for credentialtype="REFRESHTOKEN"
 
-##### refreshTokenEndpoint
+##### refreshtokenendpoint
 
 - Type: String
 - Description: A URL at which the refresh token can be traded for an access
@@ -720,7 +720,7 @@ to enable delivery of events to a target.
   endpoint MUST be authorized. The credentials for this authorization
   relationship, which exists between the delivery service managed by the
   subscription API and the refresh endpoint, are out of scope for this
-  specification. The sinkCredentials represent the authorization relationship
+  specification. The sinkcredentials represent the authorization relationship
   between the subscriber and the delivery target it points the subscription to.
 
 #### 3.2.4 Filters
