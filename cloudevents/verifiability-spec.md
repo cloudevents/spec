@@ -18,13 +18,20 @@ Further, this proposal only aims at *verifiability*. It does not aim to enable *
 
 We have set the following constraints for the proposed design:
 
-**Verifiability must be optional:** This ensures that the additional burden of producing verification material and performing verification only applies when verifiability is desired, which is not always the case.
+**Verifiability MUST be optional:** This ensures that the additional burden of producing verification material and performing verification only applies when verifiability is desired, which is not always the case.
 
-**The design must be backward compatible:** ** Backward compatibility ensures that producers can produce verifiable events without any knowledge about whether the consumers have been configured and are able to verify events. 
+**The design MUST be backwards compatible:** Backward compatibility ensures that producers can produce verifiable events without any knowledge about whether the consumers have been configured and are able to verify events. In addition, transports MUST continue to work regardless if verifiability is being used or not.
 
-**The design must be algorithm agnostic:** Being agnostic to the specifics of the verification algorithm and protocol allows for different *verifiability implementations* of this design. Different circumstances might call for different implementations, and the design should account for that.
+**The design MUST be algorithm agnostic:** Being agnostic to the specifics of the verification algorithm and protocol allows for different *verifiability implementations* of this design. Different circumstances might call for different implementations, and the design MUST account for that.
 
-**The verification material must be contained in the same message as the event:** The design aims to be simple and robust, and so the verification material must be transported and delivered along with the event that it describes (and not in separate events or even through different channels).
+**The verification material MUST be contained in the same message as the event:** The design aims to be simple and robust, and so the verification material MUST be transported and delivered along with the event that it describes (and not in separate events or even through different channels).
+
+## Assumptions
+
+This proposal contains a few assumptions that will be highlighted here.
+
+1. SDKs will verify as early as possible which may or may not depend on the verification implementation.
+2. Users manage their secrets, e.g. public key infrastructure (PKI).
 
 ## Design
 
@@ -46,6 +53,10 @@ The flow looks like this:
 
 *Option 2*: useful for verifiability implementations that are directly supported by the CE SDK. The CE SDK has to be provided with the secrets (e.g. private key for producer and public key for consumers) and will create the verification material on the producer side and also perform the verification on the consumer side. This is the appropriate choice for any type of tool that is used by other entities, for example open source.
 
+**Note:** If an intermediary party modifies an event, they are considered the producer of a new event. They MUST create an updated verification material and the consumer(s) MUST recognize them as a trustworthy producer.
+
+### Proposal
+
 In order to make this possible, we propose two new [OPTIONAL context attributes](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#optional-attributes) for the CloudEvents core specification:
 
 * `verificationmaterial`
@@ -53,15 +64,15 @@ In order to make this possible, we propose two new [OPTIONAL context attributes]
     * Description: the material that consumers can use to verify a CloudEvent. For example, the verification material could be a signature of the event based on a private key. Consumers would use the producers’ public key to verify the signature.
     * Constraints:
         * OPTIONAL
-        * If present, must be base64 encoded
-        * If present, a `verificationmaterialtype` attribute must also be present
+        * If present, MUST be base64 encoded
+        * If present, a `verificationmaterialtype` attribute MUST also be present
 * `verificationmaterialtype`
     * Type: `String`
     * Description: tells consumers of CloudEvents what type the verification material is of. This high level category is used by the consumer to choose an appropriate implementation for performing the verification. The verification material can contain information specific to the implementation such as a sub type, version information, etc.
     * Constraints:
         * OPTIONAL
-        * If present, a `verificationmaterial` attribute must also be present
-        * Producer and consumer must agree on an appropriate type
+        * If present, a `verificationmaterial` attribute MUST also be present
+        * Producer and consumer MUST agree on an appropriate type
 
 ## Verifiability Implementations
 
@@ -96,6 +107,10 @@ A proposal for adding a verifiability implementation to the CE SDK **MUST:**
 
 Test vectors ensure that implementations are consistent which does NOT affect verifiability. 
 
+A proposal for adding a verifiability implementation to the CE SDK **SHOULD:**
+
+* provide information about they handle attributes, and if relevant, normalization
+
 ## Example
 
 To illustrate, let’s walk through how to implement a verification implementation CloudEvents provide test vectors as well as a verification coverage table.
@@ -103,6 +118,7 @@ To illustrate, let’s walk through how to implement a verification implementati
 ### Verification Implementation
 
 This is an example message containing a CloudEvent directly from the spec. It happens to be an HTTP structured mode message in JSON format. Our goal is to come up with the most insecure but also most concise verification implementation imaginable: one based on an md5 digest!
+The md5 implementation will only verify whether or not the payload, `data`, is valid and not additional attributes for the sake of simplicity.
 
 Here is how a message containing that CloudEvent might look:
 
@@ -121,13 +137,11 @@ content-type: application/json
 }
 ```
 
-In order to make this event verifiable, an md5 digest of the body of the message is computed: `dc98e72d0f9980e89af5f8e7692d58d7`. This value will then be base64 encoded and added as the `verificationmaterial` context attribute:
+In order to make this event verifiable, an md5 digest of the 'data' field is computed: `dc98e72d0f9980e89af5f8e7692d58d7`. This value will then be base64 encoded and added as the `verificationmaterial` context attribute:
 
 ```
 content-length: 209
 content-type: application/json
-ce-verificationmaterial: ZGM5OGU3MmQwZjk5ODBlODlhZjVmOGU3NjkyZDU4ZDc=
-ce-verificationmaterialtype: md5
 
 {
     "specversion" : "1.0",
@@ -136,23 +150,17 @@ ce-verificationmaterialtype: md5
     "subject": null,
     "id" : "D234-1234-1234",
     "time" : "2018-04-05T17:31:00Z",
-    "data" : "I'm just a string"
+    "data" : "I'm just a string",
+    "verificationmaterial": "ODQ0ZTAwNzRkNzQ4MmZjODkwZGJhODJhYTBlY2M4ZjcgIC0K",
+    "verificationmaterialtype": "md5"
 }
 ```
 
-A consumer then receives the this message and in order to verify, they must look at the `ce-erificationmaterialtype` header to determine whether it knows how to perform the verification. The consumer sees that verification material’s type is `md5`, so they will compute the `md5` of the payload to verify the CloudEvent contained in the message:
+A consumer then receives the this message and in order to verify, they MUST look at the `ce-erificationmaterialtype` header to determine whether it knows how to perform the verification. The consumer sees that verification material’s type is `md5`, so they will compute the `md5` of the payload to verify the CloudEvent contained in the message:
 
 ```
-$ echo -n '{
-      "specversion" : "1.0",
-      "type" : "com.example.someevent",
-      "source" : "/mycontext",
-      "subject": null,
-      "id" : "D234-1234-1234",
-      "time" : "2018-04-05T17:31:00Z",
-      "data" : "I\'m just a string"
-  }' | md5sum
-dc98e72d0f9980e89af5f8e7692d58d7  -
+$ echo -n "I'm just a string" | md5sum
+844e0074d7482fc890dba82aa0ecc8f7 -
 ```
 
 The consumer can then confirm that the `md5sum` output matches the verification material and conclude that the CloudEvent’s authenticity and integrity are “guaranteed“.
@@ -173,11 +181,13 @@ An example test vector may look like:
             "subject": null,
             "id" : "D234-1234-1234",
             "time" : "2018-04-05T17:31:00Z",
-            "data" : "I'm just a string"
+            "data" : "I'm just a string",
+            "verificationmaterial": "ODQ0ZTAwNzRkNzQ4MmZjODkwZGJhODJhYTBlY2M4ZjcgIC0K",
+            "verificationmaterialtype": "md5"
         }
     },
     "expectedVerificationMaterialType": "md5",
-    "expectedVerificationMaterial": "dc98e72d0f9980e89af5f8e7692d58d7"
+    "expectedVerificationMaterial": "844e0074d7482fc890dba82aa0ecc8f7"
 ]
 ```
 
@@ -190,8 +200,8 @@ The table below outlines which parts of a CloudEvent for our imaginary md5 based
 |Verifiable information	|binary-mode	|structured-mode	|comment	|
 |---	|---	|---	|---	|
 |data/payload	|✅	|✅	|	|
-|mandatory context attributes	|❌	|✅	|The md5 verification implementation only looks at the payload, not at any headers.	|
-|optional context attributes	|❌	|✅	|
+|mandatory context attributes	|❌	|❌	|The md5 verification implementation only looks at the payload, not at any headers.	|
+|optional context attributes	|❌	|❌	|
 |extension attributes	|❌	|✅	|
 
 Again, `md5` was chosen because it makes for an easily readable example. It is wildly insecure and not suitable for actual verifiability. 
