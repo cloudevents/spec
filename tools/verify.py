@@ -143,7 +143,7 @@ async def _uri_availability_issues(uri: HttpUri, settings: Settings) -> Sequence
                 async with ClientSession() as session:
                     with closing(
                         await session.get(
-                            uri, timeout=settings.http_timeout_seconds, ssl=False
+                            uri, timeout=settings.http_timeout_seconds, ssl=False, max_field_size=81900
                         )
                     ) as response:
                         match response.status:
