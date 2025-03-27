@@ -263,14 +263,14 @@ systems.
 
 ### Verification Coverage Table
 
-The table below outlines which parts of a CloudEvent for our imaginary sha256
+The table below outlines which parts of a CloudEvent for our imaginary `rev`
 based verification implementation would cover:
 
 |Verifiable information	|binary-mode	|structured-mode	|comment	|
 |---	|---	|---	|---	|
 |data/payload	|✅	|✅	|	|
-|mandatory context attributes	|❌	|❌	|The sha256 verification implementation only looks at the payload, not at any headers.	|
-|optional context attributes	|❌	|❌	|
+|mandatory context attributes	|❌	|❌	|The `rev` verification implementation only looks at the payload, not at any headers.	|
+|permissive context attributes	|❌	|❌	|
 |extension attributes	|❌	|✅	|
 
 Again, `sha256` was chosen because it makes for an easily readable example. It is
