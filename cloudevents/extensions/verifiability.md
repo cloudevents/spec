@@ -1,5 +1,30 @@
 # Proposal: CloudEvents Verifiability
 
+This proposal introduces a transport protocol agnostic design for verifiable
+CloudEvents. It allows producers of CloudEvents to sign the events that they
+send—and consumers to cryptographically verify the *authenticity and the
+integrity* of the events that they receive. Through this process consumers can
+be sure that events were in fact produced by the claimed producer
+(authenticity), and that the events were received exactly as they were sent,
+and not modified in transit (integrity).
+
+The threats addressed by this proposal are those of malicious actors
+impersonating CloudEvent producers and of malicious actors modifying messages
+in transit.
+
+This proposal only applies to individual events. It does not give consumers any
+guarantees about the completeness of the event stream or the order of events.
+
+The threats of malicious actors removing or hiding items from the event stream
+as well as swapping their order are not addressed by this proposal. Neither are
+the possibilities of messages accidentally getting lost or delivered in the
+wrong order. Both can be addressed by producers through means of adding the
+necessary information inside the event payloads.
+
+Further, this proposal only aims at *verifiability*. It does not aim to enable
+*confidentiality*. Consequently, it does not address the threat of unauthorized
+parties reading CloudEvents that were not meant for them.
+
 ## Notational Conventions
 
 As with the main [CloudEvents specification](../spec.md), the key words "MUST",
@@ -44,40 +69,11 @@ When this extension is used, producers MUST set both the `verificationmaterial`
 and `verificationmaterialtype` attributes. Consumers can choose to verify if
 the material.
 
-## Goals
-
-This proposal introduces a transport protocol agnostic design for verifiable
-CloudEvents. It allows producers of CloudEvents to sign the events that they
-send—and consumers to cryptographically verify the *authenticity and the
-integrity* of the events that they receive. Through this process consumers can
-be sure that events were in fact produced by the claimed producer
-(authenticity), and that the events were received exactly as they were sent,
-and not modified in transit (integrity).
-
-The threats addressed by this proposal are those of malicious actors
-impersonating CloudEvent producers and of malicious actors modifying messages
-in transit.
-
-## Non-goals
-
-This proposal only applies to individual events. It does not give consumers any
-guarantees about the completeness of the event stream or the order of events.
-
-The threats of malicious actors removing or hiding items from the event stream
-as well as swapping their order are not addressed by this proposal. Neither are
-the possibilities of messages accidentally getting lost or delivered in the
-wrong order. Both can be addressed by producers through means of adding the
-necessary information inside the event payloads.
-
-Further, this proposal only aims at *verifiability*. It does not aim to enable
-*confidentiality*. Consequently, it does not address the threat of unauthorized
-parties reading CloudEvents that were not meant for them.
-
 ## Assumptions
 
 This proposal contains a few assumptions that will be highlighted here.
 
-1. SDKs will verify as early as possible which may or may not depend on the
+1. SDKs will verify as early as possible which depends on the
    verification implementation.
 2. Users manage their secrets, e.g. public key infrastructure (PKI).
 
@@ -86,7 +82,7 @@ This proposal contains a few assumptions that will be highlighted here.
 Verifiability in CloudEvents consists of two steps:
 
 1. The producer of an event adds verification material to the message
-2. The consumer of an event may use the verification material to verify the
+2. The consumer of an event MAY use the verification material to verify the
    authenticity and integrity of the event
 
 
@@ -143,7 +139,7 @@ A verifiability implementation **MUST FAIL** on:
   attributes being set in a message)
 * One relevant context attribute being present but the other missing (e.g.
   `verificationmaterial` being set but `verificationmaterialtype` missing)
-* Unknown material type (e.g. the implementation may only attempt to use the
+* Unknown material type (e.g. the implementation only attempts to use the
   verification material if it knows how to do so)
 * Invalid material (e.g. the verification material did not match the received
   event)
@@ -241,7 +237,7 @@ a verification coverage table.
 
 ### Test Vectors
 
-An example test vector may look like:
+An example test vector is defined below:
 
 ```
 [
