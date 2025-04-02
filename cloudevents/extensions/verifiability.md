@@ -1,4 +1,4 @@
-# Proposal: CloudEvents Verifiability
+# CloudEvents Verifiability Extension
 
 This proposal introduces a transport protocol agnostic design for verifiable
 CloudEvents. It allows producers of CloudEvents to sign the events that they

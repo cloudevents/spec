@@ -1,4 +1,4 @@
-# Business Activity Monitoring (BAM) Extension
+# CloudEvents Verifiability Extension
 
 本文档尚未被翻译，请先阅读英文[原版文档](../../../extensions/verifiability.md) 。
 
