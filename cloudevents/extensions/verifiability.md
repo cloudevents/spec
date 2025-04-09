@@ -263,7 +263,7 @@ based verification implementation would cover:
 |data/payload	|✅	|✅	|	|
 |mandatory context attributes	|❌	|❌	|The `rev` verification implementation only looks at the payload, not at any context attributes. |
 |permissive context attributes	|❌	|❌	|
-|extension attributes	|❌	|✅	|
+|extension attributes	|❌	|❌	|
 
 Again, `rev` was chosen because it makes for an easily readable example. It is
 wildly insecure and not suitable for actual verifiability. 
