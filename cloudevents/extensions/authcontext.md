@@ -46,9 +46,10 @@ this extension is being used.
 ### authid
 - Type: `String`
 - Description: A unique identifier of the principal that triggered the
-  occurrence. This might, for example, be a unique ID in an identity database
-  (userID), an email of a platform user or service account, or the label for an
-  API key.
+  occurrence. This specification makes no statement as to what this value
+  ought to be, however including personally identifiable information (PII)
+  in a CloudEvent is often considered inappropriate, so some indirect reference
+  (e.g. a hash or label of an API key) might be considered.
 - Constraints
   - OPTIONAL
 
