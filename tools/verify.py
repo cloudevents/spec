@@ -125,7 +125,7 @@ def _skip_type(text: str) -> Optional[str]:
 
 
 def _find_all_uris(html: HtmlText) -> Iterable[Uri]:
-    for a in _html_parser(html).findAll("a"):
+    for a in _html_parser(html).find_all("a"):
         uri = a.get("href")
         if uri:
             yield Uri(uri.strip())
