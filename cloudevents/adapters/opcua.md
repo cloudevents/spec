@@ -33,7 +33,7 @@ A keyframe message is indicated by setting the type property to  `ua-keyframe`
 | CloudEvents Attribute | Value | Remark                                            |
 | :-------------------- | :----------------------------------------------| :-------------------- |
 | `subject`             | `DataSetWriterId` or `DataSetWriterName` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164).                            | |
-| `sequence`            | `SequenceNumber` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | Attribute as defined by [sequence extensions](./sequence.md) |
+| `sequence`            | `SequenceNumber` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | Attribute as defined by [sequence extensions](./../extensions/sequence.md) |
 
 ### Deltaframe
 
@@ -42,7 +42,7 @@ A deltaframe message is indicated by setting the type property to  `ua-deltafram
 | CloudEvents Attribute | Value | Remark                                            |
 | :-------------------- | :----------------------------------------------| :-------------------- |
 | `subject`             | `DataSetWriterId` or `DataSetWriterName` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164).                            | |
-| `sequence`            | `SequenceNumber` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | Attribute as defined by [sequence extensions](./sequence.md) |
+| `sequence`            | `SequenceNumber` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | Attribute as defined by [sequence extensions](./../extensions/sequence.md) |
 
 ### Event
 
@@ -51,7 +51,7 @@ An event message is indicated by setting the type property to `ua-event`
 | CloudEvents Attribute | Value | Remark                                            |
 | :-------------------- | :----------------------------------------------| :-------------------- |
 | `subject`             | `DataSetWriterId` or `DataSetWriterName` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164).                            | |
-| `sequence`            | `SequenceNumber` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | Attribute as defined by [sequence extensions](./sequence.md) |
+| `sequence`            | `SequenceNumber` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | Attribute as defined by [sequence extensions](./../extensions/sequence.md) |
 
 ## Recomended Extension Mapping
 
@@ -59,9 +59,9 @@ It is recomended that the below extensions are also implemented.
 
 | CloudEvents Attribute | Value | Remark                                            |
 | :-------------------- | :----------------------------------------------| :-------------------- |
-| `traceparent`            | | Attribute as defined by [distributed-tracing extension](./distributed-tracing.md) to allow tracing from event publisher towards consumer. |
-| `tracestate`            | | Attribute as defined by [distributed-tracing extension](./distributed-tracing.md) MAY be used to allow tracing from event publisher towards consumer. |
-| `recordedtime`            | | Attribute as defined by [recordedtime extension](./recordedtime.md) to determine the latency between event publisher towards consumer. |
+| `traceparent`            | | Attribute as defined by [distributed-tracing extension](./../extensions/distributed-tracing.md) to allow tracing from event publisher towards consumer. |
+| `tracestate`            | | Attribute as defined by [distributed-tracing extension](./../extensions/distributed-tracing.md) MAY be used to allow tracing from event publisher towards consumer. |
+| `recordedtime`            | | Attribute as defined by [recordedtime extension](./../extensions/recordedtime.md) to determine the latency between event publisher towards consumer. |
 
 ## General Constraints
 
