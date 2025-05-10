@@ -138,7 +138,7 @@ It would then be up to the event producer to define the CloudEvents attribute
 values that would be used, just like any other event it might generate.
 
 Since not all event producers generate their events as CloudEvents, there are
-a set of [adapters](./adapters.md) defined that show how to map events from
+a set of [adapters](./adapters/README.md) defined that show how to map events from
 some popular event producers into CloudEvents. These adapters are non-normative
 but are the specification authors' best guess as to how the CloudEvents
 attribute would be populated if the event producer produced them natively.

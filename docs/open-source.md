@@ -37,5 +37,5 @@ CloudEvents v1.0, please include it in the list below.
   vendor-neutral, open-source, and community-driven Workflow Management System
   (WFMS) designed to implement the
   [Serverless Workflow specification](https://github.com/serverlessworkflow/specification).
-- [VMware Event Broker Appliance](https://vmweventbroker.io) enables event
+- [VMware Event Broker Appliance](https://github.com/vmware-samples/vcenter-event-broker-appliance) enables event
   driven workflows from vCenter Server Events.
