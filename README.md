@@ -51,7 +51,7 @@ and a graduated project on [Jan 25, 2024](https://github.com/cncf/toc/pull/996)
 |                               |
 | **Additional Documentation:** |
 | CloudEvents Primer                                             | [v1.0.2](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/primer.md) | [WIP](cloudevents/primer.md)                          |
-| [CloudEvents Adapters](cloudevents/adapters.md)                | -                                                                               | [Not versioned](cloudevents/adapters.md)              |
+| [CloudEvents Adapters](cloudevents/adapters/README.md)                | -                                                                               | [Not versioned](cloudevents/adapters/README.md)              |
 | [CloudEvents SDK Requirements](cloudevents/SDK.md)             | -                                                                               | [Not versioned](cloudevents/SDK.md)                   |
 | [Documented Extensions](cloudevents/extensions/README.md)  | -                                                                               | [Not versioned](cloudevents/extensions/README.md) |
 | [Proprietary Specifications](cloudevents/proprietary-specs.md) | -                                                                               | [Not versioned](cloudevents/proprietary-specs.md)     |
@@ -76,7 +76,7 @@ and design decisions, and then move on to the
 Since not all event producers generate CloudEvents by default, there is
 documentation describing the recommended process for adapting some popular
 events into CloudEvents, see
-[CloudEvents Adapters](cloudevents/adapters.md).
+[CloudEvents Adapters](cloudevents/adapters/README.md).
 
 ## SDKs
 

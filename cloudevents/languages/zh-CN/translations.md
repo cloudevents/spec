@@ -22,7 +22,7 @@
 | /cloudevents/formats/json-format.md |   Ready to start   |       |            |
 | /cloudevents/formats/protobuf-format.md |   Ready to start   |       |        |
 | /cloudevents/working-drafts/xml-format.md |   Ready to start   |       |        |
-| /cloudevents/adapters.md |   Ready to start   |       |          |
+| /cloudevents/adapters/README.md |   Ready to start   |       |          |
 | /cloudevents/http-webhook.md |   Ready to start   |       |         |
 | /cloudevents/primer.md |   Ready to start   |       |          |
 | /cloudevents/proprietary-specs.md |   Ready to start   |       |          |
