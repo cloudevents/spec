@@ -25,7 +25,6 @@ is being used.
 
 - Type: `Integer`
 - Description: Links dataset message to the current version of the metadata.
-Contains value from `MajorVersion` of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`.
 - Constraints
   - OPTIONAL but MUST NOT be present if `dataschema` is used
 
@@ -33,16 +32,13 @@ Contains value from `MajorVersion` of [Data Set Message Header](https://referenc
 
 - Type: `Integer`
 - Description: Links dataset message to the current version of the metadata.
-Contains value from `MinorVersion` of [Data Set Message
-Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
-field `MetaDataVersion`.
 - Constraints
   - OPTIONAL but MUST NOT be present if `dataschema` is used
 
 ### opcuastatus
 
 - Type: `Integer`
-- Description: Defines the overall status of the data set message, maps to [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `Status`.
+- Description: Defines the overall status of the data set message.
 - Constraints
   - OPTIONAL
   - REQUIRED if status is not _Good_
