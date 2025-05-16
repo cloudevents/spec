@@ -4,7 +4,7 @@ This document describes how to convert [OPC UA](https://reference.opcfoundation.
 
 All OPC UA events are converted into CloudEvents using the same pattern as described in the following table:
 
-## Core Mapping
+## Common Mapping
 
 | CloudEvents Attribute | Value | Remark                                            |
 | :-------------------- | :----------------------------------------------| :-------------------- |
@@ -15,6 +15,9 @@ All OPC UA events are converted into CloudEvents using the same pattern as descr
 | `dataschema`          | OPC UA provides type information as part of PubSub metadata messages. | For non OPC UA consumers or when different payload encoding like Avro is used, it is REQUIRED to provide schema information (based on metadata information) in a separate format like [JSON schema](https://json-schema.org/specification) or [Avro schema](https://avro.apache.org/docs/1.11.1/specification/) or others.                                             |
 | `time`                | `Timestamp` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)                                | |
 | `data`                | content of the OPCUA  event                                        | |
+| `opcuametadatamajorversion` |  `MajorVersion` in MetaDataVersion field mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | |
+| `opcuametadataminorversion` | `MinorVersion` in MetaDataVersion field mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) | |
+| `opcuastatus` | `Status` mapped from [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)                                | |
 
 ## Message specific Mapping
 
