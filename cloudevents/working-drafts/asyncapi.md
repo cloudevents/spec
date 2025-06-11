@@ -61,7 +61,7 @@ components:
   messages:
     messageKey:
       traits:
-      - $ref: 'https://raw.githubusercontent.com/Lazzaretti/asyncapi-with-cloudevents-traits/main/traits/cloudevents-headers-kafka-binary.yaml'
+      - $ref: 'https://raw.githubusercontent.com/cloudevents/spec/main/cloudevents/working-drafts/asyncapi-traits/cloudevents-headers-kafka-binary.yaml'
 ```
 
 See also: [Full Example](./asyncapi-examples/light-switch-events-binary-kafka.yaml)
