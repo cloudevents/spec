@@ -22,7 +22,24 @@ serialization format:
 
 | Format | Example                                                                 | Include                                  |
 | ------ | ----------------------------------------------------------------------- | ---------------------------------------- |
-| JSON   | [Example](./asyncapi-examples/light-switch-events-structured-json.yaml) | [Reference](../formats/cloudevents.json) |
+| JSON   | [Short Example](#json-example) [Full Example](./asyncapi-examples/light-switch-events-structured-json.yaml) | [Reference](../formats/cloudevents.json) |
+
+### JSON Example
+
+To add CloudEvents in structured mode, the following `allOf` reference needs to
+be added:
+
+```yaml
+components:
+  messages:
+    messageKey:
+      payload:
+        type: object
+        allOf:
+        - $ref: 'https://raw.githubusercontent.com/cloudevents/spec/v1.0.2/cloudevents/formats/cloudevents.json'
+```
+
+See also: [Full Example](./asyncapi-examples/light-switch-events-structured-json.yaml)
 
 ## Binary Mode
 
@@ -32,4 +49,19 @@ to depend on the protocol:
 
 | Protocol Binding                               | Example                                                              | Trait                                                            |
 | ---------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| [Kafka](../bindings/kafka-protocol-binding.md) | [Example](./asyncapi-examples/light-switch-events-binary-kafka.yaml) | [Trait](./asyncapi-traits/cloudevents-headers-kafka-binary.yaml) |
+| [Kafka](../bindings/kafka-protocol-binding.md) | [Short Example](#avro-example) [Full Example](./asyncapi-examples/light-switch-events-binary-kafka.yaml) | [Trait](./asyncapi-traits/cloudevents-headers-kafka-binary.yaml) |
+
+### Avro Example
+
+To add CloudEvents in binary mode, the following `traits` reference needs to
+be added:
+
+```yaml
+components:
+  messages:
+    messageKey:
+      traits:
+      - $ref: 'https://raw.githubusercontent.com/Lazzaretti/asyncapi-with-cloudevents-traits/main/traits/cloudevents-headers-kafka-binary.yaml'
+```
+
+See also: [Full Example](./asyncapi-examples/light-switch-events-binary-kafka.yaml)
