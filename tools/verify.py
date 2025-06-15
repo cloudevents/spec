@@ -29,6 +29,7 @@ _TOOLS_DIR = Path(__file__).parent
 _REPO_ROOT = _TOOLS_DIR.parent
 _FAKE_DOCS_DIR = Path(__file__).parent / "fake-docs"
 _FAKE_DOCS = set(_FAKE_DOCS_DIR.rglob("**/*"))
+_FAKE_DOCS.update(Path(".github").rglob("**/*"))
 _LANGUAGES_DIR_NAME = "languages"
 _ROOT_LANGUAGES_DIR = _REPO_ROOT / _LANGUAGES_DIR_NAME
 
