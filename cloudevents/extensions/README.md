@@ -47,7 +47,7 @@ for more information.
 - [Deprecation](deprecation.md)
 - [Distributed Tracing](distributed-tracing.md)
 - [Expiry Time](expirytime.md)
-- [OPC UA](opcua.md)
+- [OPC Unified Architecture](opcua.md)
 - [Partitioning](partitioning.md)
 - [Recorded Time](recordedtime.md)
 - [Sampling](sampledrate.md)

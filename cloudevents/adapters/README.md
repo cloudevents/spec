@@ -14,3 +14,4 @@ algorithms that should be used:
 - [CouchDB](./couchdb.md)
 - [GitHub](./github.md)
 - [GitLab](./gitlab.md)
+- [OPC Unified Architecture](./opcua.md)
