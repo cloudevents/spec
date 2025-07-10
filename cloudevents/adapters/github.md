@@ -10,6 +10,8 @@ https://docs.github.com/en/webhooks/webhook-events-and-payloads
 Each section below describes how to determine the CloudEvents attributes
 based on the specified event.
 
+For time attribute, if the proposed value is null, the default timestamp should be used.
+
 ### BranchProtectionConfigurationEvent
 
 | CloudEvents Attribute | Value                                                          |
@@ -552,18 +554,18 @@ based on the specified event.
 
 ### PackageEvent
 
-| CloudEvents Attribute | Value                                  |
-| :-------------------- | :------------------------------------- |
-| `id`                  | "X-GitHub-Delivery" HTTP header value  |
-| `source`              | "repository.url" value                 |
-| `specversion`         | `1.0`                                  |
-| `type`                | `com.github.package.` + "action" value |
-| `datacontentencoding` | Omit                                   |
-| `datacontenttype`     | `application/json`                     |
-| `dataschema`          | Omit                                   |
-| `subject`             | "package.id" value                     |
-| `time`                | "package.(updated\|created)\_at" value |
-| `data`                | Content of HTTP request body           |
+| CloudEvents Attribute | Value                                                                      |
+| :-------------------- | :------------------------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                                      |
+| `source`              | "repository.url" value                                                     |
+| `specversion`         | `1.0`                                                                      |
+| `type`                | `com.github.package.` + "action" value                                     |
+| `datacontentencoding` | Omit                                                                       |
+| `datacontenttype`     | `application/json`                                                         |
+| `dataschema`          | Omit                                                                       |
+| `subject`             | "package.id" value                                                         |
+| `time`                | "package.updated_at" value, unless "null", then "package.created_at" value |
+| `data`                | Content of HTTP request body                                               |
 
 ### PageBuildEvent
 
@@ -882,33 +884,33 @@ based on the specified event.
 
 ### SecretScanningAlertEvent
 
-| CloudEvents Attribute | Value                                                |
-| :-------------------- | :--------------------------------------------------- |
-| `id`                  | "X-GitHub-Delivery" HTTP header value                |
-| `source`              | "repository.url" value                               |
-| `specversion`         | `1.0`                                                |
-| `type`                | `com.github.secret_scanning_alert.` + "action" value |
-| `datacontentencoding` | Omit                                                 |
-| `datacontenttype`     | `application/json`                                   |
-| `dataschema`          | Omit                                                 |
-| `subject`             | "alert.number" value                                 |
-| `time`                | "alert.updated_at" value or "alert.created_at"       |
-| `data`                | Content of HTTP request body                         |
+| CloudEvents Attribute | Value                                                                   |
+| :-------------------- | :---------------------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                                   |
+| `source`              | "repository.url" value                                                  |
+| `specversion`         | `1.0`                                                                   |
+| `type`                | `com.github.secret_scanning_alert.` + "action" value                    |
+| `datacontentencoding` | Omit                                                                    |
+| `datacontenttype`     | `application/json`                                                      |
+| `dataschema`          | Omit                                                                    |
+| `subject`             | "alert.number" value                                                    |
+| `time`                | "alert.updated_at" value , unless "null", then "alert.created_at" value |
+| `data`                | Content of HTTP request body                                            |
 
 ### SecretScanningAlertLocationEvent
 
-| CloudEvents Attribute | Value                                                         |
-| :-------------------- | :------------------------------------------------------------ |
-| `id`                  | "X-GitHub-Delivery" HTTP header value                         |
-| `source`              | "repository.url" value                                        |
-| `specversion`         | `1.0`                                                         |
-| `type`                | `com.github.secret_scanning_alert_location.` + "action" value |
-| `datacontentencoding` | Omit                                                          |
-| `datacontenttype`     | `application/json`                                            |
-| `dataschema`          | Omit                                                          |
-| `subject`             | "alert.number" value                                          |
-| `time`                | "alert.updated_at" value or "alert.created_at"                |
-| `data`                | Content of HTTP request body                                  |
+| CloudEvents Attribute | Value                                                                   |
+| :-------------------- | :---------------------------------------------------------------------- |
+| `id`                  | "X-GitHub-Delivery" HTTP header value                                   |
+| `source`              | "repository.url" value                                                  |
+| `specversion`         | `1.0`                                                                   |
+| `type`                | `com.github.secret_scanning_alert_location.` + "action" value           |
+| `datacontentencoding` | Omit                                                                    |
+| `datacontenttype`     | `application/json`                                                      |
+| `dataschema`          | Omit                                                                    |
+| `subject`             | "alert.number" value                                                    |
+| `time`                | "alert.updated_at" value , unless "null", then "alert.created_at" value |
+| `data`                | Content of HTTP request body                                            |
 
 ### SecurityAdvisoryEvent
 
