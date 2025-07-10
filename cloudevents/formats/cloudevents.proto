@@ -2,7 +2,8 @@
  * CloudEvent Protobuf Format
  *
  * - Required context attributes are explicitly represented.
- * - Optional and Extension context attributes are carried in a map structure.
+ * - Optional context attributes are explicitly represented.
+ * - Extension context attributes are carried in a map structure.
  * - Data may be represented as binary, text, or protobuf messages.
  */
 
@@ -21,49 +22,44 @@ option php_namespace = "Io\\CloudEvents\\V1\\Proto";
 option ruby_package = "Io::CloudEvents::V1::Proto";
 
 message CloudEvent {
-
-  // -- CloudEvent Context Attributes
-
-  // Required Attributes
   string id = 1;
-  string source = 2; // URI-reference
+  string source = 2;
   string spec_version = 3;
   string type = 4;
 
-  // Optional & Extension Attributes
-  map<string, CloudEventAttributeValue> attributes = 5;
+  optional string datacontenttype = 5;
+  optional string dataschema = 6;
+  optional string subject = 7;
+  optional google.protobuf.Timestamp time = 8;
 
-  // -- CloudEvent Data (Bytes, Text, or Proto)
-  oneof  data {
-    bytes binary_data = 6;
-    string text_data = 7;
-    google.protobuf.Any proto_data = 8;
+  map<string, CloudEventAttributeValue> extensions = 9;
+
+  oneof data {
+    bytes binary_data = 10;
+    string text_data = 11;
+    google.protobuf.Any proto_data = 12;
   }
 
   /**
    * The CloudEvent specification defines
    * seven attribute value types...
    */
-
   message CloudEventAttributeValue {
-
     oneof attr {
-      bool ce_boolean = 1;
-      int32 ce_integer = 2;
-      string ce_string = 3;
-      bytes ce_bytes = 4;
-      string ce_uri = 5;
-      string ce_uri_ref = 6;
-      google.protobuf.Timestamp ce_timestamp = 7;
+      bool bool_value = 1;
+      int32 integer_value = 2;
+      string string_value = 3;
+      bytes bytes_value = 4;
+      string uri_value = 5;
+      string uri_ref_value = 6;
+      google.protobuf.Timestamp timestamp_value = 7;
     }
   }
 }
 
 /**
  * CloudEvent Protobuf Batch Format
- *
  */
-
 message CloudEventBatch {
   repeated CloudEvent events = 1;
 }
