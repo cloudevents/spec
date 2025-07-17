@@ -5,15 +5,25 @@
 This document describes the governance process under which the CloudEvents
 project will manage this repository.
 
+## Table of Contents & References
+
+- [Meetings](#meetings)
+- [Membership](#membership)
+  -  [Admins](#admins)
+- [PRs](#prs)
+- [Voting](#voting)
+- [Release Process and Versioning](#release-process-and-versioning)
+- [Additional Information](#additional-information)
+
 For easy reference, additional documentation related to how this project,
 and its subprojects, operate are listed below:
-- [Contributing](CONTRIBUTING.md)
-  - [List of contributors to the project](contributors.md)
-- [Project Releases](RELEASES.md)
-- [Project Roadmap](ROADMAP.md)
-- [SDK Governance](SDK-GOVERNANCE.md)
-  - [SDK Maintainer Guidlines](SDK-maintainer-guidelines.md)
-  - [SDK PR Guidlines](SDK-PR-guidelines.md)
+  - [Contributing](CONTRIBUTING.md)
+    - [List of contributors to the project](contributors.md)
+  - [Project Releases](RELEASES.md)
+  - [Project Roadmap](ROADMAP.md)
+  - [SDK Governance](SDK-GOVERNANCE.md)
+    - [SDK Maintainer Guidlines](SDK-maintainer-guidelines.md)
+    - [SDK PR Guidlines](SDK-PR-guidelines.md)
 
 ## Meetings
 
@@ -139,18 +149,14 @@ If a vote is taken, the follow rules will be followed:
 
 The specifications produced will adhere to the following:
 
-- The versioning scheme used will follow [semver](https://semver.org/)
-- All normative specifications, and the Primer, will be grouped together into a
-  single logical unit and released at the same time, at the same version number.
-  This is true regardless of whether each individual document actually changed
-  during the release cycle.
-- When a new release of a specification is ready, it will be given a version
-  number matching the appropriate semver version string but with a suffix of
-  `-rc#` (release candidate). This will indicate that the authors believe it
-  is ready for final release but it needs to go through a testing period to
-  allow for broader testing before it promoted to its final version number.
-  This will be true for updates to existing specifications and for new
-  specifications.
+- The versioning scheme used will follow [semver](https://semver.org/).
+
+- Specifications will be grouped into logical units and released at the same
+  time, with the same version number. This is true regardless of whether each
+  individual document actually changed during the release cycle. The
+  determination of the number of groups, and which document belongs in a group,
+  can change over time.
+
 - Since changing the CloudEvents `specversion` string could have a significant
   impact on implementations, all non-breaking changes will be made as
   "patch" version updates - this allows for the value "on the wire" to remain
@@ -159,22 +165,8 @@ The specifications produced will adhere to the following:
   that the "minor" version number will always be zero and the `specversion`
   string will always be of the form `X.0`.
 
-Note that these rules do not apply to the
+Note that these rules do not apply to unversioned documents, such as the
 [documented extensions](../cloudevents/extensions/README.md).
-
-All versions are tagged from the `main` branch, but the tag only applies to
-the "subject" of the release - the directory containing the information
-covered by that release (e.g. `subscriptions` or `cloudevents`). The
-[CloudEvents web site](https://cloudevents.io/) takes appropriate content from
-each tagged version. (If the directory containing the information covered
-by the release is not in a top-level directory, the subject should be the full path,
-e.g. `top-dir/sub-dir`.)
-
-> Note: should the need arise, additional branches may be created. For example,
-> it is likely that a `core-v2.0` branch will be created to collect changes for
-> the core specification version 2.0 significantly before those changes are
-> merged into the main branch, to allow for ongoing work on the main branch.
-> Such branches should be deleted once their content is eventually merged.
 
 To create a new release:
 
@@ -182,28 +174,70 @@ To create a new release:
   if any action should be taken (e.g. removed due to it being stale). The
   creation of a new release will be the reminder to do this check. If any
   changes are needed then PRs will be created and reviewed by the group.
-- Create a PR that modifies the [README](README.md), and all specifications (ie.
-  \*.md files) that include a version string, to the new release version string.
-  Make sure to remove `-wip` from all of the version strings.
+
+- For the most part we try to only use a single branch ("main") for our work.
+  Git branches will be used as a way to snapshot/tag releases. While we hope
+  to not push new commits to these branches, in practice, it is possible that
+  changes to a release might be needed without "picking up" other changes that
+  might have been commited to "main". Creating the branch during the release
+  process will makes this easier to manage should the need should arise.
+
+- Determine the new release version string. It should be of the form:
+  `<subject>/vX.Y.Z`, e.g. `cloudevents/v1.0.4` or `subscriptions/v1.0.0`.
+
+- Create a PR (for the "main" branch") that:
+  - Modifies the repo's files to use the new version string appended with
+    `-rc#` as appropriate. Make sure to remove all `-wip` suffixes as needed.
+  - Merge the PR.
+  - Initiate a final review/test of the release.
+
+- A "release candidate" tag will be created with the new release version
+  string but with a suffix of `-rc#` (release candidate). This will indicate
+  that the authors believe it is ready for final review/testing. This will be
+  true for updates to existing specifications and for new specifications.
+
+- When review/testing is completed, create a PR (for the "main" branch") that:
+  - Modifies the repo's files to use the new version string (w/o `-rc#`) as
+    appropriate.
+  - Update [RELEASES.md](RELEASES.md) to mention the new release, and
+    reference the yet-to-be-created release tag.
+  - Update the appropriate `*/RELEASE_NOTES.md` file with the changes
+    for the release. The list can be generated via:
+    `git log --pretty=format:%s main...v0.1 | grep -v "Merge pull"`
+    by replacing "v0.1" with the name of the previous release. Or, use github's
+    [new release](https://github.com/cloudevents/spec/releases/new) process
+    to generate the list w/o actually creating the release yet.
+
 - Merge the PR.
-- Create a [new release](https://github.com/cloudevents/spec/releases/new):
-  - Choose a "Tag version" of the form: `<subject>/vX.Y.Z`, e.g.
-    `cloudevents/v1.0.4` or `subscriptions/v1.0.0`
-  - Target should be `main`, the default value
-  - Release title should be the same as the Tag - `<subject>/vX.Y.Z`
-  - Add some descriptive text, or the list of PRs that have been merged since
-    the previous release. The git query to get the list commits since the last
-    release is:
-    `git log --pretty=format:%s main...v0.1 | grep -v "Merge pull"`.
-    Just replace "v0.1" with the name of the previous release.
-  - Press `Publish release` button
-- Create an "announcement" highlighting the key features of the new release and
-  any potential noteworthy activities of the group:
-  - Send it to the mailing list
-  - Announce the release on our
-    [twitter account](http://twitter.com/cloudeventsio)
+  - Note that the link checker should fail since any references to the new
+    release tag will not be valid yet. This is expected.
+
+- Create a new branch with the same name as the new release version string
+  appended with `-branch` (e.g. `<subject>/vX.Y.Z-branch`).
+  - Use Github to create a
+    [new release](https://github.com/cloudevents/spec/releases/new).
+    During that process, create a new tag with the new release version
+    string (e.g. `<subject>/vX.Y.Z`) w/o any suffix.
+  - Rerun the github CI actions from the previous PR and the "main" branch as
+    they should all pass now; as a sanity check.
+
+- Create an "announcement" highlighting the key features of the new release
+  and any potential noteworthy activities of the group:
+  - Send it to the mailing lists.
+  - Announce the release on our [X account](http://x.com/cloudeventsio).
   - Add it to the "announcement" section of our
-    [website](https://cloudevents.io/)
+    [website](https://cloudevents.io/).
+
+- If an update to a release is needed, create a PR for the appropriate
+  branches (including "main"), and merge when ready. For any release that's
+  updated, you'll need to move the tag for that release to point to the HEAD
+  of that branch. We'll eventually setup a Github action to automatically do
+  it but for now you can do it via the CLI:
+  - `git pull` to make sure you have all latest branches and tags
+  - `git tag -d vX.Y.Z` to delete the old tag for the release
+  - `git tag vX.Y.Z vX.Y.Z-branch` to create a new tag for the HEAD of the
+    release branch
+  - `git push REMOTE vX.Y.Z -f` to force the tag to updated in the github repo
 
 ## Additional Information
 
