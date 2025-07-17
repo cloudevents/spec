@@ -10,7 +10,7 @@ https://docs.github.com/en/webhooks/webhook-events-and-payloads
 Each section below describes how to determine the CloudEvents attributes
 based on the specified event.
 
-For time attribute, if the proposed value is null, the default timestamp should be used.
+For time attribute, if the proposed value is null, the default timestamp SHOULD be used.
 
 ### BranchProtectionConfigurationEvent
 
