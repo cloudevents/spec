@@ -120,6 +120,7 @@ native ecosystem by making our systems interoperable with CloudEvents.
   docs](https://drive.google.com/drive/folders/1eKH-tVNV25jwkuBEoi3ESqvVjNRlJqYX?usp=sharing)
 - [Demos & open source](docs/README.md) -- if you have something to share
   about your use of CloudEvents, please submit a PR!
+- [Potential CloudEvents v2 work items](cloudevents/v2.md)
 - [Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md)
 
 ### Security Concerns
