@@ -55,7 +55,7 @@ be followed:
 There are three categories of project membership:
 
 1. **Member.** This is anyone who participates in the group's activities in any
-   of our communication channels (email, github issues/PRs, meetings, etc.). No
+   of our communication channels (email, GitHub issues/PRs, meetings, etc.). No
    formal registration process is needed.
 
 2. **Voting Member.** See the [Voting](#voting) section below for more
@@ -66,7 +66,7 @@ There are three categories of project membership:
 
 3. **Admin.** Admins are Members of the group but have the ability to perform
    administrative actions on behalf of the group. For example, manage the
-   website, github repos and moderate the meetings. Their actions should be done
+   website, GitHub repos and moderate the meetings. Their actions should be done
    with the knowledge and consent of the group. They also have the ability to
    merge/close PRs, but only per the group's approval. See the
    [OWNERS](../OWNERS) file for the current list of Admins.
@@ -165,6 +165,12 @@ The specifications produced will adhere to the following:
   that the "minor" version number will always be zero and the `specversion`
   string will always be of the form `X.0`.
 
+- Each release will have both a tag and a branch. The tag will be kept
+  up-to-date with the tip of the branch. The purpose of having a branch is to
+  support very minor fixes (typos, clarifications) which amend a release in
+  place. The purpose of having a tag is to support GitHub releases, which can
+  act as a notification channel for interested users.
+
 Note that these rules do not apply to unversioned documents, such as the
 [documented extensions](../cloudevents/extensions/README.md).
 
@@ -175,13 +181,6 @@ To create a new release:
   creation of a new release will be the reminder to do this check. If any
   changes are needed then PRs will be created and reviewed by the group.
 
-- For the most part we try to only use a single branch ("main") for our work.
-  Git branches will be used as a way to snapshot/tag releases. While we hope
-  to not push new commits to these branches, in practice, it is possible that
-  changes to a release might be needed without "picking up" other changes that
-  might have been commited to "main". Creating the branch during the release
-  process will makes this easier to manage should the need should arise.
-
 - Determine the new release version string. It should be of the form:
   `<subject>/vX.Y.Z`, e.g. `cloudevents/v1.0.4` or `subscriptions/v1.0.0`.
 
@@ -191,22 +190,23 @@ To create a new release:
   - Merge the PR.
   - Initiate a final review/test of the release.
 
-- A "release candidate" tag will be created with the new release version
-  string but with a suffix of `-rc#` (release candidate). This will indicate
-  that the authors believe it is ready for final review/testing. This will be
-  true for updates to existing specifications and for new specifications.
+- Create A "release candidate" with the new release version string but with a
+  suffix of `-rc#` (release candidate). This will indicate that the authors
+  believe it is ready for final review/testing. This will be true for updates
+  to existing specifications and for new specifications.
 
 - When review/testing is completed, create a PR (for the "main" branch") that:
-  - Modifies the repo's files to use the new version string (w/o `-rc#`) as
-    appropriate.
+  - Modifies the repo's files to use the new version string (without `-rc#`)
+    as appropriate..
   - Update [RELEASES.md](RELEASES.md) to mention the new release, and
     reference the yet-to-be-created release tag.
   - Update the appropriate `*/RELEASE_NOTES.md` file with the changes
     for the release. The list can be generated via:
-    `git log --pretty=format:%s main...v0.1 | grep -v "Merge pull"`
-    by replacing "v0.1" with the name of the previous release. Or, use github's
+    `git log --pretty=format:%s main...cloudevents/v1.0.3 | grep -v "Merge pull"`
+    by replacing "cloudevents/v1.0.3" with the name of the previous release.
+    Or, use GitHub's
     [new release](https://github.com/cloudevents/spec/releases/new) process
-    to generate the list w/o actually creating the release yet.
+    to generate the list without actually creating the release yet.
 
 - Merge the PR.
   - Note that the link checker should fail since any references to the new
@@ -214,11 +214,11 @@ To create a new release:
 
 - Create a new branch with the same name as the new release version string
   appended with `-branch` (e.g. `<subject>/vX.Y.Z-branch`).
-  - Use Github to create a
+  - Use GitHub to create a
     [new release](https://github.com/cloudevents/spec/releases/new).
     During that process, create a new tag with the new release version
-    string (e.g. `<subject>/vX.Y.Z`) w/o any suffix.
-  - Rerun the github CI actions from the previous PR and the "main" branch as
+    string (e.g. `<subject>/vX.Y.Z`) without any suffix.
+  - Rerun the GitHub CI actions from the previous PR and the "main" branch as
     they should all pass now; as a sanity check.
 
 - Create an "announcement" highlighting the key features of the new release
@@ -230,16 +230,20 @@ To create a new release:
 
 - If an update to a release is needed, create a PR for the appropriate
   branches (including "main"), and merge when ready. For any release that's
-  updated, you'll need to move the tag for that release to point to the HEAD
-  of that branch. We'll eventually setup a Github action to automatically do
+  updated, you'll need to move the tag for that release to point to the head
+  of that branch. We'll eventually setup a GitHub action to automatically do
   it but for now you can do it via the CLI:
-  - `git pull` to make sure you have all latest branches and tags
-  - `git tag -d vX.Y.Z` to delete the old tag for the release
-  - `git tag vX.Y.Z vX.Y.Z-branch` to create a new tag for the HEAD of the
-    release branch
-  - `git push REMOTE vX.Y.Z -f` to force the tag to updated in the github repo
+  - `git pull --tags` to make sure you have all latest branches and tags
+  - `git tag -d <subject>/vX.Y.Z` to delete the old tag for the release
+  - `git tag <subject>/vX.Y.Z <subject>/vX.Y.Z-branch` to create a new tag for
+    the head of the release branch
+  - `git push REMOTE <subject>/vX.Y.Z -f` to force the tag to updated in the
+    GitHub repo, where `REMOTE` is replaced with the git "remote" name that
+    you have defined that references the GitHub repo
 
 ## Additional Information
 
 - We adhere to the CNCF's
-  [Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md) guidelines
+  [Code of
+  Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md)
+  guidelines.
