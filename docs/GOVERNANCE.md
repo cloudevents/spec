@@ -147,15 +147,18 @@ If a vote is taken, the follow rules will be followed:
 
 ## Release Process and Versioning
 
+### Versioning
+
 The specifications produced will adhere to the following:
 
-- The versioning scheme used will follow [semver](https://semver.org/).
+- The versioning scheme will follow [semver](https://semver.org/) for the
+  version number part of the version string.
 
-- Specifications will be grouped into logical units and released at the same
-  time, with the same version number. This is true regardless of whether each
-  individual document actually changed during the release cycle. The
-  determination of the number of groups, and which document belongs in a group,
-  can change over time.
+- Specifications will be grouped into logical units, with all documents in a
+  group released at the same time, with the same version number. This is true
+  regardless of whether each individual document actually changed during the
+  release cycle. The determination of the number of groups, and which document
+  belongs in a group, can change over time.
 
 - Since changing the CloudEvents `specversion` string could have a significant
   impact on implementations, all non-breaking changes will be made as
@@ -171,10 +174,16 @@ The specifications produced will adhere to the following:
   place. The purpose of having a tag is to support GitHub releases, which can
   act as a notification channel for interested users.
 
+- Naming will adhere to the following pattern:
+  - Release Name: `SUBJECT@vX.Y.Z`
+  - Release Candidate Tag Name: `SUBJECT@vX.Y.Z-rc#`
+  - Release Branch Name: `SUBJECT@vX.Y.Z-branch`
+  - Release Tag Name: `SUBJECT@vX.Y.Z`
+
 Note that these rules do not apply to unversioned documents, such as the
 [documented extensions](../cloudevents/extensions/README.md).
 
-To create a new release:
+### Creating A New Release
 
 - Periodically the group will examine the list of extensions to determine
   if any action should be taken (e.g. removed due to it being stale). The
@@ -182,42 +191,46 @@ To create a new release:
   changes are needed then PRs will be created and reviewed by the group.
 
 - Determine the new release version string. It should be of the form:
-  `<subject>/vX.Y.Z`, e.g. `cloudevents/v1.0.4` or `subscriptions/v1.0.0`.
+  `SUBJECT@vX.Y.Z`, e.g. `cloudevents@v1.0.4` or `subscriptions@v1.0.0`.
 
-- Create a PR (for the "main" branch") that:
-  - Modifies the repo's files to use the new version string appended with
-    `-rc#` as appropriate. Make sure to remove all `-wip` suffixes as needed.
+- Before a new release is finalized, a "release candidate" (rc) should be
+  created that identifies the versions of files in the repository that are to
+  be reviewed. The process for a RC is as follows:
+  - Create a PR (for the "main" branch) that modifies the appropriate files
+    to use the new version string appended with `-rc#`. Make sure to remove
+    all `-wip` suffixes as needed.
+  - Review and merge the PR. Note that this review is not really meant for
+    checking the functionality of the specs, rather is it intended to verify
+    the version string renaming was done properly.
+  - Create a Github tag pointing to the commit on the "main" branch after the
+    PR is merged, using the release version string suffixed with `-rc#`.
+  - Initiate a final review/test of the release, pointing reviwers to the tag.
+
+- When review/testing is completed, update all of the version string references
+  to no longer use the `-rc#` suffix:
+  - Create a PR with the following changes:
+    - Modify the repo's files to use the new version string (without `-rc#`)
+      as appropriate..
+    - Update [RELEASES.md](RELEASES.md) to mention the new release, and
+      reference the yet-to-be-created release tag.
+    - Update the appropriate `*/RELEASE_NOTES.md` file with the changes
+      for the release. The list can be generated via:
+      `git log --pretty=format:%s main...cloudevents@v1.0.3 | grep -v "Merge pull"`
+      by replacing "cloudevents@v1.0.3" with the name of the previous release.
+      Or, use GitHub's
+      [new release](https://github.com/cloudevents/spec/releases/new) process
+      to generate the list without actually creating the release yet.
   - Merge the PR.
-  - Initiate a final review/test of the release.
+    - Note that the link checker should fail since any references to the new
+      release tag will not be valid yet. This is expected.
 
-- Create A "release candidate" with the new release version string but with a
-  suffix of `-rc#` (release candidate). This will indicate that the authors
-  believe it is ready for final review/testing. This will be true for updates
-  to existing specifications and for new specifications.
-
-- When review/testing is completed, create a PR (for the "main" branch") that:
-  - Modifies the repo's files to use the new version string (without `-rc#`)
-    as appropriate..
-  - Update [RELEASES.md](RELEASES.md) to mention the new release, and
-    reference the yet-to-be-created release tag.
-  - Update the appropriate `*/RELEASE_NOTES.md` file with the changes
-    for the release. The list can be generated via:
-    `git log --pretty=format:%s main...cloudevents/v1.0.3 | grep -v "Merge pull"`
-    by replacing "cloudevents/v1.0.3" with the name of the previous release.
-    Or, use GitHub's
-    [new release](https://github.com/cloudevents/spec/releases/new) process
-    to generate the list without actually creating the release yet.
-
-- Merge the PR.
-  - Note that the link checker should fail since any references to the new
-    release tag will not be valid yet. This is expected.
-
-- Create a new branch with the same name as the new release version string
-  appended with `-branch` (e.g. `<subject>/vX.Y.Z-branch`).
+- Create the Github release and tag for the new release:
   - Use GitHub to create a
     [new release](https://github.com/cloudevents/spec/releases/new).
-    During that process, create a new tag with the new release version
-    string (e.g. `<subject>/vX.Y.Z`) without any suffix.
+    During that process, create a new tag with the new release version string
+    in the format `SUBJECT@vX.Y.Z`.
+  - Create a new branch with the new release version string in the format
+    `SUBJECT@vX.Y.Z-branch`.
   - Rerun the GitHub CI actions from the previous PR and the "main" branch as
     they should all pass now; as a sanity check.
 
@@ -234,10 +247,10 @@ To create a new release:
   of that branch. We'll eventually setup a GitHub action to automatically do
   it but for now you can do it via the CLI:
   - `git pull --tags` to make sure you have all latest branches and tags
-  - `git tag -d <subject>/vX.Y.Z` to delete the old tag for the release
-  - `git tag <subject>/vX.Y.Z <subject>/vX.Y.Z-branch` to create a new tag for
+  - `git tag -d SUBJECT@vX.Y.Z` to delete the old tag for the release
+  - `git tag SUBJECT@vX.Y.Z SUBJECT@vX.Y.Z-branch` to create a new tag for
     the head of the release branch
-  - `git push REMOTE <subject>/vX.Y.Z -f` to force the tag to updated in the
+  - `git push REMOTE SUBJECT@vX.Y.Z -f` to force the tag to updated in the
     GitHub repo, where `REMOTE` is replaced with the git "remote" name that
     you have defined that references the GitHub repo
 
