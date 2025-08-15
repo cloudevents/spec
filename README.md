@@ -59,7 +59,7 @@ and a graduated project on [Jan 25, 2024](https://github.com/cncf/toc/pull/996)
 ## Other Specifications
 |                 | Latest Release                                                  | Working Draft                 |
 | :-------------- | :-------------------------------------------------------------: | :---------------------------: |
-| CE SQL          | [v1.0.0](https://github.com/cloudevents/spec/tree/cesql/v1.0.0/cesql) | [WIP](cesql/spec.md)          |
+| CE SQL          | [v1.0.0](https://github.com/cloudevents/spec/tree/cesql@v1.0.0) | [WIP](cesql/spec.md)          |
 | Subscriptions   |                                 -                               | [WIP](subscriptions/spec.md)  |
 
 The Registry and Pagination specifications can now be found in the
