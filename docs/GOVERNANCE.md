@@ -5,15 +5,25 @@
 This document describes the governance process under which the CloudEvents
 project will manage this repository.
 
+## Table of Contents & References
+
+- [Meetings](#meetings)
+- [Membership](#membership)
+  -  [Admins](#admins)
+- [PRs](#prs)
+- [Voting](#voting)
+- [Release Process and Versioning](#release-process-and-versioning)
+- [Additional Information](#additional-information)
+
 For easy reference, additional documentation related to how this project,
 and its subprojects, operate are listed below:
-- [Contributing](CONTRIBUTING.md)
-  - [List of contributors to the project](contributors.md)
-- [Project Releases](RELEASES.md)
-- [Project Roadmap](ROADMAP.md)
-- [SDK Governance](SDK-GOVERNANCE.md)
-  - [SDK Maintainer Guidlines](SDK-maintainer-guidelines.md)
-  - [SDK PR Guidlines](SDK-PR-guidelines.md)
+  - [Contributing](CONTRIBUTING.md)
+    - [List of contributors to the project](contributors.md)
+  - [Project Releases](RELEASES.md)
+  - [Project Roadmap](ROADMAP.md)
+  - [SDK Governance](SDK-GOVERNANCE.md)
+    - [SDK Maintainer Guidlines](SDK-maintainer-guidelines.md)
+    - [SDK PR Guidlines](SDK-PR-guidelines.md)
 
 ## Meetings
 
@@ -45,7 +55,7 @@ be followed:
 There are three categories of project membership:
 
 1. **Member.** This is anyone who participates in the group's activities in any
-   of our communication channels (email, github issues/PRs, meetings, etc.). No
+   of our communication channels (email, GitHub issues/PRs, meetings, etc.). No
    formal registration process is needed.
 
 2. **Voting Member.** See the [Voting](#voting) section below for more
@@ -56,7 +66,7 @@ There are three categories of project membership:
 
 3. **Admin.** Admins are Members of the group but have the ability to perform
    administrative actions on behalf of the group. For example, manage the
-   website, github repos and moderate the meetings. Their actions should be done
+   website, GitHub repos and moderate the meetings. Their actions should be done
    with the knowledge and consent of the group. They also have the ability to
    merge/close PRs, but only per the group's approval. See the
    [OWNERS](../OWNERS) file for the current list of Admins.
@@ -137,20 +147,19 @@ If a vote is taken, the follow rules will be followed:
 
 ## Release Process and Versioning
 
+### Versioning
+
 The specifications produced will adhere to the following:
 
-- The versioning scheme used will follow [semver](https://semver.org/)
-- All normative specifications, and the Primer, will be grouped together into a
-  single logical unit and released at the same time, at the same version number.
-  This is true regardless of whether each individual document actually changed
-  during the release cycle.
-- When a new release of a specification is ready, it will be given a version
-  number matching the appropriate semver version string but with a suffix of
-  `-rc#` (release candidate). This will indicate that the authors believe it
-  is ready for final release but it needs to go through a testing period to
-  allow for broader testing before it promoted to its final version number.
-  This will be true for updates to existing specifications and for new
-  specifications.
+- The versioning scheme will follow [semver](https://semver.org/) for the
+  version number part of the version string.
+
+- Specifications will be grouped into logical units, with all documents in a
+  group released at the same time, with the same version number. This is true
+  regardless of whether each individual document actually changed during the
+  release cycle. The determination of the number of groups, and which document
+  belongs in a group, can change over time.
+
 - Since changing the CloudEvents `specversion` string could have a significant
   impact on implementations, all non-breaking changes will be made as
   "patch" version updates - this allows for the value "on the wire" to remain
@@ -159,53 +168,95 @@ The specifications produced will adhere to the following:
   that the "minor" version number will always be zero and the `specversion`
   string will always be of the form `X.0`.
 
-Note that these rules do not apply to the
+- Each release will have both a tag and a branch. The tag will be kept
+  up-to-date with the tip of the branch. The purpose of having a branch is to
+  support very minor fixes (typos, clarifications) which amend a release in
+  place. The purpose of having a tag is to support GitHub releases, which can
+  act as a notification channel for interested users.
+
+- Naming will adhere to the following pattern:
+  - Release Name: `SUBJECT@vX.Y.Z`
+  - Release Candidate Tag Name: `SUBJECT@vX.Y.Z-rc#`
+  - Release Branch Name: `SUBJECT@vX.Y.Z-branch`
+  - Release Tag Name: `SUBJECT@vX.Y.Z`
+
+Note that these rules do not apply to unversioned documents, such as the
 [documented extensions](../cloudevents/extensions/README.md).
 
-All versions are tagged from the `main` branch, but the tag only applies to
-the "subject" of the release - the directory containing the information
-covered by that release (e.g. `subscriptions` or `cloudevents`). The
-[CloudEvents web site](https://cloudevents.io/) takes appropriate content from
-each tagged version. (If the directory containing the information covered
-by the release is not in a top-level directory, the subject should be the full path,
-e.g. `top-dir/sub-dir`.)
-
-> Note: should the need arise, additional branches may be created. For example,
-> it is likely that a `core-v2.0` branch will be created to collect changes for
-> the core specification version 2.0 significantly before those changes are
-> merged into the main branch, to allow for ongoing work on the main branch.
-> Such branches should be deleted once their content is eventually merged.
-
-To create a new release:
+### Creating A New Release
 
 - Periodically the group will examine the list of extensions to determine
   if any action should be taken (e.g. removed due to it being stale). The
   creation of a new release will be the reminder to do this check. If any
   changes are needed then PRs will be created and reviewed by the group.
-- Create a PR that modifies the [README](README.md), and all specifications (ie.
-  \*.md files) that include a version string, to the new release version string.
-  Make sure to remove `-wip` from all of the version strings.
-- Merge the PR.
-- Create a [new release](https://github.com/cloudevents/spec/releases/new):
-  - Choose a "Tag version" of the form: `<subject>/vX.Y.Z`, e.g.
-    `cloudevents/v1.0.4` or `subscriptions/v1.0.0`
-  - Target should be `main`, the default value
-  - Release title should be the same as the Tag - `<subject>/vX.Y.Z`
-  - Add some descriptive text, or the list of PRs that have been merged since
-    the previous release. The git query to get the list commits since the last
-    release is:
-    `git log --pretty=format:%s main...v0.1 | grep -v "Merge pull"`.
-    Just replace "v0.1" with the name of the previous release.
-  - Press `Publish release` button
-- Create an "announcement" highlighting the key features of the new release and
-  any potential noteworthy activities of the group:
-  - Send it to the mailing list
-  - Announce the release on our
-    [twitter account](http://twitter.com/cloudeventsio)
+
+- Determine the new release version string. It should be of the form:
+  `SUBJECT@vX.Y.Z`, e.g. `cloudevents@v1.0.4` or `subscriptions@v1.0.0`.
+
+- Before a new release is finalized, a "release candidate" (rc) should be
+  created that identifies the versions of files in the repository that are to
+  be reviewed. The process for a RC is as follows:
+  - Create a PR (for the "main" branch) that modifies the appropriate files
+    to use the new version string appended with `-rc#`. Make sure to remove
+    all `-wip` suffixes as needed.
+  - Review and merge the PR. Note that this review is not really meant for
+    checking the functionality of the specs, rather is it intended to verify
+    the version string renaming was done properly.
+  - Create a Github tag pointing to the commit on the "main" branch after the
+    PR is merged, using the release version string suffixed with `-rc#`.
+  - Initiate a final review/test of the release, pointing reviwers to the tag.
+
+- When review/testing is completed, update all of the version string references
+  to no longer use the `-rc#` suffix:
+  - Create a PR with the following changes:
+    - Modify the repo's files to use the new version string (without `-rc#`)
+      as appropriate..
+    - Update [RELEASES.md](RELEASES.md) to mention the new release, and
+      reference the yet-to-be-created release tag.
+    - Update the appropriate `*/RELEASE_NOTES.md` file with the changes
+      for the release. The list can be generated via:
+      `git log --pretty=format:%s main...cloudevents@v1.0.3 | grep -v "Merge pull"`
+      by replacing "cloudevents@v1.0.3" with the name of the previous release.
+      Or, use GitHub's
+      [new release](https://github.com/cloudevents/spec/releases/new) process
+      to generate the list without actually creating the release yet.
+  - Merge the PR.
+    - Note that the link checker should fail since any references to the new
+      release tag will not be valid yet. This is expected.
+
+- Create the Github release and tag for the new release:
+  - Use GitHub to create a
+    [new release](https://github.com/cloudevents/spec/releases/new).
+    During that process, create a new tag with the new release version string
+    in the format `SUBJECT@vX.Y.Z`.
+  - Create a new branch with the new release version string in the format
+    `SUBJECT@vX.Y.Z-branch`.
+  - Rerun the GitHub CI actions from the previous PR and the "main" branch as
+    they should all pass now; as a sanity check.
+
+- Create an "announcement" highlighting the key features of the new release
+  and any potential noteworthy activities of the group:
+  - Send it to the mailing lists.
+  - Announce the release on our [X account](http://x.com/cloudeventsio).
   - Add it to the "announcement" section of our
-    [website](https://cloudevents.io/)
+    [website](https://cloudevents.io/).
+
+- If an update to a release is needed, create a PR for the appropriate
+  branches (including "main"), and merge when ready. For any release that's
+  updated, you'll need to move the tag for that release to point to the head
+  of that branch. We'll eventually setup a GitHub action to automatically do
+  it but for now you can do it via the CLI:
+  - `git pull --tags` to make sure you have all latest branches and tags
+  - `git tag -d SUBJECT@vX.Y.Z` to delete the old tag for the release
+  - `git tag SUBJECT@vX.Y.Z SUBJECT@vX.Y.Z-branch` to create a new tag for
+    the head of the release branch
+  - `git push REMOTE SUBJECT@vX.Y.Z -f` to force the tag to updated in the
+    GitHub repo, where `REMOTE` is replaced with the git "remote" name that
+    you have defined that references the GitHub repo
 
 ## Additional Information
 
 - We adhere to the CNCF's
-  [Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md) guidelines
+  [Code of
+  Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md)
+  guidelines.
