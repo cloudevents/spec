@@ -2,7 +2,7 @@
 
 | Specification Group | Version                                                              | Release Date | Release Notes                                            |
 | :------------------ | :------------------------------------------------------------------: | :----------- | :------------------------------------------------------: |
-| CESQL               | [1.0.0](https://github.com/cloudevents/spec/tree/cesql/v1.0.0)         | 2024/06/13   | [Notes](../cesql/RELEASE_NOTES.md#v100---20240613)       |
+| CESQL               | [1.0.0](https://github.com/cloudevents/spec/tree/cesql@v1.0.0)         | 2024/06/13   | [Notes](../cesql/RELEASE_NOTES.md#v100---20240613)       |
 | CloudEvents         | [1.0.2](https://github.com/cloudevents/spec/tree/v1.0.2/cloudevents) | 2022/02/05   | [Notes](../cloudevents/RELEASE_NOTES.md#v102---20220205) |
 | CloudEvents         | [1.0.1](https://github.com/cloudevents/spec/tree/v1.0.1)             | 2020/12/12   | [Notes](../cloudevents/RELEASE_NOTES.md#v101---20201212) |
 | CloudEvents         | [1.0](https://github.com/cloudevents/spec/tree/v1.0)                 | 2019/10/24   | [Notes](../cloudevents/RELEASE_NOTES.md#v100---20191024) |
