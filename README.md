@@ -56,11 +56,18 @@ and a graduated project on [Jan 25, 2024](https://github.com/cncf/toc/pull/996)
 | [Documented Extensions](cloudevents/extensions/README.md)  | -                                                                               | [Not versioned](cloudevents/extensions/README.md) |
 | [Proprietary Specifications](cloudevents/proprietary-specs.md) | -                                                                               | [Not versioned](cloudevents/proprietary-specs.md)     |
 
+The most recent release of the CloudEvents specifications can be found
+via the [ce@stable](https://github.com/cloudevents/spec/blob/ce@stable) tag.
+
 ## Other Specifications
 |                 | Latest Release                                                  | Working Draft                 |
 | :-------------- | :-------------------------------------------------------------: | :---------------------------: |
 | CE SQL          | [v1.0.0](https://github.com/cloudevents/spec/tree/cesql@v1.0.0) | [WIP](cesql/spec.md)          |
 | Subscriptions   |                                 -                               | [WIP](subscriptions/spec.md)  |
+
+The most recent release of the CESQL specification can be found
+via the [cesql@stable](https://github.com/cloudevents/spec/blob/cedql@stable)
+tag.
 
 The Registry and Pagination specifications can now be found in the
 [xRegistry/spec](https://github.com/xregistry/spec) repo.

@@ -256,11 +256,11 @@ Note that these rules do not apply to unversioned documents, such as the
 
 - If a new commit was pushed to the latest release of a group/subject of
   specifications, and if that subject has a shortened tag name
-  (e.g. `ce@v1.0`), then update that tag to point to the head of the branch:
+  (e.g. `ce@stable`), then update that tag to point to the head of the branch:
   - `git pull --tags -a`
-  - `git tag -d SUBJECT@vX.Y`
-  - `git tag SUBJECT@vX.Y SUBJECT@vX.Y.Z-branch`
-  - `git push REMOTE SUBJECT@vX.Y -f`
+  - `git tag -d SUBJECT@stable`
+  - `git tag SUBJECT@stable SUBJECT@vX.Y.Z-branch`
+  - `git push REMOTE SUBJECT@stable -f`
 
 ## Additional Information
 
