@@ -66,7 +66,7 @@ via the [ce@stable](https://github.com/cloudevents/spec/blob/ce@stable) tag.
 | Subscriptions   |                                 -                               | [WIP](subscriptions/spec.md)  |
 
 The most recent release of the CESQL specification can be found
-via the [cesql@stable](https://github.com/cloudevents/spec/blob/cedql@stable)
+via the [cesql@stable](https://github.com/cloudevents/spec/blob/cesql@stable)
 tag.
 
 The Registry and Pagination specifications can now be found in the
