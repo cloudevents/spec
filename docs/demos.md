@@ -11,7 +11,7 @@ If you have a demo of CloudEvents in action, please add a link here. If there is
 
   - Blog post about Cloud Events Orchestration using an workflow engine([Zeebe](http://zeebe.io)).
   - Instructions: You can find the [Demo Code and instructions here](https://github.com/salaboy/zeebe-cloud-events-examples).
-  
+
 - [Gaining business visibility into processes implement by Cloud Events](https://blog.bernd-ruecker.com/gaining-visibility-into-processes-spanning-multiple-microservices-a1fc751c4c13) - Jun 23, 2020
 
   - Blog post on how to use process events monitoring to understand the business process behind a choreography using Cloud Events

@@ -2,7 +2,7 @@
 
 This document describes how to convert [AWS SNS messages][sns-messages] into CloudEvents.
 
-Amazon SNS MAY send a subscription confirmation, notification, or unsubscribe confirmation 
+Amazon SNS MAY send a subscription confirmation, notification, or unsubscribe confirmation
 message to your HTTP/HTTPS endpoints.
 
 Each section below describes how to determine the CloudEvents attributes

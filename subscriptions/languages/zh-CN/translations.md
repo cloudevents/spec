@@ -1,4 +1,4 @@
-# Translation list of the subscriptions spec 
+# Translation list of the subscriptions spec
 
 | Documents   |   Status     |  Last edited |    Version |
 | :---------  | :---------: | :---------   | :---------: |

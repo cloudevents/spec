@@ -1,4 +1,4 @@
-# Translation list of the cesql spec 
+# Translation list of the cesql spec
 
 | Documents   |   Status     |  Last edited |    Version |
 | :---------  | :---------: | :---------   | :---------: |

@@ -5,8 +5,8 @@
 Asynchronous APIs, e.g., events, can be specified in AsyncAPI, similar to how
 RESTful APIs can be specified in [OpenAPI](https://swagger.io/specification/).
 When defining new events in an API-first approach it can be hard to add
-CloudEvents headers or fields according to spec. This makes following the 
-standard harder. This document will clarify how CloudEvents headers can be 
+CloudEvents headers or fields according to spec. This makes following the
+standard harder. This document will clarify how CloudEvents headers can be
 specified in AsyncAPI.
 
 ## Usage

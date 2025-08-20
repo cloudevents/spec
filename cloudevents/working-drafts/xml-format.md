@@ -178,7 +178,7 @@ Example:
 <data xsi:type="xs:any">
     <myData xmlns="http://my.org/namespace">
         ....
-    </myData>  
+    </myData>
 </data>
 ```
 
@@ -246,7 +246,7 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>image/png</datacontenttype>
@@ -261,7 +261,7 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>application/json</datacontenttype>
@@ -278,7 +278,7 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2020-03-19T12:54:00-07:00</time>
     <datacontenttype>application/xml</datacontenttype>
@@ -298,7 +298,7 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<ce:event xmlns:ce="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<ce:event xmlns:ce="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:geo="http://someauthority.example/"
           specversion="1.0" >
     <ce:time>2020-03-19T12:54:00-07:00</ce:time>
@@ -322,7 +322,7 @@ non-normative example.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<event xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:xs="http://www.w3.org/2001/XMLSchema" specversion="1.0" >
     <time>2022-02-22T15:12:00-08:00</time>
     <datacontenttype>application/xml</datacontenttype>
@@ -366,7 +366,7 @@ non-normative example.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<batch xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<batch xmlns="http://cloudevents.io/xmlformat/V1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <event specversion="1.0" >
         <time>2020-03-19T12:54:00-07:00</time>

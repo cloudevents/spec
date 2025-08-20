@@ -242,7 +242,7 @@ log, and call it manually and therewith grant access.
 
 The delivery target grants permission by issuing an HTTPS GET or POST request
 against the given URL. The HTTP GET request can be performed manually using a
-browser client. If the WebHook-Request-Callback header is used, the callback 
+browser client. If the WebHook-Request-Callback header is used, the callback
 target MUST support both methods.
 
 The delivery target MAY include the `WebHook-Allowed-Rate` response in the
@@ -312,14 +312,14 @@ WebHook-Allowed-Origin: *
 
 #### 4.2.2. WebHook-Allowed-Rate
 
-The `WebHook-Allowed-Rate` header MUST be returned alongside 
-`WebHook-Allowed-Origin`if the request contained the `WebHook-Request-Rate` 
-header, otherwise it SHOULD be returned. 
+The `WebHook-Allowed-Rate` header MUST be returned alongside
+`WebHook-Allowed-Origin`if the request contained the `WebHook-Request-Rate`
+header, otherwise it SHOULD be returned.
 
 For the callback model, the `WebHook-Allowed-Rate` header SHOULD be included
-in the callback request. If the header is not included, for instance when a 
+in the callback request. If the header is not included, for instance when a
 callback is issued through a browser as a GET request, the allowed rate SHOULD
-correspond to the requested rate. 
+correspond to the requested rate.
 
 The header grants permission to send notifications at the specified rate. The
 value is either an asterisk character or the string representation of a positive
