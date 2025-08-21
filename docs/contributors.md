@@ -15,7 +15,7 @@ Contributions do not constitute an official endorsement.
 
 # A
 - Sarah Allen - [@ultrasaurus](https://github.com/ultrasaurus)
-- Chad Arimura - [@carimura](https://github.com/banisadr)  
+- Chad Arimura - [@carimura](https://github.com/banisadr)
 - Neil Avery - [@bluemonk3y](https://github.com/bluemonk3y)
 
 # B

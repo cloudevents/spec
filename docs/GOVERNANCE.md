@@ -246,13 +246,21 @@ Note that these rules do not apply to unversioned documents, such as the
   updated, you'll need to move the tag for that release to point to the head
   of that branch. We'll eventually setup a GitHub action to automatically do
   it but for now you can do it via the CLI:
-  - `git pull --tags` to make sure you have all latest branches and tags
+  - `git pull --tags -a` to make sure you have all latest branches and tags
   - `git tag -d SUBJECT@vX.Y.Z` to delete the old tag for the release
   - `git tag SUBJECT@vX.Y.Z SUBJECT@vX.Y.Z-branch` to create a new tag for
     the head of the release branch
   - `git push REMOTE SUBJECT@vX.Y.Z -f` to force the tag to updated in the
     GitHub repo, where `REMOTE` is replaced with the git "remote" name that
     you have defined that references the GitHub repo
+
+- If a new commit was pushed to the latest release of a group/subject of
+  specifications, and if that subject has a shortened tag name
+  (e.g. `ce@stable`), then update that tag to point to the head of the branch:
+  - `git pull --tags -a`
+  - `git tag -d SUBJECT@stable`
+  - `git tag SUBJECT@stable SUBJECT@vX.Y.Z-branch`
+  - `git push REMOTE SUBJECT@stable -f`
 
 ## Additional Information
 

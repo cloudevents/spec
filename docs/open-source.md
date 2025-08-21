@@ -4,7 +4,7 @@ CloudEvents v1.0, please include it in the list below.
 - [Argo-Events](https://github.com/argoproj/argo-events): An event-based
   dependency manager for Kubernetes which uses sensors to act on CloudEvents.
 - [CDEvents](https://github.com/cdevents/spec): A common specification for SDLC
-  events to bring interoperability across tools and services. 
+  events to bring interoperability across tools and services.
 - [CloudEvents Extend API](https://github.com/goextend/cloudevents-extend-api)
   is a JavaScript programming model for Extend which allows handling
   CloudEvents.

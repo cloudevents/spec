@@ -24,7 +24,7 @@ described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 However, the scope of these key words is limited to when this extension is
 used. For example, an attribute being marked as "REQUIRED" does not mean
-it needs to be in all CloudEvents, rather it needs to be included only when 
+it needs to be in all CloudEvents, rather it needs to be included only when
 this extension is being used.
 
 ## Attributes

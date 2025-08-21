@@ -758,7 +758,7 @@ When encoded in JSON, a filter is encoded as follows:
 
 ###### 3.2.4.1.1 REQUIRED Filter Dialects
 
-This specification defines the following 6 filter dialects that MUST be 
+This specification defines the following 6 filter dialects that MUST be
 supported by every implementation:
 
 **`exact`**
@@ -830,7 +830,7 @@ For example:
 
 **`any`**
 
-Use of this MUST include one nested array of filter expressions, where at 
+Use of this MUST include one nested array of filter expressions, where at
 least one nested filter expressions MUST evaluate to true in order for the `any`
 filter expression to be true.
 
@@ -849,7 +849,7 @@ For example:
 
 **`not`**
 
-Use of this MUST include one nested filter expression, where the result of 
+Use of this MUST include one nested filter expression, where the result of
 this
 filter expression is the inverse of the result of the nested expression.
 In other words, if the nested expression evaluated to true, then the `not`
@@ -866,18 +866,18 @@ For example:
 ###### 3.2.4.1.2 OPTIONAL Filter Dialects
 
 The support of the following dialects are OPTIONAL for implementations of
-this specification: 
+this specification:
 
 **`sql`**
 
-Use of this MUST have a string value, representing a [CloudEvents SQL 
+Use of this MUST have a string value, representing a [CloudEvents SQL
 Expression](../cesql/spec.md).
 The filter result MUST be true if the result value of the expression
 equals to the `TRUE` boolean value, otherwise MUST be false if an
 error occurred while evaluating the expression or if the result value
 is equal to the `FALSE` boolean value, or if the result value is not a boolean.
 
-Implementations SHOULD reject subscriptions with invalid CloudEvents SQL 
+Implementations SHOULD reject subscriptions with invalid CloudEvents SQL
 expressions.
 
 For example:

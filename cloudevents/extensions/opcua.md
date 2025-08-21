@@ -62,9 +62,9 @@ For metadata, event and data messages (type one of `ua-metadata`, `ua-keyframe`,
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `DataSetWriterId` or `DataSetWriterName`.
 
-For event messages (type equals to `ua-event`) `subject` MUST be appended with 
+For event messages (type equals to `ua-event`) `subject` MUST be appended with
 "/" and [Base Event Type](https://reference.opcfoundation.org/Core/Part5/v104/docs/6.4.2)
-field `EventId`. 
+field `EventId`.
 
 ### time
 
@@ -104,7 +104,7 @@ determine the latency between event publisher towards consumer.
 
 - Type: `Integer`
 - Description: Links dataset message to the current version of the metadata.
-Contains value from `MajorVersion` of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`. 
+Contains value from `MajorVersion` of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`.
 - Constraints
   - OPTIONAL but MUST NOT be present if `dataschema` is used
 
@@ -121,7 +121,7 @@ field `MetaDataVersion`.
 ### opcuastatus
 
 - Type: `Integer`
-- Description: Defines the overall status of the data set message, maps to 
+- Description: Defines the overall status of the data set message, maps to
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `Status`.
 - Constraints
   - OPTIONAL
@@ -142,7 +142,7 @@ and Data Set Header as that information is mapped into CloudEvents attributes.
 
 ### Metadata message
 
-The metadata message helps Cloud applications to understand the semantics and 
+The metadata message helps Cloud applications to understand the semantics and
 structure of dataset messages.
 
 ```text
@@ -176,16 +176,16 @@ subject: energy-consumption-asset
 -----------------------------------------------
 ```
 
-### Telemetry message 
+### Telemetry message
 
-The telemetry or data messages contain values of all OPC UA nodes that had 
-changed in a given period of time (`ua-deltaframe`) or contain values for all 
-OPC UA nodes that were monitored (`ua-keyframe`). 
-The complete list of monitored OPC UA nodes as well as the related type 
-information are defined in the metadata message. The attributes 
+The telemetry or data messages contain values of all OPC UA nodes that had
+changed in a given period of time (`ua-deltaframe`) or contain values for all
+OPC UA nodes that were monitored (`ua-keyframe`).
+The complete list of monitored OPC UA nodes as well as the related type
+information are defined in the metadata message. The attributes
 `opcuametadatamajorversion` and `opcuametadataminorversion` are used to
-reference the correct metadata message. The `ua-deltaframe` messages will be 
-used for hot and/or cold path processing and `ua-keyframe` messages can 
+reference the correct metadata message. The `ua-deltaframe` messages will be
+used for hot and/or cold path processing and `ua-keyframe` messages can
 additional be used to update last-known-value tables.
 
 
@@ -214,7 +214,7 @@ opcuametadataminorversion: 672341762
 ------------------ payload -------------------
 
 {
-    ... application data 
+    ... application data
         (OPC UA PubSub JSON single dataset Message)...
 }
 
@@ -223,9 +223,9 @@ opcuametadataminorversion: 672341762
 
 #### OPC UA PubSub JSON single dataset Message
 
-Using CloudEvents and model the OPC UA PubSub header information as CloudEvent 
-attributes enables integration into various system (independent from used 
-protocols) and simplifies the payload structure. 
+Using CloudEvents and model the OPC UA PubSub header information as CloudEvent
+attributes enables integration into various system (independent from used
+protocols) and simplifies the payload structure.
 
 ```text
 {
@@ -256,11 +256,11 @@ protocols) and simplifies the payload structure.
 ### Event message
 
 The event message will contain a single event and the identifier of this event is
-added to the `subject` to allow routing it into different systems without parsing 
-the payload. Events are routed for example in systems like Manufacturing Execution 
-Systems (MES), Supervisory Control and Data Acquisition systems (SCADA), 
-Alerting Systems or Operation Technology Operator Terminals (HMI Clients) and 
-also in hot and/or cold path processing. The attributes 
+added to the `subject` to allow routing it into different systems without parsing
+the payload. Events are routed for example in systems like Manufacturing Execution
+Systems (MES), Supervisory Control and Data Acquisition systems (SCADA),
+Alerting Systems or Operation Technology Operator Terminals (HMI Clients) and
+also in hot and/or cold path processing. The attributes
 `opcuametadatamajorversion` and `opcuametadataminorversion` are used to
 reference the correct metadata message.
 
@@ -289,21 +289,21 @@ opcuametadataminorversion: 672341762
 ------------------ payload -------------------
 
 {
-    ... application data 
+    ... application data
         (OPC UA PubSub JSON Single Event Message)...
 }
 
 -----------------------------------------------
 ```
 
-### Telemetry message with different Encoding  
+### Telemetry message with different Encoding
 
-One major benefit of CloudEvents for OPC UA is that it is possible to support 
-other encoding and external schema, while keeping the same OPC UA information for 
+One major benefit of CloudEvents for OPC UA is that it is possible to support
+other encoding and external schema, while keeping the same OPC UA information for
 routing.
 
-The example below uses Avro binary encoded payload, with the corresponding schema 
-referenced by `dataschema`. The `source` will be defined by an customer defined 
+The example below uses Avro binary encoded payload, with the corresponding schema
+referenced by `dataschema`. The `source` will be defined by an customer defined
 hierarchical path.
 
 ```text
@@ -329,7 +329,7 @@ recordedtime: 2024-03-28T23:59:59Z
 
 ------------------ payload -------------------
 
-    ... application data 
+    ... application data
         (OPC UA PubSub Single DataSet Message as AVRO binary)...
 
 -----------------------------------------------

@@ -56,11 +56,18 @@ and a graduated project on [Jan 25, 2024](https://github.com/cncf/toc/pull/996)
 | [Documented Extensions](cloudevents/extensions/README.md)  | -                                                                               | [Not versioned](cloudevents/extensions/README.md) |
 | [Proprietary Specifications](cloudevents/proprietary-specs.md) | -                                                                               | [Not versioned](cloudevents/proprietary-specs.md)     |
 
+The most recent release of the CloudEvents specifications can be found
+via the [ce@stable](https://github.com/cloudevents/spec/blob/ce@stable) tag.
+
 ## Other Specifications
 |                 | Latest Release                                                  | Working Draft                 |
 | :-------------- | :-------------------------------------------------------------: | :---------------------------: |
 | CE SQL          | [v1.0.0](https://github.com/cloudevents/spec/tree/cesql@v1.0.0) | [WIP](cesql/spec.md)          |
 | Subscriptions   |                                 -                               | [WIP](subscriptions/spec.md)  |
+
+The most recent release of the CESQL specification can be found
+via the [cesql@stable](https://github.com/cloudevents/spec/blob/cesql@stable)
+tag.
 
 The Registry and Pagination specifications can now be found in the
 [xRegistry/spec](https://github.com/xregistry/spec) repo.
@@ -167,7 +174,7 @@ Please see the
 [meeting minutes doc](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for the latest information on how to join the calls.
 
-Recording from our calls are available 
+Recording from our calls are available
 [here](https://www.youtube.com/playlist?list=PLO-qzjSpLN1BEyKjOVX_nMg7ziHXUYwec), and
 older ones are
 [here](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt).
