@@ -14,6 +14,12 @@ value comes first.
 Produces and consumers are free to define an out-of-band agreement on the
 semantic meaning, or valid values, for the attribute.
 
+If sequence comparison across multiple dimensions is needed (e.g., per source 
+AND subject), implementers have two options:
+- Include the additional dimension in the `source` attribute value 
+  (e.g., `"source": "https://example.com/users/service/subject123"`)
+- Define a new extension that meets their specific sequencing requirements
+
 ## Notational Conventions
 
 As with the main [CloudEvents specification](../spec.md), the key words "MUST",
@@ -31,8 +37,8 @@ this extension is being used.
 ### sequence
 
 - Type: `String`
-- Description: Value expressing the relative order of the event. This enables
-  interpretation of data supercedence.
+- Description: Value expressing the relative order of the event within the scope
+  of its `source` attribute.
 - Constraints
   - REQUIRED
   - MUST be a non-empty lexicographically-orderable string
@@ -44,3 +50,53 @@ can determine the order of the events via a simple string-compare type of
 operation. This means that it might be necessary for the value to include
 some kind of padding (e.g. leading zeros in the case of the value being the
 string representation of an integer).
+
+## Examples
+
+### Valid Usage
+
+Events from the same source with properly ordered sequences:
+
+```json
+{
+  "specversion": "1.0",
+  "type": "com.example.user.updated",
+  "source": "https://example.com/users/service",
+  "id": "event-1",
+  "sequence": "001"
+}
+
+{
+  "specversion": "1.0",
+  "type": "com.example.user.updated",
+  "source": "https://example.com/users/service", 
+  "id": "event-2",
+  "sequence": "002"
+}
+```
+
+The second event comes after the first (`"002" > "001"`).
+
+### Separate Sequences from Different Sources
+
+```json
+{
+  "specversion": "1.0",
+  "type": "com.example.user.updated",
+  "source": "https://example.com/users/service",
+  "id": "event-1",
+  "sequence": "005"
+}
+
+{
+  "specversion": "1.0",
+  "type": "com.example.order.created",
+  "source": "https://example.com/orders/service",
+  "id": "event-2",
+  "sequence": "003"
+}
+```
+
+Both events above are **valid** and have valid sequence values. However, since
+they have different `source` values, they represent two separate sequences that
+cannot be meaningfully compared.
