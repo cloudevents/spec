@@ -20,22 +20,22 @@ This document is a working draft.
 
 ## 1. Introduction
 
-[CloudEvents][ce-spec] is a standardized and protocol-agnostic definition of the
-structure and metadata description of events. This specification defines how
-elements defined in the CloudEvents specification are to be represented using
-[Extensible Markup Language (XML)][xml-spec] elements.
+[CloudEvents][ce-spec] is a standardized and protocol-agnostic definition of
+the structure and metadata description of events. This specification defines
+how elements defined in the CloudEvents specification are to be represented
+using [Extensible Markup Language (XML)][xml-spec] elements.
 
 * The [Attributes](#2-attributes) section describes the representation and
-data type mappings for CloudEvents context attributes.
+  data type mappings for CloudEvents context attributes.
 
 * The [Data](#3-data) section defines the container for the data portion of a
-CloudEvent.
+  CloudEvent.
 
-* The [Envelope](#4-envelope) section defines an XML element to contain CloudEvent
-context attributes and data.
+* The [Envelope](#4-envelope) section defines an XML element to contain
+  CloudEvent context attributes and data.
 
 * The [Batch](#5-xml-batch-format) section describes how multiple CloudEvents
-can be packaged into a single XML element.
+  can be packaged into a single XML element.
 
 ### 1.1. Conformance
 
@@ -48,8 +48,8 @@ interpreted as described in [RFC2119][rfc2119].
 The XML representation used is deliberately verbose in favor of readability
 and deterministic processing.
 
-Preservation of type information for CloudEvent attributes is supported allowing
-custom extensions to be communicated without type loss.
+Preservation of type information for CloudEvent attributes is supported
+allowing custom extensions to be communicated without type loss.
 
 A schema-less approach has been taken favoring convention over rigid document
 structure.
@@ -63,24 +63,25 @@ Where an event (or batch of events) is represented as a complete XML document,
 an XML document preamble SHOULD be included to ensure deterministic processing.
 
 XML comments are permitted anywhere within an XML representation of a
-CloudEvent or CloudEvent batch. Comments MUST be ignored during processing, except
-for the child element of a `<data>` element containing [XML element data](#33-xml-element-data),
-where all nodes MUST be preserved.
+CloudEvent or CloudEvent batch. Comments MUST be ignored during processing,
+except for the child element of a `<data>` element containing
+[XML element data](#33-xml-element-data), where all nodes MUST be preserved.
 
-CDATA nodes and regular text nodes MUST be treated interchangeably during processing,
-except for the child element `<data>` element containing [XML element data](#33-xml-element-data),
-where all nodes MUST be preserved.
+CDATA nodes and regular text nodes MUST be treated interchangeably during
+processing, except for the child element `<data>` element containing
+[XML element data](#33-xml-element-data), where all nodes MUST be preserved.
 
 XML elements in namespaces other than `http://cloudevents.io/xmlformat/V1`, and
-XML attributes other than those described in this specification MAY appear within an XML
-representation of a CloudEvent or CloudEvent batch. These SHOULD be ignored during
-CloudEvent processing, except for the child element of a `<data>` element containing
-[XML element data](#33-xml-element-data), where all nodes MUST be preserved.
+XML attributes other than those described in this specification MAY appear
+within an XML representation of a CloudEvent or CloudEvent batch. These SHOULD
+be ignored during CloudEvent processing, except for the child element of a
+`<data>` element containing [XML element data](#33-xml-element-data), where
+all nodes MUST be preserved.
 
 ## 2. Attributes
 
-The CloudEvents type system is mapped to a set of CloudEvent specific
-type designators as follows :
+The CloudEvents type system is mapped to a set of CloudEvent specific type
+designators as follows :
 
 | CloudEvents Type  |  XML Format Type | XML Schema Type | Notes |
 | :-----------------| :----------------| :--------------- | :---- |
@@ -92,45 +93,47 @@ type designators as follows :
 | URI-reference | ce:uriRef | [xs:anyURI][xml-primitives] following [RFC 3986][rfc3986] | |
 | Timestamp     | ce:timestamp | [xs:dateTime][xml-primitives] following [RFC 3339][rfc3339] | |
 
-Each CloudEvent context attribute MUST be represented as an XML element whose local
-name exactly matches that of the attribute.
+Each CloudEvent context attribute MUST be represented as an XML element whose
+local name exactly matches that of the attribute.
 
-See the [envelope](#4-envelope) for special handing of the `specversion` context attribute.
+See the [envelope](#4-envelope) for special handing of the `specversion`
+context attribute.
 
-Extension context attributes MUST be decorated with the appropriate CloudEvent type format
-designators using an `xsi:type` XML attribute, this allows them to be exchanged
-without loss of type information.
+Extension context attributes MUST be decorated with the appropriate CloudEvent
+type format designators using an `xsi:type` XML attribute, this allows them to
+be exchanged without loss of type information.
 
-An XML element representing a core context attribute MAY be decorated with
-an `xsi:type` XML attribute. If present, this designator MUST match that of the type specified
-by the [CloudEvent context attributes][ce-attrs].
+An XML element representing a core context attribute MAY be decorated with an
+`xsi:type` XML attribute. If present, this designator MUST match that of the
+type specified by the [CloudEvent context attributes][ce-attrs].
 
-An XML element representing a context attribute MUST NOT contain any child elements. The text
-within an XML element representing a context attribute MUST NOT contain any line breaks.
-When processing the text, the attribute value MUST be parsed without discarding any other
-whitespace. (For example, `<myextension xsi:type="ce:string">  text  </myextension>` represents
-an extension attribute value with leading and trailing whitespace, whereas
-`<myextension xsi:type="ce:integer">  10  </myextension>` is invalid as the textual representation
-of an Integer attribute never contains whitespace.)
+An XML element representing a context attribute MUST NOT contain any child
+elements. The text within an XML element representing a context attribute MUST
+NOT contain any line breaks. When processing the text, the attribute value
+MUST be parsed without discarding any other whitespace. (For example,
+`<myextension xsi:type="ce:string">  text  </myextension>` represents an
+extension attribute value with leading and trailing whitespace, whereas
+`<myextension xsi:type="ce:integer">  10  </myextension>` is invalid as the
+textual representation of an Integer attribute never contains whitespace.)
 
-No other XML element attributes are expected, if present they MUST be ignored during
-processing.
+No other XML element attributes are expected, if present they MUST be ignored
+during processing.
 
 ``` xml
-    ...
-    <id>AAABBBCCCNNN0000</id>
-    ..
-    <time>2021-08-14T14:30:22-08:00</time>
-    ..
-    <myextension xsi:type="ce:string">my extension value</myextension>
-    <myboolean xsi:type="ce:boolean">false</myboolean>
+...
+<id>AAABBBCCCNNN0000</id>
+...
+<time>2021-08-14T14:30:22-08:00</time>
+...
+<myextension xsi:type="ce:string">my extension value</myextension>
+<myboolean xsi:type="ce:boolean">false</myboolean>
 ```
 
 ## 3. Data
 
 The data portion of a CloudEvent follows a similar model to that employed by
-the [JSON Format specification][json-format]. A `<data>` element MUST be used to
-encapsulate the payload.
+the [JSON Format specification][json-format]. A `<data>` element MUST be used
+to encapsulate the payload.
 
 An `xsi:type` is used to discrimate the payload type and MUST be present.
 
@@ -140,8 +143,9 @@ The following data representations are supported:
 
 ### 3.1 Binary Data
 
-Binary data MUST be carried in an element with a defined type of `xs:base64Binary`
-and encoded appropriately. The element MUST NOT contain any child elements.
+Binary data MUST be carried in an element with a defined type of
+`xs:base64Binary` and encoded appropriately. The element MUST NOT contain any
+child elements.
 
 Example:
 
@@ -151,8 +155,8 @@ Example:
 
 ### 3.2 Text Data
 
-Text MUST be carried in an element with a defined type of `xs:string`.
-The element MUST NOT contain any child elements.
+Text MUST be carried in an element with a defined type of `xs:string`. The
+element MUST NOT contain any child elements.
 
 Example:
 
@@ -162,11 +166,11 @@ Example:
 
 ### 3.3 XML Element Data
 
-XML element data MUST be carried in an element with a defined type of `xs:any` with
-exactly one child XML element (with any mandatory namespace definitions).
+XML element data MUST be carried in an element with a defined type of `xs:any`
+with exactly one child XML element (with any mandatory namespace definitions).
 
-All XML nodes (including comments and CDATA nodes) within the child XML element MUST
-be preserved during processing.
+All XML nodes (including comments and CDATA nodes) within the child XML
+element MUST be preserved during processing.
 
 The `<data>` XML element MUST NOT contain any direct child text nodes with
 non-whitespace content. There are no restrictions on the content of the
@@ -184,18 +188,22 @@ Example:
 
 ## 4. Envelope
 
-Each CloudEvent is wholly represented as an `<event>` XML element that
-MUST carry the `specversion` as an XML attribute value.
+Each CloudEvent is wholly represented as an `<event>` XML element that MUST
+carry the `specversion` as an XML attribute value.
 
 Such a representation MUST use the media type `application/cloudevents+xml`.
 
 The enveloping element contains:
 
-* A set of CloudEvent context attribute XML elements.
+* A set of CloudEvent context attribute XML elements. This includes any
+  CloudEvent extension context attributes XML elements. From an XSD
+  perspective, this is the equivalent of there being an
+  `<xs:any minOccurs="0"/>` element defined as a sibling to the other
+  CloudEvent context attribute XML elements.
 * An OPTIONAL `<data>` XML element.
 
-The `<event>` element MUST NOT contain any direct child text nodes with non-whitespace
-content.
+The `<event>` element MUST NOT contain any direct child text nodes with
+non-whitespace content.
 
 Example _(XML preamble and namespace definitions omitted for brevity)_:
 
@@ -216,12 +224,11 @@ Example _(XML preamble and namespace definitions omitted for brevity)_:
 In the _XML Batch Format_ several CloudEvents are batched into a single XML
 `<batch>` element. The element comprises a list of elements in the XML Format.
 
-The `<batch>` element MUST NOT contain any direct child text nodes with non-whitespace
-content.
+The `<batch>` element MUST NOT contain any direct child text nodes with
+non-whitespace content.
 
-The `<batch>` element MUST NOT contain any direct child elements in
-the namespace `http://cloudevents.io/xmlformat/V1` except `<event>`
-elements.
+The `<batch>` element MUST NOT contain any direct child elements in the
+namespace `http://cloudevents.io/xmlformat/V1` except `<event>` elements.
 
 An XML Batch of CloudEvents MUST use the media type
 `application/cloudevents-batch+xml`.
