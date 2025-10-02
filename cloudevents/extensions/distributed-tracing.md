@@ -45,6 +45,7 @@ this extension is being used.
   defined in [section 3.2](https://w3c.github.io/trace-context/#traceparent-header)
 - Constraints
   - REQUIRED
+  - MUST be a non-empty string
 
 ### tracestate
 
