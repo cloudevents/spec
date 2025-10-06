@@ -33,12 +33,12 @@ As a general principle, this proposal aims to avoid cryptographic agility in fav
 
 We have set the following constraints for the proposed design:
 
-**Verifiability must be optional:** This ensures that the additional burden of producing verification material and performing verification only applies when verifiability is desired, which is not always the case.
+**Verifiability MUST be OPTIONAL:** This ensures that the additional burden of producing verification material and performing verification only applies when verifiability is desired, which is not always the case.
 
-**The design must be backward compatible:** Backward compatibility ensures that producers can produce verifiable events without any knowledge about whether the consumers have been configured to and are able to verify events.
+**The design MUST be backward compatible:** Backward compatibility ensures that producers can produce verifiable events without any knowledge about whether the consumers have been configured to and are able to verify events.
 Consumers that do not support verification can consumer signed events as if they were unsigned.
 
-**The verification material must be contained in the same message as the event:** The design aims to be simple and robust, and so the verification material must be transported and delivered along with the event that it describes—and not in separate events or even through different channels.
+**The verification material MUST be contained in the same message as the event:** The design aims to be simple and robust, and so the verification material MUST be transported and delivered along with the event that it describes—and not in separate events or even through different channels.
 
 
 ## Overview
@@ -53,7 +53,7 @@ The verification material is transported in an [Extension Context Attribute](htt
 * Description: The [DSSE JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/master/envelope.md) that can be used to verify the authenticity and integrity of CloudEvent.
 * Constraints:
     * OPTIONAL
-    * If present, must be Base64 encoded
+    * If present, MUST be Base64 encoded
 
 The verification material, once Base64 decoded, looks something like this:
 
@@ -92,7 +92,7 @@ SHA256(
 )
 ```
 
-It is the digest of the concatenated digest list of the mandatory Context Attributes, the optional Context Attributes as well as the event data itself. 
+It is the digest of the concatenated digest list of the mandatory Context Attributes, the OPTIONAL Context Attributes as well as the event data itself. 
 
 #### Protocol
 
@@ -118,7 +118,7 @@ This is how to sign a CloudEvent using DSSE:
 
 * *Base64 as per  [RFC 4648](https://tools.ietf.org/html/rfc4648)*
 * *[RFC 3339](https://tools.ietf.org/html/rfc3339)*
-* *The time-offset component of the event time's RFC3339 string must be the literal uppercase character `Z` ("Zulu clock time"). Any other valid time-offset, such as +00:00, is disallowed.*
+* *The time-offset component of the event time's RFC3339 string MUST be the literal uppercase character `Z` ("Zulu clock time"). Any other valid time-offset, such as +00:00, is disallowed.*
 * *In [CloudEvent’s type system](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type-system) a `String` value has a set of character restrictions equivalent to those in [RFC 5198](https://datatracker.ietf.org/doc/html/rfc5198#section-2) (Net-Unicode). We did not find evidence of any CloudEvent SDK doing any NFC/NFD normalization—should this be common in real world deployments, the protocol above might need to prescribe `UTF8(NFC(...))` where it currently simply prescribes `UTF8(...)`.* 
 
 ### Verification
@@ -148,7 +148,7 @@ Here is how to verify a given CloudEvent:
     1. if the values are not equal, the event has been modified in transit and MUST be discarded
 10. the event is returned as verified successfully.
 
-Upon verification of an CloudEvent, implementations MUST return a new event containing only verified data: the Context Attributes (required and optional) plus the event data. Extension Context Attributes MUST NOT be included in the verified event. This ensures clear separation between verified and unverified data. Users handle either a complete unverified event or a verified event with only verified values—never a mixture of both.
+Upon verification of an CloudEvent, implementations MUST return a new event containing only verified data: the Context Attributes (REQUIRED and OPTIONAL) plus the event data. Extension Context Attributes MUST NOT be included in the verified event. This ensures clear separation between verified and unverified data. Users handle either a complete unverified event or a verified event with only verified values—never a mixture of both.
 
 ### What’s verifiable and what isn’t?
 
@@ -319,7 +319,7 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 eyJwYXlsb2FkVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5jbG91ZGV2ZW50cytqc29uIiwicGF5bG9hZCI6ImV5SmthV2RsYzNSeklqcGJJbUUwWVhsakx6Z3dMMDlIWkdFMFFrOHZNVzh2VmpCbGRIQlBjV2xNZURGS2QwSTFVek5pWlVoWE1ITTlJaXdpVlVzeFYwVmpVM1Z1Y2tZNVFua3pOSEZFVlU5dWRXSndXR1Y1Tm1JeE1rOUxMMVJaVFRSU01rOVNSVDBpTENJd1VEbGFaRXhoY1ZWek9WZExLM0JhU1ZsUlRVRjVjVWREY0VkcVZWTTVMelpRWkc4NWNuWm5RbVpaUFNJc0lsUjNTVU5ZTW5WM2VXOTRUVlZUWWxrd1Mxb3hUelEzVTBkd0wxZHBZbVkyTm1WbFJrUndPV0YyVm1jOUlpd2lkWE4wTW0wd1lqSXdWMjQzU1c0MlowcHNWVkJSVWpGSGVTdGFjVzVEY0hKdk1sSktlVTByVDFSbGJ6MGlMQ0kwTjBSRlVYQnFPRWhDVTJFckwxUkpiVmNyTlVwRFpYVlJaVkpyYlRWT1RYQktWMXBITTJoVGRVWlZQU0lzSWpRM1JFVlJjR280U0VKVFlTc3ZWRWx0VnlzMVNrTmxkVkZsVW10dE5VNU5jRXBYV2tjemFGTjFSbFU5SWl3aU5EZEVSVkZ3YWpoSVFsTmhLeTlVU1cxWEt6VktRMlYxVVdWU2EyMDFUazF3U2xkYVJ6Tm9VM1ZHVlQwaUxDSnJOa2sxWTJGclZUVmxja3c0UzJwVFZWWlVUbTkzYmtSM1kyTjJkVFZyVlRGSWVHYzRPSFJ2UmxsblBTSmRmUT09Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJmM2VkOTdkNTM3NzRjNjk3NDFkY2FiZjllOTc4NWNlZjZlMGY1ODk5NWM4Njk2OGJjMTRiODE2YTg5OWE4YTQ1Iiwic2lnIjoiTUVVQ0lBaHRMQ1JnZEd4QjUva2ZhY3YzWi9RZzAyN0VuVG9abnI2K2JLTWp6dHpKQWlFQWcxM3NSbEhCb2lsamU4VUxyNFBVL0lPbkl5L3JsSkd4Rm9QbUlhdU5SQ0U9In1dfQ==
 ```
 
-Even though not strictly a valid CloudEvent (optional Context Attributes must be the non empty string when present), CloudEvents SDKs might allow users to set empty strings regardless. This test vector accounts for that possibility and ensures correct implementation of this spec.
+Even though not strictly a valid CloudEvent (OPTIONAL Context Attributes MUST be the non empty string when present), CloudEvents SDKs might allow users to set empty strings regardless. This test vector accounts for that possibility and ensures correct implementation of this spec.
 
 #### Case 3: Event with zulu time
 
@@ -371,7 +371,7 @@ eyJwYXlsb2FkVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5jbG91ZGV2ZW50cytqc29uIiwicGF5bG9hZCI6
 eyJwYXlsb2FkVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5jbG91ZGV2ZW50cytqc29uIiwicGF5bG9hZCI6ImV5SmthV2RsYzNSeklqcGJJbUUwWVhsakx6Z3dMMDlIWkdFMFFrOHZNVzh2VmpCbGRIQlBjV2xNZURGS2QwSTFVek5pWlVoWE1ITTlJaXdpVlVzeFYwVmpVM1Z1Y2tZNVFua3pOSEZFVlU5dWRXSndXR1Y1Tm1JeE1rOUxMMVJaVFRSU01rOVNSVDBpTENJd1VEbGFaRXhoY1ZWek9WZExLM0JhU1ZsUlRVRjVjVWREY0VkcVZWTTVMelpRWkc4NWNuWm5RbVpaUFNJc0lsUjNTVU5ZTW5WM2VXOTRUVlZUWWxrd1Mxb3hUelEzVTBkd0wxZHBZbVkyTm1WbFJrUndPV0YyVm1jOUlpd2lkWE4wTW0wd1lqSXdWMjQzU1c0MlowcHNWVkJSVWpGSGVTdGFjVzVEY0hKdk1sSktlVTByVDFSbGJ6MGlMQ0kwTjBSRlVYQnFPRWhDVTJFckwxUkpiVmNyTlVwRFpYVlJaVkpyYlRWT1RYQktWMXBITTJoVGRVWlZQU0lzSWpRM1JFVlJjR280U0VKVFlTc3ZWRWx0VnlzMVNrTmxkVkZsVW10dE5VNU5jRXBYV2tjemFGTjFSbFU5SWl3aU5EZEVSVkZ3YWpoSVFsTmhLeTlVU1cxWEt6VktRMlYxVVdWU2EyMDFUazF3U2xkYVJ6Tm9VM1ZHVlQwaUxDSnJOa2sxWTJGclZUVmxja3c0UzJwVFZWWlVUbTkzYmtSM1kyTjJkVFZyVlRGSWVHYzRPSFJ2UmxsblBTSmRmUT09Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJmM2VkOTdkNTM3NzRjNjk3NDFkY2FiZjllOTc4NWNlZjZlMGY1ODk5NWM4Njk2OGJjMTRiODE2YTg5OWE4YTQ1Iiwic2lnIjoiTUVVQ0lBaHRMQ1JnZEd4QjUva2ZhY3YzWi9RZzAyN0VuVG9abnI2K2JLTWp6dHpKQWlFQWcxM3NSbEhCb2lsamU4VUxyNFBVL0lPbkl5L3JsSkd4Rm9QbUlhdU5SQ0U9In1dfQ==
 ```
 
-The verification material must be the same as in case 3, because `2020-06-18T17:24:53Z` and `2020-06-18T19:24:53+02:00` are the same moment in time and the verification protocol performs time zone normalization.
+The verification material MUST be the same as in case 3, because `2020-06-18T17:24:53Z` and `2020-06-18T19:24:53+02:00` are the same moment in time and the verification protocol performs time zone normalization.
 
 
 #### Case 5: Binary data
@@ -426,7 +426,7 @@ Key management for signed CloudEvents involves choosing between local signing an
 
 #### Consumer
 
-One requirement that both approaches—local signing and remote signing—have in common is, that a consumer must be able to determine not just whether a signature matches a given key, but also that the key from the signature is acceptable.
+One requirement that both approaches—local signing and remote signing—have in common is, that a consumer MUST be able to determine not just whether a signature matches a given key, but also that the key from the signature is acceptable.
 
 For example when a consumer receive a signed CloudEvent from their SCM system and inspects the DSSE envelope’s signature, it will need get the key for the given `keyid` and also make sure that this key is in fact belongs to the SCM system, and not to a malicious actor. 
 
