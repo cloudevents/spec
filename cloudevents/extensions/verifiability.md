@@ -119,7 +119,7 @@ This is how to sign a CloudEvent using DSSE:
 * *Base64 as per  [RFC 4648](https://tools.ietf.org/html/rfc4648)*
 * *[RFC 3339](https://tools.ietf.org/html/rfc3339)*
 * *The time-offset component of the event time's RFC3339 string MUST be the literal uppercase character `Z` ("Zulu clock time"). Any other valid time-offset, such as +00:00, is disallowed.*
-* *In [CloudEvent’s type system](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type-system) a `String` value has a set of character restrictions equivalent to those in [RFC 5198](https://datatracker.ietf.org/doc/html/rfc5198#section-2) (Net-Unicode). We did not find evidence of any CloudEvent SDK doing any NFC/NFD normalization—should this be common in real world deployments, the protocol above might need to prescribe `UTF8(NFC(...))` where it currently simply prescribes `UTF8(...)`.* 
+* *In [CloudEvent’s type system](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type-system) a `String` value has a set of character restrictions equivalent to those in [RFC 5198](https://datatracker.ietf.org/doc/html/rfc5198#section-2) (Net-Unicode). We did not find evidence of any CloudEvent SDK doing any NFC/NFD normalization—SHOULD this be common in real world deployments, the protocol above might need to prescribe `UTF8(NFC(...))` where it currently simply prescribes `UTF8(...)`.* 
 
 ### Verification
 
