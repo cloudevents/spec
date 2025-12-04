@@ -364,7 +364,7 @@ CloudEvent 可以包含任意数量的具有不同名称的附加上下文属性
 
 #### Defining Extensions/定义扩展
 
-在【CloudEvent-属性扩展](primer.md#cloudevent-attribute-extensions)
+在[CloudEvent-属性扩展](primer.md#cloudevent-attribute-extensions属性扩展)
 查阅有关扩展使用和定义等相关信息。
 
 扩展的定义应该完全定义属性的方方面面——例如 它的名称、类型、语义含义和可能的值。
