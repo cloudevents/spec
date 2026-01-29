@@ -105,7 +105,7 @@ that is to be used.
 
 ## Attributes
 
-This extension defines the following attribute:
+This extension defines the following attributes:
 
 ### dssematerial
 - Type: `String`
@@ -118,6 +118,20 @@ This extension defines the following attribute:
     - `payloadType` of `"https://cloudevents.io/verifiability/dsse/v0.1"`
     - `payload` containing Base64-encoded verification material (32-byte SHA256 digest)
     - `signatures` array with at least one signature object containing `keyid` and `sig` fields
+
+### signedextattrs
+- Type: `String`
+- Description: A comma-separated list of extension attribute names that were included in the signature.
+- Constraints:
+  - OPTIONAL
+  - If present, MUST be a comma-separated string of extension attribute names
+  - The value MUST adhere to the following rules:
+    - Attribute names MUST NOT contain repetitions
+    - Attribute names MUST NOT include required or optional [Context Attributes](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#context-attributes) (`id`, `source`, `specversion`, `type`, `datacontenttype`, `dataschema`, `subject`, `time`)
+    - Attribute names MUST NOT include `dssematerial` (the verification material attribute)
+    - Attribute names MUST NOT include `signedextattrs` itself
+    - If any of these rules are violated during verification, the event MUST be discarded
+- Example: `"exta,extb,extc"` indicates that extension attributes `exta`, `extb`, and `extc` were signed
 
 ## Implementation
 
@@ -145,68 +159,81 @@ SHA256(
   SHA256(UTF8(event.dataschema)) +
   SHA256(UTF8(event.subject)) +
   SHA256(RFC3339(UTC(event.time))) +
-  SHA256(event.data)
+  SHA256(event.data) +
+  SHA256("extensionattr1") +
+  SHA256(event.extensionattr1) +
+  SHA256("extensionattr2") +
+  SHA256(event.extensionattr2)
 )
 ```
 
 It is the digest of the concatenated digest list of the mandatory Context
-Attributes, the OPTIONAL Context Attributes as well as the event data itself.
+Attributes, the OPTIONAL Context Attributes, the event data itself and a set of optional Context Extension Attributes.
 
 #### Protocol
 
 This is how to sign a CloudEvent using DSSE:
 
 1. choose a signing key
-2. create an empty byte sequence
-  1. compute the SHA256 digest of the event's [`id`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#id) in UTF8 and append it to the byte sequence
-  2. compute the SHA256 digest of the event's [`source`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#source) Context Attribute in UTF8 and append it to the byte sequence
-  3. compute the SHA256 digest of the event's [`specversion`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#specversion) Context Attribute in UTF8 and append it to the byte sequence
-  4. compute the SHA256 digest of the event's [`type`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#type) Context Attribute in UTF8 and append it to the byte sequence
-  5. compute the SHA256 digest of the event's [`datacontenttype`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#datacontenttype) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
-  6. compute the SHA256 digest of the event's [`dataschema`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#dataschema) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
-  7. compute the SHA256 digest of the event's [`subject`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#subject) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
-  8. compute the SHA256 digest of the event's [`time`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#time) Context Attribute normalized to RFC 3339 Zulu format and append it to the byte sequence (if the attribute is not set, use the digest of the empty byte sequence)
-Note: Time normalization to Zulu format ensures signature verification remains valid even when intermediaries deserialize and reserialize events with different timezone representations of the same timestamp.
-  9. compute the SHA256 digest of the event's [`data`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#event-data) and append it to the byte sequence
-3. compute the SHA256 digest of the byte sequence from `2.`
-4. follow the [DSSE protocol v1.0.2](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/protocol.md) to create a signed [DSSE v1.0.2 JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/envelope.md) using `https://cloudevents.io/verifiability/dsse/v0.1` as `PAYLOAD_TYPE`, the digest from `3.` as `SERIALIZED_BODY` and an appropriate value for `1.` as `KEYID`
-5. encode the envelope from `4.` in Base64 and set it as the `dssematerial` Extension Context Attribute on the CloudEvent
-6. ship it!
+2. choose the list of "signed extension attributes" (see constraints in the [`signedextattrs`](#signedextattrs) attribute definition)
+3. set the `signedextattrs` Extension Context Attribute on the CloudEvent to a comma-separated string of the extension attribute names chosen in step 2 (if the list is not empty)
+4. create an empty byte sequence
+    1. compute the SHA256 digest of the event's [`id`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#id) in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
+    2. compute the SHA256 digest of the event's [`source`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#source) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
+    3. compute the SHA256 digest of the event's [`specversion`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#specversion) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
+    4. compute the SHA256 digest of the event's [`type`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#type) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
+    5. compute the SHA256 digest of the event's [`datacontenttype`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#datacontenttype) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
+    6. compute the SHA256 digest of the event's [`dataschema`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#dataschema) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
+    7. compute the SHA256 digest of the event's [`subject`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#subject) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
+    8. compute the SHA256 digest of the event's [`time`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#time) Context Attribute normalized to RFC 3339 Zulu format and append it to the byte sequence (if the attribute is not set, use the digest of the empty byte sequence)
+       Note: Time normalization to Zulu format ensures signature verification remains valid even when intermediaries deserialize and reserialize events with different timezone representations of the same timestamp.
+    9. compute the SHA256 digest of the event's [`data`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#event-data) and append it to the byte sequence
+    10. for each extension attribute in the list from step 2 (in the given order, from lowest to highest index)
+        1. compute the SHA256 digest of the extension attribute's name and append it to the byte sequence
+        2. compute the SHA256 digest of the extension attribute's value and append it to the byte sequence
+5. compute the SHA256 digest of the byte sequence from step 4
+6. follow the [DSSE protocol v1.0.2](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/protocol.md) to create a signed [DSSE v1.0.2 JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/envelope.md) using `https://cloudevents.io/verifiability/dsse/v0.1` as `PAYLOAD_TYPE`, the digest from step 5 as `SERIALIZED_BODY` and an appropriate value for step 1 as `KEYID`
+7. encode the envelope from step 6 in Base64 and set it as the `dssematerial` Extension Context Attribute on the CloudEvent
+8. ship it!
 
 ### Verification
 
-When a client verifies an event that it received, it compares the digests of
-that event’s attributes and data to the signed values in the
-`VERIFICATION_MATERIAL` . If one of the digests does not match, implementations
-MUST reject the entire event as unverifiable.
+To verify an event it received, a client checks the signature of the verification
+material delivered with the event. If it is valid, the client creates the
+`VERIFICATION_MATERIAL` from the event and compares it to the signed
+`VERIFICATION_MATERIAL`. If it is the same, then the event is considered verified.
 
 #### Protocol
 
 Here is how to verify a given CloudEvent:
 
-1. obtain list of acceptable signing keys
+1. obtain list of acceptable key ids for verification
 2. read the event’s `dssematerial` [Extension Context Attribute](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#extension-context-attributes)
-  1. if it is empty, the event was not signed and MUST be discarded
+    1. if it is not present or empty, the event was not signed and MUST be discarded
 3. decode the `dssematerial` as Base64 per [RFC4648](https://tools.ietf.org/html/rfc4648)
-  1. if decoding failed, the verification material is corrupted and the event MUST be discarded
+    1. if decoding failed, the verification material is corrupted and the event MUST be discarded
 4. parse the result into a [JSON DSSE Envelope](https://github.com/secure-systems-lab/dsse/blob/master/envelope.md)
-  1. if parsing fails, the verification material is corrupted and the event MUST be discarded
+    1. if parsing fails, the verification material is corrupted and the event MUST be discarded
 5. follow the [DSSE verification protocol](https://github.com/secure-systems-lab/dsse/blob/master/protocol.md#protocol)
-  1. filter signatures by `keyid` from list of acceptable signing keys
-  2. if verification fails, the event MUST be discarded
+    1. filter signatures by `keyid` from list of acceptable keys from step 1
+    2. if verification fails, the event MUST be discarded
 6. read the envelope’s `payloadType` value
-  1. if it is not equal to `https://cloudevents.io/verifiability/dsse/v0.1`, the verification payload is unknown and the event MUST be discarded
+    1. if it is not equal to `https://cloudevents.io/verifiability/dsse/v0.1`, the verification payload is unknown and the event MUST be discarded
 7. read the envelope’s `payload` field and Base64 decode it into a byte sequence
-  1. if the result is not an sequence of the length 32, then the verification payload is corrupted and the event MUST be discarded
-8. create verification material from the event according to the signing [Protocol](#protocol)
-9. compare the newly created verification material to that in the envelope
-  1. if the values are not equal, the event has been modified in transit and MUST be discarded
-10. the event is returned as verified successfully.
+    1. if the result is not an sequence of the length 32, then the verification payload is corrupted and the event MUST be discarded
+8. read the event's `signedextattrs` [Extension Context Attribute](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#extension-context-attributes) (see the [`signedextattrs`](#signedextattrs) attribute definition for constraints)
+    1. if it is not present or empty, the list of "signed extension attributes" is considered empty
+    2. if it is not empty, treat it as a comma separated string of "signed extension attribute names"
+    3. validate that the `signedextattrs` value adheres to the constraints defined in the [`signedextattrs`](#signedextattrs) attribute definition - if any constraint is violated, the event MUST be discarded
+9. create verification material from the event according to the signing [Protocol](#protocol)
+10. compare the newly created verification material to that in the envelope
+    1. if the values are not equal, the event has been modified in transit and MUST be discarded
+11. the event is returned as verified successfully.
 
 Upon verification of an CloudEvent, implementations MUST return a new event
-containing only verified data: the Context Attributes (REQUIRED and OPTIONAL)
-plus the event data. Extension Context Attributes MUST NOT be included in the
-verified event. This ensures clear separation between verified and unverified
+containing only verified data: the Context Attributes (REQUIRED and OPTIONAL),
+the event data plus exactly those Extension Context Attributes that were signed
+by the producer. This ensures clear separation between verified and unverified
 data. Users handle either a complete unverified event or a verified event with
 only verified values—never a mixture of both.
 
@@ -220,7 +247,7 @@ CloudEvent message—different data can be verified:
 |Event Data (payload)	|✅	|✅	|✅	|	|
 |REQUIRED Context Attributes	|✅	|✅	|✅	|	|
 |OPTIONAL Context Attributes	|✅	|✅	|✅	|See notes below for time attribute	|
-|Extension Context Attributes	|❌	|❌	|❌	|	|
+|Extension Context Attributes	|✅	|✅	|✅	|Optional (per attribute)	|
 |Metadata added by transports	|❌	|❌	|❌	|	|
 
 *Notes:*
@@ -265,13 +292,13 @@ Content-Type: application/json
 Content-Length: 541
 
 {
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "type" : "example.type",
- "datacontenttype" : "application/json",
- "data" : {
-  "hello" : "world"
+  "specversion" : "1.0",
+  "id" : "1",
+  "source" : "example/uri",
+  "type" : "example.type",
+  "datacontenttype" : "application/json",
+  "data" : {
+    "hello" : "world"
  },
  "dssematerial" : "eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiNXh6NS9WdG94TkpWWWFZeG1MZUw2eEw5STZDYXY5UDNnb2g2cXlDWUdmUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJ3WWo4YlJQWFlDSUxyeXdzUDdXR1VCd1RKc25aSFlYTUhpWEZtWWh1QkdhOU1ocDdYNHZFN1FBYkhXbytXZitjTURBYjN6dXlwRjVVbVdwZGtJUGppUT09In1dfQ=="
 }
@@ -411,7 +438,7 @@ and ensures correct implementation of this spec.
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5jbG91ZGV2ZW50cytqc29uIiwicGF5bG9hZCI6ImV5SmthV2RsYzNSeklqcGJJbUUwWVhsakx6Z3dMMDlIWkdFMFFrOHZNVzh2VmpCbGRIQlBjV2xNZURGS2QwSTFVek5pWlVoWE1ITTlJaXdpVlVzeFYwVmpVM1Z1Y2tZNVFua3pOSEZFVlU5dWRXSndXR1Y1Tm1JeE1rOUxMMVJaVFRSU01rOVNSVDBpTENJd1VEbGFaRXhoY1ZWek9WZExLM0JhU1ZsUlRVRjVjVWREY0VkcVZWTTVMelpRWkc4NWNuWm5RbVpaUFNJc0lsUjNTVU5ZTW5WM2VXOTRUVlZUWWxrd1Mxb3hUelEzVTBkd0wxZHBZbVkyTm1WbFJrUndPV0YyVm1jOUlpd2lkWE4wTW0wd1lqSXdWMjQzU1c0MlowcHNWVkJSVWpGSGVTdGFjVzVEY0hKdk1sSktlVTByVDFSbGJ6MGlMQ0kwTjBSRlVYQnFPRWhDVTJFckwxUkpiVmNyTlVwRFpYVlJaVkpyYlRWT1RYQktWMXBITTJoVGRVWlZQU0lzSWpRM1JFVlJjR280U0VKVFlTc3ZWRWx0VnlzMVNrTmxkVkZsVW10dE5VNU5jRXBYV2tjemFGTjFSbFU5SWl3aU5EZEVSVkZ3YWpoSVFsTmhLeTlVU1cxWEt6VktRMlYxVVdWU2EyMDFUazF3U2xkYVJ6Tm9VM1ZHVlQwaUxDSnJOa2sxWTJGclZUVmxja3c0UzJwVFZWWlVUbTkzYmtSM1kyTjJkVFZyVlRGSWVHYzRPSFJ2UmxsblBTSmRmUT09Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJmM2VkOTdkNTM3NzRjNjk3NDFkY2FiZjllOTc4NWNlZjZlMGY1ODk5NWM4Njk2OGJjMTRiODE2YTg5OWE4YTQ1Iiwic2lnIjoiTUVVQ0lBaHRMQ1JnZEd4QjUva2ZhY3YzWi9RZzAyN0VuVG9abnI2K2JLTWp6dHpKQWlFQWcxM3NSbEhCb2lsamU4VUxyNFBVL0lPbkl5L3JsSkd4Rm9QbUlhdU5SQ0U9In1dfQ==
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoid0tDYThzcTNkeWcvMDBaaURReS9hWEFZMXRlcFFucktMYTZ4UDBZM0QvUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJQSXhPUHF3MGFJeW9acExtdU5DTlpNS3pBNlgxWVovUXpiZVR3UzMvS3BBMjZJQzF0SU9oLzdkRFBDMWk0RW82b1dxRk1WRXJ4cEZrR0hGMnM0MHAvZz09In1dfQ==
 ```
 
 #### Case 4: Event with time including TZ
@@ -436,7 +463,7 @@ eyJwYXlsb2FkVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5jbG91ZGV2ZW50cytqc29uIiwicGF5bG9hZCI6
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6ImFwcGxpY2F0aW9uL3ZuZC5jbG91ZGV2ZW50cytqc29uIiwicGF5bG9hZCI6ImV5SmthV2RsYzNSeklqcGJJbUUwWVhsakx6Z3dMMDlIWkdFMFFrOHZNVzh2VmpCbGRIQlBjV2xNZURGS2QwSTFVek5pWlVoWE1ITTlJaXdpVlVzeFYwVmpVM1Z1Y2tZNVFua3pOSEZFVlU5dWRXSndXR1Y1Tm1JeE1rOUxMMVJaVFRSU01rOVNSVDBpTENJd1VEbGFaRXhoY1ZWek9WZExLM0JhU1ZsUlRVRjVjVWREY0VkcVZWTTVMelpRWkc4NWNuWm5RbVpaUFNJc0lsUjNTVU5ZTW5WM2VXOTRUVlZUWWxrd1Mxb3hUelEzVTBkd0wxZHBZbVkyTm1WbFJrUndPV0YyVm1jOUlpd2lkWE4wTW0wd1lqSXdWMjQzU1c0MlowcHNWVkJSVWpGSGVTdGFjVzVEY0hKdk1sSktlVTByVDFSbGJ6MGlMQ0kwTjBSRlVYQnFPRWhDVTJFckwxUkpiVmNyTlVwRFpYVlJaVkpyYlRWT1RYQktWMXBITTJoVGRVWlZQU0lzSWpRM1JFVlJjR280U0VKVFlTc3ZWRWx0VnlzMVNrTmxkVkZsVW10dE5VNU5jRXBYV2tjemFGTjFSbFU5SWl3aU5EZEVSVkZ3YWpoSVFsTmhLeTlVU1cxWEt6VktRMlYxVVdWU2EyMDFUazF3U2xkYVJ6Tm9VM1ZHVlQwaUxDSnJOa2sxWTJGclZUVmxja3c0UzJwVFZWWlVUbTkzYmtSM1kyTjJkVFZyVlRGSWVHYzRPSFJ2UmxsblBTSmRmUT09Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJmM2VkOTdkNTM3NzRjNjk3NDFkY2FiZjllOTc4NWNlZjZlMGY1ODk5NWM4Njk2OGJjMTRiODE2YTg5OWE4YTQ1Iiwic2lnIjoiTUVVQ0lBaHRMQ1JnZEd4QjUva2ZhY3YzWi9RZzAyN0VuVG9abnI2K2JLTWp6dHpKQWlFQWcxM3NSbEhCb2lsamU4VUxyNFBVL0lPbkl5L3JsSkd4Rm9QbUlhdU5SQ0U9In1dfQ==
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoid0tDYThzcTNkeWcvMDBaaURReS9hWEFZMXRlcFFucktMYTZ4UDBZM0QvUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJQSXhPUHF3MGFJeW9acExtdU5DTlpNS3pBNlgxWVovUXpiZVR3UzMvS3BBMjZJQzF0SU9oLzdkRFBDMWk0RW82b1dxRk1WRXJ4cEZrR0hGMnM0MHAvZz09In1dfQ==
 ```
 
 The verification material MUST be the same as in case 3, because
@@ -464,6 +491,125 @@ time and the verification protocol performs time zone normalization.
 ```
 eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoicUNTZWlaa1MraEg5V2lDbGZxNnBsZnFZTlZ5Mmt2eFdSZm9CckxFem9Eaz0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJEWXdiU3V4SDRXcWFhQlZPVlU4TllJYTZXYnZDazkvdkc5aGV0d3BKNHpJNWo2am1BTGRNaHcrcVZuc211YzY2NWZqVlJGVDFRUHUvanA1Z0c0U2pzUT09In1dfQ==
 ```
+
+#### Case 6a: Event with one signed extension attribute
+
+*Input: CloudEvent*
+
+```
+{
+ "specversion" : "1.0",
+ "id" : "1",
+ "source" : "example/uri",
+ "type" : "example.type",
+ "datacontenttype" : "application/json",
+ "exta" : "value1",
+ "data" : {
+  "hello" : "world"
+ }
+}
+```
+
+*Input: signedextattrs*
+
+```
+["exta"]
+```
+
+*Output: verification material:*
+
+```
+ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiUE1nU3ZQdG9nZ0FPY3RIaDZDM1F3VC96a2ZoQUpadFJKaVJnRFBFazhnRT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJzajBwRS96OW5xalh1QTFNRFRBT29lU2FtYlVXUmhHQ2tJWFdmM2VnaEUwOUd1UzhHQVZYZWdxaStmM1hwOG90WEFudHlyNnY3Q0lOaythWms1SmpUZz09In1dfQ==
+```
+
+#### Case 6b: Event with one signed extension attribute
+
+*Input: CloudEvent*
+
+```
+{
+ "specversion" : "1.0",
+ "id" : "1",
+ "source" : "example/uri",
+ "type" : "example.type",
+ "datacontenttype" : "application/json",
+ "exta" : "value1",
+ "extb" : "value2",
+ "data" : {
+  "hello" : "world"
+ }
+}
+```
+
+*Input: signedextattrs*
+
+```
+["exta"]
+```
+
+*Output: verification material:*
+
+```
+ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiUE1nU3ZQdG9nZ0FPY3RIaDZDM1F3VC96a2ZoQUpadFJKaVJnRFBFazhnRT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJzajBwRS96OW5xalh1QTFNRFRBT29lU2FtYlVXUmhHQ2tJWFdmM2VnaEUwOUd1UzhHQVZYZWdxaStmM1hwOG90WEFudHlyNnY3Q0lOaythWms1SmpUZz09In1dfQ==
+```
+
+#### Case 7: Event with multiple extension attributes
+
+*Input: CloudEvent*
+
+```
+{
+ "specversion" : "1.0",
+ "id" : "1",
+ "source" : "example/uri",
+ "type" : "example.type",
+ "datacontenttype" : "application/json",
+ "exta" : "value1",
+ "extb" : "value2",
+ "data" : {
+  "hello" : "world"
+ }
+}
+```
+
+*Input: signedextattrs*
+
+```
+["exta", "extb"]
+```
+
+*Output: verification material:*
+
+```
+ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoib3ZhaGZKV2FLYVBWRFRzUGlJUW9Ucjl1NUpOVEFFMjFHQkg1RzVQWkQ4MD0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJONkU0TFJyZGRHZGJqc0FQODVCYkpsZUo5ZnV0c2E2YTdhRWVtc1Ric29XL0lKU3F2Zmc4ZkhPcGtzbkFZcHFtRnJQWk8zeitWUERrWjNEbWpMN1FQZz09In1dfQ==
+```
+
+#### Case 8: Event with signedextattrs (invalid format with spaces)
+
+*Input: CloudEvent*
+
+```
+{
+ "specversion" : "1.0",
+ "id" : "1",
+ "source" : "example/uri",
+ "type" : "example.type",
+ "datacontenttype" : "application/json",
+ "exta" : "value1",
+ "extb" : "value2",
+ "data" : {
+  "hello" : "world"
+ }
+}
+```
+
+*Resulting `signedextattrs` value:* `exta, extb`
+
+*Output: error:*
+
+Should result in some format error regarding `signedextattrs`
+
+*Note:* This test case demonstrates an **invalid** `signedextattrs` format where there is a space after the comma (`exta, extb`). The attribute name ` extb` (with leading space) will be treated literally during signing and verification. This will cause the signature to be different from the expected value and demonstrates why proper comma-separated format (without spaces) is important.
 
 ## Appendix
 
