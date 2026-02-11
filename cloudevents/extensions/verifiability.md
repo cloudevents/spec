@@ -127,7 +127,7 @@ This extension defines the following attributes:
   - If present, MUST be a comma-separated string of extension attribute names
   - The value MUST adhere to the following rules:
     - Attribute names MUST NOT contain repetitions
-    - Attribute names MUST NOT include required or optional [Context Attributes](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#context-attributes) (`id`, `source`, `specversion`, `type`, `datacontenttype`, `dataschema`, `subject`, `time`)
+    - Attribute names MUST NOT include REQUIRED or OPTIONAL [Context Attributes](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#context-attributes) (`id`, `source`, `specversion`, `type`, `datacontenttype`, `dataschema`, `subject`, `time`)
     - Attribute names MUST NOT include `dssematerial` (the verification material attribute)
     - Attribute names MUST NOT include `signedextattrs` itself
     - If any of these rules are violated during verification, the event MUST be discarded
@@ -168,7 +168,7 @@ SHA256(
 ```
 
 It is the digest of the concatenated digest list of the mandatory Context
-Attributes, the OPTIONAL Context Attributes, the event data itself and a set of optional Context Extension Attributes.
+Attributes, the OPTIONAL Context Attributes, the event data itself and a set of OPTIONAL Context Extension Attributes.
 
 #### Protocol
 
@@ -247,7 +247,7 @@ CloudEvent message—different data can be verified:
 |Event Data (payload)	|✅	|✅	|✅	|	|
 |REQUIRED Context Attributes	|✅	|✅	|✅	|	|
 |OPTIONAL Context Attributes	|✅	|✅	|✅	|See notes below for time attribute	|
-|Extension Context Attributes	|✅	|✅	|✅	|Optional (per attribute)	|
+|Extension Context Attributes	|✅	|✅	|✅	|OPTIONAL (per attribute)	|
 |Metadata added by transports	|❌	|❌	|❌	|	|
 
 *Notes:*
@@ -607,7 +607,7 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 
 *Output: error:*
 
-Should result in some format error regarding `signedextattrs`
+SHOULD result in some format error regarding `signedextattrs`
 
 *Note:* This test case demonstrates an **invalid** `signedextattrs` format where there is a space after the comma (`exta, extb`). The attribute name ` extb` (with leading space) will be treated literally during signing and verification. This will cause the signature to be different from the expected value and demonstrates why proper comma-separated format (without spaces) is important.
 
