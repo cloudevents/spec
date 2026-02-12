@@ -5,6 +5,15 @@
 This format specification for CloudEvents defines how events are expressed
 in XML documents.
 
+The following are related to this specification but have been closed
+due to inactivity. If someone would like to reopen, and drive to completion,
+any of these issues please comment in the issue(s).
+- [Create a PR with some tweaks to the wording about relationship of context attrs and data](https://github.com/cloudevents/spec/issues/1250#top)
+- [Create an issue for CE xsi type](https://github.com/cloudevents/spec/issues/1238#top)
+- [XSD - Provide concrete XSD that XML Documents can Validated against](https://github.com/cloudevents/spec/issues/1015#top)
+- [Named Element 'ExtensionAttributes' of Type any](https://github.com/cloudevents/spec/issues/1014#top)
+- [add some info about extension attributes](https://github.com/cloudevents/spec/pull/1335)
+
 ## Status of this document
 
 This document is a working draft.
