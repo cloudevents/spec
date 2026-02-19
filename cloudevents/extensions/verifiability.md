@@ -157,7 +157,7 @@ SHA256(
   SHA256(UTF8(event.datacontenttype)) +
   SHA256(UTF8(event.dataschema)) +
   SHA256(UTF8(event.subject)) +
-  SHA256(RFC3339(UTC(event.time))) +
+  SHA256(event.time) +
   SHA256(event.data) +
   SHA256("extensionattr1") +
   SHA256(event.extensionattr1) +
@@ -193,8 +193,7 @@ This is how to sign a CloudEvent using DSSE:
     5. compute the SHA256 digest of the event's [`datacontenttype`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#datacontenttype) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
     6. compute the SHA256 digest of the event's [`dataschema`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#dataschema) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
     7. compute the SHA256 digest of the event's [`subject`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#subject) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
-    8. compute the SHA256 digest of the event's [`time`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#time) Context Attribute normalized to RFC 3339 Zulu format and append it to the byte sequence (if the attribute is not set, use the digest of the empty byte sequence)
-       Note: Time normalization to Zulu format ensures signature verification remains valid even when intermediaries deserialize and reserialize events with different timezone representations of the same timestamp.
+    8. compute the SHA256 digest of the event's [time] Context Attribute in its canonical serialized representation and append it to the byte sequence (if the attribute is not set, use the digest of the empty byte sequence)
     9. compute the SHA256 digest of the event's [`data`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#event-data) and append it to the byte sequence
     10. for each extension attribute in the list from step 2 (in the given order, from lowest to highest index)
         1. compute the SHA256 digest of the extension attribute's name and append it to the byte sequence
@@ -263,11 +262,6 @@ CloudEvent message—different data can be verified:
 |OPTIONAL Context Attributes	|✅	|✅	|✅	|See notes below for time attribute	|
 |Extension Context Attributes	|✅	|✅	|✅	|OPTIONAL (per attribute)	|
 |Metadata added by transports	|❌	|❌	|❌	|	|
-
-*Notes:*
-
-* *In [CloudEvent’s type system](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type-system) a `Timestamp`’s string encoding is [RFC 3339](https://tools.ietf.org/html/rfc3339). This means that verification of the `time` Context Attribute can only be done with second precision, even though an SDK might allow passing in a timestamp with nanosecond precision.*
-* *In [CloudEvent’s official Protocol Buffers format](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/cloudevents.proto#L57), the `time` Context Attribute is encoded as a `google.protobuf.Timestamp` and hence does not include time zone information (which RFC 3339 would allow). For interoperability with CloudEvent setups using the Protocol Buffers format, time zone information is ignored in the signing and verification process.*
 
 ## Examples
 
@@ -455,37 +449,7 @@ and ensures correct implementation of this spec.
 eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoid0tDYThzcTNkeWcvMDBaaURReS9hWEFZMXRlcFFucktMYTZ4UDBZM0QvUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJQSXhPUHF3MGFJeW9acExtdU5DTlpNS3pBNlgxWVovUXpiZVR3UzMvS3BBMjZJQzF0SU9oLzdkRFBDMWk0RW82b1dxRk1WRXJ4cEZrR0hGMnM0MHAvZz09In1dfQ==
 ```
 
-#### Case 4: Event with time including TZ
-
-*Input: CloudEvent*
-
-```
-{
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "subject": "",
- "type" : "example.type",
- "datacontenttype" : "application/json",
- "time": "2020-06-18T19:24:53+02:00",
- "data" : {
-  "hello" : "world"
- }
-}
-```
-
-*Output: verification material:*
-
-```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoid0tDYThzcTNkeWcvMDBaaURReS9hWEFZMXRlcFFucktMYTZ4UDBZM0QvUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJQSXhPUHF3MGFJeW9acExtdU5DTlpNS3pBNlgxWVovUXpiZVR3UzMvS3BBMjZJQzF0SU9oLzdkRFBDMWk0RW82b1dxRk1WRXJ4cEZrR0hGMnM0MHAvZz09In1dfQ==
-```
-
-The verification material MUST be the same as in case 3, because
-`2020-06-18T17:24:53Z` and `2020-06-18T19:24:53+02:00` are the same moment in
-time and the verification protocol performs time zone normalization.
-
-
-#### Case 5: Binary data
+#### Case 4: Binary data
 
 *Input: CloudEvent*
 
@@ -506,7 +470,7 @@ time and the verification protocol performs time zone normalization.
 eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoicUNTZWlaa1MraEg5V2lDbGZxNnBsZnFZTlZ5Mmt2eFdSZm9CckxFem9Eaz0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJEWXdiU3V4SDRXcWFhQlZPVlU4TllJYTZXYnZDazkvdkc5aGV0d3BKNHpJNWo2am1BTGRNaHcrcVZuc211YzY2NWZqVlJGVDFRUHUvanA1Z0c0U2pzUT09In1dfQ==
 ```
 
-#### Case 6a: Event with one signed extension attribute
+#### Case 5a: Event with one signed extension attribute
 
 *Input: CloudEvent*
 
@@ -536,7 +500,7 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
  eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiUE1nU3ZQdG9nZ0FPY3RIaDZDM1F3VC96a2ZoQUpadFJKaVJnRFBFazhnRT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJzajBwRS96OW5xalh1QTFNRFRBT29lU2FtYlVXUmhHQ2tJWFdmM2VnaEUwOUd1UzhHQVZYZWdxaStmM1hwOG90WEFudHlyNnY3Q0lOaythWms1SmpUZz09In1dfQ==
 ```
 
-#### Case 6b: Event with one signed extension attribute
+#### Case 5b: Event with one signed extension attribute
 
 *Input: CloudEvent*
 
