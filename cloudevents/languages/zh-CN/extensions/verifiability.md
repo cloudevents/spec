@@ -1,4 +1,4 @@
-# extension: Verifiable CloudEvents with DSSE
+# Verifiable CloudEvents with DSSE
 
 本文档尚未被翻译，请先阅读英文[原版文档](../../../extensions/verifiability.md) 。
 

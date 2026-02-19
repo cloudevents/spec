@@ -1,4 +1,4 @@
-# extension: Verifiable CloudEvents with DSSE
+# Verifiable CloudEvents with DSSE
 
 ## Goals
 
@@ -30,7 +30,6 @@ the combination of event `source` and `id` to be unique per event, signature
 replay attacks (where an attacker resubmits a legitimately signed event) are
 out of scope for this proposal - the existing source+id uniqueness requirement
 provides sufficient protection.
-
 
 Further, this extension only aims at *verifiability*. It does not aim to
 enable *confidentiality*. Consequently, it does not address the threat of
@@ -66,13 +65,11 @@ event:** The design aims to be simple and robust, and so the verification
 material MUST be transported and delivered along with the event that it
 describes—and not in separate events or even through different channels.
 
-
 ## Overview
 
 This extension enables event producers to sign CloudEvents and consumers to
 verify those signatures. The verification material is transported as extension
 attributes alongside the event data.
-
 
 In a typical flow (using an SDK):
 The producer passes a CloudEvent to the SDK, which creates the verification
@@ -108,6 +105,7 @@ that is to be used.
 This extension defines the following attributes:
 
 ### dssematerial
+
 - Type: `String`
 - Description: The [DSSE JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/master/envelope.md)
   that can be used to verify the authenticity and integrity of the CloudEvent.
@@ -120,6 +118,7 @@ This extension defines the following attributes:
     - `signatures` array with at least one signature object containing `keyid` and `sig` fields
 
 ### signedextattrs
+
 - Type: `String`
 - Description: A comma-separated list of extension attribute names that were included in the signature.
 - Constraints:
@@ -146,8 +145,8 @@ available to producers and consumers.
 ### Signature
 
 The `VERIFICATION_MATERIAL` of the type
-`https://cloudevents.io/verifiability/dsse/v0.1` in the envelope above is
-created as follows:
+`https://cloudevents.io/verifiability/dsse/v0.1` in the DSSE envelope described
+in the Overview section is created as follows:
 
 ```
 SHA256(
@@ -168,7 +167,16 @@ SHA256(
 ```
 
 It is the digest of the concatenated digest list of the mandatory Context
-Attributes, the OPTIONAL Context Attributes, the event data itself and a set of OPTIONAL Context Extension Attributes.
+Attributes, the OPTIONAL Context Attributes, the event data itself and a set of
+OPTIONAL Context Extension Attributes.
+
+**The canonical serialized representation of a CloudEvent is defined by the
+specific event format in use. Implementations MUST compute digests over the
+deterministic canonical encoding of each attribute value as defined by that
+format. For example, in the JSON format this means hashing the canonical JSON
+representation of the value; in the Protocol Buffers format this means hashing
+the deterministic protobuf wire encoding of the value (including for typed
+fields such as `google.protobuf.Timestamp`).**
 
 #### Protocol
 
@@ -195,6 +203,12 @@ This is how to sign a CloudEvent using DSSE:
 6. follow the [DSSE protocol v1.0.2](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/protocol.md) to create a signed [DSSE v1.0.2 JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/envelope.md) using `https://cloudevents.io/verifiability/dsse/v0.1` as `PAYLOAD_TYPE`, the digest from step 5 as `SERIALIZED_BODY` and an appropriate value for step 1 as `KEYID`
 7. encode the envelope from step 6 in Base64 and set it as the `dssematerial` Extension Context Attribute on the CloudEvent
 8. ship it!
+
+**This extension binds signatures to the canonical serialized representation of
+a CloudEvent in a specific event format. Transforming a CloudEvent from one
+event format to another (e.g., JSON to Protocol Buffers) changes its canonical
+representation and therefore invalidates the signature. Implementations that
+operate across formats MUST re-sign events after such transformations.**
 
 ### Verification
 
@@ -609,7 +623,12 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 
 SHOULD result in some format error regarding `signedextattrs`
 
-*Note:* This test case demonstrates an **invalid** `signedextattrs` format where there is a space after the comma (`exta, extb`). The attribute name ` extb` (with leading space) will be treated literally during signing and verification. This will cause the signature to be different from the expected value and demonstrates why proper comma-separated format (without spaces) is important.
+*Note:* This test case demonstrates an **invalid** `signedextattrs` format
+where there is a space after the comma (`exta, extb`). The attribute name `
+extb` (with leading space) will be treated literally during signing and
+verification. This will cause the signature to be different from the expected
+value and demonstrates why proper comma-separated format (without spaces) is
+important.
 
 ## Appendix
 
