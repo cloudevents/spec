@@ -127,7 +127,7 @@ This extension defines the following attributes:
   - If present, MUST be a comma-separated string of extension attribute names
   - The value MUST adhere to the following rules:
     - Attribute names MUST NOT contain repetitions
-    - Attribute names MUST NOT include REQUIRED or OPTIONAL [Context Attributes](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#context-attributes) (`id`, `source`, `specversion`, `type`, `datacontenttype`, `dataschema`, `subject`, `time`)
+    - Attribute names MUST NOT include [core context attributes](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#context-attributes) (`id`, `source`, `specversion`, `type`, `datacontenttype`, `dataschema`, `subject`, `time`)
     - Attribute names MUST NOT include `dssematerial` (the verification material attribute)
     - Attribute names MUST NOT include `signedextattrs` itself
     - If any of these rules are violated during verification, the event MUST be discarded
