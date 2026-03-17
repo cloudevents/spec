@@ -1,5 +1,7 @@
 # App Context
 
+<!-- no-verify-translation -->
+
 This extension gives information about a mobile app that triggered an event.
 
 ## Notational Conventions
@@ -32,9 +34,9 @@ this extension is being used.
 ### androidpackagename
 - Type: `String`
 - Description: The Android package name of the app triggering the event.
-  It must follow Android package naming conventions: it must have at least two segments,
-  separated by periods (`.`); each segment must start with a letter; and all characters
-  must be alphanumeric or an underscore (`[a-zA-Z0-9_]`).
+  It MUST follow Android package naming conventions: it must have at least two segments,
+  separated by periods (`.`); each segment MUST start with a letter; and all characters
+  MUST be alphanumeric or an underscore (`[a-zA-Z0-9_]`).
 - Constraints
   - OPTIONAL
   - MUST be present if the app is an Android app.
@@ -42,7 +44,7 @@ this extension is being used.
 ### iosbundleid
 - Type: `String`
 - Description: The Apple bundle identifier of the app triggering the event.
-  It must follow Apple bundle naming conventions: it must contain only alphanumeric
+  It MUST follow Apple bundle naming conventions: it must contain only alphanumeric
   characters (`A-Z`, `a-z`, `0-9`), hyphens (`-`), and periods (`.`), typically adopting
   a reverse-DNS format.
 - Constraints
