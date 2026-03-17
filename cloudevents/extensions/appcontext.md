@@ -34,7 +34,7 @@ this extension is being used.
 ### androidpackagename
 - Type: `String`
 - Description: The Android package name of the app triggering the event.
-  It MUST follow Android package naming conventions: it must have at least two segments,
+  It MUST follow Android package naming conventions: it MUST have at least two segments,
   separated by periods (`.`); each segment MUST start with a letter; and all characters
   MUST be alphanumeric or an underscore (`[a-zA-Z0-9_]`).
 - Constraints
@@ -44,7 +44,7 @@ this extension is being used.
 ### iosbundleid
 - Type: `String`
 - Description: The Apple bundle identifier of the app triggering the event.
-  It MUST follow Apple bundle naming conventions: it must contain only alphanumeric
+  It MUST follow Apple bundle naming conventions: it MUST contain only alphanumeric
   characters (`A-Z`, `a-z`, `0-9`), hyphens (`-`), and periods (`.`), typically adopting
   a reverse-DNS format.
 - Constraints
