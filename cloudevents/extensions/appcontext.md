@@ -3,6 +3,19 @@
 <!-- no-verify-translation -->
 
 This extension gives information about a mobile app that triggered an event.
+This is a way to authenticate the app that triggered an event, orthogonally
+to a source.
+
+For example, in an end-user accessible backend like a Supabase or Firebae database,
+the source of a data change event is the database. But the authentication for that
+write might be the user (covered by the [authcontext](./authcontext.md) extension)
+and the app that triggered the event (covered by this extension).
+
+Common uses can be to track engagement with a particular app, or to
+allow a backend to enforce policies based on the app that triggered
+an event. For example, either the user or the app can be used to identify
+whether an AI API could have high or low rate limits, expensive or cost effective
+models, etc.
 
 ## Notational Conventions
 
@@ -25,7 +38,7 @@ this extension is being used.
 - Constraints
   - OPTIONAL
 
-### displayname
+### appdisplayname
 - Type: `String`
 - Description: How the app appears to users.
 - Constraints
