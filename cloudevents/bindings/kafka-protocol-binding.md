@@ -225,7 +225,7 @@ This example shows the _binary_ mode mapping of an event into the Kafka message.
 All other CloudEvents attributes are mapped to Kafka Header fields with prefix
 `ce_`.
 
-Mind that `content-type` here does refer to the event `data` content carried in the
+Note that `content-type` here refers to the event `data` content carried in the
 payload.
 
 ```text
