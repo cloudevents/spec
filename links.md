@@ -129,7 +129,7 @@ between CDEvents.
 ```json
 {
   "context": {
-    "version": "0.4.0",
+    "specversion": "0.6.0-draft",
     "id": "505b31c2-8bc8-47b3-a1a0-269d7a8530ac",
     "source": "dev/jenkins",
     "type": "dev.cdevents.testsuite.finished.0.1.1",
@@ -163,7 +163,7 @@ systems to act accordingly based off the ending notation.
 ```json
 {
   "context": {
-    "version": "0.3.0",
+    "specversion": "0.6.0-draft",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "chainId": "7ff3f526-1a0e-4d35-8a4c-7d6295e97359",
     "source": "/event/source/123",
@@ -198,7 +198,7 @@ further, we can allow for a path link between `pipelinerun.queued` to the
 ```json
 {
   "context": {
-    "version": "0.3.0",
+    "specversion": "0.6.0-draft",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "chainId": "7ff3f526-1a0e-4d35-8a4c-7d6295e97359",
     "source": "/event/source/123",
@@ -367,7 +367,7 @@ help explain the overall flow using payloads from CDEvents.
 ```json
 {
   "context": {
-    "version": "0.4.0",
+    "specversion": "0.6.0-draft",
     "chainId": "d0be0005-cca7-4175-8fe3-f64d2f27bc01",
     "id": "38a09112-a1ab-4c26-94c4-edfc234ef631",
     "source": "/event/source/123",
@@ -417,7 +417,7 @@ sender generates this id.
 ```json
 {
   "context": {
-    "version": "0.4.0",
+    "specversion": "0.6.0-draft",
     "chainId": "d0be0005-cca7-4175-8fe3-f64d2f27bc01",
     "id": "AA6945F8-B0F1-48DD-B658-25ACF95BD2F5",
     "source": "/event/source/123",

@@ -1,0 +1,22 @@
+{
+  "$id": "cdevents/_defs/started",
+  "term": "Started",
+  "definition": "Indicates that execution of an entity has begun and that the system has committed to performing the associated work.",
+  "notes": [
+    "A started event does not imply successful execution or completion.",
+    "The associated execution may still fail, be canceled, or terminate early."
+  ],
+  "examples": [
+    "A pipeline run entering its first execution step",
+    "A task beginning execution on a worker",
+    "A deployment process initiating rollout"
+  ],
+  "counterExamples": [
+    "Scheduling or queuing of work",
+    "Validation or pre-flight checks",
+    "Completion of execution",
+    "Failure or cancellation outcomes",
+    "Progress or intermediate execution states"
+  ]
+}
+

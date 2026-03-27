@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0-draft/schema/custom",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/custom",
   "properties": {
     "context": {
       "properties": {
-        "version": {
+        "specversion": {
           "type": "string",
           "minLength": 1
         },
@@ -41,7 +41,7 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "version",
+        "specversion",
         "id",
         "source",
         "type",

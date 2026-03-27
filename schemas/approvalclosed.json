@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/approval-closed-event",
+  "x-cdevents-semantics": {
+    "subject": "cdevents/_defs/approval"
+  },
+  "properties": {
+    "context": {
+      "properties": {
+        "specversion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "dev.cdevents.approval.closed.0.1.0"
+          ],
+          "default": "dev.cdevents.approval.closed.0.1.0"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "schemaUri": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        },
+        "chainId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "links/embeddedlinksarray"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "specversion",
+        "id",
+        "source",
+        "type",
+        "timestamp"
+      ]
+    },
+    "subject": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "content": {
+          "properties": {
+            "approvalDetailsUrl": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Reference URL to the approval request in the originating system. Consumers with appropriate access can retrieve the full approval context, history, and decisions from this URL. This provides the canonical location of the approval record."
+            },
+            "resourceTargetUrl": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Reference URL to the resource whose progression is gated by this approval. The approval does not describe the resource, but the URL allows consumers to retrieve resource information directly from the system that owns it."
+            },
+            "responder": {
+              "type": "string",
+              "format": "uri",
+              "description": "URN identifying the entity that recorded this decision. May be a human identity, a service account, or an automated system."
+            },
+            "decision": {
+              "type": "string",
+              "enum": [
+                "escalated",
+                "delegate",
+                "deferred",
+                "requestChanges",
+                "approved",
+                "rejected"
+              ],
+              "description": "The decision made by the responder. This field represents the action taken on the approval request and does not indicate the final approval state. The terminal state is captured by the status field in approval.closed."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "approved",
+                "rejected",
+                "cancelled",
+                "expired"
+              ],
+              "description": "The terminal state of the approval. Approved is an authorized to proceed. Rejected is explicitly denied. Cancelled is withdrawn before resolution. Expired is no decision was reached within the allowed time."
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "approvalDetailsUrl",
+            "resourceTargetUrl",
+            "responder",
+            "decision",
+            "status"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "content"
+      ]
+    },
+    "customData": {
+      "oneOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "string",
+          "contentEncoding": "base64"
+        }
+      ]
+    },
+    "customDataContentType": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "context",
+    "subject"
+  ]
+}

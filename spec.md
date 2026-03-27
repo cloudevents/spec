@@ -31,7 +31,7 @@ CDEvents is a common specification for Continuous Delivery events.
     - [type (context)](#type-context)
     - [source (context)](#source-context)
     - [timestamp](#timestamp)
-    - [version](#version)
+    - [specversion](#specversion)
   - [OPTIONAL Context  Attributes](#optional-context-attributes)
     - [chainId](#chainId)
     - [links](#links)
@@ -268,7 +268,7 @@ defined in the [vocabulary](#vocabulary):
   - REQUIRED
   - MUST adhere to the format specified in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339)
 
-#### version
+#### specversion
 
 - Type: `String`
 - Description: The version of the CDEvents specification which the event
@@ -370,7 +370,7 @@ This is an example of a full CDEvent context, rendered in JSON format:
 ```json
 {
     "context": {
-    "version": "0.5.0-draft",
+    "specversion": "0.6.0-draft",
     "id" : "A234-1234-1234",
     "source" : "/staging/tekton/",
     "type" : "dev.cdevents.taskrun.started.0.2.0",
@@ -447,7 +447,7 @@ The following example shows `context` and `subject` together, rendered as JSON.
 ```json
 {
    "context": {
-      "version": "0.5.0-draft",
+      "specversion": "0.6.0-draft",
       "id" : "A234-1234-1234",
       "source" : "/staging/tekton/",
       "type" : "dev.cdevents.taskrun.started.0.2.0",

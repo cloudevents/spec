@@ -49,7 +49,7 @@ A `service` can represent for example a binary that is running, a daemon, an app
 
 This event represents an environment that has been created. Such an environment can be used to deploy services in.
 
-- Event Type: __`dev.cdevents.environment.created.0.3.0-draft`__
+- Event Type: __`dev.cdevents.environment.created.0.3.0`__
 - Predicate: created
 - Subject: [`environment`](#environment)
 
@@ -64,7 +64,7 @@ This event represents an environment that has been created. Such an environment 
 
 This event represents an environment that has been modified.
 
-- Event Type: __`dev.cdevents.environment.modified.0.3.0-draft`__
+- Event Type: __`dev.cdevents.environment.modified.0.3.0`__
 - Predicate: modified
 - Subject: [`environment`](#environment)
 
@@ -79,7 +79,7 @@ This event represents an environment that has been modified.
 
 This event represents an environment that has been deleted.```
 
-- Event Type: __`dev.cdevents.environment.deleted.0.3.0-draft`__
+- Event Type: __`dev.cdevents.environment.deleted.0.3.0`__
 - Predicate: deleted
 - Subject: [`environment`](#environment)
 
@@ -93,7 +93,7 @@ This event represents an environment that has been deleted.```
 
 This event represents a new instance of a service that has been deployed
 
-- Event Type: __`dev.cdevents.service.deployed.0.3.0-draft`__
+- Event Type: __`dev.cdevents.service.deployed.0.3.0`__
 - Predicate: deployed
 - Subject: [`service`](#service)
 
@@ -108,7 +108,7 @@ This event represents a new instance of a service that has been deployed
 
 This event represents an existing instance of a service that has been upgraded to a new version
 
-- Event Type: __`dev.cdevents.service.upgraded.0.3.0-draft`__
+- Event Type: __`dev.cdevents.service.upgraded.0.3.0`__
 - Predicate: upgraded
 - Subject: [`service`](#service)
 
@@ -123,7 +123,7 @@ This event represents an existing instance of a service that has been upgraded t
 
 This event represents an existing instance of a service that has been rolled back to a previous version
 
-- Event Type: __`dev.cdevents.service.rolledback.0.3.0-draft`__
+- Event Type: __`dev.cdevents.service.rolledback.0.3.0`__
 - Predicate: rolledback
 - Subject: [`service`](#service)
 
@@ -138,7 +138,7 @@ This event represents an existing instance of a service that has been rolled bac
 
 This event represents the removal of a previously deployed service instance and is thus not longer present in the specified environment
 
-- Event Type: __`dev.cdevents.service.removed.0.3.0-draft`__
+- Event Type: __`dev.cdevents.service.removed.0.3.0`__
 - Predicate: removed
 - Subject: [`service`](#service)
 
@@ -152,7 +152,7 @@ This event represents the removal of a previously deployed service instance and 
 
 This event represents an existing instance of a service that has an accessible URL for users to interact with it. This event can be used to let other tools know that the service is ready and also available for consumption.
 
-- Event Type: __`dev.cdevents.service.published.0.3.0-draft`__
+- Event Type: __`dev.cdevents.service.published.0.3.0`__
 - Predicate: published
 - Subject: [`service`](#service)
 

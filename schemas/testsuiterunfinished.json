@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0-draft/schema/test-suite-run-finished-event",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/testsuiterun-finished-event",
   "properties": {
     "context": {
       "properties": {
-        "version": {
+        "specversion": {
           "type": "string",
           "minLength": 1
         },
@@ -18,8 +18,8 @@
         },
         "type": {
           "type": "string",
-          "enum": ["dev.cdevents.testsuiterun.finished.0.3.0-draft"],
-          "default": "dev.cdevents.testsuiterun.finished.0.3.0-draft"
+          "enum": ["dev.cdevents.testsuiterun.finished.0.3.0"],
+          "default": "dev.cdevents.testsuiterun.finished.0.3.0"
         },
         "timestamp": {
           "type": "string",
@@ -40,7 +40,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "required": ["version", "id", "source", "type", "timestamp"]
+      "required": ["specversion", "id", "source", "type", "timestamp"]
     },
     "subject": {
       "properties": {

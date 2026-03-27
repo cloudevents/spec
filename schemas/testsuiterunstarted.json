@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0-draft/schema/test-suite-run-started-event",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/testsuiterun-started-event",
   "properties": {
     "context": {
       "properties": {
-        "version": {
+        "specversion": {
           "type": "string",
           "minLength": 1
         },
@@ -19,9 +19,9 @@
         "type": {
           "type": "string",
           "enum": [
-            "dev.cdevents.testsuiterun.started.0.3.0-draft"
+            "dev.cdevents.testsuiterun.started.0.3.0"
           ],
-          "default": "dev.cdevents.testsuiterun.started.0.3.0-draft"
+          "default": "dev.cdevents.testsuiterun.started.0.3.0"
         },
         "timestamp": {
           "type": "string",
@@ -43,7 +43,7 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "version",
+        "specversion",
         "id",
         "source",
         "type",

@@ -39,7 +39,7 @@ points for metrics.
 ## CDEvents Specification
 
 The latest release of the specification on is
-[v0.4.0](https://github.com/cdevents/spec/blob/v0.4.0/spec.md), and you can
+[v0.5.0](https://github.com/cdevents/spec/blob/v0.5.0/spec.md), and you can
 continuously follow the latest updates of the specification on [the `main`
 branch](./spec.md).
 

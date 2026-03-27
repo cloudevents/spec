@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0-draft/schema/ticket-created-event",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/ticket-created-event",
   "properties": {
     "context": {
       "properties": {
-        "version": {
+        "specversion": {
           "type": "string",
           "minLength": 1
         },
@@ -20,9 +20,9 @@
         "type": {
           "type": "string",
           "enum": [
-            "dev.cdevents.ticket.created.0.2.0-draft"
+            "dev.cdevents.ticket.created.0.2.0"
           ],
-          "default": "dev.cdevents.ticket.created.0.2.0-draft"
+          "default": "dev.cdevents.ticket.created.0.2.0"
         },
         "timestamp": {
           "type": "string",
@@ -44,7 +44,7 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "version",
+        "specversion",
         "id",
         "source",
         "type",

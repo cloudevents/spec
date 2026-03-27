@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0-draft/schema/pipeline-run-finished-event",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/pipelinerun-finished-event",
   "properties": {
     "context": {
       "properties": {
-        "version": {
+        "specversion": {
           "type": "string",
           "minLength": 1
         },
@@ -19,8 +19,8 @@
         },
         "type": {
           "type": "string",
-          "enum": ["dev.cdevents.pipelinerun.finished.0.3.0-draft"],
-          "default": "dev.cdevents.pipelinerun.finished.0.3.0-draft"
+          "enum": ["dev.cdevents.pipelinerun.finished.0.3.0"],
+          "default": "dev.cdevents.pipelinerun.finished.0.3.0"
         },
         "timestamp": {
           "type": "string",
@@ -41,7 +41,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "required": ["version", "id", "source", "type", "timestamp"]
+      "required": ["specversion", "id", "source", "type", "timestamp"]
     },
     "subject": {
       "properties": {

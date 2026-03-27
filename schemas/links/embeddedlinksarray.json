@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0-draft/schema/links/embeddedlinksarray",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/links/embeddedlinksarray",
   "type": "array",
   "items": {
     "anyOf": [

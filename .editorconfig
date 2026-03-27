@@ -1,0 +1,31 @@
+# https://editorconfig.org/
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+charset = utf-8
+
+[*.md]
+#inside code block, indentation could be anything
+indent_size = unset
+
+[*.py]
+indent_size = 4
+# 88 is the default for black formatter
+# 79 is PEP8's recommendation
+# 119 is django's recommendation
+max_line_length = 88
+
+# The JSON files contain newlines inconsistently
+[*.json]
+insert_final_newline = unset
+
+# Makefiles always use tabs for indentation
+[Makefile]
+indent_style = tab
+indent_size = 4

@@ -102,7 +102,7 @@ Content-Length: nnnn
 
 {
    "context": {
-      "version": "0.3.0",
+      "specversion": "0.6.0-draft",
       "id" : "A234-1234-1234",
       "source" : "/staging/tekton/",
       "type" : "dev.cdevents.taskrun.started.0.1.1",

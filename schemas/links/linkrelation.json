@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cdevents.dev/0.5.0-draft/schema/links/linkrelation",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/links/linkrelation",
   "properties": {
     "chainId": {
       "description": "This represents the full lifecycles of a series of events in CDEvents",

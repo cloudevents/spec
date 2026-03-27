@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
@@ -51,25 +51,25 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Set up Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: tools/package-lock.json
       - name: Install dependencies
-        run: |
-          cd tools
-          npm install -g --no-fund ajv-cli ajv-formats
+        run: npm ci --no-fund
+        working-directory: tools
       - name: Run Validate
-        run: ./tools/validate.sh
+        run: npm run validate
+        working-directory: tools
 
   spellcheck:
     name: Spellcheck (en_US)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Spellcheck
-        uses: rojopolis/spellcheck-github-actions@0.52.0
+        uses: rojopolis/spellcheck-github-actions@0.60.0

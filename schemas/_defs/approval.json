@@ -1,0 +1,23 @@
+{
+  "$id": "cdevents/_defs/approval",
+  "term": "Approval",
+  "definition": "A formal decision point in a pipeline or workflow where an identifiable entitym, human or automated, makes an accountable authorization decision that determines whether execution continues. Unlike an evaluation, an approval requires a responder whose decision could have gone differently and can be attributed and audited. An approval has a lifecycle: it is created, may receive one or more non-terminal decisions, and is eventually resolved into a terminal state.",
+  "notes": [
+    "An approval is distinct from the resource it gates, and references the resource via resourceTargetUrl but does not describe it. Use the appropriate event type for the resource itself.",
+    "A single approval may receive multiple decisions before reaching a terminal state, supporting both human approver flows and automated policy engines.",
+    "The responder may be a human identity, an automated system, or any external entity capable of authorizing progression."
+  ],
+  "examples": [
+    "A deployment gate requiring human sign-off before a production rollout proceeds",
+    "An automated policy engine authorizing a pipeline to continue after a compliance check",
+    "A regulated change management gate requiring auditable authorization before a release",
+    "A maintenance window system authorizing a deployment to proceed when the window opens",
+    "An external compliance system that must approve before a sensitive operation executes"
+  ],
+  "counterExamples": [
+    "A unit test suite asserting code correctness before a build proceeds",
+    "An automated linter check that blocks a pull request",
+    "A readiness probe or health check that gates a rollout",
+    "A budget threshold check that must be satisfied before a resource is provisioned"
+  ]
+}

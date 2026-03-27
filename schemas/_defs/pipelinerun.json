@@ -1,0 +1,19 @@
+{
+  "$id": "cdevents/_defs/pipelinerun",
+  "term": "PipelineRun",
+  "definition": "A PipelineRun is a concrete invocation of a pipeline definition, representing one complete attempt to execute that pipeline’s workflow from start to termination.",
+  "notes": [
+    "A PipelineRun is not a pipeline definition",
+    "A PipelineRun may fail, succeed, or be aborted"
+  ],
+  "examples": [
+    "Tekton PipelineRun",
+    "GitHub Actions workflow run",
+    "Spinnaker pipeline execution"
+  ],
+  "counterExamples": [
+    "Pipeline templates",
+    "Reusable pipeline graphs"
+  ]
+}
+

@@ -149,7 +149,7 @@ find schemas -name '*json' | \
 
 # Replace the version in the conformance files
 find conformance -name '*json' | \
-    xargs sed -i ".backup" -e 's,"version": "'${OLD_VERSION}'","version": "'${VERSION}'",g'
+    xargs sed -i ".backup" -e 's,"specversion": "'${OLD_VERSION}'","specversion": "'${VERSION}'",g'
 
 # Replace the version in the custom events schema ID
 find custom -name '*json' | \
@@ -157,11 +157,11 @@ find custom -name '*json' | \
 
 # Replace the version in the custom events conformance file
 find custom -name '*json' | \
-    xargs sed -i ".backup" -e 's,"version": "'${OLD_VERSION}'","version": "'${VERSION}'",g'
+    xargs sed -i ".backup" -e 's,"specversion": "'${OLD_VERSION}'","specversion": "'${VERSION}'",g'
 
 # Update examples in docs
 for doc in cloudevents-binding spec links; do
-    sed -i ".backup" -e 's;"version": "'${OLD_VERSION}'",;"version": "'${VERSION}'",;g' "${doc}.md"
+    sed -i ".backup" -e 's;"specversion": "'${OLD_VERSION}'",;"specversion": "'${VERSION}'",;g' "${doc}.md"
 done
 
 # Do not set the release in the main README for in progress releases

@@ -1,9 +1,9 @@
 {
   "context": {
-    "version": "0.5.0-draft",
+    "specversion": "0.6.0-draft",
     "id": "F4BD2B55-B6F6-4F44-AF72-BD2D0E7A8708",
     "source": "/ticketing/system",
-    "type": "dev.cdevents.ticket.closed.0.2.0-draft",
+    "type": "dev.cdevents.ticket.closed.0.2.0",
     "timestamp": "2022-11-11T13:52:20.079Z",
     "schemaUri": "https://myorg.com/schema/custom",
     "links": [

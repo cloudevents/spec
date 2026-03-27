@@ -112,7 +112,7 @@ Corresponding CDEvent using a `dev.cdeventsx.*` type:
 ```jsonld=
 {
   "context": {
-    "version": "0.1.0",
+    "specversion": "0.1.0",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "source": "/harbor/alpine",
     "type": "dev.cdeventsx.harbor-quota.exceeded.0.1.0",

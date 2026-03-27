@@ -1,7 +1,11 @@
 {
   "name": "cdevents-tools",
+  "scripts": {
+    "validate": "node validate.js"
+  },
   "dependencies": {
-    "ajv-cli": "^5.0.0",
-    "ajv-formats": "^3.0.1"
+    "ajv": "^8.18",
+    "ajv-formats": "^3.0",
+    "glob": "^13.0"
   }
 }

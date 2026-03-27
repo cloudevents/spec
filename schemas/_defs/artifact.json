@@ -1,0 +1,19 @@
+{
+  "$id": "cdevents/_defs/artifact",
+  "term": "Artifact",
+  "definition": "A versioned, immutable output of a build or packaging process that represents a deliverable unit intended for consumption by downstream systems.",
+  "notes": [],
+  "examples": [
+    "A container image produced by a CI pipeline",
+    "A compiled binary packaged for release",
+    "A versioned deployment bundle generated from source"
+  ],
+  "counterExamples": [
+    "Source code repositories or branches",
+    "Intermediate or temporary build outputs",
+    "Logs, metrics, or diagnostic data",
+    "Configuration files not intended for distribution",
+    "Runtime state or dynamically generated data"
+  ]
+}
+

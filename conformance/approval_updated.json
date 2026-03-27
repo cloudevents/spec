@@ -1,0 +1,52 @@
+{
+  "context": {
+    "specversion": "0.6.0-draft",
+    "id": "371069a8-fc18-44f1-b38f-9d70a1695820",
+    "chainId": "4c8cb7dd-3448-41de-8768-eec704e2829b",
+    "source": "/event/source/123",
+    "type": "dev.cdevents.approval.updated.0.1.0",
+    "timestamp": "2023-03-20T14:28:05.315384Z",
+    "schemaUri": "https://myorg.com/schema/custom",
+    "links": [
+      {
+        "linkType": "RELATION",
+        "linkKind": "TRIGGER",
+        "target": {
+          "contextId": "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+        },
+        "tags": {
+          "foo1": "bar",
+          "foo2": "bar"
+        }
+      }, {
+        "linkType": "PATH",
+        "from": {
+          "contextId": "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+        },
+        "tags": {
+          "foo1": "bar",
+          "foo2": "bar"
+        }
+      }, {
+        "linkType": "END",
+        "from": {
+          "contextId": "5328c37f-bb7e-4bb7-84ea-9f5f85e4a7ce"
+        },
+        "tags": {
+          "foo1": "bar",
+          "foo2": "bar"
+        }
+      }
+    ]
+  },
+  "subject": {
+    "id": "approval-123",
+    "source": "/event/source/123",
+    "content": {
+      "approvalDetailsUrl": "https://approvals.example.com/approval-123",
+      "resourceTargetUrl": "https://deployments.example.com/myapp/prod",
+      "responder": "urn:user:bob",
+      "decision": "approved"
+    }
+  }
+}

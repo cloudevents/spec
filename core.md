@@ -66,7 +66,7 @@ Due the dynamic nature of Pipelines, most of actual work needs to be queued to
 happen in a distributed way, hence queued events are added. Adopters can choose
 to ignore these events if they don't apply to their use cases.
 
-- Event Type: __`dev.cdevents.pipelinerun.queued.0.3.0-draft`__
+- Event Type: __`dev.cdevents.pipelinerun.queued.0.3.0`__
 - Predicate: queued
 - Subject: [`pipelineRun`](#pipelinerun)
 
@@ -81,7 +81,7 @@ to ignore these events if they don't apply to their use cases.
 
 A pipelineRun has started and it is running.
 
-- Event Type: __`dev.cdevents.pipelinerun.started.0.3.0-draft`__
+- Event Type: __`dev.cdevents.pipelinerun.started.0.3.0`__
 - Predicate: started
 - Subject: [`pipelineRun`](#pipelinerun)
 
@@ -96,7 +96,7 @@ A pipelineRun has started and it is running.
 
 A pipelineRun has finished, successfully or not.
 
-- Event Type: __`dev.cdevents.pipelinerun.finished.0.3.0-draft`__
+- Event Type: __`dev.cdevents.pipelinerun.finished.0.3.0`__
 - Predicate: finished
 - Subject: [`pipelineRun`](#pipelinerun)
 
@@ -113,7 +113,7 @@ A pipelineRun has finished, successfully or not.
 
 A taskRun has started and it is running.
 
-- Event Type: __`dev.cdevents.taskrun.started.0.3.0-draft`__
+- Event Type: __`dev.cdevents.taskrun.started.0.3.0`__
 - Predicate: started
 - Subject: [`taskRun`](#taskrun)
 
@@ -129,7 +129,7 @@ A taskRun has started and it is running.
 
 A taskRun has finished, successfully or not.
 
-- Event Type: __`dev.cdevents.taskrun.finished.0.3.0-draft`__
+- Event Type: __`dev.cdevents.taskrun.finished.0.3.0`__
 - Predicate: finished
 - Subject: [`taskRun`](#taskrun)
 

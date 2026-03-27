@@ -1,6 +1,6 @@
 {
   "context": {
-    "version": "0.5.0-draft",
+    "specversion": "0.6.0-draft",
     "id": "271069a8-fc18-44f1-b38f-9d70a1695819",
     "source": "/event/source/123",
     "type": "dev.cdeventsx.mytool-resource.created.0.1.0",
