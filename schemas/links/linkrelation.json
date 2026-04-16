@@ -28,10 +28,15 @@
         "contextId": {
           "type": "string",
           "minLength": 1
+        },
+        "domainId": {
+          "type": "string",
+          "format": "uri-reference"
         }
       },
-      "required": [
-        "contextId"
+      "anyOf": [
+        { "required": ["contextId"] },
+        { "required": ["domainId"] }
       ]
     },
     "target": {
@@ -41,10 +46,15 @@
         "contextId": {
           "type": "string",
           "minLength": 1
+        },
+        "domainId": {
+          "type": "string",
+          "format": "uri-reference"
         }
       },
-      "required": [
-        "contextId"
+      "anyOf": [
+        { "required": ["contextId"] },
+        { "required": ["domainId"] }
       ]
     },
     "tags": {

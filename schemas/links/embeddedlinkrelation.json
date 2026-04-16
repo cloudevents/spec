@@ -19,8 +19,16 @@
         "contextId": {
           "type": "string",
           "minLength": 1
+        },
+        "domainId": {
+          "type": "string",
+          "format": "uri-reference"
         }
-      }
+      },
+      "anyOf": [
+        { "required": ["contextId"] },
+        { "required": ["domainId"] }
+      ]
     },
     "tags": {
       "type": "object",
