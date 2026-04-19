@@ -27,6 +27,9 @@ on:
       end-sha:
         description: 'Ending SHA? (latest HEAD)'
 
+permissions:
+  contents: read
+
 jobs:
   release-notes:
     name: Release Notes
