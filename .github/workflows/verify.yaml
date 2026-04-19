@@ -1,5 +1,8 @@
 name: verify
 on: [push, pull_request]
+permissions:
+  contents: read
+
 jobs:
   verify:
     name: verify
