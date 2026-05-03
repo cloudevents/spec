@@ -29,7 +29,7 @@ pipelines:
         - dnf install -y -q gh git git-subtree
         - gh auth login --hostname github.pie.apple.com --with-token < $BUILD_SECRETS_PATH/GH_TOKEN
         - gh auth setup-git
-        - git remote set-url origin https://github.pie.apple.com/cdf/cdevents-spec.git
+        - git remote set-url origin "$(git remote get-url origin | sed 's|git@github.pie.apple.com:|https://github.pie.apple.com/|')"
         - |
           DRAFT_VERSION=$(cat version.txt)
           VERSION="${BUILD_PARAM_VERSION:-${DRAFT_VERSION%-draft}}"
@@ -40,6 +40,11 @@ pipelines:
 
           git checkout release
           find . -name "*.json" -exec sed -i "s|/${DRAFT_VERSION}/|/${VERSION}/|g" {} +
-          git add -A
+          git add -u
           git diff --cached --quiet || git commit -m "chore: set version to ${VERSION}"
-          git push origin release --force
+          git push origin release -f
+          LATEST=$(git ls-remote --tags origin "refs/tags/schemas/v${VERSION}-r*" | awk '{print $2}' | sed "s|refs/tags/schemas/v${VERSION}-r||" | sort -n | tail -1)
+          REVISION=$([ -z "$LATEST" ] && echo 0 || echo $((LATEST + 1)))
+          git tag -d "schemas/v${VERSION}-r${REVISION}" 2>/dev/null || true
+          git tag "schemas/v${VERSION}-r${REVISION}"
+          git push origin "schemas/v${VERSION}-r${REVISION}"
