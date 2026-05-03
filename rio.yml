@@ -1,0 +1,27 @@
+schemaVersion: 2.0
+timeout: 10
+
+pipelines:
+  - group: publish-schemas-branch
+    branchRules:
+      includePatterns:
+        - main
+
+    secrets:
+      names:
+        - GH_TOKEN
+
+    machine:
+      baseImage: docker.apple.com/base-images/ubi9/java11-builder:latest
+
+    build:
+      template: freestyle:v4:publish
+      steps:
+        - dnf install -y -q 'dnf-command(config-manager)'
+        - dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+        - dnf install -y -q gh git git-subtree
+        - gh auth login --hostname github.pie.apple.com --with-token < $BUILD_SECRETS_PATH/GH_TOKEN
+        - gh auth setup-git
+        - git remote set-url origin https://github.pie.apple.com/cdf/cdevents-spec.git
+        - git subtree split --prefix=schemas --branch release
+        - git push origin release --force
