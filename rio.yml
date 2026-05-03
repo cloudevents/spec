@@ -1,7 +1,62 @@
 schemaVersion: 2.0
-timeout: 10
+
+timeout: 60
 
 pipelines:
+  - branchName: oss-mirror
+
+    trigger:
+      timer: '@daily'
+
+    secrets:
+      names:
+        - ORG
+        - GH_TOKEN
+
+    machine:
+      baseImage: docker.apple.com/base-images/ubi10/ubi
+
+    build:
+      template: freestyle:v4:build
+      steps:
+        - dnf install -y -q 'dnf-command(config-manager)'
+        - dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+        - dnf install -y -q gh git
+        - gh auth login --hostname github.pie.apple.com --with-token < $BUILD_SECRETS_PATH/GH_TOKEN
+        - gh auth status --hostname github.pie.apple.com
+        - gh auth setup-git
+        - export ORG="$(cat $BUILD_SECRETS_PATH/ORG)"
+        - export SPEC_REPO="${ORG}/cdevents-spec"
+        - gh repo set-default "$SPEC_REPO"
+        - git remote rm upstream || true
+        - git remote add upstream https://github.com/cdevents/spec.git
+        - git remote rm mirror || true
+        - git remote add mirror "https://github.pie.apple.com/$SPEC_REPO.git"
+        - git fetch upstream main
+        - git fetch mirror oss-mirror || true
+        - git checkout -B oss-mirror mirror/oss-mirror || git checkout -B oss-mirror upstream/main
+        - |
+          UPSTREAM_SHA="$(git rev-parse upstream/main)"
+          MIRROR_SHA="$(git rev-parse HEAD)"
+
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "oss-mirror is already up to date with upstream/main"
+            exit 0
+          fi
+        - git rebase upstream/main
+        - git push mirror oss-mirror:oss-mirror -f
+        - |
+          if ! gh pr list --repo "$SPEC_REPO" --base main --head oss-mirror --state open --json number --jq 'length > 0' | grep -q true; then
+            gh pr create \
+              --repo "$SPEC_REPO" \
+              --base main \
+              --head oss-mirror \
+              --title "Sync oss-mirror to main" \
+              --body "Automated PR to merge the latest mirrored upstream changes from \`oss-mirror\` into \`main\`."
+          else
+            echo "Open PR from oss-mirror to main already exists"
+          fi
+          
   - group: publish-schemas-branch
     branchRules:
       includePatterns:
