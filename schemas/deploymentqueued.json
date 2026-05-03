@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/deployment-queued-event",
+  "x-cdevents-semantics": {
+    "subject": "cdevents/_defs/deployment",
+    "predicate": "cdevents/_defs/queued"
+  },
+  "properties": {
+    "context": {
+      "properties": {
+        "specversion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "dev.cdevents.deployment.queued.0.1.0"
+          ],
+          "default": "dev.cdevents.deployment.queued.0.1.0"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "schemaUri": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        },
+        "chainId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "links/embeddedlinksarray"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "specversion",
+        "id",
+        "source",
+        "type",
+        "timestamp"
+      ]
+    },
+    "subject": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "content": {
+          "properties": {
+            "artifactId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "environment": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source": {
+                  "type": "string",
+                  "minLength": 1,
+                  "format": "uri-reference"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "artifactId",
+            "environment"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "content"
+      ]
+    },
+    "customData": {
+      "oneOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "string",
+          "contentEncoding": "base64"
+        }
+      ]
+    },
+    "customDataContentType": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "context",
+    "subject"
+  ]
+}

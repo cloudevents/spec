@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cdevents.dev/0.6.0-draft/schema/targetrollout-queued-event",
+  "x-cdevents-semantics": {
+    "subject": "cdevents/_defs/targetrollout",
+    "predicate": "cdevents/_defs/queued"
+  },
+  "properties": {
+    "context": {
+      "properties": {
+        "specversion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "dev.cdevents.targetrollout.queued.0.1.0"
+          ],
+          "default": "dev.cdevents.targetrollout.queued.0.1.0"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "schemaUri": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri"
+        },
+        "chainId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "links": {
+          "$ref": "links/embeddedlinksarray"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "specversion",
+        "id",
+        "source",
+        "type",
+        "timestamp"
+      ]
+    },
+    "subject": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "format": "uri-reference"
+        },
+        "content": {
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target": {
+              "type": "string",
+              "minLength": 1,
+              "format": "uri-reference"
+            },
+            "environment": {
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source": {
+                  "type": "string",
+                  "minLength": 1,
+                  "format": "uri-reference"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            },
+            "artifactId": {
+              "type": "string",
+              "minLength": 1
+            },
+            "deploymentId": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "name",
+            "target",
+            "environment",
+            "artifactId"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "id",
+        "content"
+      ]
+    },
+    "customData": {
+      "oneOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "string",
+          "contentEncoding": "base64"
+        }
+      ]
+    },
+    "customDataContentType": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "context",
+    "subject"
+  ]
+}

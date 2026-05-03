@@ -11,11 +11,18 @@ pipelines:
       names:
         - GH_TOKEN
 
+    trigger:
+      gitPush: false
+
     machine:
       baseImage: docker.apple.com/base-images/ubi9/java11-builder:latest
 
     build:
       template: freestyle:v4:publish
+      buildParameters:
+        - parameter: VERSION
+          description: "Version to publish (e.g. 0.6.0). Defaults to version.txt with -draft removed."
+          defaultValue: ""
       steps:
         - dnf install -y -q 'dnf-command(config-manager)'
         - dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
@@ -23,5 +30,16 @@ pipelines:
         - gh auth login --hostname github.pie.apple.com --with-token < $BUILD_SECRETS_PATH/GH_TOKEN
         - gh auth setup-git
         - git remote set-url origin https://github.pie.apple.com/cdf/cdevents-spec.git
-        - git subtree split --prefix=schemas --branch release
-        - git push origin release --force
+        - |
+          DRAFT_VERSION=$(cat version.txt)
+          VERSION="${BUILD_PARAM_VERSION:-${DRAFT_VERSION%-draft}}"
+          echo "Publishing schemas at version ${VERSION} (was ${DRAFT_VERSION})"
+
+          git branch -D release || true
+          git subtree split --prefix=schemas --branch release
+
+          git checkout release
+          find . -name "*.json" -exec sed -i "s|/${DRAFT_VERSION}/|/${VERSION}/|g" {} +
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: set version to ${VERSION}"
+          git push origin release --force
