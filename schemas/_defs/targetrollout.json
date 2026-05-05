@@ -1,0 +1,19 @@
+{
+  "$id": "cdevents/_defs/targetrollout",
+  "term": "TargetRollout",
+  "definition": "A TargetRollout is a specific destination within an environment to which a release unit may be deployed and made available. A TargetRollout is always contained within an environment. Multiple TargetRollouts may exist within a single environment.",
+  "notes": [
+    "A TargetRollout carries a deploymentId reference back to its parent Deployment",
+    "A TargetRollout represents a single deployment destination, not an environment",
+    "failureType is available on targetRollout.finished to express per-destination failure reasons"
+  ],
+  "examples": [
+    "A Kubernetes namespace in us-east-1 within the production environment",
+    "A canary slot within a blue/green deployment",
+    "A named deployment slot in a cloud provider region"
+  ],
+  "counterExamples": [
+    "An environment itself",
+    "The aggregate deployment across all targets (that is a Deployment)"
+  ]
+}

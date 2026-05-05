@@ -1,0 +1,18 @@
+{
+  "$id": "cdevents/_defs/deployment",
+  "term": "Deployment",
+  "definition": "A Deployment is the act of applying a version of a release unit to one or more target rollouts. A deployment is a canonical SDLC fact, and it is not the pipeline that performed the deployment, but the change to the running system that resulted from it.",
+  "notes": [
+    "A Deployment fans out to one or more TargetRollouts",
+    "A Deployment is not the pipeline or tooling that executed it",
+    "deployment.finished is the canonical signal that a version has been deployed and is the event DORA frameworks should measure against"
+  ],
+  "examples": [
+    "Deploying myapp v1.2.3 to the production environment across multiple regions",
+    "A Spinnaker pipeline execution that rolls out a service to multiple Kubernetes clusters"
+  ],
+  "counterExamples": [
+    "The pipeline that performed the deployment",
+    "An individual rollout to a single target (that is a TargetRollout)"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$id": "cdevents/_defs/queued",
+  "term": "Queued",
+  "definition": "Indicates that an entity has been accepted and is waiting to begin execution.",
+  "notes": [
+    "A queued event does not imply that execution has started.",
+    "The associated entity may be held by scheduling, resource availability, or dependencies."
+  ],
+  "examples": [
+    "A deployment accepted by a deploy controller and waiting for resources",
+    "A target rollout scheduled but not yet executing",
+    "A pipeline run waiting in a queue before a worker picks it up"
+  ],
+  "counterExamples": [
+    "Active execution of the entity",
+    "Completion or failure of the entity"
+  ]
+}

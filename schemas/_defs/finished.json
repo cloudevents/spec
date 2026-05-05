@@ -1,0 +1,20 @@
+{
+  "$id": "cdevents/_defs/finished",
+  "term": "Finished",
+  "definition": "Indicates that execution of an entity has ended, regardless of outcome. The outcome field on the event conveys whether execution succeeded or failed.",
+  "notes": [
+    "A finished event does not imply successful execution.",
+    "The outcome field must be inspected to determine success or failure.",
+    "A finished event is terminal — no further lifecycle events follow for this entity."
+  ],
+  "examples": [
+    "A deployment completing across all target rollouts",
+    "A target rollout completing at its destination",
+    "A pipeline run terminating with success or failure"
+  ],
+  "counterExamples": [
+    "Intermediate execution states",
+    "Progress or partial completion signals",
+    "Cancellation requests (the finished event is emitted after cancellation is complete)"
+  ]
+}
