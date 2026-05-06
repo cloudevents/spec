@@ -93,7 +93,7 @@ pipelines:
 
           git checkout -B "$BRANCH"
           echo "$VERSION" > version.txt
-          find . -name "*.json" -exec sed -i "s|/${DRAFT_VERSION}/|/${VERSION}/|g" {} +
+          find . -name "*.json" -exec sed -i -e "s|/${DRAFT_VERSION}/|/${VERSION}/|g" -e "s|\"${DRAFT_VERSION}\"|\"${VERSION}\"|g" {} +
           git add -u
           git diff --cached --quiet || git commit -m "chore: set version to ${VERSION}"
           git push origin "$BRANCH" -f
@@ -135,7 +135,7 @@ pipelines:
           git subtree split --prefix=schemas --branch schemas/release
 
           git checkout schemas/release
-          find . -name "*.json" -exec sed -i "s|/${DRAFT_VERSION}/|/${VERSION}/|g" {} +
+          find . -name "*.json" -exec sed -i -e "s|/${DRAFT_VERSION}/|/${VERSION}/|g" -e "s|\"${DRAFT_VERSION}\"|\"${VERSION}\"|g" {} +
           git add -u
           git diff --cached --quiet || git commit -m "chore: set version to ${VERSION}"
           git push origin schemas/release -f
