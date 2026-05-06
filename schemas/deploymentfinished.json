@@ -94,7 +94,9 @@
               "type": "string",
               "enum": [
                 "success",
-                "failure"
+                "failure",
+                "cancel",
+                "error"
               ]
             }
           },
