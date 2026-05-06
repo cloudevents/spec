@@ -56,7 +56,48 @@ pipelines:
           else
             echo "Open PR from oss-mirror to main already exists"
           fi
-          
+
+  - group: cut-release-branch
+    branchRules:
+      includePatterns:
+        - main
+
+    secrets:
+      names:
+        - GH_TOKEN
+
+    trigger:
+      gitPush: false
+
+    machine:
+      baseImage: docker.apple.com/base-images/ubi9/java11-builder:latest
+
+    build:
+      template: freestyle:v4:publish
+      buildParameters:
+        - parameter: VERSION
+          description: "Version to release (e.g. 0.6.0). Defaults to version.txt with -draft removed."
+          defaultValue: ""
+      steps:
+        - dnf install -y -q 'dnf-command(config-manager)'
+        - dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+        - dnf install -y -q gh git
+        - gh auth login --hostname github.pie.apple.com --with-token < $BUILD_SECRETS_PATH/GH_TOKEN
+        - gh auth setup-git
+        - git remote set-url origin "$(git remote get-url origin | sed 's|git@github.pie.apple.com:|https://github.pie.apple.com/|')"
+        - |
+          DRAFT_VERSION=$(cat version.txt)
+          VERSION="${BUILD_PARAM_VERSION:-${DRAFT_VERSION%-draft}}"
+          BRANCH="release/v${VERSION}"
+          echo "Cutting release branch ${BRANCH} (was ${DRAFT_VERSION})"
+
+          git checkout -B "$BRANCH"
+          echo "$VERSION" > version.txt
+          find . -name "*.json" -exec sed -i "s|/${DRAFT_VERSION}/|/${VERSION}/|g" {} +
+          git add -u
+          git diff --cached --quiet || git commit -m "chore: set version to ${VERSION}"
+          git push origin "$BRANCH" -f
+
   - group: publish-schemas-branch
     branchRules:
       includePatterns:
@@ -90,14 +131,14 @@ pipelines:
           VERSION="${BUILD_PARAM_VERSION:-${DRAFT_VERSION%-draft}}"
           echo "Publishing schemas at version ${VERSION} (was ${DRAFT_VERSION})"
 
-          git branch -D release || true
-          git subtree split --prefix=schemas --branch release
+          git branch -D schemas/release || true
+          git subtree split --prefix=schemas --branch schemas/release
 
-          git checkout release
+          git checkout schemas/release
           find . -name "*.json" -exec sed -i "s|/${DRAFT_VERSION}/|/${VERSION}/|g" {} +
           git add -u
           git diff --cached --quiet || git commit -m "chore: set version to ${VERSION}"
-          git push origin release -f
+          git push origin schemas/release -f
           LATEST=$(git ls-remote --tags origin "refs/tags/schemas/v${VERSION}-r*" | awk '{print $2}' | sed "s|refs/tags/schemas/v${VERSION}-r||" | sort -n | tail -1)
           REVISION=$([ -z "$LATEST" ] && echo 0 || echo $((LATEST + 1)))
           git tag -d "schemas/v${VERSION}-r${REVISION}" 2>/dev/null || true
