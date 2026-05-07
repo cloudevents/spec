@@ -85,6 +85,13 @@ documentation describing the recommended process for adapting some popular
 events into CloudEvents, see
 [CloudEvents Adapters](cloudevents/adapters/README.md).
 
+This repository no longer includes non-English versions of the documentation.
+If English is not your primary language and doing the translation yourself
+via any number of freely available tools (e.g. browsers, AI) is problematic
+please let us know. For reference, a snapshot of the repository with the
+(old) translationed documentation is available via the
+[`translations`](https://github.com/cloudevents/spec/tree/translations) tag.
+
 ## SDKs
 
 In addition to the documentation mentioned above, there are also a set of
