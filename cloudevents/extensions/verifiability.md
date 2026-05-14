@@ -31,7 +31,6 @@ replay attacks (where an attacker resubmits a legitimately signed event) are
 out of scope for this proposal - the existing source+id uniqueness requirement
 provides sufficient protection.
 
-
 Further, this extension only aims at *verifiability*. It does not aim to
 enable *confidentiality*. Consequently, it does not address the threat of
 unauthorized parties being able to read CloudEvents that were not meant for
@@ -42,14 +41,16 @@ While the design in this extension *can* be used by authorized intermediaries
 to modify and re-sign events, it explicitly does not aim to provide a
 cryptographic audit trail of event modifications.
 
-As a general principle, this extension aims to avoid cryptographic agility in
+As a general principle, this extension aims to avoid cryptographic agility
+(the ability to negotiate or switch cryptographic algorithms at runtime) in
 favor of simplicity.
 
 ## Constraints
 
 The following constraints apply to the proposed design:
 
-**Verifiability MUST be OPTIONAL:** This ensures that the additional burden of
+**Verifiability is backwards compatible:** Conformant producers MAY sign events; conformant
+consumers MAY verify signatures. This ensures that the additional burden of
 producing verification material and performing verification only applies when
 verifiability is desired, which is not always the case. Consumers that don't
 understand or care about signatures can simply ignore these extension fields
@@ -65,7 +66,6 @@ unsigned.
 event:** The design aims to be simple and robust, and so the verification
 material MUST be transported and delivered along with the event that it
 describes and not in separate events or even through different channels.
-
 
 ## Overview
 
@@ -86,7 +86,8 @@ the consumer:
 The verification material is transported in an [Extension Context Attribute](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#extension-context-attributes)
 called `dssematerial` (see [Attributes](#attributes) section below).
 
-The verification material, once Base64 decoded, MUST be a proper DSSE envelope:
+The `dssematerial` binary value MUST be the UTF-8 encoding of a proper DSSE
+envelope:
 
 ```
 {
@@ -103,16 +104,17 @@ The `VERIFICATION_MATERIAL`, once Base64 decoded, MUST be a JSON object:
 
 ```
 {
- "core": "<Base64(core_digest)>",
- "ext":  "<Base64(ext_digest)>",
+ "core": "<Base64(CORE_DIGEST)>",
+ "ext":  "<Base64(EXT_DIGEST)>",
  "signedextattrs": ["exta", "extb"]
 }
 ```
 
-Where `core_digest` is a 32-byte SHA256 digest of the core CloudEvent fields and
-`ext_digest` is a 32-byte SHA256 digest of the signed extension attribute values.
+Where `CORE_DIGEST` is a 32-byte SHA256 digest of the core CloudEvent fields and
+`EXT_DIGEST` is a 32-byte SHA256 digest of the signed extension attribute values.
 The `ext` and `signedextattrs` fields are OPTIONAL: they MUST both be present
 when extension attributes are signed, and MUST both be absent otherwise.
+Unknown fields in the `VERIFICATION_MATERIAL` JSON object MUST be ignored.
 
 The `payloadType` links to the version of this spec that was used to create the
 verification material. The spec defines the version of the [DSSE Protocol](https://github.com/secure-systems-lab/dsse/blob/master/protocol.md)
@@ -123,24 +125,31 @@ that is to be used.
 This extension defines the following attribute:
 
 ### dssematerial
-- Type: `String`
-- Description: The [DSSE JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/master/envelope.md)
+- Type: `Binary`
+- Description: The [DSSE JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/envelope.md)
   that can be used to verify the authenticity and integrity of the CloudEvent.
 - Constraints:
-  - OPTIONAL
-  - If present, MUST be Base64 encoded
-  - When decoded, MUST be a valid DSSE JSON Envelope with:
+  - REQUIRED
+  - If present, its binary value MUST be the UTF-8 encoding of a valid DSSE
+    JSON Envelope with:
     - `payloadType` of `"https://cloudevents.io/verifiability/dsse/v0.1"`
     - `payload` containing a Base64-encoded JSON object with:
       - `core`: Base64-encoded 32-byte SHA256 digest of the core CloudEvent fields (REQUIRED)
       - `ext`: Base64-encoded 32-byte SHA256 digest of the signed extension attribute values (OPTIONAL)
       - `signedextattrs`: JSON array of extension attribute name strings that were signed (OPTIONAL)
       - `ext` and `signedextattrs` MUST both be present or both be absent
-      - The `signedextattrs` array MUST adhere to the following rules. If any of these rules are violated, the signing function MUST refuse to produce material and the verifier MUST discard the event:
+      - The `signedextattrs` array MUST adhere to the following rules. If any
+        of these rules are violated, the signing function MUST refuse to
+        produce material and the verifier MUST discard the event:
         - Attribute names MUST NOT contain repetitions
-        - Attribute names MUST NOT include any required or optional [Context Attribute](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#context-attributes) name (`id`, `source`, `specversion`, `type`, `datacontenttype`, `dataschema`, `subject`, `time`)
+        - Attribute names MUST NOT include any [core context attribute](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#context-attributes) name (`id`, `source`, `specversion`, `type`, `datacontenttype`, `dataschema`, `subject`, `time`)
         - Attribute names MUST NOT include `dssematerial` (the verification material attribute)
+        - Extension attribute values MUST be of a supported CloudEvents type (`Boolean`, `Integer`, `String`, `Binary`, `URI`, `URI-reference`, or `Timestamp`)
+        - An attribute name that appears in `signedextattrs` but is not present
+          on the event is valid; the SHA-256 of the empty byte sequence is
+          used in its place (see [Absent-versus-empty attribute confusability](#absent-versus-empty-attribute-confusability))
     - `signatures` array with at least one signature object containing `keyid` and `sig` fields
+    - Unknown fields in any of these JSON objects MUST be ignored
 
 ## Implementation
 
@@ -159,7 +168,7 @@ The `VERIFICATION_MATERIAL` of the type
 a JSON object created as follows:
 
 ```
-core_digest = SHA256(
+CORE_DIGEST = SHA256(
   SHA256(UTF8(event.id)) +
   SHA256(UTF8(event.source)) +
   SHA256(UTF8(event.specversion)) +
@@ -167,31 +176,47 @@ core_digest = SHA256(
   SHA256(UTF8(event.datacontenttype)) +
   SHA256(UTF8(event.dataschema)) +
   SHA256(UTF8(event.subject)) +
-  SHA256(RFC3339(UTC(event.time))) +
+  SHA256(UTF8(RFC3339(UTC(event.time)))) +
   SHA256(event.data)
 )
 
-ext_digest = SHA256(
-  SHA256(event.extensionattr1) +
-  SHA256(event.extensionattr2)
+EXT_DIGEST = SHA256(
+  SHA256(UTF8(CEString(event.extensionattr1))) +
+  SHA256(UTF8(CEString(event.extensionattr2)))
 )
 
 VERIFICATION_MATERIAL = {
-  "core": Base64(core_digest),
-  "ext":  Base64(ext_digest),          // omitted if no extension attributes are signed
+  "core": Base64(CORE_DIGEST),
+  "ext":  Base64(EXT_DIGEST),          // omitted if no extension attributes are signed
   "signedextattrs": ["extensionattr1", "extensionattr2"]  // omitted if no extension attributes are signed
 }
 ```
 
-`core_digest` is the digest of the concatenated digest list of the mandatory
+Notation used above:
+- `+` denotes byte-sequence concatenation.
+- `UTF8(s)` is the UTF-8 encoding of string `s`.
+- `RFC3339(UTC(t))` is the RFC 3339 string representation of timestamp `t`
+  normalized to UTC ("Zulu") time with second precision.
+- `CEString(v)` is the CloudEvents canonical string encoding of an extension
+  attribute value, as defined in step 5.2.1 of the [Signing Protocol](#signing-protocol)
+  (`Boolean`, `Integer`, `String`, `Binary`, `URI`, `URI-reference`, `Timestamp`).
+- `event.data` is hashed as its raw byte representation — no UTF-8 wrapping
+  is applied, because event data is not necessarily text (see Case 5 for a
+  binary example).
+- If an OPTIONAL Context Attribute or a signed extension attribute is not
+  set on the event, the SHA-256 of the empty byte sequence is used in its
+  place. See the Security Considerations section for the limitation this
+  introduces.
+
+`CORE_DIGEST` is the digest of the concatenated digest list of the mandatory
 Context Attributes, the OPTIONAL Context Attributes, and the event data.
-`ext_digest` is the digest of the concatenated value digest list of the
+`EXT_DIGEST` is the digest of the concatenated value digest list of the
 signed extension attributes. The extension attribute names are authenticated
 by being included in the `signedextattrs` array inside the signed container.
 The `ext` and `signedextattrs` fields are only present when extension
 attributes are signed.
 
-#### Protocol
+#### Signing Protocol
 
 This is how to sign a CloudEvent using DSSE:
 
@@ -205,21 +230,29 @@ This is how to sign a CloudEvent using DSSE:
     5. compute the SHA256 digest of the event's [`datacontenttype`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#datacontenttype) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
     6. compute the SHA256 digest of the event's [`dataschema`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#dataschema) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
     7. compute the SHA256 digest of the event's [`subject`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#subject) Context Attribute in UTF8 and append it to the byte sequence *(if the attribute is not set, use the digest of the empty byte sequence)*
-    8. compute the SHA256 digest of the event's [`time`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#time) Context Attribute normalized to RFC 3339 Zulu format and append it to the byte sequence (if the attribute is not set, use the digest of the empty byte sequence)
-       Note: Time normalization to Zulu format ensures signature verification remains valid even when intermediaries deserialize and reserialize events with different timezone representations of the same timestamp.
+    8. compute the SHA256 digest of the event's [`time`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#time) Context Attribute normalized to RFC 3339 Zulu format with second precision (no subsecond component) and append it to the byte sequence (if the attribute is not set, use the digest of the empty byte sequence)
+       Note: Time normalization to Zulu format with second precision ensures signature verification remains valid even when intermediaries deserialize and reserialize events with different timezone representations or subsecond precisions of the same timestamp.
     9. compute the SHA256 digest of the event's [`data`](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md#event-data) and append it to the byte sequence
-4. compute `core_digest` as the SHA256 digest of the byte sequence from step 3
+4. compute `CORE_DIGEST` as the SHA256 digest of the byte sequence from step 3
 5. if the list from step 2 is not empty:
     1. create an empty byte sequence for the ext digest
     2. for each extension attribute in the list from step 2 (in the given order, from lowest to highest index)
-        1. compute the SHA256 digest of the extension attribute's value and append it to the byte sequence. Non-string attribute values MUST be serialized to their [CloudEvents string representation](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type-system) before hashing. *(if the attribute is not present on the event, use the digest of the empty byte sequence)*
-    3. compute `ext_digest` as the SHA256 digest of the byte sequence from step 5.1
+        1. compute the SHA256 digest of the extension attribute's value and append it to the byte sequence. Extension attribute values MUST be serialized using their CloudEvents canonical string encoding before hashing:
+            - `Boolean`: "true" or "false" (case-sensitive)
+            - `Integer`: decimal representation without leading zeros, fraction, or exponent (per RFC 7159 Section 6)
+            - `String`: the string value as-is
+            - `Binary`: Base64 encoding per RFC 4648
+            - `URI`: the absolute URI string per RFC 3986 Section 4.3
+            - `URI-reference`: the URI-reference string per RFC 3986 Section 4.1
+            - `Timestamp`: RFC 3339 Zulu format with second precision (normalized to UTC as described in step 8)
+            *(if the attribute is not present on the event, use the digest of the empty byte sequence)*
+    3. compute `EXT_DIGEST` as the SHA256 digest of the byte sequence from step 5.1
 6. create the `VERIFICATION_MATERIAL` JSON object:
-    - set `core` to the Base64 encoding of `core_digest`
-    - if `ext_digest` was computed in step 5, set `ext` to the Base64 encoding of `ext_digest`
-    - if `ext_digest` was computed in step 5, set `signedextattrs` to a JSON array of the extension attribute names from step 2
+    - set `core` to the Base64 encoding of `CORE_DIGEST`
+    - if `EXT_DIGEST` was computed in step 5, set `ext` to the Base64 encoding of `EXT_DIGEST`
+    - if `EXT_DIGEST` was computed in step 5, set `signedextattrs` to a JSON array of the extension attribute names from step 2
 7. follow the [DSSE protocol v1.0.2](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/protocol.md) to create a signed [DSSE v1.0.2 JSON Envelope](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/envelope.md) using `https://cloudevents.io/verifiability/dsse/v0.1` as `PAYLOAD_TYPE`, the UTF8-encoded JSON from step 6 as `SERIALIZED_BODY`, and an appropriate `KEYID` for the key chosen in step 1
-8. encode the envelope from step 7 in Base64 and set it as the `dssematerial` Extension Context Attribute on the CloudEvent
+8. set the UTF-8 encoded JSON envelope from step 7 as the binary value of the `dssematerial` Extension Context Attribute on the CloudEvent
 9. ship it!
 
 ### Verification
@@ -229,16 +262,16 @@ material delivered with the event. If it is valid, the client creates the
 `VERIFICATION_MATERIAL` from the event and compares it to the signed
 `VERIFICATION_MATERIAL`. If it is the same, then the event is considered verified.
 
-#### Protocol
+#### Verification Protocol
 
 Here is how to verify a given CloudEvent:
 
 1. obtain list of acceptable key ids for verification
 2. read the event's `dssematerial` [Extension Context Attribute](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#extension-context-attributes)
-    1. if it is not present or empty, the event was not signed and MUST be discarded
-3. decode the `dssematerial` as Base64 per [RFC4648](https://tools.ietf.org/html/rfc4648)
-    1. if decoding failed, the verification material is corrupted and the event MUST be discarded
-4. parse the result into a [JSON DSSE Envelope](https://github.com/secure-systems-lab/dsse/blob/master/envelope.md)
+    1. if it is not present or empty, the event was not signed. A consumer whose out-of-band policy requires the event to be signed (see [Downgrade and stripping attacks](#downgrade-and-stripping-attacks)) MUST discard the event. A consumer without such a policy MAY process the event as unsigned.
+3. obtain the binary value of the `dssematerial` attribute and interpret it as UTF-8 text
+    1. if the byte sequence is not valid UTF-8, the verification material is corrupted and the event MUST be discarded
+4. parse the UTF-8 text as a [JSON DSSE Envelope](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/envelope.md)
     1. if parsing fails, the verification material is corrupted and the event MUST be discarded
 5. read the envelope's `payloadType` value
     1. if it is not equal to `https://cloudevents.io/verifiability/dsse/v0.1`, the verification payload is unknown and the event MUST be discarded
@@ -251,22 +284,28 @@ Here is how to verify a given CloudEvent:
     4. if a `signedextattrs` field is present, read it as a JSON array of strings (the list of "signed extension attribute names")
         1. validate that the `signedextattrs` value adheres to the constraints defined in the [`dssematerial`](#dssematerial) attribute definition - if any constraint is violated, the event MUST be discarded
     5. if `signedextattrs` is present but the `ext` field is absent from the payload, or vice versa, the event MUST be discarded
-7. follow the [DSSE verification protocol](https://github.com/secure-systems-lab/dsse/blob/master/protocol.md#protocol)
+7. follow the [DSSE verification protocol](https://github.com/secure-systems-lab/dsse/blob/v1.0.2/protocol.md#protocol)
     1. filter signatures by `keyid` from list of acceptable keys from step 1
     2. if verification fails, the event MUST be discarded
-8. recompute `core_digest` from the event according to steps 3-4 of the signing [Protocol](#protocol) and compare it to the `core` byte sequence from step 6.2
+8. recompute `CORE_DIGEST` from the event according to steps 3-4 of the [Signing Protocol](#signing-protocol) and compare it to the `core` byte sequence from step 6.2
     1. if the values are not equal, the event has been modified in transit and MUST be discarded
-9. if the `ext` field is present (step 6.3) and the consumer wishes to verify extension attributes, recompute `ext_digest` from the event using the `signedextattrs` list from step 6.4 according to step 5 of the signing [Protocol](#protocol) and compare it to the `ext` byte sequence from step 6.3
+9. if the `ext` field is present (step 6.3) and the consumer verifies extension attributes, the consumer MUST recompute `EXT_DIGEST` from the event using the `signedextattrs` list from step 6.4 according to step 5 of the [Signing Protocol](#signing-protocol) and compare it to the `ext` byte sequence from step 6.3
     1. if the values are not equal, the extension attributes have been modified in transit and MUST be discarded
 10. the event is returned as verified successfully.
 
-Upon verification of a CloudEvent, implementations MUST return a new event
-containing only verified data. If only core verification was performed (step 8),
-the returned event contains the Context Attributes (REQUIRED and OPTIONAL) and
-the event data only. If extension attribute verification was also performed
-(step 9), the returned event additionally includes exactly those Extension
-Context Attributes that were signed by the producer. This ensures clear
-separation between verified and unverified data.
+Upon successful verification, implementations MUST return a new event containing
+only verified data. If only core verification was performed (step 8), the
+returned event MUST contain only the Context Attributes (REQUIRED and OPTIONAL)
+and the event data — unsigned extension attributes MUST NOT appear on the
+verified event. If extension attribute verification was also performed (step 9),
+the returned event additionally includes exactly those Extension Context
+Attributes that were signed by the producer. Any extension attributes not listed
+in `signedextattrs` MUST NOT appear on the verified event returned to the
+consumer. If a consumer needs access to unsigned extension attributes, it MUST
+explicitly obtain them from the original pre-verification event and MUST clearly
+distinguish them as unverified data not covered by the signature. This ensures
+that consumers cannot accidentally treat unverified extension attribute values as
+verified without deep inspection of which attributes were signed.
 
 ### What's verifiable and what isn't?
 
@@ -285,7 +324,7 @@ CloudEvent message different data can be verified:
 
 * *In [CloudEvent's type system](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md#type-system) a `Timestamp`'s string encoding is [RFC 3339](https://tools.ietf.org/html/rfc3339). This means that verification of the `time` Context Attribute can only be done with second precision, even though an SDK might allow passing in a timestamp with nanosecond precision.*
 * *In [CloudEvent's official Protocol Buffers format](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/formats/cloudevents.proto#L57), the `time` Context Attribute is encoded as a `google.protobuf.Timestamp` and hence does not include time zone information (which RFC 3339 would allow). For interoperability with CloudEvent setups using the Protocol Buffers format, time zone information is ignored in the signing and verification process.*
-* *The signature covers the exact byte representation of the event data. Intermediaries that deserialize and reserialize event data (e.g., reformatting JSON whitespace or reordering keys) will invalidate the signature. Implementations that route signed events MUST preserve the original byte sequence of the event data.*
+* *The signature covers the exact byte representation of the event data. Intermediaries that deserialize and reserialize event data (e.g., reformatting JSON whitespace or reordering keys) will invalidate the signature. Deployments requiring end-to-end verifiability SHOULD avoid such intermediaries or accept re-signing at trust boundaries.*
 
 ## Verification Walkthrough
 
@@ -334,6 +373,15 @@ The producer wants to sign this event including `exta`. They:
   "signedextattrs": ["exta"]
 }
 ```
+
+> Note: the `core` fingerprint depends on the exact byte representation of
+> `event.data`. The walkthrough event uses `{"hello": "world"}` (with a space
+> after the colon); the CloudEvent in [Case 6a](#case-6a-event-with-one-signed-extension-attribute)
+> of the Test Vectors section has the same logical fields but is signed over
+> compact JSON (`{"hello":"world"}`, no whitespace), so its `CORE_DIGEST`
+> differs from the one shown here even though the field values are identical.
+> This is the byte-preservation requirement in action: any reserialization
+> changes the digest.
 
 4. Sign this JSON using their private key and wrap it in a DSSE envelope:
 
@@ -473,7 +521,7 @@ key, because any change to the fingerprint would break the signature checked in 
 - **If `signedextattrs` is present in the payload, `ext` must also be present, and vice versa.**
   If one is present without the other, discard the event.
 
-- **The order of attribute names in `signedextattrs` (inside the container) matters for computing `ext_digest`.**
+- **The order of attribute names in `signedextattrs` (inside the container) matters for computing `EXT_DIGEST`.**
   Always process extension attributes in the order they appear in the `signedextattrs`
   array, not in the order they appear in the event.
 
@@ -575,7 +623,7 @@ Due to the programming language agnostic nature of CloudEvents, the following
 test vectors ensure compatibility between implementations in different
 languages. We use the following cryptographic keys for all cases:
 
-##### *Cryptographic keys*
+#### Cryptographic keys
 
 ```
 Algorithm: ECDSA over NIST P-256 and SHA-256, with deterministic-rfc6979
@@ -664,7 +712,7 @@ and ensures correct implementation of this spec.
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoid0tDYThzcTNkeWcvMDBaaURReS9hWEFZMXRlcFFucktMYTZ4UDBZM0QvUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJQSXhPUHF3MGFJeW9acExtdU5DTlpNS3pBNlgxWVovUXpiZVR3UzMvS3BBMjZJQzF0SU9oLzdkRFBDMWk0RW82b1dxRk1WRXJ4cEZrR0hGMnM0MHAvZz09In1dfQ==
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pZDB0RFlUaHpjVE5rZVdjdk1EQmFhVVJSZVM5aFdFRlpNWFJsY0ZGdWNrdE1ZVFo0VURCWk0wUXZVVDBpZlE9PSIsInNpZ25hdHVyZXMiOlt7ImtleWlkIjoidGVzdGtleSIsInNpZyI6IlVNcWlOWXA3U1FacTZNSGRtczRkbjJtc0hHaW5MSHZaYVVWM2doY2ovY241QmkzZDVqejBzZmhtOXBaODlDY09hK1dXdGpZNmNadmo3Yy90T1dzVFZnPT0ifV19
 ```
 
 #### Case 4: Event with time including TZ
@@ -689,7 +737,7 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoid0tDYThzcTNkeWcvMDBaaURReS9hWEFZMXRlcFFucktMYTZ4UDBZM0QvUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJQSXhPUHF3MGFJeW9acExtdU5DTlpNS3pBNlgxWVovUXpiZVR3UzMvS3BBMjZJQzF0SU9oLzdkRFBDMWk0RW82b1dxRk1WRXJ4cEZrR0hGMnM0MHAvZz09In1dfQ==
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pZDB0RFlUaHpjVE5rZVdjdk1EQmFhVVJSZVM5aFdFRlpNWFJsY0ZGdWNrdE1ZVFo0VURCWk0wUXZVVDBpZlE9PSIsInNpZ25hdHVyZXMiOlt7ImtleWlkIjoidGVzdGtleSIsInNpZyI6IlVNcWlOWXA3U1FacTZNSGRtczRkbjJtc0hHaW5MSHZaYVVWM2doY2ovY241QmkzZDVqejBzZmhtOXBaODlDY09hK1dXdGpZNmNadmo3Yy90T1dzVFZnPT0ifV19
 ```
 
 The verification material MUST be the same as in case 3, because
@@ -715,7 +763,7 @@ time and the verification protocol performs time zone normalization.
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoicUNTZWlaa1MraEg5V2lDbGZxNnBsZnFZTlZ5Mmt2eFdSZm9CckxFem9Eaz0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJEWXdiU3V4SDRXcWFhQlZPVlU4TllJYTZXYnZDazkvdkc5aGV0d3BKNHpJNWo2am1BTGRNaHcrcVZuc211YzY2NWZqVlJGVDFRUHUvanA1Z0c0U2pzUT09In1dfQ==
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pY1VOVFpXbGFhMU1yYUVnNVYybERiR1p4Tm5Cc1puRlpUbFo1TW10MmVGZFNabTlDY2t4RmVtOUVhejBpZlE9PSIsInNpZ25hdHVyZXMiOlt7ImtleWlkIjoidGVzdGtleSIsInNpZyI6IkYyaXAweG1nSlgzdWdIWkM2dE1ycjdBMkVxYWkwOHJhR3JUd2R5aC9PR0RJSXJGN0J5TTJ5SVRMS3FOckYzZHpaR1IybzBDczlmRUJGZEx4Uk9VeUVRPT0ifV19
 ```
 
 #### Case 6a: Event with one signed extension attribute
@@ -820,8 +868,8 @@ constraints, even if the DSSE signature is valid).
 Each sub-case below shows the JSON object that would result from Base64-decoding
 the `payload` field of an otherwise valid DSSE envelope. Digest values are
 elided as `<...>` because they are immaterial to these checks. For each sub-case
-a conforming verifier MUST discard the event at step 7 of the verification
-[Protocol](#protocol-1).
+a conforming verifier MUST discard the event at step 7 of the
+[Verification Protocol](#verification-protocol).
 
 **Case 8a: Duplicate entries in `signedextattrs`**
 
@@ -885,6 +933,132 @@ present or both be absent).
 ```
 
 Expected behavior: discard the event (same constraint as Case 8d).
+
+**Case 8f: Extension attribute with unsupported type**
+
+Expected behavior: discard the event during signing or verification if any
+extension attribute named in `signedextattrs` has a value that is not of a
+supported CloudEvents type. For example, if the event contains an extension
+attribute with a complex object value, array, or other unsupported type that
+cannot be serialized using the CloudEvents canonical string encoding rules.
+
+## Security Considerations
+
+This section consolidates the security-relevant properties, assumptions, and
+limitations of this extension. It complements the [Goals](#goals) and
+[Non-goals](#non-goals) sections, which establish the high-level scope of the
+extension, and the verification rules described in the [Implementation](#implementation)
+section.
+
+### Threat model
+
+The following actors are considered **in scope**:
+
+* Untrusted intermediaries that may modify, re-order, drop, or inject events
+  between a producer and a consumer. The signature construction defined by
+  this extension allows a consumer to detect modification of covered bytes
+  and injection of events not signed by an accepted key.
+
+The following actors and concerns are considered **out of scope**:
+
+* Compromised producers. A signer in possession of a valid key cannot be
+  defended against by signature verification; defense against this case
+  requires key revocation and out-of-band trust decisions (see *Key
+  compromise and revocation* below).
+* Confidentiality of event content. This extension provides authenticity
+  and integrity, not secrecy. See [Non-goals](#non-goals).
+* Stream completeness. An intermediary that silently drops events cannot
+  be detected from individual signed events alone. Deployments requiring
+  completeness guarantees MUST pair this extension with a separate
+  mechanism (for example, sequence numbering or acknowledged delivery).
+
+### Downgrade and stripping attacks
+
+Because `dssematerial` is OPTIONAL and consumers without verification
+support process signed events as ordinary unsigned events, a hostile
+intermediary can strip `dssematerial` from a signed event and forward
+the result. Consumers cannot, from the event alone, distinguish
+"legitimately unsigned" from "signed then stripped."
+
+Consumers that require event verifiability MUST maintain out-of-band
+policy bindings that specify which event sources and/or types are
+expected to be signed. The absence of `dssematerial` on a received
+event MUST NOT be treated as evidence that the producer did not sign it.
+
+Implementations SHOULD provide a mechanism (for example, source-scoped
+policy configuration, subscription metadata, or service-mesh policy)
+by which consumers determine whether a given event is required to be
+signed.
+
+When a consumer's policy requires that events from a given source be
+signed, receiving an event from that source without `dssematerial`
+MUST be treated as a verification failure.
+
+### Absent-versus-empty attribute confusability
+
+The signing construction does not distinguish an OPTIONAL Context
+Attribute that is absent from one that is present with an empty-string
+value: both hash to SHA-256 of the empty byte sequence. The same
+collision applies to extension attributes named in `signedextattrs`.
+
+An attacker positioned between signer and verifier cannot forge
+signatures, but can flip an attribute between "absent" and
+"present-with-empty-string" undetectably.
+
+Deployments where this distinction is security-relevant MUST ensure
+producers never emit empty-string values for OPTIONAL Context
+Attributes or for extension attributes named in `signedextattrs`.
+A future revision of this specification may introduce a presence
+sentinel to remove this collision.
+
+### Key compromise and revocation
+
+This specification does not define a key revocation mechanism.
+Deployments MUST define out-of-band procedures by which compromised
+keys are removed from consumer trust stores in a timely manner.
+The DSSE `keyid` field allows consumers to associate signatures
+with revocation state.
+
+### Algorithm deprecation
+
+When the hash function or signature algorithm pinned by a particular
+`payloadType` URI is deprecated, deployments MUST migrate using a
+consumer-first ordering: consumers SHOULD be updated to accept the
+new `payloadType` before any producer is switched to emit it.
+See the Appendix for the full migration procedure.
+
+### Replay
+
+This specification does not provide replay protection. The signature
+covers `source` and `id`, which CloudEvents already requires to be
+unique per producer. Consumers that require replay protection MUST
+deduplicate received events on the (source, id) tuple with retention
+appropriate to their threat model.
+
+### Unsigned extension attributes
+
+Extension attributes not named in `signedextattrs` are not covered
+by the signature. An intermediary may add, remove, or modify such
+attributes without invalidating verification. Producers MUST NOT
+place security-relevant data in unsigned extension attributes.
+
+### Byte-preservation requirement
+
+Verification depends on the exact byte representation of the event
+data field at signing time. Intermediaries that re-serialize event
+data (for example, JSON re-formatting, transcoding, or canonicalization)
+will invalidate signatures. This is by design: any modification to
+covered bytes is treated as tampering. Deployments requiring
+end-to-end verifiability SHOULD avoid such intermediaries or accept
+re-signing at trust boundaries.
+
+### Privacy
+
+The `signedextattrs` list in the verification material discloses the
+names (but not values) of signed extension attributes. Where extension
+attribute names themselves carry semantic information that should
+remain confidential, this leak is non-trivial and SHOULD be considered
+when designing extension attribute naming conventions.
 
 ## Appendix
 
