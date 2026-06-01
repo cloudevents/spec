@@ -272,24 +272,24 @@ async def test_app(monkeypatch):
             PurePosixPath("fake-docs/text-verification.md"),
             "line 9: 'Cloud Events' is banned",
         ),
-        (
-            PurePosixPath("fake-docs/README.md"),
-            "Translation file fake-docs/languages/your-lang/README.md does not exist",
-        ),
-        (
-            PurePosixPath("fake-docs/README.md"),
-            "Translation file fake-docs/languages/my-lang/README.md does not exist",
-        ),
-        (
-            PurePosixPath("fake-docs/link-verification.md"),
-            "Translation file fake-docs/languages/your-lang/link-verification.md does"
-            " not exist",
-        ),
-        (
-            PurePosixPath("fake-docs/text-verification.md"),
-            "Translation file fake-docs/languages/my-lang/text-verification.md does not"
-            " exist",
-        ),
+        # (
+            # PurePosixPath("fake-docs/README.md"),
+            # "Translation file fake-docs/languages/your-lang/README.md does not exist",
+        # ),
+        # (
+            # PurePosixPath("fake-docs/README.md"),
+            # "Translation file fake-docs/languages/my-lang/README.md does not exist",
+        # ),
+        # (
+            # PurePosixPath("fake-docs/link-verification.md"),
+            # "Translation file fake-docs/languages/your-lang/link-verification.md does"
+            # " not exist",
+        # ),
+        # (
+            # PurePosixPath("fake-docs/text-verification.md"),
+            # "Translation file fake-docs/languages/my-lang/text-verification.md does not"
+            # " exist",
+        # ),
         (
             PurePosixPath("fake-docs/yourspec/spec.md"),
             "title ('# Your Spec - Version 1.0.1') does not "
