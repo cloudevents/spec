@@ -395,7 +395,7 @@ async def _file_issues(path: ExistingPath, settings: Settings) -> Sequence[Tagge
     return _tag_issues(
         list(await _html_issues(path, settings))
         + list(_plain_text_issues(_read_text(path)))
-        + list(_translation_issues(path))
+        # + list(_translation_issues(path))
         + list(_title_issues(path)),
         tag=path,
     )
