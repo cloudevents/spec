@@ -173,7 +173,7 @@ converted to a byte sequence using its CloudEvents type. The rules are:
 | `Boolean` | UTF-8 encoding of `"true"` or `"false"` (case-sensitive) |
 | `Integer` | UTF-8 encoding of the decimal representation without leading zeros, fraction, or exponent (per RFC 7159 Section 6) |
 | `String` | UTF-8 encoding of the string value |
-| `Binary` | Base64 encoding per RFC 4648, then UTF-8 encoded |
+| `Binary` | The raw bytes of the binary value |
 | `URI` | UTF-8 encoding of the absolute URI string per RFC 3986 Section 4.3 |
 | `URI-reference` | UTF-8 encoding of the URI-reference string per RFC 3986 Section 4.1 |
 | `Timestamp` | UTF-8 encoding of the [RFC 3339](https://tools.ietf.org/html/rfc3339) Zulu representation with second precision. Normalize to UTC (`Z` suffix) and truncate any subsecond component. Timezone-less values MUST be treated as UTC. Example: `2026-05-13T10:49:12.123456+01:00` → `2026-05-13T09:49:12Z`. Second precision is REQUIRED for interoperability — different SDKs MAY preserve different subsecond precision, which would produce different digests for the same instant. |
@@ -386,9 +386,8 @@ Here is how to verify a given CloudEvent:
 
 Upon successful verification, implementations MUST return a result that
 identifies what was verified: core only, core and extensions, or core with
-extensions skipped due to unknown types. The verified event returned to
-application code MUST contain only verified data, what exactly is included
-depends on the consumer's configured behavior mode (see
+extensions skipped due to unknown types. What exactly is included in the
+returned event depends on the consumer's configured behavior mode (see
 [Consumer Behavior Configuration](#consumer-behavior-configuration)).
 In the default `strict` mode, unsigned extension attributes MUST NOT appear
 on the verified event; only the verified Context Attributes, event data, and
@@ -422,13 +421,13 @@ A proxy or intermediary that forwards signed CloudEvents without modifying
 the signed fields MAY forward the event unchanged and its `dssematerial`
 remains valid for downstream consumers.
 
-A proxy that modifies any signed field, including event data, core context
-attributes, or any attribute named in `signedextattrs`, SHOULD re-sign the
-event using a key that downstream consumers are configured to trust. A proxy
-that cannot re-sign MUST NOT silently forward the modified event as if the
-original signature were still valid; it SHOULD either strip `dssematerial`
-(triggering downgrade-attack detection in strict consumers) or reject the
-modification.
+A proxy that conforms with this extension and modifies any signed field,
+including event data, core context attributes, or any attribute named in
+`signedextattrs`, SHOULD re-sign the event using a key that downstream
+consumers are configured to trust. A conforming proxy that cannot re-sign
+MUST NOT silently forward the modified event as if the original signature
+were still valid; it SHOULD either strip `dssematerial` (triggering
+downgrade-attack detection in strict consumers) or reject the modification.
 
 ### What's verifiable and what isn't?
 
@@ -885,7 +884,6 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 The verification material MUST be the same as in case 3, because
 `2020-06-18T17:24:53Z` and `2020-06-18T19:24:53+02:00` are the same moment in
 time and the verification protocol performs time zone normalization.
-
 
 #### Case 5: Binary data
 
