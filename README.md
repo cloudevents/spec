@@ -101,6 +101,7 @@ language specific SDKs being developed:
 - [Go](https://github.com/cloudevents/sdk-go)
 - [Java](https://github.com/cloudevents/sdk-java)
 - [Javascript](https://github.com/cloudevents/sdk-javascript)
+- [Kotlin](https://github.com/cloudevents/sdk-kotlin)
 - [PHP](https://github.com/cloudevents/sdk-php)
 - [PowerShell](https://github.com/cloudevents/sdk-powershell)
 - [Python](https://github.com/cloudevents/sdk-python)
