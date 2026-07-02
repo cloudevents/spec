@@ -171,7 +171,11 @@ SDK's github repo - see the [list of SDKs](#sdks).
 
 ### Meeting Time
 
-See the [CNCF public events calendar](https://www.cncf.io/community/calendar/).
+See the [CloudEvents public
+calendar](https://zoom-lfx.platform.linuxfoundation.org/meetings/cloudevents).
+You can add it to your calendar by subscribing to the
+[iCal link](https://webcal.prod.itx.linuxfoundation.org/lfx/a092M00001IV4PvQAL).
+
 This specification is being developed by the
 [CNCF Serverless Working Group](https://github.com/cncf/wg-serverless). This
 working group meets every Thursday at 9AM PT (USA Pacific)
@@ -181,9 +185,13 @@ Please see the
 [meeting minutes doc](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for the latest information on how to join the calls.
 
-Recording from our calls are available
+Recording from our calls are available via the
+[calendar
+entry](https://zoom-lfx.platform.linuxfoundation.org/meetings/cloudevents)
+for the day of interest.
+Old recordings are available
 [here](https://www.youtube.com/playlist?list=PLO-qzjSpLN1BEyKjOVX_nMg7ziHXUYwec), and
-older ones are
+even older ones are
 [here](https://www.youtube.com/playlist?list=PLj6h78yzYM2Ph7YoBIgsZNW_RGJvNlFOt).
 
 Periodically, the group may have in-person meetings that coincide with a major
