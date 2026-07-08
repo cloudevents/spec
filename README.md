@@ -12,7 +12,7 @@ differently.
 
 The lack of a common way of describing events means developers must constantly
 re-learn how to consume events. This also limits the potential for libraries,
-tooling and infrastructure to aide the delivery of event data across
+tooling and infrastructure to aid the delivery of event data across
 environments, like SDKs, event routers or tracing systems. The portability and
 productivity we can achieve from event data is hindered overall.
 
@@ -89,12 +89,12 @@ This repository no longer includes non-English versions of the documentation.
 If English is not your primary language and doing the translation yourself
 via any number of freely available tools (e.g. browsers, AI) is problematic
 please let us know. For reference, a snapshot of the repository with the
-(old) translationed documentation is available via the
+(old) translated documentation is available via the
 [`translations`](https://github.com/cloudevents/spec/tree/translations) tag.
 
 ## SDKs
 
-In addition to the documentation mentioned above, there are also a set of
+In addition to the documentation mentioned above, there is also a set of
 language specific SDKs being developed:
 
 - [C#/.NET](https://github.com/cloudevents/sdk-csharp)
@@ -117,8 +117,8 @@ by each SDK.
 For more information about how the SDKs operate, please see the following
 documents:
 - [SDK Governance](docs/SDK-GOVERNANCE.md)
-- [SDK Maintainer Guidlines](docs/SDK-maintainer-guidelines.md)
-- [SDK PR Guidlines](docs/SDK-PR-guidelines.md)
+- [SDK Maintainer Guidelines](docs/SDK-maintainer-guidelines.md)
+- [SDK PR Guidelines](docs/SDK-PR-guidelines.md)
 
 ## Community and Docs
 
@@ -160,7 +160,7 @@ The main mailing list for e-mail communications:
 And a #cloudevents Slack channel under
 [CNCF's Slack workspace](http://slack.cncf.io/).
 
-For SDK related comments and questions:
+For SDK specific comments and questions:
 
 - Email to: [cncf-cloudevents-sdk](mailto:cncf-cloudevents-sdk@lists.cncf.io)
 - To subscribe see: https://lists.cncf.io/g/cncf-cloudevents-sdk
@@ -186,7 +186,7 @@ Please see the
 [meeting minutes doc](https://docs.google.com/document/d/1OVF68rpuPK5shIHILK9JOqlZBbfe91RNzQ7u_P7YCDE/edit#)
 for the latest information on how to join the calls.
 
-Recording from our calls are available via the
+Recordings from our calls are available via the
 [calendar
 entry](https://zoom-lfx.platform.linuxfoundation.org/meetings/cloudevents)
 for the day of interest.
