@@ -106,11 +106,16 @@ are not defined here.
 The receiver of the event can distinguish between the two modes using two
 conditions:
 
-- If the server is a version earlier than NATS 2.2, the content mode is
-always _structured_.
-- If the server is version 2.2 or above and the `Content-Type` header of
-`application/cloudevents` is present (matched case-insensitively),
-then the message is in _structured_ mode, otherwise it is using binary mode.
+- If the server is a version earlier than NATS 2.2, the content mode is always
+  _structured_.
+- If the server is version 2.2 or above and the `Content-Type` header value is
+  prefixed with the CloudEvents media type `application/cloudevents`, then the
+  message is in _structured_ mode; otherwise, it is using _binary_ mode.
+
+"Prefixed" means that the type/subtype MAY optionally be followed by any
+[structured syntax suffix][rfc6838-section-4-2-8], such as
+[`+json`][rfc6839-section-3-1]. The media type's type and subtype are matched
+case-insensitively, as per [RFC6838, section 4.2][rfc6838-section-4-2].
 
 If the content mode is _structured_ then the NATS message payload MUST be
 the [JSON event format][json-format] serialized as specified by the
@@ -280,6 +285,10 @@ This example shows a JSON event format encoded event in client messages that are
 
 Subject: mySubject
 
+------------------ header --------------------
+
+Content-Type: application/cloudevents+json
+
 ------------------ payload -------------------
 
 {
@@ -313,18 +322,19 @@ Subject: mySubject
 [ce]: ../spec.md
 [ce-types]: ../spec.md#type-system
 [json-format]: ../formats/json-format.md
-[json-value]: https://tools.ietf.org/html/rfc7159#section-3
 [nats]: https://nats.io
 [nats22]: https://docs.nats.io/release-notes/whats_new/whats_new_22#message-headers
 [nats-message-headers]: https://github.com/nats-io/nats-architecture-and-design/blob/main/adr/ADR-4.md#nats-message-headers
 [nats-msg-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#protocol-messages
 [nats-pub-proto]: https://docs.nats.io/reference/reference-protocols/nats-protocol#pub
-[rfc2046]: https://tools.ietf.org/html/rfc2046
-[rfc2119]: https://tools.ietf.org/html/rfc2119
-[rfc3629]: https://tools.ietf.org/html/rfc3629
-[rfc3986-section-2-1]: https://tools.ietf.org/html/rfc3986#section-2.1
-[rfc7159]: https://tools.ietf.org/html/rfc7159
-[rfc7230]: https://tools.ietf.org/html/rfc7230
-[rfc7230-section-3]: https://tools.ietf.org/html/rfc7230#section-3
-[rfc7230-section-3-2-6]: https://tools.ietf.org/html/rfc7230#section-3.2.6
+[rfc2046]: https://www.rfc-editor.org/info/rfc2046
+[rfc2119]: https://www.rfc-editor.org/info/rfc2119
+[rfc3629]: https://www.rfc-editor.org/info/rfc3629
+[rfc3986-section-2-1]: https://www.rfc-editor.org/info/rfc3986/#section-2.1
+[rfc6838-section-4-2]: https://www.rfc-editor.org/info/rfc6838/#section-4.2
+[rfc6838-section-4-2-8]: https://www.rfc-editor.org/info/rfc6838/#section-4.2.8
+[rfc6839-section-3-1]: https://www.rfc-editor.org/info/rfc6839/#section-3.1
+[rfc7159]: https://www.rfc-editor.org/info/rfc7159
+[rfc7230-section-3]: https://www.rfc-editor.org/info/rfc7230/#section-3
+[rfc7230-section-3-2-6]: https://www.rfc-editor.org/info/rfc7230/#section-3.2.6
 [surrogate-pair]: http://unicode.org/glossary/#surrogate_pair
