@@ -687,14 +687,14 @@ Content-Type: application/json
 Content-Length: 178
 
 {
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "type" : "example.type",
- "datacontenttype" : "application/json",
- "data" : {
-  "hello" : "world"
- }
+  "specversion" : "1.0",
+  "id" : "1",
+  "source" : "example/uri",
+  "type" : "example.type",
+  "datacontenttype" : "application/json",
+  "data" : {
+    "hello" : "world"
+  }
 }
 ```
 
@@ -704,7 +704,7 @@ Content-Length: 178
 POST /events HTTP/1.1
 Host: api.example.com
 Content-Type: application/json
-Content-Length: 541
+Content-Length: 581
 
 {
   "specversion" : "1.0",
@@ -714,8 +714,8 @@ Content-Length: 541
   "datacontenttype" : "application/json",
   "data" : {
     "hello" : "world"
- },
- "dssematerial" : "eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiNXh6NS9WdG94TkpWWWFZeG1MZUw2eEw5STZDYXY5UDNnb2g2cXlDWUdmUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJ3WWo4YlJQWFlDSUxyeXdzUDdXR1VCd1RKc25aSFlYTUhpWEZtWWh1QkdhOU1ocDdYNHZFN1FBYkhXbytXZitjTURBYjN6dXlwRjVVbVdwZGtJUGppUT09In1dfQ=="
+  },
+  "dssematerial" : "eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pTlhoNk5TOVdkRzk0VGtwV1dXRlplRzFNWlV3MmVFdzVTVFpEWVhZNVVETm5iMmcyY1hsRFdVZG1VVDBpZlE9PSIsInNpZ25hdHVyZXMiOlt7ImtleWlkIjoidGVzdGtleSIsInNpZyI6IlBrcmhMMUNwVUVHTVF0WkdCRDRJK25zOFJhTnRNRm5xZkV0TmJETU5tV3JlTEhVNnVxc1QxMHpwTUxCMnhMR0hHU016VnV2TlIvY2hsQXdsNVhuZGNBPT0ifV19"
 }
 ```
 
@@ -727,7 +727,7 @@ Content-Length: 541
 POST /events HTTP/1.1
 Host: api.example.com
 Content-Type: application/json
-Content-Length: 25
+Content-Length: 23
 ce-specversion: 1.0
 ce-id: 1
 ce-source: example/uri
@@ -745,13 +745,13 @@ ce-datacontenttype: application/json
 POST /events HTTP/1.1
 Host: api.example.com
 Content-Type: application/json
-Content-Length: 25
+Content-Length: 23
 ce-specversion: 1.0
 ce-id: 1
 ce-source: example/uri
 ce-type: example.type
 ce-datacontenttype: application/json
-ce-dssematerial: eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiNXh6NS9WdG94TkpWWWFZeG1MZUw2eEw5STZDYXY5UDNnb2g2cXlDWUdmUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJ3WWo4YlJQWFlDSUxyeXdzUDdXR1VCd1RKc25aSFlYTUhpWEZtWWh1QkdhOU1ocDdYNHZFN1FBYkhXbytXZitjTURBYjN6dXlwRjVVbVdwZGtJUGppUT09In1dfQ==
+ce-dssematerial: eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pUjFWU01YQnZkMUJNTTFaemJHdDVlV3BTU2pCUFZsbDFiSFZ0YjBGQmJrTTBTVkJIWVVwRWNuWjBSVDBpZlE9PSIsInNpZ25hdHVyZXMiOlt7ImtleWlkIjoidGVzdGtleSIsInNpZyI6Im5QNEVaSkhaanlZaGx3UEJYaXFQdDJjM3JuSGJHeVdhNWhEMzJJc0xtSVdaSjk0c0hxckt6ejRDR3Fpd2IxcFpOeE9xUWI0SjE5dGcyU3BMSXpUdSJ9XX0=
 
 {
   "hello" : "world"
@@ -785,21 +785,21 @@ for readability, but they apply to all [CloudEvents Formats](https://github.com/
 
 ```
 {
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "type" : "example.type",
- "datacontenttype" : "application/json",
- "data" : {
-  "hello" : "world"
- }
+  "specversion" : "1.0",
+  "id" : "1",
+  "source" : "example/uri",
+  "type" : "example.type",
+  "datacontenttype" : "application/json",
+  "data" : {
+    "hello" : "world"
+  }
 }
 ```
 
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiNXh6NS9WdG94TkpWWWFZeG1MZUw2eEw5STZDYXY5UDNnb2g2cXlDWUdmUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJ3WWo4YlJQWFlDSUxyeXdzUDdXR1VCd1RKc25aSFlYTUhpWEZtWWh1QkdhOU1ocDdYNHZFN1FBYkhXbytXZitjTURBYjN6dXlwRjVVbVdwZGtJUGppUT09In1dfQ==
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pTlhoNk5TOVdkRzk0VGtwV1dXRlplRzFNWlV3MmVFdzVTVFpEWVhZNVVETm5iMmcyY1hsRFdVZG1VVDBpZlE9PSIsInNpZ25hdHVyZXMiOlt7ImtleWlkIjoidGVzdGtleSIsInNpZyI6IlBrcmhMMUNwVUVHTVF0WkdCRDRJK25zOFJhTnRNRm5xZkV0TmJETU5tV3JlTEhVNnVxc1QxMHpwTUxCMnhMR0hHU016VnV2TlIvY2hsQXdsNVhuZGNBPT0ifV19
 ```
 
 #### Case 2: Event with empty subject
@@ -808,22 +808,22 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 
 ```
 {
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "subject": "",
- "type" : "example.type",
- "datacontenttype" : "application/json",
- "data" : {
-  "hello" : "world"
- }
+  "specversion" : "1.0",
+  "id" : "1",
+  "source" : "example/uri",
+  "subject": "",
+  "type" : "example.type",
+  "datacontenttype" : "application/json",
+  "data" : {
+    "hello" : "world"
+  }
 }
 ```
 
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiNXh6NS9WdG94TkpWWWFZeG1MZUw2eEw5STZDYXY5UDNnb2g2cXlDWUdmUT0iLCJzaWduYXR1cmVzIjpbeyJrZXlpZCI6InRlc3RrZXkiLCJzaWciOiJ3WWo4YlJQWFlDSUxyeXdzUDdXR1VCd1RKc25aSFlYTUhpWEZtWWh1QkdhOU1ocDdYNHZFN1FBYkhXbytXZitjTURBYjN6dXlwRjVVbVdwZGtJUGppUT09In1dfQ==
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pTlhoNk5TOVdkRzk0VGtwV1dXRlplRzFNWlV3MmVFdzVTVFpEWVhZNVVETm5iMmcyY1hsRFdVZG1VVDBpZlE9PSIsInNpZ25hdHVyZXMiOlt7ImtleWlkIjoidGVzdGtleSIsInNpZyI6IlBrcmhMMUNwVUVHTVF0WkdCRDRJK25zOFJhTnRNRm5xZkV0TmJETU5tV3JlTEhVNnVxc1QxMHpwTUxCMnhMR0hHU016VnV2TlIvY2hsQXdsNVhuZGNBPT0ifV19
 ```
 
 Even though not strictly a valid CloudEvent (OPTIONAL Context Attributes MUST
@@ -837,16 +837,16 @@ and ensures correct implementation of this spec.
 
 ```
 {
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "subject": "",
- "type" : "example.type",
- "datacontenttype" : "application/json",
- "time": "2020-06-18T17:24:53Z",
- "data" : {
-  "hello" : "world"
- }
+  "specversion" : "1.0",
+  "id" : "1",
+  "source" : "example/uri",
+  "subject": "",
+  "type" : "example.type",
+  "datacontenttype" : "application/json",
+  "time": "2020-06-18T17:24:53Z",
+  "data" : {
+    "hello" : "world"
+  }
 }
 ```
 
@@ -862,16 +862,16 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 
 ```
 {
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "subject": "",
- "type" : "example.type",
- "datacontenttype" : "application/json",
- "time": "2020-06-18T19:24:53+02:00",
- "data" : {
-  "hello" : "world"
- }
+  "specversion" : "1.0",
+  "id" : "1",
+  "source" : "example/uri",
+  "subject": "",
+  "type" : "example.type",
+  "datacontenttype" : "application/json",
+  "time": "2020-06-18T19:24:53+02:00",
+  "data" : {
+    "hello" : "world"
+  }
 }
 ```
 
@@ -891,12 +891,12 @@ time and the verification protocol performs time zone normalization.
 
 ```
 {
- "specversion" : "1.0",
- "id" : "1",
- "source" : "example/uri",
- "type" : "example.type.binary",
- "datacontenttype" : "application/octet-stream",
- "data_base64" : "8J+koQ=="
+  "specversion" : "1.0",
+  "id" : "1",
+  "source" : "example/uri",
+  "type" : "example.type.binary",
+  "datacontenttype" : "application/octet-stream",
+  "data_base64" : "8J+koQ=="
 }
 ```
 
@@ -933,7 +933,7 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pVEZSblVVdElSMmhsWnpaVU5EaDRjRWRIY2pWNlRtdGthSEF5TW10bGJscERUM0ZwWTBaMFNUUlRRVDBpTENKbGVIUWlPaUpyVlRGUU9HSkVZVVZ1ZVU1b1oyeFhlbVJVU2s1SWFEYzNhMmhPVjFOYVpXSkNWWGgxWmxaTk1uQlZQU0lzSW5OcFoyNWxaR1Y0ZEdGMGRISnpJanBiSW1WNGRHRWlYWDA5Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJ0ZXN0a2V5Iiwic2lnIjoibHBPcHNqUnZ2NFBDb05zQUlSRFl1MXphWlNBVkV2ajVSQzFGSk1yTDEyekJLa2IxTjhFSGlQc3FJMStId0V5V092SHU3eHE1aDBkN3BWWTRBdElOM3c9PSJ9XX0=
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pVEZSblVVdElSMmhsWnpaVU5EaDRjRWRIY2pWNlRtdGthSEF5TW10bGJscERUM0ZwWTBaMFNUUlRRVDBpTENKbGVIUWlPaUpyVlRGUU9HSkVZVVZ1ZVU1b1oyeFhlbVJVU2s1SWFEYzNhMmhPVjFOYVpXSkNWWGgxWmxaTk1uQlZQU0lzSW5OcFoyNWxaR1Y0ZEdGMGRISnpJanBiSW1WNGRHRWlYWDA9Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJ0ZXN0a2V5Iiwic2lnIjoibHBPcHNqUnZ2NFBDb05zQUlSRFl1MXphWlNBVkV2ajVSQzFGSk1yTDEyekJLa2IxTjhFSGlQc3FJMStId0V5V092SHU3eHE1aDBkN3BWWTRBdElOM3c9PSJ9XX0=
 ```
 
 #### Case 6b: Event with one signed extension attribute
@@ -964,7 +964,7 @@ eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3Yw
 *Output: verification material:*
 
 ```
-eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pVEZSblVVdElSMmhsWnpaVU5EaDRjRWRIY2pWNlRtdGthSEF5TW10bGJscERUM0ZwWTBaMFNUUlRRVDBpTENKbGVIUWlPaUpyVlRGUU9HSkVZVVZ1ZVU1b1oyeFhlbVJVU2s1SWFEYzNhMmhPVjFOYVpXSkNWWGgxWmxaTk1uQlZQU0lzSW5OcFoyNWxaR1Y0ZEdGMGRISnpJanBiSW1WNGRHRWlYWDA5Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJ0ZXN0a2V5Iiwic2lnIjoibHBPcHNqUnZ2NFBDb05zQUlSRFl1MXphWlNBVkV2ajVSQzFGSk1yTDEyekJLa2IxTjhFSGlQc3FJMStId0V5V092SHU3eHE1aDBkN3BWWTRBdElOM3c9PSJ9XX0=
+eyJwYXlsb2FkVHlwZSI6Imh0dHBzOi8vY2xvdWRldmVudHMuaW8vdmVyaWZpYWJpbGl0eS9kc3NlL3YwLjEiLCJwYXlsb2FkIjoiZXlKamIzSmxJam9pVEZSblVVdElSMmhsWnpaVU5EaDRjRWRIY2pWNlRtdGthSEF5TW10bGJscERUM0ZwWTBaMFNUUlRRVDBpTENKbGVIUWlPaUpyVlRGUU9HSkVZVVZ1ZVU1b1oyeFhlbVJVU2s1SWFEYzNhMmhPVjFOYVpXSkNWWGgxWmxaTk1uQlZQU0lzSW5OcFoyNWxaR1Y0ZEdGMGRISnpJanBiSW1WNGRHRWlYWDA9Iiwic2lnbmF0dXJlcyI6W3sia2V5aWQiOiJ0ZXN0a2V5Iiwic2lnIjoibHBPcHNqUnZ2NFBDb05zQUlSRFl1MXphWlNBVkV2ajVSQzFGSk1yTDEyekJLa2IxTjhFSGlQc3FJMStId0V5V092SHU3eHE1aDBkN3BWWTRBdElOM3c9PSJ9XX0=
 ```
 
 #### Case 7: Event with multiple extension attributes
