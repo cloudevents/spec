@@ -280,6 +280,27 @@ Example: a header value of "Euro &#x20AC; &#x1F600;" SHOULD be encoded as follow
   of the Euro symbol, and "%F0%9F%98%80" is the encoded form of the
   grinning face emoji.
 
+CloudEvent messages that are not encoded per the rules above SHOULD still
+try to be accepted rather than generating an error, assuming no other error is
+encountered during its processing. For clarity, the standard HTTP header
+processing rules apply:
+
+- Character ranges sourrounded by non-percent encoded double-quotes MUST
+  be excluded from whitespace trimming and commas (`,`), normally
+  interpretted as header value separators, are treated as normal characters.
+- Commas that appear outside of non-percent encoded double-quoted ranges MUST
+  be treated as separators between a list of values. Headers with multiple
+  values MUST have the same semantic meaning as multiple instances of that
+  header name with those values.
+- Leading and trailing (non-percent encoded) whitespace around individual
+  values MUST be removed. All non-leading/trailing whitespace MUST remain
+  as-is.
+- Character ranges that are sourrounded by non-percent encoded double-quoted
+  MUST have those double-quotes removed prior to passing the values on to the
+  receiving application.
+- Percent decoding MUST be performed on all character ranges, both in and out
+  of double-quoted ranges.
+
 #### 3.1.4. Examples
 
 This example shows the _binary_ mode mapping of an event with an HTTP POST
