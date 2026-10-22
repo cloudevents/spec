@@ -72,10 +72,10 @@
     {
       "name": "data",
       "type": [
-        "bytes",
-        "null"
+        "null",
+        "bytes"
       ],
-      "default": "null"
+      "default": null
     }
   ]
 }
