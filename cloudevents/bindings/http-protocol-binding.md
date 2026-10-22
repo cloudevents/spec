@@ -137,11 +137,19 @@ defined here. The _batched_ mode MUST NOT be used unless solicited, and the
 gesture SHOULD allow the receiver to choose the maximum size of a batch.
 
 The receiver of the event can distinguish between the three modes by inspecting
-the `Content-Type` header value. If the value is prefixed with the CloudEvents
-media type `application/cloudevents` (matched case-insensitively), indicating
-the use of a known [event format](#14-event-formats), the receiver uses
-_structured_ mode. If the value is prefixed with `application/cloudevents-batch`,
-the receiver uses the _batched_ mode. Otherwise it defaults to _binary_ mode.
+the `Content-Type` header value:
+
+- If the value is prefixed with the CloudEvents media type
+  `application/cloudevents`, indicating the use of a known [event
+  format](#14-event-formats), the receiver uses _structured_ mode.
+- If the value is prefixed with `application/cloudevents-batch`,
+  the receiver uses the _batched_ mode.
+- Otherwise it defaults to _binary_ mode.
+
+"Prefixed" means that the type/subtype MAY optionally be followed by any
+[structured syntax suffix][rfc6838-section-4-2-8], such as
+[`+json`][rfc6839-section-3-1]. The media type's type and subtype are matched
+case-insensitively, as per [RFC6838, section 4.2][rfc6838-section-4-2].
 
 If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
@@ -528,7 +536,10 @@ Content-Length: nnnn
 [rfc3986-section-2-1]: https://tools.ietf.org/html/rfc3986#section-2.1
 [rfc4627]: https://tools.ietf.org/html/rfc4627
 [rfc4648]: https://tools.ietf.org/html/rfc4648
-[rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
+[rfc6838-section-4-2]: https://www.rfc-editor.org/info/rfc6838/#section-4.2
+[rfc6838-section-4-2-8]: https://www.rfc-editor.org/info/rfc6838/#section-4.2.8
+[rfc6839]: https://www.rfc-editor.org/info/rfc6839/
+[rfc6839-section-3-1]: https://www.rfc-editor.org/info/rfc6839/#section-3.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159
 [rfc7230]: https://tools.ietf.org/html/rfc7230
 [rfc7230-section-3]: https://tools.ietf.org/html/rfc7230#section-3

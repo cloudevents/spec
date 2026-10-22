@@ -132,10 +132,17 @@ here.
 
 The receiver of the event can distinguish between the two content modes by
 inspecting the `content-type` [Header][kafka-message-header] of the Kafka
-message. If the header is present and its value is prefixed with the CloudEvents
-media type `application/cloudevents` (matched case-insensitively),
-indicating the use of a known [event format](#14-event-formats), the receiver
-uses _structured_ mode, otherwise it defaults to _binary_ mode.
+message:
+
+- If the header is present and its value is prefixed with the CloudEvents media
+  type `application/cloudevents`, indicating the use of a known
+  [event format](#14-event-formats), the receiver uses _structured_ mode.
+- Otherwise it defaults to _binary_ mode.
+
+"Prefixed" means that the type/subtype MAY optionally be followed by any
+[structured syntax suffix][rfc6838-section-4-2-8], such as
+[`+json`][rfc6839-section-3-1]. The media type's type and subtype are matched
+case-insensitively, as per [RFC6838, section 4.2][rfc6838-section-4-2].
 
 If a receiver finds a CloudEvents media type as per the above rule, but with an
 event format that it cannot handle, for instance `application/cloudevents+avro`,
@@ -348,4 +355,7 @@ content-type: application/cloudevents+json; charset=UTF-8
 [rfc2046]: https://tools.ietf.org/html/rfc2046
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3629]: https://tools.ietf.org/html/rfc3629
+[rfc6838-section-4-2]: https://www.rfc-editor.org/info/rfc6838/#section-4.2
+[rfc6838-section-4-2-8]: https://www.rfc-editor.org/info/rfc6838/#section-4.2.8
+[rfc6839-section-3-1]: https://www.rfc-editor.org/info/rfc6839/#section-3.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159

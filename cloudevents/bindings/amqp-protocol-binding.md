@@ -104,10 +104,17 @@ allow solicitation of events using a particular content mode might be defined by
 an application, but are not defined here.
 
 The receiver of the event can distinguish between the two modes by inspecting
-the `content-type` message property field. If the value is prefixed with the
-CloudEvents media type `application/cloudevents` (matched case-insensitively),
-indicating the use of a known [event format](#14-event-formats), the receiver
-uses _structured_ mode, otherwise it defaults to _binary_ mode.
+the `content-type` message property field:
+
+- If the value is prefixed with the CloudEvents media type
+  `application/cloudevents`, indicating the use of a known [event
+  format](#14-event-formats), the receiver uses _structured_ mode.
+- Otherwise it defaults to _binary_ mode.
+
+"Prefixed" means that the type/subtype MAY optionally be followed by any
+[structured syntax suffix][rfc6838-section-4-2-8], such as
+[`+json`][rfc6839-section-3-1]. The media type's type and subtype are matched
+case-insensitively, as per [RFC6838, section 4.2][rfc6838-section-4-2].
 
 If a receiver detects the CloudEvents media type, but with an event format that
 it cannot handle, for instance `application/cloudevents+avro`, it MAY still
@@ -331,7 +338,10 @@ content-type: application/cloudevents+json; charset=utf-8
 [rfc2119]: https://tools.ietf.org/html/rfc2119
 [rfc3629]: https://tools.ietf.org/html/rfc3629
 [rfc4627]: https://tools.ietf.org/html/rfc4627
+[rfc6838-section-4-2]: https://www.rfc-editor.org/info/rfc6838/#section-4.2
+[rfc6838-section-4-2-8]: https://www.rfc-editor.org/info/rfc6838/#section-4.2.8
 [rfc6839]: https://tools.ietf.org/html/rfc6839#section-3.1
+[rfc6839-section-3-1]: https://www.rfc-editor.org/info/rfc6839/#section-3.1
 [rfc7159]: https://tools.ietf.org/html/rfc7159
 [oasis-amqp-1.0]: http://docs.oasis-open.org/amqp/core/v1.0/amqp-core-overview-v1.0.html
 [message-format]: http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-messaging-v1.0-os.html#section-message-format
