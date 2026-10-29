@@ -39,6 +39,31 @@ like a unified namespace path.
 MUST map to [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MessageType`.
 
+### WoT mapping
+
+When a CloudEvent uses both this extension and the
+[WoT extension](./wot.md), the following mappings apply to data and event
+messages:
+
+- `type` MUST follow the WoT extension's semantic event-type rules instead of
+  mapping to the native `MessageType`.
+- `opcuamessagetype` MUST carry the native `MessageType`.
+- `subject` MUST follow the WoT extension's affordance-pointer rules.
+- `opcuadatasetwriterid` MUST carry the native `DataSetWriterId`; it MUST NOT
+  be appended to `subject`.
+- For an event message, the `EventId` remains in the OPC UA event payload and
+  MUST NOT be appended to `subject`.
+- `opcuapublisherid` MUST identify the native PublisherId.
+- `opcuasequence` MUST carry the native `SequenceNumber`. The CloudEvents
+  `sequence` attribute, when present, MUST satisfy the independent ordering
+  requirements of the Sequence extension and MUST NOT be inferred from
+  `opcuasequence`.
+
+These conditional mappings replace only the conflicting OPC UA mappings above.
+All other requirements in this extension remain applicable. A profile that
+uses only part of this extension MUST NOT claim conformance to it unless the
+profile satisfies every applicable requirement in this document.
+
 ## Mapping of OPTIONAL Attributes
 
 ### datacontenttype
@@ -57,6 +82,8 @@ those cases the attribute references the schema and is used for versioning.
 
 ### subject
 
+When the WoT extension is not used, the following OPC UA mappings apply:
+
 For metadata, event and data messages (type one of `ua-metadata`, `ua-keyframe`,
 `ua-deltaframe`, `ua-event`), `subject` MUST map to either [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
@@ -74,14 +101,17 @@ field `Timestamp`.
 
 ## Mapping for other extensions
 
-The following well-known extensions attributes MUST be used for data messages and
-event messages (type one of `ua-keyframe`, `ua-deltaframe`, `ua-event`).
+For data and event messages, the following well-known extension attributes
+apply when this extension is used without the WoT extension. When both
+extensions are used, determine message type from `opcuamessagetype`.
 
 ### sequence
 
 Attribute as defined by [sequence extensions](./sequence.md) MUST map to [Data
 Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
-field `SequenceNumber`.
+field `SequenceNumber`, except when the WoT extension is also used. In that
+case, `opcuasequence` maps to the native field and `sequence` has the
+independent meaning defined by the Sequence extension.
 
 ### traceparent
 
@@ -127,6 +157,61 @@ field `MetaDataVersion`.
   - OPTIONAL
   - REQUIRED if status is not _Good_
   - MAY be omitted if status is _Good_
+
+### opcuapublisherid
+
+- Type: `String`
+- Description: Identifies the OPC UA PubSub PublisherId.
+- Constraints
+  - OPTIONAL
+  - If present, MUST use `<BuiltInType>:<value>`.
+  - For `Byte`, `UInt16`, `UInt32` and `UInt64`, `<value>` MUST be the
+    canonical unsigned decimal representation of the PublisherId.
+  - For `Guid`, `<value>` MUST be the lowercase canonical UUID representation
+    of the PublisherId.
+  - For `String`, `<value>` MUST be the unpadded base64url encoding of the
+    PublisherId's UTF-8 bytes.
+  - In combination with the WoT extension, REQUIRED for data and event
+    messages.
+  - MUST map to the Network Message Header `PublisherId`.
+
+### opcuadatasetwriterid
+
+- Type: `Integer`
+- Description: Identifies the DataSetWriter that produced the DataSetMessage.
+- Constraints
+  - OPTIONAL
+  - If present, MUST be in the range 0 to 65535, inclusive.
+  - In combination with the WoT extension, REQUIRED for data and event
+    messages.
+  - MUST map to the Data Set Message Header `DataSetWriterId`.
+
+### opcuamessagetype
+
+- Type: `String`
+- Description: Carries the OPC UA PubSub DataSetMessage type when `type`
+  identifies a WoT semantic event type.
+- Constraints
+  - OPTIONAL
+  - In combination with the WoT extension, REQUIRED for data and event
+    messages.
+  - MUST map to the Data Set Message Header `MessageType`.
+  - The value MUST be the native OPC UA message type, such as `ua-keyframe`,
+    `ua-deltaframe` or `ua-event`.
+
+### opcuasequence
+
+- Type: `Integer`
+- Description: Carries the native DataSetMessage sequence counter without
+  assigning CloudEvents Sequence extension ordering semantics to it.
+- Constraints
+  - OPTIONAL
+  - If present, MUST be in the range 0 to 65535, inclusive.
+  - In combination with the WoT extension, REQUIRED for keyframe, deltaframe
+    and event messages.
+  - MUST map to the Data Set Message Header `SequenceNumber`.
+  - MUST NOT be interpreted as a source-wide sequence unless it also
+    independently satisfies the Sequence extension's requirements.
 
 ## General Constraints
 

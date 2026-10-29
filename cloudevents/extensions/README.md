@@ -53,3 +53,4 @@ for more information.
 - [Sampling](sampledrate.md)
 - [Sequence](sequence.md)
 - [Severity](severity.md)
+- [Web of Things](wot.md)
