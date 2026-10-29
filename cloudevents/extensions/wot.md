@@ -25,14 +25,14 @@ attribute marked REQUIRED here is not REQUIRED in every CloudEvent.
 
 ### wotid
 
-- Type: `URI`
+- Type: `String`
 - Description: The stable WoT identity of the Thing described by the
   referenced TD. It is not the location of a registry entry or the schema of
   the CloudEvent's `data`.
 - Constraints:
   - REQUIRED
-  - MUST be a non-empty absolute URI.
-  - MUST equal the TD's `id` value when that member is present.
+  - MUST be a non-empty absolute IRI as defined in [RFC 3987][IRI].
+  - MUST equal the TD's `id` value verbatim when that member is present.
   - A resolved TD MUST retain the authored TD's `id` when it is present.
   - When the authored TD has no `id`, the Producer MUST use the stable WoT
     identity assigned to it by its publication contract. A resolved TD for
@@ -40,7 +40,12 @@ attribute marked REQUIRED here is not REQUIRED in every CloudEvent.
   - MUST NOT change merely because another revision of the same TD is
     published.
 
-A URI used as an identity is not necessarily a document retrieval URL. A
+The CloudEvents `URI` type uses RFC 3986 and does not include IRIs containing
+non-ASCII characters. This attribute uses `String` to preserve those identifiers
+without percent-encoding or otherwise rewriting the TD's `id`. Absolute URIs
+are also valid absolute IRIs.
+
+An IRI used as an identity is not necessarily a document retrieval URL. A
 Consumer MUST NOT assume that an arbitrary `wotid` can be fetched directly.
 The deployment or publication profile defines the resolver and its lookup
 scope. The identity can name either an authored TD or a resolved TD for the
@@ -68,14 +73,14 @@ resolver's default changes; it does not pin the description that existed
 when the event was produced.
 
 Version identifiers are opaque outside their governing publication contract.
-A Consumer MUST NOT select the default by sorting identifiers or substitute
-a different revision when the requested revision is unavailable.
+A Consumer MUST NOT substitute a different revision when the requested
+revision is unavailable.
 
 ### wotdigest
 
 - Type: `String`
 - Description: A digest of the selected authored or resolved TD document's
-  exact bytes, independent of its identity and retrieval location.
+  exact bytes.
 - Constraints:
   - OPTIONAL
   - If present, MUST have the form `sha-256:` followed by exactly 64 lowercase
@@ -83,19 +88,21 @@ a different revision when the requested revision is unavailable.
   - The hexadecimal value MUST be the SHA-256 digest of the TD document bytes
     obtained after removing transport framing and content coding, but before
     parsing or reserializing the document.
-  - When a Consumer uses the referenced TD to interpret the event, it MUST
+  - When a Consumer uses the referenced TD to interpret the event, it SHOULD
     verify a supplied digest before using that TD.
 
-The digest covers the selected TD representation, not the CloudEvent, its
-payload, a registry metadata response or the documents referenced by the TD.
-It does not require JSON-LD expansion or JSON canonicalization. Whitespace
-changes can change the digest.
+The digest covers the entire selected TD representation, including its `id`
+member when present. No document members are excluded. It does not cover the
+CloudEvent, its payload, a registry metadata response or the documents referenced
+by the TD. It does not require JSON-LD expansion or JSON canonicalization.
+Whitespace changes can change the digest.
 
 When `wotversion` is absent, `wotdigest` verifies the default revision and
 representation selected by the resolver; it does not define a search for some
-historical revision or representation having that digest. A missing digest
-provides no byte-verification result. A matching digest is not a signature
-and does not authenticate the Producer.
+historical revision or representation having that digest. A missing or unchecked
+digest provides no byte-verification result. A Consumer that skips verification
+MUST NOT report that the TD's bytes have been verified against `wotdigest`.
+A matching digest is not a signature and does not authenticate the Producer.
 
 ## Resolving the Thing Description
 
@@ -124,7 +131,8 @@ In that draft:
 - `wotid` is the authored WoT identity, distinct from a registry Resource id.
 - `wotversion`, when present, corresponds to the Resource's exact `versionid`.
 - An unversioned Resource reference serves its configured default Version,
-  which is not necessarily the most recently created Version.
+  which is not necessarily the most recently created Version. A Consumer
+  MUST NOT infer that default by sorting `versionid` values.
 - The Consumer retrieves the TD document view, not the registry metadata view.
 
 The xRegistry WoT draft stores authored documents. A deployment that makes a
@@ -145,11 +153,13 @@ The Core [`type`](../spec.md#type) describes the semantic event type. A
 Thing's identity in `wotid` is not its event type: two Things can produce
 events described by the same model.
 
-For TM-derived publications, the Producer MUST select a governing TM and the
+For TM-derived publications, the Producer MUST select a governing TM. For a
+publication describing one affordance, the Producer MUST also select the
 corresponding model-affordance path. When composition or derivation does not
-identify one such mapping unambiguously, the publication configuration MUST
-select it explicitly. A Producer MUST NOT infer that correspondence solely
-from matching names or select the first TM link arbitrarily.
+identify the governing TM or affordance mapping unambiguously, the publication
+configuration MUST select it explicitly. A Producer MUST NOT infer that
+correspondence solely from matching names or select the first TM link
+arbitrarily.
 
 The following naming convention constructs a reverse-DNS-prefixed type base
 from an HTTPS TM identifier:
@@ -162,17 +172,25 @@ from an HTTPS TM identifier:
 3. Encode the identifier's exact suffix after the hostname, including any
    explicit port, path, query and fragment, as one token using the encoding
    below.
-4. Append `.wot.` and that token to the reversed hostname.
+4. Append `.` and that token to the reversed hostname.
+
+The type does not include a separate WoT marker; the presence of `wotid`
+identifies use of this extension.
 
 For other TM identifier schemes, or HTTPS identifiers not meeting these
 conditions, the publication configuration MUST supply an explicit
 reverse-DNS-prefixed base. That configuration MUST assign distinct bases to
 distinct governing TMs in its type namespace.
 
-Append `.affordance.` and the encoded model-affordance path tokens to the
-base. The model path is an [RFC 6901][JSON Pointer] JSON Pointer within the
-TM that identifies an interaction affordance. Decode its JSON Pointer
-escaping before encoding each token, and join the resulting tokens with `.`.
+For a publication describing one affordance, append `.affordance.` and the
+encoded model-affordance path tokens to the base. The model path is an
+[RFC 6901][JSON Pointer] JSON Pointer within the TM that identifies an
+interaction affordance. Decode its JSON Pointer escaping before encoding
+each token, and join the resulting tokens with `.`.
+
+For a publication describing the Thing as a whole, the Producer MUST use the
+base without an affordance suffix. The publication profile defines how the
+Thing's interaction data is aggregated into the payload.
 
 For both uses of token encoding, encode the input's UTF-8 bytes. Leave only
 ASCII letters, digits, `-` and `_` unescaped. Encode every other byte as `%`
@@ -185,7 +203,7 @@ For example, TM `https://models.example.com/tm/pump` and model affordance
 `/properties/processData` produce:
 
 ```text
-com.example.models.wot.%2Ftm%2Fpump.affordance.properties.processData
+com.example.models.%2Ftm%2Fpump.affordance.properties.processData
 ```
 
 Changing the encoded TM suffix, governing base or model-affordance path
@@ -205,6 +223,9 @@ The [`subject`](../spec.md#subject), when present, MUST be an RFC 6901 JSON
 Pointer to the concrete interaction affordance within the referenced TD,
 such as `/properties/processData` or `/events/alarm`. It is not a URI
 fragment and MUST NOT be prefixed with `#`.
+
+For a publication describing the Thing as a whole, the Producer MUST omit
+`subject` rather than use an empty pointer or an arbitrary affordance.
 
 The subject identifies an affordance, not an occurrence. Different events
 from that affordance can have the same subject and different CloudEvents
@@ -247,7 +268,9 @@ affordance subject interact with that extension's existing type and subject
 mappings. Merely adding `wotid` does not permit overriding them or establish
 conformance to the OPC UA extension.
 
-## Example
+## Examples
+
+### Single Affordance
 
 The following CloudEvents describe the same pump and affordance. Both use the
 authored TD's stable `wotid`; their publication profiles select the authored
@@ -258,7 +281,7 @@ and resolved representations, respectively.
   "specversion": "1.0",
   "id": "sample-4711",
   "source": "urn:example:plant:publisher",
-  "type": "com.example.models.wot.%2Ftm%2Fpump.affordance.properties.processData",
+  "type": "com.example.models.%2Ftm%2Fpump.affordance.properties.processData",
   "subject": "/properties/processData",
   "datacontenttype": "application/json",
   "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
@@ -283,7 +306,7 @@ selects the resolved TD representation for `wotid`:
   "specversion": "1.0",
   "id": "sample-4712",
   "source": "urn:example:plant:publisher",
-  "type": "com.example.models.wot.%2Ftm%2Fpump.affordance.properties.processData",
+  "type": "com.example.models.%2Ftm%2Fpump.affordance.properties.processData",
   "subject": "/properties/processData",
   "datacontenttype": "application/json",
   "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
@@ -301,6 +324,38 @@ In either form, the separate schema describes the JSON object containing
 with the same model and model-affordance mapping can use the same type with a
 different `wotid`.
 
+### Whole Thing
+
+This CloudEvent carries aggregated data for the pump described by the same TD.
+The publication profile selects the authored TD and defines a payload containing
+the `processData` and `running` property values. The type uses the governing TM's
+base without an affordance suffix, and `subject` is absent because the event is
+not scoped to one affordance.
+
+```json
+{
+  "specversion": "1.0",
+  "id": "sample-4713",
+  "source": "urn:example:plant:publisher",
+  "type": "com.example.models.%2Ftm%2Fpump",
+  "datacontenttype": "application/json",
+  "dataschema": "https://example.com/schemas/pump-state/versions/3",
+  "wotid": "urn:example:pump:7",
+  "wotversion": "3",
+  "data": {
+    "processData": {
+      "Speed": 1500,
+      "Pressure": 4.5
+    },
+    "running": true
+  }
+}
+```
+
+`wotid` and `wotversion` select the TD used to interpret these property values.
+The TD document itself is not the payload. `dataschema` identifies the schema
+of the aggregate JSON object, not the TD or either property's DataSchema alone.
+
 ## Security Considerations
 
 Resolvers MUST apply their configured trust, authorization and retrieval
@@ -316,5 +371,6 @@ not grant access to referenced documents or make their dependencies available.
 
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
+[IRI]: https://www.rfc-editor.org/rfc/rfc3987
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
 [WoT Registry]: https://github.com/xregistry/spec/blob/main/workingdrafts/models/wot/spec.md
