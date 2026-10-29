@@ -447,5 +447,37 @@ recordedtime: 2024-03-28T23:59:59Z
 -----------------------------------------------
 ```
 
+### WoT and OPC UA telemetry message
+
+This keyframe uses the WoT event type and affordance subject while retaining
+the native OPC UA message type, writer identity and sequence number. The
+human-readable DataSetWriter name is used without a numeric writer ID. The
+example assumes that `PumpProcessData` uniquely identifies a writer within
+publisher `UInt16:12`. The CloudEvents `sequence` attribute is absent because
+this example does not define a source-wide ordering across DataSetWriters.
+
+```json
+{
+  "specversion": "1.0",
+  "id": "ua-message-25460",
+  "source": "urn:example:plant:publisher",
+  "type": "com.example.models.%2Ftm%2Fpump.affordance.properties.processData",
+  "subject": "/properties/processData",
+  "time": "2026-10-29T12:00:00Z",
+  "datacontenttype": "application/json",
+  "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
+  "wotid": "urn:example:pump:7",
+  "wotversion": "3",
+  "opcuapublisherid": "UInt16:12",
+  "opcuadatasetwritername": "PumpProcessData",
+  "opcuamessagetype": "ua-keyframe",
+  "opcuasequence": 25460,
+  "data": {
+    "Speed": 1500,
+    "Pressure": 4.5
+  }
+}
+```
+
 [UA DataSetWriterName]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table185
 [UA SequenceNumber]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.3
