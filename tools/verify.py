@@ -8,6 +8,7 @@ from functools import lru_cache
 from http import HTTPStatus
 from pathlib import Path
 from typing import Iterable, List, NewType, Optional, Sequence, Set, Tuple, TypeVar
+from urllib.parse import urlsplit
 
 from aiohttp import ClientSession
 from bs4 import BeautifulSoup
@@ -136,6 +137,8 @@ async def _uri_availability_issues(uri: HttpUri, settings: Settings) -> Sequence
     if "example.com"  in uri: return []
     if "ietf.org"     in uri: return []
     if "rfc-edit.org" in uri: return []
+    if urlsplit(uri).hostname in {"rfc-editor.org", "www.rfc-editor.org"}:
+        return []
     if "iso20022.org" in uri: return []
 
     try:

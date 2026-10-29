@@ -14,6 +14,7 @@ from verify import (
     _is_text_all_uppercase,
     _plain_text_issues,
     _render_markdown_to_html,
+    _uri_availability_issues,
 )
 
 
@@ -185,6 +186,23 @@ def test_rtl_unicode_must_be_rendered_in_the_id():
         _render_markdown_to_html("#כותרת בעברית")
         == '<h1 id="כותרת-בעברית">כותרת בעברית</h1>'
     )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "uri",
+    (
+        "https://rfc-editor.org/rfc/rfc3987",
+        "https://www.rfc-editor.org/info/rfc2119",
+    ),
+)
+async def test_rfc_editor_links_skip_network_check(monkeypatch, uri):
+    monkeypatch.setattr(
+        "verify.ClientSession",
+        lambda: pytest.fail("RFC Editor links must not be fetched"),
+    )
+
+    assert await _uri_availability_issues(uri, Settings(excluded_paths=set())) == []
 
 
 @pytest.mark.asyncio
