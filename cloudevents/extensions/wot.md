@@ -296,7 +296,9 @@ and resolved representations, respectively.
 
 For an authored TD selected by `wotid`, the Consumer resolves revision `3`
 through its configured resolver. The subject selects that TD's `processData`
-property.
+property. In the JSON event format, `data` is the CloudEvent's payload member;
+it is not named after the affordance. Here, `data` directly contains that
+property's object value without a `processData` wrapper.
 
 The resolved-view form uses the same event attributes. Its publication profile
 selects the resolved TD representation for `wotid`:
