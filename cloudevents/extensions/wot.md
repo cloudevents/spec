@@ -46,26 +46,6 @@ The deployment or publication profile defines the resolver and its lookup
 scope. The identity can name either an authored TD or a resolved TD for the
 same Thing; it does not select between those representations.
 
-### wottd
-
-- Type: `URI`
-- Description: The location of the TD document view to use. It can identify
-  either the authored TD or a resolved TD.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be a non-empty absolute URI.
-  - MUST identify the TD document, not registry metadata about the TD.
-  - The resolved document MUST have the `wotid` identity.
-  - If `wotversion` is also present, the selected document MUST be that exact
-    revision.
-
-`wottd` selects a representation; `wotid` identifies the Thing. A Producer
-MAY set `wottd` to distinguish an authored TD from a resolved TD when both
-are available under the same identity and revision. If it is absent, the
-configured resolver selects the representation. A resolution scope that
-matches more than one representation MUST be narrowed by the publication
-profile or by `wottd`; a Consumer MUST NOT choose one arbitrarily.
-
 ### wotversion
 
 - Type: `String`
@@ -78,10 +58,8 @@ profile or by `wottd`; a Consumer MUST NOT choose one arbitrarily.
   - If present, MUST be non-empty and MUST identify exactly one revision.
   - MUST NOT be interpreted as a minimum acceptable version or a version range.
   - MUST NOT be inferred from, or appended to, `wotid`.
-  - If absent, the Consumer MUST use the revision identified by `wottd`, when
-    present, or the default revision selected by the configured resolver.
-  - If `wottd` is present and the locator identifies a revision, that revision
-    MUST match `wotversion`.
+  - If absent, the Consumer MUST use the default revision selected by the
+    configured resolver for the selected representation.
 
 A publication profile MAY require `wotversion`. An exact revision is
 RECOMMENDED when later interpretation of a stored event depends on the same
@@ -113,11 +91,11 @@ payload, a registry metadata response or the documents referenced by the TD.
 It does not require JSON-LD expansion or JSON canonicalization. Whitespace
 changes can change the digest.
 
-When both `wotversion` and `wottd` are absent, `wotdigest` verifies the default
-revision and representation selected by the resolver; it does not define a
-search for some historical revision or representation having that digest. A
-missing digest provides no byte-verification result. A matching digest is not
-a signature and does not authenticate the Producer.
+When `wotversion` is absent, `wotdigest` verifies the default revision and
+representation selected by the resolver; it does not define a search for some
+historical revision or representation having that digest. A missing digest
+provides no byte-verification result. A matching digest is not a signature
+and does not authenticate the Producer.
 
 ## Resolving the Thing Description
 
@@ -127,16 +105,17 @@ or Group selection needed to distinguish copies of the same WoT identity and,
 where necessary, the authored and resolved representations. This extension
 does not prescribe a discovery protocol.
 
-A Consumer using this extension to interpret `data` MUST resolve the selected
-representation and revision without substituting a document with another
-identity. It MUST retrieve the document view identified by `wottd` when that
-attribute is present. Otherwise, it MUST use the configured resolver for
-`wotid`, `wotversion` and the publication profile's representation selection.
-An unavailable revision, ambiguous representation, mismatching TD `id`,
-malformed digest or failed digest comparison MUST be treated as unresolved
-description metadata. A Consumer MAY retain or forward the CloudEvent without
-interpreting its payload; it MUST NOT report successful TD-based
-interpretation using an unresolved reference.
+A Consumer using this extension to interpret `data` MUST resolve the
+representation and revision selected by the publication profile without
+substituting a document with another identity. The profile MUST select the
+authored or resolved representation when the configured scope can return
+both. The Consumer MUST use the configured resolver for `wotid`,
+`wotversion` and that representation selection. An unavailable revision,
+ambiguous representation, mismatching TD `id`, malformed digest or failed
+digest comparison MUST be treated as unresolved description metadata. A
+Consumer MAY retain or forward the CloudEvent without interpreting its
+payload; it MUST NOT report successful TD-based interpretation using an
+unresolved reference.
 
 The [xRegistry WoT working draft][WoT Registry] describes one resolution
 mechanism. It is a working draft, not a universal dependency of this extension.
@@ -148,10 +127,10 @@ In that draft:
   which is not necessarily the most recently created Version.
 - The Consumer retrieves the TD document view, not the registry metadata view.
 
-The xRegistry WoT draft stores authored documents. A resolved TD can instead be
-identified by `wottd` when a deployment publishes that representation as a
-document view. A registry Resource URL MUST NOT be treated as the resolved TD
-unless its document view actually returns that TD.
+The xRegistry WoT draft stores authored documents. A deployment that makes a
+resolved TD available MUST define how its resolver selects that representation
+for the same `wotid`. A registry Resource URL MUST NOT be treated as the
+resolved TD unless its document view actually returns that TD.
 
 The Consumer still needs a configured registry scope. A registry-wide identity
 query can return more than one Resource; choosing the first match does not
@@ -270,10 +249,9 @@ conformance to the OPC UA extension.
 
 ## Example
 
-The following CloudEvents describe the same pump and affordance. The first
-references the authored TD through the configured resolver. The second uses
-`wottd` to select a resolved representation explicitly. Both retain the
-authored TD's stable `wotid`.
+The following CloudEvents describe the same pump and affordance. Both use the
+authored TD's stable `wotid`; their publication profiles select the authored
+and resolved representations, respectively.
 
 ```json
 {
@@ -297,7 +275,8 @@ For an authored TD selected by `wotid`, the Consumer resolves revision `3`
 through its configured resolver. The subject selects that TD's `processData`
 property.
 
-The resolved-view form adds a document-view URI:
+The resolved-view form uses the same event attributes. Its publication profile
+selects the resolved TD representation for `wotid`:
 
 ```json
 {
@@ -309,7 +288,6 @@ The resolved-view form adds a document-view URI:
   "datacontenttype": "application/json",
   "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
   "wotid": "urn:example:pump:7",
-  "wottd": "https://registry.example/tds/pump-7/resolved/3",
   "wotversion": "3",
   "data": {
     "Speed": 1500,
