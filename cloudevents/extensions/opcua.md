@@ -49,8 +49,11 @@ messages:
   mapping to the native `MessageType`.
 - `opcuamessagetype` MUST carry the native `MessageType`.
 - `subject` MUST follow the WoT extension's affordance-pointer rules.
-- `opcuadatasetwriterid` MUST carry the native `DataSetWriterId`; it MUST NOT
-  be appended to `subject`.
+- `opcuadatasetwriterid` and `opcuadatasetwritername`, when present, MUST
+  identify the native DataSetWriter; neither MAY be appended to `subject`.
+- For data and event messages, at least one of `opcuadatasetwriterid` and
+  `opcuadatasetwritername` MUST be present. If both are present, they MUST
+  identify the same DataSetWriter.
 - For an event message, the `EventId` remains in the OPC UA event payload and
   MUST NOT be appended to `subject`.
 - `opcuapublisherid` MUST identify the native PublisherId.
@@ -107,11 +110,21 @@ extensions are used, determine message type from `opcuamessagetype`.
 
 ### sequence
 
-Attribute as defined by [sequence extensions](./sequence.md) MUST map to [Data
-Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
-field `SequenceNumber`, except when the WoT extension is also used. In that
-case, `opcuasequence` maps to the native field and `sequence` has the
-independent meaning defined by the Sequence extension.
+Without the WoT extension, a `sequence` attribute, when present, MUST map to
+the native DataSetMessage `SequenceNumber`. The OPC UA Publisher assigns and
+increments this counter for messages from a DataSetWriter, as defined in
+[OPC UA Part 14, Section 7.2.3][UA SequenceNumber]. This is the existing
+OPC UA mapping for the [Sequence extension](./sequence.md), but it does not by
+itself establish an ordering across multiple DataSetWriters that share one
+CloudEvents `source`. A Publisher using this mapping MUST scope `source` to the
+DataSetWriter's ordering scope; otherwise, it MUST NOT present the per-writer
+counter as the CloudEvents `sequence`.
+
+When the WoT extension is also used, `subject` identifies a TD affordance, not
+the DataSetWriter. `opcuasequence` therefore carries the native OPC UA counter;
+a CloudEvents `sequence`, if present, MUST satisfy the Sequence extension's
+ordering requirements independently and MUST NOT be inferred from
+`opcuasequence`.
 
 ### traceparent
 
@@ -182,9 +195,23 @@ field `MetaDataVersion`.
 - Constraints
   - OPTIONAL
   - If present, MUST be in the range 0 to 65535, inclusive.
-  - In combination with the WoT extension, REQUIRED for data and event
-    messages.
   - MUST map to the Data Set Message Header `DataSetWriterId`.
+
+### opcuadatasetwritername
+
+- Type: `String`
+- Description: Carries the human-readable name of the DataSetWriter that
+  produced the DataSetMessage.
+- Constraints
+  - OPTIONAL
+  - If present, MUST be non-empty.
+  - MUST match the DataSetWriter's configured `DataSetWriterName`. For JSON
+    message mapping, this is the [`DataSetWriterName` field][UA DataSetWriterName]
+    when present in the DataSetMessage; otherwise the publisher obtains it
+    from configuration.
+  - In combination with the WoT extension, if used without
+    `opcuadatasetwriterid`, it MUST uniquely identify the DataSetWriter within
+    the configured `opcuapublisherid` scope.
 
 ### opcuamessagetype
 
@@ -419,3 +446,6 @@ recordedtime: 2024-03-28T23:59:59Z
 
 -----------------------------------------------
 ```
+
+[UA DataSetWriterName]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table185
+[UA SequenceNumber]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.3
