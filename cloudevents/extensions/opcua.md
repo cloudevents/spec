@@ -1,10 +1,9 @@
 # OPC UA
 
-This extension defines the mapping of [OPC UA](https://reference.opcfoundation.org/Core/Part1/v105/docs/)
-[PubSub](https://reference.opcfoundation.org/Core/Part14/v105/docs/) dataset to
-CloudEvents to allow seamless routing of OPC UA dataset messages via different
-protocols, it therefore provides a recommendation to map known REQUIRED and
-OPTIONAL attributes using other extensions as well as defines its own extension
+This extension maps [OPC UA](https://reference.opcfoundation.org/Core/Part1/v105/docs/)
+[PubSub](https://reference.opcfoundation.org/Core/Part14/v105/docs/)
+DataSetMessages to CloudEvents for routing over supported protocols. It defines
+mappings for Core and other extension attributes and specifies OPC UA extension
 attributes.
 
 ## Notational Conventions
@@ -29,26 +28,31 @@ field `MessageId`.
 
 ### source
 
-MUST either map to [Application
-Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1) field
-`applicationUri` of the OPC UA server or to a customer configured identifier
-like a unified namespace path.
+Without the WoT profile, MUST either map to [Application
+Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1)
+field `applicationUri` of the OPC UA server or to a customer configured
+identifier like a unified namespace path.
+
+With the WoT profile, MUST follow its `source` mapping.
 
 ### type
 
-MUST map to [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
-field `MessageType`.
+Without the WoT profile, MUST map to
+[Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
+field `MessageType`. With the WoT profile, MUST follow its semantic event-type
+rules.
 
 ### WoT mapping
 
 When a CloudEvent uses both this extension and the
-[WoT extension](./wot.md), the following mappings apply to data and event
+[WoT profile](./wot.md), the following mappings apply to data and event
 messages:
 
-- `type` MUST follow the WoT extension's semantic event-type rules instead of
+- `source` MUST follow the WoT profile's Thing identity and version rules.
+- `type` MUST follow the WoT profile's semantic event-type rules instead of
   mapping to the native `MessageType`.
 - `opcuamessagetype` MUST carry the native `MessageType`.
-- `subject` MUST follow the WoT extension's affordance-pointer rules.
+- `subject` MUST follow the WoT profile's resolved-TD pointer rules.
 - `opcuadatasetwriterid` and `opcuadatasetwritername`, when present, MUST
   identify the native DataSetWriter; neither MAY be appended to `subject`.
 - For data and event messages, at least one of `opcuadatasetwriterid` and
@@ -65,7 +69,10 @@ messages:
 These conditional mappings replace only the conflicting OPC UA mappings above.
 All other requirements in this extension remain applicable. A profile that
 uses only part of this extension MUST NOT claim conformance to it unless the
-profile satisfies every applicable requirement in this document.
+profile satisfies every applicable requirement in this document. Producers
+sharing a WoT `source` MUST assign distinct native `MessageId` values to
+distinct events within that source to satisfy Core's `source` and `id`
+uniqueness requirement.
 
 ## Mapping of OPTIONAL Attributes
 
@@ -85,7 +92,7 @@ those cases the attribute references the schema and is used for versioning.
 
 ### subject
 
-When the WoT extension is not used, the following OPC UA mappings apply:
+When the WoT profile is not used, the following OPC UA mappings apply:
 
 For metadata, event and data messages (type one of `ua-metadata`, `ua-keyframe`,
 `ua-deltaframe`, `ua-event`), `subject` MUST map to either [Data Set Message
@@ -105,12 +112,12 @@ field `Timestamp`.
 ## Mapping for other extensions
 
 For data and event messages, the following well-known extension attributes
-apply when this extension is used without the WoT extension. When both
+apply when this extension is used without the WoT profile. When both
 extensions are used, determine message type from `opcuamessagetype`.
 
 ### sequence
 
-Without the WoT extension, a `sequence` attribute, when present, MUST map to
+Without the WoT profile, a `sequence` attribute, when present, MUST map to
 the native DataSetMessage `SequenceNumber`. The OPC UA Publisher assigns and
 increments this counter for messages from a DataSetWriter, as defined in
 [OPC UA Part 14, Section 7.2.3][UA SequenceNumber]. This is the existing
@@ -120,7 +127,7 @@ CloudEvents `source`. A Publisher using this mapping MUST scope `source` to the
 DataSetWriter's ordering scope; otherwise, it MUST NOT present the per-writer
 counter as the CloudEvents `sequence`.
 
-When the WoT extension is also used, `subject` identifies a TD affordance, not
+When the WoT profile is also used, `subject` identifies a TD or affordance, not
 the DataSetWriter. `opcuasequence` therefore carries the native OPC UA counter;
 a CloudEvents `sequence`, if present, MUST satisfy the Sequence extension's
 ordering requirements independently and MUST NOT be inferred from
@@ -171,6 +178,10 @@ field `MetaDataVersion`.
   - REQUIRED if status is not _Good_
   - MAY be omitted if status is _Good_
 
+CloudEvents `Integer` is limited to the signed 32-bit range. If a native
+status value cannot be represented, the Producer MUST report an error rather
+than omit the status, wrap the value, or report it as _Good_.
+
 ### opcuapublisherid
 
 - Type: `String`
@@ -184,7 +195,7 @@ field `MetaDataVersion`.
     of the PublisherId.
   - For `String`, `<value>` MUST be the unpadded base64url encoding of the
     PublisherId's UTF-8 bytes.
-  - In combination with the WoT extension, REQUIRED for data and event
+  - In combination with the WoT profile, REQUIRED for data and event
     messages.
   - MUST map to the Network Message Header `PublisherId`.
 
@@ -209,9 +220,10 @@ field `MetaDataVersion`.
     message mapping, this is the [`DataSetWriterName` field][UA DataSetWriterName]
     when present in the DataSetMessage; otherwise the publisher obtains it
     from configuration.
-  - In combination with the WoT extension, if used without
-    `opcuadatasetwriterid`, it MUST uniquely identify the DataSetWriter within
-    the configured `opcuapublisherid` scope.
+  - In combination with the WoT profile, MUST uniquely identify the
+    DataSetWriter within the configured `opcuapublisherid` scope.
+  - In combination with the WoT profile, names MUST be compared exactly,
+    without case folding or Unicode normalization.
 
 ### opcuamessagetype
 
@@ -220,7 +232,7 @@ field `MetaDataVersion`.
   identifies a WoT semantic event type.
 - Constraints
   - OPTIONAL
-  - In combination with the WoT extension, REQUIRED for data and event
+  - In combination with the WoT profile, REQUIRED for data and event
     messages.
   - MUST map to the Data Set Message Header `MessageType`.
   - The value MUST be the native OPC UA message type, such as `ua-keyframe`,
@@ -228,15 +240,18 @@ field `MetaDataVersion`.
 
 ### opcuasequence
 
-- Type: `Integer`
+- Type: `String`
 - Description: Carries the native DataSetMessage sequence counter without
   assigning CloudEvents Sequence extension ordering semantics to it.
 - Constraints
   - OPTIONAL
-  - If present, MUST be in the range 0 to 65535, inclusive.
-  - In combination with the WoT extension, REQUIRED for keyframe, deltaframe
+  - If present, MUST be a canonical unsigned decimal representation in the
+    range `0` to `4294967295`, inclusive, with no leading zero except for `0`.
+  - In combination with the WoT profile, REQUIRED for keyframe, deltaframe
     and event messages.
-  - MUST map to the Data Set Message Header `SequenceNumber`.
+  - MUST map to the Data Set Message Header `SequenceNumber`. The
+    [OPC UA JSON mapping][UA DataSetWriterName] defines this field as `UInt32`;
+    the String representation retains the full range of that value.
   - MUST NOT be interpreted as a source-wide sequence unless it also
     independently satisfies the Sequence extension's requirements.
 
@@ -449,34 +464,41 @@ recordedtime: 2024-03-28T23:59:59Z
 
 ### WoT and OPC UA telemetry message
 
-This keyframe uses the WoT event type and affordance subject while retaining
-the native OPC UA message type, writer identity and sequence number. The
-human-readable DataSetWriter name is used without a numeric writer ID. The
+This binary-mode keyframe uses the WoT event type and affordance subject while
+retaining the native OPC UA message type, writer identity, and sequence
+number. The DataSetWriter name is used without a numeric writer ID. The
 example assumes that `PumpProcessData` uniquely identifies a writer within
 publisher `UInt16:12`. The CloudEvents `sequence` attribute is absent because
 this example does not define a source-wide ordering across DataSetWriters.
 
-```json
+```text
+------------------ PUBLISH -------------------
+
+Topic Name: opcua/json/DataSetMessage/pump
+Content Type: application/json
+
+------------- User Properties ----------------
+
+specversion: 1.0
+id: ua-message-25460
+source: wot-td://factory/line1?wotid=urn:example:pump:7;wotversion=3.0.0
+type: com.example.models.tm.pump.properties.processData
+subject: #/properties/processData
+time: 2026-10-29T12:00:00Z
+dataschema: https://example.com/schemas/pump-process-data/versions/3
+opcuapublisherid: UInt16:12
+opcuadatasetwritername: PumpProcessData
+opcuamessagetype: ua-keyframe
+opcuasequence: 4294967295
+
+------------------ payload -------------------
+
 {
-  "specversion": "1.0",
-  "id": "ua-message-25460",
-  "source": "urn:example:plant:publisher",
-  "type": "com.example.models.%2Ftm%2Fpump.affordance.properties.processData",
-  "subject": "/properties/processData",
-  "time": "2026-10-29T12:00:00Z",
-  "datacontenttype": "application/json",
-  "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
-  "wotid": "urn:example:pump:7",
-  "wotversion": "3",
-  "opcuapublisherid": "UInt16:12",
-  "opcuadatasetwritername": "PumpProcessData",
-  "opcuamessagetype": "ua-keyframe",
-  "opcuasequence": 25460,
-  "data": {
-    "Speed": 1500,
-    "Pressure": 4.5
-  }
+  "Speed": 1500,
+  "Pressure": 4.5
 }
+
+-----------------------------------------------
 ```
 
 [UA DataSetWriterName]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table185

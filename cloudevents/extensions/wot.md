@@ -1,15 +1,13 @@
 # Web of Things
 
-This extension identifies the [Web of Things Thing Description][TD] (TD) that
-describes the interaction associated with a CloudEvent. It separates the
-Thing's identity, the selected TD representation, its revision and
-verification of its bytes. The selected representation can be the authored TD
-or a resolved TD derived from it.
+This profile maps a [Web of Things Thing Description][TD] (TD) to CloudEvents
+Core context attributes. The `source` identifies the Thing and, when provided,
+a version of its resolved TD. The `subject` identifies the part of that TD
+associated with the event, and the `type` names the event contract.
 
-The extension also defines a convention for event types derived from a
-[Thing Model][TM] (TM), affordance subjects and the relationship between a TD
-and the payload schema. It does not define a transport binding, provision a
-Thing, or require a particular registry implementation.
+The profile defines no CloudEvents extension attributes. Its use is identified
+by the `wot-td` scheme in `source`. It does not define a transport binding,
+provision a Thing, or require a particular registry implementation.
 
 ## Notational Conventions
 
@@ -18,222 +16,214 @@ As with the main [CloudEvents specification](../spec.md), the key words "MUST",
 "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
 described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-The scope of these key words is limited to events using this extension. An
+The scope of these key words is limited to events using this profile. An
 attribute marked REQUIRED here is not REQUIRED in every CloudEvent.
 
-## Attributes
+## Source
 
-### wotid
+The Core [`source`](../spec.md#source) identifies a Thing within a configured
+logical topology. It uses this absolute URI form:
 
-- Type: `String`
-- Description: The stable WoT identity of the Thing described by the
-  referenced TD. It is not the location of a registry entry or the schema of
-  the CloudEvent's `data`.
-- Constraints:
-  - REQUIRED
-  - MUST be a non-empty absolute IRI as defined in [RFC 3987][IRI].
-  - MUST equal the TD's `id` value verbatim when that member is present.
-  - A resolved TD MUST retain the authored TD's `id` when it is present.
-  - When the authored TD has no `id`, the Producer MUST use the stable WoT
-    identity assigned to it by its publication contract. A resolved TD for
-    that Thing MUST use the same identity.
-  - MUST NOT change merely because another revision of the same TD is
-    published.
+```text
+wot-td://<topology>?wotid=<encoded-wotid>[;wotversion=<encoded-version>]
+```
 
-The CloudEvents `URI` type uses RFC 3986 and does not include IRIs containing
-non-ASCII characters. This attribute uses `String` to preserve those identifiers
-without percent-encoding or otherwise rewriting the TD's `id`. Absolute URIs
-are also valid absolute IRIs.
+For example:
 
-An IRI used as an identity is not necessarily a document retrieval URL. A
-Consumer MUST NOT assume that an arbitrary `wotid` can be fetched directly.
-The deployment or publication profile defines the resolver and its lookup
-scope. The identity can name either an authored TD or a resolved TD for the
-same Thing; it does not select between those representations.
+```text
+wot-td://factory/line1?wotid=urn:example:pump:7;wotversion=3.0.0
+```
 
-### wotversion
+`wotid` and `wotversion` are query parameters, not CloudEvents attributes.
+The `wot-td` scheme is proposed and is not currently registered with IANA.
+The URI is an identifier for a configured resolver; it is not an HTTP registry
+URL and does not itself specify where to retrieve a TD.
 
-- Type: `String`
-- Description: The exact revision of the TD identified by `wotid`, within the
-  configured resolution scope and selected representation. This is a document
-  revision, not the CloudEvents `specversion`, the version of a WoT vocabulary
-  or the version of the wire-payload schema.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST be non-empty and MUST identify exactly one revision.
-  - MUST NOT be interpreted as a minimum acceptable version or a version range.
-  - MUST NOT be inferred from, or appended to, `wotid`.
-  - If absent, the Consumer MUST use the default revision selected by the
-    configured resolver for the selected representation.
+### Topology
 
-A publication profile MAY require `wotversion`. An exact revision is
-RECOMMENDED when later interpretation of a stored event depends on the same
-description. An unversioned reference can resolve differently after the
-resolver's default changes; it does not pin the description that existed
-when the event was produced.
+The Producer configures the topology. It consists of a non-empty authority
+followed by an OPTIONAL hierarchical path. Both MUST conform to
+[RFC 3986][URI]. The authority MUST contain a non-empty host and MUST NOT
+contain user information. The host need not be a resolvable DNS name.
+Implementations MUST apply RFC 3986 host case rules and MUST NOT change the
+case of the path when interpreting the topology.
 
-Version identifiers are opaque outside their governing publication contract.
-A Consumer MUST NOT substitute a different revision when the requested
-revision is unavailable.
+The topology can represent, for example, a site and production line. It is
+not the Thing's identity or a registry Resource identifier.
 
-### wotdigest
+### Query syntax and encoding
 
-- Type: `String`
-- Description: A digest of the selected authored or resolved TD document's
-  exact bytes.
-- Constraints:
-  - OPTIONAL
-  - If present, MUST have the form `sha-256:` followed by exactly 64 lowercase
-    hexadecimal characters.
-  - The hexadecimal value MUST be the SHA-256 digest of the TD document bytes
-    obtained after removing transport framing and content coding, but before
-    parsing or reserializing the document.
-  - When a Consumer uses the referenced TD to interpret the event, it SHOULD
-    verify a supplied digest before using that TD.
+The query contains `wotid` followed by an OPTIONAL `wotversion`. The literal
+parameter names are case-sensitive, and `;` separates the parameters. Each
+parameter consists of its name, one `=`, and a non-empty value. No other
+parameters are defined.
 
-The digest covers the entire selected TD representation, including its `id`
-member when present. No document members are excluded. It does not cover the
-CloudEvent, its payload, a registry metadata response or the documents referenced
-by the TD. It does not require JSON-LD expansion or JSON canonicalization.
-Whitespace changes can change the digest.
+The value's unescaped characters are the RFC 3986 `unreserved` characters
+and `!`, `$`, `'`, `(`, `)`, `*`, `,`, `:`, `@`, `/`, and `?`. A Producer
+MUST leave these characters unescaped. It MUST percent-encode the UTF-8 bytes
+of all other characters using uppercase hexadecimal digits.
+In particular, a literal `%`, `;`, `=`, `&`, `+`, or `#` in a value MUST be
+encoded. A Producer MUST NOT use form-query encoding or encode a space as `+`.
 
-When `wotversion` is absent, `wotdigest` verifies the default revision and
-representation selected by the resolver; it does not define a search for some
-historical revision or representation having that digest. A missing or unchecked
-digest provides no byte-verification result. A Consumer that skips verification
-MUST NOT report that the TD's bytes have been verified against `wotdigest`.
-A matching digest is not a signature and does not authenticate the Producer.
+A Consumer MUST split the query at `;` before decoding the values. It MUST
+reject an unknown or duplicate parameter, a missing or empty `wotid`, an empty
+`wotversion`, an invalid percent escape, invalid UTF-8, an out-of-order
+parameter, an unescaped character outside the permitted set, or a URI with an
+outer fragment. It MUST percent-decode each value exactly once and MUST NOT
+interpret `+` as a space.
+
+For example, an identifier containing U+00E9 followed by the literal characters
+`%2F` encodes that portion as `%C3%A9%252F`. One decoding pass recovers the
+original characters, including the literal `%2F`; it does not turn them into
+a slash.
+
+### Thing identity and version
+
+The decoded `wotid` MUST be a non-empty absolute IRI as defined in
+[RFC 3987][IRI]. When the authored TD has an `id`, `wotid` MUST equal that
+value verbatim and the resolved TD MUST retain it. When the authored TD has
+no `id`, the publication contract MUST assign a stable absolute WoT identity
+for the Thing. Publishing another version MUST NOT by itself change that
+identity.
+
+The OPTIONAL `wotversion` selects one exact version of the resolved TD within
+the configured resolution scope. It is not a version range, the CloudEvents
+`specversion`, a WoT vocabulary version, or a payload-schema version. Its
+meaning is defined by the publication contract; a Consumer MUST NOT substitute
+a different version when the requested version is unavailable. Selecting that
+version does not by itself establish the compatibility of its dependencies.
+
+An explicit version identifies a stable resolved view. A Producer MUST NOT
+change the logical view identified by a published version. It MUST publish a
+new version when the view changes, including changes introduced by its source
+closure. A serialization or formatting change alone does not require a new
+version.
+
+When `wotversion` is absent, the Consumer resolves the current default view.
+That default can change, so a delayed event can resolve to a different view
+than the one available when the event was produced. A publication profile
+that requires repeatable replay MUST require `wotversion`.
+
+Core requires `source` and `id` together to identify each distinct event.
+Changing the topology or version changes the `source` and therefore its event
+identity and [Sequence extension](sequence.md) scope. Returning to an earlier
+`source` returns to its existing scope: Producers MUST NOT reuse event
+identities or restart a claimed source-wide sequence within that scope.
 
 ## Resolving the Thing Description
 
-The Producer and Consumer MUST agree on the resolution scope out of band or
-through their publication profile. That scope includes any registry, tenant
-or Group selection needed to distinguish copies of the same WoT identity and,
-where necessary, the authored and resolved representations. This extension
-does not prescribe a discovery protocol.
+The Producer and Consumer MUST agree on a resolver and its scope out of band
+or through their publication profile. The scope selects a registry and Group,
+tenant, or equivalent boundary in which the Thing identity is resolved. This
+profile does not prescribe a discovery protocol.
 
-A Consumer using this extension to interpret `data` MUST resolve the
-representation and revision selected by the publication profile without
-substituting a document with another identity. The profile MUST select the
-authored or resolved representation when the configured scope can return
-both. The Consumer MUST use the configured resolver for `wotid`,
-`wotversion` and that representation selection. An unavailable revision,
-ambiguous representation, mismatching TD `id`, malformed digest or failed
-digest comparison MUST be treated as unresolved description metadata. A
-Consumer MAY retain or forward the CloudEvent without interpreting its
-payload; it MUST NOT report successful TD-based interpretation using an
-unresolved reference.
+The resolver MUST find exactly one Resource or equivalent publication for
+`wotid` within that scope. It MUST select the exact version named by
+`wotversion`, or the current default when the parameter is absent. A missing
+or ambiguous match is a resolution failure; selecting the first match does not
+establish which Thing the Producer meant.
+
+The Consumer MUST obtain the resolved TD selected by that publication. It MAY
+retrieve a published resolved view or reconstruct the same logical view from
+a complete, pinned source closure and the applicable resolution rules. The
+closure and rules MUST establish one unambiguous view. The JSON serialization
+does not need to be byte-identical.
+
+If the selected view cannot be retrieved or reconstructed, the Consumer MUST
+report a resolution failure and leave the event uncorrelated. It MAY retain
+or forward the event without interpreting its payload. The Consumer MUST NOT
+claim successful TD-based interpretation when the resolved view or its
+identity cannot be established.
 
 The [xRegistry WoT working draft][WoT Registry] describes one resolution
-mechanism. It is a working draft, not a universal dependency of this extension.
-In that draft:
+mechanism. It is a working draft, not a universal dependency of this profile.
+In that draft, `wotid` is the WoT identity rather than the Resource ID, and
+`wotversion` corresponds to the Resource's exact `versionid`. The default
+Version is not necessarily the most recently created Version and MUST NOT be
+inferred by sorting version identifiers.
 
-- `wotid` is the authored WoT identity, distinct from a registry Resource id.
-- `wotversion`, when present, corresponds to the Resource's exact `versionid`.
-- An unversioned Resource reference serves its configured default Version,
-  which is not necessarily the most recently created Version. A Consumer
-  MUST NOT infer that default by sorting `versionid` values.
-- The Consumer retrieves the TD document view, not the registry metadata view.
+The draft stores authored documents and describes a publication closure.
+Some closure reference mappings remain unresolved; the closure schema alone
+does not establish that every resolved view can be reconstructed. Where the
+closure and applicable rules cannot establish the view, the publication
+contract MUST provide the resolved view for this profile to use it.
 
-The xRegistry WoT draft stores authored documents. A deployment that makes a
-resolved TD available MUST define how its resolver selects that representation
-for the same `wotid`. A registry Resource URL MUST NOT be treated as the
-resolved TD unless its document view actually returns that TD.
-
-The Consumer still needs a configured registry scope. A registry-wide identity
-query can return more than one Resource; choosing the first match does not
-establish which description the Producer meant. The same applies when a scope
-can return both authored and resolved representations.
+The event carries no digest of the TD. An exact version or a successful
+resolution does not by itself prove that retrieved bytes are unchanged.
 
 ## Mapping Core Context Attributes
 
 ### type
 
-The Core [`type`](../spec.md#type) describes the semantic event type. A
-Thing's identity in `wotid` is not its event type: two Things can produce
-events described by the same model.
+The Core [`type`](../spec.md#type) identifies the event contract. Two Things
+can produce events of the same type when their interactions follow the same
+model. This profile uses a dot-separated symbol so a Consumer can map the type
+to a code-generation symbol.
 
-For TM-derived publications, the Producer MUST select a governing TM. For a
-publication describing one affordance, the Producer MUST also select the
+The type MUST contain one or more segments separated by single dots. Each
+segment MUST start with an ASCII letter or underscore and contain only ASCII
+letters, digits, or underscores thereafter. These character restrictions apply
+only to `type`; they do not change the Thing identifier, TD member names,
+`source`, `subject`, or payload. A code generator remains responsible for
+language-specific keywords.
+
+A Producer MAY configure the complete type. Otherwise, it derives the type
+from a governing [Thing Model][TM] (TM) and, for an affordance event, the
 corresponding model-affordance path. When composition or derivation does not
-identify the governing TM or affordance mapping unambiguously, the publication
-configuration MUST select it explicitly. A Producer MUST NOT infer that
-correspondence solely from matching names or select the first TM link
-arbitrarily.
+identify that mapping unambiguously, the publication configuration MUST
+select it explicitly. A Producer MUST NOT infer the mapping solely from
+matching names or select the first TM link.
 
-The following naming convention constructs a reverse-DNS-prefixed type base
-from an HTTPS TM identifier:
+For an eligible HTTPS TM identifier, derive the type as follows:
 
-1. Parse the absolute identifier without removing its path, query or fragment.
-   The authority MUST contain an ASCII DNS hostname with no empty labels or
-   trailing root dot, and MUST NOT contain user information. Other authorities,
-   including IP addresses, require an explicit base instead.
-2. Lowercase the ASCII DNS hostname and reverse its labels.
-3. Encode the identifier's exact suffix after the hostname, including any
-   explicit port, path, query and fragment, as one token using the encoding
-   below.
-4. Append `.` and that token to the reversed hostname.
-
-The type does not include a separate WoT marker; the presence of `wotid`
-identifies use of this extension.
-
-For other TM identifier schemes, or HTTPS identifiers not meeting these
-conditions, the publication configuration MUST supply an explicit
-reverse-DNS-prefixed base. That configuration MUST assign distinct bases to
-distinct governing TMs in its type namespace.
-
-For a publication describing one affordance, append `.affordance.` and the
-encoded model-affordance path tokens to the base. The model path is an
-[RFC 6901][JSON Pointer] JSON Pointer within the TM that identifies an
-interaction affordance. Decode its JSON Pointer escaping before encoding
-each token, and join the resulting tokens with `.`.
-
-For a publication describing the Thing as a whole, the Producer MUST use the
-base without an affordance suffix. The publication profile defines how the
-Thing's interaction data is aggregated into the payload.
-
-For both uses of token encoding, encode the input's UTF-8 bytes. Leave only
-ASCII letters, digits, `-` and `_` unescaped. Encode every other byte as `%`
-followed by two uppercase hexadecimal digits. Represent an empty token as
-`~`; a literal tilde is encoded as `%7E`. Dots and percent signs are escaped,
-so a literal dot in a name cannot be confused with a path-token separator.
-This encoding is part of the type String, not an instruction to dereference it.
+1. Require an ASCII DNS hostname without empty labels or a trailing root dot.
+   The identifier cannot contain user information, a port, a query, or a
+   fragment for this derivation.
+2. Lowercase the hostname, reverse its labels, and join them with dots.
+3. Append the TM identifier's path, replacing each `/` with `.`.
+4. For an affordance event, append the model-affordance JSON Pointer path.
+   Decode its [RFC 6901][JSON Pointer] token escaping, then replace each `/`
+   with `.`.
 
 For example, TM `https://models.example.com/tm/pump` and model affordance
 `/properties/processData` produce:
 
 ```text
-com.example.models.%2Ftm%2Fpump.affordance.properties.processData
+com.example.models.tm.pump.properties.processData
 ```
 
-Changing the encoded TM suffix, governing base or model-affordance path
-changes this derived type; changing only the hostname's letter case does not.
-The Producer MUST NOT change that derivation merely because a different TD
-instance or registry location is used. Versioning the payload schema is
-separate from naming a semantic event type.
+For a whole-Thing event, use the TM-derived type without an affordance path.
+The publication profile defines how interaction data is aggregated into the
+payload.
 
-A TD can be published without a governing TM. This extension does not invent
-one: publications without a TM-derived type follow Core's producer-defined
-type rules. A profile requiring TM-derived types MUST reject missing or
-ambiguous model mappings rather than inventing a base.
+The Producer MUST configure a valid complete type when the derivation is
+unavailable, produces an invalid symbol, or collides with a different event
+contract in the Producer's type namespace. A slash-to-dot conversion is not
+reversible: `/tm/pump.v1` and `/tm/pump/v1` produce the same suffix. The
+Producer MUST disambiguate such contracts by configuration rather than
+silently rewriting identifiers or member names.
 
 ### subject
 
-The [`subject`](../spec.md#subject), when present, MUST be an RFC 6901 JSON
-Pointer to the concrete interaction affordance within the referenced TD,
-such as `/properties/processData` or `/events/alarm`. It is not a URI
-fragment and MUST NOT be prefixed with `#`.
+The [`subject`](../spec.md#subject) is REQUIRED. It MUST be an
+[RFC 6901][JSON Pointer] URI-fragment pointer evaluated against the resolved
+TD. For an event describing the whole Thing, the Producer MUST use `#`. For
+an affordance event, the pointer MUST identify the concrete affordance in the
+resolved TD, for example `#/properties/processData` or `#/events/alarm`.
 
-For a publication describing the Thing as a whole, the Producer MUST omit
-`subject` rather than use an empty pointer or an arbitrary affordance.
+The Producer MUST escape JSON Pointer tokens before applying URI-fragment
+encoding. For example, the property name `pressure/bar` is addressed by
+`#/properties/pressure~1bar`. The Consumer MUST report a failure and leave
+the event uncorrelated if the pointer is invalid or does not select the
+intended member of the resolved view.
 
-The subject identifies an affordance, not an occurrence. Different events
-from that affordance can have the same subject and different CloudEvents
-`id` values. A binding-specific writer identifier or native occurrence
-identifier is not appended to this pointer.
+The subject identifies the Thing or affordance, not an occurrence. Different
+events can have the same subject and different CloudEvents `id` values. A
+binding-specific writer identifier or native occurrence identifier is not
+appended to this pointer.
 
-The concrete TD path and the corresponding TM declaration path can differ.
-This extension does not infer a declaration-lineage mapping between them.
+The concrete TD path and corresponding TM declaration path can differ. This
+profile does not infer a declaration-lineage mapping between them.
 
 ### dataschema and datacontenttype
 
@@ -257,36 +247,30 @@ any encoding or envelope selected by the binding.
 
 An xRegistry Schema Resource's document-view URL can identify that external
 schema. It is not the WoT Resource's metadata-view URL. A profile MAY require
-an exact schema Version independently of `wotversion`.
+an exact schema Version independently of the `wotversion` query parameter.
 
 ### Relationship to Other Extensions
 
-This extension does not redefine native message types, sequence counters,
-writer identities or source identities. A profile that also uses the
-[OPC UA extension](opcua.md) MUST specify how its TM-derived type and
-affordance subject interact with that extension's existing type and subject
-mappings. Merely adding `wotid` does not permit overriding them or establish
-conformance to the OPC UA extension.
+This profile does not redefine native message types, sequence counters, or
+writer identities. An event that also uses the [OPC UA extension](opcua.md)
+MUST follow that extension's conditional WoT mapping.
 
 ## Examples
 
 ### Single Affordance
 
-The following CloudEvents describe the same pump and affordance. Both use the
-authored TD's stable `wotid`; their publication profiles select the authored
-and resolved representations, respectively.
+This CloudEvent identifies a pump and its `processData` property. The
+configured resolver selects version `3.0.0` of the resolved TD.
 
 ```json
 {
   "specversion": "1.0",
   "id": "sample-4711",
-  "source": "urn:example:plant:publisher",
-  "type": "com.example.models.%2Ftm%2Fpump.affordance.properties.processData",
-  "subject": "/properties/processData",
+  "source": "wot-td://factory/line1?wotid=urn:example:pump:7;wotversion=3.0.0",
+  "type": "com.example.models.tm.pump.properties.processData",
+  "subject": "#/properties/processData",
   "datacontenttype": "application/json",
   "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
-  "wotid": "urn:example:pump:7",
-  "wotversion": "3",
   "data": {
     "Speed": 1500,
     "Pressure": 4.5
@@ -294,56 +278,27 @@ and resolved representations, respectively.
 }
 ```
 
-For an authored TD selected by `wotid`, the Consumer resolves revision `3`
-through its configured resolver. The subject selects that TD's `processData`
-property. In the JSON event format, `data` is the CloudEvent's payload member;
-it is not named after the affordance. Here, `data` directly contains that
-property's object value without a `processData` wrapper.
-
-The resolved-view form uses the same event attributes. Its publication profile
-selects the resolved TD representation for `wotid`:
-
-```json
-{
-  "specversion": "1.0",
-  "id": "sample-4712",
-  "source": "urn:example:plant:publisher",
-  "type": "com.example.models.%2Ftm%2Fpump.affordance.properties.processData",
-  "subject": "/properties/processData",
-  "datacontenttype": "application/json",
-  "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
-  "wotid": "urn:example:pump:7",
-  "wotversion": "3",
-  "data": {
-    "Speed": 1500,
-    "Pressure": 4.5
-  }
-}
-```
-
-In either form, the separate schema describes the JSON object containing
-`Speed` and `Pressure`; it does not describe the TD document. Another pump
-with the same model and model-affordance mapping can use the same type with a
-different `wotid`.
+The subject selects the property in that resolved view. The payload directly
+contains the property's object value without a `processData` wrapper. The
+separate schema describes that object, not the TD document. Another pump can
+use the same event type with a different Thing identity in its `source`.
 
 ### Whole Thing
 
-This CloudEvent carries aggregated data for the pump described by the same TD.
-The publication profile selects the authored TD and defines a payload containing
-the `processData` and `running` property values. The type uses the governing TM's
-base without an affordance suffix, and `subject` is absent because the event is
-not scoped to one affordance.
+This CloudEvent carries aggregated data for the same pump. Its unversioned
+source selects the current default resolved TD, which this example assumes is
+version `3.0.0`. The publication profile defines a payload containing the
+`processData` and `running` property values. The subject selects the whole TD.
 
 ```json
 {
   "specversion": "1.0",
   "id": "sample-4713",
-  "source": "urn:example:plant:publisher",
-  "type": "com.example.models.%2Ftm%2Fpump",
+  "source": "wot-td://factory/line1?wotid=urn:example:pump:7",
+  "type": "com.example.models.tm.pump",
+  "subject": "#",
   "datacontenttype": "application/json",
   "dataschema": "https://example.com/schemas/pump-state/versions/3",
-  "wotid": "urn:example:pump:7",
-  "wotversion": "3",
   "data": {
     "processData": {
       "Speed": 1500,
@@ -354,7 +309,8 @@ not scoped to one affordance.
 }
 ```
 
-`wotid` and `wotversion` select the TD used to interpret these property values.
+The source selects the TD used to interpret these property values. If the
+default changes, a later resolution of this event can select another version.
 The TD document itself is not the payload. `dataschema` identifies the schema
 of the aggregate JSON object, not the TD or either property's DataSchema alone.
 
@@ -366,13 +322,14 @@ MUST NOT authorize arbitrary network access, redirects or credential
 forwarding. Implementations SHOULD bound document sizes and dependency
 resolution.
 
-The Producer controls these attributes unless another mechanism authenticates
-them. A matching digest does not establish that a TD, its model lineage or a
-schema is authorized for the Consumer's use. Exact revisions and digests do
-not grant access to referenced documents or make their dependencies available.
+The Producer controls the context attributes unless another mechanism
+authenticates them. A version does not establish that a TD, its model lineage,
+or a schema is authorized for the Consumer's use. It does not grant access to
+referenced documents or make their dependencies available.
 
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
 [IRI]: https://www.rfc-editor.org/rfc/rfc3987
+[URI]: https://www.rfc-editor.org/rfc/rfc3986
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
 [WoT Registry]: https://github.com/xregistry/spec/blob/main/workingdrafts/models/wot/spec.md
