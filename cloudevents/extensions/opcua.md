@@ -489,7 +489,7 @@ Content Type: application/json
 specversion: 1.0
 id: ua-message-25460
 source: https://factory.example.com/line1?wotid=urn:example:pump:7;wotversion=3.0.0;site=north
-type: com.example.models.tm.pump.properties.processData
+type: com.example.models.tm.pump.properties.processData.v1
 subject: #/properties/processData
 time: 2026-10-29T12:00:00Z
 dataschema: https://example.com/schemas/pump-process-data/versions/3

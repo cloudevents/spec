@@ -167,17 +167,20 @@ resolution does not by itself prove that retrieved bytes are unchanged.
 
 ### type
 
-The Core [`type`](../spec.md#type) identifies the event contract. Two Things
-can produce events of the same type when their interactions follow the same
-model. This profile uses a dot-separated symbol so a Consumer can map the type
-to a code-generation symbol.
+The Core [`type`](../spec.md#type) identifies the event contract. The contract
+is the payload representation defined by the publication profile or protocol
+binding, including its members, member types, and semantics. Two Things can
+produce events of the same type when their event contracts are the same. This
+profile uses a dot-separated symbol so a Consumer can map the type to a
+code-generation symbol.
 
 The type MUST contain one or more segments separated by single dots. Each
 segment MUST start with an ASCII letter or underscore and contain only ASCII
 letters, digits, or underscores thereafter. These character restrictions apply
 only to `type`; they do not change the Thing identifier, TD member names,
 `source`, `subject`, or payload. A code generator remains responsible for
-language-specific keywords.
+language-specific keywords. The final segment MUST identify the event-contract
+revision as `vN`, where `N` is a positive decimal integer without leading zeros.
 
 A Producer MAY configure the complete type. Otherwise, it derives the type
 from a governing [Thing Model][TM] (TM) and, for an affordance event, the
@@ -196,17 +199,35 @@ For an eligible HTTPS TM identifier, derive the type as follows:
 4. For an affordance event, append the model-affordance JSON Pointer path.
    Decode its [RFC 6901][JSON Pointer] token escaping, then replace each `/`
    with `.`.
+5. Append the event-contract revision as the final segment.
 
 For example, TM `https://models.example.com/tm/pump` and model affordance
-`/properties/processData` produce:
+`/properties/processData` with event-contract revision 1 produce:
 
 ```text
-com.example.models.tm.pump.properties.processData
+com.example.models.tm.pump.properties.processData.v1
 ```
 
-For a whole-Thing event, use the TM-derived type without an affordance path.
-The publication profile defines how interaction data is aggregated into the
-payload.
+For a whole-Thing event, use the TM-derived type without an affordance path,
+then append the revision. The publication profile defines how interaction data
+is aggregated into the payload.
+
+The publication profile MUST assign the same revision to the same event
+contract. A Producer MUST use a new revision when the contract changes,
+including when a member is added or removed, a member's type or meaning
+changes, or the payload envelope changes. This applies even when the change is
+backwardly compatible. A Producer MUST NOT reuse a revision for a different
+contract with the same base type.
+
+For example, adding a `quality` member to
+`com.example.models.tm.pump.properties.processData.v1` requires
+`com.example.models.tm.pump.properties.processData.v2`, even if Consumers can
+ignore the new member.
+
+A change to an individual value or the presence of a member already defined as
+OPTIONAL does not change the contract revision. A change to `wotversion` or
+`dataschema` alone also does not change the revision; if it changes the payload
+contract, the Producer MUST use a new revision.
 
 The Producer MUST configure a valid complete type when the derivation is
 unavailable, produces an invalid symbol, or collides with a different event
@@ -279,7 +300,7 @@ configured resolver selects version `3.0.0` of the resolved TD.
   "specversion": "1.0",
   "id": "sample-4711",
   "source": "https://factory.example.com/line1?wotid=urn:example:pump:7;wotversion=3.0.0;site=north",
-  "type": "com.example.models.tm.pump.properties.processData",
+  "type": "com.example.models.tm.pump.properties.processData.v1",
   "subject": "#/properties/processData",
   "datacontenttype": "application/json",
   "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
@@ -307,7 +328,7 @@ version `3.0.0`. The publication profile defines a payload containing the
   "specversion": "1.0",
   "id": "sample-4713",
   "source": "https://factory.example.com/line1?wotid=urn:example:pump:7;site=north",
-  "type": "com.example.models.tm.pump",
+  "type": "com.example.models.tm.pump.v1",
   "subject": "#",
   "datacontenttype": "application/json",
   "dataschema": "https://example.com/schemas/pump-state/versions/3",
