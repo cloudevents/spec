@@ -65,6 +65,24 @@ def test_source_parameters_allow_other_context_and_parameters(source, expected):
     assert _source_parameters(source) == expected
 
 
+def test_mqtt_source_example_uses_standard_parameters():
+    text = (EXTENSIONS / "wot.md").read_text(encoding="utf-8")
+    section = text.split("## Source\n", 1)[1].split("### Query syntax", 1)[0]
+    examples = re.findall(r"```text\s*\n(mqtt://[^\n]+)\n```", section)
+    assert len(examples) == 1
+    source = examples[0]
+    uri = urlsplit(source)
+    assert (uri.scheme, uri.netloc, uri.path) == (
+        "mqtt",
+        "site",
+        "/line/cell/device/sensor",
+    )
+    assert _source_parameters(source) == {
+        "wotid": "urn:example:sensor:7",
+        "wotversion": "3.0.0",
+    }
+
+
 @pytest.mark.parametrize(
     "query, error",
     (

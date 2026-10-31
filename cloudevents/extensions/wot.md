@@ -36,6 +36,13 @@ https://factory.example.com/line1?wotid=urn:example:pump:7;wotversion=3.0.0;site
 
 The `site` parameter is defined by the Producer, not this profile. An HTTPS
 source is an identifier and is not necessarily a retrieval URL for a TD.
+
+An MQTT source identifier can use the same query parameters:
+
+```text
+mqtt://site/line/cell/device/sensor?wotid=urn:example:sensor:7;wotversion=3.0.0
+```
+
 Another possible form is:
 
 ```text
