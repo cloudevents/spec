@@ -96,10 +96,13 @@ Examples where data classification of events can be useful are:
 
 ## Appendix: Data Protection and Privacy Regulations
 
-For reference purposes, information on data protection and privacy legislation
-worldwide is available from [UNCTAD
+For reference purposes, a catalog of common data protection and privacy
+regulation and abbreviations is availble from [UNCTAD
 (United Nations Conference on Trade and
-Development)](https://unctad.org/page/data-protection-and-privacy-legislation-worldwide).
+Development)](https://unctad.org/page/data-protection-and-privacy-legislation-worldwide),
+under the `DOWNLOAD FULL DATA` button ([direct
+link](https://unctad.org/system/files/information-document/DP.xlsx)). Others
+might exist.
 
 Some examples include:
 - `GDPR` - General Data Protection Regulation, Europe
