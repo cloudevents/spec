@@ -127,6 +127,13 @@ CloudEvents `source`. A Publisher using this mapping MUST scope `source` to the
 DataSetWriter's ordering scope; otherwise, it MUST NOT present the per-writer
 counter as the CloudEvents `sequence`.
 
+The Sequence extension compares String values lexicographically. The Producer
+MUST format the mapped counter so that string comparison preserves the event
+order; padding the unsigned decimal value to ten digits is one way to do so.
+A reset or rollover can reverse that order within the same source scope. The
+Producer MUST NOT use the counter for `sequence` when it cannot preserve the
+ordering defined by the Sequence extension.
+
 When the WoT profile is also used, `subject` identifies a TD or affordance, not
 the DataSetWriter. `opcuasequence` therefore carries the native OPC UA counter;
 a CloudEvents `sequence`, if present, MUST satisfy the Sequence extension's
@@ -331,7 +338,7 @@ id: 1235-1235-1235
 source: urn:factory:aggregationserver:opcua
 datacontenttype: application/json; charset=utf-8
 subject: energy-consumption-asset
-sequence: 7
+sequence: 0000000007
 traceparent: 4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00000011
 recordedtime: 2024-03-28T21:56:43Z
 opcuametadatamajorversion: 672338910
@@ -406,7 +413,7 @@ id: 1236-1237-1238
 source: urn:factory:aggregationserver:opcua
 datacontenttype: application/json; charset=utf-8
 subject: energy-consumption-asset/444321
-sequence: 18
+sequence: 0000000018
 traceparent: caffef3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00000011
 recordedtime: 2024-03-28T21:57:01Z
 opcuametadatamajorversion: 672338910
@@ -449,7 +456,7 @@ source: bottling-company/amsterdam/FillingArea1/FillingLine9/Cell1/Conveyor
 datacontenttype: application/avro
 subject: energy-consumption-asset
 dataschema: http://example.com/schemas/energy-consumption-asset/v1.8
-sequence: 3141
+sequence: 0000003141
 traceparent: 22222f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00000011
 recordedtime: 2024-03-28T23:59:59Z
        .... further attributes ...

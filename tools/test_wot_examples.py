@@ -83,3 +83,27 @@ def test_opcua_binary_example_retains_native_writer_and_uint32_sequence():
     assert "sequence" not in event
     payload_json = payload.split("-----------------------------------------------", 1)[0]
     assert json.loads(payload_json) == {"Speed": 1500, "Pressure": 4.5}
+
+
+def test_ua_only_sequence_examples_preserve_lexicographic_order():
+    text = (EXTENSIONS / "opcua.md").read_text(encoding="utf-8")
+    sections = [
+        "### Telemetry message\n",
+        "### Event message\n",
+        "### Telemetry message with different Encoding\n",
+    ]
+    examples = [
+        text.split(heading, 1)[1].split("\n### ", 1)[0] for heading in sections
+    ]
+    sequences = [
+        re.search(r"^sequence: (\S+)$", example, re.MULTILINE).group(1)
+        for example in examples
+    ]
+    sources = [
+        re.search(r"^source: (\S+)$", example, re.MULTILINE).group(1)
+        for example in examples
+    ]
+    assert sequences == ["0000000007", "0000000018", "0000003141"]
+    assert [int(sequence) for sequence in sequences] == [7, 18, 3141]
+    assert sources[0] == sources[1]
+    assert sequences[0] < sequences[1]
