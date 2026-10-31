@@ -3,31 +3,88 @@ import re
 from pathlib import Path
 from urllib.parse import quote, unquote_to_bytes, urlsplit
 
+import pytest
+
 
 EXTENSIONS = Path(__file__).resolve().parents[1] / "cloudevents" / "extensions"
 TYPE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*")
 SAFE_VALUE = "!$'()*,:@/?"
+STANDARD_PARAMETERS = {"wotid", "wotversion"}
 
 
 def _source_parameters(source):
+    assert source
     uri = urlsplit(source)
-    assert uri.scheme == "wot-td"
-    assert uri.hostname
-    assert uri.username is None and uri.password is None
-    assert "#" not in source
     parts = uri.query.split(";")
-    assert len(parts) in (1, 2)
     values = {}
-    for part in parts:
+    for index, part in enumerate(parts):
         name, separator, encoded = part.partition("=")
+        if name not in STANDARD_PARAMETERS:
+            continue
+        assert (name == "wotid" and index == 0) or (
+            name == "wotversion" and index == 1 and "wotid" in values
+        )
         assert separator and encoded and "=" not in encoded
         assert name not in values
         assert not re.search(r"%(?![0-9A-Fa-f]{2})", encoded)
         value = unquote_to_bytes(encoded).decode("utf-8", errors="strict")
         assert quote(value, safe=SAFE_VALUE) == encoded
         values[name] = value
-    assert list(values) in (["wotid"], ["wotid", "wotversion"])
+    assert "wotid" in values
     return values
+
+
+@pytest.mark.parametrize(
+    "source, expected",
+    (
+        (
+            "https://factory.example.com/line1?wotid=urn:example:pump:7"
+            ";wotversion=3.0.0;site=north",
+            {"wotid": "urn:example:pump:7", "wotversion": "3.0.0"},
+        ),
+        (
+            "wot-td://factory/line1?wotid=urn:example:pump:7;"
+            "wotversion=3.0.0;site=north",
+            {"wotid": "urn:example:pump:7", "wotversion": "3.0.0"},
+        ),
+        (
+            "line1?wotid=urn:example:pump:7;site=north;site=south#details",
+            {"wotid": "urn:example:pump:7"},
+        ),
+        (
+            "custom:line1?wotid=urn:example:pump:7;site=north",
+            {"wotid": "urn:example:pump:7"},
+        ),
+        (
+            "?wotid=urn:example:caf%C3%A9%252F;other=a=b;flag",
+            {"wotid": "urn:example:caf\u00e9%2F"},
+        ),
+    ),
+)
+def test_source_parameters_allow_other_context_and_parameters(source, expected):
+    assert _source_parameters(source) == expected
+
+
+@pytest.mark.parametrize(
+    "query, error",
+    (
+        ("site=north", AssertionError),
+        ("site=north;wotid=urn:example:pump:7", AssertionError),
+        ("wotid=", AssertionError),
+        ("wotid=urn:example:pump:7;wotversion=", AssertionError),
+        ("wotid=urn:example:pump:7;wotid=urn:example:pump:8", AssertionError),
+        ("wotid=urn:example:pump:7;wotversion=1;wotversion=2", AssertionError),
+        ("wotversion=1;wotid=urn:example:pump:7", AssertionError),
+        ("wotid=urn:example:pump:7;site=north;wotversion=1", AssertionError),
+        ("wotid=urn:example:pump:7&wotversion=1", AssertionError),
+        ("wotid=urn:example:pump%2", AssertionError),
+        ("wotid=urn:example:pump%FF", UnicodeDecodeError),
+        ("wotid=urn:example:pump+7", AssertionError),
+    ),
+)
+def test_source_parameters_reject_invalid_standard_parameters(query, error):
+    with pytest.raises(error):
+        _source_parameters(f"https://factory.example.com/line1?{query}")
 
 
 def _assert_wot_context(event):
@@ -52,6 +109,8 @@ def test_wot_json_examples_use_canonical_core_attributes():
         "wotversion": "3.0.0",
     }
     assert _assert_wot_context(whole_thing) == {"wotid": "urn:example:pump:7"}
+    assert urlsplit(affordance["source"]).query.endswith(";site=north")
+    assert urlsplit(whole_thing["source"]).query.endswith(";site=north")
     assert affordance["subject"] == "#/properties/processData"
     assert affordance["type"] == "com.example.models.tm.pump.properties.processData"
     assert affordance["data"] == {"Speed": 1500, "Pressure": 4.5}
@@ -73,6 +132,7 @@ def test_opcua_binary_example_retains_native_writer_and_uint32_sequence():
         "wotid": "urn:example:pump:7",
         "wotversion": "3.0.0",
     }
+    assert urlsplit(event["source"]).query.endswith(";site=north")
     assert event["type"] == "com.example.models.tm.pump.properties.processData"
     assert event["subject"] == "#/properties/processData"
     assert event["opcuapublisherid"] == "UInt16:12"

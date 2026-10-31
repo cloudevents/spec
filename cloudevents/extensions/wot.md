@@ -5,9 +5,10 @@ Core context attributes. The `source` identifies the Thing and, when provided,
 a version of its resolved TD. The `subject` identifies the part of that TD
 associated with the event, and the `type` names the event contract.
 
-The profile defines no CloudEvents extension attributes. Its use is identified
-by the `wot-td` scheme in `source`. It does not define a transport binding,
-provision a Thing, or require a particular registry implementation.
+The profile defines no CloudEvents extension attributes or URI scheme.
+Producers and Consumers agree on its use through a publication profile or out
+of band. It does not define a transport binding, provision a Thing, or require
+a particular registry implementation.
 
 ## Notational Conventions
 
@@ -21,56 +22,59 @@ attribute marked REQUIRED here is not REQUIRED in every CloudEvent.
 
 ## Source
 
-The Core [`source`](../spec.md#source) identifies a Thing within a configured
-logical topology. It uses this absolute URI form:
-
-```text
-wot-td://<topology>?wotid=<encoded-wotid>[;wotversion=<encoded-version>]
-```
+The Core [`source`](../spec.md#source) identifies a Thing within the Producer's
+chosen context. It MUST contain the `wotid` query parameter and MAY contain
+`wotversion` and additional parameters. This profile does not prescribe the URI
+scheme or the rest of the URI-reference. Core permits relative URI-references
+and recommends an absolute URI.
 
 For example:
+
+```text
+https://factory.example.com/line1?wotid=urn:example:pump:7;wotversion=3.0.0;site=north
+```
+
+The `site` parameter is defined by the Producer, not this profile. An HTTPS
+source is an identifier and is not necessarily a retrieval URL for a TD.
+Another possible form is:
 
 ```text
 wot-td://factory/line1?wotid=urn:example:pump:7;wotversion=3.0.0
 ```
 
-`wotid` and `wotversion` are query parameters, not CloudEvents attributes.
-The `wot-td` scheme is proposed and is not currently registered with IANA.
-The URI is an identifier for a configured resolver; it is not an HTTP registry
-URL and does not itself specify where to retrieve a TD.
-
-### Topology
-
-The Producer configures the topology. It consists of a non-empty authority
-followed by an OPTIONAL hierarchical path. Both MUST conform to
-[RFC 3986][URI]. The authority MUST contain a non-empty host and MUST NOT
-contain user information. The host need not be a resolvable DNS name.
-Implementations MUST apply RFC 3986 host case rules and MUST NOT change the
-case of the path when interpreting the topology.
-
-The topology can represent, for example, a site and production line. It is
-not the Thing's identity or a registry Resource identifier.
+This profile does not define the `wot-td` scheme or propose its registration.
+The part of `source` outside the standardized parameters can identify a
+topology, publisher, or another Producer-defined context. This profile does
+not prescribe its structure or derive a TD retrieval location from it.
 
 ### Query syntax and encoding
 
-The query contains `wotid` followed by an OPTIONAL `wotversion`. The literal
-parameter names are case-sensitive, and `;` separates the parameters. Each
-parameter consists of its name, one `=`, and a non-empty value. No other
-parameters are defined.
+The `source` query uses `;` as the parameter separator. This profile
+standardizes two query parameters, not CloudEvents attributes: `wotid` is
+REQUIRED and appears first; `wotversion` is OPTIONAL and, when present,
+immediately follows `wotid`. Their names are case-sensitive and MUST appear
+literally. Each MUST use `name=value` with a non-empty value. `wotid` MUST
+appear exactly once, and `wotversion` MUST NOT appear more than once.
 
-The value's unescaped characters are the RFC 3986 `unreserved` characters
-and `!`, `$`, `'`, `(`, `)`, `*`, `,`, `:`, `@`, `/`, and `?`. A Producer
-MUST leave these characters unescaped. It MUST percent-encode the UTF-8 bytes
-of all other characters using uppercase hexadecimal digits.
-In particular, a literal `%`, `;`, `=`, `&`, `+`, or `#` in a value MUST be
-encoded. A Producer MUST NOT use form-query encoding or encode a space as `+`.
+A Producer MAY include additional parameters after the standardized parameters.
+This profile does not assign them a meaning; a publication contract MAY define
+their semantics. A Consumer MUST NOT reject a source solely because it contains
+parameters not defined by this profile.
 
-A Consumer MUST split the query at `;` before decoding the values. It MUST
-reject an unknown or duplicate parameter, a missing or empty `wotid`, an empty
-`wotversion`, an invalid percent escape, invalid UTF-8, an out-of-order
-parameter, an unescaped character outside the permitted set, or a URI with an
-outer fragment. It MUST percent-decode each value exactly once and MUST NOT
-interpret `+` as a space.
+For the standardized values, the unescaped characters are the
+[RFC 3986][URI] `unreserved` characters and `!`, `$`, `'`, `(`, `)`, `*`,
+`,`, `:`, `@`, `/`, and `?`. A Producer MUST leave these characters
+unescaped. It MUST percent-encode the UTF-8 bytes of all other characters using
+uppercase hexadecimal digits. In particular, a literal `%`, `;`, `=`, `&`,
+`+`, or `#` in a standardized value MUST be encoded. A Producer MUST NOT use
+form-query encoding or encode a space as `+` for those values.
+
+A Consumer MUST split the query at `;` before decoding the standardized values.
+It MUST reject a missing or empty `wotid`, an empty `wotversion`, a duplicate
+standardized parameter, or a standardized parameter in the wrong position. For
+a standardized value, it MUST reject an invalid percent escape, invalid UTF-8,
+or an unescaped character outside the permitted set. It MUST percent-decode
+each standardized value exactly once and MUST NOT interpret `+` as a space.
 
 For example, an identifier containing U+00E9 followed by the literal characters
 `%2F` encodes that portion as `%C3%A9%252F`. One decoding pass recovers the
@@ -105,10 +109,11 @@ than the one available when the event was produced. A publication profile
 that requires repeatable replay MUST require `wotversion`.
 
 Core requires `source` and `id` together to identify each distinct event.
-Changing the topology or version changes the `source` and therefore its event
-identity and [Sequence extension](sequence.md) scope. Returning to an earlier
-`source` returns to its existing scope: Producers MUST NOT reuse event
-identities or restart a claimed source-wide sequence within that scope.
+Changing the `source`, including its context, version, or other parameters,
+changes the event identity and [Sequence extension](sequence.md) scope.
+Returning to an earlier `source` returns to its existing scope: Producers MUST
+NOT reuse event identities or restart a claimed source-wide sequence within
+that scope.
 
 ## Resolving the Thing Description
 
@@ -266,7 +271,7 @@ configured resolver selects version `3.0.0` of the resolved TD.
 {
   "specversion": "1.0",
   "id": "sample-4711",
-  "source": "wot-td://factory/line1?wotid=urn:example:pump:7;wotversion=3.0.0",
+  "source": "https://factory.example.com/line1?wotid=urn:example:pump:7;wotversion=3.0.0;site=north",
   "type": "com.example.models.tm.pump.properties.processData",
   "subject": "#/properties/processData",
   "datacontenttype": "application/json",
@@ -294,7 +299,7 @@ version `3.0.0`. The publication profile defines a payload containing the
 {
   "specversion": "1.0",
   "id": "sample-4713",
-  "source": "wot-td://factory/line1?wotid=urn:example:pump:7",
+  "source": "https://factory.example.com/line1?wotid=urn:example:pump:7;site=north",
   "type": "com.example.models.tm.pump",
   "subject": "#",
   "datacontenttype": "application/json",
