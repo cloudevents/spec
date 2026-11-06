@@ -81,6 +81,10 @@
     }
   },
   "required": ["id", "source", "specversion", "type"],
+  "not": {
+    "description": "The data and data_base64 members are mutually exclusive.",
+    "required": ["data", "data_base64"]
+  },
   "definitions": {
     "iddef": {
       "type": "string",
