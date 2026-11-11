@@ -217,38 +217,28 @@ The value for each HTTP header is constructed from the respective attribute
 type's [canonical string representation][ce-types].
 
 Some CloudEvents metadata attributes can contain arbitrary UTF-8 string content,
-and per [RFC7230, section 3][rfc7230-section-3], HTTP headers MUST only use
-printable characters from the US-ASCII character set, and are terminated by a
-CRLF sequence with OPTIONAL whitespace around the header value.
+and per the
+[HTTP specification](https://www.rfc-editor.org/info/rfc9110/#section-5), any
+non-printable characters from the US-ASCII character set MUST be encoded.
+CloudEvents implementations MUST use
+[percent-encoding](https://www.rfc-editor.org/info/rfc8187).
 
-Since the CloudEvents specification does not define an "array" or "list" types,
+Implementations MAY also choose to encode printable US-ASCII characters.
+
 CloudEvents HTTP headers SHOULD NOT leverage the "combined field value"
 feature of HTTP where multiple header values can be specified on a single
 HTTP header separated by a comma (`,`).
 
-When encoding a CloudEvent as an HTTP message, string values represented as
-HTTP header values MUST adhere to the
-[HTTP specification](https://www.rfc-editor.org/info/rfc9110/#section-5), and
-therefore any non-printable US-ASCII characters MUST be encoded.
-Implementations MUST use
-[percent encoding](https://www.rfc-editor.org/info/rfc8187).
-
-Implementations MAY also choose to encode printable US-ASCII characters.
-
 Previous versions of the CloudEvents specification mandated that all
-non-leading/trailing spaces be percent encoded, however, that is no longer the
+non-leading/trailing spaces be percent-encoded, however, that is no longer the
 case. Instead, per the HTTP specification, only leading or trailing spaces that
 are not meant to be "stripped" MUST be encoded. Note that all spaces that are
-within double-quoted range of characters MUST NOT be stripped.
+within double-quoted range of characters, or are non-leading/trailing,
+MUST NOT be stripped.
 
-Decoding of an HTTP header value MUST adhere to the HTTP specification.
-For clarity, that include:
-- removing any non-encoded leading/trailing whitespaces from each value.
-- processing backslashed (`\`) characters within double-quoted ranges.
-- removing any non-encoded double-quoted characters from each value.
-- decoded any percent-encoded characters.
+Processing of double-quotes, MUST adhere to the HTTP specification.
 
-Percent encoding is performed by considering each non-printable Unicode
+Percent-encoding is performed by considering each non-printable Unicode
 character (ones outside the ASCII range of U+0021-U+007E) within the
 attribute's canonical string representation. Any character represented in
 memory as a [Unicode surrogate pair][surrogate-pair] MUST be treated as a
@@ -266,11 +256,17 @@ Steps to encode a Unicode character:
 Percent-encoding SHOULD be performed using upper-case for values A-F,
 but decoding MUST accept lower-case values.
 
-When performing percent-decoding (when decoding an HTTP message to a
-CloudEvent), values that have been unnecessarily percent-encoded MUST be
-accepted, but encoded byte sequences which are invalid in UTF-8 MUST be
-rejected. (For example, "%C0%A0" is an overlong encoding of U+0020, and
-MUST be rejected.)
+Decoding of an HTTP header value MUST adhere to the HTTP specification.
+For clarity, that includes:
+- removing any non-encoded leading/trailing whitespaces from each value.
+- processing backslashed (`\`) characters within double-quoted ranges.
+- removing any non-encoded double-quoted characters from each value.
+- decoded any percent-encoded characters.
+
+When performing percent-decoding, values that have been unnecessarily
+percent-encoded MUST be accepted, but encoded byte sequences which are invalid
+in UTF-8 MUST be rejected. (For example, "%C0%A0" is an overlong encoding of
+U+0020, and MUST be rejected.)
 
 Example: a header value of `Euro &#x20AC; &#x1F600;` SHOULD be encoded as
 follows:
