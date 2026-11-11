@@ -184,10 +184,9 @@ The [`data`](#22-data) byte-sequence is used as the HTTP message body.
 #### 3.1.3. Metadata Headers
 
 All other [CloudEvents][ce] attributes, including extensions, MUST be
-individually mapped to and from distinct HTTP message header and follow
+individually mapped to and from distinct HTTP message headers and follow
 the guidelines defined by the
-[HTTP specification](https://www.rfc-editor.org/info/rfc9110),
-[section 5](https://www.rfc-editor.org/info/rfc9110/#section-5.1).
+[HTTP specification](https://www.rfc-editor.org/info/rfc9110/#section-5.1).
 
 CloudEvents extensions that define their own attributes MAY define a secondary
 mapping to HTTP headers for those attributes, especially if specific attributes
@@ -223,9 +222,12 @@ non-printable characters from the US-ASCII character set MUST be encoded.
 CloudEvents implementations MUST use
 [percent-encoding](https://www.rfc-editor.org/info/rfc8187).
 
-Implementations MAY also choose to encode printable US-ASCII characters.
+Implementations MAY choose to percent-encode printable US-ASCII characters in
+addition to the characters mandated to be encoded by
+[RFC8187](https://www.rfc-editor.org/info/rfc8187).
 
-CloudEvents HTTP headers SHOULD NOT leverage the "combined field value"
+Since CloudEvents does not define a list/array data type, CloudEvents HTTP
+headers SHOULD NOT need to leverage the "combined field value"
 feature of HTTP where multiple header values can be specified on a single
 HTTP header separated by a comma (`,`).
 
@@ -234,9 +236,9 @@ non-leading/trailing spaces be percent-encoded, however, that is no longer the
 case. Instead, per the HTTP specification, only leading or trailing spaces that
 are not meant to be "stripped" MUST be encoded. Note that all spaces that are
 within double-quoted range of characters, or are non-leading/trailing,
-MUST NOT be stripped.
+MUST NOT be stripped by receivers.
 
-Processing of double-quotes, MUST adhere to the HTTP specification.
+Processing of double-quotes MUST adhere to the HTTP specification.
 
 Percent-encoding is performed by considering each non-printable Unicode
 character (ones outside the ASCII range of U+0021-U+007E) within the
@@ -261,7 +263,7 @@ For clarity, that includes:
 - removing any non-encoded leading/trailing whitespaces from each value.
 - processing backslashed (`\`) characters within double-quoted ranges.
 - removing any non-encoded double-quoted characters from each value.
-- decoded any percent-encoded characters.
+- decoding any percent-encoded characters.
 
 When performing percent-decoding, values that have been unnecessarily
 percent-encoded MUST be accepted, but encoded byte sequences which are invalid
