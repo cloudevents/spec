@@ -131,7 +131,8 @@ field `Timestamp`.
 
 The following well-known extension attributes apply to data and event
 messages. When the WoT profile is used, determine the native message type
-from `opcuamessagetype`.
+from `opcuamessagetype` when present or from the retained NetworkMessage's
+DataSetMessage header when it contains `MessageType`.
 
 ### sequence
 
