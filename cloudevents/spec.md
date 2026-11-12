@@ -243,7 +243,10 @@ string-encoding for each type that MUST be supported by all implementations.
   - String encoding: `URI-reference` as defined in
     [RFC 3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1).
 - `Timestamp` - Date and time expression using the Gregorian Calendar.
-  - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339).
+  - String encoding: [RFC 3339](https://tools.ietf.org/html/rfc3339). Note
+    that the RFC mentions using a character other that `T` as the separator
+    between the date and time; implementationts MUST use `T`. While lowercase
+    `t` and `z` are also permitted, only uppercase variants SHOULD be used.
 
 All context attribute values MUST be of one of the types listed above.
 Attribute values MAY be presented as native types or canonical strings.
