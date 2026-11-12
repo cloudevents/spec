@@ -40,10 +40,9 @@ field `MessageId`.
 An OPC UA Producer MAY identify the server using its
 [Application Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1)
 field `applicationUri` or a customer-configured identifier such as a unified
-namespace path. A Producer using the WoT profile MUST instead follow its
-`source` mapping. For data and event messages, a Producer MUST include
-each publisher or writer query parameter REQUIRED by the mapping unless the
-full OPC UA Part 14 NetworkMessage envelope or the Context supplies its
+namespace path. For data and event messages, a Producer MUST include each
+publisher or writer query parameter REQUIRED by the mapping unless the full
+OPC UA Part 14 NetworkMessage envelope or the Context supplies its
 corresponding value.
 
 ### type
@@ -52,8 +51,11 @@ An OPC UA Producer MAY map `type` to the
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MessageType`. A Producer using the WoT profile MUST follow its semantic
 event-type rules. When the `type` identifies a WoT event contract, a Producer
-MUST carry the native `MessageType` as `opcuamessagetype` in the event. The
-[WoT mapping section](#wot-mapping) specifies the combined mapping.
+MUST carry the native `MessageType` as `opcuamessagetype` when `data` omits
+that field from the DataSetMessage header. When a retained NetworkMessage
+envelope includes the field, the Producer MUST NOT repeat it as an event
+attribute. The [WoT mapping section](#wot-mapping) specifies the combined
+mapping.
 
 ### WoT mapping
 
@@ -61,35 +63,27 @@ When a CloudEvent uses both this extension and the
 [WoT profile](./wot.md), the following mappings apply to data and event
 messages:
 
-- `source` MUST follow the WoT profile's source mapping.
 - `type` MUST follow the WoT profile's semantic event-type rules instead of
   mapping to the native `MessageType`.
 - `subject` MUST follow the WoT profile's resolved-TD pointer rules.
 - The native PublisherId and at least one DataSetWriter identifier MUST be
   available from the full Part 14 NetworkMessage envelope, `source`, or the
   Context, as defined in [Publisher and Writer Metadata](#publisher-and-writer-metadata).
-  Writer identifiers MUST NOT be appended to `subject`.
-- For an event message, the `EventId` remains in the OPC UA event payload and
-  MUST NOT be appended to `subject`.
+- Nothing MUST be appended to `subject`. For an event message, the `EventId`
+  remains in the OPC UA event payload.
 - `opcuasequence` MUST carry the native `SequenceNumber`. The CloudEvents
   `sequence` attribute, when present, MUST satisfy the independent ordering
   requirements of the Sequence extension and MUST NOT be inferred from
   `opcuasequence`.
 
 The [publisher and writer metadata rules](#publisher-and-writer-metadata)
-define the source-query and Context representations of these identifiers.
-They do not relocate `source`, `type`, or `subject`, and they do not change
-how those Core attributes map.
-Native identifiers retained in a full NetworkMessage envelope satisfy the
-same presence requirements.
+define how OPC UA publisher and writer identifiers are supplied. The Core
+attribute mappings above remain unchanged.
 
 These conditional mappings replace only the conflicting OPC UA mappings above.
 All other requirements in this extension remain applicable. A profile that
 uses only part of this extension MUST NOT claim conformance to it unless the
-profile satisfies every applicable requirement in this document. Producers
-sharing a WoT `source` MUST assign distinct native `MessageId` values to
-distinct events within that source to satisfy Core's `source` and `id`
-uniqueness requirement.
+profile satisfies every applicable requirement in this document.
 
 ## Mapping of OPTIONAL Attributes
 
@@ -216,12 +210,14 @@ than omit the status, wrap the value, or report it as _Good_.
 ### opcuamessagetype
 
 - Type: `String`
-- Description: Carries the OPC UA PubSub DataSetMessage type when `type`
-  identifies a WoT semantic event type.
+- Description: Carries the OPC UA PubSub DataSetMessage type when the
+  DataSetMessage header is omitted from `data`.
 - Constraints
   - OPTIONAL
   - In combination with the WoT profile, the value is REQUIRED for data and
-    event messages.
+    event messages when `data` omits the DataSetMessage header.
+  - MUST NOT be present when `data` retains a full NetworkMessage envelope
+    that includes the DataSetMessage `MessageType`.
   - MUST map to the Data Set Message Header `MessageType`.
   - The value MUST be the native OPC UA message type, such as `ua-keyframe`,
     `ua-deltaframe` or `ua-event`.
@@ -357,15 +353,17 @@ referenced via `dataschema` attribute or selected through Event Context.
   Otherwise, the payload MUST omit the NetworkMessage and DataSetMessage
   headers and supply their applicable information through the mappings in
   this extension.
-- OPC UA PubSub JSON messages MUST contain exactly one dataset message.
+- OPC UA PubSub JSON messages MUST contain exactly one DataSetMessage,
+  including when a full NetworkMessage envelope is retained.
 
 A retained envelope does not replace the REQUIRED CloudEvents attributes or
-the per-event `opcuamessagetype` and `opcuasequence` attributes when the WoT
-mapping applies. `opcuamessagetype` identifies the DataSetMessage type, not
-the enclosing NetworkMessage's `ua-data` type. Duplicated values MUST agree
-with their native fields after applying the specified mappings. The Consumer
-MUST report a conflict and MUST NOT interpret a message as conforming to this
-extension when they disagree.
+the per-event `opcuasequence` attribute when the WoT mapping applies.
+`opcuamessagetype` is REQUIRED only when `data` omits the DataSetMessage
+header; when the envelope includes that field, the attribute MUST be absent.
+The NetworkMessage's `ua-data` type is not the DataSetMessage type. Any
+duplicated native values MUST agree after applying the specified mappings.
+The Consumer MUST report a conflict and MUST NOT interpret a message as
+conforming to this extension when they disagree.
 
 ## Shared Stream Metadata in a Context
 
@@ -735,7 +733,6 @@ type: com.example.models.tm.pump.properties.processData.v2
 subject: #/properties/processData
 time: 2026-10-29T12:00:01Z
 contexturl: https://registry.example/contextgroups/line1/contexts/opcua-pump-process-data/versions/2
-opcuamessagetype: ua-keyframe
 opcuasequence: 0
 
 ------------------ payload -------------------
@@ -763,7 +760,9 @@ opcuasequence: 0
 
 The native sequence has rolled over from `4294967295` to `0`; it remains
 `opcuasequence`, not a CloudEvents `sequence`. The event still uses `contexturl`
-to select its TD and schema, and carries `opcuamessagetype` in the event.
+to select its TD and schema. The DataSetMessage's `MessageType` remains in the
+retained NetworkMessage envelope instead of being repeated as
+`opcuamessagetype`.
 
 ## Context Retrieval Security
 
