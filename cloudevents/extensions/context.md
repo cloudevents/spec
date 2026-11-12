@@ -149,8 +149,8 @@ the same schema when several are supplied. Consumers apply the precedence
 without comparing the sources.
 
 An `emitter` Reference does not authenticate the event or redefine `source`.
-The [WoT profile](wot.md) defines how it selects a Thing Description (TD) when
-this extension is used. The
+The [WoT profile](wot.md) requires this extension and defines how `emitter`
+selects a Thing Description (TD). The
 [OPC UA extension](opcua.md#shared-stream-metadata-in-a-context)
 defines which stream metadata can be supplied by a Context. Neither rule
 applies to generic events merely because they contain `contexturl`.
