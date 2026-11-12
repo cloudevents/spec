@@ -51,7 +51,7 @@ An OPC UA Producer MAY map `type` to the
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MessageType`. A Producer using the WoT profile MUST follow its semantic
 event-type rules. When the `type` identifies a WoT event contract, a Producer
-SHOULD carry the native `MessageType` as `opcuamessagetype` in the event. The
+MUST carry the native `MessageType` as `opcuamessagetype` in the event. The
 [WoT mapping section](#wot-mapping) requires it when both
 profiles are used.
 
