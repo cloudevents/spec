@@ -49,8 +49,8 @@ An OPC UA Producer MAY map `type` to the
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MessageType`. A Producer using the WoT profile MUST follow its semantic
 event-type rules. When the `type` identifies a WoT event contract, a Producer
-SHOULD carry the native `MessageType` as `opcuamessagetype` in the event or
-Context. The [WoT mapping section](#wot-mapping) requires it when both
+SHOULD carry the native `MessageType` as `opcuamessagetype` in the event. The
+[WoT mapping section](#wot-mapping) requires it when both
 profiles are used.
 
 ### WoT mapping
@@ -62,8 +62,7 @@ messages:
 - `source` MUST follow the WoT profile's source mapping.
 - `type` MUST follow the WoT profile's semantic event-type rules instead of
   mapping to the native `MessageType`.
-- The native `MessageType` MUST be supplied as `opcuamessagetype` in the event
-  or Context.
+- The native `MessageType` MUST be supplied as `opcuamessagetype` in the event.
 - `subject` MUST follow the WoT profile's resolved-TD pointer rules.
 - Publisher and writer metadata supplied in `source` or the Context MUST
   identify the native Publisher and DataSetWriter. Writer identifiers MUST NOT
@@ -220,7 +219,7 @@ than omit the status, wrap the value, or report it as _Good_.
 - Constraints
   - OPTIONAL
   - In combination with the WoT profile, the value is REQUIRED for data and
-    event messages, in the event or Context.
+    event messages.
   - MUST map to the Data Set Message Header `MessageType`.
   - The value MUST be the native OPC UA message type, such as `ua-keyframe`,
     `ua-deltaframe` or `ua-event`.
@@ -365,7 +364,6 @@ processed.
 | `opcuadatasetwritername` | The stream's configured DataSetWriterName, when used. |
 | `opcuametadatamajorversion` | The MajorVersion of the applicable native metadata, when no payload schema is selected. |
 | `opcuametadataminorversion` | The MinorVersion of the applicable native metadata, when no payload schema is selected. |
-| `opcuamessagetype` | The native MessageType, only for a stream restricted to one message type. Streams that mix keyframes, deltaframes, or events retain it in each event. |
 
 These members MUST use the value constraints and native field mappings
 defined in [Attributes](#attributes) and
@@ -382,8 +380,8 @@ the corresponding value. The existing OPC UA event attributes remain valid.
 
 If a publisher or writer value appears in both the `source` query and the
 Context, the values MUST agree after decoding and type conversion. If an event
-attribute and the Context both supply a metadata version or message type,
-their typed values MUST agree. On a conflict, the Consumer MUST report a
+attribute and the Context both supply a metadata version, their typed values
+MUST agree. On a conflict, the Consumer MUST report a
 metadata conflict and MUST NOT interpret the payload using that Context. If a
 REQUIRED value is absent from all applicable locations, the Consumer MUST
 report missing metadata and MUST NOT interpret the payload as a conforming
@@ -402,12 +400,12 @@ payload contract also requires a changed WoT `type` revision when that profile
 is used; changing only `contexturl` is not sufficient.
 
 Values that vary by occurrence remain in each event. In particular,
-`opcuasequence`, `opcuastatus` when REQUIRED, `id`, and `time` MUST NOT be
-supplied by the Context as replacements for their event attributes. Tracing,
-recording times, and a CloudEvents `sequence`, when used, also remain in the
-event. A Consumer MUST NOT use Context members with those names as event
-values. Core attributes retain their normal placement and meaning even when
-their values happen to be constant for a stream.
+`opcuamessagetype`, `opcuasequence`, `opcuastatus` when REQUIRED, `id`, and
+`time` MUST NOT be supplied by the Context as replacements for their event
+attributes. Tracing, recording times, and a CloudEvents `sequence`, when used,
+also remain in the event. A Consumer MUST NOT use Context members with those
+names as event values. Core attributes retain their normal placement and
+meaning even when their values happen to be constant for a stream.
 
 Without a `contexturl`, no Context supplies missing OPC UA values. This
 preserves the existing event attributes and lets a Producer supply publisher
