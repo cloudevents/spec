@@ -1,14 +1,17 @@
 # Web of Things
 
 This profile maps a [Web of Things Thing Description][TD] (TD) to CloudEvents
-Core context attributes. The `source` identifies the Thing and, when provided,
-a version of its resolved TD. The `subject` identifies the part of that TD
-associated with the event, and the `type` names the event contract.
+Core context attributes and the [Event Context extension](context.md).
+The `contexturl` identifies shared metadata whose `emitter` Reference selects
+the resolved TD. The `subject` identifies the part of that TD associated with
+the event, and the `type` names the event contract. Without `contexturl`, the
+`source` query parameters select the Thing and its resolved TD.
 
 The profile defines no CloudEvents extension attributes or URI scheme.
 Producers and Consumers agree on its use through a publication profile or out
 of band. It does not define a transport binding, provision a Thing, or require
-a particular registry implementation.
+a particular registry implementation. Events with `contexturl` use the
+xRegistry Context representation.
 
 ## Notational Conventions
 
@@ -23,10 +26,14 @@ attribute marked REQUIRED here is not REQUIRED in every CloudEvent.
 ## Source
 
 The Core [`source`](../spec.md#source) identifies a Thing within the Producer's
-chosen context. It MUST contain the `wotid` query parameter and MAY contain
-`wotversion` and additional parameters. This profile does not prescribe the URI
-scheme or the rest of the URI-reference. Core permits relative URI-references
-and recommends an absolute URI.
+chosen context. With `contexturl`, it follows Core's URI-reference rules and
+does not need `wotid` or `wotversion`. The Context's `emitter` Reference, not
+the `source`, selects the resolved TD.
+
+Without `contexturl`, `source` MUST contain the `wotid` query parameter and MAY
+contain `wotversion` and additional parameters. This profile does not prescribe
+the URI scheme or the rest of the URI-reference. Core permits relative
+URI-references and recommends an absolute URI.
 
 For example:
 
@@ -55,6 +62,8 @@ topology, publisher, or another Producer-defined context. This profile does
 not prescribe its structure or derive a TD retrieval location from it.
 
 ### Query syntax and encoding
+
+This subsection applies when the event has no `contexturl`.
 
 The `source` query uses `;` as the parameter separator. This profile
 standardizes two query parameters, not CloudEvents attributes: `wotid` is
@@ -90,6 +99,9 @@ a slash.
 
 ### Thing identity and version
 
+This subsection applies to selection through `source` when the event has no
+`contexturl`.
+
 The decoded `wotid` MUST be a non-empty absolute IRI as defined in
 [RFC 3987][IRI]. When the authored TD has an `id`, `wotid` MUST equal that
 value verbatim and the resolved TD MUST retain it. When the authored TD has
@@ -115,6 +127,8 @@ That default can change, so a delayed event can resolve to a different view
 than the one available when the event was produced. A publication profile
 that requires repeatable replay MUST require `wotversion`.
 
+### Event identity
+
 Core requires `source` and `id` together to identify each distinct event.
 Changing the `source`, including its context, version, or other parameters,
 changes the event identity and [Sequence extension](sequence.md) scope.
@@ -122,7 +136,42 @@ Returning to an earlier `source` returns to its existing scope: Producers MUST
 NOT reuse event identities or restart a claimed source-wide sequence within
 that scope.
 
+Changing `contexturl` alone does not change event identity or sequence scope.
+A Producer MUST NOT reuse an `id` or restart a source-wide sequence merely
+because it publishes a new Context Version.
+
 ## Resolving the Thing Description
+
+### With Event Context
+
+When `contexturl` is present, the Producer and Consumer MUST use the
+[Event Context extension](context.md). The Context MUST contain an `emitter`
+Reference whose `url` identifies the resolved TD document, not its Registry
+metadata. The Context Publisher SHOULD reference an explicit TD Version and
+publish the resolved TD view at that URL. The Consumer retrieves the document
+directly or uses the corresponding document in an accepted resolved Context
+view. It MUST NOT derive a TD URL from `contexturl` or from the `emitter` URL.
+
+The Context's `emitter` is authoritative for TD selection. The Consumer MUST
+evaluate `subject` against that TD, even if an interpretation of `source`,
+including `wotid` or `wotversion` query parameters, would select another TD.
+Those parameters do not select a TD in this mode. This rule does not change
+Core's meaning of `source` or authenticate the emitting entity.
+
+If the Context cannot be retrieved or is invalid, or its `emitter` Reference
+is missing or invalid, or the referenced TD is unavailable or not resolved,
+the Consumer MUST report a resolution failure and leave the event uncorrelated.
+It MUST NOT fall back to selection through `source`. It MAY retain or forward
+the event without TD-based interpretation.
+
+The Context Publisher MUST make the TD available before configuring Producers
+with the Context Version URL. Changes to its Reference require a new Context
+Version. A change to the TD's resolved logical view requires a new TD Version;
+the Context Publisher MUST NOT change that view at a previously published
+Version URL. Context versioning alone does not make an unversioned TD URL
+stable.
+
+### Without Event Context
 
 The Producer and Consumer MUST agree on a resolver and its scope out of band
 or through their publication profile. The scope selects a registry and Group,
@@ -225,9 +274,10 @@ For example, adding a `quality` member to
 ignore the new member.
 
 A change to an individual value or the presence of a member already defined as
-OPTIONAL does not change the contract revision. A change to `wotversion` or
-`dataschema` alone also does not change the revision; if it changes the payload
-contract, the Producer MUST use a new revision.
+OPTIONAL does not change the contract revision. A change to `contexturl`, its
+`emitter` Reference, `wotversion`, or the selected schema alone also does not
+change the revision; if it changes the payload contract, the Producer MUST use
+a new revision.
 
 The Producer MUST configure a valid complete type when the derivation is
 unavailable, produces an invalid symbol, or collides with a different event
@@ -265,6 +315,11 @@ CloudEvent's actual `data` adheres to.
 [`datacontenttype`](../spec.md#datacontenttype) identifies that data's media
 type. Neither identifies the TD document's format.
 
+When `contexturl` is present, the Consumer follows the Event Context
+extension's schema precedence: `dataschema`, then the Context's `schema`
+Reference, then the schema declared by its `message` representation. The
+Producer SHOULD omit `dataschema` when the Context supplies the schema.
+
 A TD describes interactions and can contain several DataSchemas. The
 Producer MUST NOT use the whole TD as `dataschema` merely because the TD
 contains a schema for the selected affordance. A TD's retrieval URL is a
@@ -277,6 +332,7 @@ several property values, an event payload and a protocol envelope can need
 different schemas. When `dataschema` is present, the Producer MUST ensure
 that it identifies the schema of the representation actually sent, including
 any encoding or envelope selected by the binding.
+The same requirement applies to a schema supplied by the Context.
 
 An xRegistry Schema Resource's document-view URL can identify that external
 schema. It is not the WoT Resource's metadata-view URL. A profile MAY require
@@ -292,18 +348,18 @@ MUST follow that extension's conditional WoT mapping.
 
 ### Single Affordance
 
-This CloudEvent identifies a pump and its `processData` property. The
-configured resolver selects version `3.0.0` of the resolved TD.
+This CloudEvent identifies a pump and its `processData` property. Its Context
+selects version `3.0.0` of the resolved TD and supplies the payload schema.
 
 ```json
 {
   "specversion": "1.0",
   "id": "sample-4711",
-  "source": "https://factory.example.com/line1?wotid=urn:example:pump:7;wotversion=3.0.0;site=north",
+  "source": "mqtt://site/line/cell/device/sensor",
   "type": "com.example.models.tm.pump.properties.processData.v1",
   "subject": "#/properties/processData",
   "datacontenttype": "application/json",
-  "dataschema": "https://example.com/schemas/pump-process-data/versions/3",
+  "contexturl": "https://registry.example/contextgroups/line1/contexts/pump-process-data/versions/1",
   "data": {
     "Speed": 1500,
     "Pressure": 4.5
@@ -311,17 +367,22 @@ configured resolver selects version `3.0.0` of the resolved TD.
 }
 ```
 
+The Context metadata is shown in the
+[Event Context example](context.md#example). Its `emitter` selects the TD,
+and its `schema` selects the payload schema.
 The subject selects the property in that resolved view. The payload directly
 contains the property's object value without a `processData` wrapper. The
 separate schema describes that object, not the TD document. Another pump can
-use the same event type with a different Thing identity in its `source`.
+use the same event type with a different Thing identity in its `source` and a
+Context whose `emitter` describes that pump.
 
 ### Whole Thing
 
-This CloudEvent carries aggregated data for the same pump. Its unversioned
-source selects the current default resolved TD, which this example assumes is
-version `3.0.0`. The publication profile defines a payload containing the
-`processData` and `running` property values. The subject selects the whole TD.
+This CloudEvent carries aggregated data for the same pump without
+`contexturl`. Its unversioned source selects the current default resolved TD,
+which this example assumes is version `3.0.0`. The publication profile defines
+a payload containing the `processData` and `running` property values. The
+subject selects the whole TD.
 
 ```json
 {

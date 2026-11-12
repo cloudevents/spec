@@ -6,6 +6,13 @@ DataSetMessages to CloudEvents for routing over supported protocols. It defines
 mappings for Core and other extension attributes and specifies OPC UA extension
 attributes.
 
+When used with the [Event Context extension](context.md) and the xRegistry
+Context model, metadata that stays constant for a message stream is preferably
+stored in the Context rather than repeated in each event. The existing OPC UA
+attributes remain defined and usable. The
+[shared metadata rules](#shared-stream-metadata-in-a-context) describe how a
+Consumer obtains omitted values from the Context.
+
 ## Notational Conventions
 
 As with the main [CloudEvents specification](../spec.md), the key words "MUST",
@@ -66,6 +73,10 @@ messages:
   requirements of the Sequence extension and MUST NOT be inferred from
   `opcuasequence`.
 
+The Context rules below allow stable OPC UA values to be supplied by a
+Context instead of a per-event attribute. They do not relocate `source`,
+`type`, or `subject`, and they do not change how those Core attributes map.
+
 These conditional mappings replace only the conflicting OPC UA mappings above.
 All other requirements in this extension remain applicable. A profile that
 uses only part of this extension MUST NOT claim conformance to it unless the
@@ -89,6 +100,11 @@ REQUIRED to provide schema information (based on metadata information) in a
 separate format like [JSON schema](https://json-schema.org/specification) or
 [Avro schema](https://avro.apache.org/docs/1.11.1/specification/) or others. For
 those cases the attribute references the schema and is used for versioning.
+
+When the Event Context extension is used, its `schema` Reference or `message`
+representation can supply this schema instead. The Consumer follows that
+extension's schema precedence, and the Producer SHOULD omit `dataschema` when
+the Context supplies the schema.
 
 ### subject
 
@@ -267,10 +283,83 @@ than omit the status, wrap the value, or report it as _Good_.
 - OPC UA messages MUST use `binary-mode` of CloudEvents.
 - OPC UA PubSub JSON messages MUST be encoded using non-reversible encoding as
 the decoding information is contained in metadata messages or by schema
-referenced via `dataschema` attribute.
+referenced via `dataschema` attribute or selected through Event Context.
 - Payload of OPC UA PubSub JSON messages MUST NOT contain Network Message Header
 and Data Set Header as that information is mapped into CloudEvents attributes.
 - OPC UA PubSub JSON messages MUST contain exactly one dataset message.
+
+## Shared Stream Metadata in a Context
+
+A message stream here is a configured flow from one Publisher and
+DataSetWriter with a defined payload contract. It is not necessarily a broker
+topic or a CloudEvents `source`; either can carry several streams.
+
+When Producers and Consumers agree to use this extension with the
+[Event Context extension](context.md), the Context Publisher SHOULD store
+metadata that is constant for the stream as Context Version extension
+attributes. Each event then carries `contexturl`. The attributes defined in
+[Attributes](#attributes) remain valid in events, but storing stream-constant
+values once in the Context is preferable because events no longer repeat them,
+which keeps messages small. The Context has no document body: these
+values are members of its metadata object, alongside `references`.
+
+The following values can be supplied by the Context when they remain constant
+for every event using that Context Version. When a Context supplies any of
+these values, `contexturl` MUST identify a Context Version. A Context Resource
+URL can select a different default Version when a delayed or replayed event is
+processed.
+
+| Context attribute | Meaning and conditions |
+| --- | --- |
+| `opcuapublisherid` | The stream's native PublisherId. |
+| `opcuadatasetwriterid` | The stream's native DataSetWriterId, when used. |
+| `opcuadatasetwritername` | The stream's configured DataSetWriterName, when used. |
+| `opcuametadatamajorversion` | The MajorVersion of the applicable native metadata, when no payload schema is selected. |
+| `opcuametadataminorversion` | The MinorVersion of the applicable native metadata, when no payload schema is selected. |
+| `opcuamessagetype` | The native MessageType, only for a stream restricted to one message type. Streams that mix keyframes, deltaframes, or events retain it in each event. |
+
+These members MUST use the CloudEvents types, value constraints, and native
+field mappings defined in [Attributes](#attributes). For example, a Context's
+`opcuadatasetwriterid` is a JSON integer, not a string. The Context's `schema`
+Reference, rather than a new OPC UA attribute, identifies an external payload
+schema. Native metadata-version attributes MUST NOT be supplied in the event
+or Context when a schema is selected through `dataschema` or the Context.
+
+For these listed attributes, a value supplied by an applicable Context
+satisfies this extension's presence requirements, including those of the
+combined WoT mapping. A Producer MAY omit the corresponding event attribute.
+All existing attribute definitions remain unchanged for events that do not
+use this Context mapping.
+
+The Consumer uses an event attribute when it is present, otherwise the value
+in the Context. If both are present, they MUST have the same typed value. If
+they disagree, the Consumer MUST report a metadata conflict and MUST NOT
+interpret the payload using that Context. If a REQUIRED value is absent from
+both, the Consumer MUST report missing metadata and MUST NOT interpret the
+payload as a conforming OPC UA message. A Consumer that cannot retrieve the
+Context MAY process the event using only its explicit attributes if they
+satisfy every applicable requirement, including the WoT resolution rules when
+that profile is used.
+
+The Context Publisher MUST NOT change these values in a Context Version after
+any Producer is configured with its URL. A change requires a new Context Version
+and reconfigured Producers. Consumers MUST NOT retain values from a previous
+Context when processing an event that selects another Context. A changed
+payload contract also requires a changed WoT `type` revision when that profile
+is used; changing only `contexturl` is not sufficient.
+
+Values that vary by occurrence remain in each event. In particular,
+`opcuasequence`, `opcuastatus` when REQUIRED, `id`, and `time` MUST NOT be
+supplied by the Context as replacements for their event attributes. Tracing,
+recording times, and a CloudEvents `sequence`, when used, also remain in the
+event. A Consumer MUST NOT use Context members with those names as event
+values. Core attributes retain their normal placement and meaning even when
+their values happen to be constant for a stream.
+
+Without a `contexturl`, no Context supplies missing OPC UA values. This
+preserves the existing mapping for Consumers that do not support indirection.
+Producers SHOULD use omission only when they know that the intended Consumers
+support this mapping; retaining explicit OPC UA attributes remains valid.
 
 ## Examples
 
@@ -471,10 +560,11 @@ recordedtime: 2024-03-28T23:59:59Z
 
 ### WoT and OPC UA telemetry message
 
-This binary-mode keyframe uses the WoT event type and affordance subject while
-retaining the native OPC UA message type, writer identity, and sequence
-number. The DataSetWriter name is used without a numeric writer ID. The
-example assumes that `PumpProcessData` uniquely identifies a writer within
+This binary-mode keyframe uses the WoT event type and affordance subject.
+Its Context supplies the resolved TD, payload schema, PublisherId, and
+DataSetWriterName. The native OPC UA message type and sequence remain in the
+event because they can vary within this stream. The example assumes that
+`PumpProcessData` uniquely identifies a writer within
 publisher `UInt16:12`. The CloudEvents `sequence` attribute is absent because
 this example does not define a source-wide ordering across DataSetWriters.
 
@@ -488,13 +578,11 @@ Content Type: application/json
 
 specversion: 1.0
 id: ua-message-25460
-source: https://factory.example.com/line1?wotid=urn:example:pump:7;wotversion=3.0.0;site=north
+source: mqtt://site/line/cell/device/sensor
 type: com.example.models.tm.pump.properties.processData.v1
 subject: #/properties/processData
 time: 2026-10-29T12:00:00Z
-dataschema: https://example.com/schemas/pump-process-data/versions/3
-opcuapublisherid: UInt16:12
-opcuadatasetwritername: PumpProcessData
+contexturl: https://registry.example/contextgroups/line1/contexts/opcua-pump-process-data/versions/1
 opcuamessagetype: ua-keyframe
 opcuasequence: 4294967295
 
@@ -507,6 +595,37 @@ opcuasequence: 4294967295
 
 -----------------------------------------------
 ```
+
+The referenced Context Version has the following metadata. Other Core
+metadata is omitted from this excerpt.
+
+```json
+{
+  "contextid": "opcua-pump-process-data",
+  "versionid": "1",
+  "references": {
+    "emitter": {
+      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
+    },
+    "schema": {
+      "url": "https://example.com/schemas/pump-process-data/versions/3"
+    }
+  },
+  "opcuapublisherid": "UInt16:12",
+  "opcuadatasetwritername": "PumpProcessData"
+}
+```
+
+The Consumer uses the Context's PublisherId and writer name together with the
+event's `opcuamessagetype` and `opcuasequence`. It evaluates `subject` against
+the TD selected by `emitter` and uses the schema selected by `schema`.
+
+## Context Retrieval Security
+
+The Event Context extension's retrieval, authorization, and cache rules apply
+to this mapping. Stable writer metadata in a Context does not authenticate
+the Publisher or authorize access to the referenced TD or schema. A Consumer
+MUST establish trust in the Context before using it as OPC UA metadata.
 
 [UA DataSetWriterName]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table185
 [UA SequenceNumber]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.3

@@ -46,6 +46,7 @@ for more information.
 - [Dataref (Claim Check Pattern)](dataref.md)
 - [Deprecation](deprecation.md)
 - [Distributed Tracing](distributed-tracing.md)
+- [Event Context](context.md)
 - [Expiry Time](expirytime.md)
 - [OPC UA](opcua.md)
 - [Partitioning](partitioning.md)
