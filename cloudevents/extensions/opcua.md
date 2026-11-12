@@ -36,19 +36,21 @@ field `MessageId`.
 
 ### source
 
-An OPC UA source can identify the OPC UA server using its
+An OPC UA Producer MAY identify the server using its
 [Application Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1)
-field `applicationUri` or a customer configured identifier like a unified
-namespace path. It can include the publisher and writer query parameters
-defined in this extension or follow the WoT profile's `source` mapping.
+field `applicationUri` or a customer-configured identifier such as a unified
+namespace path. A Producer MAY include the publisher and writer query
+parameters defined in this extension. A Producer using the WoT profile MAY
+instead follow its `source` mapping.
 
 ### type
 
-An OPC UA `type` can map to the
+An OPC UA Producer MAY map `type` to the
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
-field `MessageType` or follow the WoT profile's semantic event-type rules.
-When the `type` identifies a WoT event contract, `opcuamessagetype` can carry
-the native `MessageType`.
+field `MessageType`. A Producer using the WoT profile MUST follow its semantic
+event-type rules. In that case, the Producer MUST supply the native
+`MessageType` as `opcuamessagetype` in the event or Context, as specified in
+the WoT mapping section.
 
 ### WoT mapping
 
@@ -112,14 +114,15 @@ the Context supplies the schema.
 
 ### subject
 
-For metadata and data messages, an OPC UA-specific mapping can use
+For metadata and data messages, a Producer MAY map `subject` to
 `DataSetWriterId` or `DataSetWriterName` from the [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
-as `subject`. A publisher using the WoT profile can instead use its
+header. A Producer using the WoT profile MUST instead follow its
 resolved-TD pointer mapping.
 
-For an OPC UA event message (`type` equals `ua-event`), `subject` can be
-appended with "/" and the [Base Event Type](https://reference.opcfoundation.org/Core/Part5/v104/docs/6.4.2)
+For an OPC UA event message (`type` equals `ua-event`), a Producer using the
+OPC UA-specific `subject` mapping MUST append "/" and the
+[Base Event Type](https://reference.opcfoundation.org/Core/Part5/v104/docs/6.4.2)
 field `EventId`.
 
 ### time
