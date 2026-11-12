@@ -39,9 +39,11 @@ field `MessageId`.
 An OPC UA Producer MAY identify the server using its
 [Application Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1)
 field `applicationUri` or a customer-configured identifier such as a unified
-namespace path. A Producer MAY include the publisher and writer query
-parameters defined in this extension. A Producer using the WoT profile MAY
-instead follow its `source` mapping.
+namespace path. A Producer using the WoT profile MAY instead follow its
+`source` mapping. For WoT data and event messages, a Producer MUST include
+each publisher or writer query parameter REQUIRED by the mapping unless the
+full OPC UA Part 14 NetworkMessage envelope or the Context supplies its
+corresponding value.
 
 ### type
 
@@ -288,8 +290,9 @@ these representation or range constraints.
 
 When these values are supplied in `source`, the query parameters carry
 stream-constant metadata. The Producer SHOULD omit a query parameter when the
-Context supplies its value. If the Context does not supply a value REQUIRED by
-the mapping, the Producer MUST supply it in `source`.
+full OPC UA Part 14 NetworkMessage envelope or the Context supplies its value.
+For each value REQUIRED by the WoT mapping that neither supplies, the Producer
+MUST include the corresponding parameter in `source`.
 
 The Producer MUST use `name=value` for each of these parameters, with a
 non-empty value. It MUST separate them from each other and from preceding
