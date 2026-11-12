@@ -9,10 +9,11 @@ attributes.
 When used with the [Event Context extension](context.md) and the xRegistry
 Context model, metadata that stays constant for a message stream is preferably
 stored in the Context rather than repeated in each event. The existing OPC UA
-attributes remain defined and usable. Publisher and writer metadata can
-instead be supplied in the `source` query when the Context does not provide
-it. The [shared metadata rules](#shared-stream-metadata-in-a-context) describe
-how a Consumer obtains these values.
+attributes remain defined and usable. A Producer MUST supply publisher and
+writer metadata REQUIRED by this mapping in the `source` query when neither
+the full Part 14 NetworkMessage envelope nor the Context provides it. The
+[shared metadata rules](#shared-stream-metadata-in-a-context) describe how a
+Consumer obtains these values.
 
 ## Notational Conventions
 
@@ -39,8 +40,8 @@ field `MessageId`.
 An OPC UA Producer MAY identify the server using its
 [Application Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1)
 field `applicationUri` or a customer-configured identifier such as a unified
-namespace path. A Producer using the WoT profile MAY instead follow its
-`source` mapping. For WoT data and event messages, a Producer MUST include
+namespace path. A Producer using the WoT profile MUST instead follow its
+`source` mapping. For data and event messages, a Producer MUST include
 each publisher or writer query parameter REQUIRED by the mapping unless the
 full OPC UA Part 14 NetworkMessage envelope or the Context supplies its
 corresponding value.
@@ -52,8 +53,7 @@ An OPC UA Producer MAY map `type` to the
 field `MessageType`. A Producer using the WoT profile MUST follow its semantic
 event-type rules. When the `type` identifies a WoT event contract, a Producer
 MUST carry the native `MessageType` as `opcuamessagetype` in the event. The
-[WoT mapping section](#wot-mapping) requires it when both
-profiles are used.
+[WoT mapping section](#wot-mapping) specifies the combined mapping.
 
 ### WoT mapping
 
@@ -64,17 +64,13 @@ messages:
 - `source` MUST follow the WoT profile's source mapping.
 - `type` MUST follow the WoT profile's semantic event-type rules instead of
   mapping to the native `MessageType`.
-- The native `MessageType` MUST be supplied as `opcuamessagetype` in the event.
 - `subject` MUST follow the WoT profile's resolved-TD pointer rules.
-- Publisher and writer metadata supplied in `source` or the Context MUST
-  identify the native Publisher and DataSetWriter. Writer identifiers MUST NOT
-  be appended to `subject`.
-- For data and event messages, at least one of `opcuadatasetwriterid` and
-  `opcuadatasetwritername` MUST be present. If both are present, they MUST
-  identify the same DataSetWriter.
+- The native PublisherId and at least one DataSetWriter identifier MUST be
+  available from the full Part 14 NetworkMessage envelope, `source`, or the
+  Context, as defined in [Publisher and Writer Metadata](#publisher-and-writer-metadata).
+  Writer identifiers MUST NOT be appended to `subject`.
 - For an event message, the `EventId` remains in the OPC UA event payload and
   MUST NOT be appended to `subject`.
-- `opcuapublisherid` MUST identify the native PublisherId.
 - `opcuasequence` MUST carry the native `SequenceNumber`. The CloudEvents
   `sequence` attribute, when present, MUST satisfy the independent ordering
   requirements of the Sequence extension and MUST NOT be inferred from
@@ -84,6 +80,8 @@ The [publisher and writer metadata rules](#publisher-and-writer-metadata)
 define the source-query and Context representations of these identifiers.
 They do not relocate `source`, `type`, or `subject`, and they do not change
 how those Core attributes map.
+Native identifiers retained in a full NetworkMessage envelope satisfy the
+same presence requirements.
 
 These conditional mappings replace only the conflicting OPC UA mappings above.
 All other requirements in this extension remain applicable. A profile that
@@ -109,17 +107,19 @@ separate format like [JSON schema](https://json-schema.org/specification) or
 [Avro schema](https://avro.apache.org/docs/1.11.1/specification/) or others. For
 those cases the attribute references the schema and is used for versioning.
 
-When the Event Context extension is used, its `schema` Reference or `message`
-representation can supply this schema instead. The Consumer follows that
-extension's schema precedence, and the Producer SHOULD omit `dataschema` when
-the Context supplies the schema.
+When the Event Context extension is used, a Producer MAY reference a Context
+whose `schema` Reference or `message` representation supplies this schema
+instead. The Consumer follows that extension's schema precedence, and the
+Producer SHOULD omit `dataschema` when the Context supplies the schema. The
+selected schema MUST describe the actual `data`, including the full
+NetworkMessage envelope when one is retained.
 
 ### subject
 
-For metadata and data messages, a Producer MAY map `subject` to
+For metadata, data, and event messages, a Producer MAY map `subject` to
 `DataSetWriterId` or `DataSetWriterName` from the [Data Set Message
-Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
-header. A Producer using the WoT profile MUST instead follow its
+Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164).
+A Producer using the WoT profile MUST instead follow its
 resolved-TD pointer mapping.
 
 For an OPC UA event message (`type` equals `ua-event`), a Producer using the
@@ -135,9 +135,9 @@ field `Timestamp`.
 
 ## Mapping for other extensions
 
-For data and event messages, the following well-known extension attributes
-apply when this extension is used without the WoT profile. When both
-extensions are used, determine message type from `opcuamessagetype`.
+The following well-known extension attributes apply to data and event
+messages. When the WoT profile is used, determine the native message type
+from `opcuamessagetype`.
 
 ### sequence
 
@@ -246,9 +246,10 @@ than omit the status, wrap the value, or report it as _Good_.
 ## Publisher and Writer Metadata
 
 The following values identify the OPC UA Publisher and DataSetWriter. They
-are not CloudEvents extension attributes. A Producer MAY supply them as
-query parameters in `source`, as extension attributes of the applicable
-Context Version, or in both places. The names are the same in both
+are not CloudEvents extension attributes. A Producer MUST supply each
+REQUIRED value as a query parameter in `source` or an extension attribute of
+the applicable Context Version unless the full Part 14 NetworkMessage
+envelope supplies it. The names are the same in the query and Context
 representations.
 
 | Name | Value |
@@ -256,6 +257,12 @@ representations.
 | `opcuapublisherid` | The native PublisherId, represented as a string. |
 | `opcuadatasetwriterid` | The native DataSetWriterId, represented as an integer. |
 | `opcuadatasetwritername` | The configured DataSetWriterName, represented as a string. |
+
+In a full [Part 14 NetworkMessage][UA NetworkMessage], the Consumer obtains
+the PublisherId from the NetworkMessage header and the DataSetWriterId or
+DataSetWriterName from its single DataSetMessage header. Those fields retain
+their native names and encodings. The following representation rules apply
+to their equivalents in `source` and the Context.
 
 `opcuapublisherid` MUST use `<BuiltInType>:<value>`. The type MUST be `Byte`,
 `UInt16`, `UInt32`, `UInt64`, or `String`, as defined for the native
@@ -275,12 +282,22 @@ configured name. For JSON message mapping, this is the
 [`DataSetWriterName` field][UA DataSetWriterName] when present in the
 DataSetMessage; otherwise the Producer obtains it from configuration.
 
-In combination with the WoT profile, `opcuapublisherid` and at least one of
-`opcuadatasetwriterid` and `opcuadatasetwritername` are REQUIRED for data and
-event messages. If both writer values are supplied, they MUST identify the
-same DataSetWriter. A writer name MUST uniquely identify the DataSetWriter
-within the PublisherId scope. Consumers MUST compare names exactly, without
-case folding or Unicode normalization.
+The native PublisherId and at least one of DataSetWriterId and DataSetWriterName
+are REQUIRED for all data and event messages, whether or not the WoT profile
+is used. Each value MUST be supplied by the envelope or by the corresponding
+query parameter or Context attribute. A full envelope that omits an identifier
+does not satisfy that identifier's presence requirement. If both writer values
+are supplied, they MUST identify the same DataSetWriter. A writer name MUST
+uniquely identify the DataSetWriter within the PublisherId scope. Consumers
+MUST compare names exactly, without case folding or Unicode normalization.
+
+When an identity is supplied in more than one place, the representations MUST
+identify the same native Publisher or DataSetWriter. To compare a query or
+Context value with an envelope field, the Consumer MUST decode that value and
+apply the field's native Part 14 encoding. For example, `UInt16:12` is encoded
+as `"12"` in a JSON NetworkMessage. The Consumer MUST report a metadata
+conflict and MUST NOT interpret the payload as a conforming OPC UA message if
+the values disagree.
 
 A Consumer MUST report invalid metadata and MUST NOT interpret the payload as
 a conforming OPC UA message if a supplied publisher or writer value violates
@@ -291,8 +308,8 @@ these representation or range constraints.
 When these values are supplied in `source`, the query parameters carry
 stream-constant metadata. The Producer SHOULD omit a query parameter when the
 full OPC UA Part 14 NetworkMessage envelope or the Context supplies its value.
-For each value REQUIRED by the WoT mapping that neither supplies, the Producer
-MUST include the corresponding parameter in `source`.
+For each REQUIRED publisher or writer value that neither supplies, the
+Producer MUST include the corresponding parameter in `source`.
 
 The Producer MUST use `name=value` for each of these parameters, with a
 non-empty value. It MUST separate them from each other and from preceding
@@ -318,7 +335,8 @@ in the query and an integer in the Context; the other two values use strings
 in both places.
 
 For example, the following source supplies the PublisherId and writer name
-when the Context does not supply them. The writer name is `Pump&Process`.
+when neither the envelope nor the Context supplies them. The writer name is
+`Pump&Process`.
 
 ```text
 mqtt://site/line/cell/device/sensor?opcuapublisherid=UInt16:12;opcuadatasetwritername=Pump%26Process;site=north
@@ -335,10 +353,19 @@ returns to a previously used `source`.
 - OPC UA PubSub JSON messages MUST be encoded using non-reversible encoding as
 the decoding information is contained in metadata messages or by schema
 referenced via `dataschema` attribute or selected through Event Context.
-- Payload of OPC UA PubSub JSON messages MUST NOT contain Network Message Header
-and Data Set Header as that information is mapped into CloudEvents attributes,
-`source`, or the Context.
+- A Producer MAY retain the full Part 14 NetworkMessage envelope in `data`.
+  Otherwise, the payload MUST omit the NetworkMessage and DataSetMessage
+  headers and supply their applicable information through the mappings in
+  this extension.
 - OPC UA PubSub JSON messages MUST contain exactly one dataset message.
+
+A retained envelope does not replace the REQUIRED CloudEvents attributes or
+the per-event `opcuamessagetype` and `opcuasequence` attributes when the WoT
+mapping applies. `opcuamessagetype` identifies the DataSetMessage type, not
+the enclosing NetworkMessage's `ua-data` type. Duplicated values MUST agree
+with their native fields after applying the specified mappings. The Consumer
+MUST report a conflict and MUST NOT interpret a message as conforming to this
+extension when they disagree.
 
 ## Shared Stream Metadata in a Context
 
@@ -354,11 +381,11 @@ values once in the Context avoids repeating them in event attributes or the
 `source` query. The Context has no document body: these values are members
 of its metadata object, alongside `references`.
 
-The following values can be supplied by the Context when they remain constant
-for every event using that Context Version. When a Context supplies any of
-these values, `contexturl` MUST identify a Context Version. A Context Resource
-URL can select a different default Version when a delayed or replayed event is
-processed.
+The Context Publisher MAY store the following values in the Context when they
+remain constant for every event using that Context Version. When a Context
+supplies any of these values, `contexturl` MUST identify a Context Version.
+A Context Resource URL can select a different default Version when a delayed
+or replayed event is processed.
 
 | Context attribute | Meaning and conditions |
 | --- | --- |
@@ -376,24 +403,26 @@ Context's `schema` Reference identifies an external payload schema. Native
 metadata-version attributes MUST NOT be supplied in the event or Context
 when a schema is selected through `dataschema` or the Context.
 
-A value supplied by an applicable Context satisfies this extension's presence
-requirements, including those of the combined WoT mapping. A Producer MAY
-omit an event attribute or source query parameter when the Context supplies
-the corresponding value. The existing OPC UA event attributes remain valid.
+For the listed values, an applicable Context satisfies this extension's
+presence requirements, including those of the combined WoT mapping. A Producer
+MAY omit the corresponding event attribute or source query parameter. Other
+event attributes, including `opcuamessagetype`, MUST NOT be replaced by Context
+members.
 
 If a publisher or writer value appears in both the `source` query and the
 Context, the values MUST agree after decoding and type conversion. If an event
 attribute and the Context both supply a metadata version, their typed values
-MUST agree. On a conflict, the Consumer MUST report a
-metadata conflict and MUST NOT interpret the payload using that Context. If a
-REQUIRED value is absent from all applicable locations, the Consumer MUST
-report missing metadata and MUST NOT interpret the payload as a conforming
-OPC UA message.
+MUST agree. The same consistency requirement applies to publisher and writer
+identities retained in the envelope. On a conflict, the Consumer MUST report a
+metadata conflict and MUST NOT interpret the payload as a conforming OPC UA
+message. If a REQUIRED value is absent from all applicable locations, the
+Consumer MUST report missing metadata and MUST NOT interpret the payload as a
+conforming OPC UA message.
 
 A Consumer that cannot retrieve the Context MAY process the event using
-its source query and explicit event attributes if they satisfy every applicable
-requirement. When the WoT profile is used, the Consumer also needs the Context
-to resolve the TD and MUST follow the WoT profile's failure rules.
+its envelope, source query, and explicit event attributes if they satisfy every
+applicable requirement. When the WoT profile is used, the Consumer also needs
+the Context to resolve the TD and MUST follow the WoT profile's failure rules.
 
 The Context Publisher MUST NOT change these values in a Context Version after
 any Producer is configured with its URL. A change requires a new Context Version
@@ -417,6 +446,10 @@ metadata only when they know that the intended Consumers support this mapping.
 
 ## Examples
 
+The examples without a Context use publisher `UInt16:12` and writer name
+`energy-consumption-asset`. Their payloads omit the native headers, so their
+`source` queries supply both identifiers.
+
 ### Metadata message
 
 The metadata message helps Cloud applications to understand the semantics and
@@ -434,7 +467,7 @@ specversion: 1.0
 type: ua-metadata
 time: 2024-03-28T21:56:24Z
 id: 1234-1234-1234
-source: urn:factory:aggregationserver:opcua
+source: https://factory.example.com/aggregationserver/opcua?opcuapublisherid=UInt16:12;opcuadatasetwritername=energy-consumption-asset
 datacontenttype: application/json; charset=utf-8
 subject: energy-consumption-asset
        .... further attributes ...
@@ -478,7 +511,7 @@ specversion: 1.0
 type: ua-deltaframe
 time: 2024-03-28T21:56:42Z
 id: 1235-1235-1235
-source: urn:factory:aggregationserver:opcua
+source: https://factory.example.com/aggregationserver/opcua?opcuapublisherid=UInt16:12;opcuadatasetwritername=energy-consumption-asset
 datacontenttype: application/json; charset=utf-8
 subject: energy-consumption-asset
 sequence: 0000000007
@@ -553,7 +586,7 @@ specversion: 1.0
 type: ua-event
 time: 2024-03-28T21:57:01Z
 id: 1236-1237-1238
-source: urn:factory:aggregationserver:opcua
+source: https://factory.example.com/aggregationserver/opcua?opcuapublisherid=UInt16:12;opcuadatasetwritername=energy-consumption-asset
 datacontenttype: application/json; charset=utf-8
 subject: energy-consumption-asset/444321
 sequence: 0000000018
@@ -595,7 +628,7 @@ specversion: 1.0
 type: ua-keyframe
 time: 2024-03-28T23:59:59Z
 id: 6235-7235-8235
-source: bottling-company/amsterdam/FillingArea1/FillingLine9/Cell1/Conveyor
+source: bottling-company/amsterdam/FillingArea1/FillingLine9/Cell1/Conveyor?opcuapublisherid=UInt16:12;opcuadatasetwritername=energy-consumption-asset
 datacontenttype: application/avro
 subject: energy-consumption-asset
 dataschema: http://example.com/schemas/energy-consumption-asset/v1.8
@@ -675,6 +708,63 @@ Context with the event's `opcuamessagetype` and `opcuasequence`. It evaluates
 `subject` against the TD selected by `emitter` and uses the schema selected by
 `schema`.
 
+#### Retaining the NetworkMessage envelope
+
+This event retains the full Part 14 NetworkMessage envelope. Its PublisherId
+and DataSetWriterId satisfy the identity requirements, so `source` needs no
+publisher or writer query parameters. Part 14 JSON encodes the configured
+PublisherId `UInt16:12` as the string `"12"`.
+
+Context Version `2` retains the same `emitter` Reference and points its `schema`
+Reference to `https://example.com/schemas/pump-process-data-envelope/versions/1`.
+It contains no publisher or writer attributes. The event type uses revision
+`v2` because retaining the envelope changes the payload contract.
+
+```text
+------------------ PUBLISH -------------------
+
+Topic Name: opcua/json/DataSetMessage/pump
+Content Type: application/json
+
+------------- User Properties ----------------
+
+specversion: 1.0
+id: ua-message-25461
+source: mqtt://site/line/cell/device/sensor?site=north
+type: com.example.models.tm.pump.properties.processData.v2
+subject: #/properties/processData
+time: 2026-10-29T12:00:01Z
+contexturl: https://registry.example/contextgroups/line1/contexts/opcua-pump-process-data/versions/2
+opcuamessagetype: ua-keyframe
+opcuasequence: 0
+
+------------------ payload -------------------
+
+{
+  "MessageId": "ua-message-25461",
+  "MessageType": "ua-data",
+  "PublisherId": "12",
+  "Messages": [
+    {
+      "DataSetWriterId": 17,
+      "MessageType": "ua-keyframe",
+      "SequenceNumber": 0,
+      "Timestamp": "2026-10-29T12:00:01Z",
+      "Payload": {
+        "Speed": 1500,
+        "Pressure": 4.5
+      }
+    }
+  ]
+}
+
+-----------------------------------------------
+```
+
+The native sequence has rolled over from `4294967295` to `0`; it remains
+`opcuasequence`, not a CloudEvents `sequence`. The event still uses `contexturl`
+to select its TD and schema, and carries `opcuamessagetype` in the event.
+
 ## Context Retrieval Security
 
 The Event Context extension's retrieval, authorization, and cache rules apply
@@ -683,6 +773,7 @@ the Publisher or authorize access to the referenced TD or schema. A Consumer
 MUST establish trust in the Context before using it as OPC UA metadata.
 
 [UA DataSetWriterName]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table185
+[UA NetworkMessage]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/7.2.5.3
 [UA DataSetWriterId]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.4.1
 [UA PublisherId]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.7.1
 [UA SequenceNumber]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.3

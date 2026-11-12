@@ -6,10 +6,10 @@ The REQUIRED `contexturl` identifies shared metadata whose `emitter` Reference
 selects the resolved TD. The `subject` identifies the part of that TD associated
 with the event, and the `type` names the event contract.
 
-The profile defines no CloudEvents extension attributes or URI scheme.
-Producers and Consumers agree on its use through a publication profile or out
-of band. It does not define a transport binding, provision a Thing, or require
-a particular registry implementation. Events use the xRegistry Context
+The profile defines no CloudEvents extension attributes. Producers and
+Consumers agree on its use through a publication profile or out of band.
+It does not define a transport binding, provision a Thing, or require a
+particular registry implementation. Events use the xRegistry Context
 representation defined by the Event Context extension.
 
 ## Notational Conventions
@@ -22,66 +22,25 @@ described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 The scope of these key words is limited to events using this profile. An
 attribute marked REQUIRED here is not REQUIRED in every CloudEvent.
 
-## Source
+## Mapping Core Context Attributes
+
+### source
 
 The Core [`source`](../spec.md#source) identifies the context in which the
-event occurred and follows Core's URI-reference rules. It can identify a Thing,
-topology, publisher, or another Producer-defined context. This profile does not
-prescribe a URI scheme or query parameters. The Context's `emitter` Reference,
-not `source`, selects the resolved TD.
+event occurred and follows Core's URI-reference rules. This profile leaves
+the content of `source` undefined beyond those Core requirements.
 
-For example, a Producer can use `https://factory.example.com/line1/pump7` or
-`mqtt://site/line/cell/device/sensor` as a source. Another possible form is
-`wot-td://factory/line1`; this profile does not define that scheme or propose
-its registration. A source is an identifier and is not necessarily a retrieval
-URL for a TD.
+For example, `https://factory.example.com/line1/pump7` and
+`mqtt://site/line/cell/device/sensor` are valid sources.
 
-### Event identity
+#### Event identity
 
 Core requires `source` and `id` together to identify each distinct event.
-Changing the `source`, including any query parameters, changes the event
-identity and [Sequence extension](sequence.md) scope.
+Changing the `source` changes the event identity and
+[Sequence extension](sequence.md) scope.
 Returning to an earlier `source` returns to its existing scope: Producers MUST
 NOT reuse event identities or restart a claimed source-wide sequence within
 that scope.
-
-Changing `contexturl` alone does not change event identity or sequence scope.
-A Producer MUST NOT reuse an `id` or restart a source-wide sequence merely
-because it publishes a new Context Version.
-
-## Resolving the Thing Description
-
-Every event using this profile MUST include `contexturl`. The Producer and
-Consumer MUST implement the [Event Context extension](context.md). The Context
-MUST contain an `emitter` Reference whose `url` identifies the resolved TD
-document, not its Registry metadata. The Context Publisher SHOULD reference an
-explicit TD Version and publish the resolved TD view at that URL. The Consumer
-retrieves the document directly or uses the corresponding document in an
-accepted resolved Context view. It MUST NOT derive a TD URL from `contexturl`
-or from the `emitter` URL.
-
-The Context's `emitter` is authoritative for TD selection. The Consumer MUST
-evaluate `subject` against that TD and MUST NOT select another TD from `source`.
-This rule does not change Core's meaning of `source` or authenticate the
-emitting entity.
-
-If `contexturl` is missing, the Context cannot be retrieved or is invalid, its
-`emitter` Reference is missing or invalid, or the referenced TD is unavailable
-or not resolved, the Consumer MUST report a resolution failure and leave the
-event uncorrelated. It MUST NOT fall back to selection through `source`. It
-MAY retain or forward the event without TD-based interpretation.
-
-The Context Publisher MUST make the TD available before configuring Producers
-with the Context Version URL. Changes to its Reference require a new Context
-Version. A change to the TD's resolved logical view requires a new TD Version;
-the Context Publisher MUST NOT change that view at a previously published
-Version URL. Context versioning alone does not make an unversioned TD URL
-stable.
-
-The event carries no digest of the TD. An exact version or a successful
-resolution does not by itself prove that retrieved bytes are unchanged.
-
-## Mapping Core Context Attributes
 
 ### type
 
@@ -207,7 +166,43 @@ An xRegistry Schema Resource's document-view URL can identify that external
 schema. It is not the WoT Resource's metadata-view URL. A profile MAY require
 an exact schema Version independently of the selected TD Version.
 
-### Relationship to Other Extensions
+## contexturl
+
+Every event using this profile MUST include `contexturl`. The Producer and
+Consumer MUST implement the [Event Context extension](context.md). The Context
+MUST contain an `emitter` Reference whose `url` identifies the resolved TD
+document, not its Registry metadata. The Context Publisher SHOULD reference an
+explicit TD Version and publish the resolved TD view at that URL. The Consumer
+retrieves the document directly or uses the corresponding document in an
+accepted resolved Context view. It MUST NOT derive a TD URL from `contexturl`
+or from the `emitter` URL.
+
+The Context's `emitter` is authoritative for TD selection. The Consumer MUST
+evaluate `subject` against that TD and MUST NOT select another TD from `source`.
+This rule does not change Core's meaning of `source` or authenticate the
+emitting entity.
+
+If `contexturl` is missing, the Context cannot be retrieved or is invalid, its
+`emitter` Reference is missing or invalid, or the referenced TD is unavailable
+or not resolved, the Consumer MUST report a resolution failure and leave the
+event uncorrelated. It MUST NOT fall back to selection through `source`. It
+MAY retain or forward the event without TD-based interpretation.
+
+The Context Publisher MUST make the TD available before configuring Producers
+with the Context Version URL. Changes to its Reference require a new Context
+Version. A change to the TD's resolved logical view requires a new TD Version;
+the Context Publisher MUST NOT change that view at a previously published
+Version URL. Context versioning alone does not make an unversioned TD URL
+stable.
+
+Changing `contexturl` alone does not change event identity or sequence scope.
+A Producer MUST NOT reuse an `id` or restart a source-wide sequence merely
+because it publishes a new Context Version.
+
+The event carries no digest of the TD. An exact version or a successful
+resolution does not by itself prove that retrieved bytes are unchanged.
+
+## Relationship to Other Extensions
 
 This profile does not redefine native message types, sequence counters, or
 writer identities. An event that also uses the [OPC UA extension](opcua.md)
