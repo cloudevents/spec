@@ -45,6 +45,7 @@ for more information.
 - [Data Classification](data-classification.md)
 - [Dataref (Claim Check Pattern)](dataref.md)
 - [Deprecation](deprecation.md)
+- [Descriptor Reference](describedby.md)
 - [Distributed Tracing](distributed-tracing.md)
 - [Expiry Time](expirytime.md)
 - [OPC UA](opcua.md)
@@ -53,3 +54,4 @@ for more information.
 - [Sampling](sampledrate.md)
 - [Sequence](sequence.md)
 - [Severity](severity.md)
+- [Web of Things](wot.md) (Core attribute mapping profile)
