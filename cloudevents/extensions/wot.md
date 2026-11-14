@@ -479,4 +479,4 @@ referenced documents or make their dependencies available.
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
-[WoT Descriptor Profile]: https://github.com/xregistry/spec/pull/796
+[WoT Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/28b6d245fb4f634bb172e0505ae8e64fdf882428/workingdrafts/models/wot/spec.md#66-wot-descriptor-profile
