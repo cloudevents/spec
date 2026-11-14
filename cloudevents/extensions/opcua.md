@@ -6,7 +6,7 @@ DataSetMessages to CloudEvents for routing over supported protocols. It defines
 mappings for Core and other extension attributes and specifies OPC UA extension
 attributes.
 
-When used with the [Descriptor Reference extension](describedby.md) and the
+When used with the [Descriptor Reference extension](descriptors.md) and the
 xRegistry Descriptor model, metadata that stays constant for a message stream is
 preferably stored in the selected Descriptor rather than repeated in each event.
 The existing OPC UA attributes remain defined and usable. A Producer MUST supply
@@ -105,9 +105,9 @@ separate format like [JSON schema](https://json-schema.org/specification) or
 those cases the attribute references the schema and is used for versioning.
 
 When the Descriptor Reference selection rules are used, a Producer MAY select a
-Descriptor whose schema Reference or Message definition supplies this schema
+Descriptor whose selected schema Reference supplies this schema
 instead. The Consumer follows that extension's [schema
-precedence](describedby.md#message-and-schema-selection), including its selector
+precedence](descriptors.md#schema-selection), including its selector
 and ambiguity rules. The Producer SHOULD omit `dataschema` when the selected
 Descriptor supplies the schema. The selected schema MUST describe the actual
 `data`, including the full NetworkMessage envelope when one is retained.
@@ -197,6 +197,15 @@ Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table1
 field `MetaDataVersion`.
 - Constraints
   - OPTIONAL but MUST NOT be present if `dataschema` is used
+
+Both metadata-version event attributes use the CloudEvents `Integer` type.
+Their native [VersionTime][UA VersionTime] values are unsigned, so the
+representable event-attribute range is `0` to `2147483647`, inclusive.
+A Producer encoding a native value in either event attribute MUST preserve
+that value exactly. If it exceeds this range, the Producer MUST report an
+encoding error rather than truncate, wrap or reinterpret it as a negative
+value. The full native range can be carried in the selected Descriptor
+metadata described below, or in an applicable native payload representation.
 
 ### opcuastatus
 
@@ -376,7 +385,7 @@ DataSetWriter with a defined payload contract. It is not necessarily a broker
 topic or a CloudEvents `source`; either can carry several streams.
 
 When Producers and Consumers agree to use this extension with the [Descriptor
-Reference selection rules](describedby.md#one-selected-processing-description),
+Reference selection rules](descriptors.md#one-selected-processing-description),
 the Publisher SHOULD store metadata that is constant for the stream as
 Descriptor Version extension attributes. The agreed binding selects the
 Descriptor through `describedby` or a profile-defined source or subject mapping.
@@ -397,16 +406,21 @@ processed.
 | `opcuadatasetwriterid` | The stream's native DataSetWriterId, when used. |
 | `opcuadatasetwritername` | The stream's configured DataSetWriterName, when used. |
 | `opcuadatasetname` | The non-empty `Name` of the applicable DataSet metadata; descriptive, not a writer identifier. |
-| `opcuametadatamajorversion` | The MajorVersion of the applicable native metadata, when no payload schema is selected. |
-| `opcuametadataminorversion` | The MinorVersion of the applicable native metadata, when no payload schema is selected. |
+| `opcuametadatamajorversion` | The native MajorVersion as a JSON integer in `0` to `4294967295`, when no payload schema is selected. |
+| `opcuametadataminorversion` | The native MinorVersion as a JSON integer in `0` to `4294967295`, when no payload schema is selected. |
 
-Publisher, writer and metadata-version members MUST use the constraints and
-mappings defined in [Attributes](#attributes) and [Publisher and Writer
-Metadata](#publisher-and-writer-metadata). For example, a Descriptor's
-`opcuadatasetwriterid` is a JSON integer, not a string. The Descriptor's
-selected schema Reference identifies an external payload schema. Native
-metadata-version attributes MUST NOT be supplied in the event or Descriptor when
-a schema is selected through `dataschema` or the Descriptor.
+Publisher and writer members MUST use the constraints and mappings defined
+in [Publisher and Writer Metadata](#publisher-and-writer-metadata). For
+example, a Descriptor's `opcuadatasetwriterid` is a JSON integer, not a string.
+The Descriptor metadata-version members MUST preserve the full native
+`VersionTime` (`UInt32`) range, `0` to `4294967295`, inclusive. These are
+Descriptor members, not CloudEvents `Integer` attributes. Consumers MUST
+compare duplicate event and Descriptor values without narrowing either value.
+Out-of-range Descriptor values are invalid metadata.
+
+The Descriptor's selected schema Reference identifies an external payload
+schema. Native metadata-version attributes MUST NOT be supplied in the event
+or Descriptor when a schema is selected through `dataschema` or the Descriptor.
 
 `opcuadatasetname` is an OPTIONAL Descriptor attribute, not a new CloudEvents
 attribute or source query parameter. If supplied, it MUST be a non-empty String
@@ -728,8 +742,7 @@ metadata is omitted from this excerpt.
   "references": {
     "pump7": {
       "class": "thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3",
-      "planurl": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7-plan/versions/3"
+      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
     },
     "gateway1": {
       "class": "thingdescription",
@@ -833,4 +846,5 @@ metadata.
 [UA PublisherId]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.7.1
 [UA SequenceNumber]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.3
 [UA DataSet Metadata]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.3
+[UA VersionTime]: https://reference.opcfoundation.org/specs/OPC-10000-4/v1.05.07/7.43
 [URI]: https://www.rfc-editor.org/rfc/rfc3986

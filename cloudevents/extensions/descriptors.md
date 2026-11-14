@@ -2,7 +2,7 @@
 
 The OPTIONAL `describedby` extension attribute identifies a Descriptor
 containing shared information for interpreting an event. A Descriptor can
-reference schemas, Message definitions, WoT Thing Descriptions or other
+reference schemas, WoT Thing Descriptions or other
 representations, and can contain typed metadata such as a publisher identity. It
 describes information relevant to the event, not necessarily only the event's
 source or subject.
@@ -144,10 +144,10 @@ The [Descriptor Registry][Descriptor Registry] defines these members:
 | --- | --- |
 | `references` | REQUIRED map of local Reference names to objects containing `class` and `url`. An empty map is valid. |
 | `entityid`, `entitytype` | Describe a primary entity when one exists; not replacements for event source identity or authenticated principals. |
-| `messageref`, `schemaref` | Select named Message and payload-schema References. |
+| `schemaref` | Selects a named payload-schema Reference. |
 | Profile attributes | Typed shared metadata whose meaning and relation to event fields are defined by the applicable profile. |
 
-Representation classes include `message`, `schema`, `thingdescription`,
+Representation classes include `schema`, `thingdescription`,
 `thingmodel` and `usdasset`. Vendor classes use URI identifiers. Multiple
 References can have the same class. Reference names do not establish emitter,
 target, authority or execution roles.
@@ -155,8 +155,8 @@ target, authority or execution roles.
 A Consumer MUST check response status, media type and Descriptor validity
 against that domain. A missing or incorrectly typed `references` map is invalid.
 An empty map can be valid but insufficient for a profile requiring a TD or
-schema. Explicit selectors MUST name an existing Reference of the expected
-class, even when the event supplies `dataschema`.
+schema. An explicit `schemaref` MUST name an existing Reference of class
+`schema`, even when the event supplies `dataschema`.
 
 For a valid Descriptor, the Consumer retrieves only the representations it
 needs, subject to its access and content-trust policies. It MUST use their URLs
@@ -166,24 +166,24 @@ can be ignored if the profile does not need it; an unsupported REQUIRED input
 makes interpretation unavailable. Entity identity and class URIs are not
 automatic retrieval instructions.
 
-### Message and schema selection
+### Schema selection
 
-The Consumer uses the Descriptor Registry's selection rule: an explicit selector
-names one Reference; without a selector, a unique Reference of the requested
-class is selected. Zero candidates means absence; multiple candidates mean
-ambiguity, not permission to select the first entry.
+The Consumer uses the Descriptor Registry's schema-selection rule: an explicit
+`schemaref` names one Reference of class `schema`; without that selector, a
+unique Reference of class `schema` is selected. Zero candidates means absence;
+multiple candidates mean ambiguity, not permission to select the first entry.
 
 The Consumer selects the first applicable payload schema source:
 
 1. The event's `dataschema`.
 2. The Processing Descriptor's selected `schema` Reference.
-3. The schema declared by its selected `message` representation.
 
 Only absence permits proceeding to the next source. Ambiguity, an invalid
 selector, unavailable selected content or an unsupported selected format MUST
 NOT cause fallback to a different schema. With no Processing Descriptor, the
-second and third candidates are absent; the Consumer MUST NOT synthesize one
-from the TD or other retrieved content.
+second candidate is absent. If neither source supplies a schema REQUIRED by the
+profile, the Consumer MUST report that missing input; it MUST NOT derive another
+schema from a TD or other unselected representation.
 
 When `dataschema` is present, otherwise unselected schema inventory is
 irrelevant to precedence. Explicit Descriptor selector validity is still
@@ -193,9 +193,9 @@ precedence without comparing schema documents.
 
 The Producer MUST ensure that the selected schema describes the actual `data`
 representation, including any protocol envelope. A TD containing several
-DataSchemas is not automatically the payload schema. The selected Message
-definition applies only according to the publication profile; Consumers MUST NOT
-guess it by matching `type` or by inspecting names when selection is ambiguous.
+DataSchemas is not automatically the payload schema. Consumers MUST NOT use
+event-type matching or Reference-name conventions to resolve an ambiguous
+schema selection.
 
 ### Failure outcomes
 
@@ -226,11 +226,13 @@ configured Version URLs when that information is unchanged. Producers are not
 REQUIRED to perform runtime validation of each event by this extension.
 
 A Descriptor Resource URL selects its current default Version, which can change.
-Consumers SHOULD bound the freshness of cached Resource responses. A Version
-fixes its published metadata, not the bytes at referenced URLs. Publishers
-SHOULD pin REQUIRED representation Versions and retain them with the Descriptor
-for the replay period. There is no lookup of the Version intended at event
-`time`, and an ETag does not reconstruct that history.
+Consumers SHOULD bound the freshness of cached Resource responses. Under the
+Descriptor Registry's publication rule, the Publisher MUST keep referenced
+representations stable for the intended processing and replay period.
+Publishers SHOULD pin representation Versions and retain them with the
+Descriptor for that period. A Version identifier alone is not evidence that
+the Publisher has met the stability requirement. There is no lookup of the
+Version intended at event `time`, and an ETag does not reconstruct that history.
 
 `source` plus `id` retains its Core uniqueness rule. Changing `source`,
 including a Version segment or query, changes the identity and source-wide
@@ -258,11 +260,12 @@ by the [Descriptor Registry][Descriptor Registry]. Each document entry uses the
 same Reference name and records its exact URL, content type, content or base64
 bytes, and redirect base URL when applicable.
 
-The bundle covers each direct `references.*.url` or returns an error. It does
-not fetch `planurl`, entity/class identifiers or transitive dependencies, and is
-not a snapshot across Registries. An empty Reference map has an empty document
-map. Relative dependencies use the target's recorded retrieval base, not the
-Descriptor's URL.
+The bundle covers each direct `references.*.url` or returns an error. Additional
+representations to be included MUST be listed as named References. An empty
+Reference map has an empty document map. Relative dependencies use the
+referenced representation's recorded retrieval base, not the Descriptor's URL.
+Stable published inputs do not make the bundle an atomic snapshot across
+Registries.
 
 This behavior is additional to Core metadata serving. Content negotiation alone
 does not collect referenced URLs. A Publisher can prebuild a bundle for a

@@ -2,7 +2,7 @@
 
 This profile maps a [Web of Things Thing Description][TD] (TD) to CloudEvents
 Core context attributes and optionally the [Descriptor Reference
-extension](describedby.md). The REQUIRED `subject` identifies a Thing or
+extension](descriptors.md). The REQUIRED `subject` identifies a Thing or
 affordance, either through a selected Descriptor or through a self-contained TD
 document URL. The `type` names the event contract.
 
@@ -178,9 +178,9 @@ CloudEvent's actual `data` adheres to.
 type. Neither identifies the TD document's format.
 
 The Consumer follows the Descriptor Reference extension's [schema
-precedence](describedby.md#message-and-schema-selection): `dataschema`, then the
-selected Descriptor's schema, then the schema declared by its selected Message
-definition. Without a Descriptor, the second and third sources are absent. The
+precedence](descriptors.md#schema-selection): `dataschema`, then the
+selected Descriptor's schema. Without a Descriptor, the second source is
+absent. The
 Producer SHOULD omit `dataschema` when a selected Descriptor already supplies
 the schema.
 
@@ -205,7 +205,7 @@ an exact schema Version independently of the selected TD Version.
 ## Description Selection
 
 This profile uses the [Descriptor Reference selection
-rules](describedby.md#one-selected-processing-description), including when
+rules](descriptors.md#one-selected-processing-description), including when
 `describedby` is absent. Apply event-format decoding before testing presence;
 JSON `null` means unset. Selection proceeds as follows:
 
@@ -237,18 +237,20 @@ Descriptor bundle. It MUST NOT construct another URL from the Descriptor URL or
 Reference. Redirect destinations, TD `id` and equal `entityid` values MUST NOT
 be used to repair a subject-to-Reference mismatch.
 
-A `thingmodel` Reference cannot replace an instance TD. A document marked as an
-unresolved [WoT projection plan][WoT Projections] MUST NOT be used as an
-ordinary TD or re-resolved to replace the published result. OPTIONAL `planurl`
-provenance follows the Descriptor Registry's class rules. Failure to retrieve
-OPTIONAL provenance does not invalidate an otherwise usable TD, unless the
-agreed profile requires that provenance. A detected invalid plan/view pairing is
-invalid metadata.
+A `thingmodel` Reference cannot replace an instance TD. The selected
+representation MUST be an ordinary resolved TD. The
+[WoT Descriptor profile][WoT Descriptor Profile] defines the TD/TM admission
+and provenance rules, including profile-specific `planurl` and plan/view
+pairing. Consumers using that profile MUST apply its admission and provenance
+rules. Failure to obtain or validate a REQUIRED profile input MUST cause a
+reported correlation failure. Unavailable OPTIONAL provenance does not prevent
+correlation with an otherwise usable TD. The generic Descriptor model does not
+define those provenance attributes.
 
 The Producer MUST supply all REQUIRED inputs through the selected route, the
 event and the agreed publication profile. A direct TD subject without a
-Descriptor does not supply missing Message definitions or native publisher
-metadata. A Producer needing those shared inputs can use a complete Descriptor
+Descriptor does not supply an external payload schema or native publisher
+metadata. A Producer needing shared inputs can use a complete Descriptor
 with `describedby`. A Consumer MUST NOT merge them from source descriptions.
 
 If selection, retrieval or correlation fails, the Consumer MUST report the
@@ -310,8 +312,7 @@ profile-specific shared metadata are omitted from this excerpt.
   "references": {
     "pump7": {
       "class": "thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3",
-      "planurl": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7-plan/versions/3"
+      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
     },
     "gateway1": {
       "class": "thingdescription",
@@ -332,7 +333,7 @@ profile-specific shared metadata are omitted from this excerpt.
 The subject prefix selects `pump7`, not the first TD in the map. The suffix
 selects its property. The payload directly contains the property's object value
 without a `processData` wrapper. The selected schema describes that object, not
-the TD document. The OPTIONAL plan and USD asset do not have to be retrieved for
+the TD document. The USD asset does not have to be retrieved for
 this correlation.
 
 ### Direct TD Subject
@@ -478,4 +479,4 @@ referenced documents or make their dependencies available.
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
-[WoT Projections]: https://github.com/marcschier/wot-thing-description/pull/1
+[WoT Descriptor Profile]: https://github.com/xregistry/spec/pull/796
