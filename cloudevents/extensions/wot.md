@@ -61,9 +61,9 @@ trigger that lookup.
 Core requires `source` and `id` together to identify each distinct event.
 Changing the `source` changes the event identity and
 [Sequence extension](sequence.md) scope.
-Returning to an earlier `source` returns to its existing scope: Producers MUST
-NOT reuse event identities or restart a claimed source-wide sequence within
-that scope.
+When returning to an earlier `source`, Producers MUST preserve the uniqueness
+of `source` plus `id`. When using the Sequence extension, their `sequence`
+values MUST remain ordered relative to earlier events from that same source.
 
 ### type
 

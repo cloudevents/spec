@@ -354,9 +354,10 @@ mqtt://site/line/cell/device/sensor?opcuapublisherid=UInt16:12;opcuadatasetwrite
 ```
 
 Changing `source`, including its query parameters, changes the CloudEvents
-event-identity and [Sequence extension](sequence.md) scope. A Producer MUST
-NOT reuse event identities or restart a claimed source-wide sequence when it
-returns to a previously used `source`.
+event-identity and [Sequence extension](sequence.md) scope. When returning to
+an earlier `source`, the Producer MUST preserve the uniqueness of `source`
+plus `id`. When using the Sequence extension, its `sequence` values MUST
+remain ordered relative to earlier events from that same source.
 
 ## General Constraints
 

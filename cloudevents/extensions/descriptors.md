@@ -6,18 +6,19 @@ reference schemas and other representations, and can contain typed metadata
 defined by an applicable profile. It describes information relevant to the
 event, not necessarily only the event's source or subject.
 
-This proposal is developed with the Descriptor Registry revision of
-[xregistry/spec#796][Descriptor Registry]. That domain defines the metadata-only
-Descriptor Resource, its Asset, Actor and Context specializations, named
-References, selectors and OPTIONAL bundle. These are drafts, not released
-standards. This document defines their CloudEvents binding; it does not require
-a Producer to host or query a Registry.
+The [xRegistry Descriptor Registry][Descriptor Registry] defines the
+metadata-only Descriptor Resource, its Asset, Actor and Context specializations,
+named References, selectors and OPTIONAL bundle. This document defines their
+CloudEvents binding; it does not require a Producer to host or query a Registry.
 
-A Publisher publishes Descriptors and their referenced representations. A
-Producer emits events, and a Consumer processes them. A publication profile is
-an agreement defining message interpretation and REQUIRED inputs. Producers and
-Consumers establish that agreement through a specification or configuration, not
-by trusting a profile asserted in untrusted metadata.
+A Descriptor publisher publishes Descriptors and their referenced
+representations. A Producer emits events, and a Consumer processes them.
+
+A publication profile specifies the agreed payload representation,
+description-selection rules, REQUIRED processing inputs and failure behavior
+for a set of events. Producers and Consumers agree on that profile through a
+specification or deployment configuration before interpreting events.
+Untrusted event or Descriptor metadata alone does not establish that agreement.
 
 ## Notational Conventions
 
@@ -100,13 +101,6 @@ containing `descriptors`, or the absence of `describedby`. They MUST NOT resolve
 arbitrary subject strings against `source`. Core URNs and relative source
 references remain valid; a profile needing direct retrieval MUST define an
 appropriate retrievable value or use `describedby`.
-
-The [WoT profile](wot.md#description-selection) defines Descriptor-relative
-subjects, self-contained TD URL subjects, and fragment-free Subject Descriptor
-Version URLs. The last form supplies the TD selection, pointer and subject
-annotations through a Subject Descriptor, independently of processing inputs.
-The direct TD form can select a TD without any Descriptor. Each form follows
-that profile's representation and validation rules.
 
 ### One selected processing description
 
@@ -210,9 +204,9 @@ not trigger a source lookup or a schema search in the subject record.
 
 When `dataschema` is present, otherwise unselected schema inventory is
 irrelevant to precedence. Explicit Descriptor selector validity is still
-checked. Publishers and Producers SHOULD supply one applicable schema source, or
-identify the same schema when several are supplied. Consumers apply the
-precedence without comparing schema documents.
+checked. Descriptor publishers and Producers SHOULD supply one applicable
+schema source, or identify the same schema when several are supplied.
+Consumers apply the precedence without comparing schema documents.
 
 The Producer MUST ensure that the selected schema describes the actual `data`
 representation, including any protocol envelope. A TD containing several
@@ -242,64 +236,34 @@ permit bypassing a failed explicit `describedby`.
 
 The Descriptor Registry defines publication and Version stability for all
 processing-significant fields, including References, selectors and typed
-metadata. A Publisher MUST make the representations REQUIRED by the profile
-available before configuring Producers to emit the selected Descriptor URL. A
+metadata. A Descriptor publisher MUST make the representations REQUIRED by
+the profile available before configuring Producers to emit the selected
+Descriptor URL. A
 Producer MUST select information applicable to the event and SHOULD reuse
 configured Version URLs when that information is unchanged. Producers are not
 REQUIRED to perform runtime validation of each event by this extension.
 
 A Descriptor Resource URL selects its current default Version, which can change.
 Consumers SHOULD bound the freshness of cached Resource responses. Under the
-Descriptor Registry's publication rule, the Publisher MUST keep referenced
-representations stable for the intended processing and replay period.
-Publishers SHOULD pin representation Versions and retain them with the
-Descriptor for that period. A Version identifier alone is not evidence that
-the Publisher has met the stability requirement. There is no lookup of the
-Version intended at event `time`, and an ETag does not reconstruct that history.
+Descriptor Registry's publication rule, the Descriptor publisher MUST keep
+referenced representations stable for the intended processing and replay
+period. Descriptor publishers SHOULD pin representation Versions and retain
+them with the Descriptor for that period. A Version identifier alone is not
+evidence that the Descriptor publisher has met the stability requirement.
+There is no lookup of the Version intended at event `time`, and an ETag does
+not reconstruct that history.
 
 `source` plus `id` retains its Core uniqueness rule. Changing `source`,
 including a Version segment or query, changes the identity and source-wide
-Sequence scope. Changing only `describedby` does not. Producers MUST NOT reuse
-event identities or restart a claimed source-wide sequence when returning to an
-earlier source.
+Sequence scope. Changing only `describedby` does not. When returning to an
+earlier `source`, Producers MUST preserve the uniqueness of `source` plus `id`.
+When using the [Sequence extension](sequence.md), their `sequence` values MUST
+remain ordered relative to earlier events from that same source.
 
 Changing `subject` can change subscription filtering and correlation; it does
 not change the source-plus-id identity scope. A profile using a versioned
 description URL as subject MUST account for that coupling. A stable subject with
 an independently versioned `describedby` avoids it.
-
-## OPTIONAL Descriptor Bundle
-
-A supporting endpoint can return the Descriptor and its direct referenced
-representations at the same URL:
-
-```http
-Accept: application/vnd.xregistry.descriptor-bundle+json, application/json;q=0.5
-```
-
-The Consumer MUST inspect `Content-Type`. Ordinary `application/json` returns
-metadata; the bundle media type returns `descriptor` and `documents` as defined
-by the [Descriptor Registry][Descriptor Registry]. Each document entry uses the
-same Reference name and records its exact URL, content type, content or base64
-bytes, and redirect base URL when applicable.
-
-The bundle covers each direct `references.*.url` or returns an error. Additional
-representations to be included MUST be listed as named References. An empty
-Reference map has an empty document map. Relative dependencies use the
-referenced representation's recorded retrieval base, not the descriptor's URL.
-Stable published inputs do not make the bundle an atomic snapshot across
-Registries.
-
-This behavior is additional to Core metadata serving. Content negotiation alone
-does not collect referenced URLs. A Publisher can prebuild a bundle for a
-suitably configured endpoint, but the same completeness, access, freshness and
-representation requirements apply.
-
-A Consumer MAY retry ordinary JSON at the same unchanged Descriptor URL after a
-bundle error and retrieve only its REQUIRED representations. This is a
-representation retry, not fallback to another Descriptor or source. Consumers
-and caches MUST distinguish negotiated representations and authorization
-contexts, following the bundle's `Vary` and freshness rules.
 
 ## Examples
 
@@ -396,5 +360,5 @@ not authenticated principals, execution grants or current readiness. Device
 admission and operation outcomes remain governed by their own protocols and
 trusted authorities.
 
-[Descriptor Registry]: https://github.com/xregistry/spec/pull/796
+[Descriptor Registry]: https://github.com/xregistry/spec/blob/ee4a11a789914e664c867d1e08f37a3cac1e910c/workingdrafts/models/descriptor/spec.md
 [Link Relations]: https://www.iana.org/assignments/link-relations/
