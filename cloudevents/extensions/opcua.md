@@ -8,14 +8,15 @@ attributes.
 
 When used with the [Descriptor Reference extension](descriptors.md) and the
 xRegistry Descriptor model, metadata that stays constant for a message stream is
-preferably stored in the selected Descriptor rather than repeated in each event.
-The existing OPC UA attributes remain defined and usable. A Producer MUST supply
-publisher and writer metadata REQUIRED by this mapping in the `source` query
-when neither the full Part 14 NetworkMessage envelope nor the selected
+preferably stored in the Processing Descriptor rather than repeated in each
+event. The existing OPC UA attributes remain defined and usable. A Producer MUST
+supply publisher and writer metadata REQUIRED by this mapping in the `source`
+query when neither the full Part 14 NetworkMessage envelope nor the selected
 Descriptor supplies it. The [shared metadata
 rules](#shared-stream-metadata-in-a-descriptor) describe how a Consumer obtains
 these values. A direct WoT TD subject can identify its description without a
-Descriptor, but does not supply these native identities.
+Processing Descriptor. A Subject Descriptor can supply the TD pointer and
+annotations. Neither subject route supplies these native identities.
 
 ## Notational Conventions
 
@@ -44,7 +45,8 @@ Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1) field
 `applicationUri` or a customer-configured identifier such as a unified namespace
 path. For data and event messages, a Producer MUST include each publisher or
 writer query parameter REQUIRED by the mapping unless the full OPC UA Part 14
-NetworkMessage envelope or the Descriptor supplies its corresponding value.
+NetworkMessage envelope or the Processing Descriptor supplies its corresponding
+value.
 
 ### type
 
@@ -66,11 +68,11 @@ messages:
 
 - `type` MUST follow the WoT profile's semantic event-type rules instead of
   mapping to the native `MessageType`.
-- `subject` MUST follow the WoT profile's Descriptor-relative or direct-TD
-  subject rules.
+- `subject` MUST follow the WoT profile's Descriptor-relative, direct-TD or
+  Subject Descriptor Version rules.
 - The native PublisherId and at least one DataSetWriter identifier MUST be
   available from the full Part 14 NetworkMessage envelope, `source`, or the
-  selected Descriptor, as defined in [Publisher and Writer
+  Processing Descriptor, as defined in [Publisher and Writer
   Metadata](#publisher-and-writer-metadata).
 - Nothing MUST be appended to `subject`. For an event message, the `EventId`
   remains in the OPC UA event payload.
@@ -117,8 +119,8 @@ Descriptor supplies the schema. The selected schema MUST describe the actual
 For metadata, data, and event messages, a Producer MAY map `subject` to
 `DataSetWriterId` or `DataSetWriterName` from the [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164).
-A Producer using the WoT profile MUST instead follow its Descriptor-relative or
-direct-TD subject mapping.
+A Producer using the WoT profile MUST instead follow its Descriptor-relative,
+direct-TD or Subject Descriptor Version mapping.
 
 For an OPC UA event message (`type` equals `ua-event`), a Producer using the
 OPC UA-specific `subject` mapping MUST append "/" and the
@@ -258,8 +260,8 @@ than omit the status, wrap the value, or report it as _Good_.
 The following values identify the OPC UA Publisher and DataSetWriter. They are
 not CloudEvents extension attributes. A Producer MUST supply each REQUIRED value
 as a query parameter in `source` or an extension attribute of the applicable
-Descriptor Version unless the full Part 14 NetworkMessage envelope supplies it.
-The names are the same in the query and Descriptor representations.
+Processing Descriptor Version unless the full Part 14 NetworkMessage envelope
+supplies it. The names are the same in the query and Descriptor representations.
 
 | Name | Value |
 | --- | --- |
@@ -378,20 +380,41 @@ duplicated native values MUST agree after applying the specified mappings.
 The Consumer MUST report a conflict and MUST NOT interpret a message as
 conforming to this extension when they disagree.
 
-## Shared Stream Metadata in a Descriptor
+## OPC UA Descriptor Profile
+
+This profile defines how a CloudEvent and a selected xRegistry Processing
+Descriptor convey native OPC UA PubSub metadata. OPC UA Part 14 defines the
+native Publisher, DataSetWriter, DataSet and ConfigurationVersion concepts. This
+section owns their Descriptor field names, representations, selection and
+duplicate-value handling.
+
+Use of a Descriptor is OPTIONAL. A Producer and Consumer can satisfy the native
+metadata requirements through the event's supported fields and retained envelope
+without selecting a Descriptor. The Version requirement below applies when the
+profile's shared fields are supplied by a Processing Descriptor, not merely
+because the WoT profile or a Subject Descriptor is used.
+
+### Shared Stream Metadata in a Descriptor
 
 A message stream here is a configured flow from one Publisher and
 DataSetWriter with a defined payload contract. It is not necessarily a broker
 topic or a CloudEvents `source`; either can carry several streams.
 
+In this section, shared metadata is read only from a Descriptor selected in the
+processing role. Publishers MUST obtain the values from the native writer and
+applicable metadata configuration governing the emitted message. A Subject
+Descriptor's annotations do not establish that association.
+
 When Producers and Consumers agree to use this extension with the [Descriptor
 Reference selection rules](descriptors.md#one-selected-processing-description),
 the Publisher SHOULD store metadata that is constant for the stream as
-Descriptor Version extension attributes. The agreed binding selects the
-Descriptor through `describedby` or a profile-defined source or subject mapping.
-Storing stream-constant values once avoids repeating them in event attributes or
-the `source` query. The Descriptor has no document body: these values are
-members of its metadata object, alongside `references`.
+Processing Descriptor Version extension attributes. The agreed binding selects
+that Descriptor through `describedby` or its defined processing route. In the
+WoT profile, the source-selected processing route applies only to short
+Descriptor-relative subjects when `describedby` is absent. Storing
+stream-constant values once avoids repeating them in event attributes or the
+`source` query. The Descriptor has no document body: these values are members of
+its metadata object, alongside `references`.
 
 The Publisher MAY store the following values in the Descriptor when they remain
 constant for every event using that Version. When a Descriptor supplies any of
@@ -400,14 +423,18 @@ selected explicitly or through a profile-defined mapping. A Resource URL can
 select a different default Version when a delayed or replayed event is
 processed.
 
-| Descriptor attribute | Meaning and conditions |
-| --- | --- |
-| `opcuapublisherid` | The stream's native PublisherId. |
-| `opcuadatasetwriterid` | The stream's native DataSetWriterId, when used. |
-| `opcuadatasetwritername` | The stream's configured DataSetWriterName, when used. |
-| `opcuadatasetname` | The non-empty `Name` of the applicable DataSet metadata; descriptive, not a writer identifier. |
-| `opcuametadatamajorversion` | The native MajorVersion as a JSON integer in `0` to `4294967295`, when no payload schema is selected. |
-| `opcuametadataminorversion` | The native MinorVersion as a JSON integer in `0` to `4294967295`, when no payload schema is selected. |
+| Descriptor attribute | JSON representation | Meaning and conditions |
+| --- | --- | --- |
+| `opcuapublisherid` | String | The stream's typed native PublisherId, under the rules in [Publisher and Writer Metadata](#publisher-and-writer-metadata). |
+| `opcuadatasetwriterid` | Integer, `1` to `65535` | The stream's native DataSetWriterId, when used. |
+| `opcuadatasetwritername` | Non-empty String | The stream's exact configured DataSetWriterName, when used. |
+| `opcuadatasetname` | Non-empty String | The `Name` of the applicable DataSet metadata; descriptive, not a writer identifier. |
+| `opcuametadatamajorversion` | Integer, `0` to `4294967295` | The native MajorVersion, when no payload schema is selected. |
+| `opcuametadataminorversion` | Integer, `0` to `4294967295` | The native MinorVersion, when no payload schema is selected. |
+
+All ranges in this table are inclusive. These are native Descriptor values, not
+new CloudEvents extension attributes. The metadata-version event attributes
+retain their separate CloudEvents `Integer` constraints.
 
 Publisher and writer members MUST use the constraints and mappings defined
 in [Publisher and Writer Metadata](#publisher-and-writer-metadata). For
@@ -417,6 +444,10 @@ The Descriptor metadata-version members MUST preserve the full native
 Descriptor members, not CloudEvents `Integer` attributes. Consumers MUST
 compare duplicate event and Descriptor values without narrowing either value.
 Out-of-range Descriptor values are invalid metadata.
+
+Metadata-version values retain their native [ConfigurationVersion][UA
+ConfigurationVersion] meaning. Descriptor versioning does not change when Part
+14 requires a MajorVersion or MinorVersion update.
 
 The Descriptor's selected schema Reference identifies an external payload
 schema. Native metadata-version attributes MUST NOT be supplied in the event
@@ -450,19 +481,31 @@ OPC UA message. If a REQUIRED value is absent from all applicable locations, the
 Consumer MUST report missing metadata and MUST NOT interpret the payload as a
 conforming OPC UA message.
 
-A Consumer MUST use only the Descriptor selected by the agreed binding. If
-`describedby` is present, missing values MUST NOT be taken from a source or
-subject description. If its Descriptor cannot be retrieved, the Consumer MAY
-interpret the native payload using the envelope, source query and explicit event
-attributes when they supply every native requirement, but MUST NOT report
-successful Descriptor-based interpretation or WoT correlation. The WoT profile's
-explicit-link failure rules still apply.
+A Consumer MUST use only the Processing Descriptor selected by the agreed
+binding for shared schema and native metadata inputs. If `describedby` is
+present, missing values MUST NOT be taken from a source or subject description.
+If its Descriptor cannot be retrieved, the Consumer MAY interpret the native
+payload using the envelope, source query and explicit event attributes when they
+supply every native requirement, but MUST NOT report successful Descriptor-based
+interpretation or WoT correlation. The WoT profile's explicit-link failure rules
+still apply.
 
-Without `describedby`, the revised WoT profile can select a direct TD subject
-without a Descriptor. Native publisher and writer requirements then have to be
-satisfied by the retained envelope or the existing source query. A direct TD
-MUST NOT be treated as a source of missing OPC UA metadata. Consumers MUST NOT
-retrieve a source Descriptor as an implicit supplement.
+Without `describedby`, the WoT profile can select a direct TD subject or a
+Subject Descriptor Version without selecting a Processing Descriptor. Native
+publisher and writer requirements then have to be satisfied by the retained
+envelope or the existing source query. A direct TD, Subject Descriptor or its
+`wotsubject` annotations MUST NOT supply missing OPC UA metadata or a payload
+schema. Consumers MUST NOT retrieve a source Descriptor as an implicit
+supplement.
+
+With `describedby`, a Subject Descriptor's selected TD URL MUST match exactly
+one TD Reference in the Processing Descriptor under the [WoT correlation
+rules](wot.md#subject-descriptor-selection). The Subject Descriptor supplies
+only the TD pointer and subject annotations. If the same URL is explicitly
+selected by both `subject` and `describedby`, the representation MAY supply
+native metadata in its separately validated processing role. Neither equal URLs
+nor the presence of native metadata in the subject record establishes that role
+without explicit selection.
 
 The Descriptor Publisher MUST NOT change these values in a Descriptor Version
 after any Producer is configured with its URL. A change requires a new
@@ -480,17 +523,70 @@ also remain in the event. A Consumer MUST NOT use Descriptor members with those
 names as event values. Core attributes retain their normal placement and meaning
 even when their values happen to be constant for a stream.
 
-When the agreed route selects no Descriptor, the Producer MUST supply all
-REQUIRED OPC UA values through the other locations defined above. An absent
-`describedby` alone does not determine whether a Descriptor was selected.
-Producers SHOULD use Descriptor metadata only when the intended Consumers
-support the agreed mapping.
+When the agreed route selects no Processing Descriptor, the Producer MUST supply
+all REQUIRED OPC UA values through the other locations defined above. An absent
+`describedby` alone does not determine whether a Processing Descriptor was
+selected. Producers SHOULD use Descriptor metadata only when the intended
+Consumers support the agreed mapping.
 
 When `source` is itself a Descriptor URL, Producers SHOULD supply shared
 identity metadata in the selected versioned Descriptor instead of appending
 query parameters to that URL. Appending a query changes the event's source
 identity and can change the retrieved resource. Consumers MUST NOT strip a query
 to make source-based retrieval work.
+
+### xRegistry Model Mapping
+
+A deployment can add these OPTIONAL Version attributes to its Descriptor
+Resource model:
+
+```json
+{
+  "opcuapublisherid": {
+    "name": "opcuapublisherid",
+    "type": "string"
+  },
+  "opcuadatasetwriterid": {
+    "name": "opcuadatasetwriterid",
+    "type": "uinteger"
+  },
+  "opcuadatasetwritername": {
+    "name": "opcuadatasetwritername",
+    "type": "string"
+  },
+  "opcuadatasetname": {
+    "name": "opcuadatasetname",
+    "type": "string"
+  },
+  "opcuametadatamajorversion": {
+    "name": "opcuametadatamajorversion",
+    "type": "uinteger"
+  },
+  "opcuametadataminorversion": {
+    "name": "opcuametadataminorversion",
+    "type": "uinteger"
+  }
+}
+```
+
+This fragment declares storage types, not every range or native consistency
+rule. The Consumer MUST report invalid metadata when supplied values violate
+this profile's type, range or native mapping constraints. Core write/null rules
+apply to Descriptor updates; CE event-attribute null decoding is not a way to
+accept null as a supplied native Descriptor value.
+
+JSON integers in this profile preserve the full native ranges. An alternate
+serialization or generated schema MUST preserve those same values, or report
+that it cannot represent them. In particular, an Avro `int` cannot represent the
+upper half of UInt32; an appropriate wider encoding is needed rather than
+narrowing or wrapping the value. This profile does not change the generic
+xRegistry schema generator.
+
+Descriptor identity, References, schema selection and publication stability
+follow the Descriptor Registry. Publishers MUST retain stable referenced
+representations, selectors and shared metadata for the intended processing and
+replay period. A new Descriptor Version conveys changed inputs; it does not make
+the native writer identity equal to a Descriptor identifier.
 
 ## Examples
 
@@ -741,11 +837,11 @@ metadata is omitted from this excerpt.
   "schemaref": "payload",
   "references": {
     "pump7": {
-      "class": "thingdescription",
+      "class": "https://xregistry.io/classes/thingdescription",
       "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
     },
     "gateway1": {
-      "class": "thingdescription",
+      "class": "https://xregistry.io/classes/thingdescription",
       "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/gateway1/versions/1"
     },
     "payload": {
@@ -753,7 +849,7 @@ metadata is omitted from this excerpt.
       "url": "https://schemas.example/pump-process-data/versions/3"
     },
     "geometry": {
-      "class": "usdasset",
+      "class": "https://xregistry.io/classes/usdasset",
       "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2"
     }
   },
@@ -773,6 +869,36 @@ With an agreed source-Descriptor binding, a Producer can instead use the
 stream's Descriptor Version URL as `source` and omit `describedby`. This changes
 the source identity; it is not an identity-preserving rewrite of already
 published events.
+
+#### Subject Descriptor with separate processing metadata
+
+The following binary-mode event uses the [Subject Descriptor
+example](wot.md#subject-descriptor-with-separate-processing-inputs) for its TD
+pointer. Its `describedby` selects the complete `pump7-telemetry` Processing
+Descriptor shown above.
+
+```http
+POST /events HTTP/1.1
+Host: consumer.example
+Content-Type: application/json
+ce-specversion: 1.0
+ce-id: ua-message-25462
+ce-source: urn:example:actor:telemetry-service
+ce-type: com.example.models.tm.pump.properties.processData.v1
+ce-subject: https://registry.example/descriptorgroups/subjects/descriptors/pump7-process/versions/1
+ce-describedby: https://registry.example/descriptorgroups/streams/descriptors/pump7-telemetry/versions/1
+ce-opcuamessagetype: ua-keyframe
+ce-opcuasequence: 18
+
+{"Speed":1500,"Pressure":4.5}
+```
+
+The Subject Descriptor selects the same TD URL as exactly one TD Reference in
+the Processing Descriptor. Its string-form pointer selects
+`/properties/processData`. The payload schema, `UInt16:12` PublisherId and
+writer identity come only from the Processing Descriptor. Removing `describedby`
+from this event would leave those processing inputs missing: the Subject
+Descriptor does not replace them and the source is not queried.
 
 #### Direct TD subject with the NetworkMessage envelope
 
@@ -847,4 +973,5 @@ metadata.
 [UA SequenceNumber]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.3
 [UA DataSet Metadata]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.3
 [UA VersionTime]: https://reference.opcfoundation.org/specs/OPC-10000-4/v1.05.07/7.43
+[UA ConfigurationVersion]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.6
 [URI]: https://www.rfc-editor.org/rfc/rfc3986

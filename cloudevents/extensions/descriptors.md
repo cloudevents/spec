@@ -2,10 +2,9 @@
 
 The OPTIONAL `describedby` extension attribute identifies a Descriptor
 containing shared information for interpreting an event. A Descriptor can
-reference schemas, WoT Thing Descriptions or other
-representations, and can contain typed metadata such as a publisher identity. It
-describes information relevant to the event, not necessarily only the event's
-source or subject.
+reference schemas and other representations, and can contain typed metadata
+defined by an applicable profile. It describes information relevant to the
+event, not necessarily only the event's source or subject.
 
 This proposal is developed with the Descriptor Registry revision of
 [xregistry/spec#796][Descriptor Registry]. That domain defines the metadata-only
@@ -78,6 +77,11 @@ Core attributes retain their meaning:
 | `dataschema` | Identifies the schema that the event's `data` adheres to. |
 | `describedby` | Identifies additional shared information for interpreting the event. It does not replace any of the above. |
 
+The **Processing Descriptor** is selected for processing inputs. A profile can
+separately use a **Subject Descriptor** to describe the subject. These are uses
+of a Descriptor, not additional Resource types. Retrieving a Subject Descriptor
+does not make it the Processing Descriptor.
+
 A Producer SHOULD omit `describedby` when the event and agreed profile already
 supply all REQUIRED inputs. If only an external payload schema is needed,
 `dataschema` supplies that relationship without a Descriptor.
@@ -97,10 +101,12 @@ arbitrary subject strings against `source`. Core URNs and relative source
 references remain valid; a profile needing direct retrieval MUST define an
 appropriate retrievable value or use `describedby`.
 
-The [WoT profile](wot.md#description-selection) defines both Descriptor-relative
-subjects and self-contained TD URL subjects. The latter can select a TD without
-any Descriptor. This extension does not define a universal syntax for following
-references from an entity record into another document.
+The [WoT profile](wot.md#description-selection) defines Descriptor-relative
+subjects, self-contained TD URL subjects, and fragment-free Subject Descriptor
+Version URLs. The last form supplies the TD selection, pointer and subject
+annotations through a Subject Descriptor, independently of processing inputs.
+The direct TD form can select a TD without any Descriptor. Each form follows
+that profile's representation and validation rules.
 
 ### One selected processing description
 
@@ -108,17 +114,29 @@ references from an entity record into another document.
 | --- | --- |
 | `describedby` is present and valid | Select that Descriptor, whether or not source or subject descriptions are also available. |
 | `describedby` is present but invalid, unavailable or incomplete | Report the condition. Do not fall back to source or subject descriptions. |
-| `describedby` is absent and the agreed profile defines source or subject retrieval | Use the profile's selected route. |
+| `describedby` is absent and the agreed profile defines source or subject retrieval | Use the profile's selected route and role; subject retrieval alone supplies no Processing Descriptor. |
 | `describedby` is absent and no retrieval mapping applies | This extension supplies no description. Do not probe source or subject. |
 | `source` and `describedby` have the same URL | One retrieval per representation and authorization context can serve both uses; event identity is unchanged. |
+| `subject` and `describedby` explicitly identify the same Descriptor URL | Retrieval can be reused, but subject and processing requirements MUST be evaluated independently. |
 
-When present, `describedby` MUST select a Descriptor supplying all Descriptor
-inputs REQUIRED by the profile. It need not duplicate information already
-supplied by the event. A Consumer MUST NOT merge missing fields from a source or
+When present, `describedby` MUST select a Descriptor supplying all processing
+inputs that the profile requires from a Descriptor. Subject selection and
+annotations follow their separately defined subject role. The Processing
+Descriptor need not duplicate information already supplied by the event.
+A Consumer MUST NOT merge missing fields from a source or
 subject description, including when both descriptions identify the same entity.
 The Source Descriptor and Processing Descriptor can describe different entities,
 such as an actor and a device; differing entity identities alone are not a
 metadata conflict.
+
+A Subject Descriptor supplies only the subject information defined by its
+profile. Its schema References, `schemaref` or protocol metadata MUST NOT supply
+missing processing inputs. If the same URL is explicitly selected through
+`describedby`, that representation can supply processing inputs in its
+separately validated processing role. Equal URLs permit reuse of an authorized
+representation; they do not imply a role that the event did not select. A
+profile MAY require consistency between a Subject Descriptor and the Processing
+Descriptor without merging their contents.
 
 When `describedby` is absent, a profile MUST distinguish its retrieval routes
 before access. There is no general "try source, then subject" algorithm. A
@@ -147,10 +165,10 @@ The [Descriptor Registry][Descriptor Registry] defines these members:
 | `schemaref` | Selects a named payload-schema Reference. |
 | Profile attributes | Typed shared metadata whose meaning and relation to event fields are defined by the applicable profile. |
 
-Representation classes include `schema`, `thingdescription`,
-`thingmodel` and `usdasset`. Vendor classes use URI identifiers. Multiple
-References can have the same class. Reference names do not establish emitter,
-target, authority or execution roles.
+The Descriptor base defines the representation class `schema`. Technology
+profiles own other class definitions and identify them by URI; Consumers compare
+those identifiers exactly. Multiple References can have the same class.
+Reference names do not establish emitter, target, authority or execution roles.
 
 A Consumer MUST check response status, media type and Descriptor validity
 against that domain. A missing or incorrectly typed `references` map is invalid.
@@ -184,6 +202,11 @@ NOT cause fallback to a different schema. With no Processing Descriptor, the
 second candidate is absent. If neither source supplies a schema REQUIRED by the
 profile, the Consumer MUST report that missing input; it MUST NOT derive another
 schema from a TD or other unselected representation.
+
+In particular, a Subject Descriptor is not the second candidate unless the event
+also explicitly selects it as the Processing Descriptor. A subject-only route
+uses the event's `dataschema` when an external payload schema is needed; it does
+not trigger a source lookup or a schema search in the subject record.
 
 When `dataschema` is present, otherwise unselected schema inventory is
 irrelevant to precedence. Explicit Descriptor selector validity is still
@@ -263,7 +286,7 @@ bytes, and redirect base URL when applicable.
 The bundle covers each direct `references.*.url` or returns an error. Additional
 representations to be included MUST be listed as named References. An empty
 Reference map has an empty document map. Relative dependencies use the
-referenced representation's recorded retrieval base, not the Descriptor's URL.
+referenced representation's recorded retrieval base, not the descriptor's URL.
 Stable published inputs do not make the bundle an atomic snapshot across
 Registries.
 
@@ -302,7 +325,8 @@ generic example does not assert the WoT or OPC UA profile.
 ```
 
 The Processing Descriptor contains the following metadata; Core bookkeeping is
-omitted. Its schema describes the decision payload, not the TD document.
+omitted. Its schema describes the decision payload, not the TD document. The
+TD's URI class is defined by the WoT profile, not the Descriptor base.
 
 ```json
 {
@@ -311,7 +335,7 @@ omitted. Its schema describes the decision payload, not the TD document.
   "schemaref": "payload",
   "references": {
     "pump7": {
-      "class": "thingdescription",
+      "class": "https://xregistry.io/classes/thingdescription",
       "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
     },
     "payload": {
@@ -334,8 +358,9 @@ also select a sufficient Descriptor through `source`, or retrieve a subject
 description through a defined mapping. Neither case is inferred by a generic
 Consumer.
 
-The [WoT examples](wot.md#examples) show a concrete direct TD subject without a
-Descriptor and a source-selected Descriptor. The [OPC UA
+The [WoT examples](wot.md#examples) show a direct TD subject without a
+Descriptor, a source-selected Processing Descriptor and a Subject Descriptor
+Version used independently of processing inputs. The [OPC UA
 mapping](opcua.md#shared-stream-metadata-in-a-descriptor) defines when a
 selected Descriptor Version supplies native stream metadata.
 
