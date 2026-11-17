@@ -349,7 +349,7 @@ WebHook-Allowed-Rate: 100
 - [RFC7540][rfc7540] Hypertext Transfer Protocol Version 2 (HTTP/2)
 
 [ce]: ./spec.md
-[webhooks]: https://web.archive.org/web/20260705184100/https://progrium.github.io/blog/2007/05/03/web-hooks-to-revolutionize-the-web/index.html
+[webhooks]: https://progrium.xyz/articles/2007/web-hooks-to-revolutionize-the-web/
 [content-type]: https://tools.ietf.org/html/rfc7231#section-3.1.1.5
 [retry-after]: https://tools.ietf.org/html/rfc7231#section-7.1.3
 [authorization]: https://tools.ietf.org/html/rfc7235#section-4.2
