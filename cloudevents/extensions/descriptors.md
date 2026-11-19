@@ -1,15 +1,14 @@
 # Descriptor Reference
 
 The OPTIONAL `describedby` attribute identifies an [xRegistry
-Descriptor][Descriptor Registry] with shared inputs for interpreting an
-event. The profile defines which inputs the Descriptor supplies. It need
-not describe the event's source or subject.
+Descriptor][Descriptor Registry] describing an event. Profiles define what
+information a Descriptor provides. A descriptor can optionally describe the
+event's source or subject.
 
-xRegistry defines the Descriptor representation, retrieval of its metadata
-and bundles, and [publication and Version stability][Publication Stability].
-Producers need not host or query a Registry. Producers and Consumers agree
-on the profile through a specification or configuration, not through
-untrusted event or Descriptor metadata.
+xRegistry defines the Descriptor representation, retrieval of its metadata,
+bundling, and [publication and Version stability][Publication Stability].
+Producers need not host or query such Registry. Producers and Consumers agree
+on the profile through a specification or configuration.
 
 ## Notational Conventions
 
@@ -45,36 +44,34 @@ bindings use their normal extension-attribute mapping.
 
 Consumers MUST decode attributes before checking presence. In the [JSON
 format](../formats/json-format.md#22-type-system-mapping), `"describedby":
-null` means unset, so the profile can use its route for an
-omitted `describedby`. This is not a failed explicit reference.
+null` means unset.  In this case a profile can define the route for an
+omitted `describedby`.
 
 The name expresses a descriptive relationship, consistent with the
-[`describedby` Web link relation][Link Relations]; it does not define an HTTP
-`Link` header or a list of links.
+[`describedby` Web link relation][Link Relations].
 
 ## Descriptor Retrieval
 
 When `describedby` is present, the Consumer MUST use it to select the
 Descriptor. Retrieve it at the supplied URL with HTTP `GET`, using
-`Accept: application/json` for metadata or bundle
+`Accept: application/json` for metadata or if supported by bundle
 negotiation as defined by the [Descriptor Registry][Descriptor Registry].
+
 The Consumer MUST check response status, media type and Descriptor validity
 before using it, including any applicable selectors. `describedby` MUST
-identify a Descriptor that supplies the processing inputs the profile requires
-from it. Those inputs need not duplicate inputs already in the event. The
-Consumer MUST NOT supplement them from another description.
+reference a Descriptor that supplies the information the profile requires
+from it. The Descriptor SHOULD NOT duplicate information already in the event.
 
 A Producer SHOULD omit `describedby` if the event and agreed profile
-already supply all REQUIRED inputs. An absent `describedby` supplies no
-Descriptor through this extension and does not authorize lookup through
-another attribute. The applicable profile defines how it interprets other
-event attributes and whether it requires a Descriptor Version.
+already supply all REQUIRED information. The applicable profile MAY define
+how to interpret other event attributes and whether a Descriptor Version
+is REQUIRED.
 
 ### Failure outcomes
 
 | Condition | Result |
 | --- | --- |
-| REQUIRED inputs obtained and selected | Processing context available; this does not itself validate the payload or authorize an operation. |
+| REQUIRED inputs obtained and selected | Processing context available. It does not validate the payload or authorize an operation. |
 | Missing, ambiguous, unavailable or unsupported REQUIRED input | Processing context unavailable. |
 | Invalid shape, selector or profile value | Invalid metadata. |
 | Applicable validation completed | Payload valid or invalid, according to that validator. |
@@ -90,16 +87,16 @@ uninterpreted event. These outcomes add no event attributes or HTTP error codes.
 
 ## Examples
 
-### Actor and processing description
+### Maintenance decision
 
-An application profile reports an actor's maintenance decision about Pump 7. It
-defines `pump7` as the subject identifier within that actor's context.
+A maintenance service reports a decision about Pump 7. The event's
+`describedby` URL identifies the Descriptor for interpreting that decision.
 
 ```json
 {
   "specversion": "1.0",
   "id": "decision-47",
-  "source": "https://registry.example/descriptorgroups/actors/descriptors/planner7",
+  "source": "urn:example:maintenance-service:planner7",
   "subject": "pump7",
   "type": "com.example.maintenance.decision.v1",
   "describedby": "https://registry.example/descriptorgroups/streams/descriptors/pump7-maintenance/versions/1",
@@ -110,10 +107,11 @@ defines `pump7` as the subject identifier within that actor's context.
 }
 ```
 
-The Descriptor below omits Core bookkeeping. Its schema
-describes the decision payload, not the TD document. The WoT profile defines
-the `thingdescription` Reference type; the Schema Descriptor profile defines
-`schema`. The type keys group References; `pump7` and `payload` name entries.
+The Descriptor below omits xRegistry Core properties. Its schema
+describes the decision payload. The WoT profile defines
+the `thingdescription` reference type pointing to the pump.
+The Schema Descriptor profile defines the `schema` reference type.
+The type keys group References. `pump7` and `payload` name entries.
 
 ```json
 {
@@ -134,8 +132,6 @@ the `thingdescription` Reference type; the Schema Descriptor profile defines
   "data": { "schema": { "schemaref": "payload" } }
 }
 ```
-
-No actor lookup is needed.
 
 ## Security Considerations
 
