@@ -2,9 +2,10 @@
 
 This profile maps [Web of Things][TD] (WoT) Thing Descriptions (TDs) to
 CloudEvents Core attributes and the OPTIONAL
-[Descriptor Reference extension](descriptors.md). Either the event's
-`subject` or its Processing Descriptor selects the Thing or affordance.
-The `type` names the event contract.
+[Descriptor Reference extension](descriptors.md). The **Processing Descriptor**
+is the Descriptor selected to supply processing inputs. Either it or the
+event's `subject` selects the Thing or affordance. The `type` names the event
+contract.
 
 Producers and Consumers agree on this mapping through a publication profile
 or configuration. A direct TD subject can stand alone; see [Description
@@ -146,7 +147,8 @@ Consumers MUST NOT infer the mode or form from a response body or URL path.
 | `https://example.com/td/pump7/versions/3#/properties/processData` | Identify the Thing's affordance through a TD document URL; description selection follows the rules below. |
 | `https://example.com/descriptorgroups/subjects/descriptors/pump7-process/versions/1` | Identify a Subject Descriptor Version. Its `data.wot.subject` selects the TD and optionally one affordance. |
 
-After event-format decoding, the Consumer MUST classify the subject as follows:
+In subject-driven selection, the Consumer MUST classify the decoded `subject`
+as follows:
 
 1. If there is no literal `#`, the value MUST be an absolute HTTP(S) URL.
    It selects a Subject Descriptor Version under the rules below.
@@ -680,6 +682,6 @@ referenced documents or make their dependencies available.
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
-[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md
-[Schema Descriptor Profile]: https://github.com/xregistry/spec/pull/796/files#diff-392fa7cefe828f037942a4b1cc7901449d3578fbb5704d00f851f252e5f2e44a
-[WoT Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/pull/8/files#diff-275076606a2e5d246231a8182b3238d3ae6823028f628b2500cb0dc2baa63018
+[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/cc7969433b0c884b47f628acab091328d4936468/workingdrafts/models/descriptor/spec.md
+[Schema Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/cc7969433b0c884b47f628acab091328d4936468/workingdrafts/models/descriptor/spec.md#9-schema-descriptor-profile
+[WoT Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/ce88f1ae9dce5429e0709886bf942507b0856f8d/workingdrafts/models/wot/spec.md#66-wot-descriptor-profile

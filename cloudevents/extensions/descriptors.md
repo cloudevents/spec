@@ -52,15 +52,16 @@ The name expresses a descriptive relationship, consistent with the
 
 ## Descriptor Retrieval
 
-When `describedby` is present, the Consumer MUST use it to select the
-Descriptor. Retrieve it at the supplied URL with HTTP `GET`, using
-`Accept: application/json` for metadata or if supported by bundle
-negotiation as defined by the [Descriptor Registry][Descriptor Registry].
+When `describedby` is present, the Consumer MUST retrieve the Descriptor at
+the supplied URL with HTTP `GET`. Request metadata with
+`Accept: application/json`. To request a bundle, follow the
+[Descriptor Registry's][Descriptor Registry] negotiation rules.
 
 The Consumer MUST check response status, media type and Descriptor validity
 before using it, including any applicable selectors. `describedby` MUST
 reference a Descriptor that supplies the information the profile requires
-from it. The Descriptor SHOULD NOT duplicate information already in the event.
+from it. The Consumer MUST NOT fill gaps in that information from another
+description. The Descriptor SHOULD NOT duplicate information in the event.
 
 A Producer SHOULD omit `describedby` if the event and agreed profile
 already supply all REQUIRED information. The applicable profile MAY define
@@ -107,11 +108,10 @@ A maintenance service reports a decision about Pump 7. The event's
 }
 ```
 
-The Descriptor below omits xRegistry Core properties. Its schema
-describes the decision payload. The WoT profile defines
-the `thingdescription` reference type pointing to the pump.
-The Schema Descriptor profile defines the `schema` reference type.
-The type keys group References. `pump7` and `payload` name entries.
+The Descriptor example omits xRegistry Core properties.
+`references.thingdescription.pump7` identifies the pump's Thing Description.
+`data.schema.schemaref` selects `references.schema.payload`, the schema for
+the decision payload.
 
 ```json
 {
@@ -151,6 +151,6 @@ not authenticated principals, execution grants or current readiness. Device
 admission and operation outcomes remain governed by their own protocols and
 trusted authorities.
 
-[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md
-[Publication Stability]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md#46-versions-and-publication-stability
+[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/cc7969433b0c884b47f628acab091328d4936468/workingdrafts/models/descriptor/spec.md
+[Publication Stability]: https://github.com/marcschier/xregistry-drafts/blob/cc7969433b0c884b47f628acab091328d4936468/workingdrafts/models/descriptor/spec.md#46-versions-and-publication-stability
 [Link Relations]: https://www.iana.org/assignments/link-relations/

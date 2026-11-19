@@ -8,8 +8,8 @@ Core and existing extension attributes and defines OPC UA attributes.
 The [OPC UA Descriptor profile](#opc-ua-descriptor-profile) uses the
 [Descriptor Reference extension](descriptors.md) and xRegistry model to
 share stream metadata. Native identity comes from the NetworkMessage
-envelope, Processing Descriptor or `source` query, not from either WoT
-subject route (direct TD or Subject Descriptor).
+envelope, the [Processing Descriptor](wot.md#web-of-things), or a `source`
+query. A lookup through `subject` alone does not supply native identity.
 
 ## Notational Conventions
 
@@ -59,7 +59,8 @@ When a CloudEvent uses both this extension and the
 messages:
 
 - The Producer MUST use the WoT [`type`](wot.md#type) and
-  [`subject`](wot.md#subject) mappings and convey native `MessageType` under
+  [`subject`](wot.md#subject) mappings. If `data` omits the DataSetMessage
+  `MessageType`, the Producer MUST convey it in
   [`opcuamessagetype`](#opcuamessagetype).
 - The Producer MUST supply the PublisherId and writer identity under the
   [Publisher and Writer Metadata](#publisher-and-writer-metadata) rules.
@@ -210,8 +211,7 @@ than omit the status, wrap the value, or report it as _Good_.
   - In combination with the WoT profile, the value is REQUIRED for data and
     event messages when `data` omits the DataSetMessage `MessageType` field,
     including when other DataSetMessage header fields are retained.
-  - MUST NOT be present when `data` retains a full NetworkMessage envelope
-    that includes the DataSetMessage `MessageType`.
+  - MUST NOT be present when `data` includes the DataSetMessage `MessageType`.
   - MUST map to the Data Set Message Header `MessageType`.
   - The value MUST be the native OPC UA message type, such as `ua-keyframe`,
     `ua-deltaframe` or `ua-event`.
@@ -810,6 +810,7 @@ complete `pump7-telemetry` Processing Descriptor shown above.
 POST /events HTTP/1.1
 Host: consumer.example
 Content-Type: application/json
+Content-Length: 29
 ce-specversion: 1.0
 ce-id: ua-message-25462
 ce-source: urn:example:actor:telemetry-service
@@ -902,4 +903,4 @@ metadata.
 [UA VersionTime]: https://reference.opcfoundation.org/specs/OPC-10000-4/v1.05.07/7.43
 [UA ConfigurationVersion]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.6
 [URI]: https://www.rfc-editor.org/rfc/rfc3986
-[Schema Descriptor Profile]: https://github.com/xregistry/spec/pull/796/files#diff-392fa7cefe828f037942a4b1cc7901449d3578fbb5704d00f851f252e5f2e44a
+[Schema Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/cc7969433b0c884b47f628acab091328d4936468/workingdrafts/models/descriptor/spec.md#9-schema-descriptor-profile
