@@ -89,11 +89,10 @@ or [Avro Schema](https://avro.apache.org/docs/1.11.1/specification/).
 `dataschema` identifies and versions that schema.
 
 A Processing Descriptor MAY supply the schema. The Consumer MUST use
-`dataschema` when present; otherwise, select a Reference from the Processing
-Descriptor's `references.schema` bucket under the [Schema Descriptor
-profile][Schema Descriptor Profile]. Without a Processing Descriptor,
-`dataschema` is the only external schema candidate. A Subject Descriptor
-supplies a schema only if separately selected as the Processing Descriptor.
+`dataschema` when present; otherwise, use the Processing Descriptor's schema
+under the [Schema Descriptor profile][Schema Descriptor Profile].
+`data.schema.schemaref` names an entry in `references.schema`. Subject-only
+lookup cannot supply a schema.
 
 The Consumer MUST report a missing REQUIRED schema. An ambiguous selection,
 invalid selector, unavailable schema or unsupported format MUST NOT cause
@@ -759,7 +758,6 @@ metadata is omitted from this excerpt.
 {
   "descriptorid": "pump7-telemetry",
   "versionid": "1",
-  "schemaref": "payload",
   "references": {
     "thingdescription": {
       "pump7": {
@@ -781,6 +779,7 @@ metadata is omitted from this excerpt.
     }
   },
   "data": {
+    "schema": { "schemaref": "payload" },
     "opcuawriter": {
       "opcuapublisherid": "UInt16:12",
       "opcuadatasetwriterid": 17,
@@ -793,8 +792,8 @@ metadata is omitted from this excerpt.
 
 The Consumer uses the selected Descriptor's PublisherId and writer identity with
 the event's `opcuamessagetype` and `opcuasequence`. The subject's `pump7` prefix
-selects the TD among two candidates; `schemaref` selects the payload schema. The
-dataset name and writer name deliberately differ.
+selects one of two TDs; `data.schema.schemaref` selects the payload schema.
+The dataset name and writer name differ.
 
 With an agreed source-Descriptor binding, a Producer can instead use the
 stream's Descriptor Version URL as `source` and omit `describedby`. This changes
@@ -824,12 +823,10 @@ ce-opcuasequence: 18
 {"Speed":1500,"Pressure":4.5}
 ```
 
-The Subject Descriptor's `thingref` selects the same TD URL as exactly one TD
-Reference in the Processing Descriptor. Its `affordanceselector.pointer` selects
-`/properties/processData`. The payload schema, `UInt16:12` PublisherId and
-writer identity come only from the Processing Descriptor. Removing `describedby`
-from this event would leave those processing inputs missing: the Subject
-Descriptor does not replace them and the source is not queried.
+`data.wot.subject` selects one matching TD URL and the `/properties/processData`
+affordance. The Processing Descriptor supplies the payload schema, `UInt16:12`
+PublisherId and writer identity. Without `describedby` these inputs are missing:
+neither the subject nor a source lookup supplies them.
 
 #### Direct TD subject with the NetworkMessage envelope
 
@@ -906,4 +903,4 @@ metadata.
 [UA VersionTime]: https://reference.opcfoundation.org/specs/OPC-10000-4/v1.05.07/7.43
 [UA ConfigurationVersion]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.6
 [URI]: https://www.rfc-editor.org/rfc/rfc3986
-[Schema Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md#9-schema-descriptor-profile
+[Schema Descriptor Profile]: https://github.com/xregistry/spec/pull/796/files#diff-392fa7cefe828f037942a4b1cc7901449d3578fbb5704d00f851f252e5f2e44a

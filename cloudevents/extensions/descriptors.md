@@ -121,7 +121,6 @@ the `thingdescription` Reference type; the Schema Descriptor profile defines
 {
   "descriptorid": "pump7-maintenance",
   "versionid": "1",
-  "schemaref": "payload",
   "references": {
     "thingdescription": {
       "pump7": {
@@ -133,13 +132,13 @@ the `thingdescription` Reference type; the Schema Descriptor profile defines
         "url": "https://schemas.example/maintenance-decision/versions/1"
       }
     }
-  }
+  },
+  "data": { "schema": { "schemaref": "payload" } }
 }
 ```
 
-The Consumer does not need the actor's description to use this Descriptor.
-The [WoT](wot.md#description-selection) and [OPC
-UA](opcua.md#opc-ua-descriptor-profile) profiles define their own mappings.
+No actor lookup is needed. See the [WoT](wot.md#description-selection) and
+[OPC UA](opcua.md#opc-ua-descriptor-profile) mappings.
 
 ## Migration from Event Context
 
