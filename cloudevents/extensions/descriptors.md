@@ -2,8 +2,8 @@
 
 The OPTIONAL `describedby` attribute identifies an [xRegistry
 Descriptor][Descriptor Registry] with shared inputs for interpreting an
-event. A **Processing Descriptor** supplies the inputs REQUIRED by the
-applicable profile. It need not describe the event's source or subject.
+event. The profile defines which inputs the Descriptor supplies. It need
+not describe the event's source or subject.
 
 xRegistry defines the Descriptor representation, retrieval of its metadata
 and bundles, and [publication and Version stability][Publication Stability].
@@ -55,8 +55,8 @@ The name expresses a descriptive relationship, consistent with the
 ## Descriptor Retrieval
 
 When `describedby` is present, the Consumer MUST use it to select the
-Processing Descriptor. Retrieve the Descriptor at the supplied URL with
-HTTP `GET`, using `Accept: application/json` for metadata or bundle
+Descriptor. Retrieve it at the supplied URL with HTTP `GET`, using
+`Accept: application/json` for metadata or bundle
 negotiation as defined by the [Descriptor Registry][Descriptor Registry].
 The Consumer MUST check response status, media type and Descriptor validity
 before using it, including any applicable selectors. `describedby` MUST
@@ -110,7 +110,7 @@ defines `pump7` as the subject identifier within that actor's context.
 }
 ```
 
-The Processing Descriptor below omits Core bookkeeping. Its schema
+The Descriptor below omits Core bookkeeping. Its schema
 describes the decision payload, not the TD document. The WoT profile defines
 the `thingdescription` Reference type; the Schema Descriptor profile defines
 `schema`. The type keys group References; `pump7` and `payload` name entries.
