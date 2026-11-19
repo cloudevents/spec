@@ -1,24 +1,15 @@
 # Descriptor Reference
 
-The OPTIONAL `describedby` extension attribute identifies a Descriptor
-containing shared information for interpreting an event. A Descriptor can
-reference schemas and other representations, and can contain typed metadata
-defined by an applicable profile. It describes information relevant to the
-event, not necessarily only the event's source or subject.
+The OPTIONAL `describedby` attribute identifies an [xRegistry
+Descriptor][Descriptor Registry] with shared inputs for interpreting an
+event. A **Processing Descriptor** supplies the inputs REQUIRED by the
+applicable profile. It need not describe the event's source or subject.
 
-The [xRegistry Descriptor Registry][Descriptor Registry] defines the
-metadata-only Descriptor Resource, its Asset, Actor and Context specializations,
-named References, selectors and OPTIONAL bundle. This document defines their
-CloudEvents binding; it does not require a Producer to host or query a Registry.
-
-A Descriptor publisher publishes Descriptors and their referenced
-representations. A Producer emits events, and a Consumer processes them.
-
-A publication profile specifies the agreed payload representation,
-description-selection rules, REQUIRED processing inputs and failure behavior
-for a set of events. Producers and Consumers agree on that profile through a
-specification or deployment configuration before interpreting events.
-Untrusted event or Descriptor metadata alone does not establish that agreement.
+xRegistry defines the Descriptor representation, retrieval of its metadata
+and bundles, and [publication and Version stability][Publication Stability].
+Producers need not host or query a Registry. Producers and Consumers agree
+on the profile through a specification or configuration, not through
+untrusted event or Descriptor metadata.
 
 ## Notational Conventions
 
@@ -41,13 +32,10 @@ profile that explicitly uses its description-selection rules.
   - OPTIONAL.
   - If present, MUST identify a Descriptor Resource or Descriptor Version
     and MUST NOT contain a fragment.
-  - SHOULD identify a Descriptor Version. Profiles MAY require one.
-  - Consumers MUST use the value unchanged as the request URL and as the URL
-    component of the cache key. Cache selection MUST also account for the
-    selected representation and authorization context.
-  - Consumers MUST NOT derive other URLs from the value. In particular, they
-    MUST NOT append `$details`, a view path or query parameter, or remove
-    `/versions/<id>`.
+  - Consumers MUST use the URL unchanged for requests and cache lookup.
+    Cache selection MUST account for representation and authorization context.
+  - Consumers MUST NOT derive other URLs, including by adding `$details`,
+    a view path or query parameter, or removing `/versions/<id>`.
   - An empty string or otherwise invalid set value is invalid, not absent.
 
 In the JSON event format, `describedby` is a top-level string member. In HTTP
@@ -55,164 +43,33 @@ binary content mode, it is the `ce-describedby` header, encoded and decoded
 according to the [HTTP binding](../bindings/http-protocol-binding.md). Other
 bindings use their normal extension-attribute mapping.
 
-Consumers MUST apply the event format's decoding rules before testing attribute
-presence. In particular, the [JSON
-format](../formats/json-format.md#22-type-system-mapping) treats `"describedby":
-null` as unset, equivalent to omission. That is not a failed explicit reference
-and does not prohibit a profile-defined route for events without `describedby`.
-The same presence rule applies to the migration check for simultaneous old and
-new attributes.
+Consumers MUST decode attributes before checking presence, including for
+migration. In the [JSON
+format](../formats/json-format.md#22-type-system-mapping), `"describedby":
+null` means unset, so the profile can use its route for an
+omitted `describedby`. This is not a failed explicit reference.
 
 The name expresses a descriptive relationship, consistent with the
 [`describedby` Web link relation][Link Relations]; it does not define an HTTP
 `Link` header or a list of links.
 
-## Core Attributes and Description Selection
+## Descriptor Retrieval
 
-Core attributes retain their meaning:
+When `describedby` is present, the Consumer MUST use it to select the
+Processing Descriptor. Retrieve the Descriptor at the supplied URL with
+HTTP `GET`, using `Accept: application/json` for metadata or bundle
+negotiation as defined by the [Descriptor Registry][Descriptor Registry].
+The Consumer MUST check response status, media type and Descriptor validity
+before using it, including any applicable selectors. `describedby` MUST
+identify a Descriptor that supplies the processing inputs the profile requires
+from it. Those inputs need not duplicate inputs already in the event. The
+Consumer MUST NOT supplement them from another description.
 
-| Attribute | Meaning |
-| --- | --- |
-| `source` | Identifies the context in which the event occurred. It is not necessarily one physical Producer. |
-| `subject` | Identifies what the event concerns within that originating context. It is a String, not inherently a retrieval URL. |
-| `dataschema` | Identifies the schema that the event's `data` adheres to. |
-| `describedby` | Identifies additional shared information for interpreting the event. It does not replace any of the above. |
-
-The **Processing Descriptor** is selected for processing inputs. A profile can
-separately use a **Subject Descriptor** to describe the subject. These are uses
-of a Descriptor, not additional Resource types. Retrieving a Subject Descriptor
-does not make it the Processing Descriptor.
-
-A Producer SHOULD omit `describedby` when the event and agreed profile already
-supply all REQUIRED inputs. If only an external payload schema is needed,
-`dataschema` supplies that relationship without a Descriptor.
-
-### Profile-defined source and subject retrieval
-
-A profile MAY use a Descriptor URL as `source` when that URL also identifies the
-originating context. It MAY define a subject that identifies a Thing or other
-entity and permits retrieval of its description. Such a profile MUST define the
-selected representation, any fragment processing, REQUIRED inputs and failure
-behavior. An arbitrary processing metadata URL MUST NOT replace `subject` if it
-no longer identifies what the event concerns under that profile.
-
-Generic Consumers MUST NOT infer retrieval from an HTTPS scheme, a URL path
-containing `descriptors`, or the absence of `describedby`. They MUST NOT resolve
-arbitrary subject strings against `source`. Core URNs and relative source
-references remain valid; a profile needing direct retrieval MUST define an
-appropriate retrievable value or use `describedby`.
-
-### One selected processing description
-
-| Condition | Processing |
-| --- | --- |
-| `describedby` is present and valid | Select that Descriptor, whether or not source or subject descriptions are also available. |
-| `describedby` is present but invalid, unavailable or incomplete | Report the condition. Do not fall back to source or subject descriptions. |
-| `describedby` is absent and the agreed profile defines source or subject retrieval | Use the profile's selected route and role; subject retrieval alone supplies no Processing Descriptor. |
-| `describedby` is absent and no retrieval mapping applies | This extension supplies no description. Do not probe source or subject. |
-| `source` and `describedby` have the same URL | One retrieval per representation and authorization context can serve both uses; event identity is unchanged. |
-| `subject` and `describedby` explicitly identify the same Descriptor URL | Retrieval can be reused, but subject and processing requirements MUST be evaluated independently. |
-
-When present, `describedby` MUST select a Descriptor supplying all processing
-inputs that the profile requires from a Descriptor. Subject selection and
-annotations follow their separately defined subject role. The Processing
-Descriptor need not duplicate information already supplied by the event.
-A Consumer MUST NOT merge missing fields from a source or
-subject description, including when both descriptions identify the same entity.
-The Source Descriptor and Processing Descriptor can describe different entities,
-such as an actor and a device; differing entity identities alone are not a
-metadata conflict.
-
-A Subject Descriptor supplies only the subject information defined by its
-profile. Its schema References, `schemaref` or protocol metadata MUST NOT supply
-missing processing inputs. If the same URL is explicitly selected through
-`describedby`, that representation can supply processing inputs in its
-separately validated processing role. Equal URLs permit reuse of an authorized
-representation; they do not imply a role that the event did not select. A
-profile MAY require consistency between a Subject Descriptor and the Processing
-Descriptor without merging their contents.
-
-When `describedby` is absent, a profile MUST distinguish its retrieval routes
-before access. There is no general "try source, then subject" algorithm. A
-failure in the selected route MUST NOT cause an implicit switch to another
-route. OPTIONAL descriptive lookups for display do not supply missing processing
-inputs.
-
-For example, a source description might contain PublisherId. If an explicit
-Processing Descriptor and the event omit that REQUIRED OPC UA value, the
-Consumer reports missing metadata rather than borrowing it from the source
-description. Conversely, an unavailable source description does not prevent
-processing when the explicit Descriptor and event supply all REQUIRED inputs.
-
-## Descriptor Representation and Processing
-
-An ordinary `GET` of the selected Descriptor URL with `Accept: application/json`
-returns Descriptor metadata directly. Its `hasdocument` model aspect is `false`;
-no `$details` request or separate Descriptor document is needed.
-
-The [Descriptor Registry][Descriptor Registry] defines these members:
-
-| Member | Use |
-| --- | --- |
-| `references` | REQUIRED map of local Reference names to objects containing `class` and `url`. An empty map is valid. |
-| `entityid`, `entitytype` | Describe a primary entity when one exists; not replacements for event source identity or authenticated principals. |
-| `schemaref` | Selects a named payload-schema Reference. |
-| Profile attributes | Typed shared metadata whose meaning and relation to event fields are defined by the applicable profile. |
-
-The Descriptor base defines the representation class `schema`. Technology
-profiles own other class definitions and identify them by URI; Consumers compare
-those identifiers exactly. Multiple References can have the same class.
-Reference names do not establish emitter, target, authority or execution roles.
-
-A Consumer MUST check response status, media type and Descriptor validity
-against that domain. A missing or incorrectly typed `references` map is invalid.
-An empty map can be valid but insufficient for a profile requiring a TD or
-schema. An explicit `schemaref` MUST name an existing Reference of class
-`schema`, even when the event supplies `dataschema`.
-
-For a valid Descriptor, the Consumer retrieves only the representations it
-needs, subject to its access and content-trust policies. It MUST use their URLs
-unchanged. A Reference's `class` identifies a representation, not a requirement
-to retrieve it or permission to execute anything it describes. An unknown class
-can be ignored if the profile does not need it; an unsupported REQUIRED input
-makes interpretation unavailable. Entity identity and class URIs are not
-automatic retrieval instructions.
-
-### Schema selection
-
-The Consumer uses the Descriptor Registry's schema-selection rule: an explicit
-`schemaref` names one Reference of class `schema`; without that selector, a
-unique Reference of class `schema` is selected. Zero candidates means absence;
-multiple candidates mean ambiguity, not permission to select the first entry.
-
-The Consumer selects the first applicable payload schema source:
-
-1. The event's `dataschema`.
-2. The Processing Descriptor's selected `schema` Reference.
-
-Only absence permits proceeding to the next source. Ambiguity, an invalid
-selector, unavailable selected content or an unsupported selected format MUST
-NOT cause fallback to a different schema. With no Processing Descriptor, the
-second candidate is absent. If neither source supplies a schema REQUIRED by the
-profile, the Consumer MUST report that missing input; it MUST NOT derive another
-schema from a TD or other unselected representation.
-
-In particular, a Subject Descriptor is not the second candidate unless the event
-also explicitly selects it as the Processing Descriptor. A subject-only route
-uses the event's `dataschema` when an external payload schema is needed; it does
-not trigger a source lookup or a schema search in the subject record.
-
-When `dataschema` is present, otherwise unselected schema inventory is
-irrelevant to precedence. Explicit Descriptor selector validity is still
-checked. Descriptor publishers and Producers SHOULD supply one applicable
-schema source, or identify the same schema when several are supplied.
-Consumers apply the precedence without comparing schema documents.
-
-The Producer MUST ensure that the selected schema describes the actual `data`
-representation, including any protocol envelope. A TD containing several
-DataSchemas is not automatically the payload schema. Consumers MUST NOT use
-event-type matching or Reference-name conventions to resolve an ambiguous
-schema selection.
+A Producer SHOULD omit `describedby` if the event and agreed profile
+already supply all REQUIRED inputs. An absent `describedby` supplies no
+Descriptor through this extension and does not authorize lookup through
+another attribute. The applicable profile defines how it interprets other
+event attributes and whether it requires a Descriptor Version.
 
 ### Failure outcomes
 
@@ -221,49 +78,16 @@ schema selection.
 | REQUIRED inputs obtained and selected | Processing context available; this does not itself validate the payload or authorize an operation. |
 | Missing, ambiguous, unavailable or unsupported REQUIRED input | Processing context unavailable. |
 | Invalid shape, selector or profile value | Invalid metadata. |
-| Repeated profile-defined values disagree after REQUIRED decoding | Metadata conflict. |
 | Applicable validation completed | Payload valid or invalid, according to that validator. |
 | Validation not performed or could not complete | Payload not checked; not a successful validation. |
 
-These are processing outcomes, not new event attributes or HTTP error codes. The
-Consumer SHOULD record a failure. Unless a profile requires an outcome, local
-policy determines whether to defer, reject, or retain/forward the event without
-that interpretation. It MUST NOT claim successful interpretation or validation
-when the REQUIRED inputs are missing. Retaining an uninterpreted event does not
-permit bypassing a failed explicit `describedby`.
-
-## Publication, Identity and Replay
-
-The Descriptor Registry defines publication and Version stability for all
-processing-significant fields, including References, selectors and typed
-metadata. A Descriptor publisher MUST make the representations REQUIRED by
-the profile available before configuring Producers to emit the selected
-Descriptor URL. A
-Producer MUST select information applicable to the event and SHOULD reuse
-configured Version URLs when that information is unchanged. Producers are not
-REQUIRED to perform runtime validation of each event by this extension.
-
-A Descriptor Resource URL selects its current default Version, which can change.
-Consumers SHOULD bound the freshness of cached Resource responses. Under the
-Descriptor Registry's publication rule, the Descriptor publisher MUST keep
-referenced representations stable for the intended processing and replay
-period. Descriptor publishers SHOULD pin representation Versions and retain
-them with the Descriptor for that period. A Version identifier alone is not
-evidence that the Descriptor publisher has met the stability requirement.
-There is no lookup of the Version intended at event `time`, and an ETag does
-not reconstruct that history.
-
-`source` plus `id` retains its Core uniqueness rule. Changing `source`,
-including a Version segment or query, changes the identity and source-wide
-Sequence scope. Changing only `describedby` does not. When returning to an
-earlier `source`, Producers MUST preserve the uniqueness of `source` plus `id`.
-When using the [Sequence extension](sequence.md), their `sequence` values MUST
-remain ordered relative to earlier events from that same source.
-
-Changing `subject` can change subscription filtering and correlation; it does
-not change the source-plus-id identity scope. A profile using a versioned
-description URL as subject MUST account for that coupling. A stable subject with
-an independently versioned `describedby` avoids it.
+If an explicit `describedby` is invalid, unavailable or incomplete, the
+Consumer MUST report the failure and MUST NOT substitute another description
+for it. A profile MAY permit processing that does not depend on the Descriptor,
+but the Consumer MUST NOT report successful Descriptor-based interpretation or
+validation without REQUIRED inputs. Unless the profile dictates the outcome,
+local policy determines whether to defer, reject, retain or forward an
+uninterpreted event. These outcomes add no event attributes or HTTP error codes.
 
 ## Examples
 
@@ -288,9 +112,10 @@ generic example does not assert the WoT or OPC UA profile.
 }
 ```
 
-The Processing Descriptor contains the following metadata; Core bookkeeping is
-omitted. Its schema describes the decision payload, not the TD document. The
-TD's URI class is defined by the WoT profile, not the Descriptor base.
+The Processing Descriptor below omits Core bookkeeping. Its schema
+describes the decision payload, not the TD document. The WoT profile defines
+the `thingdescription` Reference type; the Schema Descriptor profile defines
+`schema`. The type keys group References; `pump7` and `payload` name entries.
 
 ```json
 {
@@ -298,49 +123,32 @@ TD's URI class is defined by the WoT profile, not the Descriptor base.
   "versionid": "1",
   "schemaref": "payload",
   "references": {
-    "pump7": {
-      "class": "https://xregistry.io/classes/thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
+    "thingdescription": {
+      "pump7": {
+        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
+      }
     },
-    "payload": {
-      "class": "schema",
-      "url": "https://schemas.example/maintenance-decision/versions/1"
+    "schema": {
+      "payload": {
+        "url": "https://schemas.example/maintenance-decision/versions/1"
+      }
     }
   }
 }
 ```
 
-The actor's independently retrieved description can have `references: {}` and
-actor identity metadata. It is not merged with the Processing Descriptor.
-Neither description is an authorization to inspect or operate the pump.
-
-### Without an additional link
-
-For the same application profile, if the event and an explicit `dataschema`
-already supply every REQUIRED input, no `describedby` is needed. A profile can
-also select a sufficient Descriptor through `source`, or retrieve a subject
-description through a defined mapping. Neither case is inferred by a generic
-Consumer.
-
-The [WoT examples](wot.md#examples) show a direct TD subject without a
-Descriptor, a source-selected Processing Descriptor and a Subject Descriptor
-Version used independently of processing inputs. The [OPC UA
-mapping](opcua.md#shared-stream-metadata-in-a-descriptor) defines when a
-selected Descriptor Version supplies native stream metadata.
+The Consumer does not need the actor's description to use this Descriptor.
+The [WoT](wot.md#description-selection) and [OPC
+UA](opcua.md#opc-ua-descriptor-profile) profiles define their own mappings.
 
 ## Migration from Event Context
 
-This revision replaces the draft `contexturl` extension and Role-keyed Context
-representation. Existing events retain their original attribute and profile
-semantics; Consumers MUST NOT silently reinterpret them as the new binding.
-Deployments retaining such events need the old reader or an explicit conversion
-policy. A profile using this revision MUST reject an event with both
-`contexturl` and `describedby` unless a separate migration agreement defines
-that combination.
-
-Do not rewrite historical sources merely to adopt registry-based identity. Names
-discussed only during design, such as `contracturl`, `refset` and `contextref`,
-are not aliases defined by this extension.
+This binding replaces the draft `contexturl` extension and Role-keyed
+Context representation. Consumers MUST preserve the original semantics of
+stored events through an old reader or explicit conversion, and MUST reject
+events with both `contexturl` and `describedby` unless a migration agreement
+defines that combination. Do not rewrite historical sources just to adopt
+Registry URLs. `contracturl`, `refset` and `contextref` are not aliases.
 
 ## Security Considerations
 
@@ -360,5 +168,6 @@ not authenticated principals, execution grants or current readiness. Device
 admission and operation outcomes remain governed by their own protocols and
 trusted authorities.
 
-[Descriptor Registry]: https://github.com/xregistry/spec/blob/ee4a11a789914e664c867d1e08f37a3cac1e910c/workingdrafts/models/descriptor/spec.md
+[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md
+[Publication Stability]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md#46-versions-and-publication-stability
 [Link Relations]: https://www.iana.org/assignments/link-relations/

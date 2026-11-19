@@ -1,31 +1,24 @@
 # Web of Things
 
-This profile maps a [Web of Things Thing Description][TD] (TD) to CloudEvents
-Core context attributes and optionally the [Descriptor Reference
-extension](descriptors.md). The REQUIRED `subject` identifies a Thing or
-affordance through a Processing Descriptor, a self-contained TD document URL, or
-a Subject Descriptor Version containing a TD pointer and subject annotations.
-The `type` names the event contract.
+This profile maps [Web of Things][TD] (WoT) Thing Descriptions (TDs) to
+CloudEvents Core attributes and the OPTIONAL
+[Descriptor Reference extension](descriptors.md). The REQUIRED `subject`
+identifies a Thing or affordance through a Processing Descriptor, a TD URL,
+or a Subject Descriptor Version. The `type` names the event contract.
 
-The profile defines no new CloudEvents extension attributes. Producers and
-Consumers agree on its use through a publication profile or configuration. It
-does not define a transport binding, provision a Thing, or require a particular
-registry implementation. A direct TD subject can supply the REQUIRED description
-without a Descriptor; an explicit `describedby` can supply additional shared
-information when needed.
+Producers and Consumers agree on the profile through a publication profile
+or configuration. A direct TD subject can stand alone. If `describedby` is
+also present, its Processing Descriptor MUST contain exactly one TD
+Reference whose `url` exactly matches the subject's TD URL without the
+fragment. See [Description Selection](#description-selection). The mapping
+adds no attributes, transport binding or provisioning rules, and requires
+no particular Registry implementation.
 
-The [WoT Descriptor profile][WoT Descriptor Profile] owns these representation
-class identifiers:
-
-| Representation | Class identifier |
-| --- | --- |
-| Thing Description | `https://xregistry.io/classes/thingdescription` |
-| Thing Model | `https://xregistry.io/classes/thingmodel` |
-
-In this document, a **TD Reference** has the first URI as its exact `class`
-value. A **TM Reference** has the second URI. The former bare class names
-`thingdescription` and `thingmodel` are not aliases. The class identifiers are
-not retrieval instructions.
+The [WoT Descriptor profile][WoT Descriptor Profile] defines the Reference
+types `thingdescription` and `thingmodel`. A **TD Reference** is a named
+entry in `references.thingdescription`; a **TM Reference** is a named entry in
+`references.thingmodel`. `thingref` and named subjects select local Reference
+names, not types.
 
 ## Notational Conventions
 
@@ -49,12 +42,11 @@ different device.
 For example, `https://factory.example.com/line1/pump7` and
 `mqtt://site/line/cell/device/sensor` are valid sources.
 
-An agreed source-Descriptor binding MAY use an absolute, fragment-free
-Descriptor URL as `source` when it identifies the originating context. Consumers
-MUST NOT infer that binding merely from URL-like spelling. The
-[description-selection rules](#description-selection) determine whether the
-source is retrieved. A direct TD subject or Subject Descriptor URL does not
-trigger that lookup.
+An agreed binding MAY use an absolute, fragment-free Descriptor URL as
+`source` if it identifies the originating context. Consumers MUST NOT infer
+that binding from URL syntax. [Description Selection](#description-selection)
+defines when to retrieve the source; neither direct TD nor Subject
+Descriptor URLs trigger that lookup.
 
 #### Event identity
 
@@ -67,20 +59,16 @@ values MUST remain ordered relative to earlier events from that same source.
 
 ### type
 
-The Core [`type`](../spec.md#type) identifies the event contract. The contract
-is the payload representation defined by the publication profile or protocol
-binding, including its members, member types, and semantics. Two Things can
-produce events of the same type when their event contracts are the same. This
-profile uses a dot-separated symbol so a Consumer can map the type to a
-code-generation symbol.
+Core [`type`](../spec.md#type) identifies the event contract: the payload
+representation, members, types and semantics defined by the publication
+profile or protocol binding. Things can share a type when they share a
+contract. The dot-separated type supports code generation.
 
 The type MUST contain one or more segments separated by single dots. Each
-segment MUST start with an ASCII letter or underscore and contain only ASCII
-letters, digits, or underscores thereafter. These character restrictions apply
-only to `type`; they do not change the Thing identifier, TD member names,
-`source`, `subject`, or payload. A code generator remains responsible for
-language-specific keywords. The final segment MUST identify the event-contract
-revision as `vN`, where `N` is a positive decimal integer without leading zeros.
+segment MUST start with an ASCII letter or underscore; the rest can contain
+only ASCII letters, digits and underscores. These restrictions apply only
+to `type`; generators still handle language keywords. The last segment MUST
+be the contract revision `vN`, with positive decimal `N` and no leading zeros.
 
 A Producer MAY configure the complete type. Otherwise, it derives the type
 from a governing [Thing Model][TM] (TM) and, for an affordance event, the
@@ -124,14 +112,10 @@ For example, adding a `quality` member to
 `com.example.models.tm.pump.properties.processData.v2`, even if Consumers can
 ignore the new member.
 
-A change to an individual value or the presence of a member already defined as
-OPTIONAL does not change the contract revision. A change to `describedby`, the
-selected TD URL or the selected schema alone also does not change the revision;
-if it changes the payload contract, the Producer MUST use a new revision.
-
-A change to a Subject Descriptor's pointer or annotations follows the same rule:
-whether the payload contract changed determines the type revision, not the
-presence of a new Descriptor Version.
+Changing a value or omitting or including an OPTIONAL member does not change
+the revision. Changes to `describedby`, a TD URL, the selected schema, or
+a Subject Descriptor's `thingref`, selector or annotations require a new
+revision only if they change the payload contract.
 
 The Producer MUST configure a valid complete type when the derivation is
 unavailable, produces an invalid symbol, or collides with a different event
@@ -153,7 +137,7 @@ affordance that the event concerns.
 | `#` or `#/properties/processData` | Select the unique TD Reference in the Processing Descriptor, then the whole Thing or affordance. |
 | `pump7#/properties/processData` | Select the Processing Descriptor's named TD Reference `pump7`, then its affordance. |
 | `https://example.com/td/pump7/versions/3#/properties/processData` | Identify the Thing's affordance through a TD document URL; description selection follows the rules below. |
-| `https://example.com/descriptorgroups/subjects/descriptors/pump7-process/versions/1` | Identify a Subject Descriptor Version whose `wotsubject` selects the TD and pointer. The URL has no literal `#`. |
+| `https://example.com/descriptorgroups/subjects/descriptors/pump7-process/versions/1` | Identify a Subject Descriptor Version whose `thingref` selects the TD and whose OPTIONAL `affordanceselector` selects one affordance. Omission selects the whole Thing. The URL has no literal `#`. |
 
 After event-format decoding, the Consumer MUST classify the subject as follows:
 
@@ -192,12 +176,10 @@ as specified by RFC 6901. It MUST report a correlation failure if the encoding
 or pointer is invalid or the pointer does not select the intended Thing or
 affordance.
 
-For a Subject Descriptor, the profile's `wotsubject.pointer` uses the JSON
-Pointer **string** representation: `""` selects the whole Thing, and a non-empty
-pointer starts with `/`. Consumers MUST NOT apply URI-fragment or percent
-decoding to that stored pointer. For example, `/properties/pressure~1bar`
-selects `pressure/bar`, while `/properties/pressure%2Fbar` selects the literal
-name `pressure%2Fbar`. The latter MUST NOT be interpreted as `pressure/bar`.
+For a Subject Descriptor, use [Subject Descriptor
+selection](#subject-descriptor-selection). The stored pointer is a JSON
+Pointer string, not a URI fragment: `/properties/pressure~1bar` selects
+`pressure/bar`, while `/properties/pressure%2Fbar` selects `pressure%2Fbar`.
 
 The subject identifies the Thing or affordance, not an occurrence. Different
 events can have the same subject and different CloudEvents `id` values. A
@@ -215,31 +197,34 @@ annotations do not need their own versioned description.
 
 ### dataschema and datacontenttype
 
-Core [`dataschema`](../spec.md#dataschema) identifies the schema that the
-CloudEvent's actual `data` adheres to.
-[`datacontenttype`](../spec.md#datacontenttype) identifies that data's media
-type. Neither identifies the TD document's format.
+Core [`dataschema`](../spec.md#dataschema) and
+[`datacontenttype`](../spec.md#datacontenttype) describe the schema and media
+type of `data`, not the TD format.
 
-The Consumer follows the Descriptor Reference extension's [schema
-precedence](descriptors.md#schema-selection): `dataschema`, then the selected
-Processing Descriptor's schema. A Subject Descriptor does not supply that second
-candidate merely because it contains schema References or `schemaref`. Without a
-Processing Descriptor, the second source is absent. The Producer SHOULD omit
-`dataschema` when a selected Processing Descriptor already supplies the schema.
+The publication profile or protocol binding determines whether an external
+payload schema is REQUIRED. The Consumer MUST use `dataschema` when
+present; otherwise, select a Reference from the Processing Descriptor's
+`references.schema` bucket under the [Schema Descriptor
+profile][Schema Descriptor Profile].
+Without a Processing Descriptor, `dataschema` is the only candidate. A
+Subject Descriptor supplies a schema only if it is separately selected as
+the Processing Descriptor.
 
-A TD describes interactions and can contain several DataSchemas. The
-Producer MUST NOT use the whole TD as `dataschema` merely because the TD
-contains a schema for the selected affordance. A TD's retrieval URL is a
-valid `dataschema` only if the identified representation is itself the
-schema applicable to `data`.
+The Consumer MUST report a missing REQUIRED schema. An ambiguous selection,
+invalid selector, unavailable schema or unsupported format MUST NOT cause
+fallback to another schema. If `dataschema` is present, the Consumer MUST
+still validate applicable Descriptor selectors, but does not select a
+Descriptor schema or compare schema documents. Producers and Descriptor
+publishers SHOULD supply one schema source or identify the same schema in
+both. Producers SHOULD omit `dataschema` when the Processing Descriptor
+supplies the schema.
 
-The publication profile or protocol binding defines how the selected
-affordance's DataSchema maps to the wire payload. An object containing several
-property values, an event payload and a protocol envelope can need different
-schemas. When `dataschema` is present, the Producer MUST ensure that it
-identifies the schema of the representation actually sent, including any
-encoding or envelope selected by the binding. The same requirement applies to a
-schema supplied by a Descriptor.
+A TD can contain several DataSchemas. A Producer MUST NOT use a TD URL as
+`dataschema` unless the URL identifies the schema for `data` itself.
+The profile or binding maps an affordance's DataSchema to the wire payload.
+Aggregated properties, event data and protocol envelopes can need different
+schemas. A schema supplied through `dataschema` or a Descriptor MUST describe
+the actual payload, including its encoding and envelope.
 
 An xRegistry Schema Resource's document-view URL can identify that external
 schema. It is not the WoT Resource's metadata-view URL. A profile MAY require
@@ -247,11 +232,11 @@ an exact schema Version independently of the selected TD Version.
 
 ## Description Selection
 
-This profile uses the [Descriptor Reference selection
-rules](descriptors.md#one-selected-processing-description), including when
-`describedby` is absent. Apply event-format decoding before testing presence;
-JSON `null` means unset, including for `subject`. An unset subject fails this
-profile's REQUIRED-subject constraint. Selection proceeds as follows:
+This profile uses the [Descriptor Reference retrieval
+rules](descriptors.md#descriptor-retrieval). Apply event-format decoding before
+testing presence; JSON `null` means unset, including for `subject`. An unset
+subject fails this profile's REQUIRED-subject constraint. Selection proceeds
+as follows:
 
 1. If `describedby` is present, retrieve and validate its Descriptor. It is
    authoritative for processing inputs; a failure MUST NOT cause fallback to
@@ -272,12 +257,11 @@ profile's REQUIRED-subject constraint. Selection proceeds as follows:
    failure.
 
 For a Descriptor-relative or direct-TD subject using a Processing Descriptor,
-select its TD Reference as follows:
+select a Reference only from `references.thingdescription`, as follows:
 
 - For an empty subject prefix, the Processing Descriptor MUST have exactly
   one TD Reference.
-- For a Reference-name prefix, that entry MUST exist and MUST be a TD
-  Reference.
+- For a Reference-name prefix, the named entry MUST exist in that bucket.
 - For a direct URL prefix, exactly one TD Reference MUST
   have a `url` equal to that prefix. Consumers MUST compare the strings exactly,
   without URI normalization. Missing or duplicate matches are correlation
@@ -289,21 +273,18 @@ Descriptor bundle. It MUST NOT construct another URL from the Descriptor URL or
 Reference. Redirect destinations, TD `id` and equal `entityid` values MUST NOT
 be used to repair a subject-to-Reference mismatch.
 
-A TM Reference cannot replace an instance TD. The selected representation MUST
-be an ordinary resolved TD. The [WoT Descriptor profile][WoT Descriptor Profile]
-defines the TD/TM admission and provenance rules, including profile-specific
-`planurl` and plan/view pairing. Consumers using that profile MUST apply its
-admission and provenance rules. Failure to obtain or validate a REQUIRED profile
-input MUST cause a reported correlation failure. Unavailable OPTIONAL provenance
-does not prevent correlation with an otherwise usable TD. The generic Descriptor
-model does not define those provenance attributes.
+The selected representation MUST be an ordinary resolved TD, not a TM.
+Consumers using the [WoT Descriptor profile][WoT Descriptor Profile] MUST
+apply its admission and provenance rules, including `planurl` and plan/view
+pairing. The generic Descriptor model has no provenance attributes. Missing
+or invalid REQUIRED inputs cause a correlation failure; unavailable OPTIONAL
+provenance does not prevent use of an otherwise valid TD.
 
-The Producer MUST supply all REQUIRED inputs through the selected route, the
-event and the agreed publication profile. A direct TD or a Subject Descriptor
-alone does not supply an external payload schema or native publisher metadata. A
-Producer needing shared processing inputs can use a complete Processing
-Descriptor with `describedby`. A Consumer MUST NOT merge them from source or
-subject descriptions.
+The Producer MUST supply all REQUIRED inputs through the selected route,
+event and profile. A direct TD or Subject Descriptor supplies neither an
+external payload schema nor native publisher metadata. Producers can use
+`describedby` for shared processing inputs; Consumers MUST NOT merge source
+or subject fields.
 
 If selection, retrieval or correlation fails, the Consumer MUST report the
 failure and leave the event uncorrelated. It MAY retain or forward the event
@@ -311,14 +292,10 @@ without TD-based interpretation, but MUST NOT switch routes or substitute
 another TD. This does not authenticate the originating entity or authorize an
 action described by the TD.
 
-The Publisher MUST make the selected TD available before configuring Producers
-with its URL or a Descriptor that references it. The Publisher SHOULD publish an
-explicit TD Version. A change to the resolved logical view requires a new TD
-Version; the Publisher MUST NOT change that view at a previously published
-Version URL. Descriptor publication and Version stability follow the Descriptor
-Registry rules. This also applies to a Subject Descriptor's selected pointer,
-annotations and TD Reference: publishing a changed subject description requires
-a new Descriptor Version.
+The Publisher MUST make the selected TD available before configuring
+Producers to use its URL or a Descriptor that references it. The Publisher
+SHOULD use a TD Version URL. The [WoT Descriptor profile][WoT Descriptor Profile]
+defines publication and stability of TDs and Subject Descriptors.
 
 Changing only `describedby` does not change identity or sequence scope. A
 Producer MUST NOT reuse an `id` or restart a source-wide sequence merely because
@@ -332,14 +309,11 @@ changing default. The Producer and Consumer MUST use an agreed registry or
 publication binding that identifies the Version addressed by this URL. Consumers
 MUST verify that the retrieved Descriptor is that Version.
 
-For the xRegistry HTTP binding, a configured Registry base and Descriptor model
-provide the Version-addressing structure:
-`/<GROUPS>/<GID>/<RESOURCES>/<RID>/versions/<VID>`. The Consumer validates the
-request URL under that complete binding and checks the returned Descriptor
-identity and `versionid` against the addressed entity. It MUST NOT infer Version
-identity merely from an arbitrary `/versions/` substring or the presence of
-`versionid` in a response: default Resource responses also expose Version
-metadata.
+For xRegistry HTTP retrieval, the Consumer MUST validate the request URL
+against the configured Registry base and the [Descriptor Registry's Version
+addressing][Descriptor Registry], then check the returned identity against
+the addressed Version. A `/versions/` substring or `versionid` alone is not
+sufficient: a default Resource response also exposes Version metadata.
 
 An external publication binding MAY map an opaque absolute URL to a fixed
 Descriptor Version. That mapping MUST identify the Version and define how the
@@ -348,30 +322,42 @@ identity, the Consumer MUST report a correlation failure. Redirects do not
 authorize substitution of a default or different Version. Requests use the
 subject URL unchanged; they do not append or remove a version segment.
 
-The Consumer MUST validate the Subject Descriptor and its `wotsubject` according
-to the [WoT Descriptor profile][WoT Descriptor Profile]. That object requires an
-exact local `reference` naming a TD Reference and a `pointer` in RFC 6901 string
-form. The object and both members MUST be present and non-null; an empty pointer
-string is valid. CE's event-attribute null decoding does not apply to members of
-retrieved Descriptor metadata. Typed subject annotations follow the defining
-profile's value and null rules.
+The Consumer MUST validate the Subject Descriptor under the
+[WoT Descriptor profile][WoT Descriptor Profile]. Its REQUIRED top-level
+`thingref` MUST be a non-null String naming an exact local entry in
+`references.thingdescription`. The entry MUST identify an ordinary resolved TD.
 
-The selected Reference MUST identify an ordinary resolved TD. The stored pointer
-MUST select the intended whole Thing or concrete affordance. Consumers MUST
-report missing or malformed subject metadata, a wrong Reference class, an
-invalid pointer, an unavailable TD or a pointer that does not select the
-intended member. Other References do not become retrieval prerequisites solely
-because they occur in the same Descriptor. The Consumer MUST NOT follow
-recursive Subject Descriptor chains.
+Omit `affordanceselector` to select the whole Thing. If present, it MUST be
+a non-null object with a non-empty RFC 6901 string `pointer`. The pointer
+MUST select one existing affordance at `/properties/<name>`,
+`/actions/<name>` or `/events/<name>`, with a non-empty name and RFC 6901
+token escaping. Consumers MUST NOT URI-fragment-decode or percent-decode
+the pointer. Root, affordance-map, nested and non-affordance pointers are
+invalid. A missing or invalid pointer does not count as selector omission.
+
+Typed annotations for a selected affordance are siblings of `pointer`
+inside `affordanceselector`. Profile-defined inline metadata about the whole
+Thing belongs in the relevant Descriptor `data` bucket. Their types,
+omission and null behavior follow the defining profile.
+CE's event-attribute null decoding does not apply to retrieved Descriptor
+members: `affordanceselector: null` is invalid, not whole-Thing selection.
+The former `wotsubject` member is not an alias; a Subject Descriptor
+containing it MUST fail admission, including when the new fields are present.
+
+Consumers MUST report missing or malformed subject metadata, a `thingref`
+outside the TD bucket, an unavailable TD or a selector that does not identify
+the intended affordance as correlation failures. Other References are not
+retrieval prerequisites solely because they occur in the same Descriptor.
+The Consumer MUST NOT follow recursive Subject Descriptor chains.
 
 If `describedby` is present, the selected Subject Descriptor TD URL MUST match
 the `url` of exactly one TD Reference in the Processing Descriptor. This
 comparison is byte-for-byte, without URI normalization, redirect substitution or
 inference from TD or entity IDs. A missing or duplicate match is a correlation
 failure. The Consumer uses the matching TD representation with the Subject
-Descriptor's pointer and annotations; it does not merge Descriptor fields or
-substitute the Processing Descriptor's own subject pointer for a missing or
-invalid one.
+Descriptor's whole-Thing selection or affordance selector and annotations.
+It does not merge Descriptor fields or substitute a selector from the
+Processing Descriptor to repair missing or invalid subject metadata.
 
 If `describedby` is absent, the Subject Descriptor still supplies only subject
 semantics. Its `schemaref`, schema References, publisher or writer metadata MUST
@@ -379,12 +365,11 @@ NOT supply processing inputs. The event and agreed profile MUST supply those
 inputs; an external payload schema uses `dataschema`. The Consumer MUST NOT
 query source metadata to supplement this route.
 
-The same Version URL MAY be explicitly used for both `subject` and
-`describedby`. Consumers MAY reuse an authorized cached or retrieved
-representation for the same URL, representation and authorization context, but
-MUST validate each role independently, including the exactly-one TD URL match.
-The explicit processing role MAY then supply the schema and shared metadata; the
-subject role alone cannot do so.
+Producers MAY use the same Version URL for `subject` and `describedby`.
+Consumers MAY reuse the response or cache entry for the same URL,
+representation and authorization context, but MUST validate both roles,
+including the single TD URL match. Only the explicit processing role MAY
+supply the schema and shared metadata.
 
 ## Relationship to Other Extensions
 
@@ -397,8 +382,8 @@ MUST follow that extension's conditional WoT mapping.
 ### Single Affordance
 
 This CloudEvent identifies a pump and its `processData` property. Its Descriptor
-selects version `3` of the resolved TD and supplies the payload schema. Another
-TD in the same Descriptor describes a gateway.
+selects version `3.0.0` of the resolved TD and supplies the payload schema.
+Another TD in the same Descriptor describes a gateway.
 
 ```json
 {
@@ -425,21 +410,23 @@ profile-specific shared metadata are omitted from this excerpt.
   "versionid": "1",
   "schemaref": "payload",
   "references": {
-    "pump7": {
-      "class": "https://xregistry.io/classes/thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
+    "thingdescription": {
+      "pump7": {
+        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
+      },
+      "gateway1": {
+        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/gateway1/versions/1.0.0"
+      }
     },
-    "gateway1": {
-      "class": "https://xregistry.io/classes/thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/gateway1/versions/1"
+    "schema": {
+      "payload": {
+        "url": "https://schemas.example/pump-process-data/versions/3"
+      }
     },
-    "payload": {
-      "class": "schema",
-      "url": "https://schemas.example/pump-process-data/versions/3"
-    },
-    "geometry": {
-      "class": "https://xregistry.io/classes/usdasset",
-      "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2"
+    "usdasset": {
+      "geometry": {
+        "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2"
+      }
     }
   }
 }
@@ -463,7 +450,7 @@ the pump; it is not retrieved.
   "id": "sample-4712",
   "source": "urn:example:actor:telemetry-service",
   "type": "com.example.models.tm.pump.properties.processData.v1",
-  "subject": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3#/properties/processData",
+  "subject": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0#/properties/processData",
   "dataschema": "https://schemas.example/pump-process-data/versions/3",
   "datacontenttype": "application/json",
   "data": {
@@ -486,7 +473,7 @@ The preceding event can instead select the same telemetry Descriptor:
   "id": "sample-4714",
   "source": "urn:example:actor:telemetry-service",
   "type": "com.example.models.tm.pump.properties.processData.v1",
-  "subject": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3#/properties/processData",
+  "subject": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0#/properties/processData",
   "describedby": "https://registry.example/descriptorgroups/streams/descriptors/pump7-telemetry/versions/1",
   "datacontenttype": "application/json",
   "data": {
@@ -497,9 +484,9 @@ The preceding event can instead select the same telemetry Descriptor:
 ```
 
 The direct subject matches exactly the `pump7` Reference. The Descriptor now
-supplies the schema. Changing just the subject's TD Version to `4` would fail
-correlation because this Descriptor names Version `3`. Adding another TD
-Reference with that same Version `3` URL would also make the direct match
+supplies the schema. Changing just the subject's TD Version to `4.0.0` would
+fail correlation because this Descriptor names Version `3.0.0`. Adding another TD
+Reference with that same Version `3.0.0` URL would also make the direct match
 ambiguous; a named subject would then be REQUIRED.
 
 ### Source-selected Descriptor
@@ -552,24 +539,25 @@ examples, the configured xRegistry HTTP base is `https://registry.example`, with
 ```
 
 The Subject Descriptor at the event's `subject` URL contains the following
-metadata. Core bookkeeping is omitted. This example's deployment profile defines
-`acme_purpose` as an OPTIONAL non-empty String annotation on `wotsubject`; a
-present null is invalid under that example profile. It describes the purpose of
-the subject view, not processing policy.
+metadata. Core bookkeeping is omitted. This example's deployment profile
+defines `acme_purpose` as an OPTIONAL non-empty String annotation inside
+`affordanceselector`; a present null is invalid under that example profile.
+It describes the purpose of the affordance view, not processing policy.
 
 ```json
 {
   "descriptorid": "pump7-process",
   "versionid": "1",
-  "wotsubject": {
-    "reference": "pump7",
+  "thingref": "pump7",
+  "affordanceselector": {
     "pointer": "/properties/processData",
     "acme_purpose": "maintenance"
   },
   "references": {
-    "pump7": {
-      "class": "https://xregistry.io/classes/thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
+    "thingdescription": {
+      "pump7": {
+        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
+      }
     }
   }
 }
@@ -582,6 +570,9 @@ For this example, the selected TD at that Reference's URL is:
   "@context": "https://www.w3.org/2022/wot/td/v1.1",
   "id": "urn:example:asset:pump7",
   "title": "Pump 7",
+  "version": {
+    "instance": "3.0.0"
+  },
   "securityDefinitions": {
     "nosec_sc": {
       "scheme": "nosec"
@@ -609,17 +600,16 @@ For this example, the selected TD at that Reference's URL is:
 }
 ```
 
-The TD URL matches exactly one TD Reference in the Processing Descriptor. The
-Consumer evaluates `/properties/processData` as a stored JSON Pointer, uses
-`acme_purpose` only as defined subject annotation, and selects the payload
-schema from the Processing Descriptor's `schemaref`. It does not read the TD
-form merely to correlate the event. The TD's example security declaration does
-not authorize access to either Descriptor.
+The Consumer matches the TD URL to one Processing Descriptor Reference,
+evaluates `/properties/processData`, and uses `acme_purpose` only as a
+subject annotation. The Processing Descriptor's `schemaref` selects the
+payload schema. Correlation does not read the TD form; the TD's security
+declaration does not authorize access to either Descriptor.
 
-Changing the Subject Descriptor's TD URL to Version `4` without a matching
+Changing the Subject Descriptor's TD URL to Version `4.0.0` without a matching
 Processing Descriptor update fails correlation. Adding a second matching TD URL
-to the Processing Descriptor also fails. Changing the pointer to null fails even
-when the Processing Descriptor contains a usable pointer; there is no
+to the Processing Descriptor also fails. A null or empty selector pointer fails
+even when the Processing Descriptor contains a usable selector; there is no
 cross-Descriptor repair.
 
 The following variant retains the Subject Descriptor but selects no Processing
@@ -646,10 +636,39 @@ event's `dataschema`. If a REQUIRED schema were missing, the Consumer would
 report that condition rather than select it from the Subject Descriptor or query
 the source.
 
+#### Whole Thing through a Subject Descriptor
+
+The following Subject Descriptor selects the whole Thing by omitting
+`affordanceselector`. The Core `description` describes the whole Thing.
+The Descriptor does not use an empty or null pointer.
+
+```json
+{
+  "descriptorid": "pump7-whole",
+  "versionid": "1",
+  "thingref": "pump7",
+  "description": "Pump 7 operating state",
+  "references": {
+    "thingdescription": {
+      "pump7": {
+        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
+      }
+    }
+  }
+}
+```
+
+Under the configured example Registry, its subject URL is
+`https://registry.example/descriptorgroups/subjects/descriptors/pump7-whole/versions/1`.
+An aggregate-state event can select this URL with the aggregate type and
+Processing Descriptor used in the Whole Thing example below. The existing
+direct-TD whole-Thing subject remains the TD URL followed by `#`; it does
+not use the stored affordance selector.
+
 ### Whole Thing
 
 This CloudEvent carries aggregated data for the same pump. Its Descriptor
-selects version `3` of the resolved TD and the aggregate payload schema. The
+selects version `3.0.0` of the resolved TD and the aggregate payload schema. The
 publication profile defines a payload containing the `processData` and `running`
 property values. The subject selects the whole TD.
 
@@ -680,13 +699,15 @@ The referenced Descriptor Version contains the following metadata.
   "versionid": "1",
   "schemaref": "payload",
   "references": {
-    "pump7": {
-      "class": "https://xregistry.io/classes/thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3"
+    "thingdescription": {
+      "pump7": {
+        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
+      }
     },
-    "payload": {
-      "class": "schema",
-      "url": "https://schemas.example/pump-state/versions/3"
+    "schema": {
+      "payload": {
+        "url": "https://schemas.example/pump-state/versions/3"
+      }
     }
   }
 }
@@ -713,4 +734,6 @@ referenced documents or make their dependencies available.
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
-[WoT Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/12024152a0b10588e98ed33879fd7a5269f1290b/workingdrafts/models/wot/spec.md#66-wot-descriptor-profile
+[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md
+[Schema Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/e6f5b6af95e6abb8dfcd0311251e4244f54374aa/workingdrafts/models/descriptor/spec.md#9-schema-descriptor-profile
+[WoT Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/a5d679ce4e8d3b3f4db263c305f2c6bf55ed5242/workingdrafts/models/wot/spec.md#66-wot-descriptor-profile
