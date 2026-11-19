@@ -109,8 +109,8 @@ NetworkMessage envelope if retained.
 For metadata, data, and event messages, a Producer MAY map `subject` to
 `DataSetWriterId` or `DataSetWriterName` from the [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164).
-A Producer using the WoT profile MUST instead follow its Descriptor-relative,
-direct-TD or Subject Descriptor Version mapping.
+A Producer using the WoT profile MUST instead follow its
+[subject selection rules](wot.md#subject).
 
 For a native OPC UA event message (`MessageType` equals `ua-event`), a
 Producer using the OPC UA-specific `subject` mapping MUST append "/" and the
@@ -140,8 +140,8 @@ The Producer MUST scope `source` to the writer's ordering scope and format
 padding the unsigned decimal value to ten digits. The Producer MUST NOT
 use the counter if a reset, rollover or shared source prevents that ordering.
 
-With WoT, the subject identifies a Thing or affordance rather than the
-writer. `opcuasequence` carries the native counter. If `sequence` is present,
+With WoT, subject selection does not identify the writer.
+`opcuasequence` carries the native counter. If `sequence` is present,
 it MUST satisfy the [Sequence extension](./sequence.md) independently and
 MUST NOT be inferred from `opcuasequence`.
 
@@ -452,10 +452,9 @@ envelope or the existing source query. A direct TD, Subject Descriptor or its
 subject annotations MUST NOT supply missing OPC UA metadata or a payload schema.
 Consumers MUST NOT retrieve a source Descriptor as an implicit supplement.
 
-Apply the [WoT correlation rules](wot.md#subject-descriptor-selection) to
-match the subject's TD URL to exactly one Processing Descriptor Reference.
-If `subject` and `describedby` explicitly select the same URL, only the
-separately validated processing role MAY supply native metadata.
+Apply [WoT description selection](wot.md#description-selection). Match TD
+URLs only when `subject` independently selects a TD or Subject Descriptor.
+Only the selected Processing Descriptor MAY supply native metadata.
 
 The Descriptor Publisher MUST NOT change these values in a Descriptor Version
 after any Producer is configured with its URL. A change requires a new

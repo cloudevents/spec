@@ -43,8 +43,7 @@ binary content mode, it is the `ce-describedby` header, encoded and decoded
 according to the [HTTP binding](../bindings/http-protocol-binding.md). Other
 bindings use their normal extension-attribute mapping.
 
-Consumers MUST decode attributes before checking presence, including for
-migration. In the [JSON
+Consumers MUST decode attributes before checking presence. In the [JSON
 format](../formats/json-format.md#22-type-system-mapping), `"describedby":
 null` means unset, so the profile can use its route for an
 omitted `describedby`. This is not a failed explicit reference.
@@ -94,8 +93,7 @@ uninterpreted event. These outcomes add no event attributes or HTTP error codes.
 ### Actor and processing description
 
 An application profile reports an actor's maintenance decision about Pump 7. It
-defines `pump7` as the subject identifier within that actor's context; this
-generic example does not assert the WoT or OPC UA profile.
+defines `pump7` as the subject identifier within that actor's context.
 
 ```json
 {
@@ -137,17 +135,7 @@ the `thingdescription` Reference type; the Schema Descriptor profile defines
 }
 ```
 
-No actor lookup is needed. See the [WoT](wot.md#description-selection) and
-[OPC UA](opcua.md#opc-ua-descriptor-profile) mappings.
-
-## Migration from Event Context
-
-This binding replaces the draft `contexturl` extension and Role-keyed
-Context representation. Consumers MUST preserve the original semantics of
-stored events through an old reader or explicit conversion, and MUST reject
-events with both `contexturl` and `describedby` unless a migration agreement
-defines that combination. Do not rewrite historical sources just to adopt
-Registry URLs. `contracturl`, `refset` and `contextref` are not aliases.
+No actor lookup is needed.
 
 ## Security Considerations
 
