@@ -1,15 +1,52 @@
 # OPC UA
 
-This extension maps [OPC UA](https://reference.opcfoundation.org/Core/Part1/v105/docs/)
+This extension lets a Consumer route
+[OPC UA](https://reference.opcfoundation.org/Core/Part1/v105/docs/)
 [PubSub](https://reference.opcfoundation.org/Core/Part14/v105/docs/)
-DataSetMessages to CloudEvents for routing over supported protocols. It maps
-Core and existing extension attributes and defines OPC UA attributes.
+messages using CloudEvents attributes. A DataSetWriter publishes a
+DataSetMessage that carries measurements or an event. In this example,
+the CloudEvents `type` identifies a keyframe and `subject` identifies its
+writer. The Consumer has the OPC UA metadata for this stream. The HTTP
+request uses CloudEvents binary mode:
 
-The [OPC UA Descriptor profile](#opc-ua-descriptor-profile) uses the
-[Descriptor Reference extension](descriptor.md) to share stream metadata.
-Native identity comes from the NetworkMessage
-envelope, the [Processing Descriptor](wot.md#web-of-things), or a `source`
-query. A lookup through `subject` alone does not supply native identity.
+```http
+POST /events HTTP/1.1
+Host: consumer.example
+Content-Type: application/json
+Content-Length: 16
+ce-specversion: 1.0
+ce-id: pump7-sample-1
+ce-source: urn:example:pump7
+ce-type: ua-keyframe
+ce-subject: pump7-process
+ce-time: 2026-10-29T12:00:00Z
+
+{"Pressure":4.5}
+```
+
+When Consumers need metadata shared by a stream, the Producer can use
+[`describedby`](descriptor.md#describedby) to point to a Descriptor. This
+**Processing Descriptor** supplies shared inputs. For example, an inline
+`opcuawriter` entry can carry publisher and writer identity:
+
+```json
+{
+  "descriptorid": "pump7-stream",
+  "versionid": "1",
+  "entries": {
+    "writer": {
+      "class": "opcuawriter",
+      "opcuapublisherid": "UInt16:12",
+      "opcuadatasetwriterid": 17
+    }
+  }
+}
+```
+
+Values such as the event ID and time stay with each event. The
+[OPC UA Descriptor profile](#opc-ua-descriptor-profile) defines the shared
+fields. The [combined WoT mapping](#wot-mapping) covers events that also
+use the Web of Things (WoT) profile.
 
 ## Notational Conventions
 
@@ -18,7 +55,9 @@ As with the main [CloudEvents specification](../spec.md), the key words "MUST",
 "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
 described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-These requirements apply only to events using this extension.
+However, the scope of these key words is limited to when this extension is
+used. For example, an attribute marked as "REQUIRED" needs to be included
+when the event uses this extension and meets the stated conditions.
 
 ## Mapping of REQUIRED Attributes
 
@@ -43,35 +82,13 @@ An OPC UA Producer MAY map `type` to the
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MessageType`. For data and event messages without the WoT profile,
 the Producer MUST use that native value as `type` when the DataSetMessage
-`MessageType` field is absent from `data`. A retained header does not
-guarantee that field is present: the native content mask controls inclusion.
+`MessageType` field is absent from `data`. For a retained header, the
+native content mask determines whether it carries that field.
 
 A Producer using the WoT profile MUST instead follow its semantic
 event-type rules and the [opcuamessagetype](#opcuamessagetype) requirements
 for conveying the native message type. The [WoT mapping section](#wot-mapping)
 specifies the combined mapping.
-
-### WoT mapping
-
-When a CloudEvent uses both this extension and the
-[WoT profile](./wot.md), the following mappings apply to data and event
-messages:
-
-- The Producer MUST use the WoT [`type`](wot.md#type) and
-  [`subject`](wot.md#subject) mappings. If `data` omits the DataSetMessage
-  `MessageType`, the Producer MUST convey it in
-  [`opcuamessagetype`](#opcuamessagetype).
-- The Producer MUST supply the PublisherId and writer identity under the
-  [Publisher and Writer Metadata](#publisher-and-writer-metadata) rules.
-- Nothing MUST be appended to `subject`. For an event message, the `EventId`
-  remains in the OPC UA event payload.
-- `opcuasequence` MUST carry the native `SequenceNumber`. The CloudEvents
-  `sequence` attribute, when present, MUST satisfy the independent ordering
-  requirements of the Sequence extension and MUST NOT be inferred from
-  `opcuasequence`.
-
-These mappings override only conflicting rules. A profile MUST meet every
-other applicable requirement to conform to this extension.
 
 ## Mapping of OPTIONAL Attributes
 
@@ -91,13 +108,12 @@ or [Avro Schema](https://avro.apache.org/docs/1.11.1/specification/).
 A Processing Descriptor MAY supply the schema. The Consumer MUST use
 `dataschema` when present; otherwise, use the Processing Descriptor's schema
 under the [Schema Descriptor profile][Schema Descriptor Profile].
-Subject-only lookup cannot supply a schema.
 
 The Consumer MUST report a missing REQUIRED schema. An ambiguous selection,
 invalid selector, unavailable schema or unsupported format MUST NOT cause
 fallback to another schema. If `dataschema` is present, the Consumer MUST
-still validate applicable Descriptor selectors, without selecting a
-Descriptor schema or comparing schema documents. Producers and Descriptor
+still validate applicable Descriptor selectors and use `dataschema` as the
+sole schema input. Producers and Descriptor
 publishers SHOULD supply one schema source or identify the same schema in
 both. The Producer SHOULD omit `dataschema` when the Descriptor supplies
 the schema. The selected schema MUST describe `data`, including the
@@ -133,31 +149,25 @@ WoT mapping or `type` for the non-WoT mapping, as specified above.
 
 Without WoT, `sequence`, if present, MUST map to the native DataSetMessage
 [`SequenceNumber`][UA SequenceNumber]. The Publisher increments it per
-DataSetWriter; it does not order multiple writers sharing a `source`.
+DataSetWriter.
 The Producer MUST scope `source` to the writer's ordering scope and format
 `sequence` so lexical comparison preserves event order, for example by
 padding the unsigned decimal value to ten digits. The Producer MUST NOT
 use the counter if a reset, rollover or shared source prevents that ordering.
 
-With WoT, subject selection does not identify the writer.
-`opcuasequence` carries the native counter. If `sequence` is present,
-it MUST satisfy the [Sequence extension](./sequence.md) independently and
-MUST NOT be inferred from `opcuasequence`.
+For events using WoT, see the [combined mapping](#wot-mapping).
 
 ### traceparent
 
-Attribute as defined by [distributed-tracing extension](./distributed-tracing.md)
-to allow tracing from event publisher towards consumer.
+See the [Distributed Tracing extension](./distributed-tracing.md#traceparent).
 
 ### tracestate
 
-Attribute as defined by [distributed-tracing extension](./distributed-tracing.md)
-MAY be used to allow tracing from event publisher towards consumer.
+See the [Distributed Tracing extension](./distributed-tracing.md#tracestate).
 
 ### recordedtime
 
-Attribute as defined by [recordedtime extension](./recordedtime.md) to
-determine the latency between event publisher towards consumer.
+See the [Recorded Time extension](./recordedtime.md#recordedtime).
 
 ## Attributes
 
@@ -167,7 +177,7 @@ determine the latency between event publisher towards consumer.
 - Description: Links dataset message to the current version of the metadata.
 Contains value from `MajorVersion` of [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `MetaDataVersion`.
 - Constraints
-  - OPTIONAL but MUST NOT be present if `dataschema` is used
+  - OPTIONAL, subject to the [schema and metadata-version rules](#metadata-versions)
 
 ### opcuametadataminorversion
 
@@ -177,7 +187,7 @@ Contains value from `MinorVersion` of [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164)
 field `MetaDataVersion`.
 - Constraints
-  - OPTIONAL but MUST NOT be present if `dataschema` is used
+  - OPTIONAL, subject to the [schema and metadata-version rules](#metadata-versions)
 
 Both event attributes map unsigned [VersionTime][UA VersionTime] to
 CloudEvents `Integer` (`0` to `2147483647`, inclusive). Producers MUST
@@ -233,11 +243,11 @@ report an error rather than omit it, wrap the value, or report it as _Good_.
 
 ## Publisher and Writer Metadata
 
-The following values identify the OPC UA Publisher and DataSetWriter. They are
-not CloudEvents extension attributes. A Producer MUST supply each REQUIRED value
-as a query parameter in `source` or a field of the selected `opcuawriter`
-entry unless the full Part 14 NetworkMessage envelope
-supplies it. The names are the same in the query and Descriptor representations.
+The following names identify the OPC UA Publisher and DataSetWriter
+when supplied as `source` query parameters or in an `opcuawriter` entry.
+The native envelope carries these values under their OPC UA field names.
+The [combined WoT mapping](#wot-mapping) defines when the identities are
+REQUIRED; in the OPC UA-only mapping these values are OPTIONAL.
 
 | Name | Value |
 | --- | --- |
@@ -268,15 +278,6 @@ as a null value.
 configured name. For JSON message mapping, this is the
 [`DataSetWriterName` field][UA DataSetWriterName] when present in the
 DataSetMessage; otherwise the Producer obtains it from configuration.
-
-For data and event messages that also use the WoT profile, the native
-PublisherId and at least one of DataSetWriterId and DataSetWriterName are
-REQUIRED. The envelope, corresponding `source` query parameters or selected
-`opcuawriter` entry MUST supply those values. An envelope satisfies the
-requirement only for the identifiers it carries. Without WoT, this extension
-does not require those native identifiers in any of these locations. Producers
-can use the OPC UA-specific `subject` mapping without supplying additional
-identity metadata.
 
 If both writer values are supplied, they MUST identify the same DataSetWriter.
 A writer name MUST uniquely identify the DataSetWriter within the PublisherId
@@ -334,11 +335,8 @@ neither the envelope nor the Descriptor supplies them. The writer name is
 mqtt://site/line/cell/device/sensor?opcuapublisherid=UInt16:12;opcuadatasetwritername=Pump%26Process;site=north
 ```
 
-Changing `source`, including its query parameters, changes the CloudEvents
-event-identity and [Sequence extension](sequence.md) scope. When returning to
-an earlier `source`, the Producer MUST preserve the uniqueness of `source`
-plus `id`. When using the Sequence extension, its `sequence` values MUST
-remain ordered relative to earlier events from that same source.
+Changing `source`, including its query parameters, changes the scope
+of [event identity](../spec.md#id) and the [Sequence extension](sequence.md).
 
 ## General Constraints
 
@@ -353,13 +351,14 @@ referenced via `dataschema` attribute or selected through a Descriptor.
 - OPC UA PubSub JSON messages MUST contain exactly one DataSetMessage,
   including when a full NetworkMessage envelope is retained.
 
-A retained envelope does not replace the REQUIRED CloudEvents attributes or
-the per-event `opcuasequence` attribute when the WoT mapping applies.
+A Producer MUST supply the REQUIRED CloudEvents attributes and, when the
+WoT mapping applies, the per-event `opcuasequence` even with a retained
+envelope.
 Native message type conveyance follows [type](#type) and
 [opcuamessagetype](#opcuamessagetype), according to whether the WoT profile
 is used and whether the DataSetMessage `MessageType` field is present.
-The NetworkMessage's `ua-data` type is not the DataSetMessage type. Any
-duplicated native values MUST agree after applying the specified mappings.
+Read the native message type from the DataSetMessage header when present.
+Any duplicated native values MUST agree after applying the specified mappings.
 The Consumer MUST report a conflict and MUST NOT interpret a message as
 conforming to this extension when they disagree.
 
@@ -367,147 +366,152 @@ conforming to this extension when they disagree.
 
 This profile defines Descriptor fields for OPC UA Part 14 Publisher,
 DataSetWriter, DataSet and ConfigurationVersion metadata. A Processing
-Descriptor is OPTIONAL: the event and native envelope can supply the
-inputs. This OPC UA profile requires a Version URL only when the Processing
-Descriptor supplies shared fields.
+Descriptor is OPTIONAL. The native envelope and event can also carry inputs.
 
-### Shared Stream Metadata in a Descriptor
+### Descriptor entry
 
 A message stream here is a configured flow from one Publisher and
-DataSetWriter with a defined payload contract. It is not necessarily a broker
-topic or a CloudEvents `source`; either can carry several streams.
+DataSetWriter with a defined payload contract. A broker topic or a
+CloudEvents `source` can carry several such streams.
 
 Publishers MUST derive shared values from the native writer and metadata
 configuration for the emitted message. For an agreed [Descriptor
 binding](descriptor.md#descriptor-profiles), they SHOULD store stream-constant
-values in an `opcuawriter` entry instead of repeating them in events.
-When the entry supplies those values, the Descriptor URL MUST identify a
-fixed Version, not a default that can change before replay.
+values in an `opcuawriter` entry. An `opcuawriter` entry carries its values
+inline and MUST omit `url`. When the entry supplies shared inputs, the
+Descriptor URL MUST identify a fixed version so that replay selects the
+same inputs.
 
-With WoT, only Descriptor-relative subjects without `describedby` can select
-a Processing Descriptor through `source`. A Subject Descriptor or its
-annotations do not establish the writer association.
+A publication profile is the agreed set of rules for interpreting the event.
+Use the `opcuawriter` entry named by the publication profile, or the unique
+entry of that class if the profile supplies no name. With no name and no
+entry, writer metadata is absent from the Descriptor. A Consumer MUST
+report a missing or wrong-class named entry or an ambiguous selection and
+MUST take Descriptor writer metadata from the selected entry alone.
+
+### Shared Stream Metadata in a Descriptor
+
+Each member in the following table is OPTIONAL in the entry. The binding
+determines which values the event needs. Supply these fields inside the
+entry. Report invalid metadata for supplied values that violate this
+profile, including null values. Interpret the fields as JSON members of
+the entry under their declared types.
 
 | Member of an `opcuawriter` entry | JSON representation | Meaning and conditions |
 | --- | --- | --- |
 | `opcuapublisherid` | String | The stream's typed native PublisherId, under the rules in [Publisher and Writer Metadata](#publisher-and-writer-metadata). |
 | `opcuadatasetwriterid` | Integer, `1` to `65535` | The stream's native DataSetWriterId, when used. |
 | `opcuadatasetwritername` | Non-empty String | The stream's exact configured DataSetWriterName, when used. |
-| `opcuadatasetname` | Non-empty String | The `Name` of the applicable DataSet metadata; descriptive, not a writer identifier. |
+| `opcuadatasetname` | Non-empty String | The `Name` of the applicable DataSet metadata. |
 | `opcuametadatamajorversion` | Integer, `0` to `4294967295` | The native MajorVersion, when no payload schema is selected. |
 | `opcuametadataminorversion` | Integer, `0` to `4294967295` | The native MinorVersion, when no payload schema is selected. |
 
 Ranges are inclusive. Publisher and writer fields MUST follow [Publisher
-and Writer Metadata](#publisher-and-writer-metadata). The Descriptor's
-metadata-version fields MUST preserve the full `VersionTime` (`UInt32`) range,
-independent of the CloudEvents `Integer` limit. Consumers MUST compare
-duplicate values without narrowing. Out-of-range fields are invalid metadata.
+and Writer Metadata](#publisher-and-writer-metadata).
+
+#### Metadata versions
+
+Represent each Descriptor metadata-version field as a JSON integer in the
+full `VersionTime` (`UInt32`) range. Consumers MUST compare duplicate
+values without narrowing and report out-of-range values as invalid metadata.
 
 Metadata-version values retain their native [ConfigurationVersion][UA
-ConfigurationVersion] meaning. Descriptor versioning does not change when Part
-14 requires a MajorVersion or MinorVersion update.
+ConfigurationVersion] meaning. Apply Part 14's MajorVersion and
+MinorVersion update rules independently of Descriptor versioning.
 
 When `dataschema` or the Descriptor supplies a schema, Producers MUST NOT
 include metadata-version values in CloudEvents context attributes or the
 `opcuawriter` entry. Native fields retained in `data` are unaffected.
 
-`opcuadatasetname` is OPTIONAL and valid only in Descriptor metadata.
-It MUST equal `DataSetMetaDataType.Name` from the applicable
-[DataSet metadata][UA DataSet Metadata] or its approved configuration, not
-a name inferred from the writer, topic or TD affordance. It need not be
-unique and MUST NOT replace a REQUIRED PublisherId, DataSetWriter identity
-or native field. Repeated dataset names MUST match exactly, without case
-folding or Unicode normalization; a mismatch is a metadata conflict.
+#### DataSet name
+
+`opcuadatasetname` belongs only in Descriptor metadata. It MUST equal
+`DataSetMetaDataType.Name` from the applicable
+[DataSet metadata][UA DataSet Metadata] or its approved configuration.
+It is descriptive and can recur across writers. A Consumer MUST obtain
+any REQUIRED native identifier independently. Repeated dataset names MUST
+match exactly; a mismatch is a metadata conflict.
+
+### Using shared inputs
 
 For the listed values, an applicable Descriptor satisfies this extension's
 presence requirements for the corresponding field, including those of the
-combined WoT mapping. The dataset name satisfies no publisher or writer identity
-requirement. A Producer MAY omit the corresponding event attribute or source
-query parameter. Other event attributes, including `opcuamessagetype`, MUST NOT
-be replaced by Descriptor members.
+combined WoT mapping. A Producer MAY omit the corresponding event attribute
+or source query parameter.
 
-If a publisher or writer value appears in both the `source` query and the
-Descriptor, the values MUST agree after decoding and type conversion. If an
-event attribute and the Descriptor both supply a metadata version, their typed
-values MUST agree. The same consistency requirement applies to publisher and
-writer identities retained in the envelope. On a conflict, the Consumer MUST
-report a metadata conflict and MUST NOT interpret the payload as a conforming
-OPC UA message. If a REQUIRED value is absent from all applicable locations, the
-Consumer MUST report missing metadata and MUST NOT interpret the payload as a
-conforming OPC UA message.
+Apply the [identity consistency rules](#publisher-and-writer-metadata)
+across the query, Descriptor, and native envelope. If an event attribute
+and the Descriptor both supply a metadata version, their typed values MUST
+agree. On a conflict, the Consumer MUST report a metadata conflict and
+treat the event as nonconforming. If a REQUIRED value is absent from all
+applicable locations, the Consumer MUST report missing metadata and treat
+the event as nonconforming.
 
-A Consumer MUST use only the Processing Descriptor selected by the agreed
-binding for shared schema and native metadata inputs. If `describedby` is
-present, missing values MUST NOT be taken from a source or subject description.
-If the Consumer cannot retrieve that Descriptor, it MAY interpret the native
-payload when the envelope, source query and explicit event attributes supply
-every native requirement. It MUST NOT report that result as successful WoT
-correlation. This is native-only interpretation, not a fallback to another
-Descriptor. The [Descriptor Reference failure
-rules](descriptor.md#failure-outcomes) still apply.
-
-Without `describedby`, the WoT profile can select a direct TD subject or a
-Subject Descriptor Version without selecting a Processing Descriptor. Native
-publisher and writer requirements then have to be satisfied by the retained
-envelope or the existing source query. A direct TD, Subject Descriptor or its
-subject annotations MUST NOT supply missing OPC UA metadata or a payload schema.
-Consumers MUST NOT retrieve a source Descriptor as an implicit supplement.
-
-When the event uses WoT, apply
-[WoT description selection](wot.md#description-selection).
-Only the selected Processing Descriptor MAY supply native metadata.
+A Consumer MUST use the selected Processing Descriptor as the sole
+Descriptor source for shared schema and native metadata.
+If retrieval fails, follow the [Descriptor Reference failure
+rules](descriptor.md#failure-outcomes) for the Descriptor-based operation.
+The Consumer MAY still interpret the native payload if the envelope, source
+query, and explicit event attributes supply every native requirement.
+That result is independent of WoT correlation.
 
 The Descriptor Publisher MUST NOT change these values in a Descriptor Version
 after any Producer is configured with its URL. A change requires a new
 Descriptor Version and reconfigured Producers. Consumers MUST NOT retain values
 from a previous Descriptor when processing an event that selects another
-Descriptor. A changed payload contract also requires a changed WoT `type`
-revision when that profile is used; changing only `describedby` is not
-sufficient.
+Descriptor. The OPC UA identifiers determine the writer identity; the
+Descriptor version identifies the shared inputs. For a changed WoT payload
+contract, apply the [WoT `type` revision rules](wot.md#type).
 
 Values that vary by occurrence remain in each event. In particular,
-`opcuamessagetype`, `opcuasequence`, `opcuastatus` when REQUIRED, `id`, and
-`time` MUST NOT be supplied by the Descriptor as replacements for their event
-attributes. Tracing, recording times, and a CloudEvents `sequence`, when used,
-also remain in the event. A Consumer MUST NOT use Descriptor members with those
-names as event values. Core attributes retain their normal placement and meaning
-even when their values happen to be constant for a stream.
+the Producer MUST supply `opcuamessagetype`, `opcuasequence`, `opcuastatus`,
+`id`, and `time` on the event when their respective rules require them.
+Consumers MUST obtain these attributes and any tracing, recording time,
+and CloudEvents `sequence` values from the event itself. Core attributes
+retain their CloudEvents placement and meaning.
 
 When the agreed route selects no Processing Descriptor, the Producer MUST supply
-all REQUIRED OPC UA values through the other locations defined above. An absent
-`describedby` alone does not determine whether a Processing Descriptor was
-selected. Producers SHOULD use Descriptor metadata only when the intended
-Consumers support the agreed mapping.
+all REQUIRED OPC UA values through the other applicable locations.
+Producers SHOULD use Descriptor metadata only when the intended Consumers
+support the agreed mapping.
 
 When `source` is itself a Descriptor URL, Producers SHOULD supply shared
-identity metadata in the selected versioned Descriptor instead of appending
-query parameters to that URL. Appending a query changes the event's source
-identity and can change the retrieved resource. Consumers MUST NOT strip a query
-to make source-based retrieval work.
-
-### Descriptor entry
-
-An `opcuawriter` entry carries inline metadata and MUST omit `url`. Use
-the entry of that class named by the publication profile, or the unique
-entry if none is named. With no name and no entry, the Descriptor supplies
-no writer metadata. A missing or wrong-class named entry or an ambiguous
-selection MUST be reported. Consumers MUST NOT merge writer entries.
-
-Each native member is OPTIONAL in the entry; the binding determines which
-values the event needs. A top-level field does not supply that value. Report
-invalid metadata for supplied values that violate this profile, including
-null values. CloudEvents attribute decoding does not apply to entry fields.
-The [OPC UA entry schema](opcua.schema.json) checks entry shape; Consumers
-still verify the PublisherId encoding and range and check the event context.
+identity metadata in the selected versioned Descriptor. A query forms
+part of the source identity and can change the retrieved resource.
+Consumers MUST retrieve the exact `source` URL when that route applies.
 
 JSON integers in this profile preserve the full native ranges. An alternate
 serialization or generated schema MUST preserve those same values, or report
-that it cannot represent them. In particular, an Avro `int` cannot represent the
-upper half of UInt32; an appropriate wider encoding is needed rather than
-narrowing or wrapping the value.
+an encoding error. For example, use an Avro type wide enough to preserve
+the full UInt32 range.
 
-A Descriptor Version preserves the shared inputs, not the native writer's
-identity. That identity does not depend on the Descriptor identifier.
+The [OPC UA entry schema](opcua.schema.json) checks entry shape. Verify
+PublisherId encoding, ranges, and the event context under the rules above.
+
+## WoT mapping
+
+When a CloudEvent uses both this extension and the [WoT profile](wot.md),
+apply [WoT description selection](wot.md#description-selection). For data
+and event messages, the following mappings take precedence over the
+corresponding OPC UA-only mappings:
+
+- The Producer MUST use the WoT [`type`](wot.md#type) and
+  [`subject`](wot.md#subject) mappings. Use the WoT subject as specified
+  there and keep the native `EventId` in the OPC UA event payload.
+  Convey the native message type under the
+  [`opcuamessagetype`](#opcuamessagetype) rules.
+- The native PublisherId and at least one of DataSetWriterId and
+  DataSetWriterName are REQUIRED. Supply each value in the envelope, a
+  `source` query parameter, or the selected `opcuawriter` entry, under
+  [Publisher and Writer Metadata](#publisher-and-writer-metadata). For a
+  WoT route without a Processing Descriptor, use the envelope or `source`
+  query for these values.
+- Use [`opcuasequence`](#opcuasequence) for the native `SequenceNumber`.
+  If the Producer also supplies CloudEvents `sequence`, it MUST satisfy
+  the [Sequence extension](sequence.md) independently. The Producer MUST
+  obtain that value independently of `opcuasequence`.
+
+All other applicable OPC UA requirements remain in effect.
 
 ## Examples
 
@@ -750,8 +754,7 @@ opcuasequence: 4294967295
 -----------------------------------------------
 ```
 
-The referenced Descriptor Version has the following metadata. Other Core
-metadata is omitted from this excerpt.
+The referenced Descriptor version contains these entries:
 
 ```json
 {
@@ -791,9 +794,8 @@ selects one of two TDs; the `payload` entry supplies the schema.
 The dataset name and writer name differ.
 
 With an agreed source-Descriptor binding, a Producer can instead use the
-stream's Descriptor Version URL as `source` and omit `describedby`. This changes
-the source identity; it is not an identity-preserving rewrite of already
-published events.
+stream's Descriptor version URL as `source` and omit `describedby`. The
+new `source` establishes a different event identity scope.
 
 #### Subject Descriptor with separate processing metadata
 
@@ -821,8 +823,8 @@ ce-opcuasequence: 18
 
 The TD entry selects `/properties/processData` at the matching TD URL.
 The Processing Descriptor supplies the payload schema, `UInt16:12`
-PublisherId and writer identity. Without `describedby` these inputs are missing:
-neither the subject nor a source lookup supplies them.
+PublisherId, and writer identity. This example relies on `describedby` for
+all three inputs.
 
 #### Direct TD subject with the NetworkMessage envelope
 
@@ -876,19 +878,16 @@ opcuasequence: 0
 -----------------------------------------------
 ```
 
-The native sequence has rolled over from `4294967295` to `0`; it remains
-`opcuasequence`, not a CloudEvents `sequence`. The subject selects its TD
-directly without a source lookup. The DataSetMessage's `MessageType` remains in
-the retained NetworkMessage envelope instead of being repeated as
-`opcuamessagetype`.
+The rollover from `4294967295` to `0` is carried in `opcuasequence`. The
+subject selects its TD directly, and the retained DataSetMessage header supplies
+the native `MessageType`.
 
 ## Descriptor Retrieval Security
 
-The Descriptor Reference extension's retrieval, authorization and cache rules
-apply to this mapping. Stable writer metadata in a Descriptor does not
-authenticate the Publisher or authorize access to the referenced TD or schema. A
-Consumer MUST establish trust in the Descriptor before using it as OPC UA
-metadata.
+Follow the [Descriptor Reference security and caching rules](descriptor.md#security-considerations).
+A Consumer MUST establish trust in the Descriptor before using it as OPC UA
+metadata. Publisher authentication and authorization to access the TD or
+schema depend on checks independent of the writer metadata.
 
 [UA DataSetWriterName]: https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table185
 [UA NetworkMessage]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/7.2.5.3
