@@ -38,7 +38,8 @@ MUST NOT infer a selection from `subject`, a filename, or entry order.
 
 - Type: String
 - Description: The [absolute OpenUSD prim path][Prim Path] within the stage
-  composed from the asset selected by `url`.
+  composed from the asset selected by `url`. It associates the event as a
+  whole with that prim and anchors any field mappings.
 - Constraints:
   - OPTIONAL. Omission selects the asset without selecting an individual
     prim.
@@ -49,6 +50,35 @@ MUST NOT infer a selection from `subject`, a filename, or entry order.
     fragment or a CloudEvents subject selector. If it cannot resolve the
     path, it MUST report the failure and MUST NOT substitute another prim.
 
+### Field mappings
+
+A `usdasset` entry can associate individual JSON payload fields with
+descendants of the anchor prim. If `fieldmode` or `fieldmappings` is
+present, `primpath` is REQUIRED. With neither member, the Consumer MUST NOT
+infer field associations. Field associations do not change the event-level
+association or specify writes to USD properties.
+
+The OPTIONAL `fieldmappings` array contains objects with two REQUIRED
+string members:
+
+| Member | Meaning |
+| --- | --- |
+| `field` | A nonempty [RFC 6901 JSON Pointer][JSON Pointer] rooted at CloudEvents `data`, in string form, not a URI fragment. |
+| `prim` | A relative OpenUSD prim path to an existing descendant of the anchor. Absolute paths, parent traversal (`..`), property paths, and paths containing variant selections are invalid. |
+
+Duplicate `field` pointers are invalid. Array order does not affect
+selection. A field absent from an event, such as an omitted delta frame
+field, produces no association for that event and does not clear a prior
+value. The Consumer MUST report an invalid mapping or an unresolved explicit
+prim target rather than infer a replacement.
+
+The OPTIONAL string `fieldmode` accepts only `"byname"`. In this mode,
+the Consumer matches each top-level member of a JSON object in `data` to a
+direct child of the anchor with the exact same name. An explicit mapping for
+that field takes precedence. Without `"byname"`, only explicit mappings apply.
+A field without a matching child or an explicit mapping stays unmapped; it
+does not fall back to the anchor.
+
 This extension does not define a mapping between an OpenUSD prim and a WoT
 affordance. Asset dependencies follow OpenUSD resolution rules and are not
 automatically included in a Descriptor bundle.
@@ -57,25 +87,26 @@ automatically included in a Descriptor bundle.
 
 The following event reports Pump 7 telemetry in HTTP binary mode. Its
 `ce-describedby` header identifies the Descriptor that selects the asset and
-the pressure gauge prim. The `ce-subject` value is not used for that selection.
+its pump prim. The `ce-subject` value is not used for that selection.
 
 ```http
 POST /events HTTP/1.1
 Host: consumer.example
 Content-Type: application/json
-Content-Length: 16
+Content-Length: 43
 ce-specversion: 1.0
-ce-id: pump7-pressure-47
+ce-id: pump7-telemetry-47
 ce-source: urn:example:asset:pump7
-ce-type: com.example.pump.pressure
-ce-subject: pump7-pressure
+ce-type: com.example.pump.telemetry
+ce-subject: pump7
 ce-describedby: https://registry.example/descriptorgroups/streams/descriptors/pump7-geometry/versions/1
 
-{"pressure":4.5}
+{"pressure":4.5,"speed":1200,"status":"ok"}
 ```
 
-The Descriptor's `geometry` entry selects `/Pump7/PressureGauge` in the
-linked asset version:
+The Descriptor's `geometry` entry selects `/Pump7` in the linked asset
+version. The stage contains `/Pump7/Sensors/PressureGauge`, `/Pump7/pressure`,
+and `/Pump7/speed`, but no `/Pump7/status`:
 
 ```json
 {
@@ -85,11 +116,20 @@ linked asset version:
     "geometry": {
       "class": "usdasset",
       "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2",
-      "primpath": "/Pump7/PressureGauge"
+      "primpath": "/Pump7",
+      "fieldmode": "byname",
+      "fieldmappings": [
+        { "field": "/pressure", "prim": "Sensors/PressureGauge" }
+      ]
     }
   }
 }
 ```
+
+The explicit mapping associates `pressure` with `/Pump7/Sensors/PressureGauge`
+instead of `/Pump7/pressure`. By-name matching associates `speed` with
+`/Pump7/speed`. The `status` field stays unmapped. Without either field-mapping
+member, the event would still describe `/Pump7` as a whole.
 
 ## Security Considerations
 
@@ -98,3 +138,4 @@ for the asset and apply authorization and resource limits to its dependencies.
 Access to a Descriptor does not grant access to either.
 
 [Prim Path]: https://openusd.org/release/api/class_sdf_path.html
+[JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
