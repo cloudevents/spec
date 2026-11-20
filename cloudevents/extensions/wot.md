@@ -231,9 +231,11 @@ an exact schema Version independently of the selected TD Version.
 ## Description Selection
 
 Apply event-format decoding before checking presence; JSON `null` means
-unset. Retrieve and validate an explicit `describedby` under the [Descriptor
-Reference rules](descriptor.md#descriptor-retrieval). It is authoritative
-for processing inputs; failure MUST NOT cause fallback.
+unset. Retrieve the Descriptor at an explicit
+[`describedby`](descriptor.md#describedby) URL. It is authoritative for
+processing inputs. Follow the [Descriptor Reference failure
+rules](descriptor.md#failure-outcomes) without falling back to another
+description.
 
 In Descriptor-driven selection, `describedby` is REQUIRED. Use the Processing
 Descriptor's [selected TD entry](#subject-descriptor-selection). Missing or

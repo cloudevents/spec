@@ -379,7 +379,7 @@ topic or a CloudEvents `source`; either can carry several streams.
 
 Publishers MUST derive shared values from the native writer and metadata
 configuration for the emitted message. For an agreed [Descriptor
-binding](descriptor.md#descriptor-retrieval), they SHOULD store stream-constant
+binding](descriptor.md#descriptor-profiles), they SHOULD store stream-constant
 values in an `opcuawriter` entry instead of repeating them in events.
 When the entry supplies those values, the Descriptor URL MUST identify a
 fixed Version, not a default that can change before replay.

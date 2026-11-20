@@ -1,11 +1,30 @@
 # Descriptor Reference
 
-The OPTIONAL `describedby` attribute identifies a Descriptor that supplies
-information for interpreting an event. This extension defines the document
-and how to retrieve it. Descriptor profiles define which entries supply the
-information and how to use them. A static HTTP server or an xRegistry
-Registry can serve the same document. Producers and Consumers agree on the
-profile through a specification or configuration.
+Events can stay small when they link to additional information instead of
+carrying it in every message. The Descriptor Reference extension adds
+`describedby`, a single URL for information beyond what the event carries.
+An HTTP `GET` at that URL returns a JSON document called a Descriptor.
+
+For example, a maintenance event can set `describedby` to
+`https://maintenance.example/pump7/versions/1`. The returned Descriptor links
+to the inspection service's endpoint metadata:
+
+```json
+{
+  "descriptorid": "pump7",
+  "versionid": "1",
+  "entries": {
+    "inspection": {
+      "class": "endpoint",
+      "url": "https://maintenance.example/endpoints/inspection"
+    }
+  }
+}
+```
+
+This specification defines how to retrieve the document, not how to host it.
+A static HTTP server or an [xRegistry](https://xregistry.io) server can serve
+the same document.
 
 ## Notational Conventions
 
@@ -14,105 +33,99 @@ As with the main [CloudEvents specification](../spec.md), the key words "MUST",
 "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as
 described in [RFC 2119](https://tools.ietf.org/html/rfc2119).
 
-The scope of these key words is limited to events using this extension or a
-profile that explicitly uses its description-selection rules.
+However, the scope of these key words is limited to when this extension is
+used. For example, an attribute being marked as "REQUIRED" does not mean
+it needs to be in all CloudEvents, rather it needs to be included only when
+this extension is being used.
 
 ## Attributes
 
 ### describedby
 
 - Type: `URI`
-- Description: The absolute URL of the Descriptor selected for interpreting
-  this event.
+- Description: The URL of the Descriptor for this event.
 - Constraints:
-  - OPTIONAL.
-  - If present, MUST be an absolute HTTP(S) URL identifying a Descriptor and
-    MUST NOT contain a fragment.
-  - Consumers MUST use the URL unchanged for requests and cache lookup.
-    Cache selection MUST account for representation and authorization context.
-  - An empty string or otherwise invalid set value is invalid, not absent.
+  - REQUIRED.
+  - MUST be a non-empty absolute HTTP(S) URL without a fragment.
+  - The URL MUST support retrieval of the Descriptor by HTTP `GET`.
+    A successful response serving the Descriptor metadata MUST use
+    `Content-Type: application/json`.
 
-In the JSON event format, `describedby` is a top-level string member. In HTTP
-binary content mode, it is the `ce-describedby` header, encoded and decoded
-according to the [HTTP binding](../bindings/http-protocol-binding.md). Other
-bindings use their normal extension-attribute mapping.
+Use the supplied URL, including its query if present. Other extensions can
+reuse the Descriptor document format and define how to locate a Descriptor
+without using `describedby`.
 
-Consumers MUST decode attributes before checking presence. In the [JSON
-format](../formats/json-format.md#22-type-system-mapping), `"describedby":
-null` means unset. In this case a profile can define the route for an
-omitted `describedby`.
+## Descriptor document
 
-The name expresses a descriptive relationship, consistent with the
-[`describedby` Web link relation][Link Relations].
+A Descriptor document MUST be a JSON object with the following structure.
+A question mark identifies an OPTIONAL member. The structure shows one named
+entry; the `entries` object can hold any number of entries.
 
-## Descriptor Retrieval
+```text
+{
+  "descriptorid": "<descriptor identifier>",
+  "versionid": "<version identifier>",
+  "entityid": "<entity URI>", ?
+  "bundleurl": "<bundle URL>", ?
+  "entries": {
+    "<entry name>": {
+      "class": "<entry class>",
+      "url": "<linked document URL>", ?
+      ...
+    }
+  },
+  ...
+}
+```
 
-When `describedby` is present, the Consumer MUST retrieve the Descriptor at
-the supplied URL with HTTP `GET`. To retrieve an advertised bundle, use
-HTTP `GET` on `bundleurl` as supplied. The bundle MUST have the same
-`descriptorid` and `versionid` as the Descriptor that advertised it.
-Successful responses serving Descriptor metadata or a bundle directly from
-`bundleurl` MUST use `Content-Type: application/json`. Negotiating a bundle
-at the original URL is defined in the
-[xRegistry Descriptor working draft][Descriptor Registry].
+The ellipses stand for additional fields. This specification does not define
+their meaning or require registry-specific fields. The entry's class determines
+whether it needs `url`.
 
-The Consumer MUST check response status, media type and Descriptor validity
-before using it, including any applicable selectors. `describedby` MUST
-reference a Descriptor that supplies the information the profile requires
-from it. The Consumer MUST NOT fill gaps in that information from another
-description. The Descriptor SHOULD NOT duplicate information in the event.
+### `descriptorid`
 
-A Producer SHOULD omit `describedby` if the event and agreed profile
-already supply all REQUIRED information. The applicable profile MAY define
-how to interpret other event attributes and whether a URL that always
-identifies the same Descriptor version is REQUIRED.
+REQUIRED. A non-empty string that identifies the Descriptor within its
+publication scope.
 
-### Descriptor document
+### `versionid`
 
-The [Descriptor JSON Schema](descriptor.schema.json) defines the response
-shape. Validate against `metadata` or `bundle` in the schema's `$defs`,
-according to the representation received. Profile and URL validation still
-apply. xRegistry Core properties can accompany the document but Consumers
-MUST NOT require them for this extension.
+REQUIRED. A non-empty string that identifies the version within that Descriptor.
+Publishers MUST keep the entries, their inline fields, and their referenced
+representations stable for the intended use and replay of a published version.
+Publish a new version when those inputs change. The identifiers alone do not
+establish that a URL selects a fixed version.
 
-| Member | Presence | Meaning |
-| --- | --- | --- |
-| `descriptorid` | REQUIRED | Nonempty identifier of the Descriptor in its publication scope. |
-| `versionid` | REQUIRED | Nonempty version identifier in that Descriptor's scope. |
-| `entityid` | OPTIONAL | Absolute, fragment-free URI identifying the primary described entity. It does not trigger retrieval. |
-| `bundleurl` | OPTIONAL | Absolute, fragment-free HTTP(S) URL for a direct GET of the same version's bundle. Omit it when the server does not support a bundle for this Descriptor. When present in the bundle, it points to the bundle itself. |
-| `entries` | REQUIRED | Map of named entries. An empty map is valid. |
+### `entityid`
+
+OPTIONAL. An absolute, fragment-free URI that identifies the primary described
+entity. It does not trigger retrieval.
+
+### `bundleurl`
+
+OPTIONAL. An absolute, fragment-free HTTP(S) URL for retrieving a
+[bundle](#bundled-document) of this version. Omit it when the server does not
+support a bundle for this Descriptor. In a bundle, this URL points to the bundle
+itself.
+
+### `entries`
+
+REQUIRED. An object whose members are named entries. An empty object is valid.
 
 Entry names are one to 63 lowercase ASCII letters, digits, colons, hyphens,
 underscores or dots, starting with a letter or digit. Each entry has a
-REQUIRED `class`. The `class` identifies the linked document type, if any,
-and defines the inline fields. Standard classes use short lowercase
-alphanumeric tokens starting with a letter. Independent classes use
-reverse DNS names under the defining party's control. Each class key is at
-most 63 characters. An entry with a linked document MUST have an absolute,
-fragment-free HTTP(S) `url`. An inline-only entry MUST omit `url`. A null
-value is invalid. The profile defines whether a class links to a document.
-
-The following `class` strings are assigned:
-
-- `endpoint`: [Endpoint Descriptor profile](#endpoint)
-- `opcuawriter`: [OPC UA Descriptor profile](opcua.md#descriptor-entry)
-- `schema`: [Schema Descriptor profile](#schema)
-- `thingdescription`: [Web of Things profile](wot.md)
-- `thingmodel`: [Web of Things profile](wot.md)
-- `usdasset`: [OpenUSD profile](openusd.md#asset-selection)
-
-The same class MAY appear under different entry names. Profiles define how
-to select entries, including where a name comes from when needed. When a
-profile needs one entry and its rules leave several candidates, the Consumer
-MUST report ambiguity, not choose by map order.
-
-Publishers MUST keep the entries, their inline fields, and their referenced
-representations stable for the intended use and replay of a published
-version. Publish a new version when those inputs change. The identifiers
-alone do not establish that a URL selects a fixed version.
+REQUIRED `class` that identifies the kind of information the entry supplies.
+An entry with a linked document MUST have an absolute, fragment-free HTTP(S)
+`url`. An entry that supplies only inline fields MUST omit `url`. A null `url`
+is invalid. The same class MAY appear under different entry names.
 
 ### Bundled document
+
+A Consumer can retrieve an advertised bundle by sending HTTP `GET` to the
+supplied `bundleurl`. A successful response at that URL MUST use
+`Content-Type: application/json`. The bundle MUST have the same `descriptorid`
+and `versionid` as the Descriptor that advertised it. The
+[xRegistry Descriptor working draft][Descriptor Registry] defines how to
+negotiate a bundle at the original Descriptor URL.
 
 A bundle has the same Descriptor members as metadata. For each entry with
 a `url`, it adds a `document` object to that entry. It MUST NOT add a
@@ -135,7 +148,46 @@ it MUST report failure rather than return a partial bundle. If a request to
 `bundleurl` fails, the Consumer MAY use the original Descriptor to retrieve
 only the entries it needs. This does not select another Descriptor.
 
+### JSON Schema
+
+The [Descriptor JSON Schema](descriptor.schema.json) is available for
+validation. Under `$defs`, use `metadata` for a Descriptor without embedded
+documents and `bundle` for a bundle. Schema validation does not replace URL
+or entry-specific checks.
+
+## Descriptor profiles
+
+A Descriptor profile is an agreement about how Producers and Consumers use
+the information in a Descriptor. A specification or configuration can define
+which entry classes to use, what their linked documents and inline fields
+mean, and how to select entries when several have the same class. A profile
+can also define how event attributes affect selection or require a URL that
+always identifies the same Descriptor version.
+
+Standard classes use short lowercase alphanumeric tokens starting with a
+letter. Other specifications can define their own classes using reverse DNS
+names under the defining party's control. A `class` string is at most 63
+characters. A class definition specifies whether entries link to a document
+and which additional fields they carry.
+
+The following `class` strings are assigned:
+
+- `endpoint`: [Endpoint Descriptor profile](#endpoint)
+- `opcuawriter`: [OPC UA Descriptor profile](opcua.md#descriptor-entry)
+- `schema`: [Schema Descriptor profile](#schema)
+- `thingdescription`: [Web of Things profile](wot.md)
+- `thingmodel`: [Web of Things profile](wot.md)
+- `usdasset`: [OpenUSD profile](openusd.md#asset-selection)
+
+When a profile needs one entry and its rules leave several candidates, the
+Consumer MUST report ambiguity rather than select by map order.
+
 ### Failure outcomes
+
+Descriptor-based interpretation requires a successful response with the
+specified media type and a valid document that supplies the inputs the
+profile needs. The following table distinguishes unavailable or invalid
+inputs from a failed payload validation.
 
 | Condition | Result |
 | --- | --- |
@@ -152,11 +204,6 @@ but the Consumer MUST NOT report successful Descriptor-based interpretation or
 validation without REQUIRED inputs. Unless the profile dictates the outcome,
 local policy determines whether to defer, reject, retain or forward an
 uninterpreted event. These outcomes add no event attributes or HTTP error codes.
-
-## Descriptor profiles
-
-A publication profile determines whether an operation uses either of the
-following classes and whether it needs one entry or several.
 
 ### Schema
 
@@ -316,21 +363,26 @@ representations. An event-provided URL MUST NOT authorize arbitrary network
 access or credential forwarding. Implementations SHOULD bound response sizes,
 decompression, retrieval time, redirects and dependency processing.
 
-Read access to a Descriptor does not grant access to its targets. Caches MUST
-NOT share representations across authorization contexts unless the applicable
-access policy permits it. A bundle does not bypass trust checks. Versions do not
-authenticate content or prove unchanged bytes.
-
-Bundle freshness MUST NOT outlast the Descriptor or any included document.
-If the server cannot establish a combined policy, it MUST send
-`Cache-Control: no-store`. An `ETag` for a bundle validates the whole
-representation, not just its Descriptor metadata.
+Read access to a Descriptor does not grant access to its targets.
+A bundle does not bypass trust checks.
+Versions do not authenticate content or prove unchanged bytes.
 
 Descriptive entity IDs, TD security declarations and references to actions are
 not authenticated principals, execution grants or current readiness. Device
 admission and operation outcomes remain governed by their own protocols and
 trusted authorities.
 
-[Link Relations]: https://www.iana.org/assignments/link-relations/
+### Caching
+
+Consumers can reuse responses under HTTP caching rules. When choosing a cached
+response, account for the requested URL, the representation, and the
+authorization context. A cache MUST NOT share a representation across
+authorization contexts unless the applicable access policy permits it.
+
+Bundle freshness MUST NOT outlast the Descriptor or any included document.
+If the server cannot establish a combined policy, it MUST send
+`Cache-Control: no-store`. An `ETag` for a bundle validates the whole
+representation, not just its Descriptor metadata.
+
 [Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/d6e659fa15da069fe10eae53132ffeea36953f8c/workingdrafts/models/descriptor/spec.md#55-bundled-representations
 [Endpoint Group]: https://github.com/xregistry/spec/blob/main/endpoint/spec.md
