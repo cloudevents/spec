@@ -92,8 +92,7 @@ or [Avro Schema](https://avro.apache.org/docs/1.11.1/specification/).
 A Processing Descriptor MAY supply the schema. The Consumer MUST use
 `dataschema` when present; otherwise, use the Processing Descriptor's schema
 under the [Schema Descriptor profile][Schema Descriptor Profile].
-`data.schema.schemaref` names an entry in `references.schema`. Subject-only
-lookup cannot supply a schema.
+Subject-only lookup cannot supply a schema.
 
 The Consumer MUST report a missing REQUIRED schema. An ambiguous selection,
 invalid selector, unavailable schema or unsupported format MUST NOT cause
@@ -237,8 +236,8 @@ than omit the status, wrap the value, or report it as _Good_.
 
 The following values identify the OPC UA Publisher and DataSetWriter. They are
 not CloudEvents extension attributes. A Producer MUST supply each REQUIRED value
-as a query parameter in `source` or an extension attribute of the applicable
-Processing Descriptor Version unless the full Part 14 NetworkMessage envelope
+as a query parameter in `source` or a field of the selected `opcuawriter`
+entry unless the full Part 14 NetworkMessage envelope
 supplies it. The names are the same in the query and Descriptor representations.
 
 | Name | Value |
@@ -377,16 +376,15 @@ topic or a CloudEvents `source`; either can carry several streams.
 Publishers MUST derive shared values from the native writer and metadata
 configuration for the emitted message. For an agreed [Descriptor
 binding](descriptors.md#descriptor-retrieval), they SHOULD store stream-constant
-values in the Descriptor's `data.opcuawriter` object instead of repeating them
-in events. Those values MUST stay constant across events using that Version.
-When the object supplies such values, the selected URL MUST identify the
-Version, not a Resource whose default can change before replay.
+values in an `opcuawriter` entry instead of repeating them in events.
+When the entry supplies those values, the Descriptor URL MUST identify a
+fixed Version, not a default that can change before replay.
 
 With WoT, only Descriptor-relative subjects without `describedby` can select
 a Processing Descriptor through `source`. A Subject Descriptor or its
 annotations do not establish the writer association.
 
-| Member of `data.opcuawriter` | JSON representation | Meaning and conditions |
+| Member of an `opcuawriter` entry | JSON representation | Meaning and conditions |
 | --- | --- | --- |
 | `opcuapublisherid` | String | The stream's typed native PublisherId, under the rules in [Publisher and Writer Metadata](#publisher-and-writer-metadata). |
 | `opcuadatasetwriterid` | Integer, `1` to `65535` | The stream's native DataSetWriterId, when used. |
@@ -407,8 +405,7 @@ ConfigurationVersion] meaning. Descriptor versioning does not change when Part
 
 The Descriptor's selected schema Reference identifies an external payload
 schema. Native metadata-version values MUST NOT be supplied in the event
-or `data.opcuawriter` when a schema is selected through `dataschema` or the
-Descriptor.
+or the `opcuawriter` entry when `dataschema` or the Descriptor supplies a schema.
 
 `opcuadatasetname` is OPTIONAL and valid only in Descriptor metadata.
 It MUST equal `DataSetMetaDataType.Name` from the applicable
@@ -484,32 +481,27 @@ query parameters to that URL. Appending a query changes the event's source
 identity and can change the retrieved resource. Consumers MUST NOT strip a query
 to make source-based retrieval work.
 
-### xRegistry Model Mapping
+### Descriptor entry
 
-The Descriptor Registry's `data` map holds the OPTIONAL `opcuawriter`
-object. Each member above is OPTIONAL in the object; the binding determines
-which values the event needs. An absent or empty object supplies none. A
-top-level Descriptor attribute with the same name as a member does not supply
-that value.
+An `opcuawriter` entry carries inline metadata and MUST omit `url`. Use
+the entry of that class named by the publication profile, or the unique
+entry if none is named. With no name and no entry, the Descriptor supplies
+no writer metadata. A missing or wrong-class named entry or an ambiguous
+selection MUST be reported. Consumers MUST NOT merge writer entries.
 
-The Consumer MUST report invalid metadata if `opcuawriter` is not an object
-or if a supplied member violates this profile's type, range or native mapping
-constraints. This includes a null object or a null value for a listed member.
-Core write/null rules apply to Descriptor updates; CloudEvents event-attribute
-null decoding does not apply to a retrieved Descriptor.
+Each native member is OPTIONAL in the entry; the binding determines which
+values the event needs. A top-level field does not supply that value. Report
+invalid metadata for supplied values that violate this profile, including
+null values. CloudEvents attribute decoding does not apply to entry fields.
 
 JSON integers in this profile preserve the full native ranges. An alternate
 serialization or generated schema MUST preserve those same values, or report
 that it cannot represent them. In particular, an Avro `int` cannot represent the
 upper half of UInt32; an appropriate wider encoding is needed rather than
-narrowing or wrapping the value. This profile does not change the generic
-xRegistry schema generator.
+narrowing or wrapping the value.
 
-Descriptor identity, References, schema selection and publication stability
-follow the Descriptor Registry. Publishers MUST retain stable referenced
-representations, selectors and shared metadata for the intended processing and
-replay period. A new Descriptor Version conveys changed inputs; it does not make
-the native writer identity equal to a Descriptor identifier.
+A Descriptor Version preserves the shared inputs, not the native writer's
+identity. That identity does not depend on the Descriptor identifier.
 
 ## Examples
 
@@ -757,29 +749,25 @@ metadata is omitted from this excerpt.
 {
   "descriptorid": "pump7-telemetry",
   "versionid": "1",
-  "references": {
-    "thingdescription": {
-      "pump7": {
-        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
-      },
-      "gateway1": {
-        "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/gateway1/versions/1.0.0"
-      }
+  "entries": {
+    "pump7": {
+      "class": "thingdescription",
+      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
     },
-    "schema": {
-      "payload": {
-        "url": "https://schemas.example/pump-process-data/versions/3"
-      }
+    "gateway1": {
+      "class": "thingdescription",
+      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/gateway1/versions/1.0.0"
     },
-    "usdasset": {
-      "geometry": {
-        "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2"
-      }
-    }
-  },
-  "data": {
-    "schema": { "schemaref": "payload" },
-    "opcuawriter": {
+    "payload": {
+      "class": "schema",
+      "url": "https://schemas.example/pump-process-data/versions/3"
+    },
+    "geometry": {
+      "class": "usdasset",
+      "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2"
+    },
+    "writer": {
+      "class": "opcuawriter",
       "opcuapublisherid": "UInt16:12",
       "opcuadatasetwriterid": 17,
       "opcuadatasetwritername": "pump7-process",
@@ -791,7 +779,7 @@ metadata is omitted from this excerpt.
 
 The Consumer uses the selected Descriptor's PublisherId and writer identity with
 the event's `opcuamessagetype` and `opcuasequence`. The subject's `pump7` prefix
-selects one of two TDs; `data.schema.schemaref` selects the payload schema.
+selects one of two TDs; the `payload` entry supplies the schema.
 The dataset name and writer name differ.
 
 With an agreed source-Descriptor binding, a Producer can instead use the
@@ -823,8 +811,8 @@ ce-opcuasequence: 18
 {"Speed":1500,"Pressure":4.5}
 ```
 
-`data.wot.subject` selects one matching TD URL and the `/properties/processData`
-affordance. The Processing Descriptor supplies the payload schema, `UInt16:12`
+The TD entry selects `/properties/processData` at the matching TD URL.
+The Processing Descriptor supplies the payload schema, `UInt16:12`
 PublisherId and writer identity. Without `describedby` these inputs are missing:
 neither the subject nor a source lookup supplies them.
 
@@ -903,4 +891,4 @@ metadata.
 [UA VersionTime]: https://reference.opcfoundation.org/specs/OPC-10000-4/v1.05.07/7.43
 [UA ConfigurationVersion]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.6
 [URI]: https://www.rfc-editor.org/rfc/rfc3986
-[Schema Descriptor Profile]: https://github.com/marcschier/xregistry-drafts/blob/cc7969433b0c884b47f628acab091328d4936468/workingdrafts/models/descriptor/spec.md#9-schema-descriptor-profile
+[Schema Descriptor Profile]: descriptor-profiles.md#schema

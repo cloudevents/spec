@@ -49,6 +49,7 @@ for more information.
 - [Distributed Tracing](distributed-tracing.md)
 - [Expiry Time](expirytime.md)
 - [OPC UA](opcua.md)
+- [OpenUSD](openusd.md) (Descriptor profile)
 - [Partitioning](partitioning.md)
 - [Recorded Time](recordedtime.md)
 - [Sampling](sampledrate.md)
