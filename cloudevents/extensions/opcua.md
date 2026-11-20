@@ -6,8 +6,8 @@ DataSetMessages to CloudEvents for routing over supported protocols. It maps
 Core and existing extension attributes and defines OPC UA attributes.
 
 The [OPC UA Descriptor profile](#opc-ua-descriptor-profile) uses the
-[Descriptor Reference extension](descriptor.md) and xRegistry model to
-share stream metadata. Native identity comes from the NetworkMessage
+[Descriptor Reference extension](descriptor.md) to share stream metadata.
+Native identity comes from the NetworkMessage
 envelope, the [Processing Descriptor](wot.md#web-of-things), or a `source`
 query. A lookup through `subject` alone does not supply native identity.
 
@@ -33,10 +33,9 @@ field `MessageId`.
 An OPC UA Producer MAY identify the server using its [Application
 Description](https://reference.opcfoundation.org/Core/Part4/v104/docs/7.1) field
 `applicationUri` or a customer-configured identifier such as a unified namespace
-path. For data and event messages, a Producer MUST include each publisher or
-writer query parameter REQUIRED by the mapping unless the full OPC UA Part 14
-NetworkMessage envelope or the Processing Descriptor supplies its corresponding
-value.
+path. A Producer MAY include the query parameters defined in
+[Publisher and Writer Metadata](#publisher-and-writer-metadata), subject to
+that section's requirements for the combined WoT mapping.
 
 ### type
 
@@ -193,12 +192,12 @@ payload representations can carry the full native range.
 [Data Set Message Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164) field `Status`.
 - Constraints
   - OPTIONAL
-  - REQUIRED if status is not _Good_
-  - MAY be omitted if status is _Good_
+  - REQUIRED if status is not _Good_ and `data` omits the native `Status` field
+  - MAY be omitted if status is _Good_ or `data` retains the native `Status` field
 
-CloudEvents `Integer` is limited to the signed 32-bit range. If a native
-status value cannot be represented, the Producer MUST report an error rather
-than omit the status, wrap the value, or report it as _Good_.
+CloudEvents `Integer` is limited to the signed 32-bit range. If the status
+to be conveyed in `opcuastatus` cannot be represented, the Producer MUST
+report an error rather than omit it, wrap the value, or report it as _Good_.
 
 ### opcuamessagetype
 
@@ -270,14 +269,19 @@ configured name. For JSON message mapping, this is the
 [`DataSetWriterName` field][UA DataSetWriterName] when present in the
 DataSetMessage; otherwise the Producer obtains it from configuration.
 
-The native PublisherId and at least one of DataSetWriterId and DataSetWriterName
-are REQUIRED for all data and event messages, whether or not the WoT profile is
-used. Each value MUST be supplied by the envelope or by the corresponding query
-parameter or Descriptor field. A full envelope that omits an identifier does
-not satisfy that identifier's presence requirement. If both writer values are
-supplied, they MUST identify the same DataSetWriter. A writer name MUST uniquely
-identify the DataSetWriter within the PublisherId scope. Consumers MUST compare
-names exactly, without case folding or Unicode normalization.
+For data and event messages that also use the WoT profile, the native
+PublisherId and at least one of DataSetWriterId and DataSetWriterName are
+REQUIRED. The envelope, corresponding `source` query parameters or selected
+`opcuawriter` entry MUST supply those values. An envelope satisfies the
+requirement only for the identifiers it carries. Without WoT, this extension
+does not require those native identifiers in any of these locations. Producers
+can use the OPC UA-specific `subject` mapping without supplying additional
+identity metadata.
+
+If both writer values are supplied, they MUST identify the same DataSetWriter.
+A writer name MUST uniquely identify the DataSetWriter within the PublisherId
+scope. Consumers MUST compare names exactly, without case folding or Unicode
+normalization.
 
 When an identity is supplied in more than one place, the representations MUST
 identify the same native Publisher or DataSetWriter. To compare a query or
@@ -403,9 +407,9 @@ Metadata-version values retain their native [ConfigurationVersion][UA
 ConfigurationVersion] meaning. Descriptor versioning does not change when Part
 14 requires a MajorVersion or MinorVersion update.
 
-The Descriptor's selected schema Reference identifies an external payload
-schema. Native metadata-version values MUST NOT be supplied in the event
-or the `opcuawriter` entry when `dataschema` or the Descriptor supplies a schema.
+When `dataschema` or the Descriptor supplies a schema, Producers MUST NOT
+include metadata-version values in CloudEvents context attributes or the
+`opcuawriter` entry. Native fields retained in `data` are unaffected.
 
 `opcuadatasetname` is OPTIONAL and valid only in Descriptor metadata.
 It MUST equal `DataSetMetaDataType.Name` from the applicable
@@ -449,8 +453,8 @@ envelope or the existing source query. A direct TD, Subject Descriptor or its
 subject annotations MUST NOT supply missing OPC UA metadata or a payload schema.
 Consumers MUST NOT retrieve a source Descriptor as an implicit supplement.
 
-Apply [WoT description selection](wot.md#description-selection). Match TD
-URLs only when `subject` independently selects a TD or Subject Descriptor.
+When the event uses WoT, apply
+[WoT description selection](wot.md#description-selection).
 Only the selected Processing Descriptor MAY supply native metadata.
 
 The Descriptor Publisher MUST NOT change these values in a Descriptor Version
@@ -507,9 +511,9 @@ identity. That identity does not depend on the Descriptor identifier.
 
 ## Examples
 
-The examples preceding the WoT section use publisher `UInt16:12` and writer name
-`energy-consumption-asset`. Their payloads omit the native headers, so their
-`source` queries supply both identifiers.
+The OPC UA-only examples use writer name `energy-consumption-asset` in
+`subject`. Some also supply publisher `UInt16:12` and the writer name in the
+`source` query. Those query parameters are OPTIONAL without WoT.
 
 ### Metadata message
 
@@ -559,6 +563,8 @@ reference the correct metadata message. The `ua-deltaframe` messages will be
 used for hot and/or cold path processing and `ua-keyframe` messages can
 additional be used to update last-known-value tables.
 
+This example uses a writer-specific `source` for sequence ordering without
+carrying an explicit PublisherId or writer query parameter.
 
 ```text
 ------------------ PUBLISH -------------------
@@ -572,7 +578,7 @@ specversion: 1.0
 type: ua-deltaframe
 time: 2024-03-28T21:56:42Z
 id: 1235-1235-1235
-source: https://factory.example.com/aggregationserver/opcua?opcuapublisherid=UInt16:12;opcuadatasetwritername=energy-consumption-asset
+source: https://factory.example.com/aggregationserver/opcua/energy-consumption-asset
 datacontenttype: application/json; charset=utf-8
 subject: energy-consumption-asset
 sequence: 0000000007

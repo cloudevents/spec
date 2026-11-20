@@ -28,7 +28,7 @@
     },
     "httpUrl": {
       "$ref": "#/$defs/absoluteUri",
-      "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://[^/?#\\s]+"
+      "pattern": "^[Hh][Tt][Tt][Pp][Ss]?://(?:[^/?#@\\s]*@)?(?:\\[[^\\]\\s/?#]+\\]|[^\\[\\]:@/?#\\s]+)(?::[0-9]*)?(?=[/?]|(?![\\s\\S]))"
     },
     "entry": {
       "type": "object",

@@ -51,7 +51,9 @@ When `describedby` is present, the Consumer MUST retrieve the Descriptor at
 the supplied URL with HTTP `GET`. To retrieve an advertised bundle, use
 HTTP `GET` on `bundleurl` as supplied. The bundle MUST have the same
 `descriptorid` and `versionid` as the Descriptor that advertised it.
-Negotiating a bundle at the original URL is defined in the
+Successful responses serving Descriptor metadata or a bundle directly from
+`bundleurl` MUST use `Content-Type: application/json`. Negotiating a bundle
+at the original URL is defined in the
 [xRegistry Descriptor working draft][Descriptor Registry].
 
 The Consumer MUST check response status, media type and Descriptor validity
@@ -239,6 +241,12 @@ Host: static.example
 
 The response advertises a bundle:
 
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Connection: close
+```
+
 ```json
 {
   "descriptorid": "inspection-endpoint",
@@ -260,7 +268,13 @@ GET /bundles/inspection-endpoint/1 HTTP/1.1
 Host: static.example
 ```
 
-The bundle includes the endpoint metadata in the `inspection` entry:
+The response includes the endpoint metadata in the `inspection` entry:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+Connection: close
+```
 
 ```json
 {
@@ -318,5 +332,5 @@ admission and operation outcomes remain governed by their own protocols and
 trusted authorities.
 
 [Link Relations]: https://www.iana.org/assignments/link-relations/
-[Descriptor Registry]: https://github.com/xregistry/spec/pull/796
+[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/d6e659fa15da069fe10eae53132ffeea36953f8c/workingdrafts/models/descriptor/spec.md#55-bundled-representations
 [Endpoint Group]: https://github.com/xregistry/spec/blob/main/endpoint/spec.md
