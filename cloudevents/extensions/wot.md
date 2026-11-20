@@ -648,4 +648,4 @@ referenced documents or make their dependencies available.
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
-[Schema Descriptor Profile]: descriptor-profiles.md#schema
+[Schema Descriptor Profile]: descriptors.md#schema

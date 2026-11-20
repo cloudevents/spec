@@ -891,4 +891,4 @@ metadata.
 [UA VersionTime]: https://reference.opcfoundation.org/specs/OPC-10000-4/v1.05.07/7.43
 [UA ConfigurationVersion]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.6
 [URI]: https://www.rfc-editor.org/rfc/rfc3986
-[Schema Descriptor Profile]: descriptor-profiles.md#schema
+[Schema Descriptor Profile]: descriptors.md#schema

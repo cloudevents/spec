@@ -30,8 +30,6 @@ profile that explicitly uses its description-selection rules.
     MUST NOT contain a fragment.
   - Consumers MUST use the URL unchanged for requests and cache lookup.
     Cache selection MUST account for representation and authorization context.
-  - Consumers MUST NOT derive other URLs, including by adding `$details`,
-    a view path or query parameter, or removing `/versions/<id>`.
   - An empty string or otherwise invalid set value is invalid, not absent.
 
 In the JSON event format, `describedby` is a top-level string member. In HTTP
@@ -50,21 +48,11 @@ The name expresses a descriptive relationship, consistent with the
 ## Descriptor Retrieval
 
 When `describedby` is present, the Consumer MUST retrieve the Descriptor at
-the supplied URL with HTTP `GET`. A Consumer can request metadata with
-`Accept: application/json` or request a bundle with
-`Accept: application/vnd.xregistry.descriptor-bundle+json`.
-
-A server supporting negotiation MUST return the preferred available
-representation, with its `Content-Type` and `Vary: Accept`. If both are
-acceptable and neither is preferred, the server MUST return metadata.
-A Consumer that also accepts metadata can send
-`Accept: application/vnd.xregistry.descriptor-bundle+json, application/json;q=0.5`.
-A server supporting negotiation MUST return `406 Not Acceptable` when
-neither representation is acceptable. A static server can publish a
-prebuilt bundle at `describedby` or at the advertised `bundleurl`.
-When following `bundleurl`, the Consumer MUST use the advertised URL, not
-construct it from `describedby`. The returned bundle MUST have the same
-`descriptorid` and `versionid` as the metadata that advertised it.
+the supplied URL with HTTP `GET`. To retrieve an advertised bundle, use
+HTTP `GET` on `bundleurl` as supplied. The bundle MUST have the same
+`descriptorid` and `versionid` as the Descriptor that advertised it.
+Negotiating a bundle at the original URL is defined in the
+[xRegistry Descriptor working draft][Descriptor Registry].
 
 The Consumer MUST check response status, media type and Descriptor validity
 before using it, including any applicable selectors. `describedby` MUST
@@ -103,11 +91,19 @@ most 63 characters. An entry with a linked document MUST have an absolute,
 fragment-free HTTP(S) `url`. An inline-only entry MUST omit `url`. A null
 value is invalid. The profile defines whether a class links to a document.
 
+The following `class` strings are assigned:
+
+- `endpoint`: [Endpoint Descriptor profile](#endpoint)
+- `opcuawriter`: [OPC UA Descriptor profile](opcua.md#descriptor-entry)
+- `schema`: [Schema Descriptor profile](#schema)
+- `thingdescription`: [Web of Things profile](wot.md)
+- `thingmodel`: [Web of Things profile](wot.md)
+- `usdasset`: [OpenUSD profile](openusd.md#asset-selection)
+
 The same class MAY appear under different entry names. Profiles define how
 to select entries, including where a name comes from when needed. When a
 profile needs one entry and its rules leave several candidates, the Consumer
-MUST report ambiguity, not choose by map order. This extension defines no
-Descriptor-wide selector.
+MUST report ambiguity, not choose by map order.
 
 Publishers MUST keep the entries, their inline fields, and their referenced
 representations stable for the intended use and replay of a published
@@ -125,18 +121,17 @@ MUST NOT automatically follow links from profile fields or from the documents.
 Each `document` has a REQUIRED `contenttype` and exactly one of `content`
 (a JSON value) and `contentbase64` (base64-encoded bytes). Non-JSON
 representations use `contentbase64`. When the retrieved document has no
-media type, use `application/octet-stream`. The server MUST decode HTTP content
-codings before embedding bytes. If an allowed redirect changed the retrieval
-URL, `document.baseurl` MUST give the final URL. The entry's `url` stays
-unchanged. Consumers resolve any format-specific relative links against
+media type, use `application/octet-stream`. The server MUST decode HTTP
+content codings before embedding bytes. If an allowed redirect changed the
+retrieval URL, `document.baseurl` MUST give the final URL. The entry's `url`
+stays unchanged. Consumers resolve any format-specific relative links against
 `baseurl` if present, or the entry `url` otherwise.
 
 The server MUST verify authorization and obtain the complete document for
 every linked entry before returning a successful bundle. If it cannot do so,
-it MUST report failure rather than return a partial bundle. The Consumer
-MAY retry the unchanged `describedby` URL for metadata and retrieve only
-the entries it needs. That is a different representation of the same
-Descriptor, not a fallback to another description.
+it MUST report failure rather than return a partial bundle. If a request to
+`bundleurl` fails, the Consumer MAY use the original Descriptor to retrieve
+only the entries it needs. This does not select another Descriptor.
 
 ### Failure outcomes
 
@@ -155,6 +150,38 @@ but the Consumer MUST NOT report successful Descriptor-based interpretation or
 validation without REQUIRED inputs. Unless the profile dictates the outcome,
 local policy determines whether to defer, reject, retain or forward an
 uninterpreted event. These outcomes add no event attributes or HTTP error codes.
+
+## Descriptor profiles
+
+A publication profile determines whether an operation uses either of the
+following classes and whether it needs one entry or several. Neither
+class adds a CloudEvents attribute.
+
+### Schema
+
+A `schema` entry MUST link to a payload schema document at `url`, not its
+Registry metadata. Use the linked document or the entry's bundled
+`document`. A schema registry is not REQUIRED.
+
+To select one schema, use the `schema` entry named by the publication
+profile. If the profile supplies no name, one `schema` entry selects that
+schema, no entries means absence, and multiple entries are ambiguous.
+A specified name that is missing or has the wrong class is invalid, not
+absence. An invalid or ambiguous selection, unsupported format, or
+unavailable selected document MUST NOT cause fallback to another schema.
+The event binding defines precedence between this entry and `dataschema`.
+
+### Endpoint
+
+An `endpoint` entry MUST link to a representation of endpoint metadata
+at `url`. For an xRegistry [Endpoint Group][Endpoint Group], use the
+Group's metadata URL. The entry does not authorize invoking the endpoint.
+
+To select one endpoint, use the `endpoint` entry named by the publication
+profile or the unique entry of that class if no name is supplied.
+An absent entry, wrong class or ambiguous selection MUST be reported
+when the operation needs that endpoint. The Consumer MUST NOT replace a
+failed selection with an unrelated endpoint.
 
 ## Examples
 
@@ -178,8 +205,8 @@ A maintenance service reports a decision about Pump 7. The event's
 }
 ```
 
-The `pump7` entry identifies the pump's Thing Description. The `payload`
-entry supplies the schema for the decision.
+The `pump7` entry identifies the pump's Thing Description. The `inspection`
+entry links to metadata for the inspection service endpoint.
 
 ```json
 {
@@ -190,49 +217,73 @@ entry supplies the schema for the decision.
       "class": "thingdescription",
       "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
     },
-    "payload": {
-      "class": "schema",
-      "url": "https://schemas.example/maintenance-decision/versions/1"
+    "inspection": {
+      "class": "endpoint",
+      "url": "https://registry.example/endpoints/inspection"
     }
   }
 }
 ```
 
-### Bundled schema
+### Bundled endpoint
 
-The client requests a bundle without constructing a new URL. The
-`bundleurl` in the response identifies the same bundle for direct retrieval.
-
-```http
-GET /descriptors/inspection-schema/versions/1 HTTP/1.1
-Host: registry.example
-Accept: application/vnd.xregistry.descriptor-bundle+json
-```
+The client retrieves the Descriptor metadata:
 
 ```http
-HTTP/1.1 200 OK
-Content-Type: application/vnd.xregistry.descriptor-bundle+json
-Vary: Accept
-Cache-Control: no-store
-Connection: close
+GET /descriptors/inspection-endpoint/versions/1 HTTP/1.1
+Host: static.example
 ```
+
+The response advertises a bundle:
 
 ```json
 {
-  "descriptorid": "inspection-schema",
+  "descriptorid": "inspection-endpoint",
   "versionid": "1",
-  "bundleurl": "https://registry.example/bundles/inspection-schema/1",
+  "bundleurl": "https://static.example/bundles/inspection-endpoint/1",
   "entries": {
-    "payload": {
-      "class": "schema",
-      "url": "https://schemas.example/maintenance-decision/versions/1",
+    "inspection": {
+      "class": "endpoint",
+      "url": "https://registry.example/endpoints/inspection"
+    }
+  }
+}
+```
+
+The client retrieves the bundle directly from `bundleurl`:
+
+```http
+GET /bundles/inspection-endpoint/1 HTTP/1.1
+Host: static.example
+```
+
+The bundle includes the endpoint metadata in the `inspection` entry:
+
+```json
+{
+  "descriptorid": "inspection-endpoint",
+  "versionid": "1",
+  "bundleurl": "https://static.example/bundles/inspection-endpoint/1",
+  "entries": {
+    "inspection": {
+      "class": "endpoint",
+      "url": "https://registry.example/endpoints/inspection",
       "document": {
-        "contenttype": "application/schema+json",
+        "contenttype": "application/json",
         "content": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "type": "object",
-          "properties": { "inspectionNeeded": { "type": "boolean" } },
-          "required": ["inspectionNeeded"]
+          "endpointid": "inspection",
+          "self": "https://registry.example/endpoints/inspection",
+          "xid": "/endpoints/inspection",
+          "epoch": 1,
+          "createdat": "2026-10-29T12:00:00Z",
+          "modifiedat": "2026-10-29T12:00:00Z",
+          "usage": ["producer"],
+          "protocol": "HTTP",
+          "protocoloptions": {
+            "endpoints": [
+              { "uri": "https://maintenance.example/inspection-requests" }
+            ]
+          }
         }
       }
     }
@@ -264,3 +315,5 @@ admission and operation outcomes remain governed by their own protocols and
 trusted authorities.
 
 [Link Relations]: https://www.iana.org/assignments/link-relations/
+[Descriptor Registry]: https://github.com/xregistry/spec/pull/796
+[Endpoint Group]: https://github.com/xregistry/spec/blob/main/endpoint/spec.md
