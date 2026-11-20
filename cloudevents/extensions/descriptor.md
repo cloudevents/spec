@@ -22,9 +22,8 @@ to the inspection service's endpoint metadata:
 }
 ```
 
-This specification defines how to retrieve the document, not how to host it.
 A static HTTP server or an [xRegistry](https://xregistry.io) server can serve
-the same document.
+the document.
 
 ## Notational Conventions
 
@@ -79,8 +78,7 @@ entry; the `entries` object can hold any number of entries.
 ```
 
 The ellipses stand for additional fields. This specification does not define
-their meaning or require registry-specific fields. The entry's class determines
-whether it needs `url`.
+their meaning. The entry's class determines whether it needs `url`.
 
 ### `descriptorid`
 
@@ -89,7 +87,7 @@ publication scope.
 
 ### `versionid`
 
-REQUIRED. A non-empty string that identifies the version within that Descriptor.
+REQUIRED. A non-empty string that identifies the version of the Descriptor.
 Publishers MUST keep the entries, their inline fields, and their referenced
 representations stable for the intended use and replay of a published version.
 Publish a new version when those inputs change. The identifiers alone do not
@@ -123,9 +121,7 @@ is invalid. The same class MAY appear under different entry names.
 A Consumer can retrieve an advertised bundle by sending HTTP `GET` to the
 supplied `bundleurl`. A successful response at that URL MUST use
 `Content-Type: application/json`. The bundle MUST have the same `descriptorid`
-and `versionid` as the Descriptor that advertised it. The
-[xRegistry Descriptor working draft][Descriptor Registry] defines how to
-negotiate a bundle at the original Descriptor URL.
+and `versionid` as the Descriptor that advertised it.
 
 A bundle has the same Descriptor members as metadata. For each entry with
 a `url`, it adds a `document` object to that entry. It MUST NOT add a
@@ -384,5 +380,4 @@ If the server cannot establish a combined policy, it MUST send
 `Cache-Control: no-store`. An `ETag` for a bundle validates the whole
 representation, not just its Descriptor metadata.
 
-[Descriptor Registry]: https://github.com/marcschier/xregistry-drafts/blob/d6e659fa15da069fe10eae53132ffeea36953f8c/workingdrafts/models/descriptor/spec.md#55-bundled-representations
 [Endpoint Group]: https://github.com/xregistry/spec/blob/main/endpoint/spec.md
