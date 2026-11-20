@@ -2,7 +2,7 @@
 
 This profile maps [Web of Things][TD] (WoT) Thing Descriptions (TDs) to
 CloudEvents Core attributes and the OPTIONAL
-[Descriptor Reference extension](descriptors.md). The **Processing Descriptor**
+[Descriptor Reference extension](descriptor.md). The **Processing Descriptor**
 is the Descriptor selected to supply processing inputs. Either it or the
 event's `subject` selects the Thing or affordance. The `type` names the event
 contract.
@@ -17,6 +17,8 @@ A **TD entry** has class `thingdescription`; a **TM entry** has class
 `thingmodel`. Both MUST link to an ordinary resolved document at `url`,
 not Registry metadata or a projection plan. A Registry publisher uses the
 document-view URL. Entry names are local to the Descriptor.
+The [WoT entry schema](wot.schema.json) checks entry shape; Consumers
+still verify the linked documents and selector targets.
 
 ## Notational Conventions
 
@@ -163,7 +165,7 @@ The absence of a fragment and an empty fragment are different forms.
 meet that form's requirements. A percent-encoded `%23` is part of the URL, not
 the delimiter. Consumers MUST classify before percent-decoding a fragment.
 
-Entry names follow the [Descriptor rules](descriptors.md#descriptor-document)
+Entry names follow the [Descriptor rules](descriptor.md#descriptor-document)
 and cannot contain `/`; `http:pump7#` can name an entry but is not an HTTP URL. A
 name without a literal `#` is invalid. Invalid input or an unexpected
 representation MUST NOT be retried through another form or resolved against
@@ -230,7 +232,7 @@ an exact schema Version independently of the selected TD Version.
 
 Apply event-format decoding before checking presence; JSON `null` means
 unset. Retrieve and validate an explicit `describedby` under the [Descriptor
-Reference rules](descriptors.md#descriptor-retrieval). It is authoritative
+Reference rules](descriptor.md#descriptor-retrieval). It is authoritative
 for processing inputs; failure MUST NOT cause fallback.
 
 In Descriptor-driven selection, `describedby` is REQUIRED. Use the Processing
@@ -648,4 +650,4 @@ referenced documents or make their dependencies available.
 [TD]: https://www.w3.org/TR/wot-thing-description11/
 [TM]: https://www.w3.org/TR/wot-thing-description11/#thing-model
 [JSON Pointer]: https://www.rfc-editor.org/rfc/rfc6901
-[Schema Descriptor Profile]: descriptors.md#schema
+[Schema Descriptor Profile]: descriptor.md#schema

@@ -6,7 +6,7 @@ DataSetMessages to CloudEvents for routing over supported protocols. It maps
 Core and existing extension attributes and defines OPC UA attributes.
 
 The [OPC UA Descriptor profile](#opc-ua-descriptor-profile) uses the
-[Descriptor Reference extension](descriptors.md) and xRegistry model to
+[Descriptor Reference extension](descriptor.md) and xRegistry model to
 share stream metadata. Native identity comes from the NetworkMessage
 envelope, the [Processing Descriptor](wot.md#web-of-things), or a `source`
 query. A lookup through `subject` alone does not supply native identity.
@@ -375,7 +375,7 @@ topic or a CloudEvents `source`; either can carry several streams.
 
 Publishers MUST derive shared values from the native writer and metadata
 configuration for the emitted message. For an agreed [Descriptor
-binding](descriptors.md#descriptor-retrieval), they SHOULD store stream-constant
+binding](descriptor.md#descriptor-retrieval), they SHOULD store stream-constant
 values in an `opcuawriter` entry instead of repeating them in events.
 When the entry supplies those values, the Descriptor URL MUST identify a
 fixed Version, not a default that can change before replay.
@@ -440,7 +440,7 @@ payload when the envelope, source query and explicit event attributes supply
 every native requirement. It MUST NOT report that result as successful WoT
 correlation. This is native-only interpretation, not a fallback to another
 Descriptor. The [Descriptor Reference failure
-rules](descriptors.md#failure-outcomes) still apply.
+rules](descriptor.md#failure-outcomes) still apply.
 
 Without `describedby`, the WoT profile can select a direct TD subject or a
 Subject Descriptor Version without selecting a Processing Descriptor. Native
@@ -493,6 +493,8 @@ Each native member is OPTIONAL in the entry; the binding determines which
 values the event needs. A top-level field does not supply that value. Report
 invalid metadata for supplied values that violate this profile, including
 null values. CloudEvents attribute decoding does not apply to entry fields.
+The [OPC UA entry schema](opcua.schema.json) checks entry shape; Consumers
+still verify the PublisherId encoding and range and check the event context.
 
 JSON integers in this profile preserve the full native ranges. An alternate
 serialization or generated schema MUST preserve those same values, or report
@@ -891,4 +893,4 @@ metadata.
 [UA VersionTime]: https://reference.opcfoundation.org/specs/OPC-10000-4/v1.05.07/7.43
 [UA ConfigurationVersion]: https://reference.opcfoundation.org/specs/OPC-10000-14/v1.05.06/6.2.3.2.6
 [URI]: https://www.rfc-editor.org/rfc/rfc3986
-[Schema Descriptor Profile]: descriptors.md#schema
+[Schema Descriptor Profile]: descriptor.md#schema

@@ -154,14 +154,15 @@ uninterpreted event. These outcomes add no event attributes or HTTP error codes.
 ## Descriptor profiles
 
 A publication profile determines whether an operation uses either of the
-following classes and whether it needs one entry or several. Neither
-class adds a CloudEvents attribute.
+following classes and whether it needs one entry or several.
 
 ### Schema
 
 A `schema` entry MUST link to a payload schema document at `url`, not its
 Registry metadata. Use the linked document or the entry's bundled
 `document`. A schema registry is not REQUIRED.
+The [Descriptor JSON Schema](descriptor.schema.json) defines `schemaEntry`
+in `$defs` for validating this entry.
 
 To select one schema, use the `schema` entry named by the publication
 profile. If the profile supplies no name, one `schema` entry selects that
@@ -176,6 +177,8 @@ The event binding defines precedence between this entry and `dataschema`.
 An `endpoint` entry MUST link to a representation of endpoint metadata
 at `url`. For an xRegistry [Endpoint Group][Endpoint Group], use the
 Group's metadata URL. The entry does not authorize invoking the endpoint.
+The [Descriptor JSON Schema](descriptor.schema.json) defines `endpointEntry`
+in `$defs` for validating this entry.
 
 To select one endpoint, use the `endpoint` entry named by the publication
 profile or the unique entry of that class if no name is supplied.

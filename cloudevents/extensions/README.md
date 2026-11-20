@@ -45,7 +45,7 @@ for more information.
 - [Data Classification](data-classification.md)
 - [Dataref (Claim Check Pattern)](dataref.md)
 - [Deprecation](deprecation.md)
-- [Descriptor Reference](descriptors.md)
+- [Descriptor Reference](descriptor.md)
 - [Distributed Tracing](distributed-tracing.md)
 - [Expiry Time](expirytime.md)
 - [OPC UA](opcua.md)

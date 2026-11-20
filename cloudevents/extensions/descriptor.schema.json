@@ -9,6 +9,7 @@
     "descriptor": {
       "type": "object",
       "required": ["descriptorid", "versionid", "entries"],
+      "additionalProperties": true,
       "properties": {
         "descriptorid": { "type": "string", "minLength": 1 },
         "versionid": { "type": "string", "minLength": 1 },
@@ -32,6 +33,7 @@
     "entry": {
       "type": "object",
       "required": ["class"],
+      "additionalProperties": true,
       "properties": {
         "class": {
           "type": "string",
@@ -39,6 +41,20 @@
           "pattern": "^(?:[a-z][a-z0-9]*|[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+)(?![\\s\\S])"
         },
         "url": { "$ref": "#/$defs/httpUrl" }
+      }
+    },
+    "schemaEntry": {
+      "$ref": "#/$defs/entry",
+      "required": ["url"],
+      "properties": {
+        "class": { "const": "schema" }
+      }
+    },
+    "endpointEntry": {
+      "$ref": "#/$defs/entry",
+      "required": ["url"],
+      "properties": {
+        "class": { "const": "endpoint" }
       }
     },
     "document": {

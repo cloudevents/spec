@@ -2,7 +2,7 @@
 
 This extension associates a CloudEvent with an [OpenUSD](https://openusd.org/)
 asset or a prim within it. It uses the
-[Descriptor Reference extension](descriptors.md) and adds no CloudEvents
+[Descriptor Reference extension](descriptor.md) and adds no CloudEvents
 attributes or headers. Core attributes, including `source` and `subject`,
 retain their meanings.
 
@@ -16,7 +16,7 @@ These requirements apply only to events using this extension.
 
 ### describedby
 
-Use the existing [`describedby`](descriptors.md#describedby) attribute to
+Use the existing [`describedby`](descriptor.md#describedby) attribute to
 identify the Descriptor that supplies OpenUSD context. In HTTP binary
 content mode it is carried in the `ce-describedby` header. If `describedby`
 is absent, this extension supplies no OpenUSD context.
@@ -27,6 +27,8 @@ An entry with class `usdasset` MUST link to an OpenUSD asset at `url`.
 When an xRegistry server hosts the asset, the Publisher MUST use the
 document-view URL, not the Registry metadata URL. The Consumer can use the
 linked asset or the entry's bundled `document`.
+The [OpenUSD entry schema](openusd.schema.json) checks entry shape;
+Consumers still validate OpenUSD paths, targets, and field uniqueness.
 
 A publication profile MAY select several asset entries. If it needs one,
 the Consumer MUST use the exact entry name specified by the profile or the
@@ -133,7 +135,7 @@ member, the event would still describe `/Pump7` as a whole.
 
 ## Security Considerations
 
-Follow the [Descriptor retrieval policy](descriptors.md#security-considerations)
+Follow the [Descriptor retrieval policy](descriptor.md#security-considerations)
 for the asset and apply authorization and resource limits to its dependencies.
 Access to a Descriptor does not grant access to either.
 
