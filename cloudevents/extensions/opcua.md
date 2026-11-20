@@ -125,7 +125,7 @@ For metadata, data, and event messages, a Producer MAY map `subject` to
 `DataSetWriterId` or `DataSetWriterName` from the [Data Set Message
 Header](https://reference.opcfoundation.org/Core/Part14/v105/docs/7.2.5.4#Table164).
 A Producer using the WoT profile MUST instead follow its
-[subject selection rules](wot.md#subject).
+[rules for `subject`](wot.md#subject).
 
 For a native OPC UA event message (`MessageType` equals `ua-event`), a
 Producer using the OPC UA-specific `subject` mapping MUST append "/" and the
@@ -470,15 +470,10 @@ Consumers MUST obtain these attributes and any tracing, recording time,
 and CloudEvents `sequence` values from the event itself. Core attributes
 retain their CloudEvents placement and meaning.
 
-When the agreed route selects no Processing Descriptor, the Producer MUST supply
-all REQUIRED OPC UA values through the other applicable locations.
+An OPC UA-only event can omit `describedby`. In that case the Producer
+MUST supply all REQUIRED OPC UA values through the other applicable locations.
 Producers SHOULD use Descriptor metadata only when the intended Consumers
 support the agreed mapping.
-
-When `source` is itself a Descriptor URL, Producers SHOULD supply shared
-identity metadata in the selected versioned Descriptor. A query forms
-part of the source identity and can change the retrieved resource.
-Consumers MUST retrieve the exact `source` URL when that route applies.
 
 JSON integers in this profile preserve the full native ranges. An alternate
 serialization or generated schema MUST preserve those same values, or report
@@ -491,21 +486,20 @@ PublisherId encoding, ranges, and the event context under the rules above.
 ## WoT mapping
 
 When a CloudEvent uses both this extension and the [WoT profile](wot.md),
-apply [WoT description selection](wot.md#description-selection). For data
-and event messages, the following mappings take precedence over the
-corresponding OPC UA-only mappings:
+[`describedby` is REQUIRED](wot.md#description-selection). The same
+Descriptor supplies the WoT selection and any Descriptor-based OPC UA
+metadata. For data and event messages, the following mappings take
+precedence over the corresponding OPC UA-only mappings:
 
 - The Producer MUST use the WoT [`type`](wot.md#type) and
-  [`subject`](wot.md#subject) mappings. Use the WoT subject as specified
-  there and keep the native `EventId` in the OPC UA event payload.
+  [`subject`](wot.md#subject) mappings. Keep the native `EventId` in the
+  OPC UA event payload.
   Convey the native message type under the
   [`opcuamessagetype`](#opcuamessagetype) rules.
 - The native PublisherId and at least one of DataSetWriterId and
   DataSetWriterName are REQUIRED. Supply each value in the envelope, a
   `source` query parameter, or the selected `opcuawriter` entry, under
-  [Publisher and Writer Metadata](#publisher-and-writer-metadata). For a
-  WoT route without a Processing Descriptor, use the envelope or `source`
-  query for these values.
+  [Publisher and Writer Metadata](#publisher-and-writer-metadata).
 - Use [`opcuasequence`](#opcuasequence) for the native `SequenceNumber`.
   If the Producer also supplies CloudEvents `sequence`, it MUST satisfy
   the [Sequence extension](sequence.md) independently. The Producer MUST
@@ -718,13 +712,10 @@ recordedtime: 2024-03-28T23:59:59Z
 
 ### WoT and OPC UA telemetry message
 
-This binary-mode keyframe uses the WoT event type and named affordance subject.
-Its Descriptor supplies the resolved TD, payload schema, PublisherId,
-DataSetWriter identity and dataset name. The native OPC UA message type and
-sequence remain in the event because they can vary within this stream. The
-example uses writer ID `17` within publisher `UInt16:12`. The CloudEvents
-`sequence` attribute is absent because this example does not define a
-source-wide ordering across DataSetWriters.
+This binary-mode keyframe uses the WoT event type. Its Descriptor selects
+the pump's `processData` property and supplies the payload schema, publisher,
+and writer metadata. The native OPC UA message type and sequence remain in
+the event. This example uses writer ID `17` within publisher `UInt16:12`.
 
 ```text
 ------------------ PUBLISH -------------------
@@ -736,9 +727,9 @@ Content Type: application/json
 
 specversion: 1.0
 id: ua-message-25460
-source: https://registry.example/descriptorgroups/devices/descriptors/pump7
+source: urn:example:actor:telemetry-service
 type: com.example.models.tm.pump.properties.processData.v1
-subject: pump7#/properties/processData
+subject: pump7
 time: 2026-10-29T12:00:00Z
 describedby: https://registry.example/descriptorgroups/streams/descriptors/pump7-telemetry/versions/1
 opcuamessagetype: ua-keyframe
@@ -763,19 +754,12 @@ The referenced Descriptor version contains these entries:
   "entries": {
     "pump7": {
       "class": "thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
-    },
-    "gateway1": {
-      "class": "thingdescription",
-      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/gateway1/versions/1.0.0"
+      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0",
+      "affordanceselector": "/properties/processData"
     },
     "payload": {
       "class": "schema",
       "url": "https://schemas.example/pump-process-data/versions/3"
-    },
-    "geometry": {
-      "class": "usdasset",
-      "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2"
     },
     "writer": {
       "class": "opcuawriter",
@@ -788,55 +772,22 @@ The referenced Descriptor version contains these entries:
 }
 ```
 
-The Consumer uses the selected Descriptor's PublisherId and writer identity with
-the event's `opcuamessagetype` and `opcuasequence`. The subject's `pump7` prefix
-selects one of two TDs; the `payload` entry supplies the schema.
-The dataset name and writer name differ.
+The Consumer selects `/properties/processData` from the TD entry and
+reads the schema and native identity from the `payload` and `writer`
+entries. The event's `subject` is available for filtering.
 
-With an agreed source-Descriptor binding, a Producer can instead use the
-stream's Descriptor version URL as `source` and omit `describedby`. The
-new `source` establishes a different event identity scope.
-
-#### Subject Descriptor with separate processing metadata
-
-The following binary-mode event uses the [Subject Descriptor
-example](wot.md#subject-descriptor-with-separate-processing-inputs) for its
-Thing reference and affordance selector. Its `describedby` selects the
-complete `pump7-telemetry` Processing Descriptor shown above.
-
-```http
-POST /events HTTP/1.1
-Host: consumer.example
-Content-Type: application/json
-Content-Length: 29
-ce-specversion: 1.0
-ce-id: ua-message-25462
-ce-source: urn:example:actor:telemetry-service
-ce-type: com.example.models.tm.pump.properties.processData.v1
-ce-subject: https://registry.example/descriptorgroups/subjects/descriptors/pump7-process/versions/1
-ce-describedby: https://registry.example/descriptorgroups/streams/descriptors/pump7-telemetry/versions/1
-ce-opcuamessagetype: ua-keyframe
-ce-opcuasequence: 18
-
-{"Speed":1500,"Pressure":4.5}
-```
-
-The TD entry selects `/properties/processData` at the matching TD URL.
-The Processing Descriptor supplies the payload schema, `UInt16:12`
-PublisherId, and writer identity. This example relies on `describedby` for
-all three inputs.
-
-#### Direct TD subject with the NetworkMessage envelope
+#### WoT telemetry with a retained NetworkMessage envelope
 
 This event retains the full Part 14 NetworkMessage envelope. Its PublisherId
 and DataSetWriterId satisfy the identity requirements, so `source` needs no
 publisher or writer query parameters. Part 14 JSON encodes the configured
 PublisherId `UInt16:12` as the string `"12"`.
 
-The direct subject supplies the TD URL and affordance pointer; `dataschema`
-supplies the envelope's schema. No Descriptor is REQUIRED, so `describedby` is
-omitted. The event type uses revision `v2` because retaining the envelope
-changes the payload contract.
+`describedby` selects the [WoT example Descriptor](wot.md#web-of-things)
+for the Thing and affordance. `dataschema` takes precedence over that
+Descriptor's schema entry and identifies the envelope's schema. The event
+type uses revision `v2` because retaining the envelope changes the payload
+contract.
 
 ```text
 ------------------ PUBLISH -------------------
@@ -850,7 +801,7 @@ specversion: 1.0
 id: ua-message-25461
 source: mqtt://site/line/cell/device/sensor?site=north
 type: com.example.models.tm.pump.properties.processData.v2
-subject: https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0#/properties/processData
+describedby: https://devices.example/pump7/descriptors/process-data.json
 time: 2026-10-29T12:00:01Z
 dataschema: https://schemas.example/pump-process-data-envelope/versions/1
 opcuasequence: 0
@@ -879,8 +830,7 @@ opcuasequence: 0
 ```
 
 The rollover from `4294967295` to `0` is carried in `opcuasequence`. The
-subject selects its TD directly, and the retained DataSetMessage header supplies
-the native `MessageType`.
+retained DataSetMessage header supplies the native `MessageType`.
 
 ## Descriptor Retrieval Security
 
