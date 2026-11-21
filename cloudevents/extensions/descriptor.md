@@ -193,9 +193,11 @@ inputs from a failed payload validation.
 | Applicable validation completed | Payload valid or invalid, according to that validator. |
 | Validation not performed or could not complete | Payload not checked; not a successful validation. |
 
-If an explicit `describedby` is invalid, unavailable or incomplete, the
-Consumer MUST report the failure and MUST NOT substitute another description
-for it. A profile MAY permit processing that does not depend on the Descriptor,
+If an explicit `describedby` URL is invalid or fails to return a valid
+Descriptor response with the REQUIRED inputs, the Consumer MUST report the
+failure and MUST NOT substitute another description for it.
+
+A profile MAY permit processing that does not depend on the Descriptor,
 but the Consumer MUST NOT report successful Descriptor-based interpretation or
 validation without REQUIRED inputs. Unless the profile dictates the outcome,
 local policy determines whether to defer, reject, retain or forward an
