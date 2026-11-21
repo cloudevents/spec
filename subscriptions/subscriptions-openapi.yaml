@@ -173,7 +173,7 @@ components:
           items:
             title: "Filter entry"
             oneOf:
-              - $ref: "#/components/schemas/Filter"
+              - $ref: "#/components/schemas/ExtensionFilter"
               - $ref: "#/components/schemas/AllFilter"
               - $ref: "#/components/schemas/AnyFilter"
               - $ref: "#/components/schemas/NotFilter"
@@ -214,6 +214,22 @@ components:
       description: "A filter from a selection of multiple filter types and dialects"
       type: object
       additionalProperties: true
+    ExtensionFilter:
+      allOf:
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          title: "extension filter"
+          description: "A filter of an extension dialect, that is a dialect not defined by this specification. It has at least one property and none of the property names of the dialects defined here."
+          minProperties: 1
+          not:
+            anyOf:
+              - required: ["all"]
+              - required: ["any"]
+              - required: ["not"]
+              - required: ["exact"]
+              - required: ["prefix"]
+              - required: ["suffix"]
+              - required: ["sql"]
     AllFilter:
       allOf:
         - $ref: "#/components/schemas/Filter"
@@ -227,7 +243,7 @@ components:
               items:
                 title: "Filter entry"
                 oneOf:
-                - $ref: "#/components/schemas/Filter"
+                - $ref: "#/components/schemas/ExtensionFilter"
                 - $ref: "#/components/schemas/AllFilter"
                 - $ref: "#/components/schemas/AnyFilter"
                 - $ref: "#/components/schemas/NotFilter"
@@ -235,6 +251,7 @@ components:
                 - $ref: "#/components/schemas/PrefixFilter"
                 - $ref: "#/components/schemas/SuffixFilter"
                 - $ref: "#/components/schemas/SqlFilter"
+          required: ["all"]
           additionalProperties: false
     AnyFilter:
       allOf:
@@ -249,7 +266,7 @@ components:
               items:
                 title: "Filter entry"
                 oneOf:
-                  - $ref: "#/components/schemas/Filter"
+                  - $ref: "#/components/schemas/ExtensionFilter"
                   - $ref: "#/components/schemas/AllFilter"
                   - $ref: "#/components/schemas/AnyFilter"
                   - $ref: "#/components/schemas/NotFilter"
@@ -257,6 +274,7 @@ components:
                   - $ref: "#/components/schemas/PrefixFilter"
                   - $ref: "#/components/schemas/SuffixFilter"
                   - $ref: "#/components/schemas/SqlFilter"
+          required: ["any"]
           additionalProperties: false
     NotFilter:
       allOf:
@@ -267,7 +285,7 @@ components:
             not:
               type: object
               oneOf:
-                - $ref: "#/components/schemas/Filter"
+                - $ref: "#/components/schemas/ExtensionFilter"
                 - $ref: "#/components/schemas/AllFilter"
                 - $ref: "#/components/schemas/AnyFilter"
                 - $ref: "#/components/schemas/NotFilter"
@@ -275,6 +293,7 @@ components:
                 - $ref: "#/components/schemas/PrefixFilter"
                 - $ref: "#/components/schemas/SuffixFilter"
                 - $ref: "#/components/schemas/SqlFilter"
+          required: ["not"]
           additionalProperties: false
     ExactFilter:
       allOf:
@@ -285,6 +304,7 @@ components:
           properties:
             exact:
               $ref: "#/components/schemas/CloudEventsAttribute"
+          required: ["exact"]
           additionalProperties: false
     PrefixFilter:
       allOf:
@@ -295,6 +315,7 @@ components:
           properties:
             prefix:
               $ref: "#/components/schemas/CloudEventsAttribute"
+          required: ["prefix"]
           additionalProperties: false
     SuffixFilter:
       allOf:
@@ -305,6 +326,7 @@ components:
           properties:
             suffix:
               $ref: "#/components/schemas/CloudEventsAttribute"
+          required: ["suffix"]
           additionalProperties: false
     SqlFilter:
       allOf:
@@ -315,6 +337,7 @@ components:
             sql:
               type: string
               description: "The CESQL expression"
+          required: ["sql"]
           additionalProperties: true
     CloudEventsAttribute:
       type: object
