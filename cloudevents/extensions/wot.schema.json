@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CloudEvents WoT Descriptor entry",
+  "oneOf": [
+    { "$ref": "#/$defs/thingdescription" },
+    { "$ref": "#/$defs/thingmodel" }
+  ],
+  "$defs": {
+    "wotEntry": {
+      "$ref": "descriptor.schema.json#/$defs/entry",
+      "required": ["url"],
+      "properties": {
+        "planurl": { "$ref": "descriptor.schema.json#/$defs/httpUrl" },
+        "affordanceselector": {
+          "type": "string",
+          "pattern": "^/(?:properties|actions|events)/(?:[^~/]|~[01])+(?![\\s\\S])"
+        }
+      }
+    },
+    "thingdescription": {
+      "$ref": "#/$defs/wotEntry",
+      "properties": { "class": { "const": "thingdescription" } }
+    },
+    "thingmodel": {
+      "$ref": "#/$defs/wotEntry",
+      "properties": {
+        "class": { "const": "thingmodel" },
+        "type": {
+          "type": "string",
+          "pattern": "^(?:[A-Za-z_][A-Za-z0-9_]*\\.)*v[1-9][0-9]*(?![\\s\\S])"
+        }
+      }
+    }
+  }
+}
