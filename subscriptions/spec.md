@@ -942,7 +942,7 @@ Result:
 Errors:
 
 - **ok** - the operation succeeded
-- **notfound** - a subscription with the given _id_ already exists
+- **notfound** - a subscription with the given _id_ does not exist
 
 #### 3.2.5.3. Querying for a list of Subscriptions
 
@@ -1007,7 +1007,7 @@ Result:
 Errors:
 
 - **ok** - the operation succeeded
-- **notfound** - a subscription with the given _id_ already exists
+- **notfound** - a subscription with the given _id_ does not exist
 
 ### 3.3. HTTP Binding for the Subscription API
 
@@ -1050,6 +1050,33 @@ Content-Type: application/json
   "sink": "..."
 }
 
+```
+
+#### 3.3.1. Error Responses
+
+When an operation fails, the subscription manager MUST respond with a 4xx or
+5xx HTTP status code, and the response body SHOULD be a problem details object
+as defined in [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457), using the
+`application/problem+json` media type. The errors defined for the operations
+in [section 3.2.5](#325-api-operations) map to HTTP status codes as
+follows:
+
+- **invalid** - `400 Bad Request`
+- **notfound** - `404 Not Found`
+- **conflict** - `409 Conflict`
+
+For example:
+
+```
+HTTP/1.1 404 Not Found
+Content-Type: application/problem+json
+
+{
+  "type": "about:blank",
+  "title": "Not Found",
+  "status": 404,
+  "detail": "Subscription 'sub-1234' does not exist"
+}
 ```
 
 ### 3.4. AMQP Binding for the Subscription API
