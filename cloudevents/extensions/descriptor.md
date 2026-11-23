@@ -97,9 +97,10 @@ additional members.
 
 ##### `class`
 
-REQUIRED. Identifies the kind of information the entry supplies and
-determines whether the entry links to a document or carries its information
-inline. The same class MAY appear under different entry names.
+REQUIRED. A string of 1 to 63 characters, inclusive. It identifies the kind
+of information the entry supplies and determines whether the entry links to
+a document or carries its information inline. The same class MAY appear
+under different entry names.
 
 ##### `url`
 
@@ -178,11 +179,6 @@ entry's `url` returns, or the fields the entry supplies inline. A profile
 can also specify how to select entries for a particular use or require
 a URL that identifies a fixed Descriptor version. Each profile defines
 the inputs it needs and how to handle unavailable or invalid inputs.
-
-Standard classes use short lowercase alphanumeric tokens starting with a
-letter. Other specifications can define their own classes using reverse DNS
-names under the defining party's control. A `class` string is at most 63
-characters.
 
 The following `class` values are well-known class names:
 
