@@ -13,7 +13,6 @@
       "properties": {
         "descriptorid": { "type": "string", "minLength": 1 },
         "versionid": { "type": "string", "minLength": 1 },
-        "entityid": { "$ref": "#/$defs/absoluteUri" },
         "bundleurl": { "$ref": "#/$defs/httpUrl" },
         "entries": {
           "type": "object",

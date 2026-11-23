@@ -61,7 +61,6 @@ A Descriptor document MUST be a JSON object with the following structure.
 {
   "descriptorid": "<descriptor identifier>",
   "versionid": "<version identifier>",
-  "entityid": "<entity URI>", ?
   "bundleurl": "<bundle URL>", ?
   "entries": {
     "<entry name>": {
@@ -88,11 +87,6 @@ Publishers MUST keep the entries, their inline fields, and their referenced
 representations stable for the intended use and replay of a published version.
 Publish a new version when those inputs change. The identifiers alone do not
 establish that a URL selects a fixed version.
-
-### `entityid`
-
-OPTIONAL. An absolute, fragment-free URI that identifies the primary described
-entity. It does not trigger retrieval.
 
 ### `bundleurl`
 
@@ -399,10 +393,10 @@ Read access to a Descriptor does not grant access to its targets.
 A bundle does not bypass trust checks.
 Versions do not authenticate content or prove unchanged bytes.
 
-Descriptive entity IDs, TD security declarations and references to actions are
-not authenticated principals, execution grants or current readiness. Device
-admission and operation outcomes remain governed by their own protocols and
-trusted authorities.
+TD security declarations and references to actions are not authenticated
+principals, execution grants or current readiness. Device admission and
+operation outcomes remain governed by their own protocols and trusted
+authorities.
 
 ### Caching
 
