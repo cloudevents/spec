@@ -57,11 +57,6 @@ Each SDK MUST meet these requirements:
 - Supports HTTP transport renderings in both `structured` and `binary`
   content mode.
 
-### Object Model Structure Guidelines
-
-Each SDK will provide a generic CloudEvents class/object/structure that
-represents the canonical form of an Event.
-
 The SDK should enable users to bypass implementing transport specific encoding
 and decoding of the CloudEvents `Event` object. The general flow for Objects
 should be:
@@ -83,17 +78,48 @@ can be used with the implementation transport selected.
 
 At a high level, the SDK needs to be able to help with the following tasks:
 
-1. Compose an Event.
+1. Compose an Event [[CloudEventBuilder](#cloudeventbuilder)].
 1. Encode an Event given a transport and encoding (into a Transport Message if
-   appropriate).
+   appropriate) [[Encode](#encode)].
 1. Decode an Event given a transport specific message, request or response (into
-   a Transport Message if appropriate).
+   a Transport Message if appropriate) [[Decode](#decode)].
 
-#### Compose an Event
+### Data Model
 
-Provide a convenient way to compose both a single message and many messages.
+#### CloudEvent
+
+Each SDK will provide a generic CloudEvents class/object/structure that
+represents the canonical form of an Event.
+
+#### CloudEventMapping
+
+The CloudEventMapping provides a class/object/structure which is designed to be a
+transport agnostic.
+
+The properties are:
+
+- **Body(object):** the cloud event once it has been encoded using the format.
+This should map to a body field for the transport.
+- **ContentType(string):** a string which describes the format of the body.
+The transport protocol defines where this field is transmitted.
+- **Metadata(object):** A transport specific representation of properties which
+is to be used for the transport.
+
+#### CloudEventAttribute
+
+The properties are:
+
+- **Key(string):** The key/name of the attribute.
+- **ValueType(string):** What data type must the value be.
+- **Required(boolean):** When validating a cloud event is this attribute required to be present.
+
+### SDK Services
+
+#### CloudEventBuilder
+
+Provide a convenient way to compose a CloudEvent representation of an event.
 Implementers will need a way to quickly build up and convert their event data
-into the a CloudEvents encoded Event. In practice there tend to be two aspects
+into the a CloudEvents encoded Event. In practice there tend to be two modes
 to event composition,
 
 1. Event Creation
@@ -105,16 +131,51 @@ to event composition,
 - "I have a CloudEvents formatted Event and I need it to be a different Event."
 - "I have a CloudEvents formatted Event and I need to mutate the Event."
 
-Event creation is highly idiomatic to the SDK language.
+The builder is to enable setting the following in a language idiomatic manner
+in addition to the core cloud event properties. This can be achieved via be methods or properties:
+
+- **Extensions([Extension](#extension)[]):** Adds support for additional attributes.
+
+In addition there must be the following methods:
+
+- [Validate](#validate)
+- [Build](#build)
+- [Mutate](#mutate)
+
+##### Validate
+
+Validation MUST be possible on an individual Event. Validation MUST take into
+account the spec version, and all the requirements put in-place by the spec at
+each version.
+
+SDKs SHOULD perform validation on context attribute values provided to it by
+the SDK user. This will help ensure that only valid CloudEvents are generated.
+
+##### Build
+
+Event build is responsible for generating a [CloudEvent](#cloudevent) using the
+properties/attributes set on the builder
+
+The build operation should perform a validation of the event, raising an error if
+the validation fails.
+
+**Returns:** [CloudEvent](#cloudevent)
+
+##### Mutate
 
 Event mutation tends to be solved with an accessor pattern, like getters and
 setters. But direct key access could be leveraged, or named-key accessor
 functions.
 
-In either case, there MUST be a method for validating the resulting Event object
-based on the parameters set, most importantly the CloudEvents spec version.
+The mutate operation should perform a validation of the event, raising an error if
+the validation fails.
 
-#### Encode/Decode an Event
+**Parameters:** adapter([Adapter](#adapter)) & data(object) which corresponds to
+what is to be mutated.
+
+**Returns:** [CloudEvent](#cloudevent)
+
+#### CloudEventConverter
 
 Each SDK MUST support encoding and decoding an Event with regards to a transport
 and encoding:
@@ -129,30 +190,168 @@ and encoding:
   format, both in the [table below](#feature-support) and in any SDK-specific
   documentation provided.
 
+The converter is to enable setting the following in a language idiomatic manner
+which could be methods or properties:
+
+- **Formatters([Formatter](#formatter)):** Sets the possible formatters to be used when
+converting a [CloudEvent](#cloudevent) to/from a [CloudEventMapping](#cloudeventmapping) representation.
+- **Injectors([Injector](#injector)):** Sets the injectors which should be used to inject
+additional attributes into the CloudEvent.
+- **Verifiers([Verifier](#verifier)):** Sets the verification which should be done on the
+CloudEvent prior to FromCloudEvent or after ToCloudEvent on the formatter.
+- **DefaultContentType(string):** What content type should be used for encoding if none is provided
+- **Binder([Binder](#binder)):** Sets how metadata is represented within the [CloudEventMapping](#cloudeventmapping).
+
+In addition there must be the following methods:
+
+- [Encode](#encode)
+- [Decode](#decode)
+
+##### Encode
+
+The encode operation is responsible for taking a [CloudEvent](#cloudevent),
+using the configured formatter to generate a [CloudEventMapping](#cloudeventmapping).
+
+This mapping can then be optionally bound to a transport specific representation which
+can then be used to easily send the cloud event via the transport.
+
+**Parameters:** event([CloudEvent](#cloudevent)) & optionally contentType(string)
+
+**Returns:** [CloudEventMapping](#cloudeventmapping)
+
+##### Decode
+
+This performs the inverse of [Encode](#encode) which is to take a [CloudEventMapping](#cloudeventmapping)
+constructed using information from a transport and give the developer a
+[CloudEvent](#cloudevent) which they can use.
+
+This process involves [Debinding](#debind) the metadata to a generic representation,
+and then using the configured formatter to produce a [CloudEvent](#cloudevent).
+
 Note that when decoding an event, the media type's type and subtype MUST be
 matched case-insensitively, as specified in
 [RFC6838, section 4.2](https://www.rfc-editor.org/info/rfc6838/#section-4.2).
 
-#### Data
+**Parameters:** mapping([CloudEventMapping](#cloudeventmapping))
+
+**Returns:** [CloudEvent](#cloudevent)
+
+### API Definitions
+
+#### Adapter
+
+An adapter is needed when you need to convert an existing events into CloudEvents.
+This will typically mean extracting metadata from the event which is to then be used
+as CloudEvents attributes.
+
+##### Transform
+
+**Parameters:** event([CloudEvent](#cloudevent)) & data(object) which corresponds to what is to be mutated.
+
+**Returns:** [CloudEvent](#cloudevent)
+
+#### Formatter
+
+Is responsible for the conversion between [CloudEvent](#cloudevent) and
+[CloudEventMapping](#cloudeventmapping). This is what makes it possible to simultaneously
+support multiple formats ie json & protobuf.
+
+This will influence what attributes remain in the body & which one’s are transported
+as metadata.
+
+The formatter is to expose a readonly list of supported content types. 
+
+##### FromCloudEvent
+
+Called as part of the encoding process.
+
+**Parameters:** event([CloudEvent](#cloudevent)) & contentType(string)
+
+**Returns:** [CloudEventMapping](#cloudeventmapping)
+
+##### ToCloudEvent
+
+Called as part of the decoding process
+
+**Parameters:** mapping([CloudEventMapping](#cloudeventmapping))
+
+**Returns:** [CloudEvent](#cloudevent)
+
+#### Binder
+
+Is responsible for ensuring that the [CloudEventMapping](#cloudeventmapping) metadata can be
+converted to/from a transport agnostic form.
+
+For instance http would use ie key-value collection for http headers or amqp would use
+a metadata object.
+
+#### Bind
+
+Called as part of the encoding process.
+
+**Parameters:** mapping([CloudEventMapping](#cloudeventmapping))
+
+**Returns:** [CloudEventMapping](#cloudeventmapping)
+
+##### De-bind
+
+Called as part of the decoding process.
+
+**Parameters:** mapping([CloudEventMapping](#cloudeventmapping))
+
+**Returns:** [CloudEventMapping](#cloudeventmapping)
+
+#### Extension
+
+Supporting CloudEvents extensions is idiomatic again, but a method that mirrors
+the data access seems to work.
+
+The extension is to expose a readonly list of supported attributes
+[CloudEventAttribute](#cloudeventattribute).
+
+#### Injector
+
+The injector is responsible for setting additional attribute values if the attribute
+is not already present.
+
+An injector will commonly be used alongside [Extensions](#extension).
+
+Injectors must provide the following methods:
+
+- [Inject](#inject)
+
+##### Inject
+
+Called as the first encoding step. 
+
+**Parameters:** event([CloudEvent](#cloudevent))
+
+**Returns:** [CloudEvent](#cloudevent)
+
+#### Verifier
+
+The verifier is responsible for providing additional verification of a cloudeve
+
+A verifier will commonly be used alongside [Extensions](#extension).
+
+Verifiers must provide the following methods:
+
+- [Verify](#verify)
+
+##### Verify
+
+Called as part of the encoding process just prior to the formatting step. 
+
+**Parameters:** [CloudEvent](#cloudevent)
+
+**Returns:** valid(boolean)
+
+### Data
 
 Data access from the event has some considerations, the Event at rest could be
 encoded into the `base64` form, as structured data, or as a wire format like
 `json`. An SDK MUST provide a method for unpacking the data from these formats
 into a native format.
-
-#### Extensions
-
-Supporting CloudEvents extensions is idiomatic again, but a method that mirrors
-the data access seems to work.
-
-#### Validation
-
-Validation MUST be possible on an individual Event. Validation MUST take into
-account the spec version, and all the requirements put in-place by the spec at
-each version.
-
-SDKs SHOULD perform validation on context attribute values provided to it by
-the SDK user. This will help ensure that only valid CloudEvents are generated.
 
 ## Documentation
 
