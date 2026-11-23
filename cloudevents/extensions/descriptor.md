@@ -7,12 +7,10 @@ An HTTP `GET` at that URL returns a JSON document called a Descriptor.
 
 For example, a maintenance event can set `describedby` to
 `https://maintenance.example/pump7/versions/1`. The returned Descriptor links
-to the inspection service's endpoint metadata:
+to the inspection service's xRegistry Endpoint Group:
 
 ```json
 {
-  "descriptorid": "pump7",
-  "versionid": "1",
   "entries": {
     "inspection": {
       "class": "endpoint",
@@ -59,8 +57,6 @@ A Descriptor document MUST be a JSON object with the following structure.
 
 ```text
 {
-  "descriptorid": "<descriptor identifier>",
-  "versionid": "<version identifier>",
   "bundleurl": "<bundle URL>", ?
   "entries": {
     "<entry name>": {
@@ -75,18 +71,9 @@ A Descriptor document MUST be a JSON object with the following structure.
 
 Extensions MAY add members to the document and its entries.
 
-### `descriptorid`
-
-REQUIRED. A non-empty string that identifies the Descriptor within its
-publication scope.
-
-### `versionid`
-
-REQUIRED. A non-empty string that identifies the version of the Descriptor.
-Publishers MUST keep the entries, their inline fields, and their referenced
-representations stable for the intended use and replay of a published version.
-Publish a new version when those inputs change. The identifiers alone do not
-establish that a URL selects a fixed version.
+For a published Descriptor version, the Publisher MUST keep its entries,
+inline fields, and linked representations stable for the intended use and
+replay. Publish a new version when those inputs change.
 
 ### `bundleurl`
 
@@ -124,8 +111,9 @@ fragment-free HTTP(S) URL. Entries that supply only inline fields MUST omit
 
 A Consumer MAY retrieve an advertised bundle by sending HTTP `GET` to the
 supplied `bundleurl`. A successful response at that URL MUST use
-`Content-Type: application/json`. The bundle MUST have the same `descriptorid`
-and `versionid` as the Descriptor that advertised it.
+`Content-Type: application/json` and contain a bundle of the exact Descriptor
+version that advertised that `bundleurl`, even if the original Descriptor URL
+later serves a different version.
 
 A bundle is an expanded view of a Descriptor. Each entry with a `url`
 MUST include a `document` member containing the linked document. This
@@ -188,7 +176,8 @@ or entry-specific checks.
 A class definition specifies the representation that HTTP `GET` on an
 entry's `url` returns, or the fields the entry supplies inline. A profile
 can also specify how to select entries for a particular use or require
-a URL that identifies a fixed Descriptor version.
+a URL that identifies a fixed Descriptor version. Each profile defines
+the inputs it needs and how to handle unavailable or invalid inputs.
 
 Standard classes use short lowercase alphanumeric tokens starting with a
 letter. Other specifications can define their own classes using reverse DNS
@@ -207,59 +196,15 @@ The following `class` values are well-known class names:
 When a profile needs one entry and its rules leave several candidates, the
 Consumer MUST report ambiguity rather than select by map order.
 
-### Failure outcomes
-
-Descriptor-based interpretation requires a successful response with the
-specified media type and a valid document that supplies the inputs the
-profile needs. The following table distinguishes unavailable or invalid
-inputs from a failed payload validation.
-
-| Condition | Result |
-| --- | --- |
-| REQUIRED inputs obtained and selected | Processing context available. It does not validate the payload or authorize an operation. |
-| Missing, ambiguous, unavailable or unsupported REQUIRED input | Processing context unavailable. |
-| Invalid shape, selector or profile value | Invalid metadata. |
-| Applicable validation completed | Payload valid or invalid, according to that validator. |
-| Validation not performed or could not complete | Payload not checked; not a successful validation. |
-
-If an explicit `describedby` URL is invalid or fails to return a valid
-Descriptor response with the REQUIRED inputs, the Consumer MUST report the
-failure and MUST NOT substitute another description for it.
-
-A profile MAY permit processing that does not depend on the Descriptor,
-but the Consumer MUST NOT report successful Descriptor-based interpretation or
-validation without REQUIRED inputs. Unless the profile dictates the outcome,
-local policy determines whether to defer, reject, retain or forward an
-uninterpreted event. These outcomes add no event attributes or HTTP error codes.
-
 ### Schema
 
-A `schema` entry's `url` MUST identify a schema document for the event
-payload. Use the linked document or the entry's bundled `document`.
-The [Descriptor JSON Schema](descriptor.schema.json) defines `schemaEntry`
-in `$defs` for validating this entry.
-
-To select one schema, use the `schema` entry named by the publication
-profile. If the profile supplies no name, one `schema` entry selects that
-schema, no entries means absence, and multiple entries are ambiguous.
-A specified name that is missing or has the wrong class is invalid, not
-absence. An invalid or ambiguous selection, unsupported format, or
-unavailable selected document MUST NOT cause fallback to another schema.
-The event binding defines precedence between this entry and `dataschema`.
+A `schema` entry's `url` MUST identify a schema document for the event's
+`data`.
 
 ### Endpoint
 
-An `endpoint` entry MUST link to a representation of endpoint metadata
-at `url`. For an xRegistry [Endpoint Group][Endpoint Group], use the
-Group's metadata URL. The entry does not authorize invoking the endpoint.
-The [Descriptor JSON Schema](descriptor.schema.json) defines `endpointEntry`
-in `$defs` for validating this entry.
-
-To select one endpoint, use the `endpoint` entry named by the publication
-profile or the unique entry of that class if no name is supplied.
-An absent entry, wrong class or ambiguous selection MUST be reported
-when the operation needs that endpoint. The Consumer MUST NOT replace a
-failed selection with an unrelated endpoint.
+An `endpoint` entry's `url` MUST identify the metadata of an xRegistry
+[Endpoint Group][Endpoint Group].
 
 ## Examples
 
@@ -282,8 +227,6 @@ Connection: close
 
 ```json
 {
-  "descriptorid": "inspection-endpoint",
-  "versionid": "1",
   "bundleurl": "https://static.example/bundles/inspection-endpoint/1",
   "entries": {
     "inspection": {
@@ -311,8 +254,6 @@ Connection: close
 
 ```json
 {
-  "descriptorid": "inspection-endpoint",
-  "versionid": "1",
   "bundleurl": "https://static.example/bundles/inspection-endpoint/1",
   "entries": {
     "inspection": {
@@ -362,12 +303,10 @@ A maintenance service reports a decision about Pump 7. The event's
 ```
 
 The `pump7` entry identifies the pump's Thing Description. The `inspection`
-entry links to metadata for the inspection service endpoint.
+entry links to the inspection service's xRegistry Endpoint Group.
 
 ```json
 {
-  "descriptorid": "pump7-maintenance",
-  "versionid": "1",
   "entries": {
     "pump7": {
       "class": "thingdescription",

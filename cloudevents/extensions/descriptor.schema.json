@@ -8,11 +8,9 @@
   "$defs": {
     "descriptor": {
       "type": "object",
-      "required": ["descriptorid", "versionid", "entries"],
+      "required": ["entries"],
       "additionalProperties": true,
       "properties": {
-        "descriptorid": { "type": "string", "minLength": 1 },
-        "versionid": { "type": "string", "minLength": 1 },
         "bundleurl": { "$ref": "#/$defs/httpUrl" },
         "entries": {
           "type": "object",

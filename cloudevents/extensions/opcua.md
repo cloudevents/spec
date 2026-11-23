@@ -31,8 +31,6 @@ When Consumers need metadata shared by a stream, the Producer can use
 
 ```json
 {
-  "descriptorid": "pump7-stream",
-  "versionid": "1",
   "entries": {
     "writer": {
       "class": "opcuawriter",
@@ -106,8 +104,13 @@ or [Avro Schema](https://avro.apache.org/docs/1.11.1/specification/).
 `dataschema` identifies and versions that schema.
 
 A Processing Descriptor MAY supply the schema. The Consumer MUST use
-`dataschema` when present; otherwise, use the Processing Descriptor's schema
-under the [Schema Descriptor profile][Schema Descriptor Profile].
+`dataschema` when present. Otherwise, when a Processing Descriptor is
+available, select its [schema entry][Schema Descriptor Profile] by the
+name in the publication profile. If the profile supplies no name, select
+the sole `schema` entry; zero entries means no schema, and multiple entries
+are ambiguous. A named entry that is missing or has the wrong class is
+invalid. Use the selected schema at its `url` or from its bundled
+`document`.
 
 The Consumer MUST report a missing REQUIRED schema. An ambiguous selection,
 invalid selector, unavailable schema or unsupported format MUST NOT cause
@@ -448,9 +451,10 @@ applicable locations, the Consumer MUST report missing metadata and treat
 the event as nonconforming.
 
 A Consumer MUST use the selected Processing Descriptor as the sole
-Descriptor source for shared schema and native metadata.
-If retrieval fails, follow the [Descriptor Reference failure
-rules](descriptor.md#failure-outcomes) for the Descriptor-based operation.
+Descriptor source for shared schema and native metadata. If `describedby`
+is present but the URL is invalid or the Consumer cannot obtain a valid
+Descriptor there, the Consumer MUST report the failure and treat the
+Descriptor-based inputs as unavailable.
 The Consumer MAY still interpret the native payload if the envelope, source
 query, and explicit event attributes supply every native requirement.
 That result is independent of WoT correlation.
@@ -749,8 +753,6 @@ The referenced Descriptor version contains these entries:
 
 ```json
 {
-  "descriptorid": "pump7-telemetry",
-  "versionid": "1",
   "entries": {
     "pump7": {
       "class": "thingdescription",

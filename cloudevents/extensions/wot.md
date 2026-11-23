@@ -31,8 +31,6 @@ The `payload` entry supplies the schema for the object in `data`.
 
 ```json
 {
-  "descriptorid": "pump7-process-data",
-  "versionid": "1",
   "entries": {
     "pump7": {
       "class": "thingdescription",
@@ -78,11 +76,10 @@ Thing or affordance. The Publisher MUST make the selected TD available
 before configuring Producers to use the Descriptor and SHOULD link to a
 specific TD version.
 
-If Descriptor retrieval, entry selection, or TD or selector resolution
-fails, the Consumer MUST report the failure and leave the event
-uncorrelated. Apply the [Descriptor Reference failure
-rules](descriptor.md#failure-outcomes). The Consumer MAY retain or forward
-the uncorrelated event.
+Correlation fails if `describedby` is missing or invalid, the URL does not
+yield a valid Descriptor, or the Consumer cannot select the TD entry or
+resolve its TD or selector. The Consumer MUST report the failure and MAY
+retain or forward the uncorrelated event.
 
 ## WoT Descriptor entries
 
@@ -216,7 +213,13 @@ determines whether an external payload schema is REQUIRED.
 
 If `dataschema` is present, the Consumer MUST use it as the sole schema
 input and still validate applicable Descriptor selectors. Otherwise,
-select the Descriptor's [schema entry][Schema Descriptor Profile].
+select the Descriptor's [schema entry][Schema Descriptor Profile] by the
+name in the publication profile. If the profile supplies no name, select
+the sole `schema` entry; zero entries means no schema, and multiple entries
+are ambiguous. A named entry that is missing or has the wrong class is
+invalid. Use the selected schema at its `url` or from its bundled
+`document`.
+
 Producers and Descriptor publishers SHOULD supply one schema source or
 identify the same schema in both. Producers SHOULD omit `dataschema`
 when the Descriptor supplies the schema.
@@ -239,8 +242,6 @@ describes the aggregate object, including both `processData` and `running`.
 
 ```json
 {
-  "descriptorid": "pump7-state",
-  "versionid": "1",
   "entries": {
     "pump7": {
       "class": "thingdescription",

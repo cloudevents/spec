@@ -9,8 +9,6 @@ following Descriptor associates the event with the `/Pump7` prim:
 
 ```json
 {
-  "descriptorid": "pump7-geometry",
-  "versionid": "1",
   "entries": {
     "geometry": {
       "class": "usdasset",
@@ -42,6 +40,9 @@ Descriptor that supplies the asset entries. Core attributes retain their
 CloudEvents meanings.
 
 ## Asset selection
+
+If the Consumer cannot obtain a valid Descriptor at `describedby`, it MUST
+report the failure and leave the event unassociated with an OpenUSD asset.
 
 An entry with class `usdasset` MUST link to the OpenUSD asset itself at
 `url`. The Consumer can use the linked asset or the entry's bundled
@@ -133,8 +134,6 @@ and `/Pump7/speed`, but no `/Pump7/status`:
 
 ```json
 {
-  "descriptorid": "pump7-geometry",
-  "versionid": "1",
   "entries": {
     "geometry": {
       "class": "usdasset",
