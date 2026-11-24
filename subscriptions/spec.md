@@ -750,6 +750,14 @@ future.
 
 Filter dialects are identified by a unique `URI-Reference`.
 
+The dialects defined in this specification are identified by short relative
+references, such as `exact` and `sql`. These names are reserved for this
+specification, and other specifications or implementations MUST NOT define a
+dialect with one of them or redefine their meaning. A dialect defined outside
+of this specification SHOULD be identified by an absolute URI, such as
+`https://example.com/filters/geo`, so that it can't collide with another
+extension dialect or with a dialect added to this specification later.
+
 When encoded in JSON, a filter is encoded as follows:
 
 ```
