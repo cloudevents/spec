@@ -79,8 +79,9 @@ replay. Publish a new version when those inputs change.
 
 OPTIONAL. An absolute, fragment-free HTTP(S) URL for retrieving a
 [bundle](#bundled-document) of this Descriptor document. A Descriptor MAY
-include `bundleurl` only when the server offers a bundle for it. In a bundle,
-`bundleurl`, when present, MUST point to the bundle itself.
+include `bundleurl` only if the server supports direct retrieval of that
+Descriptor's bundle. If a bundle includes `bundleurl`, the URL MUST point to
+the bundle itself.
 
 ### `entries`
 

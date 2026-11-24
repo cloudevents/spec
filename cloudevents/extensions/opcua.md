@@ -519,8 +519,8 @@ The OPC UA-only examples use writer name `energy-consumption-asset` in
 
 ### Metadata message
 
-The metadata message helps Cloud applications to understand the semantics and
-structure of dataset messages.
+Cloud applications use the metadata message to interpret the structure and
+meaning of DataSetMessages.
 
 ```text
 ------------------ PUBLISH -------------------
@@ -555,15 +555,13 @@ subject: energy-consumption-asset
 
 ### Telemetry message
 
-The telemetry or data messages contain values of all OPC UA nodes that had
-changed in a given period of time (`ua-deltaframe`) or contain values for all
-OPC UA nodes that were monitored (`ua-keyframe`).
-The complete list of monitored OPC UA nodes as well as the related type
-information are defined in the metadata message. The attributes
-`opcuametadatamajorversion` and `opcuametadataminorversion` are used to
-reference the correct metadata message. The `ua-deltaframe` messages will be
-used for hot and/or cold path processing and `ua-keyframe` messages can
-additional be used to update last-known-value tables.
+A `ua-deltaframe` carries values for OPC UA nodes that changed during a
+given interval. A `ua-keyframe` carries values for all monitored nodes.
+The metadata message lists those nodes and their types. The
+`opcuametadatamajorversion` and `opcuametadataminorversion` attributes
+identify the corresponding metadata message. Consumers can process delta
+frames on the hot path, the cold path, or both, and can use keyframes to
+update last-known-value tables.
 
 This example uses a writer-specific `source` for sequence ordering without
 carrying an explicit PublisherId or writer query parameter.
@@ -602,9 +600,8 @@ opcuametadataminorversion: 672341762
 
 #### OPC UA PubSub JSON single dataset Message
 
-Using CloudEvents and model the OPC UA PubSub header information as CloudEvent
-attributes enables integration into various system (independent from used
-protocols) and simplifies the payload structure.
+Mapping OPC UA PubSub header fields to CloudEvents attributes simplifies
+the payload and lets systems use the same attributes across protocols.
 
 ```text
 {
@@ -634,14 +631,13 @@ protocols) and simplifies the payload structure.
 
 ### Event message
 
-The event message will contain a single event and the identifier of this event is
-added to the `subject` to allow routing it into different systems without parsing
-the payload. Events are routed for example in systems like Manufacturing Execution
-Systems (MES), Supervisory Control and Data Acquisition systems (SCADA),
-Alerting Systems or Operation Technology Operator Terminals (HMI Clients) and
-also in hot and/or cold path processing. The attributes
-`opcuametadatamajorversion` and `opcuametadataminorversion` are used to
-reference the correct metadata message.
+The message carries one event. The Producer adds its identifier to
+`subject` so systems can route it without parsing the payload. Recipients
+include manufacturing execution systems (MES), supervisory control and
+data acquisition (SCADA) systems, alerting systems, and operator terminals
+(HMI clients). Routing can serve hot-path and cold-path processing. The
+`opcuametadatamajorversion` and `opcuametadataminorversion` attributes
+identify the corresponding metadata message.
 
 ```text
 ------------------ PUBLISH -------------------
@@ -677,13 +673,10 @@ opcuametadataminorversion: 672341762
 
 ### Telemetry message with different Encoding
 
-One major benefit of CloudEvents for OPC UA is that it is possible to support
-other encoding and external schema, while keeping the same OPC UA information for
-routing.
-
-The example below uses Avro binary encoded payload, with the corresponding schema
-referenced by `dataschema`. The `source` will be defined by an customer defined
-hierarchical path.
+CloudEvents carries the same OPC UA routing information when the payload
+uses a different encoding and an external schema. Here the payload uses
+Avro binary encoding, `dataschema` identifies its schema, and `source` is
+a customer-configured hierarchical path.
 
 ```text
 ------------------ PUBLISH -------------------

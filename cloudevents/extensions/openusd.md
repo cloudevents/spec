@@ -4,8 +4,8 @@ An event reporting pump telemetry can link to the pump's
 [OpenUSD](https://openusd.org/) asset so a Consumer can locate the pump in
 a scene. The event's [`describedby`](descriptor.md#describedby) URL points to a
 [Descriptor](descriptor.md) with a `usdasset` entry. A *prim* is an element
-in the OpenUSD scene, such as the object that represents the pump. The
-following Descriptor associates the event with the `/Pump7` prim:
+in the OpenUSD scene, such as the pump's scene object. This Descriptor
+associates the event with the `/Pump7` prim:
 
 ```json
 {
