@@ -53,7 +53,7 @@ The CloudEvents type system is mapped to protobuf as follows :
 
 | CloudEvents   | protobuf |
 | ------------- | ---------------------------------------------------------------------- |
-| Boolean       | [boolean][proto-scalars] |
+| Boolean       | [bool][proto-scalars] |
 | Integer       | [int32][proto-scalars] |
 | String        | [string][proto-scalars] |
 | Binary        | [bytes][proto-scalars] |
@@ -71,7 +71,7 @@ OPTIONAL and extension attributes are represented using a map construct enabling
 direct support of the CloudEvent [type system][ce-types].
 
 ```proto
-map<string, CloudEventAttributeValue> attributes = 1;
+map<string, CloudEventAttributeValue> attributes = 5;
 
 message CloudEventAttributeValue {
 
@@ -79,9 +79,9 @@ message CloudEventAttributeValue {
       bool ce_boolean = 1;
       int32 ce_integer = 2;
       string ce_string = 3;
-      bytes ce_binary = 4;
+      bytes ce_bytes = 4;
       string ce_uri = 5;
-      string ce_uri_reference = 6;
+      string ce_uri_ref = 6;
       google.protobuf.Timestamp ce_timestamp = 7;
     }
 }
@@ -105,13 +105,13 @@ The specification allows for data payloads of the following types to be explicit
 oneof data {
 
     // Binary data
-    bytes binary_data = 2;
+    bytes binary_data = 6;
 
     // String data
-    string text_data = 3;
+    string text_data = 7;
 
     // Protobuf Message data
-    google.protobuf.Any proto_data = 4;
+    google.protobuf.Any proto_data = 8;
 }
 ```
 
