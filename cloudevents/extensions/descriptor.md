@@ -100,8 +100,8 @@ additional members.
 
 REQUIRED. A string of 1 to 63 characters, inclusive. It identifies the kind
 of information the entry supplies and determines whether the entry links to
-a document or carries its information inline. The same class MAY appear
-under different entry names.
+a document or carries its information inline. Unless the class definition
+says otherwise, the same class MAY appear under different entry names.
 
 ##### `url`
 
@@ -184,6 +184,7 @@ the inputs it needs and how to handle unavailable or invalid inputs.
 The following `class` values are well-known class names:
 
 - `endpoint`: [Endpoint Descriptor profile](#endpoint)
+- `identifiers`: [Identifiers Descriptor profile](#identifiers)
 - `opcuawriter`: [OPC UA Descriptor profile](opcua.md#descriptor-entry)
 - `schema`: [Schema Descriptor profile](#schema)
 - `thingdescription`: [Web of Things profile](wot.md)
@@ -202,6 +203,27 @@ A `schema` entry's `url` MUST identify a schema document for the event's
 
 An `endpoint` entry's `url` MUST identify the metadata of an xRegistry
 [Endpoint Group][Endpoint Group].
+
+### Identifiers
+
+An `identifiers` entry carries aliases for the described entity inline.
+A Descriptor MUST NOT contain more than one entry of this class, regardless
+of entry name. Consumers MUST check this limit when validating a Descriptor;
+the JSON Schema checks each entry independently.
+
+The entry MUST omit `url` and `document` and contain an `identifiers` member:
+a non-empty array of objects, each with exactly two string members:
+
+| Member | Meaning |
+| --- | --- |
+| `scheme` | An [absolute URI][Absolute URI] identifying the identifier scheme. |
+| `value` | The identifier in that scheme, represented as a string. |
+
+Two identifiers match only if both strings match exactly. Consumers MUST
+NOT normalize either string, including by changing case or percent-encoding.
+Aliases do not replace the xRegistry `entityid` metadata when it is present
+or change Descriptor selection through `describedby`. Consumers MUST NOT
+use an alias to establish authorization or ownership.
 
 ## Examples
 
@@ -317,6 +339,35 @@ entry links to the inspection service's xRegistry Endpoint Group.
 }
 ```
 
+### Asset identifiers
+
+The Descriptor for Pump 7 links to its Thing Description and OpenUSD asset.
+The `aliases` entry gives the pump's serial number and site asset tag. The
+serial number retains its leading zeros.
+
+```json
+{
+  "entries": {
+    "aliases": {
+      "class": "identifiers",
+      "identifiers": [
+        { "scheme": "https://manufacturer.example/id/serial", "value": "000147" },
+        { "scheme": "https://site.example/id/asset-tag", "value": "Pump-7" }
+      ]
+    },
+    "geometry": {
+      "class": "usdasset",
+      "url": "https://assets.example/usdassetgroups/line1/usdassets/pump7/versions/2",
+      "primpath": "/Pump7"
+    },
+    "pump7": {
+      "class": "thingdescription",
+      "url": "https://registry.example/thingdescriptiongroups/factory/thingdescriptions/pump7/versions/3.0.0"
+    }
+  }
+}
+```
+
 ## Security Considerations
 
 Consumers and bundle endpoints MUST apply authorization, URL, redirect and
@@ -347,3 +398,4 @@ If the server cannot establish a combined policy, it MUST send
 representation, not just its Descriptor metadata.
 
 [Endpoint Group]: https://github.com/xregistry/spec/blob/main/endpoint/spec.md
+[Absolute URI]: https://www.rfc-editor.org/rfc/rfc3986#section-4.3

@@ -38,7 +38,9 @@
           "maxLength": 63
         },
         "url": { "$ref": "#/$defs/httpUrl" }
-      }
+      },
+      "if": { "properties": { "class": { "const": "identifiers" } } },
+      "then": { "$ref": "#/$defs/identifiersEntry" }
     },
     "schemaEntry": {
       "$ref": "#/$defs/entry",
@@ -52,6 +54,32 @@
       "required": ["url"],
       "properties": {
         "class": { "const": "endpoint" }
+      }
+    },
+    "identifiersEntry": {
+      "type": "object",
+      "required": ["class", "identifiers"],
+      "properties": {
+        "class": { "const": "identifiers" },
+        "url": false,
+        "document": false,
+        "identifiers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["scheme", "value"],
+            "additionalProperties": false,
+            "properties": {
+              "scheme": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:[^#\\s]*(?![\\s\\S])"
+              },
+              "value": { "type": "string" }
+            }
+          }
+        }
       }
     },
     "document": {
