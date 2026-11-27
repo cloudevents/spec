@@ -288,7 +288,7 @@ A maintenance service reports a decision about Pump 7. The event's
 {
   "specversion": "1.0",
   "id": "decision-47",
-  "source": "urn:example:maintenance-service:planner7",
+  "source": "urn:example:actor:planner7",
   "subject": "pump7",
   "type": "com.example.maintenance.decision.v1",
   "describedby": "https://registry.example/descriptorgroups/streams/descriptors/pump7-maintenance/versions/1",

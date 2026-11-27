@@ -129,8 +129,10 @@ selection rules to check the linked document and selector target.
 ### source
 
 [`source`](../spec.md#source) identifies the event's originating context
-and follows Core's URI-reference rules. For example, a telemetry service
-can report a measurement for a pump. CloudEvents event identity and the
+and follows Core's URI-reference rules. The WoT example uses the reporting
+telemetry service as `source`; the [OpenUSD profile example](openusd.md)
+uses the asset as `source`.
+CloudEvents event identity and the
 [Sequence extension](sequence.md) use the event's `source` even when
 `describedby` changes.
 
