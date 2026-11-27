@@ -134,6 +134,14 @@ can report a measurement for a pump. CloudEvents event identity and the
 [Sequence extension](sequence.md) use the event's `source` even when
 `describedby` changes.
 
+A publication profile MAY declare that `source` identifies the described
+entity. When it does, the Producer MUST set `source` to the `entityid` of
+the Descriptor for that entity, using the exact string without
+normalization. A Consumer MAY use that value to look up the entity
+Descriptor where lookup is supported. This is independent of Description
+Selection: only the Descriptor at `describedby` supplies Descriptor
+entries for interpreting the event.
+
 ### subject
 
 [`subject`](../spec.md#subject) is OPTIONAL and retains its Core meaning.
