@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CloudEvents OPC UA Descriptor entry",
+  "$ref": "descriptor.schema.json#/$defs/entry",
+  "properties": {
+    "class": { "const": "opcuawriter" },
+    "url": false,
+    "document": false,
+    "opcuapublisherid": {
+      "type": "string",
+      "anyOf": [
+        { "pattern": "^(?:Byte|UInt16|UInt32|UInt64):[1-9][0-9]*(?![\\s\\S])" },
+        { "pattern": "^String:(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,4})(?![\\s\\S])" }
+      ]
+    },
+    "opcuadatasetwriterid": { "type": "integer", "minimum": 1, "maximum": 65535 },
+    "opcuadatasetwritername": { "type": "string", "minLength": 1 },
+    "opcuadatasetname": { "type": "string", "minLength": 1 },
+    "opcuametadatamajorversion": { "$ref": "#/$defs/versionTime" },
+    "opcuametadataminorversion": { "$ref": "#/$defs/versionTime" }
+  },
+  "$defs": {
+    "versionTime": { "type": "integer", "minimum": 0, "maximum": 4294967295 }
+  }
+}

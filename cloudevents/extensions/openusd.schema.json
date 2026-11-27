@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CloudEvents OpenUSD Descriptor entry",
+  "$ref": "descriptor.schema.json#/$defs/entry",
+  "required": ["url"],
+  "properties": {
+    "class": { "const": "usdasset" },
+    "primpath": {
+      "type": "string",
+      "pattern": "^/[^/.{}:\\s]+(?:/[^/.{}:\\s]+)*(?![\\s\\S])"
+    },
+    "fieldmode": { "const": "byname" },
+    "fieldmappings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["field", "prim"],
+        "properties": {
+          "field": {
+            "type": "string",
+            "pattern": "^/(?:[^~]|~[01])*(?![\\s\\S])"
+          },
+          "prim": {
+            "type": "string",
+            "pattern": "^[^/.{}:\\s]+(?:/[^/.{}:\\s]+)*(?![\\s\\S])"
+          }
+        }
+      }
+    }
+  },
+  "dependentRequired": {
+    "fieldmode": ["primpath"],
+    "fieldmappings": ["primpath"]
+  }
+}
