@@ -106,6 +106,25 @@ The [OpenUSD entry schema](openusd.schema.json) checks entry shape.
 Consumers using the entry verify path syntax, targets, and pointer
 uniqueness under the rules above.
 
+### Consistency with OPC 12000 attribute targets
+
+A publication profile MAY explicitly pair a payload field of a selected
+`usdasset` entry with an OPC 12000 OpenUSD attribute target for the same
+asset. The profile MUST specify how to identify the corresponding asset and
+composed stage. Matching retrieval URLs alone do not establish that identity.
+
+For each such field with both mappings, the Consumer MUST check that the
+mappings refer to the same composed stage and that the prim selected for
+the field by the [field mapping rules](#field-mappings) owns the OPC 12000
+target attribute. If the entry declares `primpath`, the Consumer MUST also
+check that the prim owning the target attribute is the anchor prim or one
+of its descendants. The Consumer MUST report each conflicting field and
+leave that field unmapped.
+
+This check does not apply to unpaired fields, fields missing either mapping,
+or other selected assets. It does not change asset selection. Property
+writes remain outside the scope of this extension.
+
 ## Examples
 
 The following event reports Pump 7 telemetry in HTTP binary mode. Its
